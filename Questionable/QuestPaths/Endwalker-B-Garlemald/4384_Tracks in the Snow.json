@@ -1,0 +1,137 @@
+{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1038839,
+          "Position": {
+            "X": -350.1488,
+            "Y": 22.738518,
+            "Z": 435.56873
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 2012000,
+          "Position": {
+            "X": -184.22223,
+            "Y": 31.937134,
+            "Z": 423.6056
+          },
+          "TerritoryId": 958,
+          "InteractionType": "AetherCurrent"
+        },
+        {
+          "DataId": 1038840,
+          "Position": {
+            "X": -157.06122,
+            "Y": 18.316332,
+            "Z": 364.06494
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 2012076,
+          "Position": {
+            "X": -31.265808,
+            "Y": -0.25946045,
+            "Z": 362.81372
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 2012077,
+          "Position": {
+            "X": 36.942017,
+            "Y": -12.039368,
+            "Z": 362.2339
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 1038843,
+          "Position": {
+            "X": 66.84973,
+            "Y": -14.344919,
+            "Z": 385.7328
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "DataId": 2012078,
+          "Position": {
+            "X": 117.81482,
+            "Y": -16.922302,
+            "Z": 390.46313
+          },
+          "TerritoryId": 958,
+          "InteractionType": "ManualAction",
+          "Comment": "Duty - Follow Girl in Green"
+        }
+      ]
+    },
+    {
+      "Sequence": 6,
+      "Steps": [
+        {
+          "DataId": 1038846,
+          "Position": {
+            "X": 555.8098,
+            "Y": 32.30835,
+            "Z": 159.10571
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1038846,
+          "Position": {
+            "X": 555.8098,
+            "Y": 32.30835,
+            "Z": 159.10571
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1039618,
+          "Position": {
+            "X": -95.96399,
+            "Y": 3.933468,
+            "Z": 0.503479
+          },
+          "TerritoryId": 962,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1039619,
+          "Position": {
+            "X": -344.625,
+            "Y": 19,
+            "Z": 71.61047
+          },
+          "TerritoryId": 962,
+          "InteractionType": "Interact",
+          "AethernetShortcut": [
+            "[Old Sharlayan] The Baldesion Annex",
+            "[Old Sharlayan] The Studium"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 2012844,
+          "Position": {
+            "X": -4.3793945,
+            "Y": 5.569519,
+            "Z": 13.809326
+          },
+          "TerritoryId": 1057,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1039620,
+          "Position": {
+            "X": -1.5107422,
+            "Y": -7.012859E-07,
+            "Z": -2.609314
+          },
+          "TerritoryId": 1057,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 1039622,
+          "Position": {
+            "X": -341.78687,
+            "Y": 19,
+            "Z": 69.10803
+          },
+          "TerritoryId": 962,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "DataId": 1039623,
+          "Position": {
+            "X": -477.89734,
+            "Y": 4.678896,
+            "Z": 29.55664
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 6,
+      "Steps": [
+        {
+          "DataId": 2012847,
+          "Position": {
+            "X": 242.08435,
+            "Y": 0.3508911,
+            "Z": 119.43237
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1039624,
+          "Position": {
+            "X": -478.38562,
+            "Y": 4.7772117,
+            "Z": 26.779541
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

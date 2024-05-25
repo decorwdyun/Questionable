@@ -1,0 +1,165 @@
+{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1039028,
+          "Position": {
+            "X": 381.33813,
+            "Y": 3.1168795,
+            "Z": -257.0688
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1037630,
+          "Position": {
+            "X": 401.8158,
+            "Y": 3.1168792,
+            "Z": -273.76215
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1039030,
+          "Position": {
+            "X": 408.65186,
+            "Y": 13.167275,
+            "Z": -184.37476
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 2011996,
+          "Position": {
+            "X": 550.01135,
+            "Y": 25.467285,
+            "Z": -159.1059
+          },
+          "TerritoryId": 957,
+          "InteractionType": "AetherCurrent"
+        },
+        {
+          "Position": {
+            "X": 498.18472,
+            "Y": 4.909424,
+            "Z": 1.4510483
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Combat",
+          "KillEnemyDataIds": [
+            13988
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 1039034,
+          "Position": {
+            "X": 494.83484,
+            "Y": 5.376761,
+            "Z": 2.7313232
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "DataId": 1039035,
+          "Position": {
+            "X": 573.5714,
+            "Y": 16.272768,
+            "Z": 130.11365
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 6,
+      "Steps": [
+        {
+          "Position": {
+            "X": 521.0876,
+            "Y": 11.819632,
+            "Z": 266.03055
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Combat",
+          "KillEnemyDataIds": [
+            13987
+          ]
+        },
+        {
+          "Position": {
+            "X": 571.6434,
+            "Y": 32.12932,
+            "Z": 370.01733
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Combat",
+          "KillEnemyDataIds": [
+            13986
+          ]
+        },
+        {
+          "Position": {
+            "X": 660.18604,
+            "Y": 44.997604,
+            "Z": 196.7378
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Combat",
+          "KillEnemyDataIds": [
+            13985,
+            13984
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1039036,
+          "Position": {
+            "X": 628.62585,
+            "Y": 37.497498,
+            "Z": 246.02112
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

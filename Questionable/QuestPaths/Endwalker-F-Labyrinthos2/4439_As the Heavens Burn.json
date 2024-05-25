@@ -1,0 +1,52 @@
+{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1040161,
+          "Position": {
+            "X": -0.35101318,
+            "Y": 1.9073486E-06,
+            "Z": -3.3417358
+          },
+          "TerritoryId": 987,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1039668,
+          "Position": {
+            "X": -389.97485,
+            "Y": 21.999998,
+            "Z": 501.85388
+          },
+          "TerritoryId": 958,
+          "InteractionType": "ManualAction",
+          "Comment": "Duty - As the Heavens Burn"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1039675,
+          "Position": {
+            "X": -404.8982,
+            "Y": 21.999998,
+            "Z": 416.3423
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

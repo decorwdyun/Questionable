@@ -1,0 +1,141 @@
+{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1038802,
+          "Position": {
+            "X": 746.63916,
+            "Y": 69.999954,
+            "Z": 523.39966
+          },
+          "TerritoryId": 621,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1024065,
+          "Position": {
+            "X": 749.9961,
+            "Y": 70.139626,
+            "Z": 522.88086
+          },
+          "TerritoryId": 621,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1038804,
+          "Position": {
+            "X": 251.81958,
+            "Y": 121.999985,
+            "Z": -360.586
+          },
+          "TerritoryId": 737,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1038811,
+          "Position": {
+            "X": 244.31213,
+            "Y": 122,
+            "Z": -362.96637
+          },
+          "TerritoryId": 737,
+          "InteractionType": "Interact",
+          "Comment": "A-Ruhn-Senna"
+        },
+        {
+          "DataId": 1038812,
+          "Position": {
+            "X": 245.77698,
+            "Y": 122,
+            "Z": -366.47595
+          },
+          "TerritoryId": 737,
+          "InteractionType": "Interact",
+          "Comment": "Sicard"
+        },
+        {
+          "DataId": 1038813,
+          "Position": {
+            "X": 250.78198,
+            "Y": 122,
+            "Z": -366.84216
+          },
+          "TerritoryId": 737,
+          "InteractionType": "Interact",
+          "Comment": "Lyse"
+        },
+        {
+          "DataId": 1038814,
+          "Position": {
+            "X": 251.23975,
+            "Y": 122,
+            "Z": -363.9124
+          },
+          "TerritoryId": 737,
+          "InteractionType": "Interact",
+          "Comment": "Lucia"
+        },
+        {
+          "DataId": 1038815,
+          "Position": {
+            "X": 250.17163,
+            "Y": 122,
+            "Z": -352.34613
+          },
+          "TerritoryId": 737,
+          "InteractionType": "Interact",
+          "Comment": "Cirina"
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 1038816,
+          "Position": {
+            "X": 254.23047,
+            "Y": 122,
+            "Z": -364.9806
+          },
+          "TerritoryId": 737,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1038817,
+          "Position": {
+            "X": 756.31335,
+            "Y": 69.9999,
+            "Z": 534.3251
+          },
+          "TerritoryId": 621,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

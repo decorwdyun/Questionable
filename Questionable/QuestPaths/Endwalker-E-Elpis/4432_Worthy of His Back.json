@@ -1,0 +1,78 @@
+{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1040128,
+          "Position": {
+            "X": -664.4236,
+            "Y": 178.07872,
+            "Z": -334.5846
+          },
+          "TerritoryId": 961,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 2012029,
+          "Position": {
+            "X": -255.54291,
+            "Y": 143.05322,
+            "Z": -36.972656
+          },
+          "TerritoryId": 961,
+          "InteractionType": "AetherCurrent",
+          "Comment": "Might be faster when initially entering the Island"
+        },
+        {
+          "DataId": 2012149,
+          "Position": {
+            "X": -353.1396,
+            "Y": 146.92908,
+            "Z": 143.57214
+          },
+          "TerritoryId": 961,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1040129,
+          "Position": {
+            "X": -629.0532,
+            "Y": 138.676,
+            "Z": 62.302612
+          },
+          "TerritoryId": 961,
+          "InteractionType": "ManualAction",
+          "Comment": "Duty - Venat"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1040129,
+          "Position": {
+            "X": -629.0532,
+            "Y": 138.676,
+            "Z": 62.302612
+          },
+          "TerritoryId": 961,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,182 @@
+﻿{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1038927,
+          "Position": {
+            "X": 2.090454,
+            "Y": -49.589596,
+            "Z": -699.733
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1038928,
+          "Position": {
+            "X": 146.37976,
+            "Y": -137.32071,
+            "Z": -504.26492
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1038929,
+          "Position": {
+            "X": 681.45264,
+            "Y": -152,
+            "Z": -494.13293
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1038929,
+          "Position": {
+            "X": 681.45264,
+            "Y": -152,
+            "Z": -494.13293
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Emote",
+          "Emote": "stretch"
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 1038929,
+          "Position": {
+            "X": 681.45264,
+            "Y": -152,
+            "Z": -494.13293
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "DataId": 2012017,
+          "Position": {
+            "X": 652.9487,
+            "Y": -160.72333,
+            "Z": -405.08124
+          },
+          "TerritoryId": 959,
+          "InteractionType": "AetherCurrent"
+        },
+        {
+          "DataId": 1038929,
+          "Position": {
+            "X": 596.2294,
+            "Y": -167.50227,
+            "Z": -510.33884
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 6,
+      "Steps": [
+        {
+          "DataId": 1038929,
+          "Position": {
+            "X": 547.2717,
+            "Y": -167.50174,
+            "Z": -525.274
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 7,
+      "Steps": [
+        {
+          "DataId": 1038929,
+          "Position": {
+            "X": 572.0069,
+            "Y": -167.50163,
+            "Z": -574.98785
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 8,
+      "Steps": [
+        {
+          "DataId": 1038929,
+          "Position": {
+            "X": 616.97437,
+            "Y": -167.50163,
+            "Z": -593.1553
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 9,
+      "Steps": [
+        {
+          "DataId": 1038929,
+          "Position": {
+            "X": 623.16296,
+            "Y": -167.50217,
+            "Z": -657.5506
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1038932,
+          "Position": {
+            "X": 617.05945,
+            "Y": -168.00002,
+            "Z": -656.58044
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

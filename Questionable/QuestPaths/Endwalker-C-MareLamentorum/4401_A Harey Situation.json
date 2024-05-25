@@ -1,0 +1,101 @@
+{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1038894,
+          "Position": {
+            "X": 2.670288,
+            "Y": -49.8925,
+            "Z": -366.0487
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 2012019,
+          "Position": {
+            "X": 21.7081,
+            "Y": -133.5001,
+            "Z": -385.7313
+          },
+          "TerritoryId": 959,
+          "InteractionType": "AetherCurrent"
+        },
+        {
+          "DataId": 1038897,
+          "Position": {
+            "X": 30.838379,
+            "Y": -132.94641,
+            "Z": -435.47723
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 175,
+          "Position": {
+            "X": -0.01531982,
+            "Y": -128.8109,
+            "Z": -512.0165
+          },
+          "TerritoryId": 959,
+          "InteractionType": "AttuneAetheryte"
+        },
+        {
+          "DataId": 1038901,
+          "Position": {
+            "X": 120.531006,
+            "Y": -132.86647,
+            "Z": -555.0164
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1038902,
+          "Position": {
+            "X": -124.864624,
+            "Y": -132.87448,
+            "Z": -471.91577
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1038903,
+          "Position": {
+            "X": -17.95996,
+            "Y": -47.192066,
+            "Z": -494.31604
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

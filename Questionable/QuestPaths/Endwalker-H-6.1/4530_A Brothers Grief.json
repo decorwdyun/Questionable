@@ -1,0 +1,66 @@
+{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1039591,
+          "Position": {
+            "X": 107.71338,
+            "Y": -350,
+            "Z": -73.68585
+          },
+          "TerritoryId": 1056,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1039595,
+          "Position": {
+            "X": 107.83545,
+            "Y": -350,
+            "Z": -84.82495
+          },
+          "TerritoryId": 1056,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1039600,
+          "Position": {
+            "X": 142.443,
+            "Y": 4.7837553,
+            "Z": -148.57715
+          },
+          "TerritoryId": 963,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1039600,
+          "Position": {
+            "X": 142.443,
+            "Y": 4.7837553,
+            "Z": -148.57715
+          },
+          "TerritoryId": 963,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

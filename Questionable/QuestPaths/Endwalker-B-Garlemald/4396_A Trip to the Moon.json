@@ -1,0 +1,101 @@
+{
+  "Version": 1,
+  "Author": "liza",
+  "Comment": "TODO This should have an aetheryte?",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1039974,
+          "Position": {
+            "X": 2.5177002,
+            "Y": 0,
+            "Z": 26.840576
+          },
+          "TerritoryId": 1024,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 2012116,
+          "Position": {
+            "X": 5.585561E-05,
+            "Y": 6.62077,
+            "Z": -0.00103838
+          },
+          "TerritoryId": 1024,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1039977,
+          "Position": {
+            "X": -627.49677,
+            "Y": 128.67758,
+            "Z": 632.41016
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact",
+          "KillEnemyDataIds": [
+            14077
+          ],
+          "Comment": "TODO what happened to seq: 2"
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 1039977,
+          "Position": {
+            "X": -627.49677,
+            "Y": 128.67758,
+            "Z": 632.41016
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "DataId": 2012118,
+          "Position": {
+            "X": -423.9109,
+            "Y": 136.9497,
+            "Z": 573.47986
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1042050,
+          "Position": {
+            "X": -383.04724,
+            "Y": 169.00394,
+            "Z": 547.5393
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

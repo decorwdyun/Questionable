@@ -1,0 +1,103 @@
+{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1044239,
+          "Position": {
+            "X": -369.2226,
+            "Y": 22,
+            "Z": 484.0619
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1044249,
+          "Position": {
+            "X": -89.89093,
+            "Y": -9.408967,
+            "Z": 416.3423
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 2013226,
+          "Position": {
+            "X": 18.631226,
+            "Y": -12.314087,
+            "Z": 383.77966
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Combat",
+          "KillEnemyDataIds": [
+            16028
+          ],
+          "Comment": "Missing second enemy data id"
+        },
+        {
+          "DataId": 2013307,
+          "Position": {
+            "X": 23.025818,
+            "Y": -9.2317505,
+            "Z": 337.5448
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 2013051,
+          "Position": {
+            "X": 62.333008,
+            "Y": -10.635559,
+            "Z": 308.73572
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Combat",
+          "KillEnemyDataIds": [
+            16030
+          ]
+        },
+        {
+          "DataId": 2013308,
+          "Position": {
+            "X": 75.33374,
+            "Y": -12.527649,
+            "Z": 339.40637
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1044250,
+          "Position": {
+            "X": 23.23944,
+            "Y": 1.1781613,
+            "Z": 144.70117
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

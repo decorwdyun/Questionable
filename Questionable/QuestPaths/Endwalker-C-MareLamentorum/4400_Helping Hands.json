@@ -1,0 +1,111 @@
+{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1038880,
+          "Position": {
+            "X": -382.2843,
+            "Y": 169.00394,
+            "Z": 549.6758
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1038884,
+          "Position": {
+            "X": 295.1858,
+            "Y": 87.78831,
+            "Z": 538.8723
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1038888,
+          "Position": {
+            "X": 446.95203,
+            "Y": 69.15293,
+            "Z": 540.032
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 2012177,
+          "Position": {
+            "X": 486.71704,
+            "Y": 70.69495,
+            "Z": 538.90283
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 1040516,
+          "Position": {
+            "X": 205.52368,
+            "Y": 59.358307,
+            "Z": 405.87463
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "DataId": 1040518,
+          "Position": {
+            "X": 205.06592,
+            "Y": 59.911327,
+            "Z": 411.42883
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1038894,
+          "Position": {
+            "X": 2.670288,
+            "Y": -49.8925,
+            "Z": -366.0487
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

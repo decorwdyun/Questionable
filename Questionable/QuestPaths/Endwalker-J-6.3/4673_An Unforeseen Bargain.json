@@ -1,0 +1,52 @@
+{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1044252,
+          "Position": {
+            "X": 510.1244,
+            "Y": -36.65,
+            "Z": -161.73041
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1044257,
+          "Position": {
+            "X": 485.06897,
+            "Y": 10.800001,
+            "Z": -427.75616
+          },
+          "TerritoryId": 958,
+          "InteractionType": "ManualAction",
+          "Comment": "Duty - An Unforeseen Bargain"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1044259,
+          "Position": {
+            "X": 528.9845,
+            "Y": -36.65,
+            "Z": -246.44855
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

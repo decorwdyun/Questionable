@@ -1,0 +1,175 @@
+{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [{
+        "DataId": 1040401,
+        "Position": {
+          "X": 374.83777,
+          "Y": 79.691376,
+          "Z": 298.08484
+        },
+        "TerritoryId": 956,
+        "InteractionType": "Interact"
+      }]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [{
+        "DataId": 1039687,
+        "Position": {
+          "X": -18.875488,
+          "Y": -31.53043,
+          "Z": -76.98181
+        },
+        "TerritoryId": 956,
+        "InteractionType": "Interact"
+      }]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [{
+        "DataId": 1040409,
+        "Position": {
+          "X": -99.076904,
+          "Y": -28.516306,
+          "Z": -60.013794
+        },
+        "TerritoryId": 956,
+        "InteractionType": "Interact"
+      }]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [{
+        "DataId": 1040422,
+        "Position": {
+          "X": -37.125244,
+          "Y": -29.530075,
+          "Z": -169.14624
+        },
+        "TerritoryId": 956,
+        "InteractionType": "Interact",
+        "Comment": "Distracted Researcher"
+      },
+        {
+          "DataId": 1040416,
+          "Position": {
+            "X": 3.0670166,
+            "Y": -29.530357,
+            "Z": -126.17688
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact",
+          "Comment": "Hyperventilating Engineer"
+        },
+        {
+          "DataId": 1040420,
+          "Position": {
+            "X": 40.634766,
+            "Y": -17.53038,
+            "Z": -69.62695
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact",
+          "Comment": "Harried Aetherologist"
+        },
+        {
+          "DataId": 1040421,
+          "Position": {
+            "X": 48.142212,
+            "Y": -31.53043,
+            "Z": -48.111755
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact",
+          "Comment": "Grimacing Naturalist"
+        },
+        {
+          "DataId": 1040417,
+          "Position": {
+            "X": 59.311768,
+            "Y": -29.530416,
+            "Z": -24.429688
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact",
+          "Comment": "Ponderous Mathematician"
+        },
+        {
+          "DataId": 1040418,
+          "Position": {
+            "X": -19.394226,
+            "Y": -29.530432,
+            "Z": 10.299805
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact",
+          "Comment": "Despondent Engineer"
+        },
+        {
+          "DataId": 1040423,
+          "Position": {
+            "X": -22.232422,
+            "Y": -31.530355,
+            "Z": 38.071167
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact",
+          "Comment": "Skeptical Researcher"
+        },
+        {
+          "DataId": 1040419,
+          "Position": {
+            "X": -15.762573,
+            "Y": -31.530432,
+            "Z": -51.59082
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact",
+          "Comment": "Anxious Engineer"
+        }]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [{
+        "DataId": 1040436,
+        "Position": {
+          "X": -78.26355,
+          "Y": -29.53,
+          "Z": -58.854065
+        },
+        "TerritoryId": 956,
+        "InteractionType": "Interact"
+      }]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [{
+        "DataId": 2012220,
+        "Position": {
+          "X": -74.418274,
+          "Y": -29.58728,
+          "Z": -53.23877
+        },
+        "TerritoryId": 956,
+        "InteractionType": "Interact"
+      }]
+    },
+    {
+      "Sequence":255,
+      "Steps": [{
+        "DataId": 1040436,
+        "Position": {
+          "X": -78.26355,
+          "Y": -29.53,
+          "Z": -58.854065
+        },
+        "TerritoryId": 956,
+        "InteractionType": "Interact"
+      }]
+    }
+  ]
+}

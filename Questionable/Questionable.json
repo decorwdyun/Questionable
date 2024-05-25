@@ -1,0 +1,12 @@
+﻿{
+  "Name": "Questionable",
+  "Author": "Liza Carvelli",
+  "Punchline": "A tiny quest helper plugin.",
+  "Description": "A tiny quest helper plugin.",
+  "Tags": [
+    "quests",
+    "msq"
+  ],
+  "RepoUrl": "https://git.carvel.li/liza/Questionable",
+  "IconUrl": "https://plugins.carvel.li/icons/Questionable.png"
+}

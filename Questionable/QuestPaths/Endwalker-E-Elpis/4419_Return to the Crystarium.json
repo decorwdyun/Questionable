@@ -1,0 +1,71 @@
+{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1040386,
+          "Position": {
+            "X": 5.1116943,
+            "Y": -1.9999962,
+            "Z": 88.12085
+          },
+          "TerritoryId": 963,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1030369,
+          "Position": {
+            "X": 614.4961,
+            "Y": 13.3097515,
+            "Z": 305.80603
+          },
+          "TerritoryId": 813,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 2012123,
+          "Position": {
+            "X": -64.042114,
+            "Y": -37.70508,
+            "Z": -210.52875
+          },
+          "TerritoryId": 819,
+          "InteractionType": "ManualAction",
+          "Comment": "Cutscene Interaction needed",
+          "AethernetShortcut": [
+            "[The Crystarium] Aetheryte Plaza",
+            "[The Crystarium] The Cabinet of Curiosity"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1039992,
+          "Position": {
+            "X": -65.26294,
+            "Y": -37.7,
+            "Z": -208.85028
+          },
+          "TerritoryId": 819,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

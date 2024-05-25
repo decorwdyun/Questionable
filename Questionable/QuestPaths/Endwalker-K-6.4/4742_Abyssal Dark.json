@@ -1,0 +1,67 @@
+{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1045482,
+          "Position": {
+            "X": 17.135864,
+            "Y": 56.573345,
+            "Z": 436.0265
+          },
+          "TerritoryId": 1162,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 2013357,
+          "Position": {
+            "X": 97.520386,
+            "Y": 74.08252,
+            "Z": 607.90405
+          },
+          "TerritoryId": 1162,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 2013364,
+          "Position": {
+            "X": 99.99231,
+            "Y": 0.015197754,
+            "Z": 101.823364
+          },
+          "TerritoryId": 1159,
+          "InteractionType": "ManualAction",
+          "Comment": "Duty - The Voidcast Dais"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1045757,
+          "Position": {
+            "X": -136.03424,
+            "Y": 54.608093,
+            "Z": 427.60352
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

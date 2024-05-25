@@ -1,0 +1,70 @@
+{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1045758,
+          "Position": {
+            "X": -135.85114,
+            "Y": 54.977272,
+            "Z": 432.02856
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1045466,
+          "Position": {
+            "X": -20.126648,
+            "Y": -47.54357,
+            "Z": -491.99664
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1039649,
+          "Position": {
+            "X": -336.53772,
+            "Y": 55,
+            "Z": -69.47443
+          },
+          "TerritoryId": 963,
+          "InteractionType": "Interact",
+          "AethernetShortcut": [
+            "[Radz-at-Han] Aetheryte Plaza",
+            "[Radz-at-Han] Meghaduta"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1039645,
+          "Position": {
+            "X": -338.33832,
+            "Y": 55,
+            "Z": -68.40625
+          },
+          "TerritoryId": 963,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+﻿{
+  "Version": 1,
+  "Author": "liza",
+  "Comment": "Sequence 3 is the end of the chase marker",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1038931,
+          "Position": {
+            "X": 615.8998,
+            "Y": -168,
+            "Z": -657.7402
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 2012184,
+          "Position": {
+            "X": 73.83838,
+            "Y": -133.07397,
+            "Z": -512.2606
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 2012185,
+          "Position": {
+            "X": -5.416992,
+            "Y": -49.05786,
+            "Z": -269.24548
+          },
+          "TerritoryId": 959,
+          "InteractionType": "ManualAction",
+          "Comment": "Duty - Follow Urianger"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [{
+        "DataId": 1038935,
+        "Position": {
+          "X": 68.5282,
+          "Y": 75.72459,
+          "Z": -23.51416
+        },
+        "TerritoryId": 959,
+        "InteractionType": "Interact"
+      }]
+    }
+  ]
+}

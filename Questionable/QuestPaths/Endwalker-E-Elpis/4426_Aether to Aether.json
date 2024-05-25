@@ -1,0 +1,111 @@
+{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1040071,
+          "Position": {
+            "X": 132.82971,
+            "Y": 10.385857,
+            "Z": 89.34155
+          },
+          "TerritoryId": 961,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 2012023,
+          "Position": {
+            "X": -144.54877,
+            "Y": -26.230347,
+            "Z": 551.5067
+          },
+          "TerritoryId": 961,
+          "InteractionType": "AetherCurrent"
+        },
+        {
+          "DataId": 1040073,
+          "Position": {
+            "X": -164.11078,
+            "Y": -41.02881,
+            "Z": 377.37073
+          },
+          "TerritoryId": 961,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 2012024,
+          "Position": {
+            "X": -481.40692,
+            "Y": -28.610718,
+            "Z": 490.53174
+          },
+          "TerritoryId": 961,
+          "InteractionType": "AetherCurrent"
+        },
+        {
+          "DataId": 1040080,
+          "Position": {
+            "X": -530.2358,
+            "Y": -26.214441,
+            "Z": 490.6233
+          },
+          "TerritoryId": 961,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 177,
+          "Position": {
+            "X": -633.7225,
+            "Y": -19.821533,
+            "Z": 542.56494
+          },
+          "TerritoryId": 961,
+          "InteractionType": "AttuneAetheryte"
+        },
+        {
+          "DataId": 1040081,
+          "Position": {
+            "X": -659.35767,
+            "Y": -22.39482,
+            "Z": 525.44434
+          },
+          "TerritoryId": 961,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1040084,
+          "Position": {
+            "X": -661.1277,
+            "Y": -22.394821,
+            "Z": 527.88574
+          },
+          "TerritoryId": 961,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

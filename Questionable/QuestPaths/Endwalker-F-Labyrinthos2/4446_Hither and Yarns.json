@@ -1,0 +1,141 @@
+{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1040436,
+          "Position": {
+            "X": -78.26355,
+            "Y": -29.53,
+            "Z": -58.854065
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 2011987,
+          "Position": {
+            "X": -176.4096,
+            "Y": -10.11676,
+            "Z": -242.26752
+          },
+          "TerritoryId": 956,
+          "InteractionType": "AetherCurrent"
+        },
+        {
+          "DataId": 2011988,
+          "Position": {
+            "X": -505.14993,
+            "Y": -21.835754,
+            "Z": -122.60626
+          },
+          "TerritoryId": 956,
+          "InteractionType": "AetherCurrent"
+        },
+        {
+          "DataId": 1040444,
+          "Position": {
+            "X": -424.24664,
+            "Y": -31.831255,
+            "Z": -38.895264
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 2012223,
+          "Position": {
+            "X": -427.2984,
+            "Y": -31.418396,
+            "Z": -38.19336
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1040446,
+          "Position": {
+            "X": -697.4136,
+            "Y": -31.621387,
+            "Z": 164.11072
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 168,
+          "Position": {
+            "X": -729.18286,
+            "Y": -27.634155,
+            "Z": 302.1438
+          },
+          "TerritoryId": 956,
+          "InteractionType": "AttuneAetheryte"
+        },
+        {
+          "DataId": 1040447,
+          "Position": {
+            "X": -710.0176,
+            "Y": -31.53043,
+            "Z": 322.59094
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "DataId": 1040450,
+          "Position": {
+            "X": -754.4213,
+            "Y": -29.529999,
+            "Z": 389.70007
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1040447,
+          "Position": {
+            "X": -710.0176,
+            "Y": -31.53043,
+            "Z": 322.59094
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

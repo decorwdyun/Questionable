@@ -1,0 +1,154 @@
+﻿{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1038992,
+          "Position": {
+            "X": 4.6539917,
+            "Y": -1.9999963,
+            "Z": 93.492065
+          },
+          "TerritoryId": 963,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1038997,
+          "Position": {
+            "X": 2.7618408,
+            "Y": -1.9999962,
+            "Z": 97.30664
+          },
+          "TerritoryId": 963,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1037313,
+          "Position": {
+            "X": 137.71265,
+            "Y": 4.783756,
+            "Z": -153.9483
+          },
+          "TerritoryId": 963,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1037314,
+          "Position": {
+            "X": 15.701477,
+            "Y": 0.9,
+            "Z": -115.22089
+          },
+          "TerritoryId": 963,
+          "InteractionType": "Interact",
+          "Comment": "Varsra"
+        },
+        {
+          "DataId": 1037316,
+          "Position": {
+            "X": -47.04364,
+            "Y": 0.9199997,
+            "Z": -94.95697
+          },
+          "TerritoryId": 963,
+          "InteractionType": "Interact",
+          "Comment": "Zeytahnur"
+        },
+        {
+          "DataId": 1037315,
+          "Position": {
+            "X": -19.60791,
+            "Y": 0.8999999,
+            "Z": -60.68518
+          },
+          "TerritoryId": 963,
+          "InteractionType": "Interact",
+          "Comment": "Rahdvira"
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 1038997,
+          "Position": {
+            "X": -37.70625,
+            "Y": -9.957219E-05,
+            "Z": -134.90237
+          },
+          "TerritoryId": 963,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "DataId": 196,
+          "Position": {
+            "X": -42.61847,
+            "Y": -0.015319824,
+            "Z": -197.61963
+          },
+          "TerritoryId": 963,
+          "InteractionType": "AttuneAethenetShard"
+        },
+        {
+          "DataId": 1039001,
+          "Position": {
+            "X": -20.096191,
+            "Y": 3.0099998,
+            "Z": -226.79486
+          },
+          "TerritoryId": 963,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1037317,
+          "Position": {
+            "X": -25.314758,
+            "Y": 1.7999934,
+            "Z": -185.96173
+          },
+          "TerritoryId": 963,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1037318,
+          "Position": {
+            "X": -4.1047363,
+            "Y": 2.9999943,
+            "Z": -203.8758
+          },
+          "TerritoryId": 963,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

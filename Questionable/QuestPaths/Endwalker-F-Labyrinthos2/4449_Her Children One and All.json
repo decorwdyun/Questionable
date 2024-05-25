@@ -1,0 +1,102 @@
+{
+  "Version": 1,
+  "Author": "liza",
+  "Comment": "Sequence 2 is 'Enter' dungeon, Sequence 3 is 'Clear' dungeon",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1040478,
+          "Position": {
+            "X": -406.9734,
+            "Y": -220.18355,
+            "Z": 304.1886
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1040487,
+          "Position": {
+            "X": -234.6991,
+            "Y": -224.38274,
+            "Z": 349.01953
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 2012742,
+          "Position": {
+            "X": -238.26965,
+            "Y": -221.51526,
+            "Z": 341.29846
+          },
+          "TerritoryId": 956,
+          "InteractionType": "ManualAction",
+          "Comment": "Duty - Aitiascope"
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 2012230,
+          "Position": {
+            "X": 99.95956,
+            "Y": -2.384186E-07,
+            "Z": 99.85896
+          },
+          "TerritoryId": 1030,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 6,
+      "Steps": [
+        {
+          "DataId": 1040503,
+          "Position": {
+            "X": -221.4237,
+            "Y": -224.3827,
+            "Z": 364.40063
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1038588,
+          "Position": {
+            "X": -101.76245,
+            "Y": 4.357494,
+            "Z": 0.7476196
+          },
+          "TerritoryId": 962,
+          "InteractionType": "Interact",
+          "AethernetShortcut": [
+            "[Old Sharlayan] The Rostra",
+            "[Old Sharlayan] The Baldesion Annex"
+          ]
+        }
+      ]
+    }
+  ]
+}

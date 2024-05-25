@@ -1,0 +1,97 @@
+{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1039686,
+          "Position": {
+            "X": -17.95996,
+            "Y": -47.192066,
+            "Z": -494.31604
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1038908,
+          "Position": {
+            "X": -456.10742,
+            "Y": -168,
+            "Z": -618.7686
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 2012178,
+          "Position": {
+            "X": -486.59497,
+            "Y": -154.37555,
+            "Z": -689.26526
+          },
+          "TerritoryId": 959,
+          "InteractionType": "ManualAction",
+          "Comment": "Navmesh can't jump"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 2012011,
+          "Position": {
+            "X": -482.7497,
+            "Y": -154.95538,
+            "Z": -595.72754
+          },
+          "TerritoryId": 959,
+          "InteractionType": "AetherCurrent"
+        },
+        {
+          "DataId": 1038912,
+          "Position": {
+            "X": -455.40552,
+            "Y": -168,
+            "Z": -620.05035
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        },
+        {
+          "ItemId": -1,
+          "TerritoryId": 959,
+          "InteractionType": "UseItem"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1038912,
+          "Position": {
+            "X": -455.40552,
+            "Y": -168,
+            "Z": -620.05035
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

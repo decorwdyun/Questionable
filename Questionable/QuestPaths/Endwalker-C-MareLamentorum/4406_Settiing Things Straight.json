@@ -1,0 +1,152 @@
+﻿{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1038935,
+          "Position": {
+            "X": 68.5282,
+            "Y": 75.72459,
+            "Z": -23.51416
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1038936,
+          "Position": {
+            "X": 191.48547,
+            "Y": 93.90228,
+            "Z": -54.306885
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 2012235,
+          "Position": {
+            "X": 183.30652,
+            "Y": 87.20532,
+            "Z": -30.47229
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Combat",
+          "KillEnemyDataIds": [
+            13998,
+            14093,
+            13998
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 2012433,
+          "Position": {
+            "X": 183.30652,
+            "Y": 87.17468,
+            "Z": -30.380737
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 1038936,
+          "Position": {
+            "X": 191.48547,
+            "Y": 93.90228,
+            "Z": -54.306885
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "Position": {
+            "X": 304.50522,
+            "Y": -144,
+            "Z": -558.8681
+          },
+          "TerritoryId": 959,
+          "InteractionType": "ManualAction",
+          "Comment": "Navmesh can't jump"
+        },
+        {
+          "DataId": 2012012,
+          "Position": {
+            "X": 316.39575,
+            "Y": -154.98596,
+            "Z": -595.5444
+          },
+          "TerritoryId": 959,
+          "InteractionType": "AetherCurrent"
+        },
+        {
+          "DataId": 1038937,
+          "Position": {
+            "X": 381.7959,
+            "Y": -168.00002,
+            "Z": -594.62885
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 6,
+      "Steps": [
+        {
+          "DataId": 2012337,
+          "Position": {
+            "X": 466.8496,
+            "Y": -168.01715,
+            "Z": -654.13904
+          },
+          "TerritoryId": 959,
+          "InteractionType": "ManualAction",
+          "Comment": "Duty - Find Runninway"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1038944,
+          "Position": {
+            "X": 361.65405,
+            "Y": -168.00002,
+            "Z": -628.19867
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

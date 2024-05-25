@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/quest/1.0",
+  "title": "Questionable V1",
+  "description": "A series of quest sequences",
+  "type": "object",
+  "properties": {
+    "Version": {
+      "description": "Version of the schema",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1
+    },
+    "Author": {
+      "description": "Author of the quest sequence",
+      "type": "string"
+    },
+    "Contributors": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "Comment": {
+      "type": "string"
+    },
+    "TerritoryBlacklist": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    },
+    "QuestSequence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "Sequence": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 255
+          },
+          "Steps": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "DataId": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0
+                },
+                "Position": {
+                  "type": "object",
+                  "properties": {
+                    "X": {
+                      "type": "number"
+                    },
+                    "Y": {
+                      "type": "number"
+                    },
+                    "Z": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "X",
+                    "Y",
+                    "Z"
+                  ]
+                },
+                "TerritoryId": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0
+                },
+                "InteractionType": {
+                  "type": "string",
+                  "enum": [
+                    "Interact",
+                    "AttuneAethenetShard",
+                    "AttuneAetheryte",
+                    "AetherCurrent",
+                    "Combat",
+                    "UseItem",
+                    "Emote",
+                    "ManualAction"
+                  ]
+                },
+                "Disabled": {
+                  "type": "boolean"
+                },
+                "AethernetShortcut": {
+                  "type": "array",
+                  "minItems": 2,
+                  "maxItems": 2,
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "[The Crystarium] Aetheryte Plaza",
+                      "[The Crystarium] Musica Universalis Markets",
+                      "[The Crystarium] Themenos Rookery",
+                      "[The Crystarium] The Dossal Gate",
+                      "[The Crystarium] The Pendants",
+                      "[The Crystarium] The Amaro Launch",
+                      "[The Crystarium] The Crystalline Mean",
+                      "[The Crystarium] The Cabinet of Curiosity",
+                      "[Eulmore] Aetheryte Plaza",
+                      "[Eulmore] Southeast Derelicts",
+                      "[Eulmore] Nightsoil Pots",
+                      "[Eulmore] The Glory Gate",
+                      "[Eulmore] The Mainstay",
+                      "[Old Sharlayan] Aetheryte Plaza",
+                      "[Old Sharlayan] The Studium",
+                      "[Old Sharlayan] The Baldesion Annex",
+                      "[Old Sharlayan] The Rostra",
+                      "[Old Sharlayan] The Leveilleur Estate",
+                      "[Old Sharlayan] Journey's End",
+                      "[Old Sharlayan] Scholar's Harbor",
+                      "[Radz-at-Han] Aetheryte Plaza",
+                      "[Radz-at-Han] Meghaduta",
+                      "[Radz-at-Han] Ruveydah Fibers",
+                      "[Radz-at-Han] Airship Landing",
+                      "[Radz-at-Han] Alzadaal's Peace",
+                      "[Radz-at-Han] Hall of the Radiant Host",
+                      "[Radz-at-Han] Mehryde's Meyhane",
+                      "[Radz-at-Han] Kama",
+                      "[Radz-at-Han] The High Crucible of Al-Kimiya"
+                    ]
+                  }
+                },
+                "KillEnemyDataIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  }
+                },
+                "Emote": {
+                  "type": "string",
+                  "enum": [
+                    "stretch",
+                    "wave",
+                    "rally"
+                  ]
+                },
+                "SkipIf": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "FlyingUnlocked"
+                    ]
+                  }
+                },
+                "Comment": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "TerritoryId",
+                "InteractionType"
+              ]
+            }
+          },
+          "Comment": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "Sequence"
+        ]
+      }
+    }
+  },
+  "required": [
+    "Version",
+    "Author"
+  ]
+}

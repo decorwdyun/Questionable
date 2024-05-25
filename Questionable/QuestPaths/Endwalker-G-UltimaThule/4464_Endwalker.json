@@ -1,0 +1,172 @@
+{
+  "Version": 1,
+  "Author": "liza",
+  "TerritoryBlacklist": [
+    973
+  ],
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1042216,
+          "Position": {
+            "X": 4.196167,
+            "Y": 637.10297,
+            "Z": 4.2266846
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 2012370,
+          "Position": {
+            "X": -3.1281738,
+            "Y": 637.07935,
+            "Z": -9.079163
+          },
+          "TerritoryId": 960,
+          "InteractionType": "ManualAction",
+          "Comment": "Duty - The Dead Ends"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 2012371,
+          "Position": {
+            "X": 100,
+            "Y": 0,
+            "Z": 106
+          },
+          "TerritoryId": 1029,
+          "InteractionType": "ManualAction",
+          "Comment": "Duty - The Final Day"
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "DataId": 1041179,
+          "Position": {
+            "X": 99.99231,
+            "Y": 0,
+            "Z": 89.98242
+          },
+          "TerritoryId": 1026,
+          "InteractionType": "ManualAction",
+          "Comment": "Duty - Zenos"
+        }
+      ]
+    },
+    {
+      "Sequence": 7,
+      "Steps": [
+        {
+          "DataId": 1041188,
+          "Position": {
+            "X": -0.16790771,
+            "Y": 0,
+            "Z": 0.8086548
+          },
+          "TerritoryId": 351,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1041181,
+          "Position": {
+            "X": -1.236023,
+            "Y": 0,
+            "Z": 0.6560669
+          },
+          "TerritoryId": 351,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1041182,
+          "Position": {
+            "X": -6.4240723,
+            "Y": 0.009977884,
+            "Z": -4.7455444
+          },
+          "TerritoryId": 351,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1041184,
+          "Position": {
+            "X": -7.034485,
+            "Y": 0,
+            "Z": -5.8442383
+          },
+          "TerritoryId": 351,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1041183,
+          "Position": {
+            "X": 6.6376343,
+            "Y": 0,
+            "Z": -6.790344
+          },
+          "TerritoryId": 351,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1041187,
+          "Position": {
+            "X": 10.482849,
+            "Y": 0,
+            "Z": -8.255188
+          },
+          "TerritoryId": 351,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1041185,
+          "Position": {
+            "X": 25.864014,
+            "Y": -1,
+            "Z": -5.7526855
+          },
+          "TerritoryId": 351,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1041186,
+          "Position": {
+            "X": 29.984009,
+            "Y": -1,
+            "Z": 0.1373291
+          },
+          "TerritoryId": 351,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1041189,
+          "Position": {
+            "X": -0.015319824,
+            "Y": 0,
+            "Z": -7.1870728
+          },
+          "TerritoryId": 351,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

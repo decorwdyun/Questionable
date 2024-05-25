@@ -1,0 +1,87 @@
+{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1039600,
+          "Position": {
+            "X": 142.443,
+            "Y": 4.7837553,
+            "Z": -148.57715
+          },
+          "TerritoryId": 963,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 199,
+          "Position": {
+            "X": 57.91655,
+            "Y": -24.69344,
+            "Z": -210.6151
+          },
+          "TerritoryId": 963,
+          "InteractionType": "AttuneAethenetShard",
+          "Comment": "This is pretty late here, maybe move it to some other quest"
+        },
+        {
+          "DataId": 1039589,
+          "Position": {
+            "X": -270.25262,
+            "Y": 0.07863108,
+            "Z": 605.9204
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1037631,
+          "Position": {
+            "X": 166.64368,
+            "Y": 5.34517,
+            "Z": 635.9807
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1039606,
+          "Position": {
+            "X": 215.80823,
+            "Y": 9.935694,
+            "Z": 561.27246
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1039607,
+          "Position": {
+            "X": -342.58032,
+            "Y": 55,
+            "Z": -68.61987
+          },
+          "TerritoryId": 963,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,92 @@
+{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1043802,
+          "Position": {
+            "X": 103.4104,
+            "Y": -718.33905,
+            "Z": 207.87354
+          },
+          "TerritoryId": 1089,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1043804,
+          "Position": {
+            "X": 220.59961,
+            "Y": -699.9556,
+            "Z": 90.01294
+          },
+          "TerritoryId": 1089,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1043806,
+          "Position": {
+            "X": 217.39526,
+            "Y": -699.9557,
+            "Z": 91.17261
+          },
+          "TerritoryId": 1089,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 2013112,
+          "Position": {
+            "X": 259.9318,
+            "Y": -706.408,
+            "Z": 90.01325
+          },
+          "TerritoryId": 1089,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1043808,
+          "Position": {
+            "X": -1.5107422,
+            "Y": -698.0104,
+            "Z": -150.83551
+          },
+          "TerritoryId": 1089,
+          "InteractionType": "ManualAction",
+          "Comment": "Duty - Where Everything Begins"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1043812,
+          "Position": {
+            "X": -1.1750488,
+            "Y": -698.0104,
+            "Z": -135.63751
+          },
+          "TerritoryId": 1089,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}
