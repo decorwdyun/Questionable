@@ -28,7 +28,7 @@
             "Z": -36.972656
           },
           "TerritoryId": 961,
-          "InteractionType": "AetherCurrent",
+          "InteractionType": "AttuneAetherCurrent",
           "Comment": "Might be faster when initially entering the Island"
         },
         {

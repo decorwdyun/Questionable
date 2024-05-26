@@ -1,0 +1,134 @@
+﻿{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1038616,
+          "Position": {
+            "X": -278.88916,
+            "Y": 2.740889,
+            "Z": 532.03625
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1038620,
+          "Position": {
+            "X": -477.68372,
+            "Y": 5.0817194,
+            "Z": 19.21106
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 170,
+          "Position": {
+            "X": -527.4888,
+            "Y": 4.785123,
+            "Z": 36.76496
+          },
+          "TerritoryId": 957,
+          "InteractionType": "AttuneAetheryte"
+        },
+        {
+          "DataId": 1038631,
+          "Position": {
+            "X": -510.7958,
+            "Y": 11.975282,
+            "Z": 117.69275
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1038635,
+          "Position": {
+            "X": -487.1443,
+            "Y": 49.161343,
+            "Z": 153.42944
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 1038636,
+          "Position": {
+            "X": -485.70996,
+            "Y": 49.103825,
+            "Z": 152.91064
+          },
+          "TerritoryId": 957,
+          "InteractionType": "ManualAction",
+          "Comment": "Follow the Lantern"
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Comment": "Follow the Lantern"
+    },
+    {
+      "Sequence": 6,
+      "Comment": "Follow the Lantern"
+    },
+    {
+      "Sequence": 7,
+      "Comment": "Follow the Lantern"
+    },
+    {
+      "Sequence": 8,
+      "Steps": [
+        {
+          "DataId": 1038637,
+          "Position": {
+            "X": -484.61133,
+            "Y": 54.187614,
+            "Z": 128.34363
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1038635,
+          "Position": {
+            "X": -487.1443,
+            "Y": 49.161343,
+            "Z": 153.42944
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

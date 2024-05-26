@@ -28,7 +28,7 @@
             "Z": -172.25916
           },
           "TerritoryId": 958,
-          "InteractionType": "AetherCurrent"
+          "InteractionType": "AttuneAetherCurrent"
         },
         {
           "Position": {
@@ -48,7 +48,7 @@
             "Z": -518.2117
           },
           "TerritoryId": 958,
-          "InteractionType": "AetherCurrent"
+          "InteractionType": "AttuneAetherCurrent"
         },
         {
           "DataId": 1039917,

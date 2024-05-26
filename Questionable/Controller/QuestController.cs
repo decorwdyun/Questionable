@@ -12,10 +12,14 @@ internal sealed class QuestController
 
     public QuestController(DalamudPluginInterface pluginInterface)
     {
+#if false
         LoadFromEmbeddedResources();
-        LoadFromDalamudConfigDirecory(pluginInterface.ConfigDirectory);
+#endif
+        LoadFromDirectory(new DirectoryInfo(@"E:\ffxiv\Questionable\Questionable\QuestPaths"));
+        LoadFromDirectory(pluginInterface.ConfigDirectory);
     }
 
+#if false
     private void LoadFromEmbeddedResources()
     {
         foreach (string resourceName in typeof(Questionable).Assembly.GetManifestResourceNames())
@@ -34,8 +38,9 @@ internal sealed class QuestController
             }
         }
     }
+#endif
 
-    private void LoadFromDalamudConfigDirecory(DirectoryInfo configDirectory)
+    private void LoadFromDirectory(DirectoryInfo configDirectory)
     {
         foreach (FileInfo fileInfo in configDirectory.GetFiles("*.json"))
         {
@@ -43,12 +48,16 @@ internal sealed class QuestController
             var (questId, name) = ExtractQuestDataFromName(fileInfo.Name);
             Quest quest = new Quest
             {
+                FilePath = fileInfo.FullName,
                 QuestId = questId,
                 Name = name,
                 Data = JsonSerializer.Deserialize<QuestData>(stream)!,
             };
             _quests[questId] = quest;
         }
+
+        foreach (DirectoryInfo childDirectory in configDirectory.GetDirectories())
+            LoadFromDirectory(childDirectory);
     }
 
     private static (ushort QuestId, string Name) ExtractQuestDataFromName(string resourceName)

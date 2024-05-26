@@ -31,7 +31,8 @@ public sealed class Questionable : IDalamudPlugin
         _framework = framework;
         _gameGui = gameGui;
         _gameFunctions = new GameFunctions(dataManager, sigScanner);
-        _movementController = new MovementController(new NavmeshIpc(pluginInterface), clientState, _gameFunctions, pluginLog);
+        _movementController =
+            new MovementController(new NavmeshIpc(pluginInterface), clientState, _gameFunctions, pluginLog);
         _windowSystem.AddWindow(new DebugWindow(_movementController, _gameFunctions, clientState, targetManager));
 
         _pluginInterface.UiBuilder.Draw += _windowSystem.Draw;
@@ -57,7 +58,8 @@ public sealed class Questionable : IDalamudPlugin
             _gameGui.ScreenToWorld(new Vector2(inputData->CursorXPosition, inputData->CursorYPosition),
                 out Vector3 worldPos))
         {
-            _movementController.NavigateTo(EMovementType.Shortcut, worldPos, _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType));
+            _movementController.NavigateTo(EMovementType.Shortcut, worldPos,
+                _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType));
         }
     }
 

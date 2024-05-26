@@ -1,0 +1,121 @@
+{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1038684,
+          "Position": {
+            "X": 29.007324,
+            "Y": -14.446999,
+            "Z": 76.46289
+          },
+          "TerritoryId": 962,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1038679,
+          "Position": {
+            "X": -275.5932,
+            "Y": 19.003881,
+            "Z": 13.321045
+          },
+          "TerritoryId": 962,
+          "InteractionType": "Interact",
+          "AethernetShortcut": [
+            "[Old Sharlayan] Scholar's Harbor",
+            "[Old Sharlayan] The Studium"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1038753,
+          "Position": {
+            "X": -234.21082,
+            "Y": 12.969517,
+            "Z": -27.054321
+          },
+          "TerritoryId": 962,
+          "InteractionType": "ManualAction",
+          "Comment": "Follow Alisaie"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1038688,
+          "Position": {
+            "X": -69.5354,
+            "Y": 18.043928,
+            "Z": -321.40082
+          },
+          "TerritoryId": 962,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "DataId": 1038692,
+          "Position": {
+            "X": -1.5411987,
+            "Y": 170.403,
+            "Z": -748.0125
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1037473,
+          "Position": {
+            "X": -27.17633,
+            "Y": 170.40298,
+            "Z": -722.46893
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1037472,
+          "Position": {
+            "X": -74.69299,
+            "Y": 170.403,
+            "Z": -755.67255
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1038695,
+          "Position": {
+            "X": -52.384216,
+            "Y": 170.403,
+            "Z": -734.7677
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

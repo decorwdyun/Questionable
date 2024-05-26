@@ -28,7 +28,7 @@
             "Z": 402.12085
           },
           "TerritoryId": 960,
-          "InteractionType": "AetherCurrent"
+          "InteractionType": "AttuneAetherCurrent"
         },
         {
           "DataId": 2012032,
@@ -38,7 +38,7 @@
             "Z": 411.73413
           },
           "TerritoryId": 960,
-          "InteractionType": "AetherCurrent"
+          "InteractionType": "AttuneAetherCurrent"
         },
         {
           "DataId": 1040343,
@@ -109,7 +109,7 @@
             "Z": 357.86987
           },
           "TerritoryId": 960,
-          "InteractionType": "AetherCurrent",
+          "InteractionType": "AttuneAetherCurrent",
           "Comment": "Unsure if this is the right spot"
         },
         {
@@ -120,7 +120,7 @@
             "Z": 289.66187
           },
           "TerritoryId": 960,
-          "InteractionType": "AetherCurrent"
+          "InteractionType": "AttuneAetherCurrent"
         },
         {
           "DataId": 1040349,

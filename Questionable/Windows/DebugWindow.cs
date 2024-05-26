@@ -39,7 +39,8 @@ internal sealed class DebugWindow : Window
         if (!_clientState.IsLoggedIn || _clientState.LocalPlayer == null)
             return;
 
-        ImGui.Text($"Current TerritoryId: {_clientState.TerritoryType}, Flying: {(_gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType) ? "Yes" : "No")}");
+        ImGui.Text(
+            $"Current TerritoryId: {_clientState.TerritoryType}, Flying: {(_gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType) ? "Yes" : "No")}");
 
         var q = _gameFunctions.GetCurrentQuest();
         ImGui.Text($"Current Quest: {q.CurrentQuest} → {q.Sequence}");
@@ -54,7 +55,8 @@ internal sealed class DebugWindow : Window
             {
                 if (ImGui.Button("Move to Target"))
                 {
-                    _movementController.NavigateTo(EMovementType.DebugWindow, _targetManager.Target.Position, _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType));
+                    _movementController.NavigateTo(EMovementType.DebugWindow, _targetManager.Target.Position,
+                        _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType));
                 }
             }
             else
@@ -107,9 +109,11 @@ internal sealed class DebugWindow : Window
         ImGui.Separator();
 
         var map = AgentMap.Instance();
-        ImGui.BeginDisabled(map == null || map->IsFlagMarkerSet == 0 || map->FlagMapMarker.TerritoryId != _clientState.TerritoryType);
+        ImGui.BeginDisabled(map == null || map->IsFlagMarkerSet == 0 ||
+                            map->FlagMapMarker.TerritoryId != _clientState.TerritoryType);
         if (ImGui.Button("Move to Flag"))
-            _gameFunctions.ExecuteCommand($"/vnav {(_gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType) ? "flyflag" : "moveflag")}");
+            _gameFunctions.ExecuteCommand(
+                $"/vnav {(_gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType) ? "flyflag" : "moveflag")}");
         ImGui.EndDisabled();
 
         ImGui.SameLine();

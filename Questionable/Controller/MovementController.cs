@@ -18,7 +18,8 @@ internal sealed class MovementController : IDisposable
     private CancellationTokenSource? _cancellationTokenSource;
     private Task<List<Vector3>>? _pathfindTask;
 
-    public MovementController(NavmeshIpc navmeshIpc, IClientState clientState, GameFunctions gameFunctions, IPluginLog pluginLog)
+    public MovementController(NavmeshIpc navmeshIpc, IClientState clientState, GameFunctions gameFunctions,
+        IPluginLog pluginLog)
     {
         _navmeshIpc = navmeshIpc;
         _clientState = clientState;

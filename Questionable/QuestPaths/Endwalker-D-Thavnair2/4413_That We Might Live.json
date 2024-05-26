@@ -43,7 +43,7 @@
             "Z": -343.89258
           },
           "TerritoryId": 957,
-          "InteractionType": "AetherCurrent"
+          "InteractionType": "AttuneAetherCurrent"
         },
         {
           "DataId": 2011997,
@@ -53,7 +53,7 @@
             "Z": -447.8676
           },
           "TerritoryId": 957,
-          "InteractionType": "AetherCurrent"
+          "InteractionType": "AttuneAetherCurrent"
         },
         {
           "DataId": 1039023,

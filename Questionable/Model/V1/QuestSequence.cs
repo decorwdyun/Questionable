@@ -4,6 +4,7 @@ namespace Questionable.Model.V1;
 
 public class QuestSequence
 {
-    public int Sequence { get; set; }
+    public required int Sequence { get; set; }
+    public string Comment { get; set; }
     public List<QuestStep> Steps { get; set; } = new();
 }

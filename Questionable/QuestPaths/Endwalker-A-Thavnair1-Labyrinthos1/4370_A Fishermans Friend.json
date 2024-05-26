@@ -1,0 +1,133 @@
+﻿{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1038608,
+          "Position": {
+            "X": 197.55847,
+            "Y": 1.769943,
+            "Z": 737.97205
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1038608,
+          "Position": {
+            "X": 197.55847,
+            "Y": 1.769943,
+            "Z": 737.97205
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1037625,
+          "Position": {
+            "X": 176.47058,
+            "Y": 1.8742183,
+            "Z": 799.2217
+          },
+          "TerritoryId": 957,
+          "InteractionType": "ManualAction",
+          "Comment": "Talk (2, 2, 1)"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1037626,
+          "Position": {
+            "X": 166.61316,
+            "Y": 4.763736,
+            "Z": 681.7273
+          },
+          "TerritoryId": 957,
+          "InteractionType": "ManualAction",
+          "Comment": "Talk (2, 1, 2)"
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 1037624,
+          "Position": {
+            "X": 213.91614,
+            "Y": 15.136713,
+            "Z": 517.72327
+          },
+          "TerritoryId": 957,
+          "InteractionType": "ManualAction",
+          "Comment": "Talk (2, 2, 2)"
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "DataId": 2011992,
+          "Position": {
+            "X": 303.91382,
+            "Y": 0.25933838,
+            "Z": 473.65527
+          },
+          "TerritoryId": 957,
+          "InteractionType": "AttuneAetherCurrent"
+        },
+        {
+          "Position": {
+            "X": 201.66586,
+            "Y": 1.7700036,
+            "Z": 712.9197
+          },
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "DataId": 1038608,
+          "Position": {
+            "X": 199.48804,
+            "Y": 1.769943,
+            "Z": 738.9843
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1038609,
+          "Position": {
+            "X": 199.35901,
+            "Y": 5.873753,
+            "Z": 612.787
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

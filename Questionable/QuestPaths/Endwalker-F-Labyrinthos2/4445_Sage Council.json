@@ -4,56 +4,63 @@
   "QuestSequence": [
     {
       "Sequence": 0,
-      "Steps": [{
-        "DataId": 1040401,
-        "Position": {
-          "X": 374.83777,
-          "Y": 79.691376,
-          "Z": 298.08484
-        },
-        "TerritoryId": 956,
-        "InteractionType": "Interact"
-      }]
+      "Steps": [
+        {
+          "DataId": 1040401,
+          "Position": {
+            "X": 374.83777,
+            "Y": 79.691376,
+            "Z": 298.08484
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact"
+        }
+      ]
     },
     {
       "Sequence": 1,
-      "Steps": [{
-        "DataId": 1039687,
-        "Position": {
-          "X": -18.875488,
-          "Y": -31.53043,
-          "Z": -76.98181
-        },
-        "TerritoryId": 956,
-        "InteractionType": "Interact"
-      }]
+      "Steps": [
+        {
+          "DataId": 1039687,
+          "Position": {
+            "X": -18.875488,
+            "Y": -31.53043,
+            "Z": -76.98181
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact"
+        }
+      ]
     },
     {
       "Sequence": 2,
-      "Steps": [{
-        "DataId": 1040409,
-        "Position": {
-          "X": -99.076904,
-          "Y": -28.516306,
-          "Z": -60.013794
-        },
-        "TerritoryId": 956,
-        "InteractionType": "Interact"
-      }]
+      "Steps": [
+        {
+          "DataId": 1040409,
+          "Position": {
+            "X": -99.076904,
+            "Y": -28.516306,
+            "Z": -60.013794
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact"
+        }
+      ]
     },
     {
       "Sequence": 3,
-      "Steps": [{
-        "DataId": 1040422,
-        "Position": {
-          "X": -37.125244,
-          "Y": -29.530075,
-          "Z": -169.14624
+      "Steps": [
+        {
+          "DataId": 1040422,
+          "Position": {
+            "X": -37.125244,
+            "Y": -29.530075,
+            "Z": -169.14624
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact",
+          "Comment": "Distracted Researcher"
         },
-        "TerritoryId": 956,
-        "InteractionType": "Interact",
-        "Comment": "Distracted Researcher"
-      },
         {
           "DataId": 1040416,
           "Position": {
@@ -130,46 +137,53 @@
           "TerritoryId": 956,
           "InteractionType": "Interact",
           "Comment": "Anxious Engineer"
-        }]
+        }
+      ]
     },
     {
       "Sequence": 4,
-      "Steps": [{
-        "DataId": 1040436,
-        "Position": {
-          "X": -78.26355,
-          "Y": -29.53,
-          "Z": -58.854065
-        },
-        "TerritoryId": 956,
-        "InteractionType": "Interact"
-      }]
+      "Steps": [
+        {
+          "DataId": 1040436,
+          "Position": {
+            "X": -78.26355,
+            "Y": -29.53,
+            "Z": -58.854065
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact"
+        }
+      ]
     },
     {
       "Sequence": 5,
-      "Steps": [{
-        "DataId": 2012220,
-        "Position": {
-          "X": -74.418274,
-          "Y": -29.58728,
-          "Z": -53.23877
-        },
-        "TerritoryId": 956,
-        "InteractionType": "Interact"
-      }]
+      "Steps": [
+        {
+          "DataId": 2012220,
+          "Position": {
+            "X": -74.418274,
+            "Y": -29.58728,
+            "Z": -53.23877
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact"
+        }
+      ]
     },
     {
-      "Sequence":255,
-      "Steps": [{
-        "DataId": 1040436,
-        "Position": {
-          "X": -78.26355,
-          "Y": -29.53,
-          "Z": -58.854065
-        },
-        "TerritoryId": 956,
-        "InteractionType": "Interact"
-      }]
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1040436,
+          "Position": {
+            "X": -78.26355,
+            "Y": -29.53,
+            "Z": -58.854065
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact"
+        }
+      ]
     }
   ]
 }
