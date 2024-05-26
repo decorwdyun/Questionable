@@ -3,17 +3,21 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
 using Dalamud.Game;
+using Dalamud.Game.ClientState.Objects;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using FFXIVClientStructs.FFXIV.Client.Game.Control;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using FFXIVClientStructs.FFXIV.Client.System.Memory;
 using FFXIVClientStructs.FFXIV.Client.System.String;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using Lumina.Excel.GeneratedSheets;
+using Questionable.Model.V1;
 
 namespace Questionable;
 
@@ -31,8 +35,15 @@ internal sealed unsafe class GameFunctions
     private readonly delegate* unmanaged<Utf8String*, int, IntPtr, void> _sanitiseString;
     private readonly ReadOnlyDictionary<ushort, byte> _territoryToAetherCurrentCompFlgSet;
 
-    public GameFunctions(IDataManager dataManager, ISigScanner sigScanner)
+    private readonly IObjectTable _objectTable;
+    private readonly ITargetManager _targetManager;
+    private readonly IPluginLog _pluginLog;
+
+    public GameFunctions(IDataManager dataManager, IObjectTable objectTable, ISigScanner sigScanner, ITargetManager targetManager, IPluginLog pluginLog)
     {
+        _objectTable = objectTable;
+        _targetManager = targetManager;
+        _pluginLog = pluginLog;
         _processChatBox =
             Marshal.GetDelegateForFunctionPointer<ProcessChatBoxDelegate>(sigScanner.ScanText(Signatures.SendChat));
         _sanitiseString =
@@ -45,7 +56,7 @@ internal sealed unsafe class GameFunctions
             .AsReadOnly();
     }
 
-    public (uint CurrentQuest, byte Sequence) GetCurrentQuest()
+    public (ushort CurrentQuest, byte Sequence) GetCurrentQuest()
     {
         var scenarioTree = AgentScenarioTree.Instance();
         if (scenarioTree == null)
@@ -69,8 +80,51 @@ internal sealed unsafe class GameFunctions
 
         //ImGui.Text($"Current Quest: {currentQuest}");
         //ImGui.Text($"Progress: {QuestManager.GetQuestSequence(currentQuest)}");
-        return (currentQuest, QuestManager.GetQuestSequence(currentQuest));
+        return ((ushort)currentQuest, QuestManager.GetQuestSequence(currentQuest));
     }
+
+    public bool IsAetheryteUnlocked(uint aetheryteId, out byte subIndex)
+    {
+        var telepo = Telepo.Instance();
+        if (telepo == null || telepo->UpdateAetheryteList() == null)
+        {
+            subIndex = 0;
+            return false;
+        }
+
+        for (ulong i = 0; i < telepo->TeleportList.Size(); ++ i)
+        {
+            var data = telepo->TeleportList.Get(i);
+            if (data.AetheryteId == aetheryteId)
+            {
+                subIndex = data.SubIndex;
+                return true;
+            }
+        }
+
+        subIndex = 0;
+        return false;
+    }
+
+    public bool IsAetheryteUnlocked(EAetheryteLocation aetheryteLocation)
+        => IsAetheryteUnlocked((uint)aetheryteLocation, out _);
+
+    public bool TeleportAetheryte(uint aetheryteId)
+    {
+        var status = ActionManager.Instance()->GetActionStatus(ActionType.Action, 5);
+        if (status != 0)
+            return false;
+
+        if (IsAetheryteUnlocked(aetheryteId, out var subIndex))
+        {
+            return Telepo.Instance()->Teleport(aetheryteId, subIndex);
+        }
+
+        return false;
+    }
+
+    public bool TeleportAetheryte(EAetheryteLocation aetheryteLocation)
+        => TeleportAetheryte((uint)aetheryteLocation);
 
     public bool IsFlyingUnlocked(ushort territoryId)
     {
@@ -82,7 +136,7 @@ internal sealed unsafe class GameFunctions
 
     public void ExecuteCommand(string command)
     {
-        if (!command.StartsWith("/", StringComparison.Ordinal))
+        if (!command.StartsWith('/'))
             return;
 
         SendMessage(command);
@@ -190,21 +244,37 @@ internal sealed unsafe class GameFunctions
 
         internal ChatPayload(byte[] stringBytes)
         {
-            this.textPtr = Marshal.AllocHGlobal(stringBytes.Length + 30);
-            Marshal.Copy(stringBytes, 0, this.textPtr, stringBytes.Length);
-            Marshal.WriteByte(this.textPtr + stringBytes.Length, 0);
+            textPtr = Marshal.AllocHGlobal(stringBytes.Length + 30);
+            Marshal.Copy(stringBytes, 0, textPtr, stringBytes.Length);
+            Marshal.WriteByte(textPtr + stringBytes.Length, 0);
 
-            this.textLen = (ulong)(stringBytes.Length + 1);
+            textLen = (ulong)(stringBytes.Length + 1);
 
-            this.unk1 = 64;
-            this.unk2 = 0;
+            unk1 = 64;
+            unk2 = 0;
         }
 
         public void Dispose()
         {
-            Marshal.FreeHGlobal(this.textPtr);
+            Marshal.FreeHGlobal(textPtr);
         }
     }
 
     #endregion
+
+    public void InteractWith(uint dataId)
+    {
+        foreach (var gameObject in _objectTable)
+        {
+            if (gameObject.DataId == dataId)
+            {
+                _targetManager.Target = null;
+                _targetManager.Target = gameObject;
+
+                TargetSystem.Instance()->InteractWithObject(
+                    (FFXIVClientStructs.FFXIV.Client.Game.Object.GameObject*)gameObject.Address, false);
+                return;
+            }
+        }
+    }
 }

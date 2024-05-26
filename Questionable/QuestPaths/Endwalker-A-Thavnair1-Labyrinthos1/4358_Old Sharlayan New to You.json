@@ -63,10 +63,11 @@
         {
           "DataId": 1038578,
           "Position": {
-            "X": -53.576973,
+            "X": -56.737106,
             "Y": -15.127001,
-            "Z": 131.09679
+            "Z": 130.76611
           },
+          "StopDistance": 0.25,
           "TerritoryId": 962,
           "InteractionType": "Interact"
         }
@@ -78,10 +79,11 @@
         {
           "DataId": 1038578,
           "Position": {
-            "X": 0.86839586,
-            "Y": 3.2250001,
-            "Z": 9.54673
+            "X": -0.03130532,
+            "Y": 3.2249997,
+            "Z": 8.909777
           },
+          "StopDistance": 0.25,
           "TerritoryId": 962,
           "InteractionType": "Interact"
         }
@@ -103,10 +105,11 @@
         {
           "DataId": 1038578,
           "Position": {
-            "X": 65.84385,
+            "X": 66.10567,
             "Y": 5.0999994,
-            "Z": -63.417946
+            "Z": -63.37148
           },
+          "StopDistance": 0.25,
           "TerritoryId": 962,
           "InteractionType": "Interact"
         }
@@ -116,12 +119,22 @@
       "Sequence": 6,
       "Steps": [
         {
+          "Position": {
+            "X": 93.30914,
+            "Y": 8.920153,
+            "Z": -89.12467
+          },
+          "TerritoryId": 962,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 1038578,
           "Position": {
             "X": -0.4629783,
             "Y": 41.37599,
             "Z": -142.5033
           },
+          "StopDistance": 0.25,
           "TerritoryId": 962,
           "InteractionType": "Interact"
         }
@@ -137,6 +150,7 @@
             "Y": 41.367188,
             "Z": -156.6034
           },
+          "StopDistance": 0.25,
           "TerritoryId": 962,
           "InteractionType": "AttuneAethenetShard"
         },
@@ -182,6 +196,7 @@
             "Y": 1.0594833,
             "Z": 30.052902
           },
+          "StopDistance": 0.25,
           "TerritoryId": 962,
           "InteractionType": "Interact",
           "AethernetShortcut": [

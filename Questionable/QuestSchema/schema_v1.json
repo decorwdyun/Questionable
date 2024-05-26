@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.com/quest/1.0",
+  "$id": "/quest/1.0",
   "title": "Questionable V1",
   "description": "A series of quest sequences",
   "type": "object",
@@ -68,6 +68,10 @@
                     "Z"
                   ]
                 },
+                "StopDistance": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
                 "TerritoryId": {
                   "type": "integer",
                   "exclusiveMinimum": 0
@@ -88,6 +92,72 @@
                 },
                 "Disabled": {
                   "type": "boolean"
+                },
+                "AetheryteShortcut": {
+                  "type": "string",
+                  "$comment": "TODO add remaining aetherytes for 2.x/3.x",
+                  "enum": [
+                    "Limsa Lominsa",
+                    "Gridania",
+                    "Ul'dah",
+                    "Ishgard",
+
+                    "Rhalgr's Reach",
+                    "Fringes - Castrum Oriens",
+                    "Fringes - Peering Stones",
+                    "Peaks - Ala Gannha",
+                    "Peaks - Ala Ghiri",
+                    "Lochs - Porta Praetoria",
+                    "Lochs - Ala Mhigan Quarter",
+                    "Kugane",
+                    "Ruby Sea - Tamamizu",
+                    "Ruby Sea - Onokoro",
+                    "Yanxia - Namai",
+                    "Yanxia - House of the Fierce",
+                    "Azim Steppe - Reunion",
+                    "Azim Steppe - Dawn Throne",
+                    "Azim Steppe - Dhoro Iloh",
+                    "Doman Enclave",
+                    "Doman Enclave - Northern Enclave",
+                    "Doman Enclave - Southern Enclave",
+
+                    "Crystarium",
+                    "Eulmore",
+                    "Lakeland - Fort Jobb",
+                    "Lakeland - Ostall Imperative",
+                    "Kholusia - Stilltide",
+                    "Kholusia - Wright",
+                    "Kholusia - Tomra",
+                    "Amh Araeng - Mord Souq",
+                    "Amh Araeng - Inn at Journey's Head",
+                    "Amh Araeng - Twine",
+                    "Rak'tika - Slitherbough",
+                    "Rak'tika - Fanow",
+                    "Il Mheg - Lydha Lran",
+                    "Il Mheg - Pia Enni",
+                    "Il Mheg - Wolekdorf",
+                    "Tempest - Ondo Cups",
+                    "Tempest - Macarenses Angle",
+
+                    "Old Sharlayan",
+                    "Radz-at-Han",
+                    "Labyrinthos - Archeion",
+                    "Labyrinthos - Sharlayan Hamlet",
+                    "Labyrinthos - Aporia",
+                    "Thavnair - Yedlihmad",
+                    "Thavnair - Great Work",
+                    "Thavnair - Palaka's Stand",
+                    "Garlemald - Camp Broken Glass",
+                    "Garlemald - Tertium",
+                    "Mare Lamentorum - Sinus Lacrimarum",
+                    "Mare Lamentorum - Bestways Burrow",
+                    "Elpis - Anagnorisis",
+                    "Elpis - Twelve Wonders",
+                    "Elpis - Poieten Oikos",
+                    "Ultima Thule - Reah Tahra",
+                    "Ultima Thula - Abode of the Ea",
+                    "Ultima Thule - Base Omicron"
+                  ]
                 },
                 "AethernetShortcut": {
                   "type": "array",
@@ -147,14 +217,14 @@
                       "[Kugane] Sekiseigumi Barracks",
                       "[Kugane] Rakuza District",
                       "[Kugane] Airship Landing",
-                      "[The Crystarium] Aetheryte Plaza",
-                      "[The Crystarium] Musica Universalis Markets",
-                      "[The Crystarium] Themenos Rookery",
-                      "[The Crystarium] The Dossal Gate",
-                      "[The Crystarium] The Pendants",
-                      "[The Crystarium] The Amaro Launch",
-                      "[The Crystarium] The Crystalline Mean",
-                      "[The Crystarium] The Cabinet of Curiosity",
+                      "[Crystarium] Aetheryte Plaza",
+                      "[Crystarium] Musica Universalis Markets",
+                      "[Crystarium] Themenos Rookery",
+                      "[Crystarium] The Dossal Gate",
+                      "[Crystarium] The Pendants",
+                      "[Crystarium] The Amaro Launch",
+                      "[Crystarium] The Crystalline Mean",
+                      "[Crystarium] The Cabinet of Curiosity",
                       "[Eulmore] Aetheryte Plaza",
                       "[Eulmore] Southeast Derelicts",
                       "[Eulmore] Nightsoil Pots",
@@ -178,6 +248,13 @@
                       "[Radz-at-Han] The High Crucible of Al-Kimiya"
                     ]
                   }
+                },
+                "EnemySpawnType": {
+                  "type": "string",
+                  "enum": [
+                    "AutoOnEnterArea",
+                    "AfterInteraction"
+                  ]
                 },
                 "KillEnemyDataIds": {
                   "type": "array",

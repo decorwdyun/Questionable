@@ -11,6 +11,7 @@ namespace Questionable.Controller;
 
 internal sealed class MovementController : IDisposable
 {
+    public const float DefaultStopDistance = 3f;
     private readonly NavmeshIpc _navmeshIpc;
     private readonly IClientState _clientState;
     private readonly GameFunctions _gameFunctions;
@@ -30,6 +31,8 @@ internal sealed class MovementController : IDisposable
     public bool IsNavmeshReady => _navmeshIpc.IsReady;
     public bool IsPathRunning => _navmeshIpc.IsPathRunning;
     public bool IsPathfinding => _pathfindTask is { IsCompleted: false };
+    public Vector3? Destination { get; private set; }
+    public float StopDistance { get; private set; }
 
     public void Update()
     {
@@ -48,14 +51,24 @@ internal sealed class MovementController : IDisposable
                 ResetPathfinding();
             }
         }
+
+        if (IsPathRunning && Destination != null)
+        {
+            Vector3 localPlayerPosition = _clientState.LocalPlayer?.Position ?? Vector3.Zero;
+            if ((localPlayerPosition - Destination.Value).Length() < StopDistance)
+                Stop();
+        }
     }
 
-    public void NavigateTo(EMovementType type, Vector3 to, bool fly)
+    public void NavigateTo(EMovementType type, Vector3 to, bool fly, float? stopDistance = null)
     {
         ResetPathfinding();
 
+
         _gameFunctions.ExecuteCommand("/automove off");
 
+        Destination = to;
+        StopDistance = stopDistance ?? (DefaultStopDistance - 0.2f);
         _cancellationTokenSource = new();
         _cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(10));
         _pathfindTask =

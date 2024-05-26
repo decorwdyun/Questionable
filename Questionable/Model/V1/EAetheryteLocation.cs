@@ -2,6 +2,8 @@
 
 public enum EAetheryteLocation
 {
+    None = 0,
+
     Gridania = 2,
     GridaniaArcher = 25,
     GridaniaLeatherworker = 26,
@@ -60,6 +62,24 @@ public enum EAetheryteLocation
     KuganeRakuzaDistrict = 119,
     KuganeAirship = 120,
 
+    FringesCastrumOriens = 98,
+    FringesPeeringStones = 99,
+    PeaksAlaGannha = 100,
+    PeaksAlaGhiri = 101,
+    LochsPortaPraetoria = 102,
+    LochsAlaMhiganQuarter = 103,
+    RubySeaTamamizu = 105,
+    RubySeaOnokoro = 106,
+    YanxiaNamai = 107,
+    YanxiaHouseOfTheFierce = 108,
+    AzimSteppeReunion = 109,
+    AzimSteppeDawnThrone = 110,
+    AzimSteppeDhoroIloh = 128,
+
+    DomanEnclave = 127,
+    DomamEnclaveNorthern = 129,
+    DomamEnclaveSouthern = 130,
+
     Crystarium = 133,
     CrystariumMarkets = 149,
     CrystariumThemenosRookery = 150,
@@ -74,6 +94,22 @@ public enum EAetheryteLocation
     EulmoreNightsoilPots = 158,
     EulmoreGloryGate = 159,
     EulmoreSoutheastDerelict = 135,
+
+    LakelandFortJobb = 132,
+    LakelandOstallImperative = 136,
+    KholusiaStilltide = 137,
+    KholusiaWright = 138,
+    KholusiaTomra = 139,
+    AmhAraengMordSouq = 140,
+    AmhAraengInnAtJourneysHead = 141,
+    AmhAraengTwine = 142,
+    RaktikaSlitherbough = 143,
+    RaktikaFanow = 144,
+    IlMhegLydhaLran = 145,
+    IlMhegPiaEnni = 146,
+    IlMhegWolekdorf = 147,
+    TempestOndoCups = 148,
+    TempestMacarensesAngle = 156,
 
     OldSharlayan = 182,
     OldSharlayanStudium = 184,
@@ -92,4 +128,21 @@ public enum EAetheryteLocation
     RadzAtHanMehrydesMeyhane = 196,
     RadzAtHanKama = 198,
     RadzAtHanHighCrucible = 199,
+
+    LabyrinthosArcheion = 166,
+    LabyrinthosSharlayanHamlet = 167,
+    LabyrinthosAporia = 168,
+    ThavnairYedlihmad = 169,
+    ThavnairGreatWork = 170,
+    ThavnairPalakasStand = 171,
+    GarlemaldCampBrokenGlass = 172,
+    GarlemaldTertium = 173,
+    MareLamentorumSinusLacrimarum = 174,
+    MareLamentorumBestwaysBurrow = 175,
+    ElpisAnagnorisis = 176,
+    ElpisTwelveWonders = 177,
+    ElpisPoietenOikos = 178,
+    UltimaThuleReahTahra = 179,
+    UltimaThuleAbodeOfTheEa = 180,
+    UltimaThuleBaseOmicron = 181
 }

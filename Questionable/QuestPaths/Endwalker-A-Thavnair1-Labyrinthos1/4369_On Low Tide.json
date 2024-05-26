@@ -27,27 +27,9 @@
             "Y": 6.991216,
             "Z": 629.2394
           },
+          "StopDistance": 5,
           "TerritoryId": 957,
           "InteractionType": "AttuneAetheryte"
-        },
-        {
-          "Position": {
-            "X": 190.45029,
-            "Y": 0.9965663,
-            "Z": 703.01746
-          },
-          "TerritoryId": 957,
-          "InteractionType": "WalkTo"
-        },
-        {
-          "DataId": 1037622,
-          "Position": {
-            "X": 187.9148,
-            "Y": 0.26447815,
-            "Z": 700.12964
-          },
-          "TerritoryId": 957,
-          "InteractionType": "Interact"
         },
         {
           "DataId": 2011948,
@@ -56,6 +38,17 @@
             "Y": 2.243042,
             "Z": 715.4192
           },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1037622,
+          "Position": {
+            "X": 189.94562,
+            "Y": 0.8560083,
+            "Z": 702.7896
+          },
+          "StopDistance": 0.25,
           "TerritoryId": 957,
           "InteractionType": "Interact"
         },

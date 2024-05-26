@@ -31,7 +31,8 @@
             "Z": 539.6046
           },
           "TerritoryId": 621,
-          "InteractionType": "Interact"
+          "InteractionType": "ManualAction",
+          "Comment": "Duty - A Frosty Reception"
         }
       ]
     },

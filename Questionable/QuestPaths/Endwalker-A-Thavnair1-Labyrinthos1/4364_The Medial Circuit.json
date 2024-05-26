@@ -38,6 +38,7 @@
             "Z": -72.22095
           },
           "TerritoryId": 956,
+          "EnemySpawnType": "AfterInteraction",
           "InteractionType": "Combat",
           "KillEnemyDataIds": [
             14020
@@ -57,6 +58,7 @@
           },
           "TerritoryId": 956,
           "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
             14021
           ]
@@ -97,21 +99,11 @@
       "Sequence": 5,
       "Steps": [
         {
-          "DataId": 2011984,
+          "DataId": 1037985,
           "Position": {
-            "X": 497.09314,
-            "Y": 73.41101,
-            "Z": -267.23126
-          },
-          "TerritoryId": 956,
-          "InteractionType": "AttuneAetherCurrent"
-        },
-        {
-          "DataId": 1038708,
-          "Position": {
-            "X": 408.31604,
-            "Y": 65.3329,
-            "Z": -130.11371
+            "X": 481.8036,
+            "Y": 66.16195,
+            "Z": -108.537415
           },
           "TerritoryId": 956,
           "InteractionType": "Interact"
@@ -127,11 +119,11 @@
           "InteractionType": "Interact"
         },
         {
-          "DataId": 1037985,
+          "DataId": 1038708,
           "Position": {
-            "X": 481.8036,
-            "Y": 66.16195,
-            "Z": -108.537415
+            "X": 408.31604,
+            "Y": 65.3329,
+            "Z": -130.11371
           },
           "TerritoryId": 956,
           "InteractionType": "Interact"
@@ -141,6 +133,16 @@
     {
       "Sequence": 6,
       "Steps": [
+        {
+          "DataId": 2011984,
+          "Position": {
+            "X": 497.09314,
+            "Y": 73.41101,
+            "Z": -267.23126
+          },
+          "TerritoryId": 956,
+          "InteractionType": "AttuneAetherCurrent"
+        },
         {
           "DataId": 2011843,
           "Position": {

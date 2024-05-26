@@ -12,7 +12,7 @@ public sealed class InteractionTypeConverter : JsonConverter<EInteractionType>
     {
         { EInteractionType.Interact, "Interact" },
         { EInteractionType.WalkTo, "WalkTo" },
-        { EInteractionType.AttuneAethenetShard, "AttuneAethenetShard" },
+        { EInteractionType.AttuneAethernetShard, "AttuneAethenetShard" },
         { EInteractionType.AttuneAetheryte, "AttuneAetheryte" },
         { EInteractionType.AttuneAetherCurrent, "AttuneAetherCurrent" },
         { EInteractionType.Combat, "Combat" },

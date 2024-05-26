@@ -156,6 +156,21 @@
           "InteractionType": "Interact"
         }
       ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1038679,
+          "Position": {
+            "X": -275.5932,
+            "Y": 19.003881,
+            "Z": 13.321045
+          },
+          "TerritoryId": 962,
+          "InteractionType": "Interact"
+        }
+      ]
     }
   ]
 }

@@ -42,6 +42,7 @@
             "Y": 4.785123,
             "Z": 36.76496
           },
+          "StopDistance": 5,
           "TerritoryId": 957,
           "InteractionType": "AttuneAetheryte"
         },

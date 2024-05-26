@@ -4,7 +4,7 @@ public enum EInteractionType
 {
     Interact,
     WalkTo,
-    AttuneAethenetShard,
+    AttuneAethernetShard,
     AttuneAetheryte,
     AttuneAetherCurrent,
     Combat,

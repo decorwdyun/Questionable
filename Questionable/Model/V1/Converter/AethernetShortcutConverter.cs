@@ -61,14 +61,14 @@ public sealed class AethernetShortcutConverter : JsonConverter<AethernetShortcut
         { EAetheryteLocation.KuganeSekiseigumiBarracks, "[Kugane] Sekiseigumi Barracks" },
         { EAetheryteLocation.KuganeRakuzaDistrict, "[Kugane] Rakuza District" },
         { EAetheryteLocation.KuganeAirship, "[Kugane] Airship Landing" },
-        { EAetheryteLocation.Crystarium, "[The Crystarium] Aetheryte Plaza" },
-        { EAetheryteLocation.CrystariumMarkets, "[The Crystarium] Musica Universalis Markets" },
-        { EAetheryteLocation.CrystariumThemenosRookery, "[The Crystarium] Themenos Rookery" },
-        { EAetheryteLocation.CrystariumDossalGate, "[The Crystarium] The Dossal Gate" },
-        { EAetheryteLocation.CrystariumPendants, "[The Crystarium] The Pendants" },
-        { EAetheryteLocation.CrystariumAmaroLaunch, "[The Crystarium] The Amaro Launch" },
-        { EAetheryteLocation.CrystariumCrystallineMean, "[The Crystarium] The Crystalline Mean" },
-        { EAetheryteLocation.CrystariumCabinetOfCuriosity, "[The Crystarium] The Cabinet of Curiosity" },
+        { EAetheryteLocation.Crystarium, "[Crystarium] Aetheryte Plaza" },
+        { EAetheryteLocation.CrystariumMarkets, "[Crystarium] Musica Universalis Markets" },
+        { EAetheryteLocation.CrystariumThemenosRookery, "[Crystarium] Themenos Rookery" },
+        { EAetheryteLocation.CrystariumDossalGate, "[Crystarium] The Dossal Gate" },
+        { EAetheryteLocation.CrystariumPendants, "[Crystarium] The Pendants" },
+        { EAetheryteLocation.CrystariumAmaroLaunch, "[Crystarium] The Amaro Launch" },
+        { EAetheryteLocation.CrystariumCrystallineMean, "[Crystarium] The Crystalline Mean" },
+        { EAetheryteLocation.CrystariumCabinetOfCuriosity, "[Crystarium] The Cabinet of Curiosity" },
         { EAetheryteLocation.Eulmore, "[Eulmore] Aetheryte Plaza" },
         { EAetheryteLocation.EulmoreSoutheastDerelict, "[Eulmore] Southeast Derelicts" },
         { EAetheryteLocation.EulmoreNightsoilPots, "[Eulmore] Nightsoil Pots" },
@@ -95,7 +95,7 @@ public sealed class AethernetShortcutConverter : JsonConverter<AethernetShortcut
     private static readonly Dictionary<string, EAetheryteLocation> StringToEnum =
         EnumToString.ToDictionary(x => x.Value, x => x.Key);
 
-    public override AethernetShortcut? Read(ref Utf8JsonReader reader, Type typeToConvert,
+    public override AethernetShortcut Read(ref Utf8JsonReader reader, Type typeToConvert,
         JsonSerializerOptions options)
     {
         if (reader.TokenType != JsonTokenType.StartArray)

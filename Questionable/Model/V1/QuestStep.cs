@@ -10,11 +10,19 @@ public class QuestStep
     [JsonConverter(typeof(InteractionTypeConverter))]
     public EInteractionType InteractionType { get; set; }
 
-    public ulong? DataId { get; set; }
-    public Vector3 Position { get; set; }
+    public uint? DataId { get; set; }
+
+    [JsonConverter(typeof(VectorConverter))]
+    public Vector3? Position { get; set; }
+
+    public float? StopDistance { get; set; }
     public ushort TerritoryId { get; set; }
     public bool Disabled { get; set; }
+    public string? Comment { get; set; }
+
+    [JsonConverter(typeof(AetheryteConverter))]
+    public EAetheryteLocation? AetheryteShortcut { get; set; }
 
     [JsonConverter(typeof(AethernetShortcutConverter))]
-    public AethernetShortcut AethernetShortcut { get; set; }
+    public AethernetShortcut? AethernetShortcut { get; set; }
 }

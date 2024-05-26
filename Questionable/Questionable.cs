@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using Dalamud.Game;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Interface.Windowing;
@@ -20,20 +21,32 @@ public sealed class Questionable : IDalamudPlugin
     private readonly IFramework _framework;
     private readonly IGameGui _gameGui;
     private readonly GameFunctions _gameFunctions;
+    private readonly QuestController _questController;
+
     private readonly MovementController _movementController;
 
     public Questionable(DalamudPluginInterface pluginInterface, IClientState clientState, ITargetManager targetManager,
         IFramework framework, IGameGui gameGui, IDataManager dataManager, ISigScanner sigScanner,
-        IPluginLog pluginLog)
+        IObjectTable objectTable, IPluginLog pluginLog, ICondition condition, IChatGui chatGui, ICommandManager commandManager)
     {
+        ArgumentNullException.ThrowIfNull(pluginInterface);
+        ArgumentNullException.ThrowIfNull(sigScanner);
+        ArgumentNullException.ThrowIfNull(dataManager);
+        ArgumentNullException.ThrowIfNull(objectTable);
+
         _pluginInterface = pluginInterface;
         _clientState = clientState;
         _framework = framework;
         _gameGui = gameGui;
-        _gameFunctions = new GameFunctions(dataManager, sigScanner);
+        _gameFunctions = new GameFunctions(dataManager, objectTable, sigScanner, targetManager, pluginLog);
+
+        NavmeshIpc navmeshIpc = new NavmeshIpc(pluginInterface);
         _movementController =
-            new MovementController(new NavmeshIpc(pluginInterface), clientState, _gameFunctions, pluginLog);
-        _windowSystem.AddWindow(new DebugWindow(_movementController, _gameFunctions, clientState, targetManager));
+            new MovementController(navmeshIpc, clientState, _gameFunctions, pluginLog);
+        _questController = new QuestController(pluginInterface, dataManager, _clientState, _gameFunctions,
+            _movementController, pluginLog, condition, chatGui, commandManager);
+        _windowSystem.AddWindow(new DebugWindow(_movementController, _questController, _gameFunctions, clientState,
+            targetManager));
 
         _pluginInterface.UiBuilder.Draw += _windowSystem.Draw;
         _framework.Update += FrameworkUpdate;
@@ -41,8 +54,9 @@ public sealed class Questionable : IDalamudPlugin
 
     private void FrameworkUpdate(IFramework framework)
     {
-        HandleNavigationShortcut();
+        _questController.Update();
 
+        HandleNavigationShortcut();
         _movementController.Update();
     }
 

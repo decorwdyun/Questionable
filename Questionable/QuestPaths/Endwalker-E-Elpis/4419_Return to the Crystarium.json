@@ -46,8 +46,8 @@
           "InteractionType": "ManualAction",
           "Comment": "Cutscene Interaction needed",
           "AethernetShortcut": [
-            "[The Crystarium] Aetheryte Plaza",
-            "[The Crystarium] The Cabinet of Curiosity"
+            "[Crystarium] Aetheryte Plaza",
+            "[Crystarium] The Cabinet of Curiosity"
           ]
         }
       ]

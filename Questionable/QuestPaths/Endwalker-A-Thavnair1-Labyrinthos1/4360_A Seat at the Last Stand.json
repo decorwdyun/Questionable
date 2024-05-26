@@ -67,9 +67,9 @@
         {
           "DataId": 1037077,
           "Position": {
-            "X": -38.07129,
+            "X": -38.066784,
             "Y": -14.169313,
-            "Z": 105.30249
+            "Z": 107.68768
           },
           "TerritoryId": 962,
           "InteractionType": "Interact"
@@ -141,9 +141,9 @@
       "Steps": [
         {
           "Position": {
-            "X": 15.242085,
+            "X": 19.79008,
             "Y": -16.247002,
-            "Z": 109.177666
+            "Z": 108.36692
           },
           "TerritoryId": 962,
           "InteractionType": "WalkTo"

@@ -53,6 +53,7 @@ internal sealed class NavmeshIpc
     public Task<List<Vector3>> Pathfind(Vector3 localPlayerPosition, Vector3 targetPosition, bool fly,
         CancellationToken cancellationToken)
     {
+        _pathSetTolerance.InvokeAction(0.25f);
         return _navPathfind.InvokeFunc(localPlayerPosition, targetPosition, fly, cancellationToken);
     }
 

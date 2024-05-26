@@ -1,27 +1,33 @@
 ﻿using System.Globalization;
 using System.Numerics;
 using Dalamud.Game.ClientState.Objects;
+using Dalamud.Interface;
+using Dalamud.Interface.Components;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using ImGuiNET;
 using Questionable.Controller;
+using Questionable.Model.V1;
 
 namespace Questionable.Windows;
 
 internal sealed class DebugWindow : Window
 {
     private readonly MovementController _movementController;
+    private readonly QuestController _questController;
     private readonly GameFunctions _gameFunctions;
     private readonly IClientState _clientState;
     private readonly ITargetManager _targetManager;
 
-    public DebugWindow(MovementController movementController, GameFunctions gameFunctions, IClientState clientState,
+    public DebugWindow(MovementController movementController, QuestController questController,
+        GameFunctions gameFunctions, IClientState clientState,
         ITargetManager targetManager)
         : base("Questionable", ImGuiWindowFlags.AlwaysAutoResize)
     {
         _movementController = movementController;
+        _questController = questController;
         _gameFunctions = gameFunctions;
         _clientState = clientState;
         _targetManager = targetManager;
@@ -39,6 +45,33 @@ internal sealed class DebugWindow : Window
         if (!_clientState.IsLoggedIn || _clientState.LocalPlayer == null)
             return;
 
+        var currentQuest = _questController.CurrentQuest;
+        if (currentQuest != null)
+        {
+            ImGui.TextUnformatted($"Quest: {currentQuest.Quest.Name} / {currentQuest.Sequence} / {currentQuest.Step}");
+            ImGui.TextUnformatted(_questController.DebugState ?? "--");
+
+            ImGui.BeginDisabled(_questController.GetNextStep().Step == null);
+            ImGui.Text($"{_questController.GetNextStep().Step?.Position}");
+            if (ImGuiComponents.IconButton(FontAwesomeIcon.Play))
+            {
+                _questController.ExecuteNextStep();
+            }
+
+            ImGui.SameLine();
+
+            if (ImGuiComponents.IconButton(FontAwesomeIcon.StepForward))
+            {
+                _questController.IncreaseStepCount();
+            }
+
+            ImGui.EndDisabled();
+        }
+        else
+            ImGui.Text("No active quest");
+
+        ImGui.Separator();
+
         ImGui.Text(
             $"Current TerritoryId: {_clientState.TerritoryType}, Flying: {(_gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType) ? "Yes" : "No")}");
 
@@ -48,7 +81,8 @@ internal sealed class DebugWindow : Window
         if (_targetManager.Target != null)
         {
             ImGui.Separator();
-            ImGui.Text($"Target: {_targetManager.Target.Name}");
+            ImGui.Text(string.Create(CultureInfo.InvariantCulture,
+                $"Target: {_targetManager.Target.Name} ({(_targetManager.Target.Position - _clientState.LocalPlayer.Position).Length():F2})"));
 
             ImGui.BeginDisabled(!_movementController.IsNavmeshReady);
             if (!_movementController.IsPathfinding)
@@ -76,7 +110,8 @@ internal sealed class DebugWindow : Window
 
             ImGui.SameLine();
 
-            if (ImGui.Button($"Copy"))
+            ImGui.Button("Copy");
+            if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
             {
                 ImGui.SetClipboardText($$"""
                                          "DataId": {{_targetManager.Target.DataId}},
@@ -88,6 +123,12 @@ internal sealed class DebugWindow : Window
                                          "TerritoryId": {{_clientState.TerritoryType}},
                                          "InteractionType": "Interact"
                                          """);
+            }
+            else if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
+            {
+                EAetheryteLocation location = (EAetheryteLocation)_targetManager.Target.DataId;
+                ImGui.SetClipboardText(string.Create(CultureInfo.InvariantCulture,
+                    $"{{EAetheryteLocation.{location}, new({_targetManager.Target.Position.X}f, {_targetManager.Target.Position.Y}f, {_targetManager.Target.Position.Z}f)}},"));
             }
         }
         else

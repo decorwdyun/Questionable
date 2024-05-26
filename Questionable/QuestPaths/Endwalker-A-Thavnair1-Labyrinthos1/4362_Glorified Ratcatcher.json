@@ -44,6 +44,7 @@
           },
           "TerritoryId": 956,
           "InteractionType": "Combat",
+          "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
             14024
           ]
@@ -77,6 +78,7 @@
           },
           "TerritoryId": 956,
           "InteractionType": "Combat",
+          "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
             14023,
             14022
