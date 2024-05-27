@@ -51,10 +51,20 @@ internal sealed class MovementController : IDisposable
                         $"Pathfinding complete, route: [{string.Join(" → ", _pathfindTask.Result.Select(x => x.ToString()))}]"));
 
                 var navPoints = _pathfindTask.Result.Skip(1).ToList();
-                if (!IsFlying && !_condition[ConditionFlag.Mounted] && navPoints.Count > 0 &&
-                    !_gameFunctions.HasStatusPreventingSprintOrMount())
+                Vector3 start = _clientState.LocalPlayer?.Position ?? navPoints[0];
+                if (IsFlying && !_condition[ConditionFlag.InFlight] && _condition[ConditionFlag.Mounted])
                 {
-                    Vector3 start = _clientState.LocalPlayer?.Position ?? navPoints[0];
+                    if (IsOnFlightPath(start) || navPoints.Any(IsOnFlightPath))
+                    {
+                        unsafe
+                        {
+                            ActionManager.Instance()->UseAction(ActionType.GeneralAction, 2);
+                        }
+                    }
+                }
+                else if (!IsFlying && !_condition[ConditionFlag.Mounted] && navPoints.Count > 0 &&
+                         !_gameFunctions.HasStatusPreventingSprintOrMount())
+                {
                     float actualDistance = 0;
                     foreach (Vector3 end in navPoints)
                     {
@@ -88,9 +98,16 @@ internal sealed class MovementController : IDisposable
         if (IsPathRunning && Destination != null)
         {
             Vector3 localPlayerPosition = _clientState.LocalPlayer?.Position ?? Vector3.Zero;
-            if ((localPlayerPosition - Destination.Value).Length() < StopDistance)
+            if ((localPlayerPosition - Destination.Value).Length() < StopDistance &&
+                Math.Abs(localPlayerPosition.Y - Destination.Value.Y) < 1.95f) // target is too far below you
                 Stop();
         }
+    }
+
+    private bool IsOnFlightPath(Vector3 p)
+    {
+        Vector3? pointOnFloor = _navmeshIpc.GetPointOnFloor(p);
+        return pointOnFloor != null && Math.Abs(pointOnFloor.Value.Y - p.Y) > 0.5f;
     }
 
     private void PrepareNavigation(EMovementType type, Vector3 to, bool fly, float? stopDistance)

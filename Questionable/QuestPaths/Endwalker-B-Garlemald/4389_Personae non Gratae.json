@@ -43,6 +43,15 @@
           "Comment": "Octavia"
         },
         {
+          "Position": {
+            "X": 502.34732,
+            "Y": -36.65,
+            "Z": -178.38684
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 1037715,
           "Position": {
             "X": 500.57214,
@@ -96,6 +105,25 @@
       "Sequence": 3,
       "Steps": [
         {
+          "Position": {
+            "X": 548.01605,
+            "Y": -36.61611,
+            "Z": -237.499
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "Position": {
+            "X": 547.66595,
+            "Y": -36.616203,
+            "Z": -244.51854
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true
+        },
+        {
           "DataId": 1037719,
           "Position": {
             "X": 549.7977,
@@ -111,6 +139,15 @@
       "Sequence": 4,
       "Steps": [
         {
+          "Position": {
+            "X": 547.021,
+            "Y": -36.616203,
+            "Z": -244.6051
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 1039899,
           "Position": {
             "X": 549.6758,
@@ -118,7 +155,8 @@
             "Z": -216.84601
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DisableNavmesh": true
         }
       ]
     },

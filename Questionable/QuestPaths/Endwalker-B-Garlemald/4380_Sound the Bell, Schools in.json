@@ -43,7 +43,11 @@
             "Z": -67.36859
           },
           "TerritoryId": 962,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AethernetShortcut": [
+            "[Old Sharlayan] The Baldesion Annex",
+            "[Old Sharlayan] The Studium"
+          ]
         }
       ]
     },
@@ -72,6 +76,7 @@
             "Y": 21.84602,
             "Z": -91.32526
           },
+          "StopDistance": 5,
           "TerritoryId": 962,
           "InteractionType": "Interact"
         }

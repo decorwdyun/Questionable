@@ -57,7 +57,8 @@
             "Z": -15.213318
           },
           "TerritoryId": 129,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Limsa Lominsa"
         }
       ]
     },
@@ -72,7 +73,9 @@
             "Z": 525.2003
           },
           "TerritoryId": 621,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Lochs - Ala Mhigan Quarter",
+          "Fly": true
         }
       ]
     }

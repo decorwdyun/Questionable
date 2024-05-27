@@ -108,6 +108,10 @@
                   "type": ["boolean", "null"],
                   "description": "If true, will mount regardless of distance to position. If false, will unmount."
                 },
+                "Fly": {
+                  "type": "boolean",
+                  "description": "If true and flying is unlocked in a zone, will use a flight path"
+                },
                 "AetheryteShortcut": {
                   "type": "string",
                   "description": "The Aetheryte to teleport to (before moving)",

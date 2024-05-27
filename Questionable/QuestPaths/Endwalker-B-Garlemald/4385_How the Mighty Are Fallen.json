@@ -12,6 +12,7 @@
             "Y": 32.318867,
             "Z": 150.04187
           },
+          "StopDistance": 5,
           "TerritoryId": 958,
           "InteractionType": "Interact"
         }
@@ -42,6 +43,7 @@
             "Y": 38.372063,
             "Z": 217.54773
           },
+          "StopDistance": 5,
           "TerritoryId": 958,
           "InteractionType": "Interact"
         }
@@ -57,6 +59,7 @@
             "Y": 38.372063,
             "Z": 214.55713
           },
+          "StopDistance": 5,
           "TerritoryId": 958,
           "InteractionType": "Interact"
         }
@@ -72,6 +75,7 @@
             "Y": 38.372063,
             "Z": 216.05249
           },
+          "StopDistance": 5,
           "TerritoryId": 958,
           "InteractionType": "Interact"
         }
@@ -97,12 +101,22 @@
       "Steps": [
         {
           "Position": {
+            "X": 398.44858,
+            "Y": 5.094846,
+            "Z": 231.72844
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "Position": {
             "X": 393.71204,
             "Y": 4.142438,
             "Z": 251.71986
           },
           "TerritoryId": 958,
           "InteractionType": "ManualAction",
+          "DisableNavmesh": true,
           "Comment": "Jump on Pipeline and move near the Aether Current"
         },
         {
@@ -113,7 +127,18 @@
             "Z": 520.31726
           },
           "TerritoryId": 958,
-          "InteractionType": "AttuneAetherCurrent"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818347
+        },
+        {
+          "Position": {
+            "X": 379.2122,
+            "Y": -18.622318,
+            "Z": 530.3423
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true
         },
         {
           "DataId": 2012001,
@@ -123,7 +148,8 @@
             "Z": 644.28174
           },
           "TerritoryId": 958,
-          "InteractionType": "AttuneAetherCurrent"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818345
         },
         {
           "DataId": 1038853,
@@ -148,7 +174,8 @@
             "Z": 650.26306
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Mount": false
         }
       ]
     },

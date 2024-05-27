@@ -20,6 +20,7 @@ public class QuestStep
     public bool Disabled { get; set; }
     public bool DisableNavmesh { get; set; }
     public bool? Mount { get; set; }
+    public bool Fly { get; set; }
     public string? Comment { get; set; }
 
     [JsonConverter(typeof(AetheryteConverter))]

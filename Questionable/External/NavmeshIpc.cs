@@ -17,6 +17,7 @@ internal sealed class NavmeshIpc
     private readonly ICallGateSubscriber<bool> _pathIsRunning;
     private readonly ICallGateSubscriber<float> _pathGetTolerance;
     private readonly ICallGateSubscriber<float, object> _pathSetTolerance;
+    private readonly ICallGateSubscriber<Vector3, bool, float, Vector3?> _queryPointOnFloor;
 
     public NavmeshIpc(DalamudPluginInterface pluginInterface)
     {
@@ -29,6 +30,7 @@ internal sealed class NavmeshIpc
         _pathIsRunning = pluginInterface.GetIpcSubscriber<bool>("vnavmesh.Path.IsRunning");
         _pathGetTolerance = pluginInterface.GetIpcSubscriber<float>("vnavmesh.Path.GetTolerance");
         _pathSetTolerance = pluginInterface.GetIpcSubscriber<float, object>("vnavmesh.Path.SetTolerance");
+        _queryPointOnFloor = pluginInterface.GetIpcSubscriber<Vector3, bool, float, Vector3?>("vnavmesh.Query.Mesh.PointOnFloor");
     }
 
     public bool IsReady
@@ -63,4 +65,7 @@ internal sealed class NavmeshIpc
 
         _pathMoveTo.InvokeAction(position, false);
     }
+
+    public Vector3? GetPointOnFloor(Vector3 position)
+        => _queryPointOnFloor.InvokeFunc(position, true, 1);
 }

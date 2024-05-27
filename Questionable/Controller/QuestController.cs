@@ -341,6 +341,7 @@ internal sealed class QuestController
             else
                 distance = step.StopDistance ?? MovementController.DefaultStopDistance;
 
+            _pluginLog.Information($"Stop dist: {distance}");
             var position = _clientState.LocalPlayer?.Position ?? new Vector3();
             float actualDistance = (position - step.Position.Value).Length();
 
@@ -375,7 +376,7 @@ internal sealed class QuestController
                 if (actualDistance > distance)
                 {
                     _movementController.NavigateTo(EMovementType.Quest, step.Position.Value,
-                        _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType), distance);
+                        step.Fly && _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType), distance);
                     return;
                 }
             }
@@ -384,7 +385,7 @@ internal sealed class QuestController
                 if (actualDistance > distance)
                 {
                     _movementController.NavigateTo(EMovementType.Quest, [step.Position.Value],
-                        _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType), distance);
+                        step.Fly && _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType), distance);
                     return;
                 }
             }
