@@ -7,12 +7,13 @@ using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using Questionable.Controller;
+using Questionable.Data;
 using Questionable.External;
 using Questionable.Windows;
 
 namespace Questionable;
 
-public sealed class Questionable : IDalamudPlugin
+public sealed class QuestionablePlugin : IDalamudPlugin
 {
     private readonly WindowSystem _windowSystem = new(nameof(Questionable));
 
@@ -25,9 +26,10 @@ public sealed class Questionable : IDalamudPlugin
 
     private readonly MovementController _movementController;
 
-    public Questionable(DalamudPluginInterface pluginInterface, IClientState clientState, ITargetManager targetManager,
-        IFramework framework, IGameGui gameGui, IDataManager dataManager, ISigScanner sigScanner,
-        IObjectTable objectTable, IPluginLog pluginLog, ICondition condition, IChatGui chatGui, ICommandManager commandManager)
+    public QuestionablePlugin(DalamudPluginInterface pluginInterface, IClientState clientState,
+        ITargetManager targetManager, IFramework framework, IGameGui gameGui, IDataManager dataManager,
+        ISigScanner sigScanner, IObjectTable objectTable, IPluginLog pluginLog, ICondition condition, IChatGui chatGui,
+        ICommandManager commandManager)
     {
         ArgumentNullException.ThrowIfNull(pluginInterface);
         ArgumentNullException.ThrowIfNull(sigScanner);
@@ -38,13 +40,15 @@ public sealed class Questionable : IDalamudPlugin
         _clientState = clientState;
         _framework = framework;
         _gameGui = gameGui;
-        _gameFunctions = new GameFunctions(dataManager, objectTable, sigScanner, targetManager, pluginLog);
+        _gameFunctions = new GameFunctions(dataManager, objectTable, sigScanner, targetManager, condition, pluginLog);
 
+        AetheryteData aetheryteData = new AetheryteData(dataManager);
         NavmeshIpc navmeshIpc = new NavmeshIpc(pluginInterface);
+        LifestreamIpc lifestreamIpc = new LifestreamIpc(pluginInterface, aetheryteData);
         _movementController =
-            new MovementController(navmeshIpc, clientState, _gameFunctions, pluginLog);
+            new MovementController(navmeshIpc, clientState, _gameFunctions, condition, pluginLog);
         _questController = new QuestController(pluginInterface, dataManager, _clientState, _gameFunctions,
-            _movementController, pluginLog, condition, chatGui, commandManager);
+            _movementController, pluginLog, condition, chatGui, aetheryteData, lifestreamIpc);
         _windowSystem.AddWindow(new DebugWindow(_movementController, _questController, _gameFunctions, clientState,
             targetManager));
 

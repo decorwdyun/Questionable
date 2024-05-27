@@ -58,7 +58,7 @@
             "Z": 127.753
           },
           "TerritoryId": 962,
-          "InteractionType": "AttuneAethenetShard"
+          "InteractionType": "AttuneAethernetShard"
         },
         {
           "DataId": 1038578,
@@ -76,6 +76,15 @@
     {
       "Sequence": 4,
       "Steps": [
+        {
+          "Position": {
+            "X": -8.38828,
+            "Y": 3.2249968,
+            "Z": 9.224017
+          },
+          "TerritoryId": 962,
+          "InteractionType": "WalkTo"
+        },
         {
           "DataId": 1038578,
           "Position": {
@@ -128,6 +137,15 @@
           "InteractionType": "WalkTo"
         },
         {
+          "Position": {
+            "X": 96.67595,
+            "Y": 15.025446,
+            "Z": -134.08261
+          },
+          "TerritoryId": 962,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 1038578,
           "Position": {
             "X": -0.4629783,
@@ -150,9 +168,8 @@
             "Y": 41.367188,
             "Z": -156.6034
           },
-          "StopDistance": 0.25,
           "TerritoryId": 962,
-          "InteractionType": "AttuneAethenetShard"
+          "InteractionType": "AttuneAethernetShard"
         },
         {
           "DataId": 1038578,
@@ -161,6 +178,7 @@
             "Y": 18.800978,
             "Z": -142.65858
           },
+          "StopDistance": 0.25,
           "TerritoryId": 962,
           "InteractionType": "Interact"
         }
@@ -177,7 +195,7 @@
             "Z": -118.73047
           },
           "TerritoryId": 962,
-          "InteractionType": "AttuneAethenetShard"
+          "InteractionType": "AttuneAethernetShard"
         },
         {
           "DataId": 188,
@@ -187,7 +205,7 @@
             "Z": 13.77887
           },
           "TerritoryId": 962,
-          "InteractionType": "AttuneAethenetShard"
+          "InteractionType": "AttuneAethernetShard"
         },
         {
           "DataId": 1038578,

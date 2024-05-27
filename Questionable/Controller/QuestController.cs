@@ -10,47 +10,69 @@ using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
+using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using Questionable.Data;
+using Questionable.External;
 using Questionable.Model.V1;
 
 namespace Questionable.Controller;
 
 internal sealed class QuestController
 {
+    private readonly DalamudPluginInterface _pluginInterface;
+    private readonly IDataManager _dataManager;
     private readonly IClientState _clientState;
     private readonly GameFunctions _gameFunctions;
     private readonly MovementController _movementController;
     private readonly IPluginLog _pluginLog;
     private readonly ICondition _condition;
     private readonly IChatGui _chatGui;
-    private readonly ICommandManager _commandManager;
     private readonly AetheryteData _aetheryteData;
+    private readonly LifestreamIpc _lifestreamIpc;
     private readonly TerritoryData _territoryData;
     private readonly Dictionary<ushort, Quest> _quests = new();
 
     public QuestController(DalamudPluginInterface pluginInterface, IDataManager dataManager, IClientState clientState,
         GameFunctions gameFunctions, MovementController movementController, IPluginLog pluginLog, ICondition condition,
-        IChatGui chatGui, ICommandManager commandManager)
+        IChatGui chatGui, AetheryteData aetheryteData, LifestreamIpc lifestreamIpc)
     {
+        _pluginInterface = pluginInterface;
+        _dataManager = dataManager;
         _clientState = clientState;
         _gameFunctions = gameFunctions;
         _movementController = movementController;
         _pluginLog = pluginLog;
         _condition = condition;
         _chatGui = chatGui;
-        _commandManager = commandManager;
-        _aetheryteData = new AetheryteData(dataManager);
+        _aetheryteData = aetheryteData;
+        _lifestreamIpc = lifestreamIpc;
         _territoryData = new TerritoryData(dataManager);
+
+        Reload();
+    }
+
+
+    public QuestProgress? CurrentQuest { get; set; }
+    public string? DebugState { get; private set; }
+    public string? Comment { get; private set; }
+
+    public void Reload()
+    {
+        _quests.Clear();
+
+        CurrentQuest = null;
+        DebugState = null;
+
 #if false
         LoadFromEmbeddedResources();
 #endif
         LoadFromDirectory(new DirectoryInfo(@"E:\ffxiv\Questionable\Questionable\QuestPaths"));
-        LoadFromDirectory(pluginInterface.ConfigDirectory);
+        LoadFromDirectory(_pluginInterface.ConfigDirectory);
 
         foreach (var (questId, quest) in _quests)
         {
             var questData =
-                dataManager.GetExcelSheet<Lumina.Excel.GeneratedSheets.Quest>()!.GetRow((uint)questId + 0x10000);
+                _dataManager.GetExcelSheet<Lumina.Excel.GeneratedSheets.Quest>()!.GetRow((uint)questId + 0x10000);
             if (questData == null)
                 continue;
 
@@ -78,9 +100,6 @@ internal sealed class QuestController
         }
     }
 #endif
-
-    public QuestProgress? CurrentQuest { get; set; }
-    public string? DebugState { get; set; }
 
     private void LoadFromDirectory(DirectoryInfo configDirectory)
     {
@@ -120,6 +139,9 @@ internal sealed class QuestController
 
     public void Update()
     {
+        Comment = null;
+        DebugState = null;
+
         (ushort currentQuestId, byte currentSequence) = _gameFunctions.GetCurrentQuest();
         if (currentQuestId == 0)
         {
@@ -185,7 +207,8 @@ internal sealed class QuestController
         }
 
         var step = sequence.Steps[CurrentQuest.Step];
-        DebugState = step.Comment ?? sequence.Comment ?? q.Data.Comment;
+        DebugState = null;
+        Comment = step.Comment ?? sequence.Comment ?? q.Data.Comment;
     }
 
     public (QuestSequence? Sequence, QuestStep? Step) GetNextStep()
@@ -216,8 +239,7 @@ internal sealed class QuestController
             CurrentQuest = CurrentQuest with
             {
                 Step = CurrentQuest.Step + 1,
-                AetheryteShortcutUsed = false,
-                AethernetShortcutUsed = false
+                StepProgress = new()
             };
         }
         else
@@ -225,30 +247,29 @@ internal sealed class QuestController
             CurrentQuest = CurrentQuest with
             {
                 Step = 255,
-                AetheryteShortcutUsed = false,
-                AethernetShortcutUsed = false
+                StepProgress = new()
             };
         }
     }
 
-    public void ExecuteNextStep()
+    public unsafe void ExecuteNextStep()
     {
         (QuestSequence? seq, QuestStep? step) = GetNextStep();
         if (seq == null || step == null)
             return;
 
         Debug.Assert(CurrentQuest != null, nameof(CurrentQuest) + " != null");
-        if (!CurrentQuest.AetheryteShortcutUsed && step.AetheryteShortcut != null)
+        if (!CurrentQuest.StepProgress.AetheryteShortcutUsed && step.AetheryteShortcut != null)
         {
             bool skipTeleport = false;
             ushort territoryType = _clientState.TerritoryType;
             if (step.TerritoryId == territoryType)
             {
-                Vector3 playerPosition = _clientState.LocalPlayer!.Position;
-                if (_aetheryteData.CalculateDistance(playerPosition, territoryType, step.AetheryteShortcut.Value) < 11 ||
+                Vector3 pos = _clientState.LocalPlayer!.Position;
+                if (_aetheryteData.CalculateDistance(pos, territoryType, step.AetheryteShortcut.Value) < 11 ||
                     (step.AethernetShortcut != null &&
-                     (_aetheryteData.CalculateDistance(playerPosition, territoryType, step.AethernetShortcut.From) < 11 ||
-                      _aetheryteData.CalculateDistance(playerPosition, territoryType, step.AethernetShortcut.To) < 11)))
+                     (_aetheryteData.CalculateDistance(pos, territoryType, step.AethernetShortcut.From) < 20 ||
+                      _aetheryteData.CalculateDistance(pos, territoryType, step.AethernetShortcut.To) < 20)))
                 {
                     skipTeleport = true;
                 }
@@ -256,7 +277,10 @@ internal sealed class QuestController
 
             if (skipTeleport)
             {
-                CurrentQuest = CurrentQuest with { AetheryteShortcutUsed = true };
+                CurrentQuest = CurrentQuest with
+                {
+                    StepProgress = CurrentQuest.StepProgress with { AetheryteShortcutUsed = true }
+                };
             }
             else
             {
@@ -265,7 +289,10 @@ internal sealed class QuestController
                     if (!_gameFunctions.IsAetheryteUnlocked(step.AetheryteShortcut.Value))
                         _chatGui.Print($"[Questionable] Aetheryte {step.AetheryteShortcut.Value} is not unlocked.");
                     else if (_gameFunctions.TeleportAetheryte(step.AetheryteShortcut.Value))
-                        CurrentQuest = CurrentQuest with { AetheryteShortcutUsed = true };
+                        CurrentQuest = CurrentQuest with
+                        {
+                            StepProgress = CurrentQuest.StepProgress with { AetheryteShortcutUsed = true }
+                        };
                     else
                         _chatGui.Print("[Questionable] Unable to teleport to aetheryte.");
                 }
@@ -276,7 +303,7 @@ internal sealed class QuestController
             }
         }
 
-        if (!CurrentQuest.AethernetShortcutUsed)
+        if (!CurrentQuest.StepProgress.AethernetShortcutUsed)
         {
             if (step.AethernetShortcut != null)
             {
@@ -291,10 +318,11 @@ internal sealed class QuestController
                 {
                     if (_aetheryteData.CalculateDistance(playerPosition, territoryType, from) < 11)
                     {
-                        // unsure if this works across languages
-                        _commandManager.ProcessCommand(
-                            $"/li {_aetheryteData.AethernetNames[step.AethernetShortcut.To].Replace("The ", "", StringComparison.Ordinal)}");
-                        CurrentQuest = CurrentQuest with { AethernetShortcutUsed = true };
+                        _lifestreamIpc.Teleport(to);
+                        CurrentQuest = CurrentQuest with
+                        {
+                            StepProgress = CurrentQuest.StepProgress with { AethernetShortcutUsed = true }
+                        };
                     }
                     else
                         _movementController.NavigateTo(EMovementType.Quest, _aetheryteData.Locations[from], false,
@@ -315,30 +343,57 @@ internal sealed class QuestController
 
             var position = _clientState.LocalPlayer?.Position ?? new Vector3();
             float actualDistance = (position - step.Position.Value).Length();
-            if (actualDistance > 30f && !_condition[ConditionFlag.Mounted] &&
-                _territoryData.CanUseMount(_clientState.TerritoryType))
+
+            if (step.Mount == true && !_gameFunctions.HasStatusPreventingSprintOrMount())
             {
-                unsafe
+                if (!_condition[ConditionFlag.Mounted] && _territoryData.CanUseMount(_clientState.TerritoryType))
                 {
-                    ActionManager.Instance()->UseAction(ActionType.Mount, 71);
+                    if (ActionManager.Instance()->GetActionStatus(ActionType.Mount, 71) == 0)
+                        ActionManager.Instance()->UseAction(ActionType.Mount, 71);
+                    return;
+                }
+            }
+            else if (step.Mount == false)
+            {
+                if (_condition[ConditionFlag.Mounted])
+                {
+                    _gameFunctions.Unmount();
+                    return;
+                }
+            }
+
+            if (!step.DisableNavmesh)
+            {
+                if (step.Mount != false && actualDistance > 30f && !_condition[ConditionFlag.Mounted] &&
+                    _territoryData.CanUseMount(_clientState.TerritoryType))
+                {
+                    if (ActionManager.Instance()->GetActionStatus(ActionType.Mount, 71) == 0)
+                        ActionManager.Instance()->UseAction(ActionType.Mount, 71);
+                    return;
                 }
 
-                return;
+                if (actualDistance > distance)
+                {
+                    _movementController.NavigateTo(EMovementType.Quest, step.Position.Value,
+                        _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType), distance);
+                    return;
+                }
             }
-            else if (actualDistance > distance)
+            else
             {
-                _movementController.NavigateTo(EMovementType.Quest, step.Position.Value,
-                    _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType), distance);
-                return;
+                if (actualDistance > distance)
+                {
+                    _movementController.NavigateTo(EMovementType.Quest, [step.Position.Value],
+                        _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType), distance);
+                    return;
+                }
             }
         }
 
         switch (step.InteractionType)
         {
             case EInteractionType.Interact:
-            case EInteractionType.AttuneAetheryte:
             case EInteractionType.AttuneAethernetShard:
-            case EInteractionType.AttuneAetherCurrent:
                 if (step.DataId != null)
                 {
                     _gameFunctions.InteractWith(step.DataId.Value);
@@ -347,7 +402,78 @@ internal sealed class QuestController
 
                 break;
 
+            case EInteractionType.AttuneAetheryte:
+                if (step.DataId != null)
+                {
+                    if (!_gameFunctions.IsAetheryteUnlocked((EAetheryteLocation)step.DataId.Value))
+                        _gameFunctions.InteractWith(step.DataId.Value);
+
+                    IncreaseStepCount();
+                }
+
+                break;
+
+            case EInteractionType.AttuneAetherCurrent:
+                if (step.DataId != null)
+                {
+                    _pluginLog.Information(
+                        $"{step.AetherCurrentId} → {_gameFunctions.IsAetherCurrentUnlocked(step.AetherCurrentId.GetValueOrDefault())}");
+                    if (step.AetherCurrentId == null ||
+                        !_gameFunctions.IsAetherCurrentUnlocked(step.AetherCurrentId.Value))
+                        _gameFunctions.InteractWith(step.DataId.Value);
+
+                    IncreaseStepCount();
+                }
+
+                break;
+
             case EInteractionType.WalkTo:
+                IncreaseStepCount();
+                break;
+
+            case EInteractionType.UseItem:
+                if (step is { DataId: not null, ItemId: not null })
+                {
+                    if (_gameFunctions.Unmount())
+                        return;
+
+                    _gameFunctions.UseItem(step.DataId.Value, step.ItemId.Value);
+                    IncreaseStepCount();
+                }
+
+                break;
+
+            case EInteractionType.Combat:
+                if (step.EnemySpawnType != null)
+                {
+                    if (_gameFunctions.Unmount())
+                        return;
+
+                    if (step.DataId != null && step.EnemySpawnType == EEnemySpawnType.AfterInteraction)
+                        _gameFunctions.InteractWith(step.DataId.Value);
+
+                    // next sequence should trigger automatically
+                    IncreaseStepCount();
+                }
+
+                break;
+
+            case EInteractionType.Emote:
+                if (step is { DataId: not null, Emote: not null })
+                {
+                    _gameFunctions.UseEmote(step.DataId.Value, step.Emote.Value);
+                    IncreaseStepCount();
+                }
+
+                break;
+
+            case EInteractionType.WaitForObjectAtPosition:
+                if (step is { DataId: not null, Position: not null } &&
+                    !_gameFunctions.IsObbjectAtPosition(step.DataId.Value, step.Position.Value))
+                {
+                    return;
+                }
+
                 IncreaseStepCount();
                 break;
 
@@ -361,6 +487,15 @@ internal sealed class QuestController
         Quest Quest,
         byte Sequence,
         int Step,
+        StepProgress StepProgress)
+    {
+        public QuestProgress(Quest quest, byte sequence, int step)
+            : this(quest, sequence, step, new StepProgress())
+        {
+        }
+    }
+
+    public sealed record StepProgress(
         bool AetheryteShortcutUsed = false,
         bool AethernetShortcutUsed = false);
 }

@@ -28,7 +28,17 @@
             "Z": 66.75818
           },
           "TerritoryId": 956,
-          "InteractionType": "AttuneAetherCurrent"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818315
+        },
+        {
+          "Position": {
+            "X": 760.1999,
+            "Y": 145.74788,
+            "Z": -52.025288
+          },
+          "TerritoryId": 956,
+          "InteractionType": "WalkTo"
         },
         {
           "DataId": 2011840,
@@ -83,6 +93,16 @@
     {
       "Sequence": 4,
       "Steps": [
+        {
+          "Position": {
+            "X": 483.16574,
+            "Y": 83.132675,
+            "Z": 74.693695
+          },
+          "TerritoryId": 956,
+          "InteractionType": "WalkTo",
+          "Comment": "Avoids aggroing some enemies on the hill"
+        },
         {
           "DataId": 2011842,
           "Position": {
@@ -141,7 +161,8 @@
             "Z": -267.23126
           },
           "TerritoryId": 956,
-          "InteractionType": "AttuneAetherCurrent"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818320
         },
         {
           "DataId": 2011843,

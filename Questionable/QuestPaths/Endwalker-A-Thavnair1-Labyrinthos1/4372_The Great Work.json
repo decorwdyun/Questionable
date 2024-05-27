@@ -1,6 +1,7 @@
 ﻿{
   "Version": 1,
   "Author": "liza",
+  "Comment": "This is possibly the least polished quest so far, as the follow steps are awkward (need to move >10 units away to trigger the follow-up)",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -83,23 +84,184 @@
             "Y": 49.103825,
             "Z": 152.91064
           },
+          "StopDistance": 5,
           "TerritoryId": 957,
-          "InteractionType": "ManualAction",
-          "Comment": "Follow the Lantern"
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1038636,
+          "Position": {
+            "X": -425.414,
+            "Y": 38.415024,
+            "Z": 160.1206
+          },
+          "StopDistance": 4,
+          "TerritoryId": 957,
+          "InteractionType": "WaitForNpcAtPosition"
+        },
+        {
+          "Position": {
+            "X": -425.43683,
+            "Y": 38.413155,
+            "Z": 160.11292
+          },
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "DataId": 1038636,
+          "Position": {
+            "X": -425.414,
+            "Y": 38.415024,
+            "Z": 160.1206
+          },
+          "StopDistance": 4,
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo"
         }
       ]
     },
     {
       "Sequence": 5,
-      "Comment": "Follow the Lantern"
+      "Steps": [
+        {
+          "DataId": 1041219,
+          "Position": {
+            "X": -425.43683,
+            "Y": 38.413155,
+            "Z": 160.11292
+          },
+          "StopDistance": 5,
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1041219,
+          "Position": {
+            "X": -419.6078,
+            "Y": 43.950115,
+            "Z": 87.3025
+          },
+          "StopDistance": 4,
+          "TerritoryId": 957,
+          "InteractionType": "WaitForNpcAtPosition"
+        },
+        {
+          "Position": {
+            "X": -430.35034,
+            "Y": 46.160213,
+            "Z": 93.2392
+          },
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "DataId": 1041220,
+          "Position": {
+            "X": -419.60785,
+            "Y": 43.9499,
+            "Z": 87.296875
+          },
+          "StopDistance": 4,
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo"
+        }
+      ]
     },
     {
       "Sequence": 6,
-      "Comment": "Follow the Lantern"
+      "Steps": [
+        {
+          "DataId": 1041220,
+          "Position": {
+            "X": -419.60785,
+            "Y": 43.9499,
+            "Z": 87.296875
+          },
+          "StopDistance": 5,
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1041220,
+          "Position": {
+            "X": -444.7032,
+            "Y": 49.551,
+            "Z": 97.1969
+          },
+          "StopDistance": 4,
+          "TerritoryId": 957,
+          "InteractionType": "WaitForNpcAtPosition"
+        },
+        {
+          "Position": {
+            "X": -433.19608,
+            "Y": 46.94587,
+            "Z": 93.295135
+          },
+          "StopDistance": 0.35,
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "DataId": 1041221,
+          "Position": {
+            "X": -444.72424,
+            "Y": 49.55681,
+            "Z": 97.18469
+          },
+          "StopDistance": 4,
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo"
+        }
+      ]
     },
     {
       "Sequence": 7,
-      "Comment": "Follow the Lantern"
+      "Steps": [
+        {
+          "DataId": 1041221,
+          "Position": {
+            "X": -444.72424,
+            "Y": 49.55681,
+            "Z": 97.18469
+          },
+          "StopDistance": 5,
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1041221,
+          "Position": {
+            "X": -484.5909,
+            "Y": 54.18516,
+            "Z": 128.3601
+          },
+          "StopDistance": 4,
+          "TerritoryId": 957,
+          "InteractionType": "WaitForNpcAtPosition"
+        },
+        {
+          "Position": {
+            "X": -472.65085,
+            "Y": 53.779083,
+            "Z": 124.34451
+          },
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "DataId": 1038637,
+          "Position": {
+            "X": -484.61133,
+            "Y": 54.187614,
+            "Z": 128.34363
+          },
+          "StopDistance": 4,
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo"
+        }
+      ]
     },
     {
       "Sequence": 8,
@@ -111,6 +273,7 @@
             "Y": 54.187614,
             "Z": 128.34363
           },
+          "StopDistance": 5,
           "TerritoryId": 957,
           "InteractionType": "Interact"
         }

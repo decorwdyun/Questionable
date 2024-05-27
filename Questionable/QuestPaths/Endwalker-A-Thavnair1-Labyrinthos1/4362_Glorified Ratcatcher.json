@@ -42,6 +42,7 @@
             "Y": 186.03699,
             "Z": -740.9324
           },
+          "StopDistance": 1,
           "TerritoryId": 956,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
@@ -77,6 +78,7 @@
             "Z": -595.69696
           },
           "TerritoryId": 956,
+          "StopDistance": 1,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
@@ -97,13 +99,23 @@
             "Z": -595.69696
           },
           "TerritoryId": 956,
-          "InteractionType": "UseItem"
+          "InteractionType": "UseItem",
+          "ItemId": 2003129
         }
       ]
     },
     {
       "Sequence": 6,
       "Steps": [
+        {
+          "Position": {
+            "X": 222.61905,
+            "Y": 182.78828,
+            "Z": -704.0299
+          },
+          "TerritoryId": 956,
+          "InteractionType": "WalkTo"
+        },
         {
           "DataId": 2011980,
           "Position": {
@@ -112,7 +124,8 @@
             "Z": -767.7577
           },
           "TerritoryId": 956,
-          "InteractionType": "AttuneAetherCurrent"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818314
         },
         {
           "DataId": 1038701,
@@ -122,7 +135,8 @@
             "Z": -823.3921
           },
           "TerritoryId": 956,
-          "InteractionType": "UseItem"
+          "InteractionType": "UseItem",
+          "ItemId": 2003129
         }
       ]
     },
@@ -144,6 +158,15 @@
     {
       "Sequence": 255,
       "Steps": [
+        {
+          "Position": {
+            "X": 254.80028,
+            "Y": 163.44171,
+            "Z": -626.4951
+          },
+          "TerritoryId": 956,
+          "InteractionType": "WalkTo"
+        },
         {
           "DataId": 1038702,
           "Position": {

@@ -12,6 +12,7 @@
             "Y": 5.880045,
             "Z": 612.02405
           },
+          "StopDistance": 5,
           "TerritoryId": 957,
           "InteractionType": "Interact"
         }
@@ -92,7 +93,8 @@
             "Z": 537.8346
           },
           "TerritoryId": 957,
-          "InteractionType": "AttuneAetherCurrent"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818329
         },
         {
           "DataId": 1038616,

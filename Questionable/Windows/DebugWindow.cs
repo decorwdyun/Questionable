@@ -35,7 +35,7 @@ internal sealed class DebugWindow : Window
         IsOpen = true;
         SizeConstraints = new WindowSizeConstraints
         {
-            MinimumSize = new Vector2(100, 0),
+            MinimumSize = new Vector2(200, 30),
             MaximumSize = default
         };
     }
@@ -43,16 +43,22 @@ internal sealed class DebugWindow : Window
     public override unsafe void Draw()
     {
         if (!_clientState.IsLoggedIn || _clientState.LocalPlayer == null)
+        {
+            ImGui.Text("Not logged in.");
             return;
+        }
 
         var currentQuest = _questController.CurrentQuest;
         if (currentQuest != null)
         {
             ImGui.TextUnformatted($"Quest: {currentQuest.Quest.Name} / {currentQuest.Sequence} / {currentQuest.Step}");
             ImGui.TextUnformatted(_questController.DebugState ?? "--");
+            ImGui.TextUnformatted(_questController.Comment ?? "--");
 
-            ImGui.BeginDisabled(_questController.GetNextStep().Step == null);
-            ImGui.Text($"{_questController.GetNextStep().Step?.Position}");
+            var nextStep = _questController.GetNextStep();
+            ImGui.BeginDisabled(nextStep.Step == null);
+            ImGui.Text(string.Create(CultureInfo.InvariantCulture,
+                $"{nextStep.Step?.InteractionType} @ {nextStep.Step?.Position}"));
             if (ImGuiComponents.IconButton(FontAwesomeIcon.Play))
             {
                 _questController.ExecuteNextStep();
@@ -163,5 +169,8 @@ internal sealed class DebugWindow : Window
         if (ImGui.Button("Stop Nav"))
             _movementController.Stop();
         ImGui.EndDisabled();
+
+        if (ImGui.Button("Reload Data"))
+            _questController.Reload();
     }
 }

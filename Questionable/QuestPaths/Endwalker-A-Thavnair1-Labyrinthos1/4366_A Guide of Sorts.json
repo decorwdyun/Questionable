@@ -46,16 +46,19 @@
             "Z": -395.31555
           },
           "TerritoryId": 956,
-          "InteractionType": "AttuneAetherCurrent"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818318
         },
         {
           "Position": {
-            "X": -327.6718,
-            "Y": 79.535736,
-            "Z": -400.00397
+            "X": -300.80545,
+            "Y": 59.384476,
+            "Z": -409.0928
           },
           "TerritoryId": 956,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true,
+          "Mount": true
         },
         {
           "DataId": 2011983,
@@ -65,7 +68,8 @@
             "Z": -286.27454
           },
           "TerritoryId": 956,
-          "InteractionType": "AttuneAetherCurrent"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818319
         },
         {
           "DataId": 1038736,
@@ -114,6 +118,7 @@
             "Y": 41.37599,
             "Z": -141.16125
           },
+          "StopDistance": 5,
           "TerritoryId": 962,
           "InteractionType": "Interact"
         }

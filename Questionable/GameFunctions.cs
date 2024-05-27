@@ -7,10 +7,13 @@ using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
 using Dalamud.Game;
+using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects;
+using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
+using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using FFXIVClientStructs.FFXIV.Client.System.Memory;
@@ -18,6 +21,8 @@ using FFXIVClientStructs.FFXIV.Client.System.String;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using Lumina.Excel.GeneratedSheets;
 using Questionable.Model.V1;
+using BattleChara = FFXIVClientStructs.FFXIV.Client.Game.Character.BattleChara;
+using GameObject = Dalamud.Game.ClientState.Objects.Types.GameObject;
 
 namespace Questionable;
 
@@ -34,15 +39,19 @@ internal sealed unsafe class GameFunctions
     private readonly ProcessChatBoxDelegate _processChatBox;
     private readonly delegate* unmanaged<Utf8String*, int, IntPtr, void> _sanitiseString;
     private readonly ReadOnlyDictionary<ushort, byte> _territoryToAetherCurrentCompFlgSet;
+    private readonly ReadOnlyDictionary<EEmote, string> _emoteCommands;
 
     private readonly IObjectTable _objectTable;
     private readonly ITargetManager _targetManager;
+    private readonly ICondition _condition;
     private readonly IPluginLog _pluginLog;
 
-    public GameFunctions(IDataManager dataManager, IObjectTable objectTable, ISigScanner sigScanner, ITargetManager targetManager, IPluginLog pluginLog)
+    public GameFunctions(IDataManager dataManager, IObjectTable objectTable, ISigScanner sigScanner,
+        ITargetManager targetManager, ICondition condition, IPluginLog pluginLog)
     {
         _objectTable = objectTable;
         _targetManager = targetManager;
+        _condition = condition;
         _pluginLog = pluginLog;
         _processChatBox =
             Marshal.GetDelegateForFunctionPointer<ProcessChatBoxDelegate>(sigScanner.ScanText(Signatures.SendChat));
@@ -53,6 +62,13 @@ internal sealed unsafe class GameFunctions
             .Where(x => x.RowId > 0)
             .Where(x => x.Unknown32 > 0)
             .ToDictionary(x => (ushort)x.RowId, x => x.Unknown32)
+            .AsReadOnly();
+        _emoteCommands = dataManager.GetExcelSheet<Emote>()!
+            .Where(x => x.RowId > 0)
+            .Where(x => x.TextCommand != null && x.TextCommand.Value != null)
+            .Select(x => (x.RowId, Command: x.TextCommand.Value!.Command?.ToString()))
+            .Where(x => x.Command != null && x.Command.StartsWith('/'))
+            .ToDictionary(x => (EEmote)x.RowId, x => x.Command!)
             .AsReadOnly();
     }
 
@@ -92,7 +108,7 @@ internal sealed unsafe class GameFunctions
             return false;
         }
 
-        for (ulong i = 0; i < telepo->TeleportList.Size(); ++ i)
+        for (ulong i = 0; i < telepo->TeleportList.Size(); ++i)
         {
             var data = telepo->TeleportList.Get(i);
             if (data.AetheryteId == aetheryteId)
@@ -132,6 +148,13 @@ internal sealed unsafe class GameFunctions
         return playerState != null &&
                _territoryToAetherCurrentCompFlgSet.TryGetValue(territoryId, out byte aetherCurrentCompFlgSet) &&
                playerState->IsAetherCurrentZoneComplete(aetherCurrentCompFlgSet);
+    }
+
+    public bool IsAetherCurrentUnlocked(uint aetherCurrentId)
+    {
+        var playerState = PlayerState.Instance();
+        return playerState != null &&
+               playerState->IsAetherCurrentUnlocked(aetherCurrentId);
     }
 
     public void ExecuteCommand(string command)
@@ -262,19 +285,81 @@ internal sealed unsafe class GameFunctions
 
     #endregion
 
-    public void InteractWith(uint dataId)
+    private GameObject? FindObjectByDataId(uint dataId)
     {
         foreach (var gameObject in _objectTable)
         {
             if (gameObject.DataId == dataId)
             {
-                _targetManager.Target = null;
-                _targetManager.Target = gameObject;
-
-                TargetSystem.Instance()->InteractWithObject(
-                    (FFXIVClientStructs.FFXIV.Client.Game.Object.GameObject*)gameObject.Address, false);
-                return;
+                return gameObject;
             }
         }
+
+        return null;
+    }
+
+    public void InteractWith(uint dataId)
+    {
+        GameObject? gameObject = FindObjectByDataId(dataId);
+        if (gameObject != null)
+        {
+            _targetManager.Target = null;
+            _targetManager.Target = gameObject;
+
+            TargetSystem.Instance()->InteractWithObject(
+                (FFXIVClientStructs.FFXIV.Client.Game.Object.GameObject*)gameObject.Address, false);
+        }
+    }
+
+    public void UseItem(uint dataId, uint itemId)
+    {
+        GameObject? gameObject = FindObjectByDataId(dataId);
+        if (gameObject != null)
+        {
+            _targetManager.Target = gameObject;
+            AgentInventoryContext.Instance()->UseItem(itemId);
+        }
+    }
+
+    public void UseEmote(uint dataId, EEmote emote)
+    {
+        GameObject? gameObject = FindObjectByDataId(dataId);
+        if (gameObject != null)
+        {
+            _targetManager.Target = gameObject;
+            ExecuteCommand($"{_emoteCommands[emote]} motion");
+        }
+    }
+
+    public bool IsObbjectAtPosition(uint dataId, Vector3 position)
+    {
+        GameObject? gameObject = FindObjectByDataId(dataId);
+        return gameObject != null && (gameObject.Position - position).Length() < 0.05f;
+    }
+
+    public bool HasStatusPreventingSprintOrMount()
+    {
+        var gameObject = GameObjectManager.GetGameObjectByIndex(0);
+        if (gameObject != null && gameObject->ObjectKind == 1)
+        {
+            var battleChara = (BattleChara*)gameObject;
+            StatusManager* statusManager = battleChara->GetStatusManager;
+            return statusManager->HasStatus(565);
+        }
+
+        return false;
+    }
+
+    public bool Unmount()
+    {
+        if (_condition[ConditionFlag.Mounted])
+        {
+            if (ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, 23) == 0)
+                ActionManager.Instance()->UseAction(ActionType.GeneralAction, 23);
+
+            return true;
+        }
+
+        return false;
     }
 }

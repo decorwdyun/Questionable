@@ -20,7 +20,7 @@ public sealed class AethernetShortcutConverter : JsonConverter<AethernetShortcut
         { EAetheryteLocation.LimsaAirship, "[Limsa Lominsa] Airship Landing" },
         { EAetheryteLocation.Gridania, "[Gridania] Aetheryte Plaza" },
         { EAetheryteLocation.GridaniaArcher, "[Gridania] Archer's Guild" },
-        { EAetheryteLocation.GridaniaLeatherworker, "[Gridania] Leatherworker's Guld & Shaded Bower" },
+        { EAetheryteLocation.GridaniaLeatherworker, "[Gridania] Leatherworker's Guild & Shaded Bower" },
         { EAetheryteLocation.GridaniaLancer, "[Gridania] Lancer's Guild" },
         { EAetheryteLocation.GridaniaConjurer, "[Gridania] Conjurer's Guild" },
         { EAetheryteLocation.GridaniaBotanist, "[Gridania] Botanist's Guild" },

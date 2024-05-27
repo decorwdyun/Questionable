@@ -18,6 +18,8 @@ public class QuestStep
     public float? StopDistance { get; set; }
     public ushort TerritoryId { get; set; }
     public bool Disabled { get; set; }
+    public bool DisableNavmesh { get; set; }
+    public bool? Mount { get; set; }
     public string? Comment { get; set; }
 
     [JsonConverter(typeof(AetheryteConverter))]
@@ -25,4 +27,15 @@ public class QuestStep
 
     [JsonConverter(typeof(AethernetShortcutConverter))]
     public AethernetShortcut? AethernetShortcut { get; set; }
+    public uint? AetherCurrentId { get; set; }
+
+    public uint? ItemId { get; set; }
+
+    [JsonConverter(typeof(EmoteConverter))]
+    public EEmote? Emote { get; set; }
+
+    [JsonConverter(typeof(EnemySpawnTypeConverter))]
+    public EEnemySpawnType? EnemySpawnType { get; set; }
+
+    public IList<uint>? KillEnemyDataIds { get; set; }
 }

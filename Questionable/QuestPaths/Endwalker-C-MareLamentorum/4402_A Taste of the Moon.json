@@ -72,7 +72,7 @@
           "InteractionType": "Interact"
         },
         {
-          "ItemId": -1,
+          "ItemId": null,
           "TerritoryId": 959,
           "InteractionType": "UseItem"
         }

@@ -47,10 +47,12 @@
               "properties": {
                 "DataId": {
                   "type": "integer",
+                  "description": "The data id of the NPC/Object/Aetheryte/Aether Current",
                   "exclusiveMinimum": 0
                 },
                 "Position": {
                   "type": "object",
+                  "description": "Position to (typically) walk to",
                   "properties": {
                     "X": {
                       "type": "number"
@@ -69,38 +71,53 @@
                   ]
                 },
                 "StopDistance": {
-                  "type": "number",
+                  "type": ["number", "null"],
+                  "description": "Set if pathfinding should stop closer or further away from the default stop distance",
                   "exclusiveMinimum": 0
                 },
                 "TerritoryId": {
                   "type": "integer",
+                  "description": "The territory id associated with the location",
                   "exclusiveMinimum": 0
                 },
                 "InteractionType": {
                   "type": "string",
+                  "description": "What to do at the position",
                   "enum": [
                     "Interact",
                     "WalkTo",
-                    "AttuneAethenetShard",
+                    "AttuneAethernetShard",
                     "AttuneAetheryte",
                     "AttuneAetherCurrent",
                     "Combat",
                     "UseItem",
                     "Emote",
+                    "WaitForNpcAtPosition",
                     "ManualAction"
                   ]
                 },
                 "Disabled": {
+                  "description": "Unused (TODO)",
                   "type": "boolean"
+                },
+                "DisableNavmesh": {
+                  "description": "If true, will go to the position in a straight line instead of using pathfinding",
+                  "type": "boolean"
+                },
+                "Mount": {
+                  "type": ["boolean", "null"],
+                  "description": "If true, will mount regardless of distance to position. If false, will unmount."
                 },
                 "AetheryteShortcut": {
                   "type": "string",
+                  "description": "The Aetheryte to teleport to (before moving)",
                   "$comment": "TODO add remaining aetherytes for 2.x/3.x",
                   "enum": [
                     "Limsa Lominsa",
                     "Gridania",
                     "Ul'dah",
                     "Ishgard",
+                    "Idyllshire",
 
                     "Rhalgr's Reach",
                     "Fringes - Castrum Oriens",
@@ -118,8 +135,6 @@
                     "Azim Steppe - Dawn Throne",
                     "Azim Steppe - Dhoro Iloh",
                     "Doman Enclave",
-                    "Doman Enclave - Northern Enclave",
-                    "Doman Enclave - Southern Enclave",
 
                     "Crystarium",
                     "Eulmore",
@@ -155,12 +170,13 @@
                     "Elpis - Twelve Wonders",
                     "Elpis - Poieten Oikos",
                     "Ultima Thule - Reah Tahra",
-                    "Ultima Thula - Abode of the Ea",
+                    "Ultima Thule - Abode of the Ea",
                     "Ultima Thule - Base Omicron"
                   ]
                 },
                 "AethernetShortcut": {
                   "type": "array",
+                  "description": "A pair of aethernet locations (from + to) to use as a shortcut",
                   "minItems": 2,
                   "maxItems": 2,
                   "items": {
@@ -176,7 +192,7 @@
                       "[Limsa Lominsa] Airship Landing",
                       "[Gridania] Aetheryte Plaza",
                       "[Gridania] Archer's Guild",
-                      "[Gridania] Leatherworker's Guld & Shaded Bower",
+                      "[Gridania] Leatherworker's Guild & Shaded Bower",
                       "[Gridania] Lancer's Guild",
                       "[Gridania] Conjurer's Guild",
                       "[Gridania] Botanist's Guild",
@@ -249,14 +265,20 @@
                     ]
                   }
                 },
+                "AetherCurrentId": {
+                  "type": "number",
+                  "description": "The aether current id, used to check if a given aetheryte is unlocked"
+                },
                 "EnemySpawnType": {
                   "type": "string",
+                  "description": "Determines how enemy spawning is handled in combat locations",
                   "enum": [
                     "AutoOnEnterArea",
                     "AfterInteraction"
                   ]
                 },
                 "KillEnemyDataIds": {
+                  "description": "The enemy data ids which are supposed to be killed",
                   "type": "array",
                   "items": {
                     "type": "integer"
@@ -264,6 +286,7 @@
                 },
                 "Emote": {
                   "type": "string",
+                  "description": "The emote to use",
                   "enum": [
                     "stretch",
                     "wave",
@@ -271,8 +294,14 @@
                     "deny"
                   ]
                 },
+                "ItemId": {
+                  "type": ["number", "null"],
+                  "description": "The Item to use",
+                  "exclusiveMinimum": 0
+                },
                 "SkipIf": {
                   "type": "array",
+                  "description": "TODO Not implemented",
                   "items": {
                     "type": "string",
                     "enum": [

@@ -22,18 +22,18 @@
       "Steps": [
         {
           "Position": {
-            "X": -80.636894,
-            "Y": 99.974266,
-            "Z": -708.7214
+            "X": -82.02301,
+            "Y": 95.24942,
+            "Z": -697.3925
           },
           "TerritoryId": 957,
           "InteractionType": "WalkTo"
         },
         {
           "Position": {
-            "X": -67.775665,
-            "Y": 97.140656,
-            "Z": -710.1025
+            "X": -78.47051,
+            "Y": 99.96379,
+            "Z": -711.17303
           },
           "TerritoryId": 957,
           "InteractionType": "WalkTo"
@@ -46,7 +46,9 @@
             "Z": -710.7805
           },
           "TerritoryId": 957,
-          "InteractionType": "AttuneAetherCurrent"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818330,
+          "DisableNavmesh": true
         },
         {
           "DataId": 1038631,
@@ -56,7 +58,8 @@
             "Z": 117.69275
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Thavnair - Great Work"
         }
       ]
     },
@@ -71,7 +74,28 @@
             "Z": -561.82196
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818334
+        },
+        {
+          "Position": {
+            "X": -489.27457,
+            "Y": 72.74904,
+            "Z": -546.8438
+          },
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo",
+          "Mount": true
+        },
+        {
+          "Position": {
+            "X": -523.7225,
+            "Y": 9.401685,
+            "Z": -554.4276
+          },
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true
         },
         {
           "DataId": 1038651,
@@ -95,6 +119,7 @@
             "Y": -0.090369135,
             "Z": -562.4323
           },
+          "StopDistance": 6,
           "TerritoryId": 957,
           "InteractionType": "Interact"
         }
@@ -111,7 +136,8 @@
             "Z": 17.532532
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Thavnair - Great Work"
         }
       ]
     }

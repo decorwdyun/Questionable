@@ -42,6 +42,7 @@
             "Y": -27.000013,
             "Z": 177.5387
           },
+          "StopDistance": 5,
           "TerritoryId": 963,
           "InteractionType": "Interact"
         }
@@ -58,7 +59,7 @@
             "Z": 110.55151
           },
           "TerritoryId": 963,
-          "InteractionType": "AttuneAethenetShard"
+          "InteractionType": "AttuneAethernetShard"
         },
         {
           "DataId": 1040256,
@@ -113,7 +114,7 @@
             "Z": 202.2583
           },
           "TerritoryId": 963,
-          "InteractionType": "AttuneAethenetShard"
+          "InteractionType": "AttuneAethernetShard"
         },
         {
           "DataId": 191,
@@ -123,7 +124,7 @@
             "Z": -31.815125
           },
           "TerritoryId": 963,
-          "InteractionType": "AttuneAethenetShard"
+          "InteractionType": "AttuneAethernetShard"
         },
         {
           "DataId": 1040259,

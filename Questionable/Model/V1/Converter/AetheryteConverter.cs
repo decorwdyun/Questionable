@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace Questionable.Model.V1.Converter;
 
-public class AetheryteConverter : JsonConverter<EAetheryteLocation>
+public sealed class AetheryteConverter : JsonConverter<EAetheryteLocation>
 {
     private static readonly Dictionary<EAetheryteLocation, string> EnumToString = new()
     {
@@ -14,6 +14,7 @@ public class AetheryteConverter : JsonConverter<EAetheryteLocation>
         { EAetheryteLocation.Gridania, "Gridania" },
         { EAetheryteLocation.Uldah, "Ul'dah" },
         { EAetheryteLocation.Ishgard, "Ishgard" },
+        { EAetheryteLocation.Idyllshire, "Idyllshire" },
 
         { EAetheryteLocation.RhalgrsReach, "Rhalgr's Reach" },
         { EAetheryteLocation.FringesCastrumOriens, "Fringes - Castrum Oriens" },
@@ -31,8 +32,6 @@ public class AetheryteConverter : JsonConverter<EAetheryteLocation>
         { EAetheryteLocation.AzimSteppeDawnThrone, "Azim Steppe - Dawn Throne" },
         { EAetheryteLocation.AzimSteppeDhoroIloh, "Azim Steppe - Dhoro Iloh" },
         { EAetheryteLocation.DomanEnclave, "Doman Enclave" },
-        { EAetheryteLocation.DomamEnclaveNorthern, "Doman Enclave - Northern Enclave" },
-        { EAetheryteLocation.DomamEnclaveSouthern, "Doman Enclave - Southern Enclave" },
 
         { EAetheryteLocation.Crystarium, "Crystarium" },
         { EAetheryteLocation.Eulmore, "Eulmore" },

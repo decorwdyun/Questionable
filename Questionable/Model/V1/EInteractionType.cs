@@ -10,5 +10,6 @@ public enum EInteractionType
     Combat,
     UseItem,
     Emote,
+    WaitForObjectAtPosition,
     ManualAction
 }
