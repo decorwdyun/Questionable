@@ -12,6 +12,7 @@
             "Y": 3.1168795,
             "Z": -262.62305
           },
+          "StopDistance": 5,
           "TerritoryId": 957,
           "InteractionType": "Interact"
         }
@@ -42,8 +43,9 @@
             "Z": -683.829
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact",
-          "Comment": "Travel to Radz-at-Han"
+          "InteractionType": "WalkTo",
+          "Comment": "Travel to Radz-at-Han",
+          "TargetTerritoryId": 963
         },
         {
           "DataId": 1040354,
@@ -112,6 +114,7 @@
             "Y": 36,
             "Z": 71.70203
           },
+          "StopDistance": 5,
           "TerritoryId": 963,
           "InteractionType": "Interact"
         }

@@ -80,6 +80,11 @@
                   "description": "The territory id associated with the location",
                   "exclusiveMinimum": 0
                 },
+                "TargetTerritoryId": {
+                  "type": "integer",
+                  "description": "If set, this step is complete (movement-wise) if this territory id is reached",
+                  "exclusiveMinimum": 0
+                },
                 "InteractionType": {
                   "type": "string",
                   "description": "What to do at the position",

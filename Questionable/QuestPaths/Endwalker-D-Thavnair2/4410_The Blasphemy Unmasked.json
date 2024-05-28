@@ -91,10 +91,11 @@
         {
           "DataId": 1038997,
           "Position": {
-            "X": -37.70625,
-            "Y": -9.957219E-05,
-            "Z": -134.90237
+            "X": -37.667046,
+            "Y": -0.00014948845,
+            "Z": -136.80333
           },
+          "StopDistance": 0.25,
           "TerritoryId": 963,
           "InteractionType": "Interact"
         }

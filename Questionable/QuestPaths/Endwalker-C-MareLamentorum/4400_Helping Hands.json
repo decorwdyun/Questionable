@@ -12,6 +12,7 @@
             "Y": 169.00394,
             "Z": 549.6758
           },
+          "StopDistance": 5,
           "TerritoryId": 959,
           "InteractionType": "Interact"
         }
@@ -20,6 +21,52 @@
     {
       "Sequence": 1,
       "Steps": [
+        {
+          "Position": {
+            "X": -326.42538,
+            "Y": 98.98749,
+            "Z": 526.5519
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true
+        },
+        {
+          "Position": {
+            "X": -50.482517,
+            "Y": 42.360725,
+            "Z": 466.64243
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "Position": {
+            "X": 113.70272,
+            "Y": 45.552776,
+            "Z": 460.49585
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "Position": {
+            "X": 129.9883,
+            "Y": 54.543076,
+            "Z": 468.93378
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "Position": {
+            "X": 126.817184,
+            "Y": 55.823048,
+            "Z": 476.34058
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo"
+        },
         {
           "DataId": 1038884,
           "Position": {
@@ -87,6 +134,7 @@
             "Y": 59.911327,
             "Z": 411.42883
           },
+          "StopDistance": 5,
           "TerritoryId": 959,
           "InteractionType": "Interact"
         }

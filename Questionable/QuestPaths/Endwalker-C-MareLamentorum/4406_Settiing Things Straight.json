@@ -21,6 +21,47 @@
       "Sequence": 1,
       "Steps": [
         {
+          "Position": {
+            "X": -126.76068,
+            "Y": 61.04055,
+            "Z": -76.382324
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "DataId": 2012014,
+          "Position": {
+            "X": -128.008,
+            "Y": 66.33093,
+            "Z": -68.2536
+          },
+          "StopDistance": 5,
+          "TerritoryId": 959,
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818363
+        },
+        {
+          "Position": {
+            "X": -116.83438,
+            "Y": 63.151585,
+            "Z": -71.81973
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "DataId": 2012010,
+          "Position": {
+            "X": 42.58789,
+            "Y": 124.01001,
+            "Z": -167.04059
+          },
+          "TerritoryId": 959,
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818359
+        },
+        {
           "DataId": 1038936,
           "Position": {
             "X": 191.48547,
@@ -44,6 +85,7 @@
           },
           "TerritoryId": 959,
           "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
             13998,
             14093,
@@ -93,6 +135,7 @@
           },
           "TerritoryId": 959,
           "InteractionType": "ManualAction",
+          "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow",
           "Comment": "Navmesh can't jump"
         },
         {
@@ -102,8 +145,19 @@
             "Y": -154.98596,
             "Z": -595.5444
           },
+          "StopDistance": 3,
           "TerritoryId": 959,
-          "InteractionType": "AttuneAetherCurrent"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818361
+        },
+        {
+          "Position": {
+            "X": 351.1467,
+            "Y": -167.87698,
+            "Z": -605.0467
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo"
         },
         {
           "DataId": 1038937,

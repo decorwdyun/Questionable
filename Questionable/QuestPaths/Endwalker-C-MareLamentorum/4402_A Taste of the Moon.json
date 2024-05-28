@@ -21,6 +21,48 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 2012013,
+          "Position": {
+            "X": 29.1046,
+            "Y": -47.739,
+            "Z": -550.4077
+          },
+          "TerritoryId": 959,
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818362
+        },
+        {
+          "Position": {
+            "X": 62.71022,
+            "Y": -46.99965,
+            "Z": -433.81802
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "Position": {
+            "X": 47.394165,
+            "Y": -133.50012,
+            "Z": -397.90225
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true
+        },
+        {
+          "DataId": 2012019,
+          "Position": {
+            "X": 21.7081,
+            "Y": -133.5001,
+            "Z": -385.7313
+          },
+          "TerritoryId": 959,
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818368,
+          "DisableNavmesh": true
+        },
+        {
           "DataId": 1038908,
           "Position": {
             "X": -456.10742,
@@ -28,7 +70,8 @@
             "Z": -618.7686
           },
           "TerritoryId": 959,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow"
         }
       ]
     },
@@ -37,13 +80,8 @@
       "Steps": [
         {
           "DataId": 2012178,
-          "Position": {
-            "X": -486.59497,
-            "Y": -154.37555,
-            "Z": -689.26526
-          },
           "TerritoryId": 959,
-          "InteractionType": "ManualAction",
+          "InteractionType": "Interact",
           "Comment": "Navmesh can't jump"
         }
       ]
@@ -59,22 +97,30 @@
             "Z": -595.72754
           },
           "TerritoryId": 959,
-          "InteractionType": "AttuneAetherCurrent"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818360
         },
         {
           "DataId": 1038912,
+          "StopDistance": 5,
+          "TerritoryId": 959,
+          "InteractionType": "Interact",
+          "Comment": "Navmesh can't jump"
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
           "Position": {
             "X": -455.40552,
             "Y": -168,
             "Z": -620.05035
           },
           "TerritoryId": 959,
-          "InteractionType": "Interact"
-        },
-        {
-          "ItemId": null,
-          "TerritoryId": 959,
-          "InteractionType": "UseItem"
+          "InteractionType": "UseItem",
+          "ItemId": 2003236
         }
       ]
     },

@@ -6,6 +6,7 @@ using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using Dalamud.Game.ClientState.Conditions;
+using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using Questionable.External;
@@ -36,13 +37,11 @@ internal sealed class MovementController : IDisposable
     public bool IsNavmeshReady => _navmeshIpc.IsReady;
     public bool IsPathRunning => _navmeshIpc.IsPathRunning;
     public bool IsPathfinding => _pathfindTask is { IsCompleted: false };
-    public Vector3? Destination { get; private set; }
-    public float StopDistance { get; private set; }
-    public bool IsFlying { get; private set; }
+    public DestinationData? Destination { get; private set; }
 
     public void Update()
     {
-        if (_pathfindTask != null)
+        if (_pathfindTask != null && Destination != null)
         {
             if (_pathfindTask.IsCompletedSuccessfully)
             {
@@ -52,7 +51,7 @@ internal sealed class MovementController : IDisposable
 
                 var navPoints = _pathfindTask.Result.Skip(1).ToList();
                 Vector3 start = _clientState.LocalPlayer?.Position ?? navPoints[0];
-                if (IsFlying && !_condition[ConditionFlag.InFlight] && _condition[ConditionFlag.Mounted])
+                if (Destination.IsFlying && !_condition[ConditionFlag.InFlight] && _condition[ConditionFlag.Mounted])
                 {
                     if (IsOnFlightPath(start) || navPoints.Any(IsOnFlightPath))
                     {
@@ -62,7 +61,7 @@ internal sealed class MovementController : IDisposable
                         }
                     }
                 }
-                else if (!IsFlying && !_condition[ConditionFlag.Mounted] && navPoints.Count > 0 &&
+                else if (!Destination.IsFlying && !_condition[ConditionFlag.Mounted] && navPoints.Count > 0 &&
                          !_gameFunctions.HasStatusPreventingSprintOrMount())
                 {
                     float actualDistance = 0;
@@ -98,9 +97,22 @@ internal sealed class MovementController : IDisposable
         if (IsPathRunning && Destination != null)
         {
             Vector3 localPlayerPosition = _clientState.LocalPlayer?.Position ?? Vector3.Zero;
-            if ((localPlayerPosition - Destination.Value).Length() < StopDistance &&
-                Math.Abs(localPlayerPosition.Y - Destination.Value.Y) < 1.95f) // target is too far below you
-                Stop();
+            if ((localPlayerPosition - Destination.Position).Length() < Destination.StopDistance)
+            {
+                if (Destination.DataId != null)
+                {
+                    GameObject? gameObject = _gameFunctions.FindObjectByDataId(Destination.DataId.Value);
+                    if (gameObject != null && gameObject is Character)
+                    {
+                        if (Math.Abs(localPlayerPosition.Y - gameObject.Position.Y) < 1.95f)
+                            Stop();
+                    }
+                    else
+                        Stop();
+                }
+                else
+                    Stop();
+            }
         }
     }
 
@@ -110,29 +122,27 @@ internal sealed class MovementController : IDisposable
         return pointOnFloor != null && Math.Abs(pointOnFloor.Value.Y - p.Y) > 0.5f;
     }
 
-    private void PrepareNavigation(EMovementType type, Vector3 to, bool fly, float? stopDistance)
+    private void PrepareNavigation(EMovementType type, uint? dataId, Vector3 to, bool fly, float? stopDistance)
     {
         ResetPathfinding();
 
         _gameFunctions.ExecuteCommand("/automove off");
 
-        Destination = to;
-        StopDistance = stopDistance ?? (DefaultStopDistance - 0.2f);
-        IsFlying = fly;
+        Destination = new DestinationData(dataId, to, stopDistance ?? (DefaultStopDistance - 0.2f), fly);
     }
 
-    public void NavigateTo(EMovementType type, Vector3 to, bool fly, float? stopDistance = null)
+    public void NavigateTo(EMovementType type, uint? dataId, Vector3 to, bool fly, float? stopDistance = null)
     {
-        PrepareNavigation(type, to, fly, stopDistance);
+        PrepareNavigation(type, dataId, to, fly, stopDistance);
         _cancellationTokenSource = new();
         _cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(10));
         _pathfindTask =
             _navmeshIpc.Pathfind(_clientState.LocalPlayer!.Position, to, fly, _cancellationTokenSource.Token);
     }
 
-    public void NavigateTo(EMovementType type, List<Vector3> to, bool fly, float? stopDistance)
+    public void NavigateTo(EMovementType type, uint? dataId, List<Vector3> to, bool fly, float? stopDistance)
     {
-        PrepareNavigation(type, to.Last(), fly, stopDistance);
+        PrepareNavigation(type, dataId, to.Last(), fly, stopDistance);
         _navmeshIpc.MoveTo(to);
     }
 
@@ -164,4 +174,6 @@ internal sealed class MovementController : IDisposable
     {
         Stop();
     }
+
+    public sealed record DestinationData(uint? DataId, Vector3 Position, float StopDistance, bool IsFlying);
 }

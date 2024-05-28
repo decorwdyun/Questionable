@@ -28,7 +28,8 @@
             "Z": -272.84656
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DisableNavmesh": true
         }
       ]
     },
@@ -43,7 +44,8 @@
             "Z": -343.89258
           },
           "TerritoryId": 957,
-          "InteractionType": "AttuneAetherCurrent"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818331
         },
         {
           "DataId": 2011997,
@@ -53,7 +55,8 @@
             "Z": -447.8676
           },
           "TerritoryId": 957,
-          "InteractionType": "AttuneAetherCurrent"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818336
         },
         {
           "DataId": 1039023,
@@ -79,6 +82,7 @@
           },
           "TerritoryId": 957,
           "InteractionType": "Combat",
+          "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
             13991,
             13990
@@ -128,6 +132,7 @@
           },
           "TerritoryId": 957,
           "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
             13989
           ]

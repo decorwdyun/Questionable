@@ -12,6 +12,7 @@
             "Y": 3.8989394,
             "Z": 7.003784
           },
+          "StopDistance": 5,
           "TerritoryId": 962,
           "InteractionType": "Interact"
         }
@@ -36,15 +37,10 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 1038978,
-          "Position": {
-            "X": 202.34985,
-            "Y": 1.7699993,
-            "Z": 757.71716
-          },
           "TerritoryId": 957,
-          "InteractionType": "Interact",
-          "Comment": "Does this get completed automatically on teleport? Using the coords from the next step"
+          "AetheryteShortcut": "Thavnair - Yedlihmad",
+          "InteractionType": "WalkTo",
+          "Comment": "Quest automatically progresses once teleported to Yedlihmad"
         }
       ]
     },

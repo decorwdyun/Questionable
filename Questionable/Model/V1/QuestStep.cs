@@ -17,6 +17,8 @@ public class QuestStep
 
     public float? StopDistance { get; set; }
     public ushort TerritoryId { get; set; }
+    public ushort? TargetTerritoryId { get; set; }
+
     public bool Disabled { get; set; }
     public bool DisableNavmesh { get; set; }
     public bool? Mount { get; set; }

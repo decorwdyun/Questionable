@@ -43,7 +43,9 @@
             "Z": -27.023743
           },
           "TerritoryId": 963,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "StopDistance": 10,
+          "DisableNavmesh": true
         },
         {
           "DataId": 195,

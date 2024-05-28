@@ -1,10 +1,12 @@
 ﻿using System.Globalization;
+using System.Linq;
 using System.Numerics;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Interface;
 using Dalamud.Interface.Components;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using ImGuiNET;
@@ -52,6 +54,27 @@ internal sealed class DebugWindow : Window
         if (currentQuest != null)
         {
             ImGui.TextUnformatted($"Quest: {currentQuest.Quest.Name} / {currentQuest.Sequence} / {currentQuest.Step}");
+
+            var questWork = _gameFunctions.GetQuestEx(currentQuest.Quest.QuestId);
+            if (questWork != null)
+            {
+                var qw = questWork.Value;
+                string vars = "";
+                for (int i = 0; i < 6; ++i)
+                    vars += qw.Variables[i] + " ";
+
+                // For combat quests, a sequence to kill 3 enemies works a bit like this:
+                // Trigger enemies → 0
+                // Kill first enemy → 1
+                // Kill second enemy → 2
+                // Last enemy → increase sequence, reset variable to 0
+                // The order in which enemies are killed doesn't seem to matter.
+                // If multiple waves spawn, this continues to count up (e.g. 1 enemy from wave 1, 2 enemies from wave 2, 1 from wave 3) would count to 3 then 0
+                ImGui.Text($"QW: {vars.Trim()} / {qw.Flags}");
+            }
+            else
+                ImGui.TextUnformatted("(Not accepted)");
+
             ImGui.TextUnformatted(_questController.DebugState ?? "--");
             ImGui.TextUnformatted(_questController.Comment ?? "--");
 
@@ -95,8 +118,8 @@ internal sealed class DebugWindow : Window
             {
                 if (ImGui.Button("Move to Target"))
                 {
-                    _movementController.NavigateTo(EMovementType.DebugWindow, _targetManager.Target.Position,
-                        _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType));
+                    _movementController.NavigateTo(EMovementType.DebugWindow, _targetManager.Target.DataId,
+                        _targetManager.Target.Position, _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType));
                 }
             }
             else

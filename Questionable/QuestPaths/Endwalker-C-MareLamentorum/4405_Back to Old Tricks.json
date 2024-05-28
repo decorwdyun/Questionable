@@ -1,7 +1,6 @@
 ﻿{
   "Version": 1,
   "Author": "liza",
-  "Comment": "Sequence 3 is the end of the chase marker",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -29,7 +28,8 @@
             "Z": -512.2606
           },
           "TerritoryId": 959,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow"
         }
       ]
     },
@@ -46,6 +46,22 @@
           "TerritoryId": 959,
           "InteractionType": "ManualAction",
           "Comment": "Duty - Follow Urianger"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 2012185,
+          "Position": {
+            "X": -5.416992,
+            "Y": -49.05786,
+            "Z": -269.24548
+          },
+          "TerritoryId": 959,
+          "InteractionType": "ManualAction",
+          "Comment": "Duty - Follow Urianger (but you failed the first time)"
         }
       ]
     },

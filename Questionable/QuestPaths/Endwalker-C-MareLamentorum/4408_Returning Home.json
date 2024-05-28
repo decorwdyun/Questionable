@@ -12,6 +12,7 @@
             "Y": 128.6778,
             "Z": 566.8573
           },
+          "StopDistance": 5,
           "TerritoryId": 959,
           "InteractionType": "Interact"
         }
@@ -20,6 +21,16 @@
     {
       "Sequence": 1,
       "Steps": [
+        {
+          "Position": {
+            "X": -614.86835,
+            "Y": 128.67761,
+            "Z": 677.33923
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo",
+          "Comment": "Avoids Combat"
+        },
         {
           "DataId": 2012531,
           "Position": {
@@ -53,7 +64,8 @@
             "Z": 407.79736
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Garlemald - Camp Broken Glass"
         }
       ]
     },
@@ -69,6 +81,7 @@
           },
           "TerritoryId": 962,
           "InteractionType": "Interact",
+          "AetheryteShortcut": "Old Sharlayan",
           "AethernetShortcut": [
             "[Old Sharlayan] Aetheryte Plaza",
             "[Old Sharlayan] The Baldesion Annex"

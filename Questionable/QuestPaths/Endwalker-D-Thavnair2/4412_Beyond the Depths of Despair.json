@@ -42,6 +42,7 @@
             "Y": 51.57471,
             "Z": -597.1924
           },
+          "StopDistance": 5,
           "TerritoryId": 957,
           "InteractionType": "Interact"
         }
@@ -59,6 +60,7 @@
           },
           "TerritoryId": 957,
           "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
             13994
           ]
@@ -77,6 +79,7 @@
           },
           "TerritoryId": 957,
           "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
             13992,
             13993
@@ -139,6 +142,7 @@
             "Y": 5.2643433,
             "Z": -244.4953
           },
+          "StopDistance": 10,
           "TerritoryId": 957,
           "InteractionType": "AttuneAetheryte"
         },

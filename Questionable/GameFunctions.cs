@@ -11,6 +11,7 @@ using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
@@ -20,6 +21,7 @@ using FFXIVClientStructs.FFXIV.Client.System.Memory;
 using FFXIVClientStructs.FFXIV.Client.System.String;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using Lumina.Excel.GeneratedSheets;
+using Questionable.Controller;
 using Questionable.Model.V1;
 using BattleChara = FFXIVClientStructs.FFXIV.Client.Game.Character.BattleChara;
 using GameObject = Dalamud.Game.ClientState.Objects.Types.GameObject;
@@ -72,35 +74,61 @@ internal sealed unsafe class GameFunctions
             .AsReadOnly();
     }
 
+    public QuestController QuestController { private get; set; }
+
     public (ushort CurrentQuest, byte Sequence) GetCurrentQuest()
     {
+        ushort currentQuest;
+
+        // if any quest that is currently tracked (i.e. in the to-do list) exists as mapped quest, we use that
+        var questManager = QuestManager.Instance();
+        if (questManager != null)
+        {
+            foreach (var tracked in questManager->TrackedQuestsSpan)
+            {
+                switch (tracked.QuestType)
+                {
+                    default:
+                        continue;
+
+                    case 1: // normal quest
+                        currentQuest = questManager->NormalQuestsSpan[tracked.Index].QuestId;
+                        break;
+                }
+
+                if (QuestController.IsKnownQuest(currentQuest))
+                    return (currentQuest, QuestManager.GetQuestSequence(currentQuest));
+            }
+        }
+
         var scenarioTree = AgentScenarioTree.Instance();
         if (scenarioTree == null)
-        {
-            //ImGui.Text("Scenario tree is null.");
-            return (0, 0);
-        }
+            return default;
 
         if (scenarioTree->Data == null)
-        {
-            //ImGui.Text("Scenario tree data is null.");
-            return (0, 0);
-        }
+            return default;
 
-        uint currentQuest = scenarioTree->Data->CurrentScenarioQuest;
+        currentQuest = scenarioTree->Data->CurrentScenarioQuest;
         if (currentQuest == 0)
-        {
-            //ImGui.Text("Current quest is 0.");
-            return (0, 0);
-        }
+            return default;
 
-        //ImGui.Text($"Current Quest: {currentQuest}");
-        //ImGui.Text($"Progress: {QuestManager.GetQuestSequence(currentQuest)}");
-        return ((ushort)currentQuest, QuestManager.GetQuestSequence(currentQuest));
+        return (currentQuest, QuestManager.GetQuestSequence(currentQuest));
+    }
+
+    public QuestWork? GetQuestEx(ushort questId)
+    {
+        QuestWork* questWork = QuestManager.Instance()->GetQuestById(questId);
+        return questWork != null ? *questWork : null;
+
     }
 
     public bool IsAetheryteUnlocked(uint aetheryteId, out byte subIndex)
     {
+        subIndex = 0;
+
+        var uiState = UIState.Instance();
+        return uiState != null && uiState->IsAetheryteUnlocked(aetheryteId);
+        /*
         var telepo = Telepo.Instance();
         if (telepo == null || telepo->UpdateAetheryteList() == null)
         {
@@ -120,6 +148,7 @@ internal sealed unsafe class GameFunctions
 
         subIndex = 0;
         return false;
+        */
     }
 
     public bool IsAetheryteUnlocked(EAetheryteLocation aetheryteLocation)
@@ -285,7 +314,7 @@ internal sealed unsafe class GameFunctions
 
     #endregion
 
-    private GameObject? FindObjectByDataId(uint dataId)
+    public GameObject? FindObjectByDataId(uint dataId)
     {
         foreach (var gameObject in _objectTable)
         {
@@ -311,6 +340,11 @@ internal sealed unsafe class GameFunctions
         }
     }
 
+    public void UseItem(uint itemId)
+    {
+        AgentInventoryContext.Instance()->UseItem(itemId);
+    }
+
     public void UseItem(uint dataId, uint itemId)
     {
         GameObject? gameObject = FindObjectByDataId(dataId);
@@ -331,7 +365,7 @@ internal sealed unsafe class GameFunctions
         }
     }
 
-    public bool IsObbjectAtPosition(uint dataId, Vector3 position)
+    public bool IsObjectAtPosition(uint dataId, Vector3 position)
     {
         GameObject? gameObject = FindObjectByDataId(dataId);
         return gameObject != null && (gameObject.Position - position).Length() < 0.05f;

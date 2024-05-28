@@ -1,7 +1,6 @@
 {
   "Version": 1,
   "Author": "liza",
-  "Comment": "TODO This should have an aetheryte?",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -37,6 +36,18 @@
       "Sequence": 3,
       "Steps": [
         {
+          "DataId": 174,
+          "Position": {
+            "X": -566.2438,
+            "Y": 134.6656,
+            "Z": 650.6459
+          },
+          "StopDistance": 10,
+          "TerritoryId": 959,
+          "InteractionType": "AttuneAetheryte",
+          "DisableNavmesh": true
+        },
+        {
           "DataId": 1039977,
           "Position": {
             "X": -627.49677,
@@ -45,10 +56,10 @@
           },
           "TerritoryId": 959,
           "InteractionType": "Interact",
+          "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
             14077
-          ],
-          "Comment": "TODO what happened to seq: 2"
+          ]
         }
       ]
     },

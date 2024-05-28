@@ -21,6 +21,27 @@
       "Sequence": 1,
       "Steps": [
         {
+          "Position": {
+            "X": 68.93551,
+            "Y": -48.912445,
+            "Z": -683.716
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true,
+          "Mount": true
+        },
+        {
+          "Position": {
+            "X": 86.32549,
+            "Y": -137.4167,
+            "Z": -619.77936
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true
+        },
+        {
           "DataId": 1038928,
           "Position": {
             "X": 146.37976,
@@ -89,15 +110,17 @@
             "Z": -405.08124
           },
           "TerritoryId": 959,
-          "InteractionType": "AttuneAetherCurrent"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818366
         },
         {
           "DataId": 1038929,
           "Position": {
-            "X": 596.2294,
+            "X": 595.4731,
             "Y": -167.50227,
-            "Z": -510.33884
+            "Z": -511.4072
           },
+          "StopDistance": 0.25,
           "TerritoryId": 959,
           "InteractionType": "Interact"
         }
@@ -109,10 +132,11 @@
         {
           "DataId": 1038929,
           "Position": {
-            "X": 547.2717,
+            "X": 547.8397,
             "Y": -167.50174,
-            "Z": -525.274
+            "Z": -526.3702
           },
+          "StopDistance": 0.25,
           "TerritoryId": 959,
           "InteractionType": "Interact"
         }
@@ -124,10 +148,11 @@
         {
           "DataId": 1038929,
           "Position": {
-            "X": 572.0069,
+            "X": 572.45984,
             "Y": -167.50163,
-            "Z": -574.98785
+            "Z": -577.03906
           },
+          "StopDistance": 0.25,
           "TerritoryId": 959,
           "InteractionType": "Interact"
         }
@@ -139,10 +164,11 @@
         {
           "DataId": 1038929,
           "Position": {
-            "X": 616.97437,
+            "X": 617.89886,
             "Y": -167.50163,
-            "Z": -593.1553
+            "Z": -594.92847
           },
+          "StopDistance": 0.25,
           "TerritoryId": 959,
           "InteractionType": "Interact"
         }
@@ -154,10 +180,11 @@
         {
           "DataId": 1038929,
           "Position": {
-            "X": 623.16296,
+            "X": 622.8754,
             "Y": -167.50217,
-            "Z": -657.5506
+            "Z": -659.45184
           },
+          "StopDistance": 0.25,
           "TerritoryId": 959,
           "InteractionType": "Interact"
         }
@@ -173,6 +200,7 @@
             "Y": -168.00002,
             "Z": -656.58044
           },
+          "StopDistance": 7,
           "TerritoryId": 959,
           "InteractionType": "Interact"
         }

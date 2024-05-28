@@ -21,14 +21,14 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 2012019,
           "Position": {
-            "X": 21.7081,
-            "Y": -133.5001,
-            "Z": -385.7313
+            "X": 1.131261,
+            "Y": -114.92335,
+            "Z": -418.2727
           },
           "TerritoryId": 959,
-          "InteractionType": "AttuneAetherCurrent"
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true
         },
         {
           "DataId": 1038897,
@@ -52,8 +52,18 @@
             "Y": -128.8109,
             "Z": -512.0165
           },
+          "StopDistance": 10,
           "TerritoryId": 959,
           "InteractionType": "AttuneAetheryte"
+        },
+        {
+          "Position": {
+            "X": 36.500526,
+            "Y": -129.20917,
+            "Z": -521.85284
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo"
         },
         {
           "DataId": 1038901,
@@ -63,7 +73,8 @@
             "Z": -555.0164
           },
           "TerritoryId": 959,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DisableNavmesh": true
         }
       ]
     },
@@ -85,6 +96,25 @@
     {
       "Sequence": 255,
       "Steps": [
+        {
+          "Position": {
+            "X": -72.39724,
+            "Y": -49.589592,
+            "Z": -336.63968
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "Position": {
+            "X": -105.34293,
+            "Y": -49.589592,
+            "Z": -367.6591
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true
+        },
         {
           "DataId": 1038903,
           "Position": {

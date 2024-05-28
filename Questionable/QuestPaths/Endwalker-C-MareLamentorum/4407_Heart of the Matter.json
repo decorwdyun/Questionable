@@ -32,6 +32,15 @@
           "Comment": "Teleporter"
         },
         {
+          "Position": {
+            "X": 65.32143,
+            "Y": -49.589592,
+            "Z": -690.11676
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 1038947,
           "Position": {
             "X": 184.00854,
@@ -55,6 +64,7 @@
           },
           "TerritoryId": 959,
           "InteractionType": "Combat",
+          "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
             13996,
             13997,
@@ -66,6 +76,15 @@
     {
       "Sequence": 3,
       "Steps": [
+        {
+          "Position": {
+            "X": 18.495846,
+            "Y": -49.589592,
+            "Z": -301.7225
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo"
+        },
         {
           "DataId": 1038950,
           "Position": {
@@ -88,9 +107,9 @@
             "Y": 128.67769,
             "Z": 572.0454
           },
+          "StopDistance": 5,
           "TerritoryId": 959,
-          "InteractionType": "Interact",
-          "Comment": "Unsure if this is the correct data id"
+          "InteractionType": "Interact"
         }
       ]
     }

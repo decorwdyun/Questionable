@@ -23,10 +23,11 @@
         {
           "DataId": 1039002,
           "Position": {
-            "X": 56.012253,
+            "X": 57.04193,
             "Y": 26.99999,
-            "Z": 44.92237
+            "Z": 46.383568
           },
+          "StopDistance": 0.25,
           "TerritoryId": 963,
           "InteractionType": "Interact",
           "AethernetShortcut": [

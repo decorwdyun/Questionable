@@ -28,7 +28,8 @@
             "Z": 425.10107
           },
           "TerritoryId": 957,
-          "InteractionType": "AttuneAetherCurrent"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818337
         },
         {
           "DataId": 2012207,
@@ -53,8 +54,8 @@
             "Z": 141.25269
           },
           "TerritoryId": 957,
-          "InteractionType": "ManualAction",
-          "Comment": "Navmesh can't swim"
+          "InteractionType": "Interact",
+          "DisableNavmesh": true
         }
       ]
     },
@@ -68,15 +69,48 @@
             "Y": -60.471558,
             "Z": 133.25696
           },
+          "StopDistance": 0.5,
           "TerritoryId": 957,
-          "InteractionType": "ManualAction",
-          "Comment": "Navmesh can't swim"
+          "InteractionType": "Interact",
+          "DisableNavmesh": true
         }
       ]
     },
     {
       "Sequence": 4,
       "Steps": [
+        {
+          "Position": {
+            "X": 235.94444,
+            "Y": -0.6,
+            "Z": 145.83025
+          },
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true,
+          "Mount": true
+        },
+        {
+          "Position": {
+            "X": 252.0308,
+            "Y": 0.57823455,
+            "Z": 150.66217
+          },
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true
+        },
+        {
+          "DataId": 2011999,
+          "Position": {
+            "X": 53.177612,
+            "Y": 11.36792,
+            "Z": 187.396
+          },
+          "TerritoryId": 957,
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818338
+        },
         {
           "DataId": 1039052,
           "Position": {
@@ -85,8 +119,7 @@
             "Z": 217.85303
           },
           "TerritoryId": 957,
-          "InteractionType": "ManualAction",
-          "Comment": "Navmesh can't swim; should *probably* collect the aether current before interacting here"
+          "InteractionType": "Interact"
         }
       ]
     },
@@ -100,6 +133,7 @@
             "Y": 25.65825,
             "Z": -319.87494
           },
+          "StopDistance": 5,
           "TerritoryId": 957,
           "InteractionType": "Interact"
         }

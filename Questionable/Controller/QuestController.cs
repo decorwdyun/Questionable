@@ -6,11 +6,10 @@ using System.IO;
 using System.Numerics;
 using System.Text.Json;
 using Dalamud.Game.ClientState.Conditions;
+using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
-using FFXIVClientStructs.FFXIV.Client.Game.Object;
-using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using Questionable.Data;
 using Questionable.External;
 using Questionable.Model.V1;
@@ -49,6 +48,7 @@ internal sealed class QuestController
         _territoryData = new TerritoryData(dataManager);
 
         Reload();
+        _gameFunctions.QuestController = this;
     }
 
 
@@ -100,6 +100,8 @@ internal sealed class QuestController
         }
     }
 #endif
+
+    public bool IsKnownQuest(ushort questId) => _quests.ContainsKey(questId);
 
     private void LoadFromDirectory(DirectoryInfo configDirectory)
     {
@@ -305,7 +307,9 @@ internal sealed class QuestController
 
         if (!CurrentQuest.StepProgress.AethernetShortcutUsed)
         {
-            if (step.AethernetShortcut != null)
+            if (step.AethernetShortcut != null &&
+                _gameFunctions.IsAetheryteUnlocked(step.AethernetShortcut.From) &&
+                _gameFunctions.IsAetheryteUnlocked(step.AethernetShortcut.To))
             {
                 EAetheryteLocation from = step.AethernetShortcut.From;
                 EAetheryteLocation to = step.AethernetShortcut.To;
@@ -325,7 +329,7 @@ internal sealed class QuestController
                         };
                     }
                     else
-                        _movementController.NavigateTo(EMovementType.Quest, _aetheryteData.Locations[from], false,
+                        _movementController.NavigateTo(EMovementType.Quest, null, _aetheryteData.Locations[from], false,
                             6.9f);
 
                     return;
@@ -333,7 +337,11 @@ internal sealed class QuestController
             }
         }
 
-        if (step.Position != null)
+        if (step.TargetTerritoryId == _clientState.TerritoryType)
+        {
+            // no more movement
+        }
+        else if (step.Position != null)
         {
             float distance;
             if (step.InteractionType == EInteractionType.WalkTo)
@@ -375,7 +383,7 @@ internal sealed class QuestController
 
                 if (actualDistance > distance)
                 {
-                    _movementController.NavigateTo(EMovementType.Quest, step.Position.Value,
+                    _movementController.NavigateTo(EMovementType.Quest, step.DataId, step.Position.Value,
                         step.Fly && _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType), distance);
                     return;
                 }
@@ -384,20 +392,49 @@ internal sealed class QuestController
             {
                 if (actualDistance > distance)
                 {
-                    _movementController.NavigateTo(EMovementType.Quest, [step.Position.Value],
+                    _movementController.NavigateTo(EMovementType.Quest, step.DataId, [step.Position.Value],
                         step.Fly && _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType), distance);
                     return;
                 }
+            }
+        }
+        else if (step.DataId != null && step.StopDistance != null)
+        {
+            GameObject? gameObject = _gameFunctions.FindObjectByDataId(step.DataId.Value);
+            if (gameObject == null ||
+                (gameObject.Position - _clientState.LocalPlayer!.Position).Length() > step.StopDistance)
+            {
+                return;
             }
         }
 
         switch (step.InteractionType)
         {
             case EInteractionType.Interact:
+                if (step.DataId != null)
+                {
+                    GameObject? gameObject = _gameFunctions.FindObjectByDataId(step.DataId.Value);
+                    if (gameObject == null)
+                        return;
+
+                    if (!gameObject.IsTargetable && _condition[ConditionFlag.Mounted])
+                    {
+                        _gameFunctions.Unmount();
+                        return;
+                    }
+
+                    _gameFunctions.InteractWith(step.DataId.Value);
+                    IncreaseStepCount();
+                }
+
+                break;
+
             case EInteractionType.AttuneAethernetShard:
                 if (step.DataId != null)
                 {
-                    _gameFunctions.InteractWith(step.DataId.Value);
+                    if (!_gameFunctions.IsAetheryteUnlocked((EAetheryteLocation)step.DataId.Value))
+                        _gameFunctions.InteractWith(step.DataId.Value);
+
                     IncreaseStepCount();
                 }
 
@@ -433,23 +470,28 @@ internal sealed class QuestController
                 break;
 
             case EInteractionType.UseItem:
+                if (_gameFunctions.Unmount())
+                    return;
+
                 if (step is { DataId: not null, ItemId: not null })
                 {
-                    if (_gameFunctions.Unmount())
-                        return;
-
                     _gameFunctions.UseItem(step.DataId.Value, step.ItemId.Value);
+                    IncreaseStepCount();
+                }
+                else if (step.ItemId != null)
+                {
+                    _gameFunctions.UseItem(step.ItemId.Value);
                     IncreaseStepCount();
                 }
 
                 break;
 
             case EInteractionType.Combat:
+                if (_gameFunctions.Unmount())
+                    return;
+
                 if (step.EnemySpawnType != null)
                 {
-                    if (_gameFunctions.Unmount())
-                        return;
-
                     if (step.DataId != null && step.EnemySpawnType == EEnemySpawnType.AfterInteraction)
                         _gameFunctions.InteractWith(step.DataId.Value);
 
@@ -470,7 +512,7 @@ internal sealed class QuestController
 
             case EInteractionType.WaitForObjectAtPosition:
                 if (step is { DataId: not null, Position: not null } &&
-                    !_gameFunctions.IsObbjectAtPosition(step.DataId.Value, step.Position.Value))
+                    !_gameFunctions.IsObjectAtPosition(step.DataId.Value, step.Position.Value))
                 {
                     return;
                 }

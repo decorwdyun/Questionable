@@ -42,18 +42,14 @@
             "Z": -253.94832
           },
           "TerritoryId": 959,
-          "InteractionType": "ManualAction",
-          "Comment": "Navmesh can't jump"
+          "InteractionType": "WalkTo"
         },
         {
           "DataId": 1038923,
-          "Position": {
-            "X": -376.27222,
-            "Y": -151.67168,
-            "Z": -267.90265
-          },
+          "StopDistance": 5,
           "TerritoryId": 959,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Comment": "Navmesh can't jump"
         }
       ]
     },
@@ -67,18 +63,14 @@
             "Z": -361.57114
           },
           "TerritoryId": 959,
-          "InteractionType": "ManualAction",
-          "Comment": "Navmesh can't jump"
+          "InteractionType": "WalkTo"
         },
         {
           "DataId": 1038924,
-          "Position": {
-            "X": -329.97632,
-            "Y": -151.67169,
-            "Z": -333.76062
-          },
+          "StopDistance": 5,
           "TerritoryId": 959,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Comment": "Navmesh can't jump"
         }
       ]
     },

@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Numerics;
 using Dalamud.Game;
 using Dalamud.Game.ClientState.Objects;
+using Dalamud.Game.Command;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
@@ -21,6 +23,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
     private readonly IClientState _clientState;
     private readonly IFramework _framework;
     private readonly IGameGui _gameGui;
+    private readonly ICommandManager _commandManager;
     private readonly GameFunctions _gameFunctions;
     private readonly QuestController _questController;
 
@@ -40,6 +43,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         _clientState = clientState;
         _framework = framework;
         _gameGui = gameGui;
+        _commandManager = commandManager;
         _gameFunctions = new GameFunctions(dataManager, objectTable, sigScanner, targetManager, condition, pluginLog);
 
         AetheryteData aetheryteData = new AetheryteData(dataManager);
@@ -54,6 +58,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
 
         _pluginInterface.UiBuilder.Draw += _windowSystem.Draw;
         _framework.Update += FrameworkUpdate;
+        _commandManager.AddHandler("/qst", new CommandInfo(ProcessCommand));
+
     }
 
     private void FrameworkUpdate(IFramework framework)
@@ -62,6 +68,11 @@ public sealed class QuestionablePlugin : IDalamudPlugin
 
         HandleNavigationShortcut();
         _movementController.Update();
+    }
+
+    private void ProcessCommand(string command, string arguments)
+    {
+        _windowSystem.Windows.Single(x => x is DebugWindow).Toggle();
     }
 
     private unsafe void HandleNavigationShortcut()
@@ -76,7 +87,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
             _gameGui.ScreenToWorld(new Vector2(inputData->CursorXPosition, inputData->CursorYPosition),
                 out Vector3 worldPos))
         {
-            _movementController.NavigateTo(EMovementType.Shortcut, worldPos,
+            _movementController.NavigateTo(EMovementType.Shortcut, null, worldPos,
                 _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType));
         }
     }
@@ -84,6 +95,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
 
     public void Dispose()
     {
+        _commandManager.RemoveHandler("/qst");
         _framework.Update -= FrameworkUpdate;
         _pluginInterface.UiBuilder.Draw -= _windowSystem.Draw;
 
