@@ -58,8 +58,22 @@
             "Z": 1.5411377
           },
           "TerritoryId": 961,
-          "InteractionType": "ManualAction",
-          "Comment": "Use Quest Item on ground locations"
+          "InteractionType": "UseItem",
+          "ItemId": 2003234,
+          "GroundTarget": true,
+          "$": "QuestValues after: 1 16 0 0 0 128"
+        },
+        {
+          "DataId": 2012132,
+          "Position": {
+            "X": 373.18982,
+            "Y": 2.9754639,
+            "Z": 10.788086
+          },
+          "TerritoryId": 961,
+          "InteractionType": "UseItem",
+          "ItemId": 2003234,
+          "GroundTarget": true
         }
       ]
     },

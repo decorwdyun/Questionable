@@ -43,7 +43,18 @@
             "Z": 107.9021
           },
           "TerritoryId": 961,
-          "InteractionType": "AttuneAetherCurrent"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818374
+        },
+        {
+          "Position": {
+            "X": 346.73517,
+            "Y": -15.572778,
+            "Z": -105.96149
+          },
+          "TerritoryId": 961,
+          "InteractionType": "WalkTo",
+          "Comment": "Needs manual jumping"
         },
         {
           "DataId": 1040052,
@@ -76,6 +87,17 @@
       "Sequence": 4,
       "Steps": [
         {
+          "Position": {
+            "X": 339.039,
+            "Y": -14.322072,
+            "Z": -101.509995
+          },
+          "StopDistance": 0.5,
+          "TerritoryId": 961,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true
+        },
+        {
           "DataId": 2012022,
           "Position": {
             "X": 151.6593,
@@ -83,7 +105,8 @@
             "Z": 2.5177002
           },
           "TerritoryId": 961,
-          "InteractionType": "AttuneAetherCurrent"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818376
         },
         {
           "DataId": 1040061,
@@ -93,7 +116,7 @@
             "Z": -104.631165
           },
           "TerritoryId": 961,
-          "InteractionType": "ManualAction",
+          "InteractionType": "Say",
           "ChatMessage": "I have a favor to ask"
         }
       ]
@@ -109,7 +132,7 @@
             "Z": -104.631165
           },
           "TerritoryId": 961,
-          "InteractionType": "ManualAction",
+          "InteractionType": "Say",
           "ChatMessage": "Please, Emet-Selch"
         }
       ]
@@ -118,14 +141,10 @@
       "Sequence": 6,
       "Steps": [
         {
-          "Position": {
-            "X": -64.09766,
-            "Y": -15.335736,
-            "Z": -84.71621
-          },
           "TerritoryId": 961,
           "InteractionType": "Emote",
-          "Emote": "wave"
+          "Emote": "wave",
+          "Comment": "Need to jump manually"
         }
       ]
     },
@@ -140,7 +159,8 @@
             "Z": 88.91431
           },
           "TerritoryId": 961,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Elpis - Anagnorisis"
         }
       ]
     }

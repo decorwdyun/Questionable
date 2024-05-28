@@ -29,7 +29,9 @@
             "Z": 305.80603
           },
           "TerritoryId": 813,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Lakeland - Fort Jobb",
+          "Fly": true
         }
       ]
     },
@@ -46,6 +48,7 @@
           "TerritoryId": 819,
           "InteractionType": "ManualAction",
           "Comment": "Cutscene Interaction needed",
+          "AetheryteShortcut": "Crystarium",
           "AethernetShortcut": [
             "[Crystarium] Aetheryte Plaza",
             "[Crystarium] The Cabinet of Curiosity"
@@ -63,6 +66,7 @@
             "Y": -37.7,
             "Z": -208.85028
           },
+          "StopDistance": 6,
           "TerritoryId": 819,
           "InteractionType": "Interact"
         }

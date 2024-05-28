@@ -12,6 +12,7 @@
             "Y": -1.1050489,
             "Z": 158.0376
           },
+          "StopDistance": 5,
           "TerritoryId": 961,
           "InteractionType": "Interact"
         }
@@ -42,6 +43,7 @@
             "Y": 11.703674,
             "Z": 126.878784
           },
+          "StopDistance": 6,
           "TerritoryId": 961,
           "InteractionType": "AttuneAetheryte"
         },

@@ -96,6 +96,7 @@
                     "AttuneAetherCurrent",
                     "Combat",
                     "UseItem",
+                    "Say",
                     "Emote",
                     "WaitForNpcAtPosition",
                     "ManualAction"
@@ -302,6 +303,10 @@
                     "rally",
                     "deny"
                   ]
+                },
+                "ChatMessage": {
+                  "type": "string",
+                  "description": "The text to use with /say"
                 },
                 "ItemId": {
                   "type": ["number", "null"],

@@ -107,6 +107,27 @@ internal sealed class DebugWindow : Window
         var q = _gameFunctions.GetCurrentQuest();
         ImGui.Text($"Current Quest: {q.CurrentQuest} → {q.Sequence}");
 
+        var questManager = QuestManager.Instance();
+        if (questManager != null)
+        {
+            for (int i = 0; i < 1 /*questManager->TrackedQuestsSpan.Length*/; ++i)
+            {
+                var trackedQuest = questManager->TrackedQuestsSpan[i];
+                switch (trackedQuest.QuestType)
+                {
+                    default:
+                        ImGui.Text($"Tracked quest {i}: {trackedQuest.QuestType}, {trackedQuest.Index}");
+                        break;
+
+                    case 1:
+                        ImGui.Text(
+                            $"Tracked quest: {questManager->NormalQuestsSpan[trackedQuest.Index].QuestId}, {trackedQuest.Index}");
+                        break;
+                }
+            }
+        }
+
+
         if (_targetManager.Target != null)
         {
             ImGui.Separator();

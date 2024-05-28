@@ -58,6 +58,7 @@
           },
           "TerritoryId": 961,
           "InteractionType": "Combat",
+          "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
             14075,
             14074
@@ -90,6 +91,7 @@
             "Y": -22.39482,
             "Z": 504.90576
           },
+          "StopDistance": 5,
           "TerritoryId": 961,
           "InteractionType": "Interact"
         }

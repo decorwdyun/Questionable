@@ -9,6 +9,7 @@ public enum EInteractionType
     AttuneAetherCurrent,
     Combat,
     UseItem,
+    Say,
     Emote,
     WaitForObjectAtPosition,
     ManualAction

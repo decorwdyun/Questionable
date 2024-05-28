@@ -12,6 +12,7 @@
             "Y": -37.7,
             "Z": -208.85028
           },
+          "StopDistance": 6,
           "TerritoryId": 819,
           "InteractionType": "Interact"
         }
@@ -37,18 +38,23 @@
       ]
     },
     {
-      "Sequence": 2,
+      "Sequence": 3,
       "Steps": [
         {
-          "DataId": 2012128,
           "Position": {
-            "X": -0.001528129,
-            "Y": 4.931927,
-            "Z": 0.01416349
+            "X": -6.1157894,
+            "Y": 2.0849845,
+            "Z": -4.654831
           },
           "TerritoryId": 1031,
-          "InteractionType": "ManualAction",
-          "Comment": "Interact with Aetheryte (Navmesh can't jump)"
+          "InteractionType": "WalkTo"
+        },
+        {
+          "DataId": 2012128,
+          "TerritoryId": 1031,
+          "InteractionType": "Interact",
+          "Comment": "Interact with Aetheryte (Navmesh can't jump)",
+          "$": "QuestVariables after: 16 0 16 0 0 16"
         },
         {
           "DataId": 1039993,
@@ -58,7 +64,8 @@
             "Z": -9.353821
           },
           "TerritoryId": 1031,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "$": "QuestVariables after: 32 1 16 0 0 144"
         },
         {
           "DataId": 1039994,
@@ -68,7 +75,8 @@
             "Z": 2.1209717
           },
           "TerritoryId": 1031,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "$": "QuestVariables after: 49 1 16 0 0 208"
         },
         {
           "DataId": 1039995,
@@ -107,6 +115,7 @@
             "Y": 44.32154,
             "Z": 771.4198
           },
+          "StopDistance": 5,
           "TerritoryId": 961,
           "InteractionType": "Interact"
         }

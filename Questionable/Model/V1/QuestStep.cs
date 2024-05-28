@@ -33,9 +33,11 @@ public class QuestStep
     public uint? AetherCurrentId { get; set; }
 
     public uint? ItemId { get; set; }
+    public bool? GroundTarget { get; set; }
 
     [JsonConverter(typeof(EmoteConverter))]
     public EEmote? Emote { get; set; }
+    public string ChatMessage { get; set; }
 
     [JsonConverter(typeof(EnemySpawnTypeConverter))]
     public EEnemySpawnType? EnemySpawnType { get; set; }

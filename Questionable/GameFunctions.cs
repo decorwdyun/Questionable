@@ -355,6 +355,16 @@ internal sealed unsafe class GameFunctions
         }
     }
 
+    public void UseItemOnGround(uint dataId, uint itemId)
+    {
+        GameObject? gameObject = FindObjectByDataId(dataId);
+        if (gameObject != null)
+        {
+            var position = (FFXIVClientStructs.FFXIV.Common.Math.Vector3)gameObject.Position;
+            ActionManager.Instance()->UseActionLocation(ActionType.KeyItem, itemId, gameObject.ObjectId, &position);
+        }
+    }
+
     public void UseEmote(uint dataId, EEmote emote)
     {
         GameObject? gameObject = FindObjectByDataId(dataId);
@@ -363,6 +373,11 @@ internal sealed unsafe class GameFunctions
             _targetManager.Target = gameObject;
             ExecuteCommand($"{_emoteCommands[emote]} motion");
         }
+    }
+
+    public void UseEmote(EEmote emote)
+    {
+        ExecuteCommand($"{_emoteCommands[emote]} motion");
     }
 
     public bool IsObjectAtPosition(uint dataId, Vector3 position)

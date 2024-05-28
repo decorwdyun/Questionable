@@ -339,7 +339,7 @@ internal sealed class QuestController
 
         if (step.TargetTerritoryId == _clientState.TerritoryType)
         {
-            // no more movement
+            _pluginLog.Information("Skipping any movement");
         }
         else if (step.Position != null)
         {
@@ -349,7 +349,6 @@ internal sealed class QuestController
             else
                 distance = step.StopDistance ?? MovementController.DefaultStopDistance;
 
-            _pluginLog.Information($"Stop dist: {distance}");
             var position = _clientState.LocalPlayer?.Position ?? new Vector3();
             float actualDistance = (position - step.Position.Value).Length();
 
@@ -473,7 +472,12 @@ internal sealed class QuestController
                 if (_gameFunctions.Unmount())
                     return;
 
-                if (step is { DataId: not null, ItemId: not null })
+                if (step is { DataId: not null, ItemId: not null, GroundTarget: true })
+                {
+                    _gameFunctions.UseItemOnGround(step.DataId.Value, step.ItemId.Value);
+                    IncreaseStepCount();
+                }
+                else if (step is { DataId: not null, ItemId: not null })
                 {
                     _gameFunctions.UseItem(step.DataId.Value, step.ItemId.Value);
                     IncreaseStepCount();
@@ -505,6 +509,26 @@ internal sealed class QuestController
                 if (step is { DataId: not null, Emote: not null })
                 {
                     _gameFunctions.UseEmote(step.DataId.Value, step.Emote.Value);
+                    IncreaseStepCount();
+                }
+                else if (step.Emote != null)
+                {
+                    _gameFunctions.UseEmote(step.Emote.Value);
+                    IncreaseStepCount();
+                }
+
+                break;
+
+            case EInteractionType.Say:
+                if (_condition[ConditionFlag.Mounted])
+                {
+                    _gameFunctions.Unmount();
+                    return;
+                }
+
+                if (!string.IsNullOrEmpty(step.ChatMessage))
+                {
+                    _gameFunctions.ExecuteCommand($"/say {step.ChatMessage}");
                     IncreaseStepCount();
                 }
 
