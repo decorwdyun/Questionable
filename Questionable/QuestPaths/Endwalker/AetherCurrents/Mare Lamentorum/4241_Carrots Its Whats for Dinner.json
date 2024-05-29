@@ -1,0 +1,98 @@
+{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1039520,
+          "Position": {
+            "X": -287.8615,
+            "Y": -143.50005,
+            "Z": -520.28687
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "Position": {
+            "X": -345.7338,
+            "Y": -161.8501,
+            "Z": -646.97064
+          },
+          "TerritoryId": 959,
+          "InteractionType": "ManualAction",
+          "Comment": "Navmesh can't jump"
+        },
+        {
+          "DataId": 1041789,
+          "StopDistance": 3,
+          "TerritoryId": 959,
+          "InteractionType": "Say",
+          "ChatMessage": "carrot of happiness"
+        },
+        {
+          "DataId": 1041790,
+          "Position": {
+            "X": -482.01727,
+            "Y": -167.50002,
+            "Z": -545.6169
+          },
+          "StopDistance": 3,
+          "TerritoryId": 959,
+          "InteractionType": "Say",
+          "ChatMessage": "carrot of happiness",
+          "$.1": "QuestVariables if done after [1]: 2 0 0 0 0 192"
+        },
+        {
+          "Position": {
+            "X": -438.33246,
+            "Y": -168.00002,
+            "Z": -420.43494
+          },
+          "TerritoryId": 959,
+          "InteractionType": "ManualAction",
+          "Comment": "Navmesh can't jump"
+        },
+        {
+          "DataId": 1041791,
+          "StopDistance": 3,
+          "TerritoryId": 959,
+          "InteractionType": "Say",
+          "ChatMessage": "carrot of happiness"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "Position": {
+            "X": -376.5167,
+            "Y": -168,
+            "Z": -432.03497
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true
+        },
+        {
+          "DataId": 1039520,
+          "Position": {
+            "X": -287.8615,
+            "Y": -143.50005,
+            "Z": -520.28687
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

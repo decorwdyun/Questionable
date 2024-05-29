@@ -28,7 +28,9 @@
             "Z": 296.98633
           },
           "TerritoryId": 960,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "$.0": "[1]",
+          "$.1": "QuestVariables if done first: 16 0 0 16 0 128"
         },
         {
           "DataId": 2012367,
@@ -38,7 +40,9 @@
             "Z": 240.03955
           },
           "TerritoryId": 960,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "$.0": "[2]",
+          "$.1": "QuestVariables if done after [1]: 32 16 0 16 0 144"
         },
         {
           "DataId": 2012368,
@@ -48,7 +52,9 @@
             "Z": 280.93384
           },
           "TerritoryId": 960,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "$.0": "[3]",
+          "$.1": "QuestVariables if done after [1, 2]: 48 17 0 16 0 152"
         },
         {
           "DataId": 2012366,
@@ -58,7 +64,9 @@
             "Z": 295.97925
           },
           "TerritoryId": 960,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "$.0": "[4]",
+          "$.1": "QuestVariables if done after [1, 2, 3]: 65 17 0 16 0 184"
         },
         {
           "DataId": 2012369,
@@ -68,7 +76,9 @@
             "Z": 297.16943
           },
           "TerritoryId": 960,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "$.0": "[5]",
+          "$.1": "QuestVariables if done after [1, 2, 3, 4]: 81 17 16 16 0 188"
         },
         {
           "DataId": 2012365,
@@ -121,8 +131,8 @@
             "Y": 637.1029,
             "Z": 2.690414
           },
-          "TerritoryId": 960,
-          "InteractionType": "Interact"
+          "TerritoryId": 1027,
+          "InteractionType": "WalkTo"
         }
       ]
     },

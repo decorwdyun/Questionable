@@ -12,6 +12,7 @@
             "Y": 232.2548,
             "Z": -252.8573
           },
+          "StopDistance": 5,
           "TerritoryId": 960,
           "InteractionType": "Interact"
         }
@@ -58,7 +59,8 @@
             "Z": -361.50153
           },
           "TerritoryId": 960,
-          "InteractionType": "AttuneAetherCurrent"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818389
         },
         {
           "DataId": 2012035,
@@ -68,7 +70,8 @@
             "Z": -295.15533
           },
           "TerritoryId": 960,
-          "InteractionType": "AttuneAetherCurrent"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818394
         },
         {
           "DataId": 1040317,
@@ -78,7 +81,8 @@
             "Z": -312.58112
           },
           "TerritoryId": 960,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DisableNavmesh": true
         }
       ]
     },
@@ -107,8 +111,11 @@
             "Y": 272.51086,
             "Z": -600.7019
           },
+          "StopDistance": 4,
           "TerritoryId": 960,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "$.0": "[1]",
+          "$.1": "QuestVariables if done first: 1 0 0 0 0 128"
         },
         {
           "DataId": 2012355,
@@ -117,8 +124,11 @@
             "Y": 272.4497,
             "Z": -616.4492
           },
+          "StopDistance": 4,
           "TerritoryId": 960,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "$.0": "[2]",
+          "$.1": "QuestVariables if done after [1]: 2 0 0 0 0 192"
         },
         {
           "DataId": 180,
@@ -127,6 +137,7 @@
             "Y": 272.48022,
             "Z": -657.49603
           },
+          "StopDistance": 8,
           "TerritoryId": 960,
           "InteractionType": "AttuneAetheryte"
         },
@@ -137,8 +148,11 @@
             "Y": 272.99915,
             "Z": -617.853
           },
+          "StopDistance": 4,
           "TerritoryId": 960,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "$.0": "[3]",
+          "$.1": "QuestVariables if done after [2]: 3 0 0 0 0 224"
         },
         {
           "DataId": 2012357,
@@ -147,8 +161,11 @@
             "Y": 272.9381,
             "Z": -592.5841
           },
+          "StopDistance": 4,
           "TerritoryId": 960,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "$.0": "[4]",
+          "$.1": "QuestVariables if done first: TODO"
         }
       ]
     },

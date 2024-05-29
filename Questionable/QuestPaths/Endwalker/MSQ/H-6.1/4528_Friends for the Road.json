@@ -27,8 +27,10 @@
             "Y": 4.357494,
             "Z": 0.7476196
           },
+          "StopDistance": 5,
           "TerritoryId": 962,
           "InteractionType": "Interact",
+          "AetheryteShortcut": "Old Sharlayan",
           "AethernetShortcut": [
             "[Old Sharlayan] Aetheryte Plaza",
             "[Old Sharlayan] The Baldesion Annex"
@@ -40,6 +42,19 @@
       "Sequence": 2,
       "Steps": [
         {
+          "Position": {
+            "X": -350.9551,
+            "Y": 18.999998,
+            "Z": 56.043774
+          },
+          "TerritoryId": 962,
+          "InteractionType": "WalkTo",
+          "AethernetShortcut": [
+            "[Old Sharlayan] The Baldesion Annex",
+            "[Old Sharlayan] The Studium"
+          ]
+        },
+        {
           "DataId": 1039581,
           "Position": {
             "X": -398.45886,
@@ -47,11 +62,7 @@
             "Z": 92.48486
           },
           "TerritoryId": 962,
-          "InteractionType": "Interact",
-          "AethernetShortcut": [
-            "[Old Sharlayan] The Baldesion Annex",
-            "[Old Sharlayan] The Studium"
-          ]
+          "InteractionType": "Interact"
         }
       ]
     },
@@ -67,6 +78,7 @@
           },
           "TerritoryId": 956,
           "InteractionType": "Interact",
+          "AetheryteShortcut": "Labyrinthos - Aporia",
           "SkipIf": [
             "FlyingUnlocked"
           ]
@@ -79,7 +91,8 @@
             "Z": 298.39014
           },
           "TerritoryId": 956,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
@@ -94,7 +107,9 @@
             "Z": 603.41797
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Thavnair - Yedlihmad",
+          "Fly": true
         }
       ]
     }

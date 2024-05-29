@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿using System.Collections.Generic;
 
 namespace Questionable.Model.V1.Converter;
 
-public sealed class InteractionTypeConverter : JsonConverter<EInteractionType>
+public sealed class InteractionTypeConverter() : EnumConverter<EInteractionType>(Values)
 {
-    private static readonly Dictionary<EInteractionType, string> EnumToString = new()
+    private static readonly Dictionary<EInteractionType, string> Values = new()
     {
         { EInteractionType.Interact, "Interact" },
         { EInteractionType.WalkTo, "WalkTo" },
@@ -22,25 +18,4 @@ public sealed class InteractionTypeConverter : JsonConverter<EInteractionType>
         { EInteractionType.WaitForObjectAtPosition, "WaitForNpcAtPosition" },
         { EInteractionType.ManualAction, "ManualAction" }
     };
-
-    private static readonly Dictionary<string, EInteractionType> StringToEnum =
-        EnumToString.ToDictionary(x => x.Value, x => x.Key);
-
-    public override EInteractionType Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-    {
-        if (reader.TokenType != JsonTokenType.String)
-            throw new JsonException();
-
-        string? str = reader.GetString();
-        if (str == null)
-            throw new JsonException();
-
-        return StringToEnum.TryGetValue(str, out EInteractionType value) ? value : throw new JsonException();
-    }
-
-    public override void Write(Utf8JsonWriter writer, EInteractionType value, JsonSerializerOptions options)
-    {
-        ArgumentNullException.ThrowIfNull(writer);
-        writer.WriteStringValue(EnumToString[value]);
-    }
 }

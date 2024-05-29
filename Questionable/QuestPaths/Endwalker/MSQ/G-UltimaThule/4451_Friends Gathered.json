@@ -65,6 +65,7 @@
             "Y": -13.777,
             "Z": 149.70618
           },
+          "StopDistance": 5,
           "TerritoryId": 962,
           "InteractionType": "Interact"
         }
@@ -114,8 +115,13 @@
             "Y": 4.357494,
             "Z": 0.7476196
           },
+          "StopDistance": 5,
           "TerritoryId": 962,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AethernetShortcut": [
+            "[Old Sharlayan] The Leveilleur Estate",
+            "[Old Sharlayan] The Baldesion Annex"
+          ]
         }
       ]
     }

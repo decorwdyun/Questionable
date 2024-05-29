@@ -1,5 +1,9 @@
-﻿namespace Questionable.Model.V1;
+﻿using System.Text.Json.Serialization;
+using Questionable.Model.V1.Converter;
 
+namespace Questionable.Model.V1;
+
+[JsonConverter(typeof(AetheryteConverter))]
 public enum EAetheryteLocation
 {
     None = 0,

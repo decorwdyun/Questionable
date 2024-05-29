@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿using System.Collections.Generic;
 
 namespace Questionable.Model.V1.Converter;
 
-public sealed class AetheryteConverter : JsonConverter<EAetheryteLocation>
+public sealed class AetheryteConverter() : EnumConverter<EAetheryteLocation>(Values)
 {
-    private static readonly Dictionary<EAetheryteLocation, string> EnumToString = new()
+    private static readonly Dictionary<EAetheryteLocation, string> Values = new()
     {
         { EAetheryteLocation.Limsa, "Limsa Lominsa" },
         { EAetheryteLocation.Gridania, "Gridania" },
@@ -67,29 +63,7 @@ public sealed class AetheryteConverter : JsonConverter<EAetheryteLocation>
         { EAetheryteLocation.ElpisTwelveWonders, "Elpis - Twelve Wonders" },
         { EAetheryteLocation.ElpisPoietenOikos, "Elpis - Poieten Oikos" },
         { EAetheryteLocation.UltimaThuleReahTahra, "Ultima Thule - Reah Tahra" },
-        { EAetheryteLocation.UltimaThuleAbodeOfTheEa, "Ultima Thula - Abode of the Ea" },
+        { EAetheryteLocation.UltimaThuleAbodeOfTheEa, "Ultima Thule - Abode of the Ea" },
         { EAetheryteLocation.UltimaThuleBaseOmicron, "Ultima Thule - Base Omicron" }
     };
-
-    private static readonly Dictionary<string, EAetheryteLocation> StringToEnum =
-        EnumToString.ToDictionary(x => x.Value, x => x.Key);
-
-    public override EAetheryteLocation Read(ref Utf8JsonReader reader, Type typeToConvert,
-        JsonSerializerOptions options)
-    {
-        if (reader.TokenType != JsonTokenType.String)
-            throw new JsonException();
-
-        string? str = reader.GetString();
-        if (str == null)
-            throw new JsonException();
-
-        return StringToEnum.TryGetValue(str, out EAetheryteLocation value) ? value : throw new JsonException();
-    }
-
-    public override void Write(Utf8JsonWriter writer, EAetheryteLocation value, JsonSerializerOptions options)
-    {
-        ArgumentNullException.ThrowIfNull(writer);
-        writer.WriteStringValue(EnumToString[value]);
-    }
 }

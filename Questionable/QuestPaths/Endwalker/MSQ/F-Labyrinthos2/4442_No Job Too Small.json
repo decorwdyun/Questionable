@@ -23,53 +23,13 @@
       "Steps": [
         {
           "Position": {
-            "X": -102.94707,
-            "Y": -29.933468,
-            "Z": 674.6727
-          },
-          "TerritoryId": 956,
-          "InteractionType": "WalkTo"
-        },
-        {
-          "Position": {
-            "X": -118.62926,
-            "Y": -22.071072,
-            "Z": 681.35846
-          },
-          "TerritoryId": 956,
-          "InteractionType": "ManualAction",
-          "DisableNavmesh": true,
-          "Comment": "Navmesh can't jump"
-        },
-        {
-          "DataId": 2011986,
-          "Position": {
-            "X": -128.06903,
-            "Y": -20.523438,
-            "Z": 676.7223
-          },
-          "TerritoryId": 956,
-          "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818317
-        },
-        {
-          "Position": {
-            "X": -114.01625,
-            "Y": -30.313616,
-            "Z": 670.05585
-          },
-          "TerritoryId": 956,
-          "InteractionType": "WalkTo",
-          "DisableNavmesh": true
-        },
-        {
-          "Position": {
             "X": 79.66557,
             "Y": -29.904594,
             "Z": 457.04776
           },
           "TerritoryId": 956,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "Comment": "TODO verify this is correct, there was an aether current prior to this"
         },
         {
           "DataId": 2011989,

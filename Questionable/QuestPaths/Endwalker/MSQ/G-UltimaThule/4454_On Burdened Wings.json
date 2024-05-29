@@ -12,6 +12,7 @@
             "Y": 73.47535,
             "Z": 309.86487
           },
+          "StopDistance": 7,
           "TerritoryId": 960,
           "InteractionType": "Interact"
         }
@@ -27,8 +28,11 @@
             "Y": 72.5362,
             "Z": 332.23462
           },
+          "StopDistance": 8,
           "TerritoryId": 960,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "$.0": "[1]",
+          "$.1": "QuestVariables if done first: 1 0 0 0 0 64"
         },
         {
           "DataId": 1038008,
@@ -37,8 +41,11 @@
             "Y": 78.6382,
             "Z": 303.8529
           },
+          "StopDistance": 8,
           "TerritoryId": 960,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "$.0": "[2]",
+          "$.1": "QuestVariables if done after [1]: 2 0 0 0 0 96"
         },
         {
           "DataId": 179,
@@ -47,6 +54,7 @@
             "Y": 74.34187,
             "Z": 269.6726
           },
+          "StopDistance": 10,
           "TerritoryId": 960,
           "InteractionType": "AttuneAetheryte"
         },
@@ -57,6 +65,7 @@
             "Y": 88.871994,
             "Z": 207.35486
           },
+          "StopDistance": 8,
           "TerritoryId": 960,
           "InteractionType": "Interact"
         }
@@ -88,17 +97,9 @@
             "Z": -30.71643
           },
           "TerritoryId": 960,
-          "InteractionType": "Interact"
-        },
-        {
-          "DataId": 2012283,
-          "Position": {
-            "X": -465.1103,
-            "Y": 56.47351,
-            "Z": -30.71643
-          },
-          "TerritoryId": 960,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "$.0": "[1]",
+          "$.1": "QuestVariables if done first: 1 0 0 0 0 ??"
         },
         {
           "DataId": 2012282,
@@ -106,6 +107,18 @@
             "X": -479.3927,
             "Y": 56.290405,
             "Z": -33.676758
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "$.0": "[1]",
+          "$.1": "QuestVariables if done after [1]: 2 0 0 0 0 ??"
+        },
+        {
+          "DataId": 2012281,
+          "Position": {
+            "X": -472.25153,
+            "Y": 56.26001,
+            "Z": -20.676025
           },
           "TerritoryId": 960,
           "InteractionType": "Interact"
@@ -137,8 +150,10 @@
             "Y": 64.78333,
             "Z": -200.3357
           },
+          "StopDistance": 1,
           "TerritoryId": 960,
           "InteractionType": "Combat",
+          "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
             14002
           ]

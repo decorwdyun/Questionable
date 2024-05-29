@@ -1,6 +1,10 @@
-﻿namespace Questionable.Model.V1;
+﻿using System.Text.Json.Serialization;
+using Questionable.Model.V1.Converter;
 
-public class AethernetShortcut
+namespace Questionable.Model.V1;
+
+[JsonConverter(typeof(AethernetShortcutConverter))]
+public sealed class AethernetShortcut
 {
     public EAetheryteLocation From { get; set; }
     public EAetheryteLocation To { get; set; }

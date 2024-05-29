@@ -12,6 +12,7 @@
             "Y": 4.357494,
             "Z": 0.7476196
           },
+          "StopDistance": 5,
           "TerritoryId": 962,
           "InteractionType": "Interact"
         }
@@ -29,6 +30,7 @@
           },
           "TerritoryId": 956,
           "InteractionType": "Interact",
+          "AetheryteShortcut": "Labyrinthos - Aporia",
           "SkipIf": [
             "FlyingUnlocked"
           ]
@@ -41,7 +43,8 @@
             "Z": 301.56396
           },
           "TerritoryId": 956,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
@@ -70,6 +73,7 @@
             "Y": 80.7959,
             "Z": 607.6904
           },
+          "StopDistance": 5,
           "TerritoryId": 960,
           "InteractionType": "Interact"
         }

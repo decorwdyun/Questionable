@@ -28,7 +28,8 @@
             "Z": 360.46387
           },
           "TerritoryId": 960,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Ultima Thule - Base Omicron"
         }
       ]
     },
@@ -82,6 +83,7 @@
             "Y": 566,
             "Z": 317.96698
           },
+          "StopDistance": 1,
           "TerritoryId": 960,
           "InteractionType": "Interact"
         }

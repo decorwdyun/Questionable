@@ -7,7 +7,6 @@ namespace Questionable.Model.V1;
 
 public class QuestStep
 {
-    [JsonConverter(typeof(InteractionTypeConverter))]
     public EInteractionType InteractionType { get; set; }
 
     public uint? DataId { get; set; }
@@ -25,22 +24,20 @@ public class QuestStep
     public bool Fly { get; set; }
     public string? Comment { get; set; }
 
-    [JsonConverter(typeof(AetheryteConverter))]
     public EAetheryteLocation? AetheryteShortcut { get; set; }
 
-    [JsonConverter(typeof(AethernetShortcutConverter))]
     public AethernetShortcut? AethernetShortcut { get; set; }
     public uint? AetherCurrentId { get; set; }
 
     public uint? ItemId { get; set; }
     public bool? GroundTarget { get; set; }
 
-    [JsonConverter(typeof(EmoteConverter))]
     public EEmote? Emote { get; set; }
-    public string ChatMessage { get; set; }
+    public string? ChatMessage { get; set; }
 
-    [JsonConverter(typeof(EnemySpawnTypeConverter))]
     public EEnemySpawnType? EnemySpawnType { get; set; }
 
-    public IList<uint>? KillEnemyDataIds { get; set; }
+    public IList<uint> KillEnemyDataIds { get; set; } = new List<uint>();
+
+    public IList<ESkipCondition> SkipIf { get; set; } = new List<ESkipCondition>();
 }

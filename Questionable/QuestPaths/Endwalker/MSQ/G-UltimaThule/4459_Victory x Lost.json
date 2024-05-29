@@ -12,6 +12,7 @@
             "Y": 269.0203,
             "Z": -633.5393
           },
+          "StopDistance": 5,
           "TerritoryId": 960,
           "InteractionType": "Interact"
         }
@@ -20,6 +21,17 @@
     {
       "Sequence": 1,
       "Steps": [
+        {
+          "DataId": 2012034,
+          "Position": {
+            "X": 424.55164,
+            "Y": 283.37524,
+            "Z": -679.7742
+          },
+          "TerritoryId": 960,
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818393
+        },
         {
           "DataId": 1039787,
           "Position": {
@@ -54,6 +66,7 @@
           },
           "TerritoryId": 960,
           "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
             14000,
             14001
@@ -86,6 +99,7 @@
             "Y": 439.695,
             "Z": 155.59619
           },
+          "StopDistance": 5,
           "TerritoryId": 960,
           "InteractionType": "Interact"
         }
@@ -118,6 +132,7 @@
           },
           "TerritoryId": 960,
           "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
             13999
           ]
@@ -135,7 +150,8 @@
             "Z": 239.39868
           },
           "TerritoryId": 960,
-          "InteractionType": "AttuneAetherCurrent"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818392
         },
         {
           "DataId": 1039791,
@@ -194,28 +210,9 @@
             "Y": 437.5829,
             "Z": 333.63843
           },
+          "StopDistance": 5,
           "TerritoryId": 960,
           "InteractionType": "AttuneAetheryte"
-        },
-        {
-          "DataId": 2012031,
-          "Position": {
-            "X": 13.107483,
-            "Y": 275.56262,
-            "Z": -756.40497
-          },
-          "TerritoryId": 960,
-          "InteractionType": "AttuneAetherCurrent"
-        },
-        {
-          "DataId": 2012034,
-          "Position": {
-            "X": 424.55164,
-            "Y": 283.37524,
-            "Z": -679.7742
-          },
-          "TerritoryId": 960,
-          "InteractionType": "AttuneAetherCurrent"
         },
         {
           "DataId": 1039791,

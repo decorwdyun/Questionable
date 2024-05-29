@@ -103,7 +103,7 @@
                   ]
                 },
                 "Disabled": {
-                  "description": "Unused (TODO)",
+                  "description": "Whether this step is disabled (see SkipIf for more control)",
                   "type": "boolean"
                 },
                 "DisableNavmesh": {
@@ -301,7 +301,8 @@
                     "stretch",
                     "wave",
                     "rally",
-                    "deny"
+                    "deny",
+                    "pray"
                   ]
                 },
                 "ChatMessage": {

@@ -393,7 +393,7 @@ internal sealed unsafe class GameFunctions
         {
             var battleChara = (BattleChara*)gameObject;
             StatusManager* statusManager = battleChara->GetStatusManager;
-            return statusManager->HasStatus(565) || statusManager->HasStatus(404);
+            return statusManager->HasStatus(565) || statusManager->HasStatus(404) || statusManager->HasStatus(2730);
         }
 
         return false;

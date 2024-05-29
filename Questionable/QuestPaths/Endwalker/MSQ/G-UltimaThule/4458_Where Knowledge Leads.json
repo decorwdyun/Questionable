@@ -12,6 +12,7 @@
             "Y": 269.0903,
             "Z": -490.44025
           },
+          "StopDistance": 7,
           "TerritoryId": 960,
           "InteractionType": "Interact"
         }
@@ -51,6 +52,35 @@
       "Sequence": 255,
       "Steps": [
         {
+          "Position": {
+            "X": -353.82343,
+            "Y": 263.4366,
+            "Z": -458.5238
+          },
+          "TerritoryId": 960,
+          "InteractionType": "WalkTo",
+          "Mount": true
+        },
+        {
+          "Position": {
+            "X": -394.40567,
+            "Y": 266.7831,
+            "Z": -478.6604
+          },
+          "TerritoryId": 960,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true
+        },
+        {
+          "Position": {
+            "X": -408.86514,
+            "Y": 266.81473,
+            "Z": -519.4911
+          },
+          "TerritoryId": 960,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 2012036,
           "Position": {
             "X": -385.24457,
@@ -58,7 +88,21 @@
             "Z": -629.8772
           },
           "TerritoryId": 960,
-          "InteractionType": "Interact"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818395
+        },
+        {
+          "DataId": 2012031,
+          "Position": {
+            "X": 13.107483,
+            "Y": 275.56262,
+            "Z": -756.40497
+          },
+          "TerritoryId": 960,
+          "InteractionType": "AttuneAetherCurrent",
+          "AetheryteShortcut": "Ultima Thule - Abode of the Ea",
+          "AetherCurrentId": 2818390,
+          "Comment": "TODO Verify"
         },
         {
           "DataId": 1039778,

@@ -1,40 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Text.Json.Serialization;
+﻿using System.Collections.Generic;
 
 namespace Questionable.Model.V1.Converter;
 
-public class EmoteConverter : JsonConverter<EEmote>
+public sealed class EmoteConverter() : EnumConverter<EEmote>(Values)
 {
-    private static readonly Dictionary<EEmote, string> EnumToString = new()
+    private static readonly Dictionary<EEmote, string> Values = new()
     {
         { EEmote.Stretch, "stretch" },
         { EEmote.Wave, "wave" },
         { EEmote.Rally, "rally" },
         { EEmote.Deny, "deny" },
+        { EEmote.Pray, "pray" },
     };
 
-    private static readonly Dictionary<string, EEmote> StringToEnum =
-        EnumToString.ToDictionary(x => x.Value, x => x.Key);
-
-    public override EEmote Read(ref Utf8JsonReader reader, Type typeToConvert,
-        JsonSerializerOptions options)
-    {
-        if (reader.TokenType != JsonTokenType.String)
-            throw new JsonException();
-
-        string? str = reader.GetString();
-        if (str == null)
-            throw new JsonException();
-
-        return StringToEnum.TryGetValue(str, out EEmote value) ? value : throw new JsonException();
-    }
-
-    public override void Write(Utf8JsonWriter writer, EEmote value, JsonSerializerOptions options)
-    {
-        ArgumentNullException.ThrowIfNull(writer);
-        writer.WriteStringValue(EnumToString[value]);
-    }
 }

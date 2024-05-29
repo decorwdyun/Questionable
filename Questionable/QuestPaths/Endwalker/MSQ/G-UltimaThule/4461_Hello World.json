@@ -28,7 +28,8 @@
             "Z": 303.8529
           },
           "TerritoryId": 960,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Ultima Thule - Base Omicron"
         }
       ]
     },
@@ -44,7 +45,7 @@
           },
           "TerritoryId": 960,
           "InteractionType": "ManualAction",
-          "Comment": "Identify Anomaly (Elbow)"
+          "Comment": "Identify Anomaly (Elbow/Knee)"
         }
       ]
     },

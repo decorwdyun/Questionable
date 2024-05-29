@@ -1,7 +1,6 @@
 {
   "Version": 1,
   "Author": "liza",
-  "Comment": "Sequence 2 is 'Enter' dungeon, Sequence 3 is 'Clear' dungeon",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -91,6 +90,7 @@
           },
           "TerritoryId": 962,
           "InteractionType": "Interact",
+          "StopDistance": 5,
           "AethernetShortcut": [
             "[Old Sharlayan] The Rostra",
             "[Old Sharlayan] The Baldesion Annex"

@@ -57,6 +57,7 @@ internal sealed class DebugWindow : Window
         {
             ImGui.TextUnformatted($"Quest: {currentQuest.Quest.Name} / {currentQuest.Sequence} / {currentQuest.Step}");
 
+            ImGui.BeginDisabled();
             var questWork = _gameFunctions.GetQuestEx(currentQuest.Quest.QuestId);
             if (questWork != null)
             {
@@ -78,6 +79,7 @@ internal sealed class DebugWindow : Window
                 ImGui.TextUnformatted("(Not accepted)");
 
             ImGui.TextUnformatted(_questController.DebugState ?? "--");
+            ImGui.EndDisabled();
             ImGui.TextUnformatted(_questController.Comment ?? "--");
 
             var nextStep = _questController.GetNextStep();

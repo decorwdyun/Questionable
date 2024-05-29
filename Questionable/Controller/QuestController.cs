@@ -264,6 +264,13 @@ internal sealed class QuestController
             return;
 
         Debug.Assert(CurrentQuest != null, nameof(CurrentQuest) + " != null");
+        if (step.Disabled)
+        {
+            _pluginLog.Information("Skipping step, as it is disabled");
+            IncreaseStepCount();
+            return;
+        }
+
         if (!CurrentQuest.StepProgress.AetheryteShortcutUsed && step.AetheryteShortcut != null)
         {
             bool skipTeleport = false;
@@ -306,6 +313,13 @@ internal sealed class QuestController
 
                 return;
             }
+        }
+
+        if (step.SkipIf.Contains(ESkipCondition.FlyingUnlocked) && _gameFunctions.IsFlyingUnlocked(step.TerritoryId))
+        {
+            _pluginLog.Information("Skipping step, as flying is unlocked");
+            IncreaseStepCount();
+            return;
         }
 
         if (!CurrentQuest.StepProgress.AethernetShortcutUsed)
@@ -357,7 +371,8 @@ internal sealed class QuestController
 
             if (step.Mount == true && !_gameFunctions.HasStatusPreventingSprintOrMount())
             {
-                if (!_condition[ConditionFlag.Mounted] && _territoryData.CanUseMount(_clientState.TerritoryType))
+                if (!_condition[ConditionFlag.Mounted] && !_condition[ConditionFlag.InCombat] &&
+                    _territoryData.CanUseMount(_clientState.TerritoryType))
                 {
                     if (ActionManager.Instance()->GetActionStatus(ActionType.Mount, 71) == 0)
                         ActionManager.Instance()->UseAction(ActionType.Mount, 71);
@@ -376,7 +391,7 @@ internal sealed class QuestController
             if (!step.DisableNavmesh)
             {
                 if (step.Mount != false && actualDistance > 30f && !_condition[ConditionFlag.Mounted] &&
-                    _territoryData.CanUseMount(_clientState.TerritoryType) &&
+                    !_condition[ConditionFlag.InCombat] && _territoryData.CanUseMount(_clientState.TerritoryType) &&
                     !_gameFunctions.HasStatusPreventingSprintOrMount())
                 {
                     if (ActionManager.Instance()->GetActionStatus(ActionType.Mount, 71) == 0)
