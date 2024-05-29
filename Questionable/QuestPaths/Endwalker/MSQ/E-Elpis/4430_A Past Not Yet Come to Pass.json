@@ -27,6 +27,7 @@
             "Y": 161.24207,
             "Z": -222.2782
           },
+          "StopDistance": 7,
           "TerritoryId": 961,
           "InteractionType": "AttuneAetheryte"
         },
@@ -106,6 +107,15 @@
     {
       "Sequence": 6,
       "Steps": [
+        {
+          "Position": {
+            "X": -585.33386,
+            "Y": 159.16429,
+            "Z": -197.54811
+          },
+          "TerritoryId": 961,
+          "InteractionType": "WalkTo"
+        },
         {
           "DataId": 1040117,
           "Position": {

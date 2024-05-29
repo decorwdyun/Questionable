@@ -1,10 +1,12 @@
 ﻿using System.Globalization;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.InteropServices;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Interface;
 using Dalamud.Interface.Components;
 using Dalamud.Interface.Windowing;
+using Dalamud.Memory;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
@@ -110,6 +112,7 @@ internal sealed class DebugWindow : Window
         var questManager = QuestManager.Instance();
         if (questManager != null)
         {
+            // unsure how these are sorted
             for (int i = 0; i < 1 /*questManager->TrackedQuestsSpan.Length*/; ++i)
             {
                 var trackedQuest = questManager->TrackedQuestsSpan[i];

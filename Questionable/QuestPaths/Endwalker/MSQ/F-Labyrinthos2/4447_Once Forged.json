@@ -12,6 +12,7 @@
             "Y": -31.53043,
             "Z": 321.46167
           },
+          "StopDistance": 5,
           "TerritoryId": 956,
           "InteractionType": "Interact"
         }
@@ -44,6 +45,7 @@
           },
           "TerritoryId": 956,
           "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
             13982,
             13981,
@@ -78,7 +80,8 @@
             "Z": 661.86
           },
           "TerritoryId": 956,
-          "InteractionType": "AttuneAetherCurrent"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818316
         },
         {
           "DataId": 1040455,

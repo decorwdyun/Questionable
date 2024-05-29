@@ -15,6 +15,7 @@
             "Y": 151.51599,
             "Z": -303.39514
           },
+          "StopDistance": 5,
           "TerritoryId": 961,
           "InteractionType": "Interact"
         }
@@ -45,6 +46,7 @@
             "Y": 329.9458,
             "Z": -765.80457
           },
+          "StopDistance": 4,
           "TerritoryId": 961,
           "InteractionType": "ManualAction",
           "Comment": "Duty - Ktisis Hyperborea"
@@ -61,6 +63,7 @@
             "Y": -17.131165,
             "Z": 49.66809
           },
+          "StopDistance": 5,
           "TerritoryId": 961,
           "InteractionType": "Interact"
         }

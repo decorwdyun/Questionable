@@ -141,7 +141,6 @@ internal sealed class QuestController
 
     public void Update()
     {
-        Comment = null;
         DebugState = null;
 
         (ushort currentQuestId, byte currentSequence) = _gameFunctions.GetCurrentQuest();
@@ -161,6 +160,7 @@ internal sealed class QuestController
         if (CurrentQuest == null)
         {
             DebugState = "No quest active";
+            Comment = null;
             return;
         }
 
@@ -193,18 +193,21 @@ internal sealed class QuestController
         if (sequence == null)
         {
             DebugState = "Sequence not found";
+            Comment = null;
             return;
         }
 
         if (CurrentQuest.Step == 255)
         {
             DebugState = "Step completed";
+            Comment = null;
             return;
         }
 
         if (CurrentQuest.Step >= sequence.Steps.Count)
         {
             DebugState = "Step not found";
+            Comment = null;
             return;
         }
 
@@ -373,10 +376,12 @@ internal sealed class QuestController
             if (!step.DisableNavmesh)
             {
                 if (step.Mount != false && actualDistance > 30f && !_condition[ConditionFlag.Mounted] &&
-                    _territoryData.CanUseMount(_clientState.TerritoryType))
+                    _territoryData.CanUseMount(_clientState.TerritoryType) &&
+                    !_gameFunctions.HasStatusPreventingSprintOrMount())
                 {
                     if (ActionManager.Instance()->GetActionStatus(ActionType.Mount, 71) == 0)
                         ActionManager.Instance()->UseAction(ActionType.Mount, 71);
+
                     return;
                 }
 

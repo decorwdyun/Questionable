@@ -1,0 +1,96 @@
+﻿{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1037969,
+          "Position": {
+            "X": -611.90204,
+            "Y": -22.39482,
+            "Z": 510.42944
+          },
+          "TerritoryId": 961,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1041141,
+          "Position": {
+            "X": -614.313,
+            "Y": -22.39482,
+            "Z": 509.72766
+          },
+          "TerritoryId": 961,
+          "InteractionType": "ManualAction",
+          "Comment": "Follow"
+        },
+        {
+          "Position": {
+            "X": -838.7837,
+            "Y": -39.605896,
+            "Z": 518.9479
+          },
+          "TerritoryId": 961,
+          "InteractionType": "WalkTo",
+          "Comment": "Unsure if this is sequence 1"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "Position": {
+            "X": -838.7837,
+            "Y": -39.605896,
+            "Z": 518.9479
+          },
+          "TerritoryId": 961,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AutoOnEnterArea",
+          "KillEnemyDataIds": [
+            14064,
+            14065
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1041137,
+          "Position": {
+            "X": -819.6994,
+            "Y": -38.65795,
+            "Z": 506.43152
+          },
+          "TerritoryId": 961,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1037969,
+          "Position": {
+            "X": -611.90204,
+            "Y": -22.39482,
+            "Z": 510.42944
+          },
+          "TerritoryId": 961,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

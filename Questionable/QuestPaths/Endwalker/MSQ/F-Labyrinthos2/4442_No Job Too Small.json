@@ -12,6 +12,7 @@
             "Y": -30.155542,
             "Z": 638.7273
           },
+          "StopDistance": 5,
           "TerritoryId": 956,
           "InteractionType": "Interact"
         }
@@ -21,6 +22,26 @@
       "Sequence": 1,
       "Steps": [
         {
+          "Position": {
+            "X": -102.94707,
+            "Y": -29.933468,
+            "Z": 674.6727
+          },
+          "TerritoryId": 956,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "Position": {
+            "X": -118.62926,
+            "Y": -22.071072,
+            "Z": 681.35846
+          },
+          "TerritoryId": 956,
+          "InteractionType": "ManualAction",
+          "DisableNavmesh": true,
+          "Comment": "Navmesh can't jump"
+        },
+        {
           "DataId": 2011986,
           "Position": {
             "X": -128.06903,
@@ -28,8 +49,27 @@
             "Z": 676.7223
           },
           "TerritoryId": 956,
-          "InteractionType": "ManualAction",
-          "Comment": "Attune to Aether Current #4"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818317
+        },
+        {
+          "Position": {
+            "X": -114.01625,
+            "Y": -30.313616,
+            "Z": 670.05585
+          },
+          "TerritoryId": 956,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true
+        },
+        {
+          "Position": {
+            "X": 79.66557,
+            "Y": -29.904594,
+            "Z": 457.04776
+          },
+          "TerritoryId": 956,
+          "InteractionType": "WalkTo"
         },
         {
           "DataId": 2011989,
@@ -39,7 +79,8 @@
             "Z": 178.85095
           },
           "TerritoryId": 956,
-          "InteractionType": "AttuneAetherCurrent"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818323
         },
         {
           "DataId": 1039750,
@@ -57,16 +98,6 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 1037253,
-          "Position": {
-            "X": 34.74475,
-            "Y": -28.549177,
-            "Z": 45.548096
-          },
-          "TerritoryId": 956,
-          "InteractionType": "Interact"
-        },
-        {
           "DataId": 1037271,
           "Position": {
             "X": 84.64172,
@@ -74,7 +105,21 @@
             "Z": 31.021484
           },
           "TerritoryId": 956,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "$.0": "[1] Navmesh navigates here first, even if you feed it [2]",
+          "$.1": "QuestVariables if done first: 1 0 0 0 0 64"
+        },
+        {
+          "DataId": 1037253,
+          "Position": {
+            "X": 34.74475,
+            "Y": -28.549177,
+            "Z": 45.548096
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact",
+          "$.0": "[2]",
+          "$.1": "QuestVariables after: 2 0 0 0 0 192"
         },
         {
           "DataId": 1037275,
@@ -98,6 +143,7 @@
             "Y": -27.542603,
             "Z": -46.67737
           },
+          "StopDistance": 7,
           "TerritoryId": 956,
           "InteractionType": "AttuneAetheryte"
         },

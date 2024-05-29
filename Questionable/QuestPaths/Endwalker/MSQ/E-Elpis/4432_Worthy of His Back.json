@@ -12,6 +12,7 @@
             "Y": 178.07872,
             "Z": -334.5846
           },
+          "StopDistance": 5,
           "TerritoryId": 961,
           "InteractionType": "Interact"
         }
@@ -29,7 +30,16 @@
           },
           "TerritoryId": 961,
           "InteractionType": "AttuneAetherCurrent",
-          "Comment": "Might be faster when initially entering the Island"
+          "AetherCurrentId": 2818383
+        },
+        {
+          "Position": {
+            "X": -297.88638,
+            "Y": 146.9291,
+            "Z": 84.30863
+          },
+          "TerritoryId": 961,
+          "InteractionType": "WalkTo"
         },
         {
           "DataId": 2012149,
@@ -69,6 +79,7 @@
             "Y": 138.676,
             "Z": 62.302612
           },
+          "StopDistance": 5,
           "TerritoryId": 961,
           "InteractionType": "Interact"
         }

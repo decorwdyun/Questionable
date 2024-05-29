@@ -29,6 +29,7 @@
           },
           "TerritoryId": 958,
           "InteractionType": "ManualAction",
+          "AetheryteShortcut": "Garlemald - Camp Broken Glass",
           "Comment": "Duty - As the Heavens Burn"
         }
       ]
@@ -43,6 +44,7 @@
             "Y": 21.999998,
             "Z": 416.3423
           },
+          "StopDistance": 6,
           "TerritoryId": 958,
           "InteractionType": "Interact"
         }

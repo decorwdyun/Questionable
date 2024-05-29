@@ -12,6 +12,7 @@
             "Y": -31.53043,
             "Z": -78.324646
           },
+          "StopDistance": 5,
           "TerritoryId": 956,
           "InteractionType": "Interact"
         }
@@ -42,6 +43,7 @@
             "Y": -17.532654,
             "Z": -77.073364
           },
+          "StopDistance": 5,
           "TerritoryId": 956,
           "InteractionType": "ManualAction",
           "Comment": "Find Points of Interest"
@@ -60,6 +62,7 @@
           },
           "TerritoryId": 956,
           "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
             13983
           ]

@@ -12,6 +12,7 @@
             "Y": 138.676,
             "Z": 62.302612
           },
+          "StopDistance": 5,
           "TerritoryId": 961,
           "InteractionType": "Interact"
         }
@@ -20,6 +21,17 @@
     {
       "Sequence": 1,
       "Steps": [
+        {
+          "DataId": 2012026,
+          "Position": {
+            "X": -555.6268,
+            "Y": 158.09863,
+            "Z": 172.41162
+          },
+          "TerritoryId": 961,
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818380
+        },
         {
           "DataId": 1040132,
           "Position": {
@@ -51,16 +63,6 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 2012026,
-          "Position": {
-            "X": -555.6268,
-            "Y": 158.09863,
-            "Z": 172.41162
-          },
-          "TerritoryId": 961,
-          "InteractionType": "AttuneAetherCurrent"
-        },
-        {
           "DataId": 2012027,
           "Position": {
             "X": -392.08063,
@@ -68,7 +70,9 @@
             "Z": -293.59882
           },
           "TerritoryId": 961,
-          "InteractionType": "AttuneAetherCurrent"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818381,
+          "AetheryteShortcut": "Elpis - Poieten Oikos"
         },
         {
           "DataId": 2012151,
@@ -92,6 +96,7 @@
             "Y": 294.93375,
             "Z": -559.62463
           },
+          "StopDistance": 5,
           "TerritoryId": 961,
           "InteractionType": "Interact"
         }
@@ -108,7 +113,8 @@
             "Z": -691.3405
           },
           "TerritoryId": 961,
-          "InteractionType": "AttuneAetherCurrent"
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818379
         },
         {
           "DataId": 1040135,

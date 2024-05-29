@@ -21,6 +21,16 @@
       "Sequence": 1,
       "Steps": [
         {
+          "Position": {
+            "X": 5.4520116,
+            "Y": -28.723352,
+            "Z": -42.992764
+          },
+          "TerritoryId": 956,
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Labyrinthos - Sharlayan Hamlet"
+        },
+        {
           "DataId": 1039687,
           "Position": {
             "X": -18.875488,
@@ -59,7 +69,8 @@
           },
           "TerritoryId": 956,
           "InteractionType": "Interact",
-          "Comment": "Distracted Researcher"
+          "Comment": "Distracted Researcher",
+          "$.1": "QuestVariables if done first: 1 0 0 0 2 0"
         },
         {
           "DataId": 1040416,
@@ -70,7 +81,8 @@
           },
           "TerritoryId": 956,
           "InteractionType": "Interact",
-          "Comment": "Hyperventilating Engineer"
+          "Comment": "Hyperventilating Engineer",
+          "$.1": "QuestVariables if done after [1]: 2 0 0 0 130 0"
         },
         {
           "DataId": 1040420,
@@ -81,7 +93,8 @@
           },
           "TerritoryId": 956,
           "InteractionType": "Interact",
-          "Comment": "Harried Aetherologist"
+          "Comment": "Harried Aetherologist",
+          "$.1": "QuestVariables if done after [2]: 3 0 0 0 138 0"
         },
         {
           "DataId": 1040421,
@@ -92,7 +105,8 @@
           },
           "TerritoryId": 956,
           "InteractionType": "Interact",
-          "Comment": "Grimacing Naturalist"
+          "Comment": "Grimacing Naturalist",
+          "$.1": "QuestVariables if done after [3]: 4 0 0 0 142 0"
         },
         {
           "DataId": 1040417,
@@ -103,7 +117,8 @@
           },
           "TerritoryId": 956,
           "InteractionType": "Interact",
-          "Comment": "Ponderous Mathematician"
+          "Comment": "Ponderous Mathematician",
+          "$.1": "QuestVariables if done after [4]: 5 0 0 0 206 0"
         },
         {
           "DataId": 1040418,
@@ -114,7 +129,9 @@
           },
           "TerritoryId": 956,
           "InteractionType": "Interact",
-          "Comment": "Despondent Engineer"
+          "Comment": "Despondent Engineer",
+          "Mount": true,
+          "$.1": "QuestVariables if done after [5]: 6 0 0 0 238 0"
         },
         {
           "DataId": 1040423,
@@ -125,7 +142,8 @@
           },
           "TerritoryId": 956,
           "InteractionType": "Interact",
-          "Comment": "Skeptical Researcher"
+          "Comment": "Skeptical Researcher",
+          "$.1": "QuestVariables if done after [6]: 7 0 0 0 239 0"
         },
         {
           "DataId": 1040419,
@@ -165,6 +183,7 @@
             "Y": -29.58728,
             "Z": -53.23877
           },
+          "StopDistance": 5,
           "TerritoryId": 956,
           "InteractionType": "Interact"
         }
@@ -180,6 +199,7 @@
             "Y": -29.53,
             "Z": -58.854065
           },
+          "StopDistance": 5,
           "TerritoryId": 956,
           "InteractionType": "Interact"
         }

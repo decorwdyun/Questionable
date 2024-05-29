@@ -12,6 +12,7 @@
             "Y": 79.691376,
             "Z": 299.8855
           },
+          "StopDistance": 5,
           "TerritoryId": 956,
           "InteractionType": "Interact"
         }
@@ -53,10 +54,11 @@
         {
           "DataId": 1040402,
           "Position": {
-            "X": 423.0226,
-            "Y": 65.26492,
-            "Z": -119.98032
+            "X": 422.61563,
+            "Y": 65.31176,
+            "Z": -121.74779
           },
+          "StopDistance": 0.25,
           "TerritoryId": 956,
           "InteractionType": "Interact"
         }
@@ -68,10 +70,11 @@
         {
           "DataId": 1040402,
           "Position": {
-            "X": 409.65042,
+            "X": 407.89633,
             "Y": 65.16199,
-            "Z": -119.04752
+            "Z": -119.62697
           },
+          "StopDistance": 0.25,
           "TerritoryId": 956,
           "InteractionType": "Interact"
         }
@@ -83,10 +86,11 @@
         {
           "DataId": 1040402,
           "Position": {
-            "X": 462.06644,
+            "X": 463.33115,
             "Y": 65.16199,
-            "Z": -67.42904
+            "Z": -66.60645
           },
+          "StopDistance": 0.25,
           "TerritoryId": 956,
           "InteractionType": "Interact"
         }
@@ -98,10 +102,11 @@
         {
           "DataId": 1040402,
           "Position": {
-            "X": 485.29535,
+            "X": 485.30798,
             "Y": 65.16199,
-            "Z": -96.03572
+            "Z": -96.01148
           },
+          "StopDistance": 0.25,
           "TerritoryId": 956,
           "InteractionType": "Interact"
         }
