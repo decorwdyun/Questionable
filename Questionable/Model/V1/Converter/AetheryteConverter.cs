@@ -6,11 +6,48 @@ public sealed class AetheryteConverter() : EnumConverter<EAetheryteLocation>(Val
 {
     private static readonly Dictionary<EAetheryteLocation, string> Values = new()
     {
-        { EAetheryteLocation.Limsa, "Limsa Lominsa" },
         { EAetheryteLocation.Gridania, "Gridania" },
+
+        { EAetheryteLocation.CentralShroudBentbranchMeadows, "Central Shroud - Bentbranch Meadows" },
+        { EAetheryteLocation.EastShroudHawthorneHut, "East Shroud - Hawthorne Hut" },
+        { EAetheryteLocation.SouthShroudQuarrymill, "South Shroud - Quarrymill" },
+        { EAetheryteLocation.SouthShroudCampTranquil, "South Shroud - Camp Tranquil" },
+        { EAetheryteLocation.NorthShroudFallgourdFloat, "North Shroud - Fallgourd Float" },
+
         { EAetheryteLocation.Uldah, "Ul'dah" },
+        { EAetheryteLocation.WesternThanalanHorizon, "Western Thanalan - Horizon" },
+        { EAetheryteLocation.CentralThanalanBlackBrushStation, "Central Thanalan - Black Brush Station" },
+        { EAetheryteLocation.EasternThanalanCampDrybone, "Eastern Thanalan - Camp Drybone" },
+        { EAetheryteLocation.SouthernThanalanLittleAlaMhigo, "Southern Thanalan - Little Ala Mhigo" },
+        { EAetheryteLocation.SouthernThanalanForgottenSprings, "Southern Thanalan - Forgotten Springs" },
+        { EAetheryteLocation.NorthernThanalanCampBluefog, "Northern Thanalan - Camp Bluefog" },
+        { EAetheryteLocation.NorthernThanalanCeruleumProcessingPlant, "Northern Thanalan - Ceruleum Processing Plant" },
+
+        { EAetheryteLocation.Limsa, "Limsa Lominsa" },
+        { EAetheryteLocation.MiddleLaNosceaSummerfordFarms, "Middle La Noscea - Summerford Farms" },
+        { EAetheryteLocation.LowerLaNosceaMorabyDrydocks, "Lower La Noscea - Moraby Drydocks" },
+        { EAetheryteLocation.EasternLaNosceaCostaDelSol, "Eastern La Noscea - Costa Del Sol" },
+        { EAetheryteLocation.EasternLaNosceaWineport, "Eastern La Noscea - Wineport" },
+        { EAetheryteLocation.WesternLaNosceaSwiftperch, "Western La Noscea - Swiftperch" },
+        { EAetheryteLocation.WesternLaNosceaAleport, "Western La Noscea - Aleport" },
+        { EAetheryteLocation.UpperLaNosceaCampBronzeLake, "Upper La Noscea - Camp Bronze Lake" },
+        { EAetheryteLocation.OuterLaNosceaCampOverlook, "Outer La Noscea - Camp Overlook" },
+
+        { EAetheryteLocation.CoerthasCentralHighlandsCampDragonhead, "Coerthas Central Highlands - Camp Dragonhead" },
+        { EAetheryteLocation.MorDhona, "Mor Dhona" },
+        { EAetheryteLocation.GoldSaucer, "Gold Saucer" },
+        { EAetheryteLocation.WolvesDenPier, "Wolves' Den Pier" },
+
         { EAetheryteLocation.Ishgard, "Ishgard" },
         { EAetheryteLocation.Idyllshire, "Idyllshire" },
+        { EAetheryteLocation.CoerthasWesternHighlandsFalconsNest, "Coerthas Western Highlands - Falcon's Nest" },
+        { EAetheryteLocation.SeaOfCloudsCampCloudtop, "The Sea of Clouds - Camp Cloudtop" },
+        { EAetheryteLocation.SeaOfCloudsOkZundu, "The Sea of Clouds - Ok' Zundu" },
+        { EAetheryteLocation.AzysLlaHelix, "Azys Lla - Helix" },
+        { EAetheryteLocation.DravanianForelandsTailfeather, "The Dravanian Forelands - Tailfeather" },
+        { EAetheryteLocation.DravanianForelandsAnyxTrine, "The Dravanian Forelands - Anyx Trine" },
+        { EAetheryteLocation.ChurningMistsMoghome, "The Churning Mists - Moghome" },
+        { EAetheryteLocation.ChurningMistsZenith, "The Churning Mists - Zenith" },
 
         { EAetheryteLocation.RhalgrsReach, "Rhalgr's Reach" },
         { EAetheryteLocation.FringesCastrumOriens, "Fringes - Castrum Oriens" },

@@ -1,0 +1,53 @@
+﻿{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1033854,
+          "Position": {
+            "X": 59.983154,
+            "Y": -3.0654925E-07,
+            "Z": 1.6021729
+          },
+          "TerritoryId": 819,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 2011103,
+          "Position": {
+            "X": 100,
+            "Y": 4.208088E-05,
+            "Z": 112.5434
+          },
+          "StopDistance": 5,
+          "TerritoryId": 931,
+          "InteractionType": "ManualAction",
+          "Comment": "Duty -  The Seat of Sacrifice"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1033856,
+          "Position": {
+            "X": 53.421753,
+            "Y": 0.019417252,
+            "Z": -0.045776367
+          },
+          "TerritoryId": 819,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

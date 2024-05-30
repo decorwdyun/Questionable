@@ -1,0 +1,79 @@
+﻿{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1003027,
+          "Position": {
+            "X": 4.8981323,
+            "Y": -1.92944,
+            "Z": -0.19836426
+          },
+          "TerritoryId": 205,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1036439,
+          "Position": {
+            "X": 57.90796,
+            "Y": -8.556444,
+            "Z": 107.16406
+          },
+          "TerritoryId": 132,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Gridania"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1036441,
+          "Position": {
+            "X": 32.60852,
+            "Y": -19.000002,
+            "Z": 103.34924
+          },
+          "StopDistance": 7,
+          "TerritoryId": 132,
+          "InteractionType": "ManualAction",
+          "Comment": "Duty - Death Unto Dawn"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "TerritoryId": 351,
+          "InteractionType": "ManualAction",
+          "Comment": "Credits"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1036444,
+          "Position": {
+            "X": -1.6937866,
+            "Y": 0,
+            "Z": -4.135254
+          },
+          "TerritoryId": 351,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

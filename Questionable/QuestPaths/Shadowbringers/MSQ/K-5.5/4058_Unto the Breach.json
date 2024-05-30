@@ -6,12 +6,13 @@
       "Sequence": 0,
       "Steps": [
         {
-          "DataId": 1036452,
+          "DataId": 1035613,
           "Position": {
-            "X": -2.2736206,
+            "X": -2.456726,
             "Y": 0,
-            "Z": -8.835022
+            "Z": -9.720032
           },
+          "StopDistance": 5,
           "TerritoryId": 351,
           "InteractionType": "Interact"
         }
@@ -21,19 +22,16 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 1038570,
+          "DataId": 1036324,
           "Position": {
-            "X": -374.6853,
-            "Y": 7.999938,
-            "Z": 45.822754
+            "X": 739.681,
+            "Y": 70,
+            "Z": 535.4237
           },
-          "TerritoryId": 129,
+          "TerritoryId": 621,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "Limsa Lominsa",
-          "AethernetShortcut": [
-            "[Limsa Lominsa] Aetheryte Plaza",
-            "[Limsa Lominsa] Arcanist's Guild"
-          ]
+          "AetheryteShortcut": "Lochs - Ala Mhigan Quarter",
+          "Fly": true
         }
       ]
     },
@@ -41,13 +39,13 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 1038578,
+          "DataId": 1036329,
           "Position": {
-            "X": 49.69861,
-            "Y": -16.246998,
-            "Z": 145.2201
+            "X": 741.1155,
+            "Y": 70,
+            "Z": 527.7333
           },
-          "TerritoryId": 962,
+          "TerritoryId": 621,
           "InteractionType": "Interact"
         }
       ]

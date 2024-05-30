@@ -119,7 +119,6 @@ internal sealed unsafe class GameFunctions
     {
         QuestWork* questWork = QuestManager.Instance()->GetQuestById(questId);
         return questWork != null ? *questWork : null;
-
     }
 
     public bool IsAetheryteUnlocked(uint aetheryteId, out byte subIndex)

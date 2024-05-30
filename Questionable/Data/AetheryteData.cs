@@ -21,6 +21,12 @@ internal sealed class AetheryteData
                 { EAetheryteLocation.GridaniaBotanist, new(-311.0857f, 7.94989f, -177.05048f) },
                 { EAetheryteLocation.GridaniaAmphitheatre, new(-73.92999f, 7.9804688f, -140.15417f) },
 
+                { EAetheryteLocation.CentralShroudBentbranchMeadows, new(13.076904f, 0.56451416f, 35.90442f) },
+                { EAetheryteLocation.EastShroudHawthorneHut, new(-186.54156f, 3.7994385f, 297.56616f) },
+                { EAetheryteLocation.SouthShroudQuarrymill, new(178.60681f, 10.543945f, -68.19263f) },
+                { EAetheryteLocation.SouthShroudCampTranquil, new(-230.0603f, 22.62909f, 355.45886f) },
+                { EAetheryteLocation.NorthShroudFallgourdFloat, new(-41.58087f, -38.55963f, 233.7528f) },
+
                 { EAetheryteLocation.Uldah, new(-144.51825f, -1.3580933f, -169.6651f) },
                 { EAetheryteLocation.UldahAdventurers, new(64.22522f, 4.5318604f, -115.31244f) },
                 { EAetheryteLocation.UldahThaumaturge, new(-154.83331f, 14.633362f, 73.07532f) },
@@ -32,6 +38,17 @@ internal sealed class AetheryteData
                 { EAetheryteLocation.UldahSapphireAvenue, new(131.9447f, 4.714966f, -29.800903f) },
                 { EAetheryteLocation.UldahChamberOfRule, new(6.6376343f, 30.655273f, -24.826477f) },
 
+                { EAetheryteLocation.WesternThanalanHorizon, new(68.0094f, 48.203125f, -227.039f) },
+                { EAetheryteLocation.CentralThanalanBlackBrushStation, new(-16.159302f, 0.32037354f, -166.58276f) },
+                { EAetheryteLocation.EasternThanalanCampDrybone, new(-386.3432f, -57.1756f, 142.59558f) },
+                { EAetheryteLocation.SouthernThanalanLittleAlaMhigo, new(-159.3805f, 30.105957f, -415.45746f) },
+                { EAetheryteLocation.SouthernThanalanForgottenSprings, new(-326.6194f, 10.696533f, 406.63757f) },
+                { EAetheryteLocation.NorthernThanalanCampBluefog, new(20.98108f, 8.8349f, 454.0321f) },
+                {
+                    EAetheryteLocation.NorthernThanalanCeruleumProcessingPlant,
+                    new(-26.596497f, 49.881714f, -30.838562f)
+                },
+
                 { EAetheryteLocation.Limsa, new(-84.031494f, 20.767456f, 0.015197754f) },
                 { EAetheryteLocation.LimsaAftcastle, new(16.067688f, 40.787354f, 68.80286f) },
                 { EAetheryteLocation.LimsaCulinarian, new(-56.50421f, 44.47998f, -131.45648f) },
@@ -39,6 +56,20 @@ internal sealed class AetheryteData
                 { EAetheryteLocation.LimsaFisher, new(-179.40033f, 4.8065186f, 182.97095f) },
                 { EAetheryteLocation.LimsaMarauder, new(-5.1728516f, 44.63257f, -218.06671f) },
                 { EAetheryteLocation.LimsaHawkersAlley, new(-213.61108f, 16.739136f, 51.80432f) },
+
+                { EAetheryteLocation.LowerLaNosceaMorabyDrydocks, new(156.11499f, 15.518433f, 673.21277f) },
+                { EAetheryteLocation.MiddleLaNosceaSummerfordFarms, new(227.98499f, 115.526f, -257.0382f) },
+                { EAetheryteLocation.EasternLaNosceaCostaDelSol, new(489.15845f, 20.828491f, 468.80298f) },
+                { EAetheryteLocation.EasternLaNosceaWineport, new(-18.387146f, 72.67859f, 3.829956f) },
+                { EAetheryteLocation.WesternLaNosceaSwiftperch, new(651.5449f, 11.734131f, 513.35913f) },
+                { EAetheryteLocation.WesternLaNosceaAleport, new(260.94446f, -19.60791f, 218.52441f) },
+                { EAetheryteLocation.UpperLaNosceaCampBronzeLake, new(437.4303f, 5.508484f, 94.590576f) },
+                { EAetheryteLocation.OuterLaNosceaCampOverlook, new(-117.54028f, 66.02576f, -212.66504f) },
+
+                { EAetheryteLocation.CoerthasCentralHighlandsCampDragonhead, new(223.98718f, 315.7854f, -234.85168f) },
+                { EAetheryteLocation.MorDhona, new(40.024292f, 24.002441f, -668.0247f) },
+                { EAetheryteLocation.GoldSaucer, new(-0.015319824f, 3.4942627f, -0.015319824f) },
+                { EAetheryteLocation.WolvesDenPier, new(40.93994f, 5.4779663f, -14.816589f) },
 
                 { EAetheryteLocation.Ishgard, new(-63.98114f, 11.154297f, 43.9917f) },
                 { EAetheryteLocation.IshgardForgottenKnight, new(45.792236f, 24.551636f, 0.99176025f) },
@@ -56,6 +87,15 @@ internal sealed class AetheryteData
                 { EAetheryteLocation.RhalgrsReach, new(78.23291f, 1.9683228f, 97.45935f) },
                 { EAetheryteLocation.RhalgrsReachWest, new(-84.275635f, 0.503479f, 9.323181f) },
                 { EAetheryteLocation.RhalgrsReachNorthEast, new(101.24353f, 3.463745f, -115.46509f) },
+
+                { EAetheryteLocation.CoerthasWesternHighlandsFalconsNest, new(474.87585f, 217.94458f, 708.5221f) },
+                { EAetheryteLocation.SeaOfCloudsCampCloudtop, new(-615.7473f, -118.36426f, 546.5934f) },
+                { EAetheryteLocation.SeaOfCloudsOkZundu, new(-613.1533f, -49.485046f, -415.03015f) },
+                { EAetheryteLocation.AzysLlaHelix, new(-722.8046f, -182.29956f, -593.40814f) },
+                { EAetheryteLocation.DravanianForelandsTailfeather, new(532.6771f, -48.722107f, 30.166992f) },
+                { EAetheryteLocation.DravanianForelandsAnyxTrine, new(-304.12756f, -16.70868f, 32.059082f) },
+                { EAetheryteLocation.ChurningMistsMoghome, new(259.20496f, -37.70508f, 596.85657f) },
+                { EAetheryteLocation.ChurningMistsZenith, new(-584.9546f, 52.84192f, 313.43542f) },
 
                 { EAetheryteLocation.Kugane, new(47.501343f, 8.438171f, -37.30841f) },
                 { EAetheryteLocation.KuganeShiokazeHostelry, new(-73.16705f, -6.088379f, -77.77527f) },

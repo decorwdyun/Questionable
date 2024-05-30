@@ -71,7 +71,10 @@
                   ]
                 },
                 "StopDistance": {
-                  "type": ["number", "null"],
+                  "type": [
+                    "number",
+                    "null"
+                  ],
                   "description": "Set if pathfinding should stop closer or further away from the default stop distance",
                   "exclusiveMinimum": 0
                 },
@@ -111,7 +114,10 @@
                   "type": "boolean"
                 },
                 "Mount": {
-                  "type": ["boolean", "null"],
+                  "type": [
+                    "boolean",
+                    "null"
+                  ],
                   "description": "If true, will mount regardless of distance to position. If false, will unmount."
                 },
                 "Fly": {
@@ -121,14 +127,44 @@
                 "AetheryteShortcut": {
                   "type": "string",
                   "description": "The Aetheryte to teleport to (before moving)",
-                  "$comment": "TODO add remaining aetherytes for 2.x/3.x",
                   "enum": [
-                    "Limsa Lominsa",
                     "Gridania",
+                    "Central Shroud - Bentbranch Meadows",
+                    "East Shroud - Hawthorne Hut",
+                    "South Shroud - Quarrymill",
+                    "South Shroud - Camp Tranquil",
+                    "North Shroud - Fallgourd Float",
                     "Ul'dah",
+                    "Western Thanalan - Horizon",
+                    "Central Thanalan - Black Brush Station",
+                    "Eastern Thanalan - Camp Drybone",
+                    "Southern Thanalan - Little Ala Mhigo",
+                    "Southern Thanalan - Forgotten Springs",
+                    "Northern Thanalan - Camp Bluefog",
+                    "Northern Thanalan - Ceruleum Processing Plant",
+                    "Limsa Lominsa",
+                    "Middle La Noscea - Summerford Farms",
+                    "Lower La Noscea - Moraby Drydocks",
+                    "Eastern La Noscea - Costa Del Sol",
+                    "Eastern La Noscea - Wineport",
+                    "Western La Noscea - Swiftperch",
+                    "Western La Noscea - Aleport",
+                    "Upper La Noscea - Camp Bronze Lake",
+                    "Outer La Noscea - Camp Overlook",
+                    "Coerthas Central Highlands - Camp Dragonhead",
+                    "Mor Dhona",
+                    "Gold Saucer",
+                    "Wolves' Den Pier",
                     "Ishgard",
                     "Idyllshire",
-
+                    "Coerthas Western Highlands - Falcon's Nest",
+                    "The Sea of Clouds - Camp Cloudtop",
+                    "The Sea of Clouds - Ok' Zundu",
+                    "Azys Lla - Helix",
+                    "The Dravanian Forelands - Tailfeather",
+                    "The Dravanian Forelands - Anyx Trine",
+                    "The Churning Mists - Moghome",
+                    "The Churning Mists - Zenith",
                     "Rhalgr's Reach",
                     "Fringes - Castrum Oriens",
                     "Fringes - Peering Stones",
@@ -145,7 +181,6 @@
                     "Azim Steppe - Dawn Throne",
                     "Azim Steppe - Dhoro Iloh",
                     "Doman Enclave",
-
                     "Crystarium",
                     "Eulmore",
                     "Lakeland - Fort Jobb",
@@ -163,7 +198,6 @@
                     "Il Mheg - Wolekdorf",
                     "Tempest - Ondo Cups",
                     "Tempest - Macarenses Angle",
-
                     "Old Sharlayan",
                     "Radz-at-Han",
                     "Labyrinthos - Archeion",
@@ -187,19 +221,11 @@
                 "AethernetShortcut": {
                   "type": "array",
                   "description": "A pair of aethernet locations (from + to) to use as a shortcut",
-                  "minItems": 2,
+                  "minItems": 1,
                   "maxItems": 2,
                   "items": {
                     "type": "string",
                     "enum": [
-                      "[Limsa Lominsa] Aetheryte Plaza",
-                      "[Limsa Lominsa] Arcanist's Guild",
-                      "[Limsa Lominsa] Fishermen's Guild",
-                      "[Limsa Lominsa] Hawker's Alley",
-                      "[Limsa Lominsa] The Aftcastle",
-                      "[Limsa Lominsa] Culinarian's Guild",
-                      "[Limsa Lominsa] Marauder's Guild",
-                      "[Limsa Lominsa] Airship Landing",
                       "[Gridania] Aetheryte Plaza",
                       "[Gridania] Archer's Guild",
                       "[Gridania] Leatherworker's Guild & Shaded Bower",
@@ -207,6 +233,9 @@
                       "[Gridania] Conjurer's Guild",
                       "[Gridania] Botanist's Guild",
                       "[Gridania] Mih Khetto's Amphitheatre",
+                      "[Gridania] Blue Badger Gate (Central Shroud)",
+                      "[Gridania] Yellow Serpent Gate (North Shroud)",
+                      "[Gridania] White Wolf Gate (Central Shroud)",
                       "[Gridania] Airship Landing",
                       "[Ul'dah] Aetheryte Plaza",
                       "[Ul'dah] Adventurer's Guild",
@@ -217,8 +246,21 @@
                       "[Ul'dah] Goldsmiths' Guild",
                       "[Ul'dah] Sapphire Avenue Exchange",
                       "[Ul'dah] Alchemists' Guild",
+                      "[Ul'dah] Gate of the Sultana (Western Thanalan)",
+                      "[Ul'dah] Gate of Nald (Central Thanalan)",
+                      "[Ul'dah] Gate of Thal (Central Thanalan)",
                       "[Ul'dah] The Chamber of Rule",
                       "[Ul'dah] Airship Landing",
+                      "[Limsa Lominsa] Aetheryte Plaza",
+                      "[Limsa Lominsa] Arcanist's Guild",
+                      "[Limsa Lominsa] Fishermen's Guild",
+                      "[Limsa Lominsa] Hawker's Alley",
+                      "[Limsa Lominsa] The Aftcastle",
+                      "[Limsa Lominsa] Culinarian's Guild",
+                      "[Limsa Lominsa] Marauder's Guild",
+                      "[Limsa Lominsa] Zephyr Gate (Middle La Noscea)",
+                      "[Limsa Lominsa] Tempest Gate (Lower La Noscea)",
+                      "[Limsa Lominsa] Airship Landing",
                       "[Ishgard] Aetheryte Plaza",
                       "[Ishgard] The Forgotten Knight",
                       "[Ishgard] Skysteel Manufactory",
@@ -228,11 +270,16 @@
                       "[Ishgard] Saint Reymanaud's Cathedral",
                       "[Ishgard] The Tribunal",
                       "[Ishgard] The Last Vigil",
+                      "[Ishgard] The Gates of Judgement (Coerthas Central Highlands)",
                       "[Idyllshire] Aetheryte Plaza",
                       "[Idyllshire] West Idyllshire",
+                      "[Idyllshire] Prologue Gate",
+                      "[Idyllshire] Epilogue Gate",
                       "[Rhalgr's Reach] Aetheryte Plaza",
                       "[Rhalgr's Reach] Western Rhalgr's Reach",
                       "[Rhalgr's Reach] Northeastern Rhalgr's Reach",
+                      "[Rhalgr's Reach] Fringes Gate",
+                      "[Rhalgr's Reach] Peaks Gate",
                       "[Kugane] Aetheryte Plaza",
                       "[Kugane] Shiokaze Hostelry",
                       "[Kugane] Pier #1",
@@ -242,6 +289,7 @@
                       "[Kugane] The Ruby Bazaar",
                       "[Kugane] Sekiseigumi Barracks",
                       "[Kugane] Rakuza District",
+                      "[Kugane] The Ruby Price",
                       "[Kugane] Airship Landing",
                       "[Crystarium] Aetheryte Plaza",
                       "[Crystarium] Musica Universalis Markets",
@@ -251,11 +299,13 @@
                       "[Crystarium] The Amaro Launch",
                       "[Crystarium] The Crystalline Mean",
                       "[Crystarium] The Cabinet of Curiosity",
+                      "[Crystarium] Tessellation (Lakeland)",
                       "[Eulmore] Aetheryte Plaza",
                       "[Eulmore] Southeast Derelicts",
                       "[Eulmore] Nightsoil Pots",
                       "[Eulmore] The Glory Gate",
                       "[Eulmore] The Mainstay",
+                      "[Eulmore] The Path to Glory (Kholusia)",
                       "[Old Sharlayan] Aetheryte Plaza",
                       "[Old Sharlayan] The Studium",
                       "[Old Sharlayan] The Baldesion Annex",
@@ -263,6 +313,7 @@
                       "[Old Sharlayan] The Leveilleur Estate",
                       "[Old Sharlayan] Journey's End",
                       "[Old Sharlayan] Scholar's Harbor",
+                      "[Old Sharlayan] The Hall of Artifice (Labyrinthos)",
                       "[Radz-at-Han] Aetheryte Plaza",
                       "[Radz-at-Han] Meghaduta",
                       "[Radz-at-Han] Ruveydah Fibers",
@@ -271,7 +322,8 @@
                       "[Radz-at-Han] Hall of the Radiant Host",
                       "[Radz-at-Han] Mehryde's Meyhane",
                       "[Radz-at-Han] Kama",
-                      "[Radz-at-Han] The High Crucible of Al-Kimiya"
+                      "[Radz-at-Han] The High Crucible of Al-Kimiya",
+                      "[Radz-at-Han] The Gate of First Sight (Thavnair)"
                     ]
                   }
                 },
@@ -284,7 +336,8 @@
                   "description": "Determines how enemy spawning is handled in combat locations",
                   "enum": [
                     "AutoOnEnterArea",
-                    "AfterInteraction"
+                    "AfterInteraction",
+                    "AfterItemUse"
                   ]
                 },
                 "KillEnemyDataIds": {
@@ -310,7 +363,10 @@
                   "description": "The text to use with /say"
                 },
                 "ItemId": {
-                  "type": ["number", "null"],
+                  "type": [
+                    "number",
+                    "null"
+                  ],
                   "description": "The Item to use",
                   "exclusiveMinimum": 0
                 },

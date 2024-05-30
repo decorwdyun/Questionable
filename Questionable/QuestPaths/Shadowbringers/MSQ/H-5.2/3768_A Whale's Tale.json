@@ -1,0 +1,184 @@
+﻿{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1032526,
+          "Position": {
+            "X": 606.1035,
+            "Y": 350.3518,
+            "Z": -200
+          },
+          "TerritoryId": 818,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "Position": {
+            "X": -269.44116,
+            "Y": -0.82486916,
+            "Z": 724.67255
+          },
+          "TerritoryId": 813,
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Lakeland - Ostall Imperative",
+          "Fly": true
+        },
+        {
+          "DataId": 1032528,
+          "Position": {
+            "X": -270.98505,
+            "Y": -0.82573783,
+            "Z": 723.96423
+          },
+          "TerritoryId": 813,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1030333,
+          "Position": {
+            "X": -612.23773,
+            "Y": 27.728632,
+            "Z": 817.65466
+          },
+          "StopDistance": 5,
+          "TerritoryId": 813,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "Position": {
+            "X": -591.3982,
+            "Y": 26.347507,
+            "Z": 773.5695
+          },
+          "TerritoryId": 813,
+          "InteractionType": "WalkTo",
+          "Mount": true,
+          "Fly": true,
+          "DisableNavmesh": true
+        },
+        {
+          "Position": {
+            "X": -610.2863,
+            "Y": -2.1544409,
+            "Z": 734.7734
+          },
+          "TerritoryId": 813,
+          "InteractionType": "WalkTo",
+          "Fly": true,
+          "DisableNavmesh": true
+        },
+        {
+          "DataId": 2010280,
+          "Position": {
+            "X": -630.4265,
+            "Y": -29.862,
+            "Z": 752.5597
+          },
+          "TerritoryId": 813,
+          "InteractionType": "Interact",
+          "DisableNavmesh": true,
+          "$.1": "QuestVariables if done first: 1 0 0 0 0 64"
+        },
+        {
+          "DataId": 2010278,
+          "Position": {
+            "X": -655.5123,
+            "Y": -40.299072,
+            "Z": 743.22107
+          },
+          "TerritoryId": 813,
+          "InteractionType": "Interact",
+          "DisableNavmesh": true
+        },
+        {
+          "DataId": 2010282,
+          "Position": {
+            "X": -663.14185,
+            "Y": -25.711487,
+            "Z": 738.82654
+          },
+          "TerritoryId": 813,
+          "InteractionType": "Interact",
+          "DisableNavmesh": true
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "Position": {
+            "X": -643.2488,
+            "Y": 4.133975,
+            "Z": 714.8211
+          },
+          "TerritoryId": 813,
+          "InteractionType": "WalkTo",
+          "Mount": true,
+          "Fly": true,
+          "DisableNavmesh": true
+        },
+        {
+          "DataId": 1030333,
+          "Position": {
+            "X": -612.23773,
+            "Y": 27.728632,
+            "Z": 817.65466
+          },
+          "TerritoryId": 813,
+          "InteractionType": "Interact",
+          "Fly": true
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "DataId": 1032531,
+          "Position": {
+            "X": -130.90723,
+            "Y": 9.572956,
+            "Z": 697.68823
+          },
+          "TerritoryId": 813,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1032554,
+          "Position": {
+            "X": 237.72021,
+            "Y": 5.6935816,
+            "Z": 552.1781
+          },
+          "TerritoryId": 813,
+          "InteractionType": "Interact",
+          "Fly": true
+        }
+      ]
+    }
+  ]
+}

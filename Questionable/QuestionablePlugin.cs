@@ -59,7 +59,6 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         _pluginInterface.UiBuilder.Draw += _windowSystem.Draw;
         _framework.Update += FrameworkUpdate;
         _commandManager.AddHandler("/qst", new CommandInfo(ProcessCommand));
-
     }
 
     private void FrameworkUpdate(IFramework framework)

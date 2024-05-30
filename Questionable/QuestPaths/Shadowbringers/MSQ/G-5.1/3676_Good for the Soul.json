@@ -1,0 +1,123 @@
+﻿{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1031732,
+          "Position": {
+            "X": 366.68945,
+            "Y": -27.966003,
+            "Z": 305.19568
+          },
+          "TerritoryId": 815,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1031732,
+          "Position": {
+            "X": 366.68945,
+            "Y": -27.966003,
+            "Z": 305.19568
+          },
+          "TerritoryId": 815,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1031792,
+          "Position": {
+            "X": -483.7873,
+            "Y": 45.58319,
+            "Z": -235.46198
+          },
+          "TerritoryId": 815,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Amh Araeng - Twine"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 2010811,
+          "Position": {
+            "X": -16.922302,
+            "Y": 42.282715,
+            "Z": -470.48145
+          },
+          "StopDistance": 1,
+          "TerritoryId": 815,
+          "InteractionType": "Interact",
+          "$.1": "QuestVariables if done first: 16 16 16 0 0 32"
+        },
+        {
+          "DataId": 2010810,
+          "Position": {
+            "X": 8.682312,
+            "Y": 42.130127,
+            "Z": -471.9463
+          },
+          "TerritoryId": 815,
+          "InteractionType": "Interact",
+          "$.1": "QuestVariables if done after [1]: 33 16 32 0 0 96"
+        },
+        {
+          "DataId": 2010809,
+          "Position": {
+            "X": 19.760376,
+            "Y": 42.130127,
+            "Z": -463.3402
+          },
+          "TerritoryId": 815,
+          "InteractionType": "Interact",
+          "Comment": "Combat not necessary to progress quest"
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 1031732,
+          "Position": {
+            "X": 366.68945,
+            "Y": -27.966003,
+            "Z": 305.19568
+          },
+          "TerritoryId": 815,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Amh Araeng - Inn at Journey's Head"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1031734,
+          "Position": {
+            "X": 364.58374,
+            "Y": -27.966003,
+            "Z": 304.12744
+          },
+          "StopDistance": 6,
+          "TerritoryId": 815,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

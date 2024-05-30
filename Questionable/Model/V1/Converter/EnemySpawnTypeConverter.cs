@@ -7,6 +7,7 @@ public sealed class EnemySpawnTypeConverter() : EnumConverter<EEnemySpawnType>(V
     private static readonly Dictionary<EEnemySpawnType, string> Values = new()
     {
         { EEnemySpawnType.AfterInteraction, "AfterInteraction" },
+        { EEnemySpawnType.AfterItemUse, "AfterItemUse" },
         { EEnemySpawnType.AutoOnEnterArea, "AutoOnEnterArea" },
     };
 }

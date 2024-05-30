@@ -516,8 +516,11 @@ internal sealed class QuestController
 
                 if (step.EnemySpawnType != null)
                 {
-                    if (step.DataId != null && step.EnemySpawnType == EEnemySpawnType.AfterInteraction)
+                    if (step is { DataId: not null, EnemySpawnType: EEnemySpawnType.AfterInteraction })
                         _gameFunctions.InteractWith(step.DataId.Value);
+
+                    if (step is { DataId: not null, ItemId: not null, EnemySpawnType: EEnemySpawnType.AfterItemUse })
+                        _gameFunctions.UseItem(step.DataId.Value, step.ItemId.Value);
 
                     // next sequence should trigger automatically
                     IncreaseStepCount();

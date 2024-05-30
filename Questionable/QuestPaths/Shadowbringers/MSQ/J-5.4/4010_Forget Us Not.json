@@ -6,12 +6,13 @@
       "Sequence": 0,
       "Steps": [
         {
-          "DataId": 1036452,
+          "DataId": 1035354,
           "Position": {
-            "X": -2.2736206,
+            "X": -1.0223389,
             "Y": 0,
-            "Z": -8.835022
+            "Z": -8.529846
           },
+          "StopDistance": 5,
           "TerritoryId": 351,
           "InteractionType": "Interact"
         }
@@ -21,18 +22,18 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 1038570,
+          "DataId": 1035364,
           "Position": {
-            "X": -374.6853,
-            "Y": 7.999938,
-            "Z": 45.822754
+            "X": 68.558716,
+            "Y": 40,
+            "Z": 69.90149
           },
-          "TerritoryId": 129,
+          "TerritoryId": 128,
           "InteractionType": "Interact",
           "AetheryteShortcut": "Limsa Lominsa",
           "AethernetShortcut": [
             "[Limsa Lominsa] Aetheryte Plaza",
-            "[Limsa Lominsa] Arcanist's Guild"
+            "[Limsa Lominsa] The Aftcastle"
           ]
         }
       ]
@@ -41,13 +42,14 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 1038578,
+          "DataId": 1035366,
           "Position": {
-            "X": 49.69861,
-            "Y": -16.246998,
-            "Z": 145.2201
+            "X": -110.09387,
+            "Y": 39.999992,
+            "Z": 116.990845
           },
-          "TerritoryId": 962,
+          "StopDistance": 5,
+          "TerritoryId": 128,
           "InteractionType": "Interact"
         }
       ]

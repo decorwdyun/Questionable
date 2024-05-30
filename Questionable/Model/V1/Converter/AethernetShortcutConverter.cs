@@ -10,14 +10,6 @@ public sealed class AethernetShortcutConverter : JsonConverter<AethernetShortcut
 {
     private static readonly Dictionary<EAetheryteLocation, string> EnumToString = new()
     {
-        { EAetheryteLocation.Limsa, "[Limsa Lominsa] Aetheryte Plaza" },
-        { EAetheryteLocation.LimsaArcanist, "[Limsa Lominsa] Arcanist's Guild" },
-        { EAetheryteLocation.LimsaFisher, "[Limsa Lominsa] Fishermen's Guild" },
-        { EAetheryteLocation.LimsaHawkersAlley, "[Limsa Lominsa] Hawker's Alley" },
-        { EAetheryteLocation.LimsaAftcastle, "[Limsa Lominsa] The Aftcastle" },
-        { EAetheryteLocation.LimsaCulinarian, "[Limsa Lominsa] Culinarian's Guild" },
-        { EAetheryteLocation.LimsaMarauder, "[Limsa Lominsa] Marauder's Guild" },
-        { EAetheryteLocation.LimsaAirship, "[Limsa Lominsa] Airship Landing" },
         { EAetheryteLocation.Gridania, "[Gridania] Aetheryte Plaza" },
         { EAetheryteLocation.GridaniaArcher, "[Gridania] Archer's Guild" },
         { EAetheryteLocation.GridaniaLeatherworker, "[Gridania] Leatherworker's Guild & Shaded Bower" },
@@ -25,7 +17,11 @@ public sealed class AethernetShortcutConverter : JsonConverter<AethernetShortcut
         { EAetheryteLocation.GridaniaConjurer, "[Gridania] Conjurer's Guild" },
         { EAetheryteLocation.GridaniaBotanist, "[Gridania] Botanist's Guild" },
         { EAetheryteLocation.GridaniaAmphitheatre, "[Gridania] Mih Khetto's Amphitheatre" },
+        { EAetheryteLocation.GridaniaBlueBadgerGate, "[Gridania] Blue Badger Gate (Central Shroud)" },
+        { EAetheryteLocation.GridaniaYellowSerpentGate, "[Gridania] Yellow Serpent Gate (North Shroud)" },
+        { EAetheryteLocation.GridaniaWhiteWolfGate, "[Gridania] White Wolf Gate (Central Shroud)" },
         { EAetheryteLocation.GridaniaAirship, "[Gridania] Airship Landing" },
+
         { EAetheryteLocation.Uldah, "[Ul'dah] Aetheryte Plaza" },
         { EAetheryteLocation.UldahAdventurers, "[Ul'dah] Adventurer's Guild" },
         { EAetheryteLocation.UldahThaumaturge, "[Ul'dah] Thaumaturge's Guild" },
@@ -36,7 +32,22 @@ public sealed class AethernetShortcutConverter : JsonConverter<AethernetShortcut
         { EAetheryteLocation.UldahSapphireAvenue, "[Ul'dah] Sapphire Avenue Exchange" },
         { EAetheryteLocation.UldahAlchemist, "[Ul'dah] Alchemists' Guild" },
         { EAetheryteLocation.UldahChamberOfRule, "[Ul'dah] The Chamber of Rule" },
+        { EAetheryteLocation.UldahGateOfTheSultana, "[Ul'dah] Gate of the Sultana (Western Thanalan)" },
+        { EAetheryteLocation.UldahGateOfNald, "[Ul'dah] Gate of Nald (Central Thanalan)" },
+        { EAetheryteLocation.UldahGateOfThal, "[Ul'dah] Gate of Thal (Central Thanalan)" },
         { EAetheryteLocation.UldahAirship, "[Ul'dah] Airship Landing" },
+
+        { EAetheryteLocation.Limsa, "[Limsa Lominsa] Aetheryte Plaza" },
+        { EAetheryteLocation.LimsaArcanist, "[Limsa Lominsa] Arcanist's Guild" },
+        { EAetheryteLocation.LimsaFisher, "[Limsa Lominsa] Fishermen's Guild" },
+        { EAetheryteLocation.LimsaHawkersAlley, "[Limsa Lominsa] Hawker's Alley" },
+        { EAetheryteLocation.LimsaAftcastle, "[Limsa Lominsa] The Aftcastle" },
+        { EAetheryteLocation.LimsaCulinarian, "[Limsa Lominsa] Culinarian's Guild" },
+        { EAetheryteLocation.LimsaMarauder, "[Limsa Lominsa] Marauder's Guild" },
+        { EAetheryteLocation.LimsaZephyrGate, "[Limsa Lominsa] Zephyr Gate (Middle La Noscea)" },
+        { EAetheryteLocation.LimsaTempestGate, "[Limsa Lominsa] Tempest Gate (Lower La Noscea)" },
+        { EAetheryteLocation.LimsaAirship, "[Limsa Lominsa] Airship Landing" },
+
         { EAetheryteLocation.Ishgard, "[Ishgard] Aetheryte Plaza" },
         { EAetheryteLocation.IshgardForgottenKnight, "[Ishgard] The Forgotten Knight" },
         { EAetheryteLocation.IshgardSkysteelManufactory, "[Ishgard] Skysteel Manufactory" },
@@ -46,11 +57,19 @@ public sealed class AethernetShortcutConverter : JsonConverter<AethernetShortcut
         { EAetheryteLocation.IshgardSaintReymanaudsCathedral, "[Ishgard] Saint Reymanaud's Cathedral" },
         { EAetheryteLocation.IshgardTribunal, "[Ishgard] The Tribunal" },
         { EAetheryteLocation.IshgardLastVigil, "[Ishgard] The Last Vigil" },
+        { EAetheryteLocation.IshgardGatesOfJudgement, "[Ishgard] The Gates of Judgement (Coerthas Central Highlands)" },
+
         { EAetheryteLocation.Idyllshire, "[Idyllshire] Aetheryte Plaza" },
         { EAetheryteLocation.IdyllshireWest, "[Idyllshire] West Idyllshire" },
+        { EAetheryteLocation.IdyllshirePrologueGate, "[Idyllshire] Prologue Gate" },
+        { EAetheryteLocation.IdyllshireEpilogueGate, "[Idyllshire] Epilogue Gate" },
+
         { EAetheryteLocation.RhalgrsReach, "[Rhalgr's Reach] Aetheryte Plaza" },
         { EAetheryteLocation.RhalgrsReachWest, "[Rhalgr's Reach] Western Rhalgr's Reach" },
         { EAetheryteLocation.RhalgrsReachNorthEast, "[Rhalgr's Reach] Northeastern Rhalgr's Reach" },
+        { EAetheryteLocation.RhalgrsReachFringesGate, "[Rhalgr's Reach] Fringes Gate" },
+        { EAetheryteLocation.RhalgrsReachPeaksGate, "[Rhalgr's Reach] Peaks Gate" },
+
         { EAetheryteLocation.Kugane, "[Kugane] Aetheryte Plaza" },
         { EAetheryteLocation.KuganeShiokazeHostelry, "[Kugane] Shiokaze Hostelry" },
         { EAetheryteLocation.KuganePier1, "[Kugane] Pier #1" },
@@ -60,7 +79,9 @@ public sealed class AethernetShortcutConverter : JsonConverter<AethernetShortcut
         { EAetheryteLocation.KuganeRubyBazaar, "[Kugane] The Ruby Bazaar" },
         { EAetheryteLocation.KuganeSekiseigumiBarracks, "[Kugane] Sekiseigumi Barracks" },
         { EAetheryteLocation.KuganeRakuzaDistrict, "[Kugane] Rakuza District" },
+        { EAetheryteLocation.KuganeRubyPrice, "[Kugane] The Ruby Price" },
         { EAetheryteLocation.KuganeAirship, "[Kugane] Airship Landing" },
+
         { EAetheryteLocation.Crystarium, "[Crystarium] Aetheryte Plaza" },
         { EAetheryteLocation.CrystariumMarkets, "[Crystarium] Musica Universalis Markets" },
         { EAetheryteLocation.CrystariumThemenosRookery, "[Crystarium] Themenos Rookery" },
@@ -69,11 +90,15 @@ public sealed class AethernetShortcutConverter : JsonConverter<AethernetShortcut
         { EAetheryteLocation.CrystariumAmaroLaunch, "[Crystarium] The Amaro Launch" },
         { EAetheryteLocation.CrystariumCrystallineMean, "[Crystarium] The Crystalline Mean" },
         { EAetheryteLocation.CrystariumCabinetOfCuriosity, "[Crystarium] The Cabinet of Curiosity" },
+        { EAetheryteLocation.CrystariumTessellation, "[Crystarium] Tessellation (Lakeland)" },
+
         { EAetheryteLocation.Eulmore, "[Eulmore] Aetheryte Plaza" },
         { EAetheryteLocation.EulmoreSoutheastDerelict, "[Eulmore] Southeast Derelicts" },
         { EAetheryteLocation.EulmoreNightsoilPots, "[Eulmore] Nightsoil Pots" },
         { EAetheryteLocation.EulmoreGloryGate, "[Eulmore] The Glory Gate" },
         { EAetheryteLocation.EulmoreMainstay, "[Eulmore] The Mainstay" },
+        { EAetheryteLocation.EulmorePathToGlory, "[Eulmore] The Path to Glory (Kholusia)" },
+
         { EAetheryteLocation.OldSharlayan, "[Old Sharlayan] Aetheryte Plaza" },
         { EAetheryteLocation.OldSharlayanStudium, "[Old Sharlayan] The Studium" },
         { EAetheryteLocation.OldSharlayanBaldesionAnnex, "[Old Sharlayan] The Baldesion Annex" },
@@ -81,6 +106,8 @@ public sealed class AethernetShortcutConverter : JsonConverter<AethernetShortcut
         { EAetheryteLocation.OldSharlayanLeveilleurEstate, "[Old Sharlayan] The Leveilleur Estate" },
         { EAetheryteLocation.OldSharlayanJourneysEnd, "[Old Sharlayan] Journey's End" },
         { EAetheryteLocation.OldSharlayanScholarsHarbor, "[Old Sharlayan] Scholar's Harbor" },
+        { EAetheryteLocation.OldSharlayanHallOfArtifice, "[Old Sharlayan] The Hall of Artifice (Labyrinthos)" },
+
         { EAetheryteLocation.RadzAtHan, "[Radz-at-Han] Aetheryte Plaza" },
         { EAetheryteLocation.RadzAtHanMeghaduta, "[Radz-at-Han] Meghaduta" },
         { EAetheryteLocation.RadzAtHanRuveydahFibers, "[Radz-at-Han] Ruveydah Fibers" },
@@ -89,7 +116,8 @@ public sealed class AethernetShortcutConverter : JsonConverter<AethernetShortcut
         { EAetheryteLocation.RadzAtHanHallOfTheRadiantHost, "[Radz-at-Han] Hall of the Radiant Host" },
         { EAetheryteLocation.RadzAtHanMehrydesMeyhane, "[Radz-at-Han] Mehryde's Meyhane" },
         { EAetheryteLocation.RadzAtHanKama, "[Radz-at-Han] Kama" },
-        { EAetheryteLocation.RadzAtHanHighCrucible, "[Radz-at-Han] The High Crucible of Al-Kimiya" }
+        { EAetheryteLocation.RadzAtHanHighCrucible, "[Radz-at-Han] The High Crucible of Al-Kimiya" },
+        { EAetheryteLocation.RadzAtHanGateOfFirstSight, "[Radz-at-Han] The Gate of First Sight (Thavnair)" },
     };
 
     private static readonly Dictionary<string, EAetheryteLocation> StringToEnum =
