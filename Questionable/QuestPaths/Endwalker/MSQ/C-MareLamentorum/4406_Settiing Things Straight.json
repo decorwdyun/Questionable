@@ -12,6 +12,7 @@
             "Y": 75.72459,
             "Z": -23.51416
           },
+          "StopDistance": 5,
           "TerritoryId": 959,
           "InteractionType": "Interact"
         }
@@ -48,7 +49,8 @@
             "Z": -71.81973
           },
           "TerritoryId": 959,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "Mount": true
         },
         {
           "DataId": 2012010,

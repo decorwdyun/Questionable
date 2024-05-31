@@ -28,7 +28,8 @@
             "Z": 416.3423
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
@@ -44,10 +45,12 @@
           },
           "TerritoryId": 958,
           "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
-            16028
+            16028, 16029
           ],
-          "Comment": "Missing second enemy data id"
+          "$.0": "[1]",
+          "$.1": "QuestVariables if done first: 16 5(enemy kill count) 0 0 0 64"
         },
         {
           "DataId": 2013307,
@@ -57,7 +60,21 @@
             "Z": 337.5448
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "$.0": "[2]",
+          "$.1": "QuestVariables if done after [1]: 33 5 0 0 0 96"
+        },
+        {
+          "DataId": 2013308,
+          "Position": {
+            "X": 75.33374,
+            "Y": -12.527649,
+            "Z": 339.40637
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact",
+          "$.0": "[3]",
+          "$.1": "QuestVariables if done after [1, 2]: 49 21 0 0 0 112"
         },
         {
           "DataId": 2013051,
@@ -68,19 +85,10 @@
           },
           "TerritoryId": 958,
           "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
             16030
           ]
-        },
-        {
-          "DataId": 2013308,
-          "Position": {
-            "X": 75.33374,
-            "Y": -12.527649,
-            "Z": 339.40637
-          },
-          "TerritoryId": 958,
-          "InteractionType": "Interact"
         }
       ]
     },
@@ -95,7 +103,8 @@
             "Z": 144.70117
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     }

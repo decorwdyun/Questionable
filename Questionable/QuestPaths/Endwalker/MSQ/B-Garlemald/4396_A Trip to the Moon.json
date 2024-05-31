@@ -45,6 +45,7 @@
           "StopDistance": 10,
           "TerritoryId": 959,
           "InteractionType": "AttuneAetheryte",
+          "Mount": true,
           "DisableNavmesh": true
         },
         {

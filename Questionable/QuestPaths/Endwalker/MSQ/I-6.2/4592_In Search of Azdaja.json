@@ -28,7 +28,8 @@
             "Z": 22.507019
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Thavnair - Great Work"
         }
       ]
     },
@@ -42,6 +43,7 @@
             "Y": 0.07863108,
             "Z": 605.9204
           },
+          "StopDistance": 5,
           "TerritoryId": 957,
           "InteractionType": "Interact"
         }
@@ -88,6 +90,7 @@
             "Y": 376.4496,
             "Z": -158.31238
           },
+          "StopDistance": 7,
           "TerritoryId": 1089,
           "InteractionType": "Interact"
         }

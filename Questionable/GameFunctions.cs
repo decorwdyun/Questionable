@@ -46,14 +46,16 @@ internal sealed unsafe class GameFunctions
     private readonly IObjectTable _objectTable;
     private readonly ITargetManager _targetManager;
     private readonly ICondition _condition;
+    private readonly IClientState _clientState;
     private readonly IPluginLog _pluginLog;
 
     public GameFunctions(IDataManager dataManager, IObjectTable objectTable, ISigScanner sigScanner,
-        ITargetManager targetManager, ICondition condition, IPluginLog pluginLog)
+        ITargetManager targetManager, ICondition condition, IClientState clientState, IPluginLog pluginLog)
     {
         _objectTable = objectTable;
         _targetManager = targetManager;
         _condition = condition;
+        _clientState = clientState;
         _pluginLog = pluginLog;
         _processChatBox =
             Marshal.GetDelegateForFunctionPointer<ProcessChatBoxDelegate>(sigScanner.ScanText(Signatures.SendChat));
@@ -74,7 +76,8 @@ internal sealed unsafe class GameFunctions
             .AsReadOnly();
     }
 
-    public QuestController QuestController { private get; set; }
+    // FIXME
+    public QuestController QuestController { private get; set; } = null!;
 
     public (ushort CurrentQuest, byte Sequence) GetCurrentQuest()
     {
@@ -323,6 +326,7 @@ internal sealed unsafe class GameFunctions
             }
         }
 
+        _pluginLog.Warning($"Could not find GameObject with dataId {dataId}");
         return null;
     }
 
@@ -331,7 +335,7 @@ internal sealed unsafe class GameFunctions
         GameObject? gameObject = FindObjectByDataId(dataId);
         if (gameObject != null)
         {
-            _targetManager.Target = null;
+            _pluginLog.Information($"Setting target with {dataId} to {gameObject.ObjectId}");
             _targetManager.Target = gameObject;
 
             TargetSystem.Instance()->InteractWithObject(
@@ -387,6 +391,9 @@ internal sealed unsafe class GameFunctions
 
     public bool HasStatusPreventingSprintOrMount()
     {
+        if (_condition[ConditionFlag.Swimming] && !IsFlyingUnlocked(_clientState.TerritoryType))
+            return true;
+
         var gameObject = GameObjectManager.GetGameObjectByIndex(0);
         if (gameObject != null && gameObject->ObjectKind == 1)
         {

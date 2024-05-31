@@ -101,6 +101,7 @@
           },
           "TerritoryId": 958,
           "InteractionType": "WalkTo",
+          "Mount": true,
           "DisableNavmesh": true
         },
         {
@@ -213,7 +214,9 @@
           "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
             14078
-          ]
+          ],
+          "$.0": "[1]",
+          "$.1": "QuestVariables if done first: (before) 0 0 2 0 0 0 (after) 16 16 2 0 0 64"
         },
         {
           "DataId": 2012109,
@@ -230,7 +233,9 @@
           ],
           "Comment": "TODO Needs item use?",
           "ItemId": 2003231,
-          "ItemUseHealthMaxPercent": 10
+          "ItemUseHealthMaxPercent": 10,
+          "$.0": "[2]",
+          "$.1": "QuestVariables if done after [1]: 32 17 1 0 0 96"
         },
         {
           "DataId": 2012108,
@@ -241,7 +246,9 @@
           },
           "TerritoryId": 958,
           "InteractionType": "Interact",
-          "Comment": "TODO Maybe move the train station aether current interaction before this"
+          "Comment": "TODO Maybe move the train station aether current interaction before this",
+          "$.0": "[3]",
+          "$.1": "QuestVariables if done after [1, 2]: 49 17 1 0 0 224"
         },
         {
           "DataId": 2012110,
@@ -258,7 +265,8 @@
           ],
           "Comment": "TODO Needs item use?",
           "ItemId": 2003231,
-          "ItemUseHealthMaxPercent": 10
+          "ItemUseHealthMaxPercent": 10,
+          "$.0": "[4]"
         }
       ]
     },

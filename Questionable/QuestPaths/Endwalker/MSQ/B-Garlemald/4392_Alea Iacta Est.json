@@ -30,7 +30,8 @@
           },
           "TerritoryId": 958,
           "InteractionType": "Interact",
-          "Comment": "Marcellinus"
+          "Comment": "Marcellinus",
+          "$.1": "QuestVariables if done first: 16 16 0 0 0 128"
         },
         {
           "DataId": 1038791,

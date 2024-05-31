@@ -1,0 +1,114 @@
+﻿{
+  "Version": 1,
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1040633,
+          "Position": {
+            "X": 496.94043,
+            "Y": 10.887661,
+            "Z": -418.57025
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1040634,
+          "Position": {
+            "X": 190.26465,
+            "Y": 10.5,
+            "Z": -630.2129
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 2012377,
+          "Position": {
+            "X": 189.10498,
+            "Y": 10.482849,
+            "Z": -668.9708
+          },
+          "TerritoryId": 958,
+          "InteractionType": "ManualAction",
+          "Comment": "Follow Azure-haired Boy"
+        },
+        {
+          "DataId": 1040636,
+          "Position": {
+            "X": 21.744019,
+            "Y": 10.5,
+            "Z": -589.3187
+          },
+          "StopDistance": 1,
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "Position": {
+            "X": -18.56067,
+            "Y": 10.5,
+            "Z": -530.3922
+          },
+          "StopDistance": 1,
+          "TerritoryId": 958,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AutoOnEnterArea",
+          "KillEnemyDataIds": [
+            14101
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 1040637,
+          "Position": {
+            "X": -16.525574,
+            "Y": 10.5,
+            "Z": -532.15845
+          },
+          "StopDistance": 7,
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1040633,
+          "Position": {
+            "X": 496.94043,
+            "Y": 10.887661,
+            "Z": -418.57025
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Garlemald - Tertium"
+        }
+      ]
+    }
+  ]
+}

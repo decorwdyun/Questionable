@@ -12,6 +12,7 @@
             "Y": -350,
             "Z": -83.14642
           },
+          "StopDistance": 5,
           "TerritoryId": 1056,
           "InteractionType": "Interact"
         }
@@ -43,7 +44,8 @@
             "Z": 108.11011
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Thavnair - Great Work"
         }
       ]
     },
@@ -74,6 +76,7 @@
           },
           "TerritoryId": 963,
           "InteractionType": "Interact",
+          "AetheryteShortcut": "Radz-at-Han",
           "AethernetShortcut": [
             "[Radz-at-Han] Aetheryte Plaza",
             "[Radz-at-Han] Meghaduta"

@@ -44,6 +44,7 @@
             "Y": 22.554066,
             "Z": 430.01453
           },
+          "StopDistance": 5,
           "TerritoryId": 958,
           "InteractionType": "Interact"
         }
@@ -59,7 +60,7 @@
             "Y": 22.071072,
             "Z": 434.01233
           },
-          "StopDistance": 6,
+          "StopDistance": 7,
           "TerritoryId": 958,
           "InteractionType": "Interact"
         }
@@ -87,9 +88,9 @@
         {
           "DataId": 1039880,
           "Position": {
-            "X": 62.068886,
-            "Y": -0.13689682,
-            "Z": 150.48564
+            "X": 66.50907,
+            "Y": 0.26087344,
+            "Z": 149.46323
           },
           "StopDistance": 1,
           "TerritoryId": 958,

@@ -103,4 +103,6 @@ public sealed class AetheryteConverter() : EnumConverter<EAetheryteLocation>(Val
         { EAetheryteLocation.UltimaThuleAbodeOfTheEa, "Ultima Thule - Abode of the Ea" },
         { EAetheryteLocation.UltimaThuleBaseOmicron, "Ultima Thule - Base Omicron" }
     };
+
+    public static bool IsLargeAetheryte(EAetheryteLocation aetheryte) => Values.ContainsKey(aetheryte);
 }

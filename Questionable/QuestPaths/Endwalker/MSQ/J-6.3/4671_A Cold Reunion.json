@@ -27,6 +27,7 @@
             "Y": -36.65,
             "Z": -185.87018
           },
+          "StopDistance": 6,
           "TerritoryId": 958,
           "InteractionType": "Interact"
         }
@@ -43,7 +44,8 @@
             "Z": 485.37415
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Garlemald - Camp Broken Glass"
         }
       ]
     },
@@ -58,7 +60,8 @@
             "Z": 427.87805
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
@@ -72,6 +75,7 @@
             "Y": -20.207552,
             "Z": 509.88013
           },
+          "StopDistance": 5,
           "TerritoryId": 958,
           "InteractionType": "Interact"
         }
@@ -88,7 +92,8 @@
             "Z": 642.8473
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
@@ -103,7 +108,8 @@
             "Z": 484.0619
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Garlemald - Camp Broken Glass"
         }
       ]
     }

@@ -30,7 +30,11 @@
           },
           "TerritoryId": 813,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "Lakeland - Fort Jobb",
+          "AetheryteShortcut": "Crystarium",
+          "AethernetShortcut": [
+            "[Crystarium] Aetheryte Plaza",
+            "[Crystarium] Tessellation (Lakeland)"
+          ],
           "Fly": true
         }
       ]

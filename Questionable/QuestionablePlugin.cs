@@ -44,7 +44,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         _framework = framework;
         _gameGui = gameGui;
         _commandManager = commandManager;
-        _gameFunctions = new GameFunctions(dataManager, objectTable, sigScanner, targetManager, condition, pluginLog);
+        _gameFunctions = new GameFunctions(dataManager, objectTable, sigScanner, targetManager, condition, clientState,
+            pluginLog);
 
         AetheryteData aetheryteData = new AetheryteData(dataManager);
         NavmeshIpc navmeshIpc = new NavmeshIpc(pluginInterface);

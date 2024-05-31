@@ -13,6 +13,7 @@ using FFXIVClientStructs.FFXIV.Client.Game;
 using Questionable.Data;
 using Questionable.External;
 using Questionable.Model.V1;
+using Questionable.Model.V1.Converter;
 
 namespace Questionable.Controller;
 
@@ -346,8 +347,8 @@ internal sealed class QuestController
                         };
                     }
                     else
-                        _movementController.NavigateTo(EMovementType.Quest, null, _aetheryteData.Locations[from], false,
-                            6.9f);
+                        _movementController.NavigateTo(EMovementType.Quest, (uint)from, _aetheryteData.Locations[from], false,
+                            AetheryteConverter.IsLargeAetheryte(from) ? 10.9f : 6.9f);
 
                     return;
                 }
@@ -409,8 +410,14 @@ internal sealed class QuestController
             }
             else
             {
+                // navmesh won't move close enough
                 if (actualDistance > distance)
                 {
+                    // picking up Mehvan's baby, not sure if navmesh ignores y distance but it thinks you're close
+                    // enough
+                    if (step.DataId == 2012208)
+                        distance /= 2;
+
                     _movementController.NavigateTo(EMovementType.Quest, step.DataId, [step.Position.Value],
                         step.Fly && _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType), distance);
                     return;
@@ -445,6 +452,8 @@ internal sealed class QuestController
                     _gameFunctions.InteractWith(step.DataId.Value);
                     IncreaseStepCount();
                 }
+                else
+                    _pluginLog.Warning("Not interacting on current step, DataId is null");
 
                 break;
 

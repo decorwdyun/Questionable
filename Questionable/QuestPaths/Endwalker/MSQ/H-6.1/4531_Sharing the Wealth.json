@@ -28,8 +28,7 @@
             "Z": -210.6151
           },
           "TerritoryId": 963,
-          "InteractionType": "AttuneAethernetShard",
-          "Comment": "This is pretty late here, maybe move it to some other quest"
+          "InteractionType": "AttuneAethernetShard"
         },
         {
           "DataId": 1039589,
@@ -39,7 +38,9 @@
             "Z": 605.9204
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "AetheryteShortcut": "Thavnair - Yedlihmad",
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
@@ -47,12 +48,23 @@
       "Sequence": 2,
       "Steps": [
         {
+          "Position": {
+            "X": 169.31848,
+            "Y": 5.3451567,
+            "Z": 633.7924
+          },
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo",
+          "Fly": true
+        },
+        {
           "DataId": 1037631,
           "Position": {
             "X": 166.64368,
             "Y": 5.34517,
             "Z": 635.9807
           },
+          "StopDistance": 5,
           "TerritoryId": 957,
           "InteractionType": "Interact"
         },
@@ -79,7 +91,12 @@
             "Z": -68.61987
           },
           "TerritoryId": 963,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Radz-at-Han",
+          "AethernetShortcut": [
+            "[Radz-at-Han] Aetheryte Plaza",
+            "[Radz-at-Han] Meghaduta"
+          ]
         }
       ]
     }

@@ -12,6 +12,7 @@
             "Y": -0.4,
             "Z": -70.72565
           },
+          "StopDistance": 7,
           "TerritoryId": 1077,
           "InteractionType": "Interact"
         }
@@ -42,6 +43,7 @@
             "Y": -19,
             "Z": 176.985
           },
+          "StopDistance": 5,
           "TerritoryId": 1092,
           "InteractionType": "ManualAction",
           "Comment": "Duty - Storm's Crown"
@@ -58,6 +60,7 @@
             "Y": -0.21963555,
             "Z": 52.506226
           },
+          "StopDistance": 5,
           "TerritoryId": 1077,
           "InteractionType": "Interact"
         }

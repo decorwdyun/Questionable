@@ -47,7 +47,8 @@
             "Z": -15.243774
           },
           "TerritoryId": 962,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Old Sharlayan"
         }
       ]
     },
@@ -95,10 +96,11 @@
         {
           "DataId": 1039614,
           "Position": {
-            "X": -95.859055,
-            "Y": 3.933468,
-            "Z": 2.172171
+            "X": -94.118614,
+            "Y": 3.8989394,
+            "Z": 1.0696089
           },
+          "StopDistance": 0.25,
           "TerritoryId": 962,
           "InteractionType": "Interact",
           "AethernetShortcut": [

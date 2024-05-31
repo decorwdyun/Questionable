@@ -29,7 +29,9 @@
           },
           "TerritoryId": 958,
           "InteractionType": "Interact",
-          "Comment": "Caeso"
+          "Comment": "Caeso",
+          "$.0": "[1]",
+          "$.1": "QuestVariables if done first: 17 0 0 0 0 64"
         },
         {
           "DataId": 1037718,
@@ -40,7 +42,9 @@
           },
           "TerritoryId": 958,
           "InteractionType": "Interact",
-          "Comment": "Octavia"
+          "Comment": "Octavia",
+          "$.0": "[2]",
+          "$.2": "QuestVariables if done after [1]: 33 1 0 0 0 80"
         },
         {
           "Position": {
@@ -60,7 +64,9 @@
           },
           "TerritoryId": 958,
           "InteractionType": "Interact",
-          "Comment": "Sabinianus"
+          "Comment": "Sabinianus",
+          "$.0": "[3]",
+          "$.2": "QuestVariables if done after [1, 2]: 49 1 16 0 0 206"
         },
         {
           "DataId": 1037717,
@@ -71,7 +77,9 @@
           },
           "TerritoryId": 958,
           "InteractionType": "Interact",
-          "Comment": "Marcellinus"
+          "Comment": "Marcellinus",
+          "$.0": "[4]",
+          "$.2": "QuestVariables if done after [1, 2, 3]: 65 17 16 0 0 240"
         },
         {
           "DataId": 2012062,
@@ -82,7 +90,8 @@
           },
           "TerritoryId": 958,
           "InteractionType": "Interact",
-          "Comment": "Magitek Radio"
+          "Comment": "Magitek Radio",
+          "$.0": "[5]"
         }
       ]
     },

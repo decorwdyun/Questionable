@@ -12,6 +12,7 @@
             "Y": 376.38647,
             "Z": -158.0072
           },
+          "StopDistance": 7,
           "TerritoryId": 1089,
           "InteractionType": "Interact"
         }
@@ -28,7 +29,9 @@
             "Z": -109.33093
           },
           "TerritoryId": 1089,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "$.0": "[1]",
+          "$.1": "QuestVariables if done first: 1 0 0 0 0 128"
         },
         {
           "DataId": 1043790,
@@ -38,7 +41,9 @@
             "Z": -106.70636
           },
           "TerritoryId": 1089,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "$.0": "[2]",
+          "$.1": "QuestVariables if done after [1]: 2 0 0 0 0 192"
         },
         {
           "DataId": 1043791,
@@ -48,7 +53,9 @@
             "Z": -61.539734
           },
           "TerritoryId": 1089,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "$.0": "[3]",
+          "$.1": "QuestVariables if done after [1, 2]: 3 0 0 0 0 224"
         },
         {
           "DataId": 1043792,

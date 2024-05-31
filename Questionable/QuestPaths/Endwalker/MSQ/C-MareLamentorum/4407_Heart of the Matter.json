@@ -12,6 +12,7 @@
             "Y": -168.00002,
             "Z": -625.11633
           },
+          "StopDistance": 5,
           "TerritoryId": 959,
           "InteractionType": "Interact"
         }
@@ -29,6 +30,7 @@
           },
           "TerritoryId": 959,
           "InteractionType": "Interact",
+          "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow",
           "Comment": "Teleporter"
         },
         {

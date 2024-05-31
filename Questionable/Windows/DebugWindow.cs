@@ -137,7 +137,9 @@ internal sealed class DebugWindow : Window
         {
             ImGui.Separator();
             ImGui.Text(string.Create(CultureInfo.InvariantCulture,
-                $"Target: {_targetManager.Target.Name} ({(_targetManager.Target.Position - _clientState.LocalPlayer.Position).Length():F2})"));
+                $"Target: {_targetManager.Target.Name}  ({_targetManager.Target.ObjectKind}; {_targetManager.Target.DataId})"));
+            ImGui.Text(string.Create(CultureInfo.InvariantCulture,
+                $"Distance: {(_targetManager.Target.Position - _clientState.LocalPlayer.Position).Length():F2}, Y: {_targetManager.Target.Position.Y - _clientState.LocalPlayer.Position.Y:F2}"));
 
             ImGui.BeginDisabled(!_movementController.IsNavmeshReady);
             if (!_movementController.IsPathfinding)

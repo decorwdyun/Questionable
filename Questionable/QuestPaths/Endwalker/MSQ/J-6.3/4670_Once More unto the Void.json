@@ -12,6 +12,7 @@
             "Y": 55,
             "Z": -68.40625
           },
+          "StopDistance": 5,
           "TerritoryId": 963,
           "InteractionType": "Interact"
         }
@@ -50,6 +51,26 @@
           "InteractionType": "Interact",
           "AethernetShortcut": [
             "[Radz-at-Han] Kama",
+            "[Radz-at-Han] Meghaduta"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1044293,
+          "Position": {
+            "X": -346.12042,
+            "Y": 55,
+            "Z": -66.17847
+          },
+          "TerritoryId": 963,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Radz-at-Han",
+          "AethernetShortcut": [
+            "[Radz-at-Han] Aetheryte Plaza",
             "[Radz-at-Han] Meghaduta"
           ]
         }

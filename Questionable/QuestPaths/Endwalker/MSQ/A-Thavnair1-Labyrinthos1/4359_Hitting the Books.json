@@ -73,7 +73,9 @@
             "Z": 57.99951
           },
           "TerritoryId": 962,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "$.0": "[1]",
+          "$.2": "QuestVariables if done after [3]: 2 0 0 0 0 96"
         },
         {
           "DataId": 2011825,
@@ -83,7 +85,8 @@
             "Z": 100.1449
           },
           "TerritoryId": 962,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "$.0": "[2]"
         },
         {
           "DataId": 2011826,
@@ -93,7 +96,9 @@
             "Z": 43.289795
           },
           "TerritoryId": 962,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "$.0": "[3]",
+          "$.2": "QuestVariables if used first: 1 0 0 0 0 64"
         }
       ]
     },

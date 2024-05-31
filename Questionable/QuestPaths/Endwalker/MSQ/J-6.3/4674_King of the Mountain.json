@@ -27,6 +27,7 @@
             "Y": -36.65,
             "Z": -243.843
           },
+          "StopDistance": 5,
           "TerritoryId": 958,
           "InteractionType": "Interact"
         }
@@ -43,7 +44,8 @@
             "Z": 718.8982
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
@@ -58,6 +60,7 @@
             "Z": 717.7081
           },
           "TerritoryId": 958,
+          "StopDistance": 5,
           "InteractionType": "ManualAction",
           "Comment": "Duty - Lapis Manalis"
         }

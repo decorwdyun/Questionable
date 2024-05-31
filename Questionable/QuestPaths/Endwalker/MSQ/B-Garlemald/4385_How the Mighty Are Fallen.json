@@ -138,6 +138,7 @@
           },
           "TerritoryId": 958,
           "InteractionType": "WalkTo",
+          "Mount": true,
           "DisableNavmesh": true
         },
         {
@@ -175,7 +176,8 @@
           },
           "TerritoryId": 958,
           "InteractionType": "Interact",
-          "Mount": false
+          "Mount": false,
+          "Comment": "TODO Should cancel Navmesh on fade out"
         }
       ]
     },
@@ -189,6 +191,7 @@
             "Y": -13.278784,
             "Z": 648.249
           },
+          "StopDistance": 5,
           "TerritoryId": 958,
           "InteractionType": "Interact"
         }

@@ -76,6 +76,7 @@
             "Y": 19,
             "Z": 69.10803
           },
+          "StopDistance": 5,
           "TerritoryId": 962,
           "InteractionType": "Interact"
         }
@@ -92,13 +93,25 @@
             "Z": 29.55664
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Thavnair - Great Work"
         }
       ]
     },
     {
       "Sequence": 6,
       "Steps": [
+        {
+          "Position": {
+            "X": 242.9973,
+            "Y": 1.2090492,
+            "Z": 118.133255
+          },
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Thavnair - Palaka's Stand",
+          "Fly": true
+        },
         {
           "DataId": 2012847,
           "Position": {
@@ -122,7 +135,8 @@
             "Z": 26.779541
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Thavnair - Great Work"
         }
       ]
     }

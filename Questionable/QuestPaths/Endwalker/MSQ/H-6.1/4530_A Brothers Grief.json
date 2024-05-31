@@ -12,6 +12,7 @@
             "Y": -350,
             "Z": -73.68585
           },
+          "StopDistance": 5,
           "TerritoryId": 1056,
           "InteractionType": "Interact"
         }
@@ -43,7 +44,8 @@
             "Z": -148.57715
           },
           "TerritoryId": 963,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Radz-at-Han"
         }
       ]
     },

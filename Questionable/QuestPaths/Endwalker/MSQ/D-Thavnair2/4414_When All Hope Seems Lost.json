@@ -140,7 +140,8 @@
           "KillEnemyDataIds": [
             13987
           ],
-          "$": "QuestVariables after: 16 1 0 0 0 128"
+          "$.0": "[1]",
+          "$.1": "QuestVariables if done first: 16 1 0 0 0 128"
         },
         {
           "Position": {
@@ -154,7 +155,9 @@
           "KillEnemyDataIds": [
             13986
           ],
-          "$": "QuestVariables after: 33 1 0 0 0 192"
+          "$.0": "[2]",
+          "$.1": "QuestVariables if done after [1]: 33 1 0 0 0 192",
+          "$.2": "QuestVariables if done after [3]: 33 32 0 0 0 96"
         },
         {
           "Position": {
@@ -168,7 +171,9 @@
           "KillEnemyDataIds": [
             13985,
             13984
-          ]
+          ],
+          "$.0": "[3]",
+          "$.2": "QuestVariables if done first: 16 32 0 0 0 32"
         }
       ]
     },

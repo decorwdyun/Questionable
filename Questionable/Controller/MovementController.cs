@@ -6,10 +6,14 @@ using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using Dalamud.Game.ClientState.Conditions;
+using Dalamud.Game.ClientState.Objects.Enums;
+using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using Questionable.External;
+using Questionable.Model.V1;
+using Questionable.Model.V1.Converter;
 
 namespace Questionable.Controller;
 
@@ -99,13 +103,32 @@ internal sealed class MovementController : IDisposable
             Vector3 localPlayerPosition = _clientState.LocalPlayer?.Position ?? Vector3.Zero;
             if ((localPlayerPosition - Destination.Position).Length() < Destination.StopDistance)
             {
-                if (Destination.DataId != null)
+                if (Destination.DataId is 2012173 or 2012174 or 2012175 or 2012176)
+                {
+                    Stop();
+                }
+                else if (Destination.DataId != null)
                 {
                     GameObject? gameObject = _gameFunctions.FindObjectByDataId(Destination.DataId.Value);
-                    if (gameObject != null && gameObject is Character)
+                    if (gameObject is Character or EventObj)
                     {
                         if (Math.Abs(localPlayerPosition.Y - gameObject.Position.Y) < 1.95f)
                             Stop();
+                    }
+                    else if (gameObject != null && gameObject.ObjectKind == ObjectKind.Aetheryte)
+                    {
+                        if (AetheryteConverter.IsLargeAetheryte((EAetheryteLocation)Destination.DataId))
+                        {
+                            // TODO verify this
+                            if (Math.Abs(localPlayerPosition.Y - gameObject.Position.Y) < 2.95f)
+                                Stop();
+                        }
+                        else
+                        {
+                            // aethernet shard
+                            if (Math.Abs(localPlayerPosition.Y - gameObject.Position.Y) < 1.95f)
+                                Stop();
+                        }
                     }
                     else
                         Stop();
