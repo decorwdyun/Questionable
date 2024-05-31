@@ -31,8 +31,8 @@
             "Z": -9.079163
           },
           "TerritoryId": 960,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - The Dead Ends"
+          "InteractionType": "Duty",
+          "Comment": "The Dead Ends"
         }
       ]
     },
@@ -48,8 +48,8 @@
           },
           "StopDistance": 5,
           "TerritoryId": 1029,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - The Final Day"
+          "InteractionType": "Duty",
+          "Comment": "The Final Day"
         }
       ]
     },
@@ -64,8 +64,8 @@
             "Z": 89.98242
           },
           "TerritoryId": 1026,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - Zenos"
+          "InteractionType": "SinglePlayerDuty",
+          "Comment": "Zenos"
         }
       ]
     },

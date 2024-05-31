@@ -31,8 +31,8 @@
             "Z": 610.65076
           },
           "TerritoryId": 957,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - Alzadaal's Legacy"
+          "InteractionType": "Duty",
+          "Comment": "Alzadaal's Legacy"
         }
       ]
     },

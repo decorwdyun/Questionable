@@ -9,5 +9,6 @@ public sealed class EnemySpawnTypeConverter() : EnumConverter<EEnemySpawnType>(V
         { EEnemySpawnType.AfterInteraction, "AfterInteraction" },
         { EEnemySpawnType.AfterItemUse, "AfterItemUse" },
         { EEnemySpawnType.AutoOnEnterArea, "AutoOnEnterArea" },
+        { EEnemySpawnType.OverworldEnemies, "OverworldEnemies" },
     };
 }

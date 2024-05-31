@@ -47,7 +47,8 @@
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
-            16028, 16029
+            16028,
+            16029
           ],
           "$.0": "[1]",
           "$.1": "QuestVariables if done first: 16 5(enemy kill count) 0 0 0 64"

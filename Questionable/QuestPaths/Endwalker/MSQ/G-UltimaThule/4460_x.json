@@ -96,7 +96,7 @@
             "Z": 375.50916
           },
           "TerritoryId": 960,
-          "InteractionType": "ManualAction",
+          "InteractionType": "WaitForManualProgress",
           "Comment": "Duty - Find Errant Omicron"
         }
       ]

@@ -54,8 +54,8 @@
             "Z": -448.3325
           },
           "TerritoryId": 918,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - Fight NPCs, then Elidibus"
+          "InteractionType": "SinglePlayerDuty",
+          "Comment": "Fight NPCs, then Elidibus"
         }
       ]
     },

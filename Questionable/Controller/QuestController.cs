@@ -347,7 +347,8 @@ internal sealed class QuestController
                         };
                     }
                     else
-                        _movementController.NavigateTo(EMovementType.Quest, (uint)from, _aetheryteData.Locations[from], false,
+                        _movementController.NavigateTo(EMovementType.Quest, (uint)from, _aetheryteData.Locations[from],
+                            false,
                             AetheryteConverter.IsLargeAetheryte(from) ? 10.9f : 6.9f);
 
                     return;
@@ -574,6 +575,27 @@ internal sealed class QuestController
                 }
 
                 IncreaseStepCount();
+                break;
+
+            case EInteractionType.WaitForManualProgress:
+                // something needs to be done manually, the next sequence will be picked up automatically
+                break;
+
+            case EInteractionType.Duty:
+                // TODO open duty finder
+                break;
+
+            case EInteractionType.SinglePlayerDuty:
+                // TODO: Disable YesAlready, interact with NPC to open dialog, restore YesAlready
+                // TODO: also implement check for territory blacklist
+                break;
+
+            case EInteractionType.Jump:
+                // TODO implement somehow??
+                break;
+
+            case EInteractionType.Instruction:
+                // Need to manually forward
                 break;
 
             default:

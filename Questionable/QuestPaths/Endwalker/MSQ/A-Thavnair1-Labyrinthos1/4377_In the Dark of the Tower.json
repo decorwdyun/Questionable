@@ -60,8 +60,8 @@
             "Z": -663.81323
           },
           "TerritoryId": 957,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - The Tower of Zot"
+          "InteractionType": "Duty",
+          "Comment": "The Tower of Zot"
         }
       ]
     },

@@ -29,8 +29,8 @@
           },
           "StopDistance": 5,
           "TerritoryId": 931,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty -  The Seat of Sacrifice"
+          "InteractionType": "Duty",
+          "Comment": "The Seat of Sacrifice"
         }
       ]
     },

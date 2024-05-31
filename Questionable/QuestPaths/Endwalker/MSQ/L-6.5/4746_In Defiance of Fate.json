@@ -43,8 +43,8 @@
             "Z": 298.20703
           },
           "TerritoryId": 817,
-          "InteractionType": "ManualAction",
-          "Comment": "/say allin tuta"
+          "InteractionType": "Say",
+          "ChatMessage": "allin tuta"
         }
       ]
     },

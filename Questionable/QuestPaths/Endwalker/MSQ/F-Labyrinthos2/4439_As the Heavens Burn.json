@@ -28,9 +28,9 @@
             "Z": 501.85388
           },
           "TerritoryId": 958,
-          "InteractionType": "ManualAction",
+          "InteractionType": "SinglePlayerDuty",
           "AetheryteShortcut": "Garlemald - Camp Broken Glass",
-          "Comment": "Duty - As the Heavens Burn"
+          "Comment": "As the Heavens Burn"
         }
       ]
     },

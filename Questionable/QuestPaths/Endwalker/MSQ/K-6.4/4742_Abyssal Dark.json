@@ -43,8 +43,8 @@
             "Z": 101.823364
           },
           "TerritoryId": 1159,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - The Voidcast Dais"
+          "InteractionType": "Duty",
+          "Comment": "The Voidcast Dais"
         }
       ]
     },

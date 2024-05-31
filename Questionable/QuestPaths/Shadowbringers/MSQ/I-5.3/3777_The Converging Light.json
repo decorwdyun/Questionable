@@ -59,8 +59,8 @@
             "Z": 1.940211
           },
           "TerritoryId": 820,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - The Heroes' Gauntlet"
+          "InteractionType": "Duty",
+          "Comment": "The Heroes' Gauntlet"
         }
       ]
     },

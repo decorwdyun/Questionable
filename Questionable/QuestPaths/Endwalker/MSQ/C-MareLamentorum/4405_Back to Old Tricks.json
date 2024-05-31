@@ -45,8 +45,8 @@
             "Z": -269.24548
           },
           "TerritoryId": 959,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - Follow Urianger"
+          "InteractionType": "SinglePlayerDuty",
+          "Comment": "Follow Urianger"
         }
       ]
     },
@@ -61,8 +61,8 @@
             "Z": -269.24548
           },
           "TerritoryId": 959,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - Follow Urianger (but you failed the first time)"
+          "InteractionType": "SinglePlayerDuty",
+          "Comment": "Follow Urianger (but you failed the first time)"
         }
       ]
     },

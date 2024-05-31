@@ -99,7 +99,7 @@
             "Z": 681.35846
           },
           "TerritoryId": 956,
-          "InteractionType": "ManualAction",
+          "InteractionType": "ShouldBeAJump",
           "DisableNavmesh": true,
           "Comment": "Navmesh can't jump"
         },

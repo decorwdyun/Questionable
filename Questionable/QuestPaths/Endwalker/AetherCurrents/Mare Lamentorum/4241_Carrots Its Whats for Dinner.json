@@ -27,7 +27,7 @@
             "Z": -646.97064
           },
           "TerritoryId": 959,
-          "InteractionType": "ManualAction",
+          "InteractionType": "ShouldBeAJump",
           "Comment": "Navmesh can't jump"
         },
         {
@@ -57,7 +57,7 @@
             "Z": -420.43494
           },
           "TerritoryId": 959,
-          "InteractionType": "ManualAction",
+          "InteractionType": "ShouldBeAJump",
           "Comment": "Navmesh can't jump"
         },
         {

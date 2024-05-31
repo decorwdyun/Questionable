@@ -61,8 +61,8 @@
           },
           "TerritoryId": 958,
           "StopDistance": 5,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - Lapis Manalis"
+          "InteractionType": "Duty",
+          "Comment": "Lapis Manalis"
         }
       ]
     },

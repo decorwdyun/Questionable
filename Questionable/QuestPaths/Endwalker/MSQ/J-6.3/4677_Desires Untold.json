@@ -58,8 +58,8 @@
             "Z": 45.63965
           },
           "TerritoryId": 1125,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - Mount Ordeals"
+          "InteractionType": "Duty",
+          "Comment": "Mount Ordeals"
         }
       ]
     },

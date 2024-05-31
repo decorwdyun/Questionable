@@ -69,8 +69,8 @@
             "Z": -9.10968
           },
           "TerritoryId": 351,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - Estinien vs. Arch Ultima"
+          "InteractionType": "SinglePlayerDuty",
+          "Comment": "Estinien vs. Arch Ultima"
         }
       ]
     },

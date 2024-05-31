@@ -108,7 +108,7 @@
             "Z": -519.18823
           },
           "TerritoryId": 956,
-          "InteractionType": "ManualAction",
+          "InteractionType": "SinglePlayerDuty",
           "Comment": "Duty - Shoot Large Green Bird"
         }
       ]

@@ -37,7 +37,7 @@
             "Z": 543.8281
           },
           "TerritoryId": 961,
-          "InteractionType": "ManualAction",
+          "InteractionType": "ShouldBeAJump",
           "Comment": "Jump on Ledge"
         },
         {

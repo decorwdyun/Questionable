@@ -48,8 +48,8 @@
           },
           "StopDistance": 4,
           "TerritoryId": 961,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - Ktisis Hyperborea"
+          "InteractionType": "Duty",
+          "Comment": "Ktisis Hyperborea"
         }
       ]
     },

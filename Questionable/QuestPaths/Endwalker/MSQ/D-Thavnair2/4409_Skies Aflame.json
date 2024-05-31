@@ -70,8 +70,8 @@
             "Z": 761.50134
           },
           "TerritoryId": 957,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - Vanaspati"
+          "InteractionType": "Duty",
+          "Comment": "Vanaspati"
         }
       ]
     },

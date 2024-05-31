@@ -28,8 +28,8 @@
             "Z": 439.96326
           },
           "TerritoryId": 1162,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - The Lunar Subterrane"
+          "InteractionType": "Duty",
+          "Comment": "The Lunar Subterrane"
         }
       ]
     },
@@ -59,8 +59,8 @@
             "Z": 106.3549
           },
           "TerritoryId": 1181,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - The Abyssal Fracture"
+          "InteractionType": "Duty",
+          "Comment": "The Abyssal Fracture"
         }
       ]
     },

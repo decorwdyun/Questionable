@@ -142,8 +142,8 @@
             "Z": 390.46313
           },
           "TerritoryId": 958,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - Follow Girl in Green"
+          "InteractionType": "SinglePlayerDuty",
+          "Comment": "Follow Girl in Green"
         }
       ]
     },

@@ -54,8 +54,8 @@
             "Z": 647.6997
           },
           "TerritoryId": 813,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - Grand Cosmos"
+          "InteractionType": "Duty",
+          "Comment": "Grand Cosmos"
         }
       ]
     },

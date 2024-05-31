@@ -45,7 +45,7 @@
           },
           "StopDistance": 5,
           "TerritoryId": 956,
-          "InteractionType": "ManualAction",
+          "InteractionType": "WaitForManualProgress",
           "Comment": "Find Points of Interest"
         }
       ]

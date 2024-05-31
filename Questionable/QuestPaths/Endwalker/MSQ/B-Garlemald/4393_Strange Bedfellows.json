@@ -48,7 +48,7 @@
             "Z": -402.64487
           },
           "TerritoryId": 958,
-          "InteractionType": "ManualAction",
+          "InteractionType": "Instruction",
           "Comment": "Jump to Aether Current"
         },
         {
@@ -69,7 +69,7 @@
             "Z": -398.82806
           },
           "TerritoryId": 958,
-          "InteractionType": "ManualAction",
+          "InteractionType": "Instruction",
           "Comment": "Leave the Aether Current location"
         },
         {
@@ -79,7 +79,7 @@
             "Z": -337.21478
           },
           "TerritoryId": 958,
-          "InteractionType": "ManualAction",
+          "InteractionType": "Instruction",
           "Comment": "Jump onto the Highway"
         },
         {
@@ -226,7 +226,7 @@
             "Z": 94.77368
           },
           "TerritoryId": 958,
-          "InteractionType": "ManualAction",
+          "InteractionType": "Instruction",
           "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
             14079
@@ -258,7 +258,7 @@
             "Z": 396.96338
           },
           "TerritoryId": 958,
-          "InteractionType": "ManualAction",
+          "InteractionType": "Instruction",
           "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
             14080

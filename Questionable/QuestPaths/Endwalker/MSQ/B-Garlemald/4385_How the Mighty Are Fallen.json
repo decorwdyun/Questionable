@@ -115,7 +115,7 @@
             "Z": 251.71986
           },
           "TerritoryId": 958,
-          "InteractionType": "ManualAction",
+          "InteractionType": "ShouldBeAJump",
           "DisableNavmesh": true,
           "Comment": "Jump on Pipeline and move near the Aether Current"
         },

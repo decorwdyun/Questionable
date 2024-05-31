@@ -89,7 +89,7 @@
             "Z": 419.7605
           },
           "TerritoryId": 959,
-          "InteractionType": "ManualAction",
+          "InteractionType": "Instruction",
           "Comment": "Follow Argos"
         },
         {
@@ -148,7 +148,7 @@
             "Z": 523.5217
           },
           "TerritoryId": 959,
-          "InteractionType": "ManualAction",
+          "InteractionType": "Instruction",
           "Comment": "Follow Argos"
         },
         {

@@ -136,7 +136,7 @@
             "Z": -558.8681
           },
           "TerritoryId": 959,
-          "InteractionType": "ManualAction",
+          "InteractionType": "ShouldBeAJump",
           "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow",
           "Comment": "Navmesh can't jump"
         },
@@ -184,8 +184,8 @@
             "Z": -654.13904
           },
           "TerritoryId": 959,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - Find Runninway"
+          "InteractionType": "SinglePlayerDuty",
+          "Comment": "Find \"Runninway?\""
         }
       ]
     },

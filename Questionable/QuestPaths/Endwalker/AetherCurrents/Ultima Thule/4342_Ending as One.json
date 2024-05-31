@@ -27,8 +27,9 @@
             "Z": -523.8633
           },
           "TerritoryId": 960,
-          "InteractionType": "ManualAction",
-          "Comment": "Kill 2 Drifting Ea",
+          "InteractionType": "Combat",
+          "EnemySpawnType": "OverworldEnemies",
+          "Comment": "Kill 2 Drifting Ea, TODO: add data ids",
           "$": "QuestVariables: 0 0-16-32 0 0 0 0"
         }
       ]

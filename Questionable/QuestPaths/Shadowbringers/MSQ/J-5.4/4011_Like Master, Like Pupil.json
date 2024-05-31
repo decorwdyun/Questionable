@@ -87,8 +87,8 @@
             "Z": -218.00574
           },
           "TerritoryId": 399,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - Matoya's Relict"
+          "InteractionType": "Duty",
+          "Comment": "Matoya's Relict"
         }
       ]
     },

@@ -44,7 +44,7 @@
             "Z": 398.42822
           },
           "TerritoryId": 960,
-          "InteractionType": "ManualAction",
+          "InteractionType": "WaitForManualProgress",
           "Comment": "Identify Anomaly (Elbow/Knee)"
         }
       ]

@@ -46,8 +46,8 @@
             "Z": 103.227295
           },
           "TerritoryId": 1028,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - Zodiark"
+          "InteractionType": "Duty",
+          "Comment": "The Dark Inside"
         }
       ]
     },

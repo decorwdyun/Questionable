@@ -63,8 +63,8 @@
             "Z": -634.54645
           },
           "TerritoryId": 180,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - Great Ship Vylbrand"
+          "InteractionType": "SinglePlayerDuty",
+          "Comment": "Great Ship Vylbrand"
         }
       ]
     },

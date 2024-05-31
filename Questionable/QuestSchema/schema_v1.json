@@ -102,7 +102,11 @@
                     "Say",
                     "Emote",
                     "WaitForNpcAtPosition",
-                    "ManualAction"
+                    "WaitForManualProgress",
+                    "Duty",
+                    "SinglePlayerDuty",
+                    "ShouldBeAJump",
+                    "Instruction"
                   ]
                 },
                 "Disabled": {
@@ -337,7 +341,8 @@
                   "enum": [
                     "AutoOnEnterArea",
                     "AfterInteraction",
-                    "AfterItemUse"
+                    "AfterItemUse",
+                    "OverworldEnemies"
                   ]
                 },
                 "KillEnemyDataIds": {

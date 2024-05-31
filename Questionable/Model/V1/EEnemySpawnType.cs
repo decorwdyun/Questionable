@@ -10,4 +10,5 @@ public enum EEnemySpawnType
     AfterInteraction,
     AfterItemUse,
     AutoOnEnterArea,
+    OverworldEnemies,
 }

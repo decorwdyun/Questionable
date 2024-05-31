@@ -16,5 +16,14 @@ public enum EInteractionType
     Say,
     Emote,
     WaitForObjectAtPosition,
-    ManualAction
+    WaitForManualProgress,
+    Duty,
+    SinglePlayerDuty,
+
+    Jump,
+
+    /// <summary>
+    /// Needs to be manually continued.
+    /// </summary>
+    Instruction,
 }

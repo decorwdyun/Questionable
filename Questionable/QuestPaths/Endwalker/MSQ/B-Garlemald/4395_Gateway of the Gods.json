@@ -105,8 +105,8 @@
             "Z": -676.875
           },
           "TerritoryId": 958,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - Tower of Babil"
+          "InteractionType": "Duty",
+          "Comment": "The Tower of Babil"
         }
       ]
     },

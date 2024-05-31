@@ -47,7 +47,7 @@
             "Z": -27.054321
           },
           "TerritoryId": 962,
-          "InteractionType": "ManualAction",
+          "InteractionType": "WaitForManualProgress",
           "Comment": "Follow Alisaie"
         }
       ]

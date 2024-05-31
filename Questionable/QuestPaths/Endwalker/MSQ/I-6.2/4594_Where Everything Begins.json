@@ -69,8 +69,8 @@
             "Z": -150.83551
           },
           "TerritoryId": 1089,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - Where Everything Begins"
+          "InteractionType": "SinglePlayerDuty",
+          "Comment": "Where Everything Begins"
         }
       ]
     },

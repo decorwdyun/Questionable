@@ -75,8 +75,8 @@
             "Z": -89.463684
           },
           "TerritoryId": 1056,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - Fell Court of Troia"
+          "InteractionType": "Duty",
+          "Comment": "Fell Court of Troia"
         }
       ]
     },

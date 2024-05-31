@@ -46,7 +46,7 @@
             "Z": -807.82135
           },
           "TerritoryId": 959,
-          "InteractionType": "ManualAction",
+          "InteractionType": "ShouldBeAJump",
           "Comment": "Navmesh can't jump (TODO this is super out of the way)"
         },
         {

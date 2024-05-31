@@ -28,8 +28,8 @@
             "Z": 488.3954
           },
           "TerritoryId": 958,
-          "InteractionType": "ManualAction",
-          "Comment": "Start Duty"
+          "InteractionType": "SinglePlayerDuty",
+          "Comment": "In from the Cold"
         }
       ]
     },

@@ -139,8 +139,8 @@
             "Z": 238.0937
           },
           "TerritoryId": 962,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - The Aetherfont"
+          "InteractionType": "Duty",
+          "Comment": "The Aetherfont"
         }
       ]
     },

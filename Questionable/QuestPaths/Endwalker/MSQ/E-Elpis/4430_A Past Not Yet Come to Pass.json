@@ -84,7 +84,7 @@
             "Z": -173.75458
           },
           "TerritoryId": 961,
-          "InteractionType": "ManualAction",
+          "InteractionType": "WaitForManualProgress",
           "Comment": "Talk (1, 2, 1)"
         }
       ]
@@ -124,7 +124,7 @@
             "Z": -155.5047
           },
           "TerritoryId": 961,
-          "InteractionType": "ManualAction",
+          "InteractionType": "WaitForManualProgress",
           "Comment": "Talk (2, 2, 1)"
         }
       ]

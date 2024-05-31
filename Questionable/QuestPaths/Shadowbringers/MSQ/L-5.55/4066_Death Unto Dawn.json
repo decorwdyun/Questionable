@@ -45,8 +45,8 @@
           },
           "StopDistance": 7,
           "TerritoryId": 132,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - Death Unto Dawn"
+          "InteractionType": "SinglePlayerDuty",
+          "Comment": "Death Unto Dawn"
         }
       ]
     },
@@ -55,7 +55,7 @@
       "Steps": [
         {
           "TerritoryId": 351,
-          "InteractionType": "ManualAction",
+          "InteractionType": "WaitForManualProgress",
           "Comment": "Credits"
         }
       ]

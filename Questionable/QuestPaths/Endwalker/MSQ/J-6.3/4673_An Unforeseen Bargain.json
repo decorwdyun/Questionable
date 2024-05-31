@@ -29,8 +29,8 @@
           },
           "StopDistance": 5,
           "TerritoryId": 958,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - An Unforeseen Bargain"
+          "InteractionType": "SinglePlayerDuty",
+          "Comment": "An Unforeseen Bargain"
         }
       ]
     },

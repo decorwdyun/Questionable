@@ -16,6 +16,10 @@ public sealed class InteractionTypeConverter() : EnumConverter<EInteractionType>
         { EInteractionType.Say, "Say" },
         { EInteractionType.Emote, "Emote" },
         { EInteractionType.WaitForObjectAtPosition, "WaitForNpcAtPosition" },
-        { EInteractionType.ManualAction, "ManualAction" }
+        { EInteractionType.WaitForManualProgress, "WaitForManualProgress" },
+        { EInteractionType.Duty, "Duty" },
+        { EInteractionType.SinglePlayerDuty, "SinglePlayerDuty" },
+        { EInteractionType.Jump, "ShouldBeAJump" },
+        { EInteractionType.Instruction, "Instruction" },
     };
 }

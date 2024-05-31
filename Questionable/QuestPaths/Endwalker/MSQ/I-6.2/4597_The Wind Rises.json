@@ -45,8 +45,8 @@
           },
           "StopDistance": 5,
           "TerritoryId": 1092,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - Storm's Crown"
+          "InteractionType": "Duty",
+          "Comment": "Storm's Crown"
         }
       ]
     },

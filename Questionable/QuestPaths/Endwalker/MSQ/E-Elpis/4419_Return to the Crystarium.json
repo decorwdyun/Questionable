@@ -50,7 +50,7 @@
             "Z": -210.52875
           },
           "TerritoryId": 819,
-          "InteractionType": "ManualAction",
+          "InteractionType": "WaitForManualProgress",
           "Comment": "Cutscene Interaction needed",
           "AetheryteShortcut": "Crystarium",
           "AethernetShortcut": [

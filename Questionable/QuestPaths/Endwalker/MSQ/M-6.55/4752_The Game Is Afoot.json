@@ -28,8 +28,8 @@
             "Z": 243.42712
           },
           "TerritoryId": 962,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - The Game Is Afoot",
+          "InteractionType": "SinglePlayerDuty",
+          "Comment": "The Game Is Afoot",
           "AethernetShortcut": [
             "[Old Sharlayan] The Studium",
             "[Old Sharlayan] Scholar's Harbor"

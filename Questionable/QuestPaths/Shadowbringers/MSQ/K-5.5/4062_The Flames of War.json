@@ -64,8 +64,8 @@
             "Z": 12.893799
           },
           "TerritoryId": 130,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - Paglth'an"
+          "InteractionType": "Duty",
+          "Comment": "Paglth'an"
         }
       ]
     },

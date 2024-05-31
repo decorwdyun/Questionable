@@ -39,7 +39,7 @@
         {
           "DataId": 1039998,
           "TerritoryId": 961,
-          "InteractionType": "ManualAction",
+          "InteractionType": "WaitForManualProgress",
           "Comment": "Capture Mobs with less than 50% HP"
         }
       ]

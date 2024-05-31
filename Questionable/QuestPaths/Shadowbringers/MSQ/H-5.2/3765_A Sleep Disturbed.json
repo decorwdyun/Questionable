@@ -45,7 +45,7 @@
             "Z": -387.10614
           },
           "TerritoryId": 817,
-          "InteractionType": "ManualAction",
+          "InteractionType": "SinglePlayerDuty",
           "Fly": true,
           "Comment": "Duty - A Sleep Disturbed (Opo-Opo, Wolf, Serpent)"
         }

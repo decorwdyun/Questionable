@@ -28,7 +28,7 @@
             "Z": 509.72766
           },
           "TerritoryId": 961,
-          "InteractionType": "ManualAction",
+          "InteractionType": "WaitForManualProgress",
           "Comment": "Follow"
         },
         {

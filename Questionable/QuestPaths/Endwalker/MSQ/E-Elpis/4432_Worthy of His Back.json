@@ -64,8 +64,8 @@
             "Z": 62.302612
           },
           "TerritoryId": 961,
-          "InteractionType": "ManualAction",
-          "Comment": "Duty - Venat"
+          "InteractionType": "SinglePlayerDuty",
+          "Comment": "Venat"
         }
       ]
     },
