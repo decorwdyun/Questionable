@@ -37,16 +37,9 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 2013052,
-          "Position": {
-            "X": 99.77076,
-            "Y": -19,
-            "Z": 176.985
-          },
-          "StopDistance": 5,
           "TerritoryId": 1092,
           "InteractionType": "Duty",
-          "Comment": "Storm's Crown"
+          "ContentFinderConditionId": 870
         }
       ]
     },

@@ -19,8 +19,12 @@ public enum EInteractionType
     WaitForManualProgress,
     Duty,
     SinglePlayerDuty,
-
     Jump,
+
+    /// <summary>
+    /// Needs to be adjusted for coords etc. in the quest data.
+    /// </summary>
+    ShouldBeAJump,
 
     /// <summary>
     /// Needs to be manually continued.

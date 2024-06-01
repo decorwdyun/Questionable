@@ -132,15 +132,9 @@
       "Sequence": 7,
       "Steps": [
         {
-          "DataId": 2013359,
-          "Position": {
-            "X": 134.667,
-            "Y": -16.147,
-            "Z": 238.0937
-          },
           "TerritoryId": 962,
           "InteractionType": "Duty",
-          "Comment": "The Aetherfont"
+          "ContentFinderConditionId": 822
         }
       ]
     },

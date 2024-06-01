@@ -47,15 +47,9 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 2010808,
-          "Position": {
-            "X": -123.55237,
-            "Y": -0.7172241,
-            "Z": 647.6997
-          },
           "TerritoryId": 813,
           "InteractionType": "Duty",
-          "Comment": "Grand Cosmos"
+          "ContentFinderConditionId": 692
         }
       ]
     },

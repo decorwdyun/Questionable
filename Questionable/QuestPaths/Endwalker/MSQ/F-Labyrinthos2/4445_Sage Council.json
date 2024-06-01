@@ -26,9 +26,11 @@
             "Y": -28.723352,
             "Z": -42.992764
           },
+          "StopDistance": 0.75,
           "TerritoryId": 956,
           "InteractionType": "WalkTo",
-          "AetheryteShortcut": "Labyrinthos - Sharlayan Hamlet"
+          "AetheryteShortcut": "Labyrinthos - Sharlayan Hamlet",
+          "Mount": true
         },
         {
           "DataId": 1039687,
@@ -70,6 +72,7 @@
           "TerritoryId": 956,
           "InteractionType": "Interact",
           "Comment": "Distracted Researcher",
+          "$.0": "[1]",
           "$.1": "QuestVariables if done first: 1 0 0 0 2 0"
         },
         {
@@ -82,6 +85,7 @@
           "TerritoryId": 956,
           "InteractionType": "Interact",
           "Comment": "Hyperventilating Engineer",
+          "$.0": "[2]",
           "$.1": "QuestVariables if done after [1]: 2 0 0 0 130 0"
         },
         {
@@ -94,6 +98,7 @@
           "TerritoryId": 956,
           "InteractionType": "Interact",
           "Comment": "Harried Aetherologist",
+          "$.0": "[3]",
           "$.1": "QuestVariables if done after [2]: 3 0 0 0 138 0"
         },
         {
@@ -106,6 +111,7 @@
           "TerritoryId": 956,
           "InteractionType": "Interact",
           "Comment": "Grimacing Naturalist",
+          "$.0": "[4]",
           "$.1": "QuestVariables if done after [3]: 4 0 0 0 142 0"
         },
         {
@@ -118,6 +124,7 @@
           "TerritoryId": 956,
           "InteractionType": "Interact",
           "Comment": "Ponderous Mathematician",
+          "$.0": "[5]",
           "$.1": "QuestVariables if done after [4]: 5 0 0 0 206 0"
         },
         {
@@ -131,6 +138,7 @@
           "InteractionType": "Interact",
           "Comment": "Despondent Engineer",
           "Mount": true,
+          "$.0": "[6]",
           "$.1": "QuestVariables if done after [5]: 6 0 0 0 238 0"
         },
         {
@@ -143,6 +151,8 @@
           "TerritoryId": 956,
           "InteractionType": "Interact",
           "Comment": "Skeptical Researcher",
+          "Mount": true,
+          "$.0": "[7]",
           "$.1": "QuestVariables if done after [6]: 7 0 0 0 239 0"
         },
         {
@@ -154,7 +164,9 @@
           },
           "TerritoryId": 956,
           "InteractionType": "Interact",
-          "Comment": "Anxious Engineer"
+          "Comment": "Anxious Engineer",
+          "$.0": "[8]",
+          "$.2": "QuestVariables if done first: 1 0 0 0 16 0"
         }
       ]
     },

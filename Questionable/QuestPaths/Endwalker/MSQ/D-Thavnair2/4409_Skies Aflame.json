@@ -63,15 +63,9 @@
       "Sequence": 4,
       "Steps": [
         {
-          "DataId": 2012228,
-          "Position": {
-            "X": 205.82886,
-            "Y": 1.7547607,
-            "Z": 761.50134
-          },
           "TerritoryId": 957,
           "InteractionType": "Duty",
-          "Comment": "Vanaspati"
+          "ContentFinderConditionId": 789
         }
       ]
     },

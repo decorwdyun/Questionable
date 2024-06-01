@@ -27,6 +27,7 @@ internal sealed class QuestController
     private readonly IPluginLog _pluginLog;
     private readonly ICondition _condition;
     private readonly IChatGui _chatGui;
+    private readonly IFramework _framework;
     private readonly AetheryteData _aetheryteData;
     private readonly LifestreamIpc _lifestreamIpc;
     private readonly TerritoryData _territoryData;
@@ -34,7 +35,7 @@ internal sealed class QuestController
 
     public QuestController(DalamudPluginInterface pluginInterface, IDataManager dataManager, IClientState clientState,
         GameFunctions gameFunctions, MovementController movementController, IPluginLog pluginLog, ICondition condition,
-        IChatGui chatGui, AetheryteData aetheryteData, LifestreamIpc lifestreamIpc)
+        IChatGui chatGui, IFramework framework, AetheryteData aetheryteData, LifestreamIpc lifestreamIpc)
     {
         _pluginInterface = pluginInterface;
         _dataManager = dataManager;
@@ -44,6 +45,7 @@ internal sealed class QuestController
         _pluginLog = pluginLog;
         _condition = condition;
         _chatGui = chatGui;
+        _framework = framework;
         _aetheryteData = aetheryteData;
         _lifestreamIpc = lifestreamIpc;
         _territoryData = new TerritoryData(dataManager);
@@ -358,7 +360,13 @@ internal sealed class QuestController
 
         if (step.TargetTerritoryId == _clientState.TerritoryType)
         {
-            _pluginLog.Information("Skipping any movement");
+            _pluginLog.Information("Zone transition, skipping movement");
+        }
+        else if (step.InteractionType == EInteractionType.Jump && step.JumpDestination != null &&
+                 (_clientState.LocalPlayer!.Position - step.JumpDestination.Position).Length() <=
+                 (step.JumpDestination.StopDistance ?? 1f))
+        {
+            _pluginLog.Information("We're at the jump destination, skipping movement");
         }
         else if (step.Position != null)
         {
@@ -582,7 +590,9 @@ internal sealed class QuestController
                 break;
 
             case EInteractionType.Duty:
-                // TODO open duty finder
+                if (step.ContentFinderConditionId != null)
+                    _gameFunctions.OpenDutyFinder(step.ContentFinderConditionId.Value);
+
                 break;
 
             case EInteractionType.SinglePlayerDuty:
@@ -591,9 +601,24 @@ internal sealed class QuestController
                 break;
 
             case EInteractionType.Jump:
-                // TODO implement somehow??
+                if (step.JumpDestination != null && !_condition[ConditionFlag.Jumping])
+                {
+                    float stopDistance = step.JumpDestination.StopDistance ?? 1f;
+                    if ((_clientState.LocalPlayer!.Position - step.JumpDestination.Position).Length() <= stopDistance)
+                        IncreaseStepCount();
+                    else
+                    {
+                        _movementController.NavigateTo(EMovementType.Quest, step.DataId,
+                            [step.JumpDestination.Position],
+                            false, step.JumpDestination.StopDistance ?? stopDistance);
+                        _framework.RunOnTick(() => ActionManager.Instance()->UseAction(ActionType.GeneralAction, 2),
+                            TimeSpan.FromSeconds(step.JumpDestination.DelaySeconds ?? 0.5f));
+                    }
+                }
+
                 break;
 
+            case EInteractionType.ShouldBeAJump:
             case EInteractionType.Instruction:
                 // Need to manually forward
                 break;

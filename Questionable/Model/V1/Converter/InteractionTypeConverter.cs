@@ -19,7 +19,8 @@ public sealed class InteractionTypeConverter() : EnumConverter<EInteractionType>
         { EInteractionType.WaitForManualProgress, "WaitForManualProgress" },
         { EInteractionType.Duty, "Duty" },
         { EInteractionType.SinglePlayerDuty, "SinglePlayerDuty" },
-        { EInteractionType.Jump, "ShouldBeAJump" },
+        { EInteractionType.Jump, "Jump" },
+        { EInteractionType.ShouldBeAJump, "ShouldBeAJump" },
         { EInteractionType.Instruction, "Instruction" },
     };
 }

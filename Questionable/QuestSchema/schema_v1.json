@@ -105,6 +105,7 @@
                     "WaitForManualProgress",
                     "Duty",
                     "SinglePlayerDuty",
+                    "Jump",
                     "ShouldBeAJump",
                     "Instruction"
                   ]
@@ -373,6 +374,52 @@
                     "null"
                   ],
                   "description": "The Item to use",
+                  "exclusiveMinimum": 0
+                },
+                "JumpDestination": {
+                  "type": "object",
+                  "properties": {
+                    "Position": {
+                      "type": "object",
+                      "description": "Position to try reaching after the jump",
+                      "properties": {
+                        "X": {
+                          "type": "number"
+                        },
+                        "Y": {
+                          "type": "number"
+                        },
+                        "Z": {
+                          "type": "number"
+                        }
+                      },
+                      "required": [
+                        "X",
+                        "Y",
+                        "Z"
+                      ]
+                    },
+                    "StopDistance": {
+                      "type": [
+                        "number",
+                        "null"
+                      ],
+                      "description": "Set if pathfinding should stop closer or further away from the default stop distance",
+                      "exclusiveMinimum": 0
+                    },
+                    "DelaySeconds": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "Position"
+                  ]
+                },
+                "ContentFinderConditionId": {
+                  "type": "number",
                   "exclusiveMinimum": 0
                 },
                 "SkipIf": {

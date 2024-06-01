@@ -53,15 +53,9 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 2011959,
-          "Position": {
-            "X": -636.4081,
-            "Y": -0.015319824,
-            "Z": -663.81323
-          },
           "TerritoryId": 957,
           "InteractionType": "Duty",
-          "Comment": "The Tower of Zot"
+          "ContentFinderConditionId": 783
         }
       ]
     },

@@ -57,15 +57,9 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 2011521,
-          "Position": {
-            "X": -24.368713,
-            "Y": 83.17688,
-            "Z": 12.893799
-          },
           "TerritoryId": 130,
           "InteractionType": "Duty",
-          "Comment": "Paglth'an"
+          "ContentFinderConditionId": 777
         }
       ]
     },

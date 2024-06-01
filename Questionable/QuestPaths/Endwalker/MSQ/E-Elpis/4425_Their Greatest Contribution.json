@@ -48,13 +48,20 @@
         },
         {
           "Position": {
-            "X": 346.73517,
-            "Y": -15.572778,
-            "Z": -105.96149
+            "X": 475.2184,
+            "Y": -17.473314,
+            "Z": 47.986946
           },
           "TerritoryId": 961,
-          "InteractionType": "WalkTo",
-          "Comment": "Needs manual jumping"
+          "InteractionType": "Jump",
+          "JumpDestination": {
+            "Position": {
+              "X": 477.34882,
+              "Y": -16.407324,
+              "Z": 43.802086
+            },
+            "DelaySeconds": 0.25
+          }
         },
         {
           "DataId": 1040052,
@@ -78,6 +85,7 @@
             "Y": -14.757837,
             "Z": -115.15985
           },
+          "StopDistance": 7,
           "TerritoryId": 961,
           "InteractionType": "Interact"
         }
@@ -95,6 +103,7 @@
           "StopDistance": 0.5,
           "TerritoryId": 961,
           "InteractionType": "WalkTo",
+          "Mount": true,
           "DisableNavmesh": true
         },
         {
@@ -141,10 +150,33 @@
       "Sequence": 6,
       "Steps": [
         {
+          "Position": {
+            "X": -55.662647,
+            "Y": -16.696985,
+            "Z": -81.29199
+          },
+          "StopDistance": 0.25,
+          "TerritoryId": 961,
+          "InteractionType": "Jump",
+          "JumpDestination": {
+            "Position": {
+              "X": -58.75509,
+              "Y": -15.402463,
+              "Z": -83.133934
+            }
+          },
+          "DisableNavmesh": true
+        },
+        {
+          "Position": {
+            "X": -64.19198,
+            "Y": -15.332472,
+            "Z": -84.65695
+          },
+          "StopDistance": 0.25,
           "TerritoryId": 961,
           "InteractionType": "Emote",
-          "Emote": "wave",
-          "Comment": "Need to jump manually"
+          "Emote": "wave"
         }
       ]
     },

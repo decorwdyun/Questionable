@@ -24,15 +24,9 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 2012370,
-          "Position": {
-            "X": -3.1281738,
-            "Y": 637.07935,
-            "Z": -9.079163
-          },
           "TerritoryId": 960,
           "InteractionType": "Duty",
-          "Comment": "The Dead Ends"
+          "ContentFinderConditionId": 792
         }
       ]
     },
@@ -40,16 +34,9 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 2012371,
-          "Position": {
-            "X": 100,
-            "Y": 0,
-            "Z": 106
-          },
-          "StopDistance": 5,
           "TerritoryId": 1029,
           "InteractionType": "Duty",
-          "Comment": "The Final Day"
+          "ContentFinderConditionId": 796
         }
       ]
     },

@@ -51,15 +51,9 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 2013240,
-          "Position": {
-            "X": 657.3739,
-            "Y": -180.7837,
-            "Z": 45.63965
-          },
           "TerritoryId": 1125,
           "InteractionType": "Duty",
-          "Comment": "Mount Ordeals"
+          "ContentFinderConditionId": 886
         }
       ]
     },

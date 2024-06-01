@@ -24,15 +24,9 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 2012839,
-          "Position": {
-            "X": -269.55066,
-            "Y": 0.10675049,
-            "Z": 610.65076
-          },
           "TerritoryId": 957,
           "InteractionType": "Duty",
-          "Comment": "Alzadaal's Legacy"
+          "ContentFinderConditionId": 844
         }
       ]
     },

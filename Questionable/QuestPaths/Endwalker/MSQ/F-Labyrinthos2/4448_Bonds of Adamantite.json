@@ -28,7 +28,8 @@
           },
           "AetheryteShortcut": "Labyrinthos - Sharlayan Hamlet",
           "TerritoryId": 956,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "Mount": true
         },
         {
           "DataId": 2012226,
@@ -98,6 +99,7 @@
             "Y": -191.11913,
             "Z": 301.71655
           },
+          "StopDistance": 7,
           "TerritoryId": 956,
           "InteractionType": "Interact"
         }
@@ -113,7 +115,8 @@
             "Z": 301.63266
           },
           "TerritoryId": 956,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Comment": "TODO Should cancel navmesh if condition is [OccupiedInCutsceneEvent OR BetweenAreas]; then verify next marker distance"
         }
       ]
     },

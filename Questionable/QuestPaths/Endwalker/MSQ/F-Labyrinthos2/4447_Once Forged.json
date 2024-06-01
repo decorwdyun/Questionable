@@ -94,14 +94,22 @@
         },
         {
           "Position": {
-            "X": -118.62926,
-            "Y": -22.071072,
-            "Z": 681.35846
+            "X": -120.48093,
+            "Y": -21.96263,
+            "Z": 685.2332
           },
           "TerritoryId": 956,
-          "InteractionType": "ShouldBeAJump",
+          "InteractionType": "Jump",
           "DisableNavmesh": true,
-          "Comment": "Navmesh can't jump"
+          "JumpDestination": {
+            "Position": {
+              "X": -124.55376,
+              "Y": -19.659834,
+              "Z": 686.864
+            },
+            "StopDistance": 0.5,
+            "DelaySeconds": 0.25
+          }
         },
         {
           "DataId": 2011986,
@@ -112,7 +120,8 @@
           },
           "TerritoryId": 956,
           "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818317
+          "AetherCurrentId": 2818317,
+          "DisableNavmesh": true
         },
         {
           "Position": {
@@ -122,6 +131,7 @@
           },
           "TerritoryId": 956,
           "InteractionType": "WalkTo",
+          "Mount": true,
           "DisableNavmesh": true
         },
         {

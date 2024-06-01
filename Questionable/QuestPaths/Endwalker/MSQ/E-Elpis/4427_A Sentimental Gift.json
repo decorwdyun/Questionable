@@ -45,7 +45,8 @@
             "Z": 546.50183
           },
           "TerritoryId": 961,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "$.1": "QuestVariables if done first: 1 0 0 0 0 128"
         },
         {
           "DataId": 2012136,
@@ -129,7 +130,8 @@
             "Z": 432.59787
           },
           "TerritoryId": 961,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "Mount": true
         },
         {
           "DataId": 2012021,

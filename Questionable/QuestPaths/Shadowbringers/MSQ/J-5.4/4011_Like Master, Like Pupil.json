@@ -80,15 +80,9 @@
       "Sequence": 4,
       "Steps": [
         {
-          "DataId": 2011334,
-          "Position": {
-            "X": 384.32886,
-            "Y": 75.48633,
-            "Z": -218.00574
-          },
           "TerritoryId": 399,
           "InteractionType": "Duty",
-          "Comment": "Matoya's Relict"
+          "ContentFinderConditionId": 746
         }
       ]
     },

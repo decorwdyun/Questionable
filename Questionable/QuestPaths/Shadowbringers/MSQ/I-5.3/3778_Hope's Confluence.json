@@ -21,16 +21,9 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 2011103,
-          "Position": {
-            "X": 100,
-            "Y": 4.208088E-05,
-            "Z": 112.5434
-          },
-          "StopDistance": 5,
           "TerritoryId": 931,
           "InteractionType": "Duty",
-          "Comment": "The Seat of Sacrifice"
+          "ContentFinderConditionId": 738
         }
       ]
     },

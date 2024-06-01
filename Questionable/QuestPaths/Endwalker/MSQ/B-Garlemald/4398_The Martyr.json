@@ -39,14 +39,9 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 2012122,
-          "Position": {
-            "X": 99.96179,
-            "Y": -0.015319824,
-            "Z": 103.227295
-          },
           "TerritoryId": 1028,
           "InteractionType": "Duty",
+          "ContentFinderConditionId": 802,
           "Comment": "The Dark Inside"
         }
       ]

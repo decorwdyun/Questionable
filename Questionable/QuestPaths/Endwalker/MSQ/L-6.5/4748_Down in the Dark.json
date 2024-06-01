@@ -21,15 +21,9 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 2013410,
-          "Position": {
-            "X": 24.338135,
-            "Y": 56.65674,
-            "Z": 439.96326
-          },
           "TerritoryId": 1162,
           "InteractionType": "Duty",
-          "Comment": "The Lunar Subterrane"
+          "ContentFinderConditionId": 823
         }
       ]
     },
@@ -52,15 +46,9 @@
       "Sequence": 5,
       "Steps": [
         {
-          "DataId": 2013411,
-          "Position": {
-            "X": 100.0275,
-            "Y": 0,
-            "Z": 106.3549
-          },
           "TerritoryId": 1181,
           "InteractionType": "Duty",
-          "Comment": "The Abyssal Fracture"
+          "ContentFinderConditionId": 964
         }
       ]
     },

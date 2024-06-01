@@ -75,7 +75,6 @@ internal sealed class MovementController : IDisposable
                         start = end;
                     }
 
-                    _pluginLog.Information($"Distance: {actualDistance}");
                     unsafe
                     {
                         // 70 is ~10 seconds of sprint
@@ -119,8 +118,9 @@ internal sealed class MovementController : IDisposable
                     {
                         if (AetheryteConverter.IsLargeAetheryte((EAetheryteLocation)Destination.DataId))
                         {
-                            // TODO verify this
-                            if (Math.Abs(localPlayerPosition.Y - gameObject.Position.Y) < 2.95f)
+                            // TODO verify the first part of this, is there any aetheryte like that?
+                            if (localPlayerPosition.Y - gameObject.Position.Y < 2.95f &&
+                                localPlayerPosition.Y - gameObject.Position.Y > -0.9f)
                                 Stop();
                         }
                         else

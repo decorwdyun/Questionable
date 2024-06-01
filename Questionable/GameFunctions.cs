@@ -42,6 +42,7 @@ internal sealed unsafe class GameFunctions
     private readonly delegate* unmanaged<Utf8String*, int, IntPtr, void> _sanitiseString;
     private readonly ReadOnlyDictionary<ushort, byte> _territoryToAetherCurrentCompFlgSet;
     private readonly ReadOnlyDictionary<EEmote, string> _emoteCommands;
+    private readonly ReadOnlyDictionary<uint, ushort> _contentFinderConditionToContentId;
 
     private readonly IObjectTable _objectTable;
     private readonly ITargetManager _targetManager;
@@ -73,6 +74,10 @@ internal sealed unsafe class GameFunctions
             .Select(x => (x.RowId, Command: x.TextCommand.Value!.Command?.ToString()))
             .Where(x => x.Command != null && x.Command.StartsWith('/'))
             .ToDictionary(x => (EEmote)x.RowId, x => x.Command!)
+            .AsReadOnly();
+        _contentFinderConditionToContentId = dataManager.GetExcelSheet<ContentFinderCondition>()
+            .Where(x => x.RowId > 0 && x.Content > 0)
+            .ToDictionary(x => x.RowId, x => x.Content)
             .AsReadOnly();
     }
 
@@ -364,7 +369,7 @@ internal sealed unsafe class GameFunctions
         if (gameObject != null)
         {
             var position = (FFXIVClientStructs.FFXIV.Common.Math.Vector3)gameObject.Position;
-            ActionManager.Instance()->UseActionLocation(ActionType.KeyItem, itemId, gameObject.ObjectId, &position);
+            ActionManager.Instance()->UseActionLocation(ActionType.KeyItem, itemId, location: &position);
         }
     }
 
@@ -416,5 +421,18 @@ internal sealed unsafe class GameFunctions
         }
 
         return false;
+    }
+
+    public void OpenDutyFinder(uint contentFinderConditionId)
+    {
+        if (_contentFinderConditionToContentId.TryGetValue(contentFinderConditionId, out ushort contentId))
+        {
+            if (UIState.IsInstanceContentUnlocked(contentId))
+                AgentContentsFinder.Instance()->OpenRegularDuty(contentFinderConditionId);
+            else
+                _pluginLog.Error($"Trying to access a locked duty (cf: {contentFinderConditionId}, content: {contentId})");
+        }
+        else
+            _pluginLog.Error($"Could not find content for content finder condition (cf: {contentFinderConditionId})");
     }
 }

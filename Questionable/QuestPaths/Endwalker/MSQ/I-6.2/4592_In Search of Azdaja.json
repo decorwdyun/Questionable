@@ -68,15 +68,9 @@
       "Sequence": 4,
       "Steps": [
         {
-          "DataId": 2013041,
-          "Position": {
-            "X": 110.06323,
-            "Y": -350.02673,
-            "Z": -89.463684
-          },
           "TerritoryId": 1056,
           "InteractionType": "Duty",
-          "Comment": "Fell Court of Troia"
+          "ContentFinderConditionId": 869
         }
       ]
     },

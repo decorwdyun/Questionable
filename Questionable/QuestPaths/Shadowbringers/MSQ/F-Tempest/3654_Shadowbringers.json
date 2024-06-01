@@ -7,16 +7,9 @@
       "Sequence": 7,
       "Steps": [
         {
-          "DataId": 2010235,
-          "Position": {
-            "X": -426.9627,
-            "Y": -229.08374,
-            "Z": 858.09106
-          },
-          "StopDistance": 5,
           "TerritoryId": 818,
           "InteractionType": "Duty",
-          "Comment": "Amaurot"
+          "ContentFinderConditionId": 652
         }
       ]
     },
@@ -24,16 +17,9 @@
       "Sequence": 9,
       "Steps": [
         {
-          "DataId": 2010236,
-          "Position": {
-            "X": 100.0382,
-            "Y": 4.768372E-07,
-            "Z": 106.0076
-          },
-          "StopDistance": 5,
           "TerritoryId": 881,
           "InteractionType": "Duty",
-          "Comment": "The Dying Gasp"
+          "ContentFinderConditionId": 687
         }
       ]
     },

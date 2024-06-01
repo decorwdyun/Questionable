@@ -40,16 +40,9 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 2012172,
-          "Position": {
-            "X": -412.49713,
-            "Y": 329.9458,
-            "Z": -765.80457
-          },
-          "StopDistance": 4,
           "TerritoryId": 961,
           "InteractionType": "Duty",
-          "Comment": "Ktisis Hyperborea"
+          "ContentFinderConditionId": 787
         }
       ]
     },

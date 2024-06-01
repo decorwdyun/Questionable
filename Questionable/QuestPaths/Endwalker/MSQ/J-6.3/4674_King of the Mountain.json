@@ -53,16 +53,10 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 2013225,
-          "Position": {
-            "X": 469.16907,
-            "Y": -18.204102,
-            "Z": 717.7081
-          },
           "TerritoryId": 958,
-          "StopDistance": 5,
           "InteractionType": "Duty",
-          "Comment": "Lapis Manalis"
+          "Comment": "Lapis Manalis",
+          "ContentFinderConditionId": 896
         }
       ]
     },

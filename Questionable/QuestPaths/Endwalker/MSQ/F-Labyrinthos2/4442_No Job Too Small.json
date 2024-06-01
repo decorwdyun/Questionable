@@ -28,8 +28,7 @@
             "Z": 457.04776
           },
           "TerritoryId": 956,
-          "InteractionType": "WalkTo",
-          "Comment": "TODO verify this is correct, there was an aether current prior to this"
+          "InteractionType": "WalkTo"
         },
         {
           "DataId": 2011989,

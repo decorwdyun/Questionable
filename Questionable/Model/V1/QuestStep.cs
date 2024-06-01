@@ -38,6 +38,8 @@ public class QuestStep
     public EEnemySpawnType? EnemySpawnType { get; set; }
 
     public IList<uint> KillEnemyDataIds { get; set; } = new List<uint>();
+    public JumpDestination? JumpDestination { get; set; }
+    public uint? ContentFinderConditionId { get; set; }
 
     public IList<ESkipCondition> SkipIf { get; set; } = new List<ESkipCondition>();
 }

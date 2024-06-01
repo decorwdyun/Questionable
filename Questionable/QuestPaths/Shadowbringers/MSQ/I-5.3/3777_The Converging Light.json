@@ -52,15 +52,9 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 2011101,
-          "Position": {
-            "X": 60.04639,
-            "Y": 82.82986,
-            "Z": 1.940211
-          },
           "TerritoryId": 820,
           "InteractionType": "Duty",
-          "Comment": "The Heroes' Gauntlet"
+          "ContentFinderConditionId": 737
         }
       ]
     },

@@ -27,18 +27,16 @@
             "Y": -26.995626,
             "Z": 543.8281
           },
+          "StopDistance": 0.5,
           "TerritoryId": 961,
-          "InteractionType": "WalkTo"
-        },
-        {
-          "Position": {
-            "X": -137.80992,
-            "Y": -26.995626,
-            "Z": 543.8281
-          },
-          "TerritoryId": 961,
-          "InteractionType": "ShouldBeAJump",
-          "Comment": "Jump on Ledge"
+          "InteractionType": "Jump",
+          "JumpDestination": {
+            "Position": {
+              "X": -144.54877,
+              "Y": -26.230347,
+              "Z": 551.5067
+            }
+          }
         },
         {
           "DataId": 2012023,
@@ -59,6 +57,7 @@
           },
           "TerritoryId": 961,
           "InteractionType": "WalkTo",
+          "Mount": true,
           "DisableNavmesh": true
         },
         {

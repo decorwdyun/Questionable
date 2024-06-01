@@ -98,15 +98,9 @@
       "Sequence": 4,
       "Steps": [
         {
-          "DataId": 2012113,
-          "Position": {
-            "X": -525.8717,
-            "Y": -190.02063,
-            "Z": -676.875
-          },
           "TerritoryId": 958,
           "InteractionType": "Duty",
-          "Comment": "The Tower of Babil"
+          "ContentFinderConditionId": 785
         }
       ]
     },

@@ -36,15 +36,9 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 2013364,
-          "Position": {
-            "X": 99.99231,
-            "Y": 0.015197754,
-            "Z": 101.823364
-          },
           "TerritoryId": 1159,
           "InteractionType": "Duty",
-          "Comment": "The Voidcast Dais"
+          "ContentFinderConditionId": 949
         }
       ]
     },
