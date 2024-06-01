@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Numerics;
 using System.Text.Json.Serialization;
+using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using Questionable.Model.V1.Converter;
 
 namespace Questionable.Model.V1;
@@ -21,7 +22,8 @@ public class QuestStep
     public bool Disabled { get; set; }
     public bool DisableNavmesh { get; set; }
     public bool? Mount { get; set; }
-    public bool Fly { get; set; }
+    public bool? Fly { get; set; }
+    public bool? Sprint { get; set; }
     public string? Comment { get; set; }
 
     public EAetheryteLocation? AetheryteShortcut { get; set; }
@@ -42,4 +44,28 @@ public class QuestStep
     public uint? ContentFinderConditionId { get; set; }
 
     public IList<ESkipCondition> SkipIf { get; set; } = new List<ESkipCondition>();
+    public IList<short?> CompletionQuestVariablesFlags { get; set; } = new List<short?>();
+    public IList<DialogueChoice> DialogueChoices { get; set; } = new List<DialogueChoice>();
+
+    public unsafe bool MatchesQuestVariables(QuestWork questWork)
+    {
+        if (CompletionQuestVariablesFlags.Count != 6)
+            return false;
+
+        for (int i = 0; i < 6; ++i)
+        {
+            short? check = CompletionQuestVariablesFlags[i];
+            if (check == null)
+                continue;
+
+            byte actualValue = questWork.Variables[i];
+            byte expectedValue = check > 0 ? (byte)check : (byte)0;
+            byte checkByte = check > 0 ? (byte)check : (byte)-check;
+
+            if ((actualValue & checkByte) != expectedValue)
+                return false;
+        }
+
+        return true;
+    }
 }

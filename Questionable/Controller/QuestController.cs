@@ -3,17 +3,23 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using System.Text.Json;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using FFXIVClientStructs.FFXIV.Client.UI;
+using LLib.GameUI;
+using Lumina.Excel.CustomSheets;
 using Questionable.Data;
 using Questionable.External;
 using Questionable.Model.V1;
 using Questionable.Model.V1.Converter;
+using ValueType = FFXIVClientStructs.FFXIV.Component.GUI.ValueType;
 
 namespace Questionable.Controller;
 
@@ -28,6 +34,7 @@ internal sealed class QuestController
     private readonly ICondition _condition;
     private readonly IChatGui _chatGui;
     private readonly IFramework _framework;
+    private readonly IGameGui _gameGui;
     private readonly AetheryteData _aetheryteData;
     private readonly LifestreamIpc _lifestreamIpc;
     private readonly TerritoryData _territoryData;
@@ -35,7 +42,8 @@ internal sealed class QuestController
 
     public QuestController(DalamudPluginInterface pluginInterface, IDataManager dataManager, IClientState clientState,
         GameFunctions gameFunctions, MovementController movementController, IPluginLog pluginLog, ICondition condition,
-        IChatGui chatGui, IFramework framework, AetheryteData aetheryteData, LifestreamIpc lifestreamIpc)
+        IChatGui chatGui, IFramework framework, IGameGui gameGui, AetheryteData aetheryteData,
+        LifestreamIpc lifestreamIpc)
     {
         _pluginInterface = pluginInterface;
         _dataManager = dataManager;
@@ -46,6 +54,7 @@ internal sealed class QuestController
         _condition = condition;
         _chatGui = chatGui;
         _framework = framework;
+        _gameGui = gameGui;
         _aetheryteData = aetheryteData;
         _lifestreamIpc = lifestreamIpc;
         _territoryData = new TerritoryData(dataManager);
@@ -318,11 +327,45 @@ internal sealed class QuestController
             }
         }
 
-        if (step.SkipIf.Contains(ESkipCondition.FlyingUnlocked) && _gameFunctions.IsFlyingUnlocked(step.TerritoryId))
+        if (!step.SkipIf.Contains(ESkipCondition.Never))
         {
-            _pluginLog.Information("Skipping step, as flying is unlocked");
-            IncreaseStepCount();
-            return;
+            _pluginLog.Information("Checking skip conditions");
+
+            if (step.SkipIf.Contains(ESkipCondition.FlyingUnlocked) &&
+                _gameFunctions.IsFlyingUnlocked(step.TerritoryId))
+            {
+                _pluginLog.Information("Skipping step, as flying is unlocked");
+                IncreaseStepCount();
+                return;
+            }
+
+            if (step is
+                {
+                    DataId: not null,
+                    InteractionType: EInteractionType.AttuneAetheryte or EInteractionType.AttuneAethernetShard
+                } &&
+                _gameFunctions.IsAetheryteUnlocked((EAetheryteLocation)step.DataId.Value))
+            {
+                _pluginLog.Information("Skipping step, as aetheryte/aethernet shard is unlocked");
+                IncreaseStepCount();
+                return;
+            }
+
+            if (step is { DataId: not null, InteractionType: EInteractionType.AttuneAetherCurrent } &&
+                _gameFunctions.IsAetherCurrentUnlocked(step.DataId.Value))
+            {
+                _pluginLog.Information("Skipping step, as current is unlocked");
+                IncreaseStepCount();
+                return;
+            }
+
+            QuestWork? questWork = _gameFunctions.GetQuestEx(CurrentQuest.Quest.QuestId);
+            if (questWork != null && step.MatchesQuestVariables(questWork.Value))
+            {
+                _pluginLog.Information("Skipping step, as quest variables match");
+                IncreaseStepCount();
+                return;
+            }
         }
 
         if (!CurrentQuest.StepProgress.AethernetShortcutUsed)
@@ -350,7 +393,7 @@ internal sealed class QuestController
                     }
                     else
                         _movementController.NavigateTo(EMovementType.Quest, (uint)from, _aetheryteData.Locations[from],
-                            false,
+                            false, true,
                             AetheryteConverter.IsLargeAetheryte(from) ? 10.9f : 6.9f);
 
                     return;
@@ -367,6 +410,11 @@ internal sealed class QuestController
                  (step.JumpDestination.StopDistance ?? 1f))
         {
             _pluginLog.Information("We're at the jump destination, skipping movement");
+        }
+        else if (step.InteractionType == EInteractionType.CutsceneSelectString &&
+                 _condition[ConditionFlag.OccupiedInCutSceneEvent])
+        {
+            _pluginLog.Information("In cutscene selection, skipping movement");
         }
         else if (step.Position != null)
         {
@@ -413,7 +461,9 @@ internal sealed class QuestController
                 if (actualDistance > distance)
                 {
                     _movementController.NavigateTo(EMovementType.Quest, step.DataId, step.Position.Value,
-                        step.Fly && _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType), distance);
+                        fly: step.Fly == true && _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType),
+                        sprint: step.Sprint != false,
+                        stopDistance: distance);
                     return;
                 }
             }
@@ -428,7 +478,9 @@ internal sealed class QuestController
                         distance /= 2;
 
                     _movementController.NavigateTo(EMovementType.Quest, step.DataId, [step.Position.Value],
-                        step.Fly && _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType), distance);
+                        fly: step.Fly == true && _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType),
+                        sprint: step.Sprint != false,
+                        stopDistance: distance);
                     return;
                 }
             }
@@ -609,8 +661,8 @@ internal sealed class QuestController
                     else
                     {
                         _movementController.NavigateTo(EMovementType.Quest, step.DataId,
-                            [step.JumpDestination.Position],
-                            false, step.JumpDestination.StopDistance ?? stopDistance);
+                            [step.JumpDestination.Position], false, false,
+                            step.JumpDestination.StopDistance ?? stopDistance);
                         _framework.RunOnTick(() => ActionManager.Instance()->UseAction(ActionType.GeneralAction, 2),
                             TimeSpan.FromSeconds(step.JumpDestination.DelaySeconds ?? 0.5f));
                     }
@@ -621,6 +673,54 @@ internal sealed class QuestController
             case EInteractionType.ShouldBeAJump:
             case EInteractionType.Instruction:
                 // Need to manually forward
+                break;
+
+            case EInteractionType.CutsceneSelectString:
+                // to do this automatically, should likely be in Addon's post setup
+                if (_gameGui.TryGetAddonByName<AddonCutSceneSelectString>("CutSceneSelectString", out var addon) &&
+                    LAddon.IsAddonReady(&addon->AtkUnitBase))
+                {
+                    foreach (DialogueChoice dialogueChoice in step.DialogueChoices)
+                    {
+                        var excelSheet = _dataManager.Excel.GetSheet<QuestDialogueText>(dialogueChoice.ExcelSheet);
+                        if (excelSheet == null)
+                        {
+                            _pluginLog.Error($"Unknown excel sheet '{dialogueChoice.ExcelSheet}'");
+                            continue;
+                        }
+
+                        string? excelString = excelSheet
+                            .FirstOrDefault(x => x.Key == dialogueChoice.Answer)
+                            ?.Value
+                            ?.ToString();
+                        if (excelString == null)
+                        {
+                            _pluginLog.Error(
+                                $"Could not extract '{dialogueChoice.Answer}' from sheet '{dialogueChoice.ExcelSheet}'");
+                            return;
+                        }
+
+                        _pluginLog.Verbose($"Looking for option '{excelString}'");
+                        for (int i = 5; i < addon->AtkUnitBase.AtkValuesCount; ++i)
+                        {
+                            var atkValue = addon->AtkUnitBase.AtkValues[i];
+                            if (atkValue.Type != ValueType.String)
+                                continue;
+
+                            string? atkString = atkValue.ReadAtkString();
+                            _pluginLog.Verbose($"Option {i}: {atkString}");
+                            if (excelString == atkString)
+                            {
+                                _pluginLog.Information($"Selecting option {i - 5}: {atkString}");
+                                addon->AtkUnitBase.FireCallbackInt(i - 5);
+                                return;
+                            }
+                        }
+                    }
+                }
+                else if (step.DataId != null && !_condition[ConditionFlag.OccupiedInCutSceneEvent])
+                    _gameFunctions.InteractWith(step.DataId.Value);
+
                 break;
 
             default:

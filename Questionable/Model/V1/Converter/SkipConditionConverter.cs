@@ -6,6 +6,7 @@ public sealed class SkipConditionConverter() : EnumConverter<ESkipCondition>(Val
 {
     private static readonly Dictionary<ESkipCondition, string> Values = new()
     {
+        { ESkipCondition.Never, "Never" },
         { ESkipCondition.FlyingUnlocked, "FlyingUnlocked" },
     };
 }

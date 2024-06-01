@@ -7,5 +7,6 @@ namespace Questionable.Model.V1;
 public enum ESkipCondition
 {
     None,
+    Never,
     FlyingUnlocked,
 }

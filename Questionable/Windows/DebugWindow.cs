@@ -147,7 +147,8 @@ internal sealed class DebugWindow : Window
                 if (ImGui.Button("Move to Target"))
                 {
                     _movementController.NavigateTo(EMovementType.DebugWindow, _targetManager.Target.DataId,
-                        _targetManager.Target.Position, _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType));
+                        _targetManager.Target.Position, _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType),
+                        true);
                 }
             }
             else

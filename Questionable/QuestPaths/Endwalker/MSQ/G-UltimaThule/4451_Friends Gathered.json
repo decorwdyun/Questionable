@@ -86,7 +86,8 @@
           "AethernetShortcut": [
             "[Old Sharlayan] Scholar's Harbor",
             "[Old Sharlayan] The Studium"
-          ]
+          ],
+          "$.1": "QuestVariables if done first: 16 16 128 0 0 128"
         },
         {
           "DataId": 1039825,
@@ -97,7 +98,6 @@
           },
           "TerritoryId": 962,
           "InteractionType": "Interact",
-          "Comment": "Unsure why this is on the same Sequence No",
           "AethernetShortcut": [
             "[Old Sharlayan] The Studium",
             "[Old Sharlayan] The Leveilleur Estate"

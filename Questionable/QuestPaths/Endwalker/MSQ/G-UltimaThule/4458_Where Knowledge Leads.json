@@ -101,8 +101,7 @@
           "TerritoryId": 960,
           "InteractionType": "AttuneAetherCurrent",
           "AetheryteShortcut": "Ultima Thule - Abode of the Ea",
-          "AetherCurrentId": 2818390,
-          "Comment": "TODO Verify"
+          "AetherCurrentId": 2818390
         },
         {
           "DataId": 1039778,

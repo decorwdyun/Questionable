@@ -58,7 +58,7 @@
           "TerritoryId": 960,
           "InteractionType": "Interact",
           "$.0": "[2]",
-          "$.2": "QuestVariables if done after [1]: 33 1 0 0 0 192"
+          "$.1": "QuestVariables if done after [1]: 33 1 0 0 0 192"
         },
         {
           "DataId": 1040293,
@@ -68,7 +68,9 @@
             "Z": 665.5221
           },
           "TerritoryId": 960,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "$.0": "[3]",
+          "$.2": "QuestVariables if done first: 16 16 0 0 0 32"
         }
       ]
     },

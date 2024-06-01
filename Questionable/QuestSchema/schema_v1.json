@@ -106,6 +106,7 @@
                     "Duty",
                     "SinglePlayerDuty",
                     "Jump",
+                    "CutsceneSelectString",
                     "ShouldBeAJump",
                     "Instruction"
                   ]
@@ -128,6 +129,12 @@
                 "Fly": {
                   "type": "boolean",
                   "description": "If true and flying is unlocked in a zone, will use a flight path"
+                },
+                "Sprint": {
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
                 },
                 "AetheryteShortcut": {
                   "type": "string",
@@ -419,7 +426,7 @@
                   ]
                 },
                 "ContentFinderConditionId": {
-                  "type": "number",
+                  "type": "integer",
                   "exclusiveMinimum": 0
                 },
                 "SkipIf": {
@@ -428,7 +435,57 @@
                   "items": {
                     "type": "string",
                     "enum": [
+                      "Never",
                       "FlyingUnlocked"
+                    ]
+                  }
+                },
+                "CompletionQuestVariablesFlags": {
+                  "type": "array",
+                  "description": "Quest Variables that dictate whether or not this step is skipped: null is don't check, positive values need to be set, negative values need to be unset",
+                  "items": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "enum": [
+                      null,
+                      1,
+                      2,
+                      4,
+                      8,
+                      16,
+                      32,
+                      64,
+                      128,
+                      -1,
+                      -2,
+                      -4,
+                      -8,
+                      -16,
+                      -32,
+                      -64,
+                      -128
+                    ]
+                  },
+                  "minItems": 6,
+                  "maxItems": 6
+                },
+                "DialogueChoices": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "ExcelSheet": {
+                        "type": "string"
+                      },
+                      "Answer": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "ExcelSheet",
+                      "Answer"
                     ]
                   }
                 },

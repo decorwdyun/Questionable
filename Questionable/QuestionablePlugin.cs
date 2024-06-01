@@ -53,7 +53,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         _movementController =
             new MovementController(navmeshIpc, clientState, _gameFunctions, condition, pluginLog);
         _questController = new QuestController(pluginInterface, dataManager, _clientState, _gameFunctions,
-            _movementController, pluginLog, condition, chatGui, framework, aetheryteData, lifestreamIpc);
+            _movementController, pluginLog, condition, chatGui, framework, gameGui, aetheryteData, lifestreamIpc);
         _windowSystem.AddWindow(new DebugWindow(_movementController, _questController, _gameFunctions, clientState,
             targetManager));
 
@@ -88,7 +88,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
                 out Vector3 worldPos))
         {
             _movementController.NavigateTo(EMovementType.Shortcut, null, worldPos,
-                _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType));
+                _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType), true);
         }
     }
 

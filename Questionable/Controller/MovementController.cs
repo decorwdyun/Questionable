@@ -66,7 +66,7 @@ internal sealed class MovementController : IDisposable
                     }
                 }
                 else if (!Destination.IsFlying && !_condition[ConditionFlag.Mounted] && navPoints.Count > 0 &&
-                         !_gameFunctions.HasStatusPreventingSprintOrMount())
+                         !_gameFunctions.HasStatusPreventingSprintOrMount() && Destination.CanSprint)
                 {
                     float actualDistance = 0;
                     foreach (Vector3 end in navPoints)
@@ -118,10 +118,19 @@ internal sealed class MovementController : IDisposable
                     {
                         if (AetheryteConverter.IsLargeAetheryte((EAetheryteLocation)Destination.DataId))
                         {
+                            /*
+                            if ((EAetheryteLocation) Destination.DataId is EAetheryteLocation.OldSharlayan
+                                or EAetheryteLocation.UltimaThuleAbodeOfTheEa)
+                                Stop();
+
                             // TODO verify the first part of this, is there any aetheryte like that?
+                            // TODO Unsure if this is per-aetheryte or what; because e.g. old sharlayan is at -1.53;
+                            //      but Elpis aetherytes fail at around -0.95
                             if (localPlayerPosition.Y - gameObject.Position.Y < 2.95f &&
                                 localPlayerPosition.Y - gameObject.Position.Y > -0.9f)
                                 Stop();
+                            */
+                            Stop();
                         }
                         else
                         {
@@ -145,27 +154,27 @@ internal sealed class MovementController : IDisposable
         return pointOnFloor != null && Math.Abs(pointOnFloor.Value.Y - p.Y) > 0.5f;
     }
 
-    private void PrepareNavigation(EMovementType type, uint? dataId, Vector3 to, bool fly, float? stopDistance)
+    private void PrepareNavigation(EMovementType type, uint? dataId, Vector3 to, bool fly, bool sprint, float? stopDistance)
     {
         ResetPathfinding();
 
         _gameFunctions.ExecuteCommand("/automove off");
 
-        Destination = new DestinationData(dataId, to, stopDistance ?? (DefaultStopDistance - 0.2f), fly);
+        Destination = new DestinationData(dataId, to, stopDistance ?? (DefaultStopDistance - 0.2f), fly, sprint);
     }
 
-    public void NavigateTo(EMovementType type, uint? dataId, Vector3 to, bool fly, float? stopDistance = null)
+    public void NavigateTo(EMovementType type, uint? dataId, Vector3 to, bool fly, bool sprint, float? stopDistance = null)
     {
-        PrepareNavigation(type, dataId, to, fly, stopDistance);
+        PrepareNavigation(type, dataId, to, fly, sprint, stopDistance);
         _cancellationTokenSource = new();
         _cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(10));
         _pathfindTask =
             _navmeshIpc.Pathfind(_clientState.LocalPlayer!.Position, to, fly, _cancellationTokenSource.Token);
     }
 
-    public void NavigateTo(EMovementType type, uint? dataId, List<Vector3> to, bool fly, float? stopDistance)
+    public void NavigateTo(EMovementType type, uint? dataId, List<Vector3> to, bool fly, bool sprint, float? stopDistance)
     {
-        PrepareNavigation(type, dataId, to.Last(), fly, stopDistance);
+        PrepareNavigation(type, dataId, to.Last(), fly, sprint, stopDistance);
         _navmeshIpc.MoveTo(to);
     }
 
@@ -198,5 +207,5 @@ internal sealed class MovementController : IDisposable
         Stop();
     }
 
-    public sealed record DestinationData(uint? DataId, Vector3 Position, float StopDistance, bool IsFlying);
+    public sealed record DestinationData(uint? DataId, Vector3 Position, float StopDistance, bool IsFlying, bool CanSprint);
 }

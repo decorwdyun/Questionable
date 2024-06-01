@@ -54,6 +54,10 @@
         </Reference>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\LLib\LLib.csproj" />
+    </ItemGroup>
+
     <!--
     <ItemGroup>
         <EmbeddedResource Include="QuestPaths/**/*.json"/>

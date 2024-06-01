@@ -77,9 +77,9 @@
             "Y": 4.357494,
             "Z": 0.7476196
           },
+          "StopDistance": 5,
           "TerritoryId": 962,
           "InteractionType": "Interact",
-          "StopDistance": 5,
           "AethernetShortcut": [
             "[Old Sharlayan] The Rostra",
             "[Old Sharlayan] The Baldesion Annex"
