@@ -1,0 +1,115 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1039058,
+          "Position": {
+            "X": -38.19336,
+            "Y": 25.818825,
+            "Z": -318.47113
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1039059,
+          "Position": {
+            "X": 381.88745,
+            "Y": 3.1168795,
+            "Z": -262.0432
+          },
+          "StopDistance": 15,
+          "TerritoryId": 957,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Thavnair - Palaka's Stand"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1039064,
+          "Position": {
+            "X": 428.85486,
+            "Y": 3.1168792,
+            "Z": -262.62305
+          },
+          "StopDistance": 7,
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1037628,
+          "Position": {
+            "X": 432.9137,
+            "Y": 3.1168795,
+            "Z": -243.76288
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1040449,
+          "Position": {
+            "X": 368.64258,
+            "Y": 3.5858154,
+            "Z": -238.3612
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1037629,
+          "Position": {
+            "X": 430.01453,
+            "Y": 13.027412,
+            "Z": -200.85455
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "Position": {
+            "X": 425.544,
+            "Y": 3.1257756,
+            "Z": -218.32741
+          },
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo",
+          "Mount": true,
+          "DisableNavmesh": true
+        },
+        {
+          "DataId": 1039064,
+          "Position": {
+            "X": 428.85486,
+            "Y": 3.1168792,
+            "Z": -262.62305
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

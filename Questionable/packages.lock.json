@@ -24,6 +24,9 @@
       },
       "llib": {
         "type": "Project"
+      },
+      "questpaths": {
+        "type": "Project"
       }
     }
   }

@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net8.0-windows</TargetFramework>
+        <LangVersion>12</LangVersion>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Questionable.QuestPaths</RootNamespace>
+        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+        <DebugType>none</DebugType>
+        <PathMap Condition="$(SolutionDir) != ''">$(SolutionDir)=X:\</PathMap>
+    </PropertyGroup>
+
+    <Target Name="ZipShadowbringers" BeforeTargets="BeforeResGen">
+        <ZipDirectory SourceDirectory="$(ProjectDir)\Shadowbringers"
+                      DestinationFile="$(TargetDir)\Shadowbringers.zip"
+                      Overwrite="true"/>
+    </Target>
+
+    <Target Name="ZipEndwalker" BeforeTargets="BeforeResGen">
+        <ZipDirectory SourceDirectory="$(ProjectDir)\Endwalker"
+                      DestinationFile="$(TargetDir)\Endwalker.zip"
+                      Overwrite="true"/>
+    </Target>
+
+    <ItemGroup>
+        <EmbeddedResource Include="$(TargetDir)\Shadowbringers.zip"/>
+        <EmbeddedResource Include="$(TargetDir)\Endwalker.zip"/>
+    </ItemGroup>
+</Project>

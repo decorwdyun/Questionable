@@ -1,0 +1,188 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1039896,
+          "Position": {
+            "X": 530.1747,
+            "Y": -36.65,
+            "Z": -175.86023
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1037716,
+          "Position": {
+            "X": 524.43726,
+            "Y": -36.65,
+            "Z": -186.69415
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact",
+          "Comment": "Caeso",
+          "$.0": "[1]",
+          "$.1": "QuestVariables if done first: 17 0 0 0 0 64"
+        },
+        {
+          "DataId": 1037718,
+          "Position": {
+            "X": 512.62683,
+            "Y": -36.65,
+            "Z": -160.3266
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact",
+          "Comment": "Octavia",
+          "$.0": "[2]",
+          "$.2": "QuestVariables if done after [1]: 33 1 0 0 0 80"
+        },
+        {
+          "Position": {
+            "X": 502.34732,
+            "Y": -36.65,
+            "Z": -178.38684
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "DataId": 1037715,
+          "Position": {
+            "X": 500.57214,
+            "Y": -36.65,
+            "Z": -178.85101
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact",
+          "Comment": "Sabinianus",
+          "$.0": "[3]",
+          "$.2": "QuestVariables if done after [1, 2]: 49 1 16 0 0 206"
+        },
+        {
+          "DataId": 1037717,
+          "Position": {
+            "X": 495.35352,
+            "Y": -36.06746,
+            "Z": -205.1576
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact",
+          "Comment": "Marcellinus",
+          "$.0": "[4]",
+          "$.2": "QuestVariables if done after [1, 2, 3]: 65 17 16 0 0 240"
+        },
+        {
+          "DataId": 2012062,
+          "Position": {
+            "X": 512.1679,
+            "Y": -34.82775,
+            "Z": -201.7169
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact",
+          "Comment": "Magitek Radio",
+          "$.0": "[5]"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1039899,
+          "Position": {
+            "X": 549.6758,
+            "Y": -36.616077,
+            "Z": -216.84601
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "Position": {
+            "X": 548.01605,
+            "Y": -36.61611,
+            "Z": -237.499
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "Position": {
+            "X": 547.66595,
+            "Y": -36.616203,
+            "Z": -244.51854
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true
+        },
+        {
+          "DataId": 1037719,
+          "Position": {
+            "X": 549.7977,
+            "Y": -36.61618,
+            "Z": -260.57837
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "Position": {
+            "X": 547.021,
+            "Y": -36.616203,
+            "Z": -244.6051
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "DataId": 1039899,
+          "Position": {
+            "X": 549.6758,
+            "Y": -36.616077,
+            "Z": -216.84601
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact",
+          "DisableNavmesh": true
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1039896,
+          "Position": {
+            "X": 530.1747,
+            "Y": -36.65,
+            "Z": -175.86023
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

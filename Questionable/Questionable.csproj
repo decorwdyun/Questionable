@@ -56,15 +56,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\LLib\LLib.csproj" />
+      <ProjectReference Include="..\QuestPaths\QuestPaths.csproj" Condition="'$(Configuration)' == 'Release'" />
     </ItemGroup>
-
-    <!--
-    <ItemGroup>
-        <EmbeddedResource Include="QuestPaths/**/*.json"/>
-    </ItemGroup>
-    -->
-
-    <Target Name="RenameLatestZip" AfterTargets="PackagePlugin">
-        <Exec Command="rename $(OutDir)$(AssemblyName)\latest.zip $(AssemblyName)-$(Version).zip"/>
-    </Target>
 </Project>

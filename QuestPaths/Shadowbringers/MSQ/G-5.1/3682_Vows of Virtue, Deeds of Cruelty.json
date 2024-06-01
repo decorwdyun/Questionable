@@ -1,0 +1,94 @@
+﻿{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1031777,
+          "Position": {
+            "X": 25.864014,
+            "Y": 82.78213,
+            "Z": 24.734863
+          },
+          "TerritoryId": 820,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1027230,
+          "Position": {
+            "X": 117.997925,
+            "Y": 14.649025,
+            "Z": 7.156433
+          },
+          "TerritoryId": 819,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Crystarium",
+          "AethernetShortcut": [
+            "[Crystarium] Aetheryte Plaza",
+            "[Crystarium] The Dossal Gate"
+          ]
+        },
+        {
+          "DataId": 1032121,
+          "Position": {
+            "X": 0.045776367,
+            "Y": -5.996435E-14,
+            "Z": -5.5390625
+          },
+          "TerritoryId": 844,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 2002881,
+          "Position": {
+            "X": 21.133728,
+            "Y": 22.323914,
+            "Z": -631.281
+          },
+          "TerritoryId": 156,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Mor Dhona"
+        },
+        {
+          "DataId": 1032081,
+          "Position": {
+            "X": -2.4262085,
+            "Y": 0,
+            "Z": -9.10968
+          },
+          "TerritoryId": 351,
+          "InteractionType": "SinglePlayerDuty",
+          "Comment": "Estinien vs. Arch Ultima"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1032081,
+          "Position": {
+            "X": -2.4262085,
+            "Y": 0,
+            "Z": -9.10968
+          },
+          "StopDistance": 5,
+          "TerritoryId": 351,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

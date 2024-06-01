@@ -1,0 +1,86 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1045692,
+          "Position": {
+            "X": -256.67206,
+            "Y": 19.26994,
+            "Z": -46.28064
+          },
+          "TerritoryId": 962,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1045695,
+          "Position": {
+            "X": 135.57642,
+            "Y": -16.147,
+            "Z": 243.42712
+          },
+          "TerritoryId": 962,
+          "InteractionType": "SinglePlayerDuty",
+          "Comment": "The Game Is Afoot",
+          "AethernetShortcut": [
+            "[Old Sharlayan] The Studium",
+            "[Old Sharlayan] Scholar's Harbor"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1045696,
+          "Position": {
+            "X": 135.729,
+            "Y": -16.146997,
+            "Z": 241.50452
+          },
+          "TerritoryId": 962,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 1037077,
+          "Position": {
+            "X": -38.07129,
+            "Y": -14.169313,
+            "Z": 105.30249
+          },
+          "TerritoryId": 962,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1045699,
+          "Position": {
+            "X": -60.41046,
+            "Y": -15.127002,
+            "Z": 139.42163
+          },
+          "TerritoryId": 962,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

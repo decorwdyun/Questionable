@@ -75,7 +75,7 @@ internal sealed unsafe class GameFunctions
             .Where(x => x.Command != null && x.Command.StartsWith('/'))
             .ToDictionary(x => (EEmote)x.RowId, x => x.Command!)
             .AsReadOnly();
-        _contentFinderConditionToContentId = dataManager.GetExcelSheet<ContentFinderCondition>()
+        _contentFinderConditionToContentId = dataManager.GetExcelSheet<ContentFinderCondition>()!
             .Where(x => x.RowId > 0 && x.Content > 0)
             .ToDictionary(x => x.RowId, x => x.Content)
             .AsReadOnly();

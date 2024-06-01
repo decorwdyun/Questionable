@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Questionable", "Questionabl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LLib", "LLib\LLib.csproj", "{EEDE3BBE-E260-445E-8FB3-1264E0CBBE91}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuestPaths", "QuestPaths\QuestPaths.csproj", "{7A136F28-8D5C-478D-B993-0F39F1451A47}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{EEDE3BBE-E260-445E-8FB3-1264E0CBBE91}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EEDE3BBE-E260-445E-8FB3-1264E0CBBE91}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EEDE3BBE-E260-445E-8FB3-1264E0CBBE91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A136F28-8D5C-478D-B993-0F39F1451A47}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A136F28-8D5C-478D-B993-0F39F1451A47}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A136F28-8D5C-478D-B993-0F39F1451A47}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A136F28-8D5C-478D-B993-0F39F1451A47}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

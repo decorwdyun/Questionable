@@ -1,0 +1,52 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1039931,
+          "Position": {
+            "X": -351.15588,
+            "Y": 23.742596,
+            "Z": 418.4176
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1039932,
+          "Position": {
+            "X": -357.99194,
+            "Y": 22,
+            "Z": 488.3954
+          },
+          "TerritoryId": 958,
+          "InteractionType": "SinglePlayerDuty",
+          "Comment": "In from the Cold"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1039933,
+          "Position": {
+            "X": -369.2531,
+            "Y": 22.20836,
+            "Z": 403.76892
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

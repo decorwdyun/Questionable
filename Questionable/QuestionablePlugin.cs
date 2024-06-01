@@ -11,6 +11,7 @@ using FFXIVClientStructs.FFXIV.Client.UI;
 using Questionable.Controller;
 using Questionable.Data;
 using Questionable.External;
+using Questionable.Model;
 using Questionable.Windows;
 
 namespace Questionable;

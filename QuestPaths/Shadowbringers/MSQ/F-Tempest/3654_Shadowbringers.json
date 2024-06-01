@@ -1,0 +1,68 @@
+﻿{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "Comment": "TODO Missing Quest Start",
+  "QuestSequence": [
+    {
+      "Sequence": 7,
+      "Steps": [
+        {
+          "TerritoryId": 818,
+          "InteractionType": "Duty",
+          "ContentFinderConditionId": 652
+        }
+      ]
+    },
+    {
+      "Sequence": 9,
+      "Steps": [
+        {
+          "TerritoryId": 881,
+          "InteractionType": "Duty",
+          "ContentFinderConditionId": 687
+        }
+      ]
+    },
+    {
+      "Sequence": 11,
+      "Steps": [
+        {
+          "DataId": 1030576,
+          "Position": {
+            "X": -0.015319824,
+            "Y": -1.0530548E-13,
+            "Z": -6.0273438
+          },
+          "TerritoryId": 844,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 2002881,
+          "Position": {
+            "X": 21.133728,
+            "Y": 22.323914,
+            "Z": -631.281
+          },
+          "TerritoryId": 156,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Mor Dhona"
+        },
+        {
+          "DataId": 1031257,
+          "Position": {
+            "X": -2.4262085,
+            "Y": 0,
+            "Z": -9.10968
+          },
+          "TerritoryId": 351,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+﻿{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1038908,
+          "Position": {
+            "X": -456.10742,
+            "Y": -168,
+            "Z": -618.7686
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1038919,
+          "Position": {
+            "X": -518.36426,
+            "Y": -161.84549,
+            "Z": -281.94098
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "Position": {
+            "X": -356.28064,
+            "Y": -161.84383,
+            "Z": -253.94832
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "DataId": 1038923,
+          "StopDistance": 5,
+          "TerritoryId": 959,
+          "InteractionType": "Interact",
+          "Comment": "Navmesh can't jump"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "Position": {
+            "X": -338.71045,
+            "Y": -161.84383,
+            "Z": -361.57114
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "DataId": 1038924,
+          "StopDistance": 5,
+          "TerritoryId": 959,
+          "InteractionType": "Interact",
+          "Comment": "Navmesh can't jump"
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 1038919,
+          "Position": {
+            "X": -518.36426,
+            "Y": -161.84549,
+            "Z": -281.94098
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "DataId": 1038925,
+          "Position": {
+            "X": -506.52325,
+            "Y": -161.84383,
+            "Z": -258.68628
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 6,
+      "Steps": [
+        {
+          "DataId": 1038926,
+          "Position": {
+            "X": -28.244446,
+            "Y": -131.29884,
+            "Z": -585.7481
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1038927,
+          "Position": {
+            "X": 2.090454,
+            "Y": -49.589596,
+            "Z": -699.733
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

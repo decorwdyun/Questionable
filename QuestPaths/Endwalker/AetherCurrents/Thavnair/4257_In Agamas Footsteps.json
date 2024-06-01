@@ -1,0 +1,69 @@
+﻿{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1040864,
+          "Position": {
+            "X": 462.51624,
+            "Y": 14.320099,
+            "Z": -219.86731
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1040862,
+          "Position": {
+            "X": -27.023743,
+            "Y": 26.58384,
+            "Z": -178.63745
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact",
+          "Comment": "Unclear if this can be done automatically, enemies seem to despawn"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 2012261,
+          "Position": {
+            "X": 334.67603,
+            "Y": 13.076904,
+            "Z": -239.7956
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact",
+          "Mount": false,
+          "Sprint": false
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1040864,
+          "Position": {
+            "X": 462.51624,
+            "Y": 14.320099,
+            "Z": -219.86731
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

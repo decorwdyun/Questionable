@@ -1,0 +1,83 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "DataId": 1045611,
+      "Position": {
+        "X": 160.87585,
+        "Y": -49.589592,
+        "Z": -618.46344
+      },
+      "TerritoryId": 959,
+      "InteractionType": "Interact",
+      "Comment": "Unsure if correct id"
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1045919,
+          "Position": {
+            "X": -200.45782,
+            "Y": 59.021378,
+            "Z": 418.69226
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 2013354,
+          "Position": {
+            "X": -2.7314453,
+            "Y": 73.8689,
+            "Z": 638.0254
+          },
+          "TerritoryId": 1162,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 2013355,
+          "Position": {
+            "X": -44.87683,
+            "Y": 66.57507,
+            "Z": 547.6615
+          },
+          "TerritoryId": 1162,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 2013356,
+          "Position": {
+            "X": 69.29114,
+            "Y": 56.71765,
+            "Z": 472.19043
+          },
+          "TerritoryId": 1162,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1045479,
+          "Position": {
+            "X": 4.043579,
+            "Y": 58.561604,
+            "Z": 424.97888
+          },
+          "TerritoryId": 1162,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

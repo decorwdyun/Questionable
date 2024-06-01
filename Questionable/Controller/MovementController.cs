@@ -12,6 +12,7 @@ using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using Questionable.External;
+using Questionable.Model;
 using Questionable.Model.V1;
 using Questionable.Model.V1.Converter;
 

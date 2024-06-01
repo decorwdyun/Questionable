@@ -1,0 +1,93 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1041555,
+          "Position": {
+            "X": 26.443848,
+            "Y": -129.20917,
+            "Z": -536.9497
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1041556,
+          "Position": {
+            "X": 113.14563,
+            "Y": -133.07352,
+            "Z": -465.17133
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1041745,
+          "Position": {
+            "X": 66.23938,
+            "Y": -133.00002,
+            "Z": -432.8222
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact",
+          "Comment": "Cheerful Loporrit",
+          "$.0": "[1]",
+          "$.1": "QuestVariables if done first: 1 0 0 0 0 64"
+        },
+        {
+          "DataId": 1041746,
+          "Position": {
+            "X": -85.83203,
+            "Y": -133.0356,
+            "Z": -507.1336
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact",
+          "Comment": "Stern Loporrit",
+          "$.0": "[2]",
+          "$.1": "QuestVariables if done after [1]: 2 0 0 0 0 96"
+        },
+        {
+          "DataId": 1041744,
+          "Position": {
+            "X": -110.12439,
+            "Y": -133.07341,
+            "Z": -556.7865
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact",
+          "Comment": "Easygoing Loporrit"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1041556,
+          "Position": {
+            "X": 113.14563,
+            "Y": -133.07352,
+            "Z": -465.17133
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

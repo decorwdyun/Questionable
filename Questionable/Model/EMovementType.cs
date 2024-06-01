@@ -1,4 +1,4 @@
-﻿namespace Questionable;
+﻿namespace Questionable.Model;
 
 public enum EMovementType
 {

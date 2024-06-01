@@ -1,0 +1,86 @@
+﻿{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1038931,
+          "Position": {
+            "X": 615.8998,
+            "Y": -168,
+            "Z": -657.7402
+          },
+          "StopDistance": 7,
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 2012184,
+          "Position": {
+            "X": 73.83838,
+            "Y": -133.07397,
+            "Z": -512.2606
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 2012185,
+          "Position": {
+            "X": -5.416992,
+            "Y": -49.05786,
+            "Z": -269.24548
+          },
+          "TerritoryId": 959,
+          "InteractionType": "SinglePlayerDuty",
+          "Comment": "Follow Urianger"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 2012185,
+          "Position": {
+            "X": -5.416992,
+            "Y": -49.05786,
+            "Z": -269.24548
+          },
+          "TerritoryId": 959,
+          "InteractionType": "SinglePlayerDuty",
+          "Comment": "Follow Urianger (but you failed the first time)"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1038935,
+          "Position": {
+            "X": 68.5282,
+            "Y": 75.72459,
+            "Z": -23.51416
+          },
+          "StopDistance": 5,
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+﻿{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1033868,
+          "Position": {
+            "X": 19.57727,
+            "Y": 82.78207,
+            "Z": 48.53894
+          },
+          "TerritoryId": 820,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1033872,
+          "Position": {
+            "X": -634.2717,
+            "Y": 35.86156,
+            "Z": -234.21082
+          },
+          "TerritoryId": 816,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Il Mheg - Lydha Lran",
+          "Fly": true
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1027690,
+          "Position": {
+            "X": 452.9945,
+            "Y": 87.48282,
+            "Z": -691.9814
+          },
+          "StopDistance": 5,
+          "TerritoryId": 816,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Il Mheg - Wolekdorf"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1033872,
+          "Position": {
+            "X": -634.2717,
+            "Y": 35.86156,
+            "Z": -234.21082
+          },
+          "TerritoryId": 816,
+          "InteractionType": "Interact",
+          "Fly": true
+        }
+      ]
+    }
+  ]
+}

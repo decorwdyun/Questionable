@@ -1,0 +1,118 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1038868,
+          "Position": {
+            "X": 605.9204,
+            "Y": 34.7239,
+            "Z": 201.09851
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1039864,
+          "Position": {
+            "X": -334.12683,
+            "Y": 23.803606,
+            "Z": 405.2644
+          },
+          "StopDistance": 7,
+          "TerritoryId": 958,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Garlemald - Camp Broken Glass"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1039870,
+          "Position": {
+            "X": -358.14453,
+            "Y": 22.554066,
+            "Z": 430.01453
+          },
+          "StopDistance": 5,
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1039878,
+          "Position": {
+            "X": -362.1729,
+            "Y": 22.071072,
+            "Z": 434.01233
+          },
+          "StopDistance": 7,
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 1039880,
+          "Position": {
+            "X": -308.36963,
+            "Y": 22.468344,
+            "Z": 365.7129
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WaitForManualProgress",
+          "Comment": "Follow Alphinaud and Alisaie"
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "DataId": 1039880,
+          "Position": {
+            "X": 66.50907,
+            "Y": 0.26087344,
+            "Z": 149.46323
+          },
+          "StopDistance": 1,
+          "TerritoryId": 958,
+          "InteractionType": "Interact",
+          "Comment": "Follow Alphinaud and Alisaie"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1039883,
+          "Position": {
+            "X": 64.65234,
+            "Y": 0.21427588,
+            "Z": 147.8446
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

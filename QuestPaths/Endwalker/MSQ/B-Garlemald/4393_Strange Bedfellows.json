@@ -1,0 +1,304 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1039915,
+          "Position": {
+            "X": -399.80164,
+            "Y": 22.143175,
+            "Z": 422.8733
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 2012008,
+          "Position": {
+            "X": 134.90503,
+            "Y": 14.389221,
+            "Z": -172.25916
+          },
+          "StopDistance": 5,
+          "TerritoryId": 958,
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818352
+        },
+        {
+          "Position": {
+            "X": -141.20903,
+            "Y": 11.389334,
+            "Z": -399.3773
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "Position": {
+            "X": -153.54558,
+            "Y": 11.389343,
+            "Z": -402.64487
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Instruction",
+          "Comment": "Jump to Aether Current"
+        },
+        {
+          "DataId": 2012009,
+          "Position": {
+            "X": -144.9455,
+            "Y": 17.56311,
+            "Z": -420.52344
+          },
+          "TerritoryId": 958,
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818353
+        },
+        {
+          "Position": {
+            "X": -145.6724,
+            "Y": 11.389343,
+            "Z": -398.82806
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Instruction",
+          "Comment": "Leave the Aether Current location"
+        },
+        {
+          "Position": {
+            "X": 78.52435,
+            "Y": 10.5,
+            "Z": -337.21478
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Instruction",
+          "Comment": "Jump onto the Highway"
+        },
+        {
+          "DataId": 2012007,
+          "Position": {
+            "X": 79.9115,
+            "Y": 37.857544,
+            "Z": -518.2117
+          },
+          "TerritoryId": 958,
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818351
+        },
+        {
+          "Position": {
+            "X": 76.583664,
+            "Y": 10.5,
+            "Z": -538.34607
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo",
+          "Mount": true,
+          "DisableNavmesh": true
+        },
+        {
+          "DataId": 1039917,
+          "Position": {
+            "X": 495.50623,
+            "Y": 10.800001,
+            "Z": -425.2232
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1037715,
+          "Position": {
+            "X": 500.57214,
+            "Y": -36.65,
+            "Z": -178.85101
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 173,
+          "Position": {
+            "X": 518.9136,
+            "Y": -35.324707,
+            "Z": -178.36273
+          },
+          "StopDistance": 7,
+          "TerritoryId": 958,
+          "InteractionType": "AttuneAetheryte",
+          "DisableNavmesh": true
+        },
+        {
+          "DataId": 1037716,
+          "Position": {
+            "X": 524.43726,
+            "Y": -36.65,
+            "Z": -186.69415
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 1037719,
+          "Position": {
+            "X": 549.7977,
+            "Y": -36.61618,
+            "Z": -260.57837
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "DataId": 1039924,
+          "Position": {
+            "X": 547.5089,
+            "Y": -35.24417,
+            "Z": -192.73676
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 6,
+      "Steps": [
+        {
+          "Position": {
+            "X": 539.89374,
+            "Y": -36.65,
+            "Z": -193.11551
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo",
+          "Mount": true,
+          "DisableNavmesh": true
+        },
+        {
+          "DataId": 2012111,
+          "Position": {
+            "X": 507.042,
+            "Y": 8.8654175,
+            "Z": 64.68298
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
+          "KillEnemyDataIds": [
+            14078
+          ],
+          "$.0": "[1]",
+          "$.1": "QuestVariables if done first: (before) 0 0 2 0 0 0 (after) 16 16 2 0 0 64"
+        },
+        {
+          "DataId": 2012109,
+          "Position": {
+            "X": 338.49072,
+            "Y": 2.304016,
+            "Z": 94.77368
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Instruction",
+          "EnemySpawnType": "AfterInteraction",
+          "KillEnemyDataIds": [
+            14079
+          ],
+          "Comment": "TODO Needs item use?",
+          "ItemId": 2003231,
+          "ItemUseHealthMaxPercent": 10,
+          "$.0": "[2]",
+          "$.1": "QuestVariables if done after [1]: 32 17 1 0 0 96"
+        },
+        {
+          "DataId": 2012108,
+          "Position": {
+            "X": 79.42322,
+            "Y": 0.62561035,
+            "Z": 153.24634
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact",
+          "Comment": "TODO Maybe move the train station aether current interaction before this",
+          "$.0": "[3]",
+          "$.1": "QuestVariables if done after [1, 2]: 49 17 1 0 0 224"
+        },
+        {
+          "DataId": 2012110,
+          "Position": {
+            "X": -25.558899,
+            "Y": -12.954956,
+            "Z": 396.96338
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Instruction",
+          "EnemySpawnType": "AfterInteraction",
+          "KillEnemyDataIds": [
+            14080
+          ],
+          "Comment": "TODO Needs item use?",
+          "ItemId": 2003231,
+          "ItemUseHealthMaxPercent": 10,
+          "$.0": "[4]"
+        }
+      ]
+    },
+    {
+      "Sequence": 7,
+      "Steps": [
+        {
+          "DataId": 1039930,
+          "Position": {
+            "X": -208.33148,
+            "Y": 15.486622,
+            "Z": 450.88867
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1039931,
+          "Position": {
+            "X": -351.15588,
+            "Y": 23.742596,
+            "Z": 418.4176
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

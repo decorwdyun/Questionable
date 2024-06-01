@@ -17,6 +17,7 @@ using LLib.GameUI;
 using Lumina.Excel.CustomSheets;
 using Questionable.Data;
 using Questionable.External;
+using Questionable.Model;
 using Questionable.Model.V1;
 using Questionable.Model.V1.Converter;
 using ValueType = FFXIVClientStructs.FFXIV.Component.GUI.ValueType;
@@ -75,11 +76,23 @@ internal sealed class QuestController
         CurrentQuest = null;
         DebugState = null;
 
-#if false
-        LoadFromEmbeddedResources();
+#if RELEASE
+        _pluginLog.Information("Loading quests from assembly");
+        QuestPaths.AssemblyQuestLoader.LoadQuestsFromEmbeddedResources(LoadQuestFromStream);
+#else
+        DirectoryInfo? solutionDirectory = _pluginInterface.AssemblyLocation?.Directory?.Parent?.Parent;
+        if (solutionDirectory != null)
+        {
+            DirectoryInfo pathProjectDirectory =
+                new DirectoryInfo(Path.Combine(solutionDirectory.FullName, "QuestPaths"));
+            if (pathProjectDirectory.Exists)
+            {
+                LoadFromDirectory(new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "Shadowbringers")));
+                LoadFromDirectory(new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "Endwalker")));
+            }
+        }
 #endif
-        LoadFromDirectory(new DirectoryInfo(@"E:\ffxiv\Questionable\Questionable\QuestPaths"));
-        LoadFromDirectory(_pluginInterface.ConfigDirectory);
+        LoadFromDirectory(new DirectoryInfo(Path.Combine(_pluginInterface.ConfigDirectory.FullName, "Quests")));
 
         foreach (var (questId, quest) in _quests)
         {
@@ -92,45 +105,36 @@ internal sealed class QuestController
         }
     }
 
-#if false
-    private void LoadFromEmbeddedResources()
+    private void LoadQuestFromStream(string fileName, Stream stream)
     {
-        foreach (string resourceName in typeof(Questionable).Assembly.GetManifestResourceNames())
+        _pluginLog.Verbose($"Loading quest from '{fileName}'");
+        var (questId, name) = ExtractQuestDataFromName(fileName);
+        Quest quest = new Quest
         {
-            if (resourceName.EndsWith(".json"))
-            {
-                var (questId, name) = ExtractQuestDataFromName(resourceName);
-                Quest quest = new Quest
-                {
-                    QuestId = questId,
-                    Name = name,
-                    Data = JsonSerializer.Deserialize<QuestData>(
-                        typeof(Questionable).Assembly.GetManifestResourceStream(resourceName)!)!,
-                };
-                _quests[questId] = quest;
-            }
-        }
+            QuestId = questId,
+            Name = name,
+            Data = JsonSerializer.Deserialize<QuestData>(stream)!,
+        };
+        _quests[questId] = quest;
     }
-#endif
 
     public bool IsKnownQuest(ushort questId) => _quests.ContainsKey(questId);
 
-    private void LoadFromDirectory(DirectoryInfo configDirectory)
+    private void LoadFromDirectory(DirectoryInfo directory)
     {
-        foreach (FileInfo fileInfo in configDirectory.GetFiles("*.json"))
+        if (!directory.Exists)
+        {
+            _pluginLog.Information($"Not loading quests from {directory} (doesn't exist)");
+            return;
+        }
+
+        _pluginLog.Information($"Loading quests from {directory}");
+        foreach (FileInfo fileInfo in directory.GetFiles("*.json"))
         {
             try
             {
                 using FileStream stream = new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read);
-                var (questId, name) = ExtractQuestDataFromName(fileInfo.Name);
-                Quest quest = new Quest
-                {
-                    FilePath = fileInfo.FullName,
-                    QuestId = questId,
-                    Name = name,
-                    Data = JsonSerializer.Deserialize<QuestData>(stream)!,
-                };
-                _quests[questId] = quest;
+                LoadQuestFromStream(fileInfo.Name, stream);
             }
             catch (Exception e)
             {
@@ -138,7 +142,7 @@ internal sealed class QuestController
             }
         }
 
-        foreach (DirectoryInfo childDirectory in configDirectory.GetDirectories())
+        foreach (DirectoryInfo childDirectory in directory.GetDirectories())
             LoadFromDirectory(childDirectory);
     }
 

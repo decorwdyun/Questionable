@@ -1,0 +1,83 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1038588,
+          "Position": {
+            "X": -101.76245,
+            "Y": 4.357494,
+            "Z": 0.7476196
+          },
+          "StopDistance": 5,
+          "TerritoryId": 962,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1039550,
+          "Position": {
+            "X": -620.7218,
+            "Y": -27.670597,
+            "Z": 302.17432
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Labyrinthos - Aporia",
+          "SkipIf": [
+            "FlyingUnlocked"
+          ]
+        },
+        {
+          "DataId": 1039827,
+          "Position": {
+            "X": -323.38446,
+            "Y": -224.2727,
+            "Z": 301.56396
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact",
+          "Fly": true
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1039847,
+          "Position": {
+            "X": -334.92035,
+            "Y": -224.19772,
+            "Z": 311.9402
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1039852,
+          "Position": {
+            "X": -376.1197,
+            "Y": 80.7959,
+            "Z": 607.6904
+          },
+          "StopDistance": 5,
+          "TerritoryId": 960,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

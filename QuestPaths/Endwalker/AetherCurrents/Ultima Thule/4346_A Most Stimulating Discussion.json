@@ -1,0 +1,76 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1038016,
+          "Position": {
+            "X": 105.42456,
+            "Y": 269.29584,
+            "Z": -454.3069
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1040880,
+          "Position": {
+            "X": -110.185425,
+            "Y": 269.2062,
+            "Z": -713.5271
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Ultima Thule - Abode of the Ea"
+        },
+        {
+          "DataId": 1040881,
+          "Position": {
+            "X": -201.86163,
+            "Y": 288.6714,
+            "Z": -466.331
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "$.0": "[2]",
+          "$.1": "QuestVariables if done after [3]: 32 17 0 0 0 160"
+        },
+        {
+          "DataId": 1040879,
+          "Position": {
+            "X": -184.52734,
+            "Y": 267.47086,
+            "Z": -292.65283
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "$.0": "[3]",
+          "$.1": "QuestVariables if done first: 16 1 0 0 0 128"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1038016,
+          "Position": {
+            "X": 105.42456,
+            "Y": 269.29584,
+            "Z": -454.3069
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}
