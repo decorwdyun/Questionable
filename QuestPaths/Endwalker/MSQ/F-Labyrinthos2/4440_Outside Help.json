@@ -49,7 +49,8 @@
           "AethernetShortcut": [
             "[Old Sharlayan] Aetheryte Plaza",
             "[Old Sharlayan] The Baldesion Annex"
-          ]
+          ],
+          "TargetTerritoryId": 987
         }
       ]
     },
@@ -64,7 +65,8 @@
             "Z": 14.785889
           },
           "TerritoryId": 987,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 962
         },
         {
           "DataId": 1039683,

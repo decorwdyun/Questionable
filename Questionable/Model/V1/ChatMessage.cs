@@ -1,7 +1,7 @@
 ﻿namespace Questionable.Model.V1;
 
-public sealed class DialogueChoice
+public sealed class ChatMessage
 {
     public string? ExcelSheet { get; set; }
-    public string Answer { get; set; } = null!;
+    public string Key { get; set; } = null!;
 }

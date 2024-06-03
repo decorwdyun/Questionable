@@ -99,7 +99,8 @@
           "AethernetShortcut": [
             "[Old Sharlayan] The Leveilleur Estate",
             "[Old Sharlayan] The Baldesion Annex"
-          ]
+          ],
+          "TargetTerritoryId": 987
         },
         {
           "DataId": 1040291,

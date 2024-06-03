@@ -9,7 +9,6 @@ using System.Text;
 using Dalamud.Game;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects;
-using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using FFXIVClientStructs.FFXIV.Client.Game;
@@ -20,11 +19,13 @@ using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using FFXIVClientStructs.FFXIV.Client.System.Memory;
 using FFXIVClientStructs.FFXIV.Client.System.String;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
+using Lumina.Excel.CustomSheets;
 using Lumina.Excel.GeneratedSheets;
 using Questionable.Controller;
 using Questionable.Model.V1;
 using BattleChara = FFXIVClientStructs.FFXIV.Client.Game.Character.BattleChara;
 using GameObject = Dalamud.Game.ClientState.Objects.Types.GameObject;
+using Quest = Questionable.Model.Quest;
 
 namespace Questionable;
 
@@ -44,6 +45,7 @@ internal sealed unsafe class GameFunctions
     private readonly ReadOnlyDictionary<EEmote, string> _emoteCommands;
     private readonly ReadOnlyDictionary<uint, ushort> _contentFinderConditionToContentId;
 
+    private readonly IDataManager _dataManager;
     private readonly IObjectTable _objectTable;
     private readonly ITargetManager _targetManager;
     private readonly ICondition _condition;
@@ -53,6 +55,7 @@ internal sealed unsafe class GameFunctions
     public GameFunctions(IDataManager dataManager, IObjectTable objectTable, ISigScanner sigScanner,
         ITargetManager targetManager, ICondition condition, IClientState clientState, IPluginLog pluginLog)
     {
+        _dataManager = dataManager;
         _objectTable = objectTable;
         _targetManager = targetManager;
         _condition = condition;
@@ -399,6 +402,11 @@ internal sealed unsafe class GameFunctions
         if (_condition[ConditionFlag.Swimming] && !IsFlyingUnlocked(_clientState.TerritoryType))
             return true;
 
+        // company chocobo is locked
+        var playerState = PlayerState.Instance();
+        if (playerState != null && !playerState->IsMountUnlocked(1))
+            return true;
+
         var gameObject = GameObjectManager.GetGameObjectByIndex(0);
         if (gameObject != null && gameObject->ObjectKind == 1)
         {
@@ -410,12 +418,41 @@ internal sealed unsafe class GameFunctions
         return false;
     }
 
+    public void Mount()
+    {
+        if (!_condition[ConditionFlag.Mounted])
+        {
+            var playerState = PlayerState.Instance();
+            if (playerState != null && playerState->IsMountUnlocked(71))
+            {
+                if (ActionManager.Instance()->GetActionStatus(ActionType.Mount, 71) == 0)
+                {
+                    _pluginLog.Information("Using SDS Fenrir as mount");
+                    ActionManager.Instance()->UseAction(ActionType.Mount, 71);
+                }
+            }
+            else
+            {
+                if (ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, 9) == 0)
+                {
+                    _pluginLog.Information("Using mount roulette");
+                    ActionManager.Instance()->UseAction(ActionType.GeneralAction, 9);
+                }
+            }
+        }
+    }
+
     public bool Unmount()
     {
         if (_condition[ConditionFlag.Mounted])
         {
             if (ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, 23) == 0)
+            {
+                _pluginLog.Information("Unmounting...");
                 ActionManager.Instance()->UseAction(ActionType.GeneralAction, 23);
+            }
+            else
+                _pluginLog.Warning("Can't unmount right now?");
 
             return true;
         }
@@ -430,9 +467,38 @@ internal sealed unsafe class GameFunctions
             if (UIState.IsInstanceContentUnlocked(contentId))
                 AgentContentsFinder.Instance()->OpenRegularDuty(contentFinderConditionId);
             else
-                _pluginLog.Error($"Trying to access a locked duty (cf: {contentFinderConditionId}, content: {contentId})");
+                _pluginLog.Error(
+                    $"Trying to access a locked duty (cf: {contentFinderConditionId}, content: {contentId})");
         }
         else
             _pluginLog.Error($"Could not find content for content finder condition (cf: {contentFinderConditionId})");
+    }
+
+    public string? GetExcelString(Quest currentQuestQuest, string? excelSheetName, string key)
+    {
+        if (excelSheetName == null)
+        {
+            string questPrefix = $"quest/{(currentQuestQuest.QuestId / 100):000}/";
+            string questSuffix = $"_{currentQuestQuest.QuestId:00000}";
+            excelSheetName = _dataManager.Excel
+                .GetSheetNames()
+                .SingleOrDefault(x =>
+                    x.StartsWith(questPrefix, StringComparison.Ordinal) &&
+                    x.EndsWith(questSuffix, StringComparison.Ordinal));
+            if (excelSheetName == null)
+            {
+                _pluginLog.Error($"Could not find sheet matching '{questPrefix}*{questSuffix}");
+                return null;
+            }
+        }
+
+        var excelSheet = _dataManager.Excel.GetSheet<QuestDialogueText>(excelSheetName);
+        if (excelSheet == null)
+        {
+            _pluginLog.Error($"Unknown excel sheet '{excelSheetName}'");
+            return null;
+        }
+
+        return excelSheet.FirstOrDefault(x => x.Key == key)?.Value?.ToString();
     }
 }

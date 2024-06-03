@@ -27,6 +27,7 @@
             "Y": 55,
             "Z": -68.61987
           },
+          "StopDistance": 5,
           "TerritoryId": 963,
           "InteractionType": "Interact"
         }
@@ -44,6 +45,7 @@
           },
           "TerritoryId": 819,
           "InteractionType": "Interact",
+          "AetheryteShortcut": "Crystarium",
           "AethernetShortcut": [
             "[Crystarium] Aetheryte Plaza",
             "[Crystarium] The Cabinet of Curiosity"

@@ -8,5 +8,6 @@ public enum ESkipCondition
 {
     None,
     Never,
+    FlyingLocked,
     FlyingUnlocked,
 }

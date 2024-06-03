@@ -126,7 +126,9 @@
           },
           "TerritoryId": 961,
           "InteractionType": "Say",
-          "ChatMessage": "I have a favor to ask"
+          "ChatMessage": {
+            "Key": "TEXT_AKTKME107_04425_SAYTODO_000_190"
+          }
         }
       ]
     },
@@ -142,7 +144,9 @@
           },
           "TerritoryId": 961,
           "InteractionType": "Say",
-          "ChatMessage": "Please, Emet-Selch"
+          "ChatMessage": {
+            "Key": "TEXT_AKTKME107_04425_SAYTODO_000_210"
+          }
         }
       ]
     },

@@ -12,6 +12,7 @@
             "Y": 54.977272,
             "Z": 432.02856
           },
+          "StopDistance": 7,
           "TerritoryId": 959,
           "InteractionType": "Interact"
         }
@@ -21,6 +22,18 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 2012664,
+          "Position": {
+            "X": -26.901672,
+            "Y": -130.47992,
+            "Z": -580.4685
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow",
+          "SkipIf": ["FlyingUnlocked"]
+        },
+        {
           "DataId": 1045466,
           "Position": {
             "X": -20.126648,
@@ -28,7 +41,8 @@
             "Z": -491.99664
           },
           "TerritoryId": 959,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
@@ -44,6 +58,7 @@
           },
           "TerritoryId": 963,
           "InteractionType": "Interact",
+          "AetheryteShortcut": "Radz-at-Han",
           "AethernetShortcut": [
             "[Radz-at-Han] Aetheryte Plaza",
             "[Radz-at-Han] Meghaduta"

@@ -46,6 +46,7 @@
             "Y": 0.59503174,
             "Z": -141.71057
           },
+          "StopDistance": 5,
           "TerritoryId": 963,
           "InteractionType": "Interact"
         }
@@ -61,7 +62,8 @@
             "Z": -140.01839
           },
           "TerritoryId": 963,
-          "InteractionType": "UseItem"
+          "InteractionType": "UseItem",
+          "ItemId": 2003461
         }
       ]
     },

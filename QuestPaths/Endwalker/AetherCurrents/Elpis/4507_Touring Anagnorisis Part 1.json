@@ -59,6 +59,14 @@
           },
           "TerritoryId": 961,
           "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ],
           "$.0": "[1]",
           "$.1": "QuestVariables if done first: 17 0 0 0 0 64"
         },
@@ -71,6 +79,14 @@
           },
           "TerritoryId": 961,
           "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ],
           "$.0": "[2]",
           "$.2": "QuestVariables if done after [1]: 33 16 0 0 0 96",
           "$.3": "QuestVariables if done after [3]: 32 17 0 0 0 160"
@@ -84,6 +100,14 @@
           },
           "TerritoryId": 961,
           "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ],
           "$.0": 3,
           "$.1": "QuestVariables if done first: 16 1 0 0 0 128"
         }

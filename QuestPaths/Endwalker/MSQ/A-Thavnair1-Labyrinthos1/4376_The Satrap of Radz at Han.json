@@ -103,7 +103,8 @@
           "AethernetShortcut": [
             "[Old Sharlayan] Aetheryte Plaza",
             "[Old Sharlayan] The Baldesion Annex"
-          ]
+          ],
+          "TargetTerritoryId": 987
         },
         {
           "DataId": 1038589,

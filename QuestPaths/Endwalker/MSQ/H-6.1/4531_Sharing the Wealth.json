@@ -66,7 +66,15 @@
           },
           "StopDistance": 5,
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 1039606,

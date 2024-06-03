@@ -32,7 +32,8 @@
           "AethernetShortcut": [
             "[Old Sharlayan] The Studium",
             "[Old Sharlayan] The Baldesion Annex"
-          ]
+          ],
+          "TargetTerritoryId": 987
         },
         {
           "DataId": 1038784,

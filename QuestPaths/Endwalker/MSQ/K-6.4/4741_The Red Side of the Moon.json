@@ -4,15 +4,18 @@
   "QuestSequence": [
     {
       "Sequence": 0,
-      "DataId": 1045611,
-      "Position": {
-        "X": 160.87585,
-        "Y": -49.589592,
-        "Z": -618.46344
-      },
-      "TerritoryId": 959,
-      "InteractionType": "Interact",
-      "Comment": "Unsure if correct id"
+      "Steps": [
+        {
+          "DataId": 1045611,
+          "Position": {
+            "X": 160.87585,
+            "Y": -49.589592,
+            "Z": -618.46344
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
+      ]
     },
     {
       "Sequence": 1,
@@ -25,7 +28,9 @@
             "Z": 418.69226
           },
           "TerritoryId": 959,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Mare Lamentorum - Sinus Lacrimarum",
+          "Fly": true
         }
       ]
     },
@@ -40,7 +45,16 @@
             "Z": 638.0254
           },
           "TerritoryId": 1162,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ],
+          "Comment": "TODO Check Flags"
         },
         {
           "DataId": 2013355,
@@ -50,7 +64,15 @@
             "Z": 547.6615
           },
           "TerritoryId": 1162,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 2013356,
@@ -60,7 +82,15 @@
             "Z": 472.19043
           },
           "TerritoryId": 1162,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         }
       ]
     },

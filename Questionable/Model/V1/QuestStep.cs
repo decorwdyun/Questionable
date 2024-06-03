@@ -35,7 +35,7 @@ public class QuestStep
     public bool? GroundTarget { get; set; }
 
     public EEmote? Emote { get; set; }
-    public string? ChatMessage { get; set; }
+    public ChatMessage? ChatMessage { get; set; }
 
     public EEnemySpawnType? EnemySpawnType { get; set; }
 

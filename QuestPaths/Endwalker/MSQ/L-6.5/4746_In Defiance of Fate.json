@@ -28,7 +28,8 @@
             "Z": 298.20703
           },
           "TerritoryId": 817,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Rak'tika - Slitherbough"
         }
       ]
     },
@@ -44,7 +45,9 @@
           },
           "TerritoryId": 817,
           "InteractionType": "Say",
-          "ChatMessage": "allin tuta"
+          "ChatMessage": {
+            "Key": "TEXT_AKTKML103_04746_SAYTODO_000_140"
+          }
         }
       ]
     },
@@ -89,7 +92,8 @@
             "Z": -224.5976
           },
           "TerritoryId": 815,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Amh Araeng - Twine"
         }
       ]
     },

@@ -29,7 +29,8 @@
           },
           "TerritoryId": 156,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "Mor Dhona"
+          "AetheryteShortcut": "Mor Dhona",
+          "TargetTerritoryId": 351
         },
         {
           "DataId": 1035355,

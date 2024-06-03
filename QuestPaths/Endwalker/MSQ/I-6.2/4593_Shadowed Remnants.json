@@ -30,6 +30,14 @@
           },
           "TerritoryId": 1089,
           "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ],
           "$.0": "[1]",
           "$.1": "QuestVariables if done first: 1 0 0 0 0 128"
         },
@@ -42,6 +50,14 @@
           },
           "TerritoryId": 1089,
           "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ],
           "$.0": "[2]",
           "$.1": "QuestVariables if done after [1]: 2 0 0 0 0 192"
         },
@@ -54,6 +70,14 @@
           },
           "TerritoryId": 1089,
           "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ],
           "$.0": "[3]",
           "$.1": "QuestVariables if done after [1, 2]: 3 0 0 0 0 224"
         },
@@ -65,7 +89,15 @@
             "Z": -49.45453
           },
           "TerritoryId": 1089,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            16
+          ]
         }
       ]
     },
@@ -114,7 +146,7 @@
             "Z": 206.78001
           },
           "TerritoryId": 1089,
-          "InteractionType": "Interact"
+          "InteractionType": "WalkTo"
         }
       ]
     },
@@ -128,6 +160,7 @@
             "Y": -718.4441,
             "Z": 206.77502
           },
+          "StopDistance": 5,
           "TerritoryId": 1089,
           "InteractionType": "Interact"
         }

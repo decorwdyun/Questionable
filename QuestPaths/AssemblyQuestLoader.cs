@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if RELEASE
+using System;
 using System.IO;
 using System.IO.Compression;
 
@@ -23,3 +24,4 @@ public static class AssemblyQuestLoader
         }
     }
 }
+#endif

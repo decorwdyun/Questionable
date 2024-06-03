@@ -28,7 +28,8 @@
             "Z": -616.14404
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
@@ -43,12 +44,13 @@
             "Z": -715.44977
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
     {
-      "Sequence": 3,
+      "Sequence": 4,
       "Steps": [
         {
           "TerritoryId": 1125,
@@ -67,9 +69,9 @@
             "Y": 89.42017,
             "Z": -636.86584
           },
+          "StopDistance": 5,
           "TerritoryId": 957,
-          "InteractionType": "Interact",
-          "Comment": "Unsure if this is the right data id"
+          "InteractionType": "Interact"
         }
       ]
     }

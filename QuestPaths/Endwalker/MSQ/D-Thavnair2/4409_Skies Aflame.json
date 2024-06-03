@@ -29,7 +29,8 @@
             "Z": 4.55803
           },
           "TerritoryId": 962,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 987
         }
       ]
     },
@@ -37,6 +38,11 @@
       "Sequence": 2,
       "Steps": [
         {
+          "Position": {
+            "X": 0,
+            "Y": 0,
+            "Z": 0
+          },
           "TerritoryId": 957,
           "AetheryteShortcut": "Thavnair - Yedlihmad",
           "InteractionType": "WalkTo",

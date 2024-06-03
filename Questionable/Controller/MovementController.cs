@@ -167,6 +167,8 @@ internal sealed class MovementController : IDisposable
     public void NavigateTo(EMovementType type, uint? dataId, Vector3 to, bool fly, bool sprint, float? stopDistance = null)
     {
         PrepareNavigation(type, dataId, to, fly, sprint, stopDistance);
+        _pluginLog.Information($"Pathfinding to {Destination}");
+
         _cancellationTokenSource = new();
         _cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(10));
         _pathfindTask =
@@ -176,6 +178,8 @@ internal sealed class MovementController : IDisposable
     public void NavigateTo(EMovementType type, uint? dataId, List<Vector3> to, bool fly, bool sprint, float? stopDistance)
     {
         PrepareNavigation(type, dataId, to.Last(), fly, sprint, stopDistance);
+
+        _pluginLog.Information($"Moving to {Destination}");
         _navmeshIpc.MoveTo(to);
     }
 

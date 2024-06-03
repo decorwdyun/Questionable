@@ -39,6 +39,7 @@
             "Y": 1.7999947,
             "Z": -180.07172
           },
+          "StopDistance": 5,
           "TerritoryId": 963,
           "InteractionType": "Interact",
           "AethernetShortcut": [

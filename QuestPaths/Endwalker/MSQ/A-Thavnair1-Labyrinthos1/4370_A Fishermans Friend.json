@@ -46,15 +46,12 @@
           "InteractionType": "CutsceneSelectString",
           "DialogueChoices": [
             {
-              "ExcelSheet": "quest/043/AktKma114_04370",
               "Answer": "TEXT_AKTKMA114_04370_A2_000_088"
             },
             {
-              "ExcelSheet": "quest/043/AktKma114_04370",
               "Answer": "TEXT_AKTKMA114_04370_A3_000_098"
             },
             {
-              "ExcelSheet": "quest/043/AktKma114_04370",
               "Answer": "TEXT_AKTKMA114_04370_A5_000_107"
             }
           ]
@@ -75,15 +72,12 @@
           "InteractionType": "CutsceneSelectString",
           "DialogueChoices": [
             {
-              "ExcelSheet": "quest/043/AktKma114_04370",
               "Answer": "TEXT_AKTKMA114_04370_A6_000_149"
             },
             {
-              "ExcelSheet": "quest/043/AktKma114_04370",
               "Answer": "TEXT_AKTKMA114_04370_A7_000_158"
             },
             {
-              "ExcelSheet": "quest/043/AktKma114_04370",
               "Answer": "TEXT_AKTKMA114_04370_A8_000_164"
             }
           ]
@@ -104,15 +98,12 @@
           "InteractionType": "CutsceneSelectString",
           "DialogueChoices": [
             {
-              "ExcelSheet": "quest/043/AktKma114_04370",
               "Answer": "TEXT_AKTKMA114_04370_A9_000_200"
             },
             {
-              "ExcelSheet": "quest/043/AktKma114_04370",
               "Answer": "TEXT_AKTKMA114_04370_A10_000_209"
             },
             {
-              "ExcelSheet": "quest/043/AktKma114_04370",
               "Answer": "TEXT_AKTKMA114_04370_A11_000_218"
             }
           ]

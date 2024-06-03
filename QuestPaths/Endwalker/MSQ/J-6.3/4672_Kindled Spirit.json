@@ -50,6 +50,14 @@
             16028,
             16029
           ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ],
           "$.0": "[1]",
           "$.1": "QuestVariables if done first: 16 5(enemy kill count) 0 0 0 64"
         },
@@ -62,6 +70,14 @@
           },
           "TerritoryId": 958,
           "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ],
           "$.0": "[2]",
           "$.1": "QuestVariables if done after [1]: 33 5 0 0 0 96"
         },
@@ -74,6 +90,14 @@
           },
           "TerritoryId": 958,
           "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            16
+          ],
           "$.0": "[3]",
           "$.1": "QuestVariables if done after [1, 2]: 49 21 0 0 0 112"
         },
@@ -89,7 +113,16 @@
           "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
             16030
-          ]
+          ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ],
+          "$.2": "QuestVariables if done first: 16 0 16 0 0 128"
         }
       ]
     },

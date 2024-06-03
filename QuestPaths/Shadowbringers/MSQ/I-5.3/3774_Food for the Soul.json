@@ -28,7 +28,8 @@
             "Z": 27.5
           },
           "TerritoryId": 351,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 156
         },
         {
           "Position": {

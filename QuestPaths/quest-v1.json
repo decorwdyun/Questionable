@@ -348,7 +348,9 @@
                     "type": "string",
                     "enum": [
                       "Never",
-                      "FlyingUnlocked"
+                      "FlyingLocked",
+                      "FlyingUnlocked",
+                      "DifferentTerritory"
                     ]
                   }
                 },
@@ -563,12 +565,22 @@
                   "then": {
                     "properties": {
                       "ChatMessage": {
-                        "type": "string",
-                        "description": "The text to use with /say"
+                        "type": "object",
+                        "description": "The text to use with /say",
+                        "properties": {
+                          "ExcelSheet": {
+                            "type": "string"
+                          },
+                          "Key": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "Key"
+                        ]
                       }
                     },
                     "required": [
-                      "Position",
                       "ChatMessage"
                     ]
                   }
@@ -655,7 +667,6 @@
                             }
                           },
                           "required": [
-                            "ExcelSheet",
                             "Answer"
                           ]
                         }

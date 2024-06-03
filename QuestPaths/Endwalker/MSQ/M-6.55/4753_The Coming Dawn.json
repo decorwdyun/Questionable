@@ -126,7 +126,8 @@
             "Z": 4.55803
           },
           "TerritoryId": 962,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 987
         },
         {
           "DataId": 2013420,

@@ -107,10 +107,15 @@
             "Y": 1.2090492,
             "Z": 118.133255
           },
+          "StopDistance": 4,
           "TerritoryId": 957,
           "InteractionType": "WalkTo",
           "AetheryteShortcut": "Thavnair - Palaka's Stand",
-          "Fly": true
+          "Fly": true,
+          "SkipIf": [
+            "FlyingLocked"
+          ],
+          "Comment": "TODO Verify; there's some weird shenanigans happening with navmesh not moving to coords 'below' it"
         },
         {
           "DataId": 2012847,
@@ -120,7 +125,8 @@
             "Z": 119.43237
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Mount": false
         }
       ]
     },

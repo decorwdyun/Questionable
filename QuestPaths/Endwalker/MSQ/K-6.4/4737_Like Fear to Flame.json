@@ -12,6 +12,7 @@
             "Y": -16.147,
             "Z": 235.70605
           },
+          "StopDistance": 7,
           "TerritoryId": 962,
           "InteractionType": "Interact"
         }
@@ -27,8 +28,10 @@
             "Y": 23.803606,
             "Z": 404.9286
           },
+          "StopDistance": 7,
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Garlemald - Camp Broken Glass"
         }
       ]
     },
@@ -43,7 +46,8 @@
             "Z": -191.48547
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Garlemald - Tertium"
         }
       ]
     },
@@ -58,7 +62,15 @@
             "Z": -156.02356
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 1045491,
@@ -68,7 +80,15 @@
             "Z": -178.27118
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 1037774,
@@ -78,7 +98,15 @@
             "Z": -212.14618
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            16
+          ]
         },
         {
           "DataId": 1045489,
@@ -88,7 +116,15 @@
             "Z": -213.18384
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 1037766,
@@ -98,7 +134,16 @@
             "Z": -265.00348
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Comment": "TODO Check flags",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            8
+          ]
         }
       ]
     },
@@ -113,7 +158,8 @@
             "Z": -637.56775
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     }

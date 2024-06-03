@@ -10,19 +10,19 @@
         <PathMap Condition="$(SolutionDir) != ''">$(SolutionDir)=X:\</PathMap>
     </PropertyGroup>
 
-    <Target Name="ZipShadowbringers" BeforeTargets="BeforeResGen">
+    <Target Name="ZipShadowbringers" BeforeTargets="BeforeResGen" Condition="'$(Configuration)' == 'Release'">
         <ZipDirectory SourceDirectory="$(ProjectDir)\Shadowbringers"
                       DestinationFile="$(TargetDir)\Shadowbringers.zip"
                       Overwrite="true"/>
     </Target>
 
-    <Target Name="ZipEndwalker" BeforeTargets="BeforeResGen">
+    <Target Name="ZipEndwalker" BeforeTargets="BeforeResGen" Condition="'$(Configuration)' == 'Release'">
         <ZipDirectory SourceDirectory="$(ProjectDir)\Endwalker"
                       DestinationFile="$(TargetDir)\Endwalker.zip"
                       Overwrite="true"/>
     </Target>
 
-    <ItemGroup>
+    <ItemGroup Condition="'$(Configuration)' == 'Release'">
         <EmbeddedResource Include="$(TargetDir)\Shadowbringers.zip"/>
         <EmbeddedResource Include="$(TargetDir)\Endwalker.zip"/>
     </ItemGroup>
