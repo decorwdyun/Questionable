@@ -44,6 +44,14 @@
           },
           "TerritoryId": 957,
           "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ],
           "$": "QuestVariables after: 16 1 0 0 0 128"
         },
         {
@@ -53,12 +61,28 @@
             "Z": -159.90234
           },
           "TerritoryId": 957,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 2011914,
           "TerritoryId": 957,
           "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ],
           "$": "QuestVariables after: 32 17 0 0 0 160"
         },
         {
@@ -69,7 +93,15 @@
             "Z": -157.09167
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         }
       ]
     },

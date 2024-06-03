@@ -30,7 +30,8 @@
           },
           "TerritoryId": 958,
           "InteractionType": "Interact",
-          "Fly": true
+          "Fly": true,
+          "TargetTerritoryId": 1160
         }
       ]
     },
@@ -61,7 +62,6 @@
           },
           "TerritoryId": 1160,
           "InteractionType": "Interact",
-          "Comment": "TODO Check Flags",
           "CompletionQuestVariablesFlags": [
             null,
             null,

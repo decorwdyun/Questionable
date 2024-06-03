@@ -135,7 +135,6 @@
           },
           "TerritoryId": 958,
           "InteractionType": "Interact",
-          "Comment": "TODO Check flags",
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -150,6 +149,18 @@
     {
       "Sequence": 255,
       "Steps": [
+        {
+          "Position": {
+            "X": 534.8861,
+            "Y": -36.65,
+            "Z": -245.12135
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo",
+          "SkipIf": [
+            "FlyingLocked"
+          ]
+        },
         {
           "DataId": 1045430,
           "Position": {

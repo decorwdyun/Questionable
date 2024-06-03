@@ -2,6 +2,10 @@
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
   "Comment": "TODO Missing Quest Start",
+  "TerritoryBlacklist": [
+    838,
+    847
+  ],
   "QuestSequence": [
     {
       "Sequence": 7,

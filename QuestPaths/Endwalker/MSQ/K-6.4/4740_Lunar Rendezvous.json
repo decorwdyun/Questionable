@@ -64,8 +64,23 @@
           "TerritoryId": 959,
           "InteractionType": "Interact",
           "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow",
-          "SkipIf": ["FlyingUnlocked"],
-          "Comment": "Check if the flying unlocked check is good enough"
+          "SkipIf": [
+            "FlyingUnlocked"
+          ]
+        },
+        {
+          "Position": {
+            "X": -19.779482,
+            "Y": -56.63768,
+            "Z": -464.9354
+          },
+          "StopDistance": 1,
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo",
+          "SkipIf": [
+            "FlyingLocked"
+          ],
+          "Fly": true
         },
         {
           "DataId": 1039686,
@@ -91,7 +106,8 @@
             "Z": -620.3861
           },
           "TerritoryId": 959,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
@@ -156,8 +172,7 @@
             null,
             null,
             32
-          ],
-          "Comment": "TODO Check Flags"
+          ]
         },
         {
           "DataId": 1045473,
@@ -179,7 +194,8 @@
             16
           ]
         }
-      ]
+      ],
+      "Comment": "TODO Check Flags (32)"
     },
     {
       "Sequence": 255,

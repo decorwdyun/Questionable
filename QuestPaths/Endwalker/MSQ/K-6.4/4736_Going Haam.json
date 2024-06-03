@@ -82,7 +82,14 @@
           },
           "StopDistance": 5,
           "TerritoryId": 962,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMK102_04736_Q2_000_094",
+              "Yes": true
+            }
+          ]
         }
       ]
     },

@@ -20,7 +20,6 @@ public enum EInteractionType
     Duty,
     SinglePlayerDuty,
     Jump,
-    CutsceneSelectString,
 
     /// <summary>
     /// Needs to be adjusted for coords etc. in the quest data.

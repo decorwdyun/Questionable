@@ -1,7 +1,14 @@
-﻿namespace Questionable.Model.V1;
+﻿using System.Text.Json.Serialization;
+using Questionable.Model.V1.Converter;
 
-public sealed class DialogueChoice
+namespace Questionable.Model.V1;
+
+public class DialogueChoice
 {
+    [JsonConverter(typeof(DialogueChoiceTypeConverter))]
+    public EDialogChoiceType Type { get; set; }
     public string? ExcelSheet { get; set; }
-    public string Answer { get; set; } = null!;
+    public string Prompt { get; set; } = null!;
+    public bool Yes { get; set; } = true;
+    public string? Answer { get; set; }
 }

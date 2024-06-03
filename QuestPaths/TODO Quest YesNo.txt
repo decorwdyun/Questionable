@@ -1,0 +1,13 @@
+Currying Flavor:
+  "DialogueChoices": [
+    {
+      "Type": "List",
+      "Prompt": "TEXT_AKTKMK101_04735_Q1_000_000",
+      "Answer": "TEXT_AKTKMK101_04735_A1_000_003"
+    },
+    {
+      "Type": "YesNo",
+      "Prompt": "TEXT_AKTKMK101_04735_Q2_000_182",
+      "Yes": true
+    }
+  ]

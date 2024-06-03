@@ -13,7 +13,14 @@
             "Z": -68.40625
           },
           "TerritoryId": 963,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMM103_04753_Q1_000_000",
+              "Answer": "TEXT_AKTKMM103_04753_A1_000_001"
+            }
+          ]
         }
       ]
     },
@@ -27,8 +34,10 @@
             "Y": 4.357494,
             "Z": 0.7476196
           },
+          "StopDistance": 7,
           "TerritoryId": 962,
           "InteractionType": "Interact",
+          "AetheryteShortcut": "Old Sharlayan",
           "AethernetShortcut": [
             "[Old Sharlayan] Aetheryte Plaza",
             "[Old Sharlayan] The Baldesion Annex"

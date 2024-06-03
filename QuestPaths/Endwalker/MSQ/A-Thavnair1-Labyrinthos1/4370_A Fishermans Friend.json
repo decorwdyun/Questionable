@@ -43,15 +43,21 @@
             "Z": 799.2217
           },
           "TerritoryId": 957,
-          "InteractionType": "CutsceneSelectString",
+          "InteractionType": "Interact",
           "DialogueChoices": [
             {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMA114_04370_Q2_000_086",
               "Answer": "TEXT_AKTKMA114_04370_A2_000_088"
             },
             {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMA114_04370_Q3_000_096",
               "Answer": "TEXT_AKTKMA114_04370_A3_000_098"
             },
             {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMA114_04370_Q5_000_106",
               "Answer": "TEXT_AKTKMA114_04370_A5_000_107"
             }
           ]
@@ -69,15 +75,21 @@
             "Z": 681.7273
           },
           "TerritoryId": 957,
-          "InteractionType": "CutsceneSelectString",
+          "InteractionType": "Interact",
           "DialogueChoices": [
             {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMA114_04370_Q6_000_147",
               "Answer": "TEXT_AKTKMA114_04370_A6_000_149"
             },
             {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMA114_04370_Q7_000_157",
               "Answer": "TEXT_AKTKMA114_04370_A7_000_158"
             },
             {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMA114_04370_Q8_000_162",
               "Answer": "TEXT_AKTKMA114_04370_A8_000_164"
             }
           ]
@@ -95,15 +107,21 @@
             "Z": 517.72327
           },
           "TerritoryId": 957,
-          "InteractionType": "CutsceneSelectString",
+          "InteractionType": "Interact",
           "DialogueChoices": [
             {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMA114_04370_Q9_000_198",
               "Answer": "TEXT_AKTKMA114_04370_A9_000_200"
             },
             {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMA114_04370_Q10_000_207",
               "Answer": "TEXT_AKTKMA114_04370_A10_000_209"
             },
             {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMA114_04370_Q11_000_216",
               "Answer": "TEXT_AKTKMA114_04370_A11_000_218"
             }
           ]

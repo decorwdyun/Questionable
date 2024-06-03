@@ -20,7 +20,6 @@ public sealed class InteractionTypeConverter() : EnumConverter<EInteractionType>
         { EInteractionType.Duty, "Duty" },
         { EInteractionType.SinglePlayerDuty, "SinglePlayerDuty" },
         { EInteractionType.Jump, "Jump" },
-        { EInteractionType.CutsceneSelectString, "CutsceneSelectString" },
         { EInteractionType.ShouldBeAJump, "ShouldBeAJump" },
         { EInteractionType.Instruction, "Instruction" },
     };

@@ -1,12 +1,9 @@
 ﻿using System.Globalization;
-using System.Linq;
 using System.Numerics;
-using System.Runtime.InteropServices;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Interface;
 using Dalamud.Interface.Components;
 using Dalamud.Interface.Windowing;
-using Dalamud.Memory;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
@@ -43,6 +40,15 @@ internal sealed class DebugWindow : Window
             MinimumSize = new Vector2(200, 30),
             MaximumSize = default
         };
+    }
+
+    public override bool DrawConditions()
+    {
+        if (!_clientState.IsLoggedIn || _clientState.LocalPlayer == null)
+            return false;
+
+        var currentQuest = _questController.CurrentQuest;
+        return currentQuest == null || !currentQuest.Quest.Data.TerritoryBlacklist.Contains(_clientState.TerritoryType);
     }
 
     public override unsafe void Draw()

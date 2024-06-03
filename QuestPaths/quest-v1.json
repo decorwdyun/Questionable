@@ -100,7 +100,6 @@
                     "Duty",
                     "SinglePlayerDuty",
                     "Jump",
-                    "CutsceneSelectString",
                     "ShouldBeAJump",
                     "Instruction"
                   ]
@@ -648,7 +647,7 @@
                   "if": {
                     "properties": {
                       "InteractionType": {
-                        "const": "CutsceneSelectString"
+                        "const": "Interact"
                       }
                     }
                   },
@@ -659,22 +658,68 @@
                         "items": {
                           "type": "object",
                           "properties": {
+                            "Type": {
+                              "type": "string",
+                              "enum": [
+                                "YesNo",
+                                "List"
+                              ]
+                            },
                             "ExcelSheet": {
                               "type": "string"
                             },
-                            "Answer": {
+                            "Prompt": {
                               "type": "string"
                             }
                           },
                           "required": [
-                            "Answer"
+                            "Type",
+                            "Prompt"
+                          ],
+                          "allOf": [
+                            {
+                              "if": {
+                                "properties": {
+                                  "Type": {
+                                    "const": "YesNo"
+                                  }
+                                }
+                              },
+                              "then": {
+                                "properties": {
+                                  "Yes": {
+                                    "type": "boolean",
+                                    "default": true
+                                  }
+                                },
+                                "required": [
+                                  "Yes"
+                                ]
+                              }
+                            },
+                            {
+                              "if": {
+                                "properties": {
+                                  "Type": {
+                                    "const": "List"
+                                  }
+                                }
+                              },
+                              "then": {
+                                "properties": {
+                                  "Answer": {
+                                    "type": "string"
+                                  }
+                                },
+                                "required": [
+                                  "Answer"
+                                ]
+                              }
+                            }
                           ]
                         }
                       }
-                    },
-                    "required": [
-                      "DialogueChoices"
-                    ]
+                    }
                   }
                 },
                 {

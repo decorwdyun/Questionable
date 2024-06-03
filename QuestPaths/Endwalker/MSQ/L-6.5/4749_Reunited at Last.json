@@ -12,6 +12,7 @@
             "Y": 56.66061,
             "Z": 467.39905
           },
+          "StopDistance": 15,
           "TerritoryId": 1162,
           "InteractionType": "Interact"
         }
@@ -43,7 +44,8 @@
             "Z": -191.51605
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Garlemald - Tertium"
         }
       ]
     },
@@ -59,6 +61,7 @@
           },
           "TerritoryId": 962,
           "InteractionType": "Interact",
+          "AetheryteShortcut": "Old Sharlayan",
           "AethernetShortcut": [
             "[Old Sharlayan] Aetheryte Plaza",
             "[Old Sharlayan] The Rostra"

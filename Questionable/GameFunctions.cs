@@ -474,22 +474,18 @@ internal sealed unsafe class GameFunctions
             _pluginLog.Error($"Could not find content for content finder condition (cf: {contentFinderConditionId})");
     }
 
-    public string? GetExcelString(Quest currentQuestQuest, string? excelSheetName, string key)
+    public string? GetExcelString(Quest currentQuest, string? excelSheetName, string key)
     {
         if (excelSheetName == null)
         {
-            string questPrefix = $"quest/{(currentQuestQuest.QuestId / 100):000}/";
-            string questSuffix = $"_{currentQuestQuest.QuestId:00000}";
-            excelSheetName = _dataManager.Excel
-                .GetSheetNames()
-                .SingleOrDefault(x =>
-                    x.StartsWith(questPrefix, StringComparison.Ordinal) &&
-                    x.EndsWith(questSuffix, StringComparison.Ordinal));
-            if (excelSheetName == null)
+            var questRow = _dataManager.GetExcelSheet<Lumina.Excel.GeneratedSheets2.Quest>()!.GetRow((uint)currentQuest.QuestId + 0x10000);
+            if (questRow == null)
             {
-                _pluginLog.Error($"Could not find sheet matching '{questPrefix}*{questSuffix}");
+                _pluginLog.Error($"Could not find quest row for {currentQuest.QuestId}");
                 return null;
             }
+
+            excelSheetName = $"quest/{(currentQuest.QuestId / 100):000}/{questRow.Id}";
         }
 
         var excelSheet = _dataManager.Excel.GetSheet<QuestDialogueText>(excelSheetName);

@@ -12,6 +12,7 @@
             "Y": 41.530136,
             "Z": -165.27051
           },
+          "StopDistance": 7,
           "TerritoryId": 962,
           "InteractionType": "Interact"
         }
@@ -29,9 +30,17 @@
           },
           "TerritoryId": 819,
           "InteractionType": "Interact",
+          "AetheryteShortcut": "Crystarium",
           "AethernetShortcut": [
             "[Crystarium] Aetheryte Plaza",
             "[Crystarium] The Dossal Gate"
+          ],
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKML107_04750_SYSTEM_000_101",
+              "Yes": true
+            }
           ]
         }
       ]
@@ -52,6 +61,22 @@
       ]
     },
     {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1045684,
+          "Position": {
+            "X": -0.96136475,
+            "Y": 0,
+            "Z": -3.3417358
+          },
+          "StopDistance": 5,
+          "TerritoryId": 844,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
       "Sequence": 4,
       "Steps": [
         {
@@ -63,6 +88,7 @@
           },
           "TerritoryId": 963,
           "InteractionType": "Interact",
+          "AetheryteShortcut": "Radz-at-Han",
           "AethernetShortcut": [
             "[Radz-at-Han] Aetheryte Plaza",
             "[Radz-at-Han] Meghaduta"
@@ -89,17 +115,17 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 196,
+          "DataId": 1039645,
           "Position": {
-            "X": -42.61847,
-            "Y": -0.015319824,
-            "Z": -197.61963
+            "X": -338.33832,
+            "Y": 55,
+            "Z": -68.40625
           },
           "TerritoryId": 963,
           "InteractionType": "Interact",
           "AethernetShortcut": [
             "[Radz-at-Han] Mehryde's Meyhane",
-            "[Radz-at-Han] Aetheryte Plaza"
+            "[Radz-at-Han] Meghaduta"
           ]
         }
       ]

@@ -26,6 +26,7 @@
             "Y": -0.67464465,
             "Z": 653.1527
           },
+          "StopDistance": 0.5,
           "TerritoryId": 813,
           "InteractionType": "WalkTo",
           "AetheryteShortcut": "Lakeland - Fort Jobb",

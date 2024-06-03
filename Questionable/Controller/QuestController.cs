@@ -10,14 +10,11 @@ using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using FFXIVClientStructs.FFXIV.Client.Game;
-using FFXIVClientStructs.FFXIV.Client.UI;
-using LLib.GameUI;
 using Questionable.Data;
 using Questionable.External;
 using Questionable.Model;
 using Questionable.Model.V1;
 using Questionable.Model.V1.Converter;
-using ValueType = FFXIVClientStructs.FFXIV.Component.GUI.ValueType;
 
 namespace Questionable.Controller;
 
@@ -272,6 +269,27 @@ internal sealed class QuestController
         }
     }
 
+    public void IncreaseDialogueChoicesSelected()
+    {
+        (QuestSequence? seq, QuestStep? step) = GetNextStep();
+        if (CurrentQuest == null || seq == null || step == null)
+        {
+            _pluginLog.Warning("Unable to retrieve next quest step, not increasing dialogue choice count");
+            return;
+        }
+
+        CurrentQuest = CurrentQuest with
+        {
+            StepProgress = CurrentQuest.StepProgress with
+            {
+                DialogueChoicesSelected = CurrentQuest.StepProgress.DialogueChoicesSelected + 1
+            }
+        };
+
+        if (CurrentQuest.StepProgress.DialogueChoicesSelected >= step.DialogueChoices.Count)
+            IncreaseStepCount();
+    }
+
     public unsafe void ExecuteNextStep()
     {
         (QuestSequence? seq, QuestStep? step) = GetNextStep();
@@ -422,7 +440,8 @@ internal sealed class QuestController
                 }
             }
             else
-                _pluginLog.Warning($"Aethernet shortcut not unlocked (from: {step.AethernetShortcut.From}, to: {step.AethernetShortcut.To}), walking manually");
+                _pluginLog.Warning(
+                    $"Aethernet shortcut not unlocked (from: {step.AethernetShortcut.From}, to: {step.AethernetShortcut.To}), walking manually");
         }
 
         if (step.TargetTerritoryId == _clientState.TerritoryType && !step.SkipIf.Contains(ESkipCondition.Never))
@@ -438,11 +457,6 @@ internal sealed class QuestController
             (step.JumpDestination.StopDistance ?? 1f))
         {
             _pluginLog.Information("We're at the jump destination, skipping movement");
-        }
-        else if (step.InteractionType == EInteractionType.CutsceneSelectString &&
-                 _condition[ConditionFlag.OccupiedInCutSceneEvent])
-        {
-            _pluginLog.Information("In cutscene selection, skipping movement");
         }
         else if (step.Position != null)
         {
@@ -543,7 +557,10 @@ internal sealed class QuestController
                     }
 
                     _gameFunctions.InteractWith(step.DataId.Value);
-                    IncreaseStepCount();
+
+                    // if we have any dialogue, that is handled in GameUiController
+                    if (step.DialogueChoices.Count == 0)
+                        IncreaseStepCount();
                 }
                 else
                     _pluginLog.Warning("Not interacting on current step, DataId is null");
@@ -712,41 +729,6 @@ internal sealed class QuestController
                 // Need to manually forward
                 break;
 
-            case EInteractionType.CutsceneSelectString:
-                // to do this automatically, should likely be in Addon's post setup
-                if (_gameGui.TryGetAddonByName<AddonCutSceneSelectString>("CutSceneSelectString", out var addon) &&
-                    LAddon.IsAddonReady(&addon->AtkUnitBase))
-                {
-                    foreach (DialogueChoice dialogueChoice in step.DialogueChoices)
-                    {
-                        string? excelString = _gameFunctions.GetExcelString(CurrentQuest.Quest,
-                            dialogueChoice.ExcelSheet, dialogueChoice.Answer);
-                        if (excelString == null)
-                            return;
-
-                        _pluginLog.Verbose($"Looking for option '{excelString}'");
-                        for (int i = 5; i < addon->AtkUnitBase.AtkValuesCount; ++i)
-                        {
-                            var atkValue = addon->AtkUnitBase.AtkValues[i];
-                            if (atkValue.Type != ValueType.String)
-                                continue;
-
-                            string? atkString = atkValue.ReadAtkString();
-                            _pluginLog.Verbose($"Option {i}: {atkString}");
-                            if (excelString == atkString)
-                            {
-                                _pluginLog.Information($"Selecting option {i - 5}: {atkString}");
-                                addon->AtkUnitBase.FireCallbackInt(i - 5);
-                                return;
-                            }
-                        }
-                    }
-                }
-                else if (step.DataId != null && !_condition[ConditionFlag.OccupiedInCutSceneEvent])
-                    _gameFunctions.InteractWith(step.DataId.Value);
-
-                break;
-
             default:
                 _pluginLog.Warning($"Action '{step.InteractionType}' is not implemented");
                 break;
@@ -767,5 +749,6 @@ internal sealed class QuestController
 
     public sealed record StepProgress(
         bool AetheryteShortcutUsed = false,
-        bool AethernetShortcutUsed = false);
+        bool AethernetShortcutUsed = false,
+        int DialogueChoicesSelected = 0);
 }

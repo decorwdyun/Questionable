@@ -27,13 +27,13 @@ public sealed class QuestionablePlugin : IDalamudPlugin
     private readonly ICommandManager _commandManager;
     private readonly GameFunctions _gameFunctions;
     private readonly QuestController _questController;
-
     private readonly MovementController _movementController;
+    private readonly GameUiController _gameUiController;
 
     public QuestionablePlugin(DalamudPluginInterface pluginInterface, IClientState clientState,
         ITargetManager targetManager, IFramework framework, IGameGui gameGui, IDataManager dataManager,
         ISigScanner sigScanner, IObjectTable objectTable, IPluginLog pluginLog, ICondition condition, IChatGui chatGui,
-        ICommandManager commandManager)
+        ICommandManager commandManager, IAddonLifecycle addonLifecycle)
     {
         ArgumentNullException.ThrowIfNull(pluginInterface);
         ArgumentNullException.ThrowIfNull(sigScanner);
@@ -55,6 +55,9 @@ public sealed class QuestionablePlugin : IDalamudPlugin
             new MovementController(navmeshIpc, clientState, _gameFunctions, condition, pluginLog);
         _questController = new QuestController(pluginInterface, dataManager, _clientState, _gameFunctions,
             _movementController, pluginLog, condition, chatGui, framework, gameGui, aetheryteData, lifestreamIpc);
+        _gameUiController =
+            new GameUiController(clientState, addonLifecycle, dataManager, _gameFunctions, _questController, pluginLog);
+
         _windowSystem.AddWindow(new DebugWindow(_movementController, _questController, _gameFunctions, clientState,
             targetManager));
 
@@ -100,6 +103,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         _framework.Update -= FrameworkUpdate;
         _pluginInterface.UiBuilder.Draw -= _windowSystem.Draw;
 
+        _gameUiController.Dispose();
         _movementController.Dispose();
     }
 }

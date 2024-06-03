@@ -12,6 +12,7 @@
             "Y": -15.127001,
             "Z": 139.45215
           },
+          "StopDistance": 5,
           "TerritoryId": 962,
           "InteractionType": "Interact"
         }
@@ -32,6 +33,14 @@
           "AethernetShortcut": [
             "[Old Sharlayan] Scholar's Harbor",
             "[Old Sharlayan] The Studium"
+          ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            16
           ]
         },
         {
@@ -42,7 +51,15 @@
             "Z": 103.28821
           },
           "TerritoryId": 962,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 2013417,
@@ -52,7 +69,15 @@
             "Z": 59.00659
           },
           "TerritoryId": 962,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 2013416,
@@ -62,7 +87,15 @@
             "Z": 20.523315
           },
           "TerritoryId": 962,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         }
       ]
     },
@@ -111,7 +144,14 @@
             "Z": 0.7476196
           },
           "TerritoryId": 962,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMM103_04753_SYSTEM_000_302",
+              "Yes": true
+            }
+          ]
         }
       ]
     },
@@ -151,6 +191,7 @@
             "Y": 4.357494,
             "Z": 0.7476196
           },
+          "StopDistance": 5,
           "TerritoryId": 962,
           "InteractionType": "Interact"
         }

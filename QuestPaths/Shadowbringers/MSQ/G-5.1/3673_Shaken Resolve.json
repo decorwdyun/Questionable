@@ -13,7 +13,14 @@
             "Z": -9.10968
           },
           "TerritoryId": 351,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_LUCKMG101_03673_Q1_000_500",
+              "Answer": "TEXT_LUCKMG101_03673_A1_000_500"
+            }
+          ]
         }
       ]
     },
@@ -38,7 +45,8 @@
             "Z": -656.1909
           },
           "TerritoryId": 156,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "Mount": true
         },
         {
           "DataId": 1018433,
