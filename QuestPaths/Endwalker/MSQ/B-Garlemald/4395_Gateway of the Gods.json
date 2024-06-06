@@ -1,6 +1,9 @@
 {
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
+  "TerritoryBlacklist": [
+    969
+  ],
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -80,7 +83,14 @@
             "Z": -677.4243
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMB116_04395_Q3_000_206",
+              "Yes": true
+            }
+          ]
         },
         {
           "DataId": 2012112,
@@ -114,6 +124,7 @@
             "Y": 0,
             "Z": 33.585083
           },
+          "StopDistance": 4,
           "TerritoryId": 1024,
           "InteractionType": "Interact"
         }

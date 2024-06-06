@@ -78,7 +78,14 @@
           },
           "TerritoryId": 958,
           "InteractionType": "WaitForManualProgress",
-          "Comment": "Follow Alphinaud and Alisaie"
+          "Comment": "Follow Alphinaud and Alisaie",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMB108_04387_Q1_000_161",
+              "Yes": true
+            }
+          ]
         }
       ]
     },

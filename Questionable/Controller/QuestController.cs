@@ -513,11 +513,6 @@ internal sealed class QuestController
                 // navmesh won't move close enough
                 if (actualDistance > distance)
                 {
-                    // picking up Mehvan's baby, not sure if navmesh ignores y distance but it thinks you're close
-                    // enough
-                    if (step.DataId == 2012208)
-                        distance /= 2;
-
                     _movementController.NavigateTo(EMovementType.Quest, step.DataId, [step.Position.Value],
                         fly: step.Fly == true && _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType),
                         sprint: step.Sprint != false,
@@ -670,7 +665,7 @@ internal sealed class QuestController
 
                 if (step.ChatMessage != null)
                 {
-                    string? excelString = _gameFunctions.GetExcelString(CurrentQuest.Quest, step.ChatMessage.ExcelSheet,
+                    string? excelString = _gameFunctions.GetDialogueText(CurrentQuest.Quest, step.ChatMessage.ExcelSheet,
                         step.ChatMessage.Key);
                     if (excelString == null)
                         return;

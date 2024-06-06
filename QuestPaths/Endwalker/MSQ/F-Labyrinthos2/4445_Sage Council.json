@@ -72,6 +72,14 @@
           "TerritoryId": 956,
           "InteractionType": "Interact",
           "Comment": "Distracted Researcher",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            2,
+            null
+          ],
           "$.0": "[1]",
           "$.1": "QuestVariables if done first: 1 0 0 0 2 0"
         },
@@ -85,6 +93,14 @@
           "TerritoryId": 956,
           "InteractionType": "Interact",
           "Comment": "Hyperventilating Engineer",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            128,
+            null
+          ],
           "$.0": "[2]",
           "$.1": "QuestVariables if done after [1]: 2 0 0 0 130 0"
         },
@@ -98,6 +114,14 @@
           "TerritoryId": 956,
           "InteractionType": "Interact",
           "Comment": "Harried Aetherologist",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            8,
+            null
+          ],
           "$.0": "[3]",
           "$.1": "QuestVariables if done after [2]: 3 0 0 0 138 0"
         },
@@ -111,6 +135,15 @@
           "TerritoryId": 956,
           "InteractionType": "Interact",
           "Comment": "Grimacing Naturalist",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            4,
+            null
+          ],
+          "Mount": true,
           "$.0": "[4]",
           "$.1": "QuestVariables if done after [3]: 4 0 0 0 142 0"
         },
@@ -124,6 +157,14 @@
           "TerritoryId": 956,
           "InteractionType": "Interact",
           "Comment": "Ponderous Mathematician",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            64,
+            null
+          ],
           "$.0": "[5]",
           "$.1": "QuestVariables if done after [4]: 5 0 0 0 206 0"
         },
@@ -137,6 +178,14 @@
           "TerritoryId": 956,
           "InteractionType": "Interact",
           "Comment": "Despondent Engineer",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            32,
+            null
+          ],
           "Mount": true,
           "$.0": "[6]",
           "$.1": "QuestVariables if done after [5]: 6 0 0 0 238 0"
@@ -151,6 +200,14 @@
           "TerritoryId": 956,
           "InteractionType": "Interact",
           "Comment": "Skeptical Researcher",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            1,
+            null
+          ],
           "Mount": true,
           "$.0": "[7]",
           "$.1": "QuestVariables if done after [6]: 7 0 0 0 239 0"
@@ -165,6 +222,14 @@
           "TerritoryId": 956,
           "InteractionType": "Interact",
           "Comment": "Anxious Engineer",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            16,
+            null
+          ],
           "$.0": "[8]",
           "$.2": "QuestVariables if done first: 1 0 0 0 16 0"
         }

@@ -39,7 +39,14 @@
             "Z": -81.28485
           },
           "TerritoryId": 956,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMF110_04448_Q1_000_031",
+              "Yes": true
+            }
+          ]
         }
       ]
     },
@@ -85,7 +92,14 @@
             "Z": 302.17432
           },
           "TerritoryId": 956,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMF110_04448_Q2_000_111",
+              "Yes": true
+            }
+          ]
         }
       ]
     },

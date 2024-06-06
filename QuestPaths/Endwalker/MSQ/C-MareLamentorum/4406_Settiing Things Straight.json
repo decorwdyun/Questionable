@@ -136,9 +136,16 @@
             "Z": -558.8681
           },
           "TerritoryId": 959,
-          "InteractionType": "ShouldBeAJump",
+          "InteractionType": "Jump",
           "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow",
-          "Comment": "Navmesh can't jump"
+          "JumpDestination": {
+            "Position": {
+              "X": 307.72073,
+              "Y": -143.15913,
+              "Z": -563.4788
+            },
+            "StopDistance": 5
+          }
         },
         {
           "DataId": 2012012,

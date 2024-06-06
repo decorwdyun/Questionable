@@ -140,6 +140,14 @@
           "KillEnemyDataIds": [
             13987
           ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ],
           "$.0": "[1]",
           "$.1": "QuestVariables if done first: 16 1 0 0 0 128"
         },
@@ -154,6 +162,14 @@
           "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
             13986
+          ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
           ],
           "$.0": "[2]",
           "$.1": "QuestVariables if done after [1]: 33 1 0 0 0 192",
@@ -171,6 +187,14 @@
           "KillEnemyDataIds": [
             13985,
             13984
+          ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
           ],
           "$.0": "[3]",
           "$.2": "QuestVariables if done first: 16 32 0 0 0 32"

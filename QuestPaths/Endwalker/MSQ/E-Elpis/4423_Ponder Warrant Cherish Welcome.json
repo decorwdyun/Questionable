@@ -85,7 +85,14 @@
             "Z": 73.258545
           },
           "TerritoryId": 961,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKME105_04423_Q1_000_106",
+              "Answer": "TEXT_AKTKME105_04423_A1_000_107"
+            }
+          ]
         }
       ]
     },
@@ -100,7 +107,14 @@
             "Z": 121.47705
           },
           "TerritoryId": 961,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKME105_04423_Q4_000_178",
+              "Answer": "TEXT_AKTKME105_04423_A4_000_180"
+            }
+          ]
         }
       ]
     },
@@ -130,7 +144,14 @@
             "Z": 107.133545
           },
           "TerritoryId": 961,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKME105_04423_Q7_000_313",
+              "Answer": "TEXT_AKTKME105_04423_A7_000_314"
+            }
+          ]
         }
       ]
     },

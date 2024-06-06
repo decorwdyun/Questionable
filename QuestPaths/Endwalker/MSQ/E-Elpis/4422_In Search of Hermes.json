@@ -58,7 +58,14 @@
             "Z": 157.61035
           },
           "TerritoryId": 961,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKME104_04422_Q1_000_094",
+              "Answer": "TEXT_AKTKME104_04422_A1_000_095"
+            }
+          ]
         }
       ]
     }

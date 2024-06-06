@@ -30,7 +30,14 @@
           },
           "TerritoryId": 961,
           "InteractionType": "Interact",
-          "Fly": true
+          "Fly": true,
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKME120_04438_Q1_000_008",
+              "Yes": true
+            }
+          ]
         }
       ]
     },

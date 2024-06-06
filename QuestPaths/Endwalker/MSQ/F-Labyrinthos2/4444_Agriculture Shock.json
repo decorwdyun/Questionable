@@ -60,7 +60,14 @@
           },
           "StopDistance": 0.25,
           "TerritoryId": 956,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMF106_04444_Q3_000_125",
+              "Answer": "TEXT_AKTKMF106_04444_A3_000_126"
+            }
+          ]
         }
       ]
     },
@@ -138,7 +145,14 @@
             "Z": 299.8855
           },
           "TerritoryId": 956,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMF106_04444_Q4_000_272",
+              "Answer": "TEXT_AKTKMF106_04444_A4_000_273"
+            }
+          ]
         }
       ]
     }

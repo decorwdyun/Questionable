@@ -49,6 +49,13 @@
           "StopDistance": 5,
           "TerritoryId": 959,
           "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMC105_04403_Q1_000_073",
+              "Answer": "TEXT_AKTKMC105_04403_A1_000_075"
+            }
+          ],
           "Comment": "Navmesh can't jump"
         }
       ]
@@ -70,6 +77,13 @@
           "StopDistance": 5,
           "TerritoryId": 959,
           "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMC105_04403_Q1_000_118",
+              "Answer": "TEXT_AKTKMC105_04403_A1_000_120"
+            }
+          ],
           "Comment": "Navmesh can't jump"
         }
       ]
@@ -116,7 +130,14 @@
           },
           "TerritoryId": 959,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow"
+          "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMC105_04403_SYSTEM_000_215",
+              "Yes": true
+            }
+          ]
         }
       ]
     },

@@ -105,7 +105,14 @@
             "Z": -565.0569
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMA119_04375_Q1_000_056",
+              "Yes": true
+            }
+          ]
         }
       ]
     },

@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Numerics;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Interface;
@@ -21,18 +22,22 @@ internal sealed class DebugWindow : Window
     private readonly QuestController _questController;
     private readonly GameFunctions _gameFunctions;
     private readonly IClientState _clientState;
+    private readonly IFramework _framework;
     private readonly ITargetManager _targetManager;
+    private readonly GameUiController _gameUiController;
 
     public DebugWindow(MovementController movementController, QuestController questController,
-        GameFunctions gameFunctions, IClientState clientState,
-        ITargetManager targetManager)
+        GameFunctions gameFunctions, IClientState clientState, IFramework framework,
+        ITargetManager targetManager, GameUiController gameUiController)
         : base("Questionable", ImGuiWindowFlags.AlwaysAutoResize)
     {
         _movementController = movementController;
         _questController = questController;
         _gameFunctions = gameFunctions;
         _clientState = clientState;
+        _framework = framework;
         _targetManager = targetManager;
+        _gameUiController = gameUiController;
 
         IsOpen = true;
         SizeConstraints = new WindowSizeConstraints
@@ -230,6 +235,10 @@ internal sealed class DebugWindow : Window
         ImGui.EndDisabled();
 
         if (ImGui.Button("Reload Data"))
+        {
             _questController.Reload();
+            _framework.RunOnTick(() => _gameUiController.HandleCurrentDialogueChoices(),
+                TimeSpan.FromMilliseconds(200));
+        }
     }
 }

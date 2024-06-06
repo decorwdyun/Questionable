@@ -56,14 +56,17 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         _questController = new QuestController(pluginInterface, dataManager, _clientState, _gameFunctions,
             _movementController, pluginLog, condition, chatGui, framework, gameGui, aetheryteData, lifestreamIpc);
         _gameUiController =
-            new GameUiController(clientState, addonLifecycle, dataManager, _gameFunctions, _questController, pluginLog);
+            new GameUiController(clientState, addonLifecycle, dataManager, _gameFunctions, _questController, gameGui,
+                pluginLog);
 
         _windowSystem.AddWindow(new DebugWindow(_movementController, _questController, _gameFunctions, clientState,
-            targetManager));
+            framework, targetManager, _gameUiController));
 
         _pluginInterface.UiBuilder.Draw += _windowSystem.Draw;
         _framework.Update += FrameworkUpdate;
         _commandManager.AddHandler("/qst", new CommandInfo(ProcessCommand));
+
+        _framework.RunOnTick(() => _gameUiController.HandleCurrentDialogueChoices(), TimeSpan.FromMilliseconds(200));
     }
 
     private void FrameworkUpdate(IFramework framework)

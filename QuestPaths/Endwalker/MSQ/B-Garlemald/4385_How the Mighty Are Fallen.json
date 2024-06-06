@@ -110,14 +110,123 @@
         },
         {
           "Position": {
-            "X": 393.71204,
-            "Y": 4.142438,
-            "Z": 251.71986
+            "X": 394.97046,
+            "Y": 3.652959,
+            "Z": 254.77034
           },
           "TerritoryId": 958,
-          "InteractionType": "ShouldBeAJump",
+          "InteractionType": "Jump",
           "DisableNavmesh": true,
-          "Comment": "Jump on Pipeline and move near the Aether Current"
+          "JumpDestination": {
+            "Position": {
+              "X": 405.0264,
+              "Y": -2.2185562,
+              "Z": 267.40506
+            },
+            "StopDistance": 3
+          }
+        },
+        {
+          "Position": {
+            "X": 405.01987,
+            "Y": -2.2185562,
+            "Z": 298.9302
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Jump",
+          "JumpDestination": {
+            "Position": {
+              "X": 405.01382,
+              "Y": -2.2185562,
+              "Z": 308.17484
+            },
+            "StopDistance": 3
+          }
+        },
+        {
+          "Position": {
+            "X": 404.9343,
+            "Y": -2.2185562,
+            "Z": 338.46368
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Jump",
+          "JumpDestination": {
+            "Position": {
+              "X": 404.9452,
+              "Y": -2.2185562,
+              "Z": 347.15533
+            },
+            "StopDistance": 3
+          }
+        },
+        {
+          "Position": {
+            "X": 405.0104,
+            "Y": -2.2185562,
+            "Z": 379.0302
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Jump",
+          "JumpDestination": {
+            "Position": {
+              "X": 404.98633,
+              "Y": -2.2185562,
+              "Z": 388.4368
+            },
+            "StopDistance": 3
+          }
+        },
+        {
+          "Position": {
+            "X": 405.02594,
+            "Y": -2.2185562,
+            "Z": 419.30426
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Jump",
+          "JumpDestination": {
+            "Position": {
+              "X": 405.00076,
+              "Y": -2.2185562,
+              "Z": 427.6698
+            },
+            "StopDistance": 3
+          }
+        },
+        {
+          "Position": {
+            "X": 405.03207,
+            "Y": -2.2185562,
+            "Z": 457.66095
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Jump",
+          "JumpDestination": {
+            "Position": {
+              "X": 404.94934,
+              "Y": -2.2185562,
+              "Z": 467.3867
+            },
+            "StopDistance": 3
+          }
+        },
+        {
+          "Position": {
+            "X": 405.04044,
+            "Y": -2.2185562,
+            "Z": 498.37363
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Jump",
+          "JumpDestination": {
+            "Position": {
+              "X": 405.158,
+              "Y": -2.2185564,
+              "Z": 508.9487
+            },
+            "StopDistance": 3
+          }
         },
         {
           "DataId": 2012003,

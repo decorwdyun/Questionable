@@ -52,6 +52,7 @@
     },
     {
       "Sequence": 3,
+      "Comment": "TODO Check flags",
       "Steps": [
         {
           "DataId": 1037628,
@@ -61,7 +62,15 @@
             "Z": -243.76288
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 1040449,
@@ -71,7 +80,15 @@
             "Z": -238.3612
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 1037629,
@@ -81,7 +98,15 @@
             "Z": -200.85455
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         }
       ]
     },

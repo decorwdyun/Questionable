@@ -33,7 +33,9 @@
           "AethernetShortcut": [
             "[Crystarium] The Cabinet of Curiosity",
             "[Crystarium] The Dossal Gate"
-          ]
+          ],
+          "Comment": "TODO Check target territory id",
+          "TargetTerritoryId": 844
         }
       ]
     },
@@ -47,13 +49,40 @@
             "Z": -4.654831
           },
           "TerritoryId": 1031,
-          "InteractionType": "WalkTo"
+          "InteractionType": "Jump",
+          "JumpDestination": {
+            "Position": {
+              "X": -1.5539734,
+              "Y": 3.6164591,
+              "Z": -1.1141448
+            }
+          },
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            16
+          ]
         },
         {
           "DataId": 2012128,
+          "Position": {
+            "X": -0.001528129,
+            "Y": 4.931927,
+            "Z": 0.01416349
+          },
           "TerritoryId": 1031,
           "InteractionType": "Interact",
-          "Comment": "Interact with Aetheryte (Navmesh can't jump)",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            16
+          ],
           "$.0": "[1]",
           "$.1": "QuestVariables if done first: 16 0 16 0 0 16"
         },
@@ -66,6 +95,14 @@
           },
           "TerritoryId": 1031,
           "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ],
           "$.0": "[2]",
           "$": "QuestVariables after: 32 1 16 0 0 144"
         },
@@ -78,6 +115,14 @@
           },
           "TerritoryId": 1031,
           "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ],
           "$.0": "[3]",
           "$.1": "QuestVariables after: 49 1 16 0 0 208"
         },
@@ -90,6 +135,14 @@
           },
           "TerritoryId": 1031,
           "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ],
           "$.0": "[4]",
           "$.2": "QuestVariables if done first: 16 16 0 0 0 32"
         }

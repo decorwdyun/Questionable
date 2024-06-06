@@ -50,12 +50,33 @@
             "Z": -210.52875
           },
           "TerritoryId": 819,
-          "InteractionType": "WaitForManualProgress",
-          "Comment": "Cutscene Interaction needed",
+          "InteractionType": "Interact",
           "AetheryteShortcut": "Crystarium",
           "AethernetShortcut": [
             "[Crystarium] Aetheryte Plaza",
             "[Crystarium] The Cabinet of Curiosity"
+          ],
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKME101_04419_Q2_000_071",
+              "Yes": true
+            },
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKME101_04419_Q3_000_083",
+              "Answer": "TEXT_AKTKME101_04419_A3_000_087"
+            },
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKME101_04419_Q4_000_113",
+              "Answer": "TEXT_AKTKME101_04419_A4_000_114"
+            },
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKME101_04419_Q5_000_129",
+              "Answer": "TEXT_AKTKME101_04419_A5_000_131"
+            }
           ]
         }
       ]

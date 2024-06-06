@@ -64,7 +64,14 @@
             "Z": -494.13293
           },
           "TerritoryId": 959,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMC106_04404_Q1_000_021",
+              "Answer": "TEXT_AKTKMC106_04404_A1_000_022"
+            }
+          ]
         }
       ]
     },

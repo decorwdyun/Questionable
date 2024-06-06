@@ -28,7 +28,14 @@
             "Z": -0.00103838
           },
           "TerritoryId": 1024,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMB117_04396_Q1_000_060",
+              "Yes": true
+            }
+          ]
         }
       ]
     },

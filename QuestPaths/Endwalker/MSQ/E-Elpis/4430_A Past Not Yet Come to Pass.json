@@ -84,8 +84,29 @@
             "Z": -173.75458
           },
           "TerritoryId": 961,
-          "InteractionType": "WaitForManualProgress",
-          "Comment": "Talk (1, 2, 1)"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKME112_04430_Q1_000_072",
+              "Yes": true
+            },
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKME112_04430_Q2_000_076",
+              "Answer": "TEXT_AKTKME112_04430_A2_000_077"
+            },
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKME112_04430_Q3_000_089",
+              "Answer": "TEXT_AKTKME112_04430_A3_000_091"
+            },
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKME112_04430_Q4_000_098",
+              "Answer": "TEXT_AKTKME112_04430_A4_000_099"
+            }
+          ]
         }
       ]
     },
@@ -125,7 +146,29 @@
             "Z": -155.5047
           },
           "TerritoryId": 961,
-          "InteractionType": "WaitForManualProgress",
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKME112_04430_Q5_000_152",
+              "Yes": true
+            },
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKME112_04430_Q6_000_154",
+              "Answer": "TEXT_AKTKME112_04430_A6_000_156"
+            },
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKME112_04430_Q7_000_168",
+              "Answer": "TEXT_AKTKME112_04430_A7_000_170"
+            },
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKME112_04430_Q8_000_181",
+              "Answer": "TEXT_AKTKME112_04430_A8_000_182"
+            }
+          ],
           "Comment": "Talk (2, 2, 1)"
         }
       ]

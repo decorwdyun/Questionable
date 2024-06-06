@@ -60,11 +60,11 @@ internal sealed class NavmeshIpc
         return _navPathfind.InvokeFunc(localPlayerPosition, targetPosition, fly, cancellationToken);
     }
 
-    public void MoveTo(List<Vector3> position)
+    public void MoveTo(List<Vector3> position, bool fly)
     {
         Stop();
 
-        _pathMoveTo.InvokeAction(position, false);
+        _pathMoveTo.InvokeAction(position, fly);
     }
 
     public Vector3? GetPointOnFloor(Vector3 position)

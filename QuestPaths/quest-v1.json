@@ -647,7 +647,17 @@
                   "if": {
                     "properties": {
                       "InteractionType": {
-                        "const": "Interact"
+                        "anyOf": [
+                          {
+                            "const": "Interact"
+                          },
+                          {
+                            "const": "SinglePlayerDuty"
+                          },
+                          {
+                            "const": "WaitForManualProgress"
+                          }
+                        ]
                       }
                     }
                   },
@@ -662,14 +672,19 @@
                               "type": "string",
                               "enum": [
                                 "YesNo",
-                                "List"
+                                "List",
+                                "ContentTalkYesNo",
+                                "ContentTalkList"
                               ]
                             },
                             "ExcelSheet": {
                               "type": "string"
                             },
                             "Prompt": {
-                              "type": "string"
+                              "type": [
+                                "string",
+                                "null"
+                              ]
                             }
                           },
                           "required": [
@@ -681,7 +696,14 @@
                               "if": {
                                 "properties": {
                                   "Type": {
-                                    "const": "YesNo"
+                                    "anyOf": [
+                                      {
+                                        "const": "YesNo"
+                                      },
+                                      {
+                                        "const": "ContentTalkYesNo"
+                                      }
+                                    ]
                                   }
                                 }
                               },
@@ -701,7 +723,14 @@
                               "if": {
                                 "properties": {
                                   "Type": {
-                                    "const": "List"
+                                    "anyOf": [
+                                      {
+                                        "const": "List"
+                                      },
+                                      {
+                                        "const": "ContentTalkList"
+                                      }
+                                    ]
                                   }
                                 }
                               },

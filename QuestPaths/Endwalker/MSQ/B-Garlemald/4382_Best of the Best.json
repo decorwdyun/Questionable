@@ -30,7 +30,14 @@
           },
           "StopDistance": 7,
           "TerritoryId": 621,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMB103_04382_Q1_000_052",
+              "Yes": true
+            }
+          ]
         }
       ]
     },
@@ -62,7 +69,15 @@
           "StopDistance": 7,
           "TerritoryId": 737,
           "InteractionType": "Interact",
-          "Comment": "A-Ruhn-Senna"
+          "Comment": "A-Ruhn-Senna",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 1038812,
@@ -74,7 +89,15 @@
           "StopDistance": 7,
           "TerritoryId": 737,
           "InteractionType": "Interact",
-          "Comment": "Sicard"
+          "Comment": "Sicard",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 1038813,
@@ -86,7 +109,15 @@
           "StopDistance": 7,
           "TerritoryId": 737,
           "InteractionType": "Interact",
-          "Comment": "Lyse"
+          "Comment": "Lyse",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 1038814,
@@ -98,7 +129,15 @@
           "StopDistance": 7,
           "TerritoryId": 737,
           "InteractionType": "Interact",
-          "Comment": "Lucia"
+          "Comment": "Lucia",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            16
+          ]
         },
         {
           "DataId": 1038815,
@@ -110,7 +149,15 @@
           "StopDistance": 7,
           "TerritoryId": 737,
           "InteractionType": "Interact",
-          "Comment": "Cirina"
+          "Comment": "Cirina",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            8
+          ]
         }
       ]
     },

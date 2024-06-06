@@ -29,7 +29,14 @@
           },
           "TerritoryId": 961,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "Elpis - Anagnorisis"
+          "AetheryteShortcut": "Elpis - Anagnorisis",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKZH018_04313_Q1_000_100",
+              "Answer": "TEXT_AKTKZH018_04313_A2_000_100"
+            }
+          ]
         }
       ]
     },

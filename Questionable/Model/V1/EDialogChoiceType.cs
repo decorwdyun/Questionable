@@ -4,5 +4,7 @@ public enum EDialogChoiceType
 {
     None,
     YesNo,
-    List
+    List,
+    ContentTalkYesNo,
+    ContentTalkList,
 }

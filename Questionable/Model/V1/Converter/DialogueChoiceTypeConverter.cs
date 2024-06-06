@@ -8,5 +8,7 @@ public sealed class DialogueChoiceTypeConverter() : EnumConverter<EDialogChoiceT
     {
         { EDialogChoiceType.YesNo, "YesNo" },
         { EDialogChoiceType.List, "List" },
+        { EDialogChoiceType.ContentTalkYesNo, "ContentTalkYesNo" },
+        { EDialogChoiceType.ContentTalkList, "ContentTalkList" },
     };
 }

@@ -32,7 +32,19 @@
           },
           "TerritoryId": 621,
           "InteractionType": "SinglePlayerDuty",
-          "Comment": "A Frosty Reception"
+          "Comment": "A Frosty Reception",
+          "DialogueChoices": [
+            {
+              "Type": "ContentTalkList",
+              "Prompt": "264",
+              "Answer": "267"
+            },
+            {
+              "Type": "ContentTalkYesNo",
+              "Prompt": "268",
+              "Yes": true
+            }
+          ]
         }
       ]
     },

@@ -31,6 +31,14 @@
           "TerritoryId": 958,
           "InteractionType": "Interact",
           "Comment": "Marcellinus",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ],
           "$.1": "QuestVariables if done first: 16 16 0 0 0 128"
         },
         {
@@ -42,7 +50,15 @@
           },
           "TerritoryId": 958,
           "InteractionType": "Interact",
-          "Comment": "Octavia"
+          "Comment": "Octavia",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         }
       ]
     },
@@ -57,7 +73,14 @@
             "Z": -422.62915
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMB113_04392_Q1_000_031",
+              "Answer": "TEXT_AKTKMB113_04392_A1_000_032"
+            }
+          ]
         }
       ]
     },
@@ -72,7 +95,14 @@
             "Z": -232.98999
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMB113_04392_Q2_000_051",
+              "Yes": true
+            }
+          ]
         }
       ]
     },

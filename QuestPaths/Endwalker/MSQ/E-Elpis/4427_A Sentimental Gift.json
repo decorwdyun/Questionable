@@ -46,6 +46,14 @@
           },
           "TerritoryId": 961,
           "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ],
           "$.1": "QuestVariables if done first: 1 0 0 0 0 128"
         },
         {
@@ -56,7 +64,15 @@
             "Z": 543.572
           },
           "TerritoryId": 961,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         }
       ]
     },
@@ -116,7 +132,14 @@
             "Z": 460.77673
           },
           "TerritoryId": 961,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKME109_04427_Q3_000_163",
+              "Answer": "TEXT_AKTKME109_04427_A3_000_164"
+            }
+          ]
         }
       ]
     },

@@ -10,6 +10,7 @@ using Dalamud.Game;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Plugin.Services;
+using Dalamud.Utility;
 using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
@@ -474,7 +475,7 @@ internal sealed unsafe class GameFunctions
             _pluginLog.Error($"Could not find content for content finder condition (cf: {contentFinderConditionId})");
     }
 
-    public string? GetExcelString(Quest currentQuest, string? excelSheetName, string key)
+    public string? GetDialogueText(Quest currentQuest, string? excelSheetName, string key)
     {
         if (excelSheetName == null)
         {
@@ -495,6 +496,12 @@ internal sealed unsafe class GameFunctions
             return null;
         }
 
-        return excelSheet.FirstOrDefault(x => x.Key == key)?.Value?.ToString();
+        return excelSheet.FirstOrDefault(x => x.Key == key)?.Value?.ToDalamudString().ToString();
+    }
+
+    public string? GetContentTalk(uint rowId)
+    {
+        var questRow = _dataManager.GetExcelSheet<ContentTalk>()!.GetRow(rowId);
+        return questRow?.Text?.ToString();
     }
 }

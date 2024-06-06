@@ -45,10 +45,11 @@
         },
         {
           "Position": {
-            "X": -188.58397,
-            "Y": 20.625948,
-            "Z": 408.3002
+            "X": -188.84349,
+            "Y": 20.31553,
+            "Z": 406.13293
           },
+          "StopDistance": 1,
           "TerritoryId": 958,
           "InteractionType": "WalkTo",
           "DisableNavmesh": true,
@@ -75,6 +76,7 @@
             "Y": 3.426586,
             "Z": 360.1115
           },
+          "StopDistance": 1,
           "TerritoryId": 958,
           "InteractionType": "WalkTo",
           "DisableNavmesh": true,
@@ -158,7 +160,7 @@
             "Z": 159.10571
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "WalkTo"
         }
       ]
     },

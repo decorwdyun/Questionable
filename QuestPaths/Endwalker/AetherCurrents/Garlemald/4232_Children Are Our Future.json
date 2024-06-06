@@ -90,7 +90,14 @@
           },
           "StopDistance": 7,
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKZD008_04232_Q1_000_000",
+              "Answer": "TEXT_AKTKZD008_04232_A1_000_002"
+            }
+          ]
         }
       ]
     },

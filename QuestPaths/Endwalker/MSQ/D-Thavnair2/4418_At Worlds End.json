@@ -95,7 +95,14 @@
             "Z": -87.90729
           },
           "TerritoryId": 963,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMD110_04418_Q2_000_172",
+              "Answer": "TEXT_AKTKMD110_04418_A2_000_173"
+            }
+          ]
         }
       ]
     },
@@ -114,6 +121,13 @@
           "AethernetShortcut": [
             "[Radz-at-Han] Hall of the Radiant Host",
             "[Radz-at-Han] Mehryde's Meyhane"
+          ],
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMD110_04418_Q3_000_223",
+              "Answer": "TEXT_AKTKMD110_04418_A3_000_225"
+            }
           ]
         }
       ]

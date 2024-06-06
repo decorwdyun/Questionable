@@ -88,7 +88,7 @@ internal sealed class MovementController : IDisposable
                     }
                 }
 
-                _navmeshIpc.MoveTo(navPoints);
+                _navmeshIpc.MoveTo(navPoints, Destination.IsFlying);
                 ResetPathfinding();
             }
             else if (_pathfindTask.IsCompleted)
@@ -166,6 +166,7 @@ internal sealed class MovementController : IDisposable
 
     public void NavigateTo(EMovementType type, uint? dataId, Vector3 to, bool fly, bool sprint, float? stopDistance = null)
     {
+        fly |= _condition[ConditionFlag.Diving];
         PrepareNavigation(type, dataId, to, fly, sprint, stopDistance);
         _pluginLog.Information($"Pathfinding to {Destination}");
 
@@ -177,10 +178,11 @@ internal sealed class MovementController : IDisposable
 
     public void NavigateTo(EMovementType type, uint? dataId, List<Vector3> to, bool fly, bool sprint, float? stopDistance)
     {
+        fly |= _condition[ConditionFlag.Diving];
         PrepareNavigation(type, dataId, to.Last(), fly, sprint, stopDistance);
 
         _pluginLog.Information($"Moving to {Destination}");
-        _navmeshIpc.MoveTo(to);
+        _navmeshIpc.MoveTo(to, fly);
     }
 
     public void ResetPathfinding()

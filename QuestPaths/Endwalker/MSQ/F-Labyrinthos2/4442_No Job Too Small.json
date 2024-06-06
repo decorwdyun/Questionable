@@ -65,6 +65,14 @@
           },
           "TerritoryId": 956,
           "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ],
           "$.0": "[1] Navmesh navigates here first, even if you feed it [2]",
           "$.1": "QuestVariables if done first: 1 0 0 0 0 64"
         },
@@ -77,6 +85,14 @@
           },
           "TerritoryId": 956,
           "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ],
           "$.0": "[2]",
           "$.1": "QuestVariables after: 2 0 0 0 0 192"
         },
@@ -88,7 +104,15 @@
             "Z": -14.450317
           },
           "TerritoryId": 956,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         }
       ]
     },

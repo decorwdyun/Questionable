@@ -46,7 +46,7 @@
           },
           "TerritoryId": 959,
           "InteractionType": "SinglePlayerDuty",
-          "Comment": "Follow Urianger"
+          "Comment": "Follow Urianger (TODO is this sequence used?)"
         }
       ]
     },
@@ -62,7 +62,7 @@
           },
           "TerritoryId": 959,
           "InteractionType": "SinglePlayerDuty",
-          "Comment": "Follow Urianger (but you failed the first time)"
+          "Comment": "Follow Urianger"
         }
       ]
     },

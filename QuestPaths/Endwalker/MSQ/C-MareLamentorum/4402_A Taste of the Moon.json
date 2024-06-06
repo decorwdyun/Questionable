@@ -81,7 +81,20 @@
         {
           "DataId": 2012178,
           "TerritoryId": 959,
+          "StopDistance": 3,
           "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMC104_04402_Q1_000_071",
+              "Answer": "TEXT_AKTKMC104_04402_A1_000_074"
+            },
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMC104_04402_Q2_000_081",
+              "Yes": true
+            }
+          ],
           "Comment": "Navmesh can't jump"
         }
       ]
@@ -102,10 +115,33 @@
         },
         {
           "DataId": 1038912,
-          "StopDistance": 5,
+          "Position": {
+            "X": -462.06528,
+            "Y": -155.5629,
+            "Z": -625.5277
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Jump",
+          "JumpDestination": {
+            "Position": {
+              "X": -453.99258,
+              "Y": -168,
+              "Z": -618.5703
+            },
+            "StopDistance": 8
+          }
+        },
+        {
+          "DataId": 1038912,
+          "Position": {
+            "X": -455.40552,
+            "Y": -168,
+            "Z": -620.05035
+          },
           "TerritoryId": 959,
           "InteractionType": "Interact",
-          "Comment": "Navmesh can't jump"
+          "DialogueChoices": [
+          ]
         }
       ]
     },

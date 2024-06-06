@@ -29,7 +29,14 @@
             "Z": -653.13196
           },
           "TerritoryId": 961,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKME116_04434_Q1_000_021",
+              "Yes": true
+            }
+          ]
         }
       ]
     },

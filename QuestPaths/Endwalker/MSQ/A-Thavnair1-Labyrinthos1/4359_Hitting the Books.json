@@ -75,6 +75,21 @@
           },
           "TerritoryId": 962,
           "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ],
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMA103_04359_Q5_000_071",
+              "Yes": true
+            }
+          ],
           "$.0": "[1]",
           "$.2": "QuestVariables if done after [3]: 2 0 0 0 0 96"
         },
@@ -87,6 +102,21 @@
           },
           "TerritoryId": 962,
           "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ],
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMA103_04359_Q2_000_049",
+              "Yes": true
+            }
+          ],
           "$.0": "[2]"
         },
         {
@@ -98,6 +128,21 @@
           },
           "TerritoryId": 962,
           "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ],
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMA103_04359_Q3_000_055",
+              "Yes": true
+            }
+          ],
           "$.0": "[3]",
           "$.2": "QuestVariables if used first: 1 0 0 0 0 64"
         }

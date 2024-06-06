@@ -8,7 +8,7 @@ public class DialogueChoice
     [JsonConverter(typeof(DialogueChoiceTypeConverter))]
     public EDialogChoiceType Type { get; set; }
     public string? ExcelSheet { get; set; }
-    public string Prompt { get; set; } = null!;
+    public string? Prompt { get; set; } = null!;
     public bool Yes { get; set; } = true;
     public string? Answer { get; set; }
 }

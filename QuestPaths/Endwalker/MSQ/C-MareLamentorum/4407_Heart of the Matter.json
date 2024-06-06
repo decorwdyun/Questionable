@@ -31,7 +31,10 @@
           "TerritoryId": 959,
           "InteractionType": "Interact",
           "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow",
-          "Comment": "Teleporter"
+          "TargetTerritoryId": 959,
+          "SkipIf": [
+            "Never"
+          ]
         },
         {
           "Position": {
