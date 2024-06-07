@@ -170,7 +170,14 @@
             "Z": 241.77905
           },
           "TerritoryId": 960,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMG111_04460_Q1_000_135",
+              "Yes": true
+            }
+          ]
         },
         {
           "DataId": 1041157,

@@ -1,6 +1,10 @@
 {
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
+  "TerritoryBlacklist": [
+    978,
+    995
+  ],
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -83,6 +87,13 @@
           "AethernetShortcut": [
             "[Old Sharlayan] The Rostra",
             "[Old Sharlayan] The Baldesion Annex"
+          ],
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMF111_04449_Q4_000_344",
+              "Yes": true
+            }
           ]
         }
       ]

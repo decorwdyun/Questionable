@@ -13,7 +13,15 @@
             "Z": 727.7484
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKZA201_04489_Q1_000_004",
+              "Answer": "TEXT_AKTKZA201_04489_A1_000_002"
+            }
+          ],
+          "Comment": "TODO I don't think dialogue choices as part of accepting a quest are handled yet"
         }
       ]
     },

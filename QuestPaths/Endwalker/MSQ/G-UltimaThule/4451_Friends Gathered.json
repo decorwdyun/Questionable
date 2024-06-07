@@ -121,6 +121,13 @@
           "AethernetShortcut": [
             "[Old Sharlayan] The Leveilleur Estate",
             "[Old Sharlayan] The Baldesion Annex"
+          ],
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMG102_04451_Q1_000_143",
+              "Yes": true
+            }
           ]
         }
       ]

@@ -2,7 +2,9 @@
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
   "TerritoryBlacklist": [
-    973
+    973,
+    997,
+    1013
   ],
   "QuestSequence": [
     {
@@ -234,7 +236,14 @@
             "Z": -7.1870728
           },
           "TerritoryId": 351,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMG115_04464_Q13_000_391",
+              "Yes": true
+            }
+          ]
         }
       ]
     }

@@ -37,6 +37,13 @@
             null,
             128
           ],
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMG114_04463_Q1_000_031",
+              "Answer": "TEXT_AKTKMG114_04463_A1_000_033"
+            }
+          ],
           "$.0": "[1]",
           "$.1": "QuestVariables if done first: 16 0 0 16 0 128"
         },
@@ -136,6 +143,13 @@
             null,
             null,
             64
+          ],
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMG114_04463_Q2_000_061",
+              "Answer": "TEXT_AKTKMG114_04463_A2_000_063"
+            }
           ],
           "$.0": "[6]",
           "$.1": "QuestVariables if done first: 16 0 1 0 0 64"

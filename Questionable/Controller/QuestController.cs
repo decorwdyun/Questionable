@@ -444,7 +444,7 @@ internal sealed class QuestController
                     $"Aethernet shortcut not unlocked (from: {step.AethernetShortcut.From}, to: {step.AethernetShortcut.To}), walking manually");
         }
 
-        if (step.TargetTerritoryId == _clientState.TerritoryType && !step.SkipIf.Contains(ESkipCondition.Never))
+        if (step.TargetTerritoryId.HasValue && step.TerritoryId != step.TargetTerritoryId && step.TargetTerritoryId == _clientState.TerritoryType)
         {
             // we assume whatever e.g. interaction, walkto etc. we have will trigger the zone transition
             _pluginLog.Information("Zone transition, skipping rest of step");

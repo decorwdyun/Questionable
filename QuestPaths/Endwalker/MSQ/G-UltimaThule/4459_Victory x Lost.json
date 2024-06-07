@@ -55,7 +55,14 @@
             "Z": -319.50867
           },
           "TerritoryId": 960,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMG110_04459_Q1_000_041",
+              "Yes": true
+            }
+          ]
         },
         {
           "DataId": 2012286,
@@ -176,7 +183,15 @@
             "Z": 329.76257
           },
           "TerritoryId": 960,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 1038041,
@@ -186,7 +201,15 @@
             "Z": 345.44885
           },
           "TerritoryId": 960,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 1038045,
@@ -196,7 +219,15 @@
             "Z": 347.64624
           },
           "TerritoryId": 960,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         }
       ]
     },

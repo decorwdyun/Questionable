@@ -111,10 +111,7 @@
           },
           "TerritoryId": 956,
           "InteractionType": "Interact",
-          "TargetTerritoryId": 956,
-          "SkipIf": [
-            "Never"
-          ]
+          "TargetTerritoryId": 956
         },
         {
           "DataId": 1040397,

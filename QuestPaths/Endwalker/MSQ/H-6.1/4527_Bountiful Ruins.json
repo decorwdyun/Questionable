@@ -48,8 +48,39 @@
             "Z": -225.42157
           },
           "TerritoryId": 963,
-          "InteractionType": "WaitForManualProgress",
-          "Comment": "Talk (1, 1, 1, 2)"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMH102_04527_Q9_100_111",
+              "Yes": true
+            },
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMH102_04527_Q1_000_000",
+              "Answer": "TEXT_AKTKMH102_04527_A1_000_001"
+            },
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMH102_04527_Q2_000_000",
+              "Answer": "TEXT_AKTKMH102_04527_A2_000_001"
+            },
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMH102_04527_Q3_000_000",
+              "Answer": "TEXT_AKTKMH102_04527_A3_000_001"
+            },
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMH102_04527_Q4_000_000",
+              "Answer": "TEXT_AKTKMH102_04527_A4_000_001"
+            },
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMH102_04527_Q5_000_000",
+              "Answer": "TEXT_AKTKMH102_04527_A5_000_002"
+            }
+          ]
         }
       ]
     },

@@ -33,7 +33,8 @@
           "AetheryteShortcut": "Labyrinthos - Aporia",
           "SkipIf": [
             "FlyingUnlocked"
-          ]
+          ],
+          "TargetTerritoryId": 956
         },
         {
           "DataId": 1039827,
@@ -59,7 +60,14 @@
             "Z": 311.9402
           },
           "TerritoryId": 956,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMG103_04452_Q1_000_183",
+              "Yes": true
+            }
+          ]
         }
       ]
     },
