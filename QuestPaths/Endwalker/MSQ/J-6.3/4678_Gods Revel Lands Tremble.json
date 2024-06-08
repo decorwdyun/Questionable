@@ -34,6 +34,13 @@
           "AethernetShortcut": [
             "[Radz-at-Han] Aetheryte Plaza",
             "[Radz-at-Han] Meghaduta"
+          ],
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMJ109_04678_SYSTEM_000_021",
+              "Yes": true
+            }
           ]
         }
       ]

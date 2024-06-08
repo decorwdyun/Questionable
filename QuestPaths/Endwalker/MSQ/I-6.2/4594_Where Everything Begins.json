@@ -1,6 +1,9 @@
 {
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
+  "TerritoryBlacklist": [
+    1091
+  ],
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -59,7 +62,8 @@
             "Z": 90.01325
           },
           "TerritoryId": 1089,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 1089
         },
         {
           "DataId": 1043808,

@@ -126,7 +126,23 @@
           },
           "TerritoryId": 957,
           "InteractionType": "Interact",
-          "Mount": false
+          "Mount": false,
+          "SkipIf": [
+            "FlyingLocked"
+          ]
+        },
+        {
+          "DataId": 2012847,
+          "Position": {
+            "X": 242.08435,
+            "Y": 0.3508911,
+            "Z": 119.43237
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact",
+          "SkipIf": [
+            "FlyingUnlocked"
+          ]
         }
       ]
     },

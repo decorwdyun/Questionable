@@ -11,6 +11,7 @@ using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using FFXIVClientStructs.FFXIV.Client.Game.Control;
 using Questionable.External;
 using Questionable.Model;
 using Questionable.Model.V1;
@@ -159,7 +160,8 @@ internal sealed class MovementController : IDisposable
     {
         ResetPathfinding();
 
-        _gameFunctions.ExecuteCommand("/automove off");
+        if (InputManager.IsAutoRunning())
+            _gameFunctions.ExecuteCommand("/automove off");
 
         Destination = new DestinationData(dataId, to, stopDistance ?? (DefaultStopDistance - 0.2f), fly, sprint);
     }
@@ -207,6 +209,9 @@ internal sealed class MovementController : IDisposable
     {
         _navmeshIpc.Stop();
         ResetPathfinding();
+
+        if (InputManager.IsAutoRunning())
+            _gameFunctions.ExecuteCommand("/automove off");
     }
 
     public void Dispose()

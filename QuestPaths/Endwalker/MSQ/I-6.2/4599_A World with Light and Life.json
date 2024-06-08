@@ -14,7 +14,14 @@
           },
           "StopDistance": 7,
           "TerritoryId": 1078,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMI108_04599_Q1_000_000",
+              "Answer": "TEXT_AKTKMI108_04599_A1_000_002"
+            }
+          ]
         }
       ]
     },
@@ -30,7 +37,8 @@
           },
           "StopDistance": 4,
           "TerritoryId": 1078,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 963
         },
         {
           "DataId": 1037381,
@@ -45,6 +53,13 @@
           "AethernetShortcut": [
             "[Radz-at-Han] Meghaduta",
             "[Radz-at-Han] Mehryde's Meyhane"
+          ],
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMI108_04599_Q3_000_000",
+              "Answer": "TEXT_AKTKMI108_04599_A3_000_002"
+            }
           ]
         }
       ]
@@ -64,6 +79,13 @@
           "AethernetShortcut": [
             "[Radz-at-Han] Mehryde's Meyhane",
             "[Radz-at-Han] Meghaduta"
+          ],
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMI108_04599_SYSTEM_000_211",
+              "Yes": true
+            }
           ]
         }
       ]

@@ -48,7 +48,19 @@
           },
           "StopDistance": 5,
           "TerritoryId": 963,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMK101_04735_Q1_000_000",
+              "Answer": "TEXT_AKTKMK101_04735_A1_000_003"
+            },
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMK101_04735_Q1_000_065",
+              "Yes": true
+            }
+          ]
         }
       ]
     },
@@ -97,6 +109,13 @@
           "AethernetShortcut": [
             "[Radz-at-Han] Mehryde's Meyhane",
             "[Radz-at-Han] Meghaduta"
+          ],
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMK101_04735_Q2_000_182",
+              "Yes": true
+            }
           ]
         }
       ]

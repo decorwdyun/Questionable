@@ -29,7 +29,8 @@
             "Z": -232.4083
           },
           "TerritoryId": 1089,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 1089
         },
         {
           "DataId": 1043792,
@@ -103,7 +104,8 @@
             "Z": 14.389221
           },
           "TerritoryId": 1089,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 1089
         },
         {
           "DataId": 1043814,
@@ -128,7 +130,8 @@
             "Z": -232.41016
           },
           "TerritoryId": 1089,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 1089
         },
         {
           "DataId": 1043816,
@@ -138,7 +141,14 @@
             "Z": -110.12439
           },
           "TerritoryId": 1089,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMI104_04595_SYSTEM_000_322",
+              "Yes": true
+            }
+          ]
         }
       ]
     },

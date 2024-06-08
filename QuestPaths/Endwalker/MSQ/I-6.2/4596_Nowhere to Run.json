@@ -114,7 +114,14 @@
             "Z": -22.62915
           },
           "TerritoryId": 1077,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMI105_04596_Q1_000_000",
+              "Answer": "TEXT_AKTKMI105_04596_A1_000_002"
+            }
+          ]
         }
       ]
     },
@@ -159,7 +166,14 @@
             "Z": 60.501953
           },
           "TerritoryId": 1077,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMI105_04596_Q2_000_000",
+              "Answer": "TEXT_AKTKMI105_04596_A2_000_001"
+            }
+          ]
         }
       ]
     },

@@ -29,7 +29,14 @@
           },
           "TerritoryId": 957,
           "InteractionType": "Interact",
-          "Fly": true
+          "Fly": true,
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMH109_04534_Q2_000_120",
+              "Yes": true
+            }
+          ]
         }
       ]
     },

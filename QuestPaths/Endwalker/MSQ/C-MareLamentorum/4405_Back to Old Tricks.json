@@ -35,22 +35,6 @@
       ]
     },
     {
-      "Sequence": 2,
-      "Steps": [
-        {
-          "DataId": 2012185,
-          "Position": {
-            "X": -5.416992,
-            "Y": -49.05786,
-            "Z": -269.24548
-          },
-          "TerritoryId": 959,
-          "InteractionType": "SinglePlayerDuty",
-          "Comment": "Follow Urianger (TODO is this sequence used?)"
-        }
-      ]
-    },
-    {
       "Sequence": 3,
       "Steps": [
         {

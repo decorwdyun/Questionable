@@ -55,7 +55,15 @@
           },
           "TerritoryId": 957,
           "InteractionType": "WalkTo",
-          "Fly": true
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 1037631,
@@ -74,6 +82,13 @@
             null,
             null,
             128
+          ],
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMH106_04531_Q1_000_000",
+              "Answer": "TEXT_AKTKMH106_04531_A1_000_002"
+            }
           ]
         },
         {
@@ -84,7 +99,15 @@
             "Z": 561.27246
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         }
       ]
     },

@@ -52,7 +52,6 @@
     },
     {
       "Sequence": 3,
-      "Comment": "TODO Check flags",
       "Steps": [
         {
           "DataId": 1037628,

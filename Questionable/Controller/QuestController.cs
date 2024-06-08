@@ -29,7 +29,6 @@ internal sealed class QuestController
     private readonly ICondition _condition;
     private readonly IChatGui _chatGui;
     private readonly IFramework _framework;
-    private readonly IGameGui _gameGui;
     private readonly AetheryteData _aetheryteData;
     private readonly LifestreamIpc _lifestreamIpc;
     private readonly TerritoryData _territoryData;
@@ -37,8 +36,7 @@ internal sealed class QuestController
 
     public QuestController(DalamudPluginInterface pluginInterface, IDataManager dataManager, IClientState clientState,
         GameFunctions gameFunctions, MovementController movementController, IPluginLog pluginLog, ICondition condition,
-        IChatGui chatGui, IFramework framework, IGameGui gameGui, AetheryteData aetheryteData,
-        LifestreamIpc lifestreamIpc)
+        IChatGui chatGui, IFramework framework, AetheryteData aetheryteData, LifestreamIpc lifestreamIpc)
     {
         _pluginInterface = pluginInterface;
         _dataManager = dataManager;
@@ -49,7 +47,6 @@ internal sealed class QuestController
         _condition = condition;
         _chatGui = chatGui;
         _framework = framework;
-        _gameGui = gameGui;
         _aetheryteData = aetheryteData;
         _lifestreamIpc = lifestreamIpc;
         _territoryData = new TerritoryData(dataManager);
@@ -358,7 +355,7 @@ internal sealed class QuestController
 
         if (!step.SkipIf.Contains(ESkipCondition.Never))
         {
-            _pluginLog.Information("Checking skip conditions");
+            _pluginLog.Information($"Checking skip conditions; {string.Join(",", step.SkipIf)}");
 
             if (step.SkipIf.Contains(ESkipCondition.FlyingUnlocked) &&
                 _gameFunctions.IsFlyingUnlocked(step.TerritoryId))

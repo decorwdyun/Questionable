@@ -56,7 +56,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         _movementController =
             new MovementController(navmeshIpc, clientState, _gameFunctions, condition, pluginLog);
         _questController = new QuestController(pluginInterface, dataManager, _clientState, _gameFunctions,
-            _movementController, pluginLog, condition, chatGui, framework, gameGui, aetheryteData, lifestreamIpc);
+            _movementController, pluginLog, condition, chatGui, framework, aetheryteData, lifestreamIpc);
         _gameUiController =
             new GameUiController(addonLifecycle, dataManager, _gameFunctions, _questController, gameGui, pluginLog);
 

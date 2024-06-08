@@ -32,37 +32,6 @@
           "AetherCurrentId": 2818362
         },
         {
-          "Position": {
-            "X": 62.71022,
-            "Y": -46.99965,
-            "Z": -433.81802
-          },
-          "TerritoryId": 959,
-          "InteractionType": "WalkTo"
-        },
-        {
-          "Position": {
-            "X": 47.394165,
-            "Y": -133.50012,
-            "Z": -397.90225
-          },
-          "TerritoryId": 959,
-          "InteractionType": "WalkTo",
-          "DisableNavmesh": true
-        },
-        {
-          "DataId": 2012019,
-          "Position": {
-            "X": 21.7081,
-            "Y": -133.5001,
-            "Z": -385.7313
-          },
-          "TerritoryId": 959,
-          "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818368,
-          "DisableNavmesh": true
-        },
-        {
           "DataId": 1038908,
           "Position": {
             "X": -456.10742,
@@ -139,9 +108,7 @@
             "Z": -620.05035
           },
           "TerritoryId": 959,
-          "InteractionType": "Interact",
-          "DialogueChoices": [
-          ]
+          "InteractionType": "Interact"
         }
       ]
     },

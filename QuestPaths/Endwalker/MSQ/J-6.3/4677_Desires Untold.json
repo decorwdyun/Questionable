@@ -16,7 +16,14 @@
             "Z": -569.8787
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMJ108_04677_Q1_000_000",
+              "Answer": "TEXT_AKTKMJ108_04677_A1_000_001"
+            }
+          ]
         }
       ]
     },
@@ -48,7 +55,14 @@
           },
           "TerritoryId": 957,
           "InteractionType": "Interact",
-          "Fly": true
+          "Fly": true,
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMJ108_04677_Q2_000_063",
+              "Yes": true
+            }
+          ]
         }
       ]
     },

@@ -32,6 +32,13 @@
           "AethernetShortcut": [
             "[Radz-at-Han] Ruveydah Fibers",
             "[Radz-at-Han] Meghaduta"
+          ],
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMI109_04600_SYSTEM_000_020",
+              "Yes": true
+            }
           ]
         }
       ]

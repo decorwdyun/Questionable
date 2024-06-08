@@ -64,6 +64,7 @@
           "TerritoryId": 959,
           "InteractionType": "Interact",
           "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow",
+          "TargetTerritoryId": 959,
           "SkipIf": [
             "FlyingUnlocked"
           ]
@@ -194,8 +195,7 @@
             16
           ]
         }
-      ],
-      "Comment": "TODO Check Flags (32)"
+      ]
     },
     {
       "Sequence": 255,

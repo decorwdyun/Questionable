@@ -28,6 +28,7 @@
             "Y": -350,
             "Z": -84.82495
           },
+          "StopDistance": 5,
           "TerritoryId": 1056,
           "InteractionType": "Interact"
         }
@@ -60,7 +61,14 @@
             "Z": -148.57715
           },
           "TerritoryId": 963,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMH105_04530_Q2_000_000",
+              "Answer": "TEXT_AKTKMH105_04530_A2_000_001"
+            }
+          ]
         }
       ]
     }

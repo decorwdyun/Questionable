@@ -44,7 +44,14 @@
             "Z": 51.499146
           },
           "TerritoryId": 1077,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMI107_04598_SYSTEM_000_221",
+              "Yes": true
+            }
+          ]
         }
       ]
     },
@@ -59,7 +66,14 @@
             "Z": -81.28485
           },
           "TerritoryId": 963,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMI107_04598_SYSTEM_000_401",
+              "Yes": true
+            }
+          ]
         }
       ]
     }

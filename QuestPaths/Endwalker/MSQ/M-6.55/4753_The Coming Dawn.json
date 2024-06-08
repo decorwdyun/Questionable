@@ -14,7 +14,14 @@
           },
           "StopDistance": 5,
           "TerritoryId": 962,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKMM103_04753_Q1_000_000",
+              "Answer": "TEXT_AKTKMM103_04753_A1_000_001"
+            }
+          ]
         }
       ]
     },

@@ -1,6 +1,9 @@
 ﻿{
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
+  "TerritoryBlacklist": [
+    922
+  ],
   "QuestSequence": [
     {
       "Sequence": 0,
