@@ -16,7 +16,6 @@ namespace Questionable.Controller;
 
 internal sealed class GameUiController : IDisposable
 {
-    private readonly IClientState _clientState;
     private readonly IAddonLifecycle _addonLifecycle;
     private readonly IDataManager _dataManager;
     private readonly GameFunctions _gameFunctions;
@@ -24,10 +23,9 @@ internal sealed class GameUiController : IDisposable
     private readonly IGameGui _gameGui;
     private readonly IPluginLog _pluginLog;
 
-    public GameUiController(IClientState clientState, IAddonLifecycle addonLifecycle, IDataManager dataManager,
-        GameFunctions gameFunctions, QuestController questController, IGameGui gameGui, IPluginLog pluginLog)
+    public GameUiController(IAddonLifecycle addonLifecycle, IDataManager dataManager, GameFunctions gameFunctions,
+        QuestController questController, IGameGui gameGui, IPluginLog pluginLog)
     {
-        _clientState = clientState;
         _addonLifecycle = addonLifecycle;
         _dataManager = dataManager;
         _gameFunctions = gameFunctions;
@@ -48,36 +46,36 @@ internal sealed class GameUiController : IDisposable
         if (_gameGui.TryGetAddonByName("SelectString", out AddonSelectString* addonSelectString))
         {
             _pluginLog.Information("SelectString window is open");
-            SelectStringPostSetup(addonSelectString);
+            SelectStringPostSetup(addonSelectString, true);
         }
 
         if (_gameGui.TryGetAddonByName("CutSceneSelectString",
                 out AddonCutSceneSelectString* addonCutSceneSelectString))
         {
             _pluginLog.Information("CutSceneSelectString window is open");
-            CutsceneSelectStringPostSetup(addonCutSceneSelectString);
+            CutsceneSelectStringPostSetup(addonCutSceneSelectString, true);
         }
 
         if (_gameGui.TryGetAddonByName("SelectIconString", out AddonSelectIconString* addonSelectIconString))
         {
             _pluginLog.Information("SelectIconString window is open");
-            SelectIconStringPostSetup(addonSelectIconString);
+            SelectIconStringPostSetup(addonSelectIconString, true);
         }
 
         if (_gameGui.TryGetAddonByName("SelectYesno", out AddonSelectYesno* addonSelectYesno))
         {
             _pluginLog.Information("SelectYesno window is open");
-            SelectYesnoPostSetup(addonSelectYesno);
+            SelectYesnoPostSetup(addonSelectYesno, true);
         }
     }
 
     private unsafe void SelectStringPostSetup(AddonEvent type, AddonArgs args)
     {
         AddonSelectString* addonSelectString = (AddonSelectString*)args.Addon;
-        SelectStringPostSetup(addonSelectString);
+        SelectStringPostSetup(addonSelectString, false);
     }
 
-    private unsafe void SelectStringPostSetup(AddonSelectString* addonSelectString)
+    private unsafe void SelectStringPostSetup(AddonSelectString* addonSelectString, bool checkAllSteps)
     {
         string? actualPrompt = addonSelectString->AtkUnitBase.AtkValues[2].ReadAtkString();
         if (actualPrompt == null)
@@ -87,10 +85,11 @@ internal sealed class GameUiController : IDisposable
         for (ushort i = 7; i < addonSelectString->AtkUnitBase.AtkValuesCount; ++i)
             answers.Add(addonSelectString->AtkUnitBase.AtkValues[i].ReadAtkString());
 
-        int? answer = HandleListChoice(actualPrompt, answers);
+        int? answer = HandleListChoice(actualPrompt, answers, checkAllSteps);
         if (answer != null)
         {
-            _questController.IncreaseDialogueChoicesSelected();
+            if (!checkAllSteps)
+                _questController.IncreaseDialogueChoicesSelected();
             addonSelectString->AtkUnitBase.FireCallbackInt(answer.Value);
         }
     }
@@ -98,10 +97,11 @@ internal sealed class GameUiController : IDisposable
     private unsafe void CutsceneSelectStringPostSetup(AddonEvent type, AddonArgs args)
     {
         AddonCutSceneSelectString* addonCutSceneSelectString = (AddonCutSceneSelectString*)args.Addon;
-        CutsceneSelectStringPostSetup(addonCutSceneSelectString);
+        CutsceneSelectStringPostSetup(addonCutSceneSelectString, false);
     }
 
-    private unsafe void CutsceneSelectStringPostSetup(AddonCutSceneSelectString* addonCutSceneSelectString)
+    private unsafe void CutsceneSelectStringPostSetup(AddonCutSceneSelectString* addonCutSceneSelectString,
+        bool checkAllSteps)
     {
         string? actualPrompt = addonCutSceneSelectString->AtkUnitBase.AtkValues[2].ReadAtkString();
         if (actualPrompt == null)
@@ -111,10 +111,11 @@ internal sealed class GameUiController : IDisposable
         for (int i = 5; i < addonCutSceneSelectString->AtkUnitBase.AtkValuesCount; ++i)
             answers.Add(addonCutSceneSelectString->AtkUnitBase.AtkValues[i].ReadAtkString());
 
-        int? answer = HandleListChoice(actualPrompt, answers);
+        int? answer = HandleListChoice(actualPrompt, answers, checkAllSteps);
         if (answer != null)
         {
-            _questController.IncreaseDialogueChoicesSelected();
+            if (!checkAllSteps)
+                _questController.IncreaseDialogueChoicesSelected();
             addonCutSceneSelectString->AtkUnitBase.FireCallbackInt(answer.Value);
         }
     }
@@ -122,10 +123,10 @@ internal sealed class GameUiController : IDisposable
     private unsafe void SelectIconStringPostSetup(AddonEvent type, AddonArgs args)
     {
         AddonSelectIconString* addonSelectIconString = (AddonSelectIconString*)args.Addon;
-        SelectIconStringPostSetup(addonSelectIconString);
+        SelectIconStringPostSetup(addonSelectIconString, false);
     }
 
-    private unsafe void SelectIconStringPostSetup(AddonSelectIconString* addonSelectIconString)
+    private unsafe void SelectIconStringPostSetup(AddonSelectIconString* addonSelectIconString, bool checkAllSteps)
     {
         string? actualPrompt = addonSelectIconString->AtkUnitBase.AtkValues[3].ReadAtkString();
         if (string.IsNullOrEmpty(actualPrompt))
@@ -135,16 +136,17 @@ internal sealed class GameUiController : IDisposable
         for (ushort i = 0; i < addonSelectIconString->AtkUnitBase.AtkValues[5].Int; i++)
             answers.Add(addonSelectIconString->AtkUnitBase.AtkValues[i * 3 + 7].ReadAtkString());
 
-        int? answer = HandleListChoice(actualPrompt, answers);
+        int? answer = HandleListChoice(actualPrompt, answers, checkAllSteps);
         if (answer != null)
         {
-            _questController.IncreaseDialogueChoicesSelected();
+            if (!checkAllSteps)
+                _questController.IncreaseDialogueChoicesSelected();
             addonSelectIconString->AtkUnitBase.FireCallbackInt(answer.Value);
         }
     }
 
 
-    private int? HandleListChoice(string? actualPrompt, List<string?> answers)
+    private int? HandleListChoice(string? actualPrompt, List<string?> answers, bool checkAllSteps)
     {
         var currentQuest = _questController.CurrentQuest;
         if (currentQuest == null)
@@ -154,14 +156,25 @@ internal sealed class GameUiController : IDisposable
         }
 
         var quest = currentQuest.Quest;
-        var step = quest.FindSequence(currentQuest.Sequence)?.FindStep(currentQuest.Step);
-        if (step == null)
+        IList<DialogueChoice> dialogueChoices;
+        if (checkAllSteps)
         {
-            _pluginLog.Information("Ignoring list choice, no active step");
-            return null;
+            var sequence = quest.FindSequence(currentQuest.Sequence);
+            dialogueChoices = sequence?.Steps.SelectMany(x => x.DialogueChoices).ToList() ?? new List<DialogueChoice>();
+        }
+        else
+        {
+            var step = quest.FindSequence(currentQuest.Sequence)?.FindStep(currentQuest.Step);
+            if (step == null)
+            {
+                _pluginLog.Information("Ignoring list choice, no active step");
+                return null;
+            }
+
+            dialogueChoices = step.DialogueChoices;
         }
 
-        foreach (var dialogueChoice in step.DialogueChoices)
+        foreach (var dialogueChoice in dialogueChoices)
         {
             if (dialogueChoice.Answer == null)
             {
@@ -211,6 +224,7 @@ internal sealed class GameUiController : IDisposable
 
             for (int i = 0; i < answers.Count; ++i)
             {
+                _pluginLog.Verbose($"Checking if {answers[i]} == {excelAnswer}");
                 if (GameStringEquals(answers[i], excelAnswer))
                 {
                     _pluginLog.Information($"Returning {i}: '{answers[i]}' for '{actualPrompt}'");
@@ -226,10 +240,10 @@ internal sealed class GameUiController : IDisposable
     private unsafe void SelectYesnoPostSetup(AddonEvent type, AddonArgs args)
     {
         AddonSelectYesno* addonSelectYesno = (AddonSelectYesno*)args.Addon;
-        SelectYesnoPostSetup(addonSelectYesno);
+        SelectYesnoPostSetup(addonSelectYesno, false);
     }
 
-    private unsafe void SelectYesnoPostSetup(AddonSelectYesno* addonSelectYesno)
+    private unsafe void SelectYesnoPostSetup(AddonSelectYesno* addonSelectYesno, bool checkAllSteps)
     {
         string? actualPrompt = addonSelectYesno->AtkUnitBase.AtkValues[0].ReadAtkString();
         if (actualPrompt == null)
@@ -242,53 +256,71 @@ internal sealed class GameUiController : IDisposable
             return;
 
         var quest = currentQuest.Quest;
-        var step = quest.FindSequence(currentQuest.Sequence)?.FindStep(currentQuest.Step);
-        if (step != null && HandleDefaultYesNo(addonSelectYesno, quest, step, actualPrompt))
-            return;
+        if (checkAllSteps)
+        {
+            var sequence = quest.FindSequence(currentQuest.Sequence);
+            if (sequence != null && HandleDefaultYesNo(addonSelectYesno, quest,
+                    sequence.Steps.SelectMany(x => x.DialogueChoices).ToList(), actualPrompt, checkAllSteps))
+                return;
+        }
+        else
+        {
+            var step = quest.FindSequence(currentQuest.Sequence)?.FindStep(currentQuest.Step);
+            if (step != null && HandleDefaultYesNo(addonSelectYesno, quest, step.DialogueChoices, actualPrompt,
+                    checkAllSteps))
+                return;
+        }
 
         HandleTravelYesNo(addonSelectYesno, currentQuest, actualPrompt);
     }
 
-    private unsafe bool HandleDefaultYesNo(AddonSelectYesno* addonSelectYesno, Quest quest, QuestStep step,
-        string actualPrompt)
+    private unsafe bool HandleDefaultYesNo(AddonSelectYesno* addonSelectYesno, Quest quest,
+        IList<DialogueChoice> dialogueChoices, string actualPrompt, bool checkAllSteps)
     {
-        _pluginLog.Verbose($"DefaultYesNo: Choice count: {step.DialogueChoices.Count}");
-        foreach (var dialogueChoice in step.DialogueChoices)
+        _pluginLog.Verbose($"DefaultYesNo: Choice count: {dialogueChoices.Count}");
+        foreach (var dialogueChoice in dialogueChoices)
         {
             string? excelPrompt;
-            switch (dialogueChoice.Type)
+            if (dialogueChoice.Prompt != null)
             {
-                case EDialogChoiceType.ContentTalkYesNo:
-                    excelPrompt =
-                        _gameFunctions.GetContentTalk(uint.Parse(dialogueChoice.Prompt, CultureInfo.InvariantCulture));
-                    break;
-                case EDialogChoiceType.YesNo:
-                    excelPrompt =
-                        _gameFunctions.GetDialogueText(quest, dialogueChoice.ExcelSheet, dialogueChoice.Prompt);
-                    break;
-                default:
-                    continue;
+                switch (dialogueChoice.Type)
+                {
+                    case EDialogChoiceType.ContentTalkYesNo:
+                        excelPrompt =
+                            _gameFunctions.GetContentTalk(uint.Parse(dialogueChoice.Prompt,
+                                CultureInfo.InvariantCulture));
+                        break;
+                    case EDialogChoiceType.YesNo:
+                        excelPrompt =
+                            _gameFunctions.GetDialogueText(quest, dialogueChoice.ExcelSheet, dialogueChoice.Prompt);
+                        break;
+                    default:
+                        continue;
+                }
             }
+            else
+                excelPrompt = null;
 
             if (excelPrompt == null || !GameStringEquals(actualPrompt, excelPrompt))
                 continue;
 
             addonSelectYesno->AtkUnitBase.FireCallbackInt(dialogueChoice.Yes ? 0 : 1);
-            _questController.IncreaseDialogueChoicesSelected();
+            if (!checkAllSteps)
+                _questController.IncreaseDialogueChoicesSelected();
             return true;
         }
 
         return false;
     }
 
-    private unsafe bool HandleTravelYesNo(AddonSelectYesno* addonSelectYesno,
+    private unsafe void HandleTravelYesNo(AddonSelectYesno* addonSelectYesno,
         QuestController.QuestProgress currentQuest, string actualPrompt)
     {
         // this can be triggered either manually (in which case we should increase the step counter), or automatically
         // (in which case it is ~1 frame later, and the step counter has already been increased)
         var sequence = currentQuest.Quest.FindSequence(currentQuest.Sequence);
         if (sequence == null)
-            return false;
+            return;
 
         bool increaseStepCount = true;
         QuestStep? step = sequence.FindStep(currentQuest.Step);
@@ -308,7 +340,7 @@ internal sealed class GameUiController : IDisposable
         if (step == null || step.TargetTerritoryId == null)
         {
             _pluginLog.Verbose("TravelYesNo: Not found");
-            return false;
+            return;
         }
 
         var warps = _dataManager.GetExcelSheet<Warp>()!
@@ -327,10 +359,8 @@ internal sealed class GameUiController : IDisposable
             addonSelectYesno->AtkUnitBase.FireCallbackInt(0);
             if (increaseStepCount)
                 _questController.IncreaseStepCount();
-            return true;
+            return;
         }
-
-        return false;
     }
 
     private unsafe void CreditPostSetup(AddonEvent type, AddonArgs args)
@@ -353,7 +383,7 @@ internal sealed class GameUiController : IDisposable
     /// <summary>
     /// Ensures characters like '-' are handled equally in both strings.
     /// </summary>
-    private bool GameStringEquals(string? a, string? b)
+    private static bool GameStringEquals(string? a, string? b)
     {
         if (a == null)
             return b == null;

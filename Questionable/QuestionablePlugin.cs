@@ -29,6 +29,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
     private readonly QuestController _questController;
     private readonly MovementController _movementController;
     private readonly GameUiController _gameUiController;
+    private readonly Configuration _configuration;
 
     public QuestionablePlugin(DalamudPluginInterface pluginInterface, IClientState clientState,
         ITargetManager targetManager, IFramework framework, IGameGui gameGui, IDataManager dataManager,
@@ -47,6 +48,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         _commandManager = commandManager;
         _gameFunctions = new GameFunctions(dataManager, objectTable, sigScanner, targetManager, condition, clientState,
             pluginLog);
+        _configuration = (Configuration?)_pluginInterface.GetPluginConfig() ?? new Configuration();
 
         AetheryteData aetheryteData = new AetheryteData(dataManager);
         NavmeshIpc navmeshIpc = new NavmeshIpc(pluginInterface);
@@ -56,11 +58,10 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         _questController = new QuestController(pluginInterface, dataManager, _clientState, _gameFunctions,
             _movementController, pluginLog, condition, chatGui, framework, gameGui, aetheryteData, lifestreamIpc);
         _gameUiController =
-            new GameUiController(clientState, addonLifecycle, dataManager, _gameFunctions, _questController, gameGui,
-                pluginLog);
+            new GameUiController(addonLifecycle, dataManager, _gameFunctions, _questController, gameGui, pluginLog);
 
-        _windowSystem.AddWindow(new DebugWindow(_movementController, _questController, _gameFunctions, clientState,
-            framework, targetManager, _gameUiController));
+        _windowSystem.AddWindow(new DebugWindow(pluginInterface, _movementController, _questController, _gameFunctions,
+            clientState, framework, targetManager, _gameUiController, _configuration));
 
         _pluginInterface.UiBuilder.Draw += _windowSystem.Draw;
         _framework.Update += FrameworkUpdate;

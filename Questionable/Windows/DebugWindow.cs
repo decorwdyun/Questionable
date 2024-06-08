@@ -5,19 +5,22 @@ using Dalamud.Game.ClientState.Objects;
 using Dalamud.Interface;
 using Dalamud.Interface.Components;
 using Dalamud.Interface.Windowing;
+using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using ImGuiNET;
+using LLib.ImGui;
 using Questionable.Controller;
 using Questionable.Model;
 using Questionable.Model.V1;
 
 namespace Questionable.Windows;
 
-internal sealed class DebugWindow : Window
+internal sealed class DebugWindow : LWindow, IPersistableWindowConfig
 {
+    private readonly DalamudPluginInterface _pluginInterface;
     private readonly MovementController _movementController;
     private readonly QuestController _questController;
     private readonly GameFunctions _gameFunctions;
@@ -25,12 +28,14 @@ internal sealed class DebugWindow : Window
     private readonly IFramework _framework;
     private readonly ITargetManager _targetManager;
     private readonly GameUiController _gameUiController;
+    private readonly Configuration _configuration;
 
-    public DebugWindow(MovementController movementController, QuestController questController,
-        GameFunctions gameFunctions, IClientState clientState, IFramework framework,
-        ITargetManager targetManager, GameUiController gameUiController)
+    public DebugWindow(DalamudPluginInterface pluginInterface, MovementController movementController,
+        QuestController questController, GameFunctions gameFunctions, IClientState clientState, IFramework framework,
+        ITargetManager targetManager, GameUiController gameUiController, Configuration configuration)
         : base("Questionable", ImGuiWindowFlags.AlwaysAutoResize)
     {
+        _pluginInterface = pluginInterface;
         _movementController = movementController;
         _questController = questController;
         _gameFunctions = gameFunctions;
@@ -38,6 +43,7 @@ internal sealed class DebugWindow : Window
         _framework = framework;
         _targetManager = targetManager;
         _gameUiController = gameUiController;
+        _configuration = configuration;
 
         IsOpen = true;
         SizeConstraints = new WindowSizeConstraints
@@ -46,6 +52,10 @@ internal sealed class DebugWindow : Window
             MaximumSize = default
         };
     }
+
+    public WindowConfig WindowConfig => _configuration.DebugWindowConfig;
+
+    public void SaveWindowConfig() => _pluginInterface.SavePluginConfig(_configuration);
 
     public override bool DrawConditions()
     {
