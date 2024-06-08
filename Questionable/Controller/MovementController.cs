@@ -12,6 +12,7 @@ using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
+using Microsoft.Extensions.Logging;
 using Questionable.External;
 using Questionable.Model;
 using Questionable.Model.V1;
@@ -26,18 +27,18 @@ internal sealed class MovementController : IDisposable
     private readonly IClientState _clientState;
     private readonly GameFunctions _gameFunctions;
     private readonly ICondition _condition;
-    private readonly IPluginLog _pluginLog;
+    private readonly ILogger<MovementController> _logger;
     private CancellationTokenSource? _cancellationTokenSource;
     private Task<List<Vector3>>? _pathfindTask;
 
     public MovementController(NavmeshIpc navmeshIpc, IClientState clientState, GameFunctions gameFunctions,
-        ICondition condition, IPluginLog pluginLog)
+        ICondition condition, ILogger<MovementController> logger)
     {
         _navmeshIpc = navmeshIpc;
         _clientState = clientState;
         _gameFunctions = gameFunctions;
         _condition = condition;
-        _pluginLog = pluginLog;
+        _logger = logger;
     }
 
     public bool IsNavmeshReady => _navmeshIpc.IsReady;
@@ -51,9 +52,8 @@ internal sealed class MovementController : IDisposable
         {
             if (_pathfindTask.IsCompletedSuccessfully)
             {
-                _pluginLog.Information(
-                    string.Create(CultureInfo.InvariantCulture,
-                        $"Pathfinding complete, route: [{string.Join(" → ", _pathfindTask.Result.Select(x => x.ToString()))}]"));
+                _logger.LogInformation("Pathfinding complete, route: [{Route}]",
+                    string.Join(" → ", _pathfindTask.Result.Select(x => x.ToString("G", CultureInfo.InvariantCulture))));
 
                 var navPoints = _pathfindTask.Result.Skip(1).ToList();
                 Vector3 start = _clientState.LocalPlayer?.Position ?? navPoints[0];
@@ -83,7 +83,7 @@ internal sealed class MovementController : IDisposable
                         if (actualDistance > 100f &&
                             ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, 4) == 0)
                         {
-                            _pluginLog.Information("Triggering Sprint");
+                            _logger.LogInformation("Triggering Sprint");
                             ActionManager.Instance()->UseAction(ActionType.GeneralAction, 4);
                         }
                     }
@@ -94,7 +94,7 @@ internal sealed class MovementController : IDisposable
             }
             else if (_pathfindTask.IsCompleted)
             {
-                _pluginLog.Information("Unable to complete pathfinding task");
+                _logger.LogWarning("Unable to complete pathfinding task");
                 ResetPathfinding();
             }
         }
@@ -170,7 +170,7 @@ internal sealed class MovementController : IDisposable
     {
         fly |= _condition[ConditionFlag.Diving];
         PrepareNavigation(type, dataId, to, fly, sprint, stopDistance);
-        _pluginLog.Information($"Pathfinding to {Destination}");
+        _logger.LogInformation("Pathfinding to {Destination}", Destination);
 
         _cancellationTokenSource = new();
         _cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(10));
@@ -183,7 +183,7 @@ internal sealed class MovementController : IDisposable
         fly |= _condition[ConditionFlag.Diving];
         PrepareNavigation(type, dataId, to.Last(), fly, sprint, stopDistance);
 
-        _pluginLog.Information($"Moving to {Destination}");
+        _logger.LogInformation("Moving to {Destination}", Destination);
         _navmeshIpc.MoveTo(to, fly);
     }
 

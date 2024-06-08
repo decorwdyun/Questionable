@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 
 namespace Questionable.Model.V1.Converter;
 
-public abstract class EnumConverter<T> : JsonConverter<T>
+internal abstract class EnumConverter<T> : JsonConverter<T>
     where T : Enum
 {
     private readonly ReadOnlyDictionary<T, string> _enumToString;

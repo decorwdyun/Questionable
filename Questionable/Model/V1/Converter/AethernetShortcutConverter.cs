@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace Questionable.Model.V1.Converter;
 
-public sealed class AethernetShortcutConverter : JsonConverter<AethernetShortcut>
+internal sealed class AethernetShortcutConverter : JsonConverter<AethernetShortcut>
 {
     private static readonly Dictionary<EAetheryteLocation, string> EnumToString = new()
     {

@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace Questionable.Model.V1;
 
-public class QuestData
+[UsedImplicitly(ImplicitUseKindFlags.Assign, ImplicitUseTargetFlags.WithMembers)]
+internal sealed class QuestData
 {
     public required string Author { get; set; }
     public List<string> Contributors { get; set; } = new();

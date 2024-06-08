@@ -1,113 +1,84 @@
 ﻿using System;
-using System.Linq;
-using System.Numerics;
+using System.Diagnostics.CodeAnalysis;
+using Dalamud.Extensions.MicrosoftLogging;
 using Dalamud.Game;
 using Dalamud.Game.ClientState.Objects;
-using Dalamud.Game.Command;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
-using FFXIVClientStructs.FFXIV.Client.UI;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Questionable.Controller;
 using Questionable.Data;
 using Questionable.External;
-using Questionable.Model;
 using Questionable.Windows;
 
 namespace Questionable;
 
+[SuppressMessage("ReSharper", "UnusedType.Global")]
 public sealed class QuestionablePlugin : IDalamudPlugin
 {
-    private readonly WindowSystem _windowSystem = new(nameof(Questionable));
+    private readonly ServiceProvider? _serviceProvider;
 
-    private readonly DalamudPluginInterface _pluginInterface;
-    private readonly IClientState _clientState;
-    private readonly IFramework _framework;
-    private readonly IGameGui _gameGui;
-    private readonly ICommandManager _commandManager;
-    private readonly GameFunctions _gameFunctions;
-    private readonly QuestController _questController;
-    private readonly MovementController _movementController;
-    private readonly GameUiController _gameUiController;
-    private readonly Configuration _configuration;
-
-    public QuestionablePlugin(DalamudPluginInterface pluginInterface, IClientState clientState,
-        ITargetManager targetManager, IFramework framework, IGameGui gameGui, IDataManager dataManager,
-        ISigScanner sigScanner, IObjectTable objectTable, IPluginLog pluginLog, ICondition condition, IChatGui chatGui,
-        ICommandManager commandManager, IAddonLifecycle addonLifecycle)
+    public QuestionablePlugin(DalamudPluginInterface pluginInterface,
+        IClientState clientState,
+        ITargetManager targetManager,
+        IFramework framework,
+        IGameGui gameGui,
+        IDataManager dataManager,
+        ISigScanner sigScanner,
+        IObjectTable objectTable,
+        IPluginLog pluginLog,
+        ICondition condition,
+        IChatGui chatGui,
+        ICommandManager commandManager,
+        IAddonLifecycle addonLifecycle)
     {
         ArgumentNullException.ThrowIfNull(pluginInterface);
-        ArgumentNullException.ThrowIfNull(sigScanner);
-        ArgumentNullException.ThrowIfNull(dataManager);
-        ArgumentNullException.ThrowIfNull(objectTable);
 
-        _pluginInterface = pluginInterface;
-        _clientState = clientState;
-        _framework = framework;
-        _gameGui = gameGui;
-        _commandManager = commandManager;
-        _gameFunctions = new GameFunctions(dataManager, objectTable, sigScanner, targetManager, condition, clientState,
-            pluginLog);
-        _configuration = (Configuration?)_pluginInterface.GetPluginConfig() ?? new Configuration();
+        ServiceCollection serviceCollection = new();
+        serviceCollection.AddLogging(builder => builder.SetMinimumLevel(LogLevel.Trace)
+            .ClearProviders()
+            .AddDalamudLogger(pluginLog));
+        serviceCollection.AddSingleton<IDalamudPlugin>(this);
+        serviceCollection.AddSingleton(pluginInterface);
+        serviceCollection.AddSingleton(clientState);
+        serviceCollection.AddSingleton(targetManager);
+        serviceCollection.AddSingleton(framework);
+        serviceCollection.AddSingleton(gameGui);
+        serviceCollection.AddSingleton(dataManager);
+        serviceCollection.AddSingleton(sigScanner);
+        serviceCollection.AddSingleton(objectTable);
+        serviceCollection.AddSingleton(condition);
+        serviceCollection.AddSingleton(chatGui);
+        serviceCollection.AddSingleton(commandManager);
+        serviceCollection.AddSingleton(addonLifecycle);
+        serviceCollection.AddSingleton(new WindowSystem(nameof(Questionable)));
+        serviceCollection.AddSingleton((Configuration?)pluginInterface.GetPluginConfig() ?? new Configuration());
 
-        AetheryteData aetheryteData = new AetheryteData(dataManager);
-        NavmeshIpc navmeshIpc = new NavmeshIpc(pluginInterface);
-        LifestreamIpc lifestreamIpc = new LifestreamIpc(pluginInterface, aetheryteData);
-        _movementController =
-            new MovementController(navmeshIpc, clientState, _gameFunctions, condition, pluginLog);
-        _questController = new QuestController(pluginInterface, dataManager, _clientState, _gameFunctions,
-            _movementController, pluginLog, condition, chatGui, framework, aetheryteData, lifestreamIpc);
-        _gameUiController =
-            new GameUiController(addonLifecycle, dataManager, _gameFunctions, _questController, gameGui, pluginLog);
+        serviceCollection.AddSingleton<GameFunctions>();
+        serviceCollection.AddSingleton<AetheryteData>();
+        serviceCollection.AddSingleton<TerritoryData>();
+        serviceCollection.AddSingleton<NavmeshIpc>();
+        serviceCollection.AddSingleton<LifestreamIpc>();
 
-        _windowSystem.AddWindow(new DebugWindow(pluginInterface, _movementController, _questController, _gameFunctions,
-            clientState, framework, targetManager, _gameUiController, _configuration));
+        serviceCollection.AddSingleton<MovementController>();
+        serviceCollection.AddSingleton<QuestRegistry>();
+        serviceCollection.AddSingleton<QuestController>();
+        serviceCollection.AddSingleton<GameUiController>();
+        serviceCollection.AddSingleton<NavigationShortcutController>();
 
-        _pluginInterface.UiBuilder.Draw += _windowSystem.Draw;
-        _framework.Update += FrameworkUpdate;
-        _commandManager.AddHandler("/qst", new CommandInfo(ProcessCommand));
+        serviceCollection.AddSingleton<DebugWindow>();
+        serviceCollection.AddSingleton<DalamudInitializer>();
 
-        _framework.RunOnTick(() => _gameUiController.HandleCurrentDialogueChoices(), TimeSpan.FromMilliseconds(200));
+        _serviceProvider = serviceCollection.BuildServiceProvider();
+        _serviceProvider.GetRequiredService<QuestRegistry>().Reload();
+        _serviceProvider.GetRequiredService<DebugWindow>();
+        _serviceProvider.GetRequiredService<DalamudInitializer>();
     }
-
-    private void FrameworkUpdate(IFramework framework)
-    {
-        _questController.Update();
-
-        HandleNavigationShortcut();
-        _movementController.Update();
-    }
-
-    private void ProcessCommand(string command, string arguments)
-    {
-        _windowSystem.Windows.Single(x => x is DebugWindow).Toggle();
-    }
-
-    private unsafe void HandleNavigationShortcut()
-    {
-        var inputData = UIInputData.Instance();
-        if (inputData == null)
-            return;
-
-        if (inputData->IsGameWindowFocused &&
-            inputData->UIFilteredMouseButtonReleasedFlags.HasFlag(MouseButtonFlags.LBUTTON) &&
-            inputData->GetKeyState(SeVirtualKey.MENU).HasFlag(KeyStateFlags.Down) &&
-            _gameGui.ScreenToWorld(new Vector2(inputData->CursorXPosition, inputData->CursorYPosition),
-                out Vector3 worldPos))
-        {
-            _movementController.NavigateTo(EMovementType.Shortcut, null, worldPos,
-                _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType), true);
-        }
-    }
-
 
     public void Dispose()
     {
-        _commandManager.RemoveHandler("/qst");
-        _framework.Update -= FrameworkUpdate;
-        _pluginInterface.UiBuilder.Draw -= _windowSystem.Draw;
-
-        _gameUiController.Dispose();
-        _movementController.Dispose();
+        _serviceProvider?.Dispose();
     }
 }

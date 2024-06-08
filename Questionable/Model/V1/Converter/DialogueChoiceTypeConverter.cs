@@ -2,7 +2,7 @@
 
 namespace Questionable.Model.V1.Converter;
 
-public sealed class DialogueChoiceTypeConverter() : EnumConverter<EDialogChoiceType>(Values)
+internal sealed class DialogueChoiceTypeConverter() : EnumConverter<EDialogChoiceType>(Values)
 {
     private static readonly Dictionary<EDialogChoiceType, string> Values = new()
     {

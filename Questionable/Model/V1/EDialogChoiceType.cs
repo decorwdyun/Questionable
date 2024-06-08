@@ -1,6 +1,6 @@
 ﻿namespace Questionable.Model.V1;
 
-public enum EDialogChoiceType
+internal enum EDialogChoiceType
 {
     None,
     YesNo,

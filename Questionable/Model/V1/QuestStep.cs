@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Text.Json.Serialization;
 using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
+using JetBrains.Annotations;
 using Questionable.Model.V1.Converter;
 
 namespace Questionable.Model.V1;
 
-public class QuestStep
+[UsedImplicitly(ImplicitUseKindFlags.Assign, ImplicitUseTargetFlags.WithMembers)]
+internal sealed class QuestStep
 {
     public EInteractionType InteractionType { get; set; }
 

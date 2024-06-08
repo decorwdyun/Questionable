@@ -4,7 +4,7 @@ using Questionable.Model.V1.Converter;
 namespace Questionable.Model.V1;
 
 [JsonConverter(typeof(SkipConditionConverter))]
-public enum ESkipCondition
+internal enum ESkipCondition
 {
     None,
     Never,

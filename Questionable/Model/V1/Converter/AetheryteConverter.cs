@@ -2,7 +2,7 @@
 
 namespace Questionable.Model.V1.Converter;
 
-public sealed class AetheryteConverter() : EnumConverter<EAetheryteLocation>(Values)
+internal sealed class AetheryteConverter() : EnumConverter<EAetheryteLocation>(Values)
 {
     private static readonly Dictionary<EAetheryteLocation, string> Values = new()
     {

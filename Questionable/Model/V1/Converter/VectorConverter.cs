@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace Questionable.Model.V1.Converter;
 
-public class VectorConverter : JsonConverter<Vector3>
+internal sealed class VectorConverter : JsonConverter<Vector3>
 {
     public override Vector3 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
 using System.Numerics;
-using System.Text.Json;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects.Types;
-using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using Microsoft.Extensions.Logging;
 using Questionable.Data;
 using Questionable.External;
 using Questionable.Model;
@@ -20,39 +16,34 @@ namespace Questionable.Controller;
 
 internal sealed class QuestController
 {
-    private readonly DalamudPluginInterface _pluginInterface;
-    private readonly IDataManager _dataManager;
     private readonly IClientState _clientState;
     private readonly GameFunctions _gameFunctions;
     private readonly MovementController _movementController;
-    private readonly IPluginLog _pluginLog;
+    private readonly ILogger<QuestController> _logger;
     private readonly ICondition _condition;
     private readonly IChatGui _chatGui;
     private readonly IFramework _framework;
     private readonly AetheryteData _aetheryteData;
     private readonly LifestreamIpc _lifestreamIpc;
     private readonly TerritoryData _territoryData;
-    private readonly Dictionary<ushort, Quest> _quests = new();
+    private readonly QuestRegistry _questRegistry;
 
-    public QuestController(DalamudPluginInterface pluginInterface, IDataManager dataManager, IClientState clientState,
-        GameFunctions gameFunctions, MovementController movementController, IPluginLog pluginLog, ICondition condition,
-        IChatGui chatGui, IFramework framework, AetheryteData aetheryteData, LifestreamIpc lifestreamIpc)
+    public QuestController(IClientState clientState, GameFunctions gameFunctions, MovementController movementController,
+        ILogger<QuestController> logger, ICondition condition, IChatGui chatGui, IFramework framework,
+        AetheryteData aetheryteData, LifestreamIpc lifestreamIpc, TerritoryData territoryData,
+        QuestRegistry questRegistry)
     {
-        _pluginInterface = pluginInterface;
-        _dataManager = dataManager;
         _clientState = clientState;
         _gameFunctions = gameFunctions;
         _movementController = movementController;
-        _pluginLog = pluginLog;
+        _logger = logger;
         _condition = condition;
         _chatGui = chatGui;
         _framework = framework;
         _aetheryteData = aetheryteData;
         _lifestreamIpc = lifestreamIpc;
-        _territoryData = new TerritoryData(dataManager);
-
-        Reload();
-        _gameFunctions.QuestController = this;
+        _territoryData = territoryData;
+        _questRegistry = questRegistry;
     }
 
 
@@ -62,88 +53,10 @@ internal sealed class QuestController
 
     public void Reload()
     {
-        _quests.Clear();
-
         CurrentQuest = null;
         DebugState = null;
 
-#if RELEASE
-        _pluginLog.Information("Loading quests from assembly");
-        QuestPaths.AssemblyQuestLoader.LoadQuestsFromEmbeddedResources(LoadQuestFromStream);
-#else
-        DirectoryInfo? solutionDirectory = _pluginInterface.AssemblyLocation?.Directory?.Parent?.Parent;
-        if (solutionDirectory != null)
-        {
-            DirectoryInfo pathProjectDirectory =
-                new DirectoryInfo(Path.Combine(solutionDirectory.FullName, "QuestPaths"));
-            if (pathProjectDirectory.Exists)
-            {
-                LoadFromDirectory(new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "Shadowbringers")));
-                LoadFromDirectory(new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "Endwalker")));
-            }
-        }
-#endif
-        LoadFromDirectory(new DirectoryInfo(Path.Combine(_pluginInterface.ConfigDirectory.FullName, "Quests")));
-
-        foreach (var (questId, quest) in _quests)
-        {
-            var questData =
-                _dataManager.GetExcelSheet<Lumina.Excel.GeneratedSheets.Quest>()!.GetRow((uint)questId + 0x10000);
-            if (questData == null)
-                continue;
-
-            quest.Name = questData.Name.ToString();
-        }
-    }
-
-    private void LoadQuestFromStream(string fileName, Stream stream)
-    {
-        _pluginLog.Verbose($"Loading quest from '{fileName}'");
-        var (questId, name) = ExtractQuestDataFromName(fileName);
-        Quest quest = new Quest
-        {
-            QuestId = questId,
-            Name = name,
-            Data = JsonSerializer.Deserialize<QuestData>(stream)!,
-        };
-        _quests[questId] = quest;
-    }
-
-    public bool IsKnownQuest(ushort questId) => _quests.ContainsKey(questId);
-
-    private void LoadFromDirectory(DirectoryInfo directory)
-    {
-        if (!directory.Exists)
-        {
-            _pluginLog.Information($"Not loading quests from {directory} (doesn't exist)");
-            return;
-        }
-
-        _pluginLog.Information($"Loading quests from {directory}");
-        foreach (FileInfo fileInfo in directory.GetFiles("*.json"))
-        {
-            try
-            {
-                using FileStream stream = new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read);
-                LoadQuestFromStream(fileInfo.Name, stream);
-            }
-            catch (Exception e)
-            {
-                throw new InvalidDataException($"Unable to load file {fileInfo.FullName}", e);
-            }
-        }
-
-        foreach (DirectoryInfo childDirectory in directory.GetDirectories())
-            LoadFromDirectory(childDirectory);
-    }
-
-    private static (ushort QuestId, string Name) ExtractQuestDataFromName(string resourceName)
-    {
-        string name = resourceName.Substring(0, resourceName.Length - ".json".Length);
-        name = name.Substring(name.LastIndexOf('.') + 1);
-
-        string[] parts = name.Split('_', 2);
-        return (ushort.Parse(parts[0], CultureInfo.InvariantCulture), parts[1]);
+        _questRegistry.Reload();
     }
 
     public void Update()
@@ -158,7 +71,7 @@ internal sealed class QuestController
         }
         else if (CurrentQuest == null || CurrentQuest.Quest.QuestId != currentQuestId)
         {
-            if (_quests.TryGetValue(currentQuestId, out var quest))
+            if (_questRegistry.TryGetQuest(currentQuestId, out var quest))
                 CurrentQuest = new QuestProgress(quest, currentSequence, 0);
             else if (CurrentQuest != null)
                 CurrentQuest = null;
@@ -244,7 +157,7 @@ internal sealed class QuestController
         (QuestSequence? seq, QuestStep? step) = GetNextStep();
         if (CurrentQuest == null || seq == null || step == null)
         {
-            _pluginLog.Warning("Unable to retrieve next quest step, not increasing step count");
+            _logger.LogWarning("Unable to retrieve next quest step, not increasing step count");
             return;
         }
 
@@ -271,7 +184,7 @@ internal sealed class QuestController
         (QuestSequence? seq, QuestStep? step) = GetNextStep();
         if (CurrentQuest == null || seq == null || step == null)
         {
-            _pluginLog.Warning("Unable to retrieve next quest step, not increasing dialogue choice count");
+            _logger.LogWarning("Unable to retrieve next quest step, not increasing dialogue choice count");
             return;
         }
 
@@ -292,13 +205,13 @@ internal sealed class QuestController
         (QuestSequence? seq, QuestStep? step) = GetNextStep();
         if (CurrentQuest == null || seq == null || step == null)
         {
-            _pluginLog.Warning("Could not retrieve next quest step, not doing anything");
+            _logger.LogWarning("Could not retrieve next quest step, not doing anything");
             return;
         }
 
         if (step.Disabled)
         {
-            _pluginLog.Information("Skipping step, as it is disabled");
+            _logger.LogInformation("Skipping step, as it is disabled");
             IncreaseStepCount();
             return;
         }
@@ -315,14 +228,14 @@ internal sealed class QuestController
                      (_aetheryteData.CalculateDistance(pos, territoryType, step.AethernetShortcut.From) < 20 ||
                       _aetheryteData.CalculateDistance(pos, territoryType, step.AethernetShortcut.To) < 20)))
                 {
-                    _pluginLog.Information("Skipping aetheryte teleport");
+                    _logger.LogInformation("Skipping aetheryte teleport");
                     skipTeleport = true;
                 }
             }
 
             if (skipTeleport)
             {
-                _pluginLog.Information("Marking aetheryte shortcut as used");
+                _logger.LogInformation("Marking aetheryte shortcut as used");
                 CurrentQuest = CurrentQuest with
                 {
                     StepProgress = CurrentQuest.StepProgress with { AetheryteShortcutUsed = true }
@@ -332,12 +245,12 @@ internal sealed class QuestController
             {
                 if (!_gameFunctions.IsAetheryteUnlocked(step.AetheryteShortcut.Value))
                 {
-                    _pluginLog.Error($"Aetheryte {step.AetheryteShortcut.Value} is not unlocked.");
+                    _logger.LogError("Aetheryte {Aetheryte} is not unlocked.", step.AetheryteShortcut.Value);
                     _chatGui.Print($"[Questionable] Aetheryte {step.AetheryteShortcut.Value} is not unlocked.");
                 }
                 else if (_gameFunctions.TeleportAetheryte(step.AetheryteShortcut.Value))
                 {
-                    _pluginLog.Information("Travelling via aetheryte...");
+                    _logger.LogInformation("Travelling via aetheryte...");
                     CurrentQuest = CurrentQuest with
                     {
                         StepProgress = CurrentQuest.StepProgress with { AetheryteShortcutUsed = true }
@@ -345,7 +258,7 @@ internal sealed class QuestController
                 }
                 else
                 {
-                    _pluginLog.Warning("Unable to teleport to aetheryte");
+                    _logger.LogWarning("Unable to teleport to aetheryte");
                     _chatGui.Print("[Questionable] Unable to teleport to aetheryte.");
                 }
 
@@ -355,12 +268,12 @@ internal sealed class QuestController
 
         if (!step.SkipIf.Contains(ESkipCondition.Never))
         {
-            _pluginLog.Information($"Checking skip conditions; {string.Join(",", step.SkipIf)}");
+            _logger.LogInformation("Checking skip conditions; {ConfiguredConditions}", string.Join(",", step.SkipIf));
 
             if (step.SkipIf.Contains(ESkipCondition.FlyingUnlocked) &&
                 _gameFunctions.IsFlyingUnlocked(step.TerritoryId))
             {
-                _pluginLog.Information("Skipping step, as flying is unlocked");
+                _logger.LogInformation("Skipping step, as flying is unlocked");
                 IncreaseStepCount();
                 return;
             }
@@ -368,7 +281,7 @@ internal sealed class QuestController
             if (step.SkipIf.Contains(ESkipCondition.FlyingLocked) &&
                 !_gameFunctions.IsFlyingUnlocked(step.TerritoryId))
             {
-                _pluginLog.Information("Skipping step, as flying is locked");
+                _logger.LogInformation("Skipping step, as flying is locked");
                 IncreaseStepCount();
                 return;
             }
@@ -380,7 +293,7 @@ internal sealed class QuestController
                 } &&
                 _gameFunctions.IsAetheryteUnlocked((EAetheryteLocation)step.DataId.Value))
             {
-                _pluginLog.Information("Skipping step, as aetheryte/aethernet shard is unlocked");
+                _logger.LogInformation("Skipping step, as aetheryte/aethernet shard is unlocked");
                 IncreaseStepCount();
                 return;
             }
@@ -388,7 +301,7 @@ internal sealed class QuestController
             if (step is { DataId: not null, InteractionType: EInteractionType.AttuneAetherCurrent } &&
                 _gameFunctions.IsAetherCurrentUnlocked(step.DataId.Value))
             {
-                _pluginLog.Information("Skipping step, as current is unlocked");
+                _logger.LogInformation("Skipping step, as current is unlocked");
                 IncreaseStepCount();
                 return;
             }
@@ -396,7 +309,7 @@ internal sealed class QuestController
             QuestWork? questWork = _gameFunctions.GetQuestEx(CurrentQuest.Quest.QuestId);
             if (questWork != null && step.MatchesQuestVariables(questWork.Value))
             {
-                _pluginLog.Information("Skipping step, as quest variables match");
+                _logger.LogInformation("Skipping step, as quest variables match");
                 IncreaseStepCount();
                 return;
             }
@@ -418,7 +331,7 @@ internal sealed class QuestController
                 {
                     if (_aetheryteData.CalculateDistance(playerPosition, territoryType, from) < 11)
                     {
-                        _pluginLog.Information($"Using lifestream to teleport to {to}");
+                        _logger.LogInformation("Using lifestream to teleport to {Destination}", to);
                         _lifestreamIpc.Teleport(to);
                         CurrentQuest = CurrentQuest with
                         {
@@ -427,7 +340,7 @@ internal sealed class QuestController
                     }
                     else
                     {
-                        _pluginLog.Information("Moving to aethernet shortcut");
+                        _logger.LogInformation("Moving to aethernet shortcut");
                         _movementController.NavigateTo(EMovementType.Quest, (uint)from, _aetheryteData.Locations[from],
                             false, true,
                             AetheryteConverter.IsLargeAetheryte(from) ? 10.9f : 6.9f);
@@ -437,14 +350,16 @@ internal sealed class QuestController
                 }
             }
             else
-                _pluginLog.Warning(
-                    $"Aethernet shortcut not unlocked (from: {step.AethernetShortcut.From}, to: {step.AethernetShortcut.To}), walking manually");
+                _logger.LogWarning(
+                    "Aethernet shortcut not unlocked (from: {FromAetheryte}, to: {ToAetheryte}), walking manually",
+                    step.AethernetShortcut.From, step.AethernetShortcut.To);
         }
 
-        if (step.TargetTerritoryId.HasValue && step.TerritoryId != step.TargetTerritoryId && step.TargetTerritoryId == _clientState.TerritoryType)
+        if (step.TargetTerritoryId.HasValue && step.TerritoryId != step.TargetTerritoryId &&
+            step.TargetTerritoryId == _clientState.TerritoryType)
         {
             // we assume whatever e.g. interaction, walkto etc. we have will trigger the zone transition
-            _pluginLog.Information("Zone transition, skipping rest of step");
+            _logger.LogInformation("Zone transition, skipping rest of step");
             IncreaseStepCount();
             return;
         }
@@ -453,7 +368,7 @@ internal sealed class QuestController
             (_clientState.LocalPlayer!.Position - step.JumpDestination.Position).Length() <=
             (step.JumpDestination.StopDistance ?? 1f))
         {
-            _pluginLog.Information("We're at the jump destination, skipping movement");
+            _logger.LogInformation("We're at the jump destination, skipping movement");
         }
         else if (step.Position != null)
         {
@@ -468,7 +383,7 @@ internal sealed class QuestController
 
             if (step.Mount == true && !_gameFunctions.HasStatusPreventingSprintOrMount())
             {
-                _pluginLog.Information("Step explicitly wants a mount, trying to mount...");
+                _logger.LogInformation("Step explicitly wants a mount, trying to mount...");
                 if (!_condition[ConditionFlag.Mounted] && !_condition[ConditionFlag.InCombat] &&
                     _territoryData.CanUseMount(_clientState.TerritoryType))
                 {
@@ -478,7 +393,7 @@ internal sealed class QuestController
             }
             else if (step.Mount == false)
             {
-                _pluginLog.Information("Step explicitly wants no mount, trying to unmount...");
+                _logger.LogInformation("Step explicitly wants no mount, trying to unmount...");
                 if (_condition[ConditionFlag.Mounted])
                 {
                     _gameFunctions.Unmount();
@@ -499,7 +414,7 @@ internal sealed class QuestController
                 if (actualDistance > distance)
                 {
                     _movementController.NavigateTo(EMovementType.Quest, step.DataId, step.Position.Value,
-                        fly: step.Fly == true && _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType),
+                        fly: step.Fly == true && _gameFunctions.IsFlyingUnlockedInCurrentZone(),
                         sprint: step.Sprint != false,
                         stopDistance: distance);
                     return;
@@ -511,7 +426,7 @@ internal sealed class QuestController
                 if (actualDistance > distance)
                 {
                     _movementController.NavigateTo(EMovementType.Quest, step.DataId, [step.Position.Value],
-                        fly: step.Fly == true && _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType),
+                        fly: step.Fly == true && _gameFunctions.IsFlyingUnlockedInCurrentZone(),
                         sprint: step.Sprint != false,
                         stopDistance: distance);
                     return;
@@ -524,12 +439,12 @@ internal sealed class QuestController
             if (gameObject == null ||
                 (gameObject.Position - _clientState.LocalPlayer!.Position).Length() > step.StopDistance)
             {
-                _pluginLog.Warning("Object not found or too far away, no position so we can't move");
+                _logger.LogWarning("Object not found or too far away, no position so we can't move");
                 return;
             }
         }
 
-        _pluginLog.Information($"Running logic for {step.InteractionType}");
+        _logger.LogInformation("Running logic for {InteractionType}", step.InteractionType);
         switch (step.InteractionType)
         {
             case EInteractionType.Interact:
@@ -538,7 +453,7 @@ internal sealed class QuestController
                     GameObject? gameObject = _gameFunctions.FindObjectByDataId(step.DataId.Value);
                     if (gameObject == null)
                     {
-                        _pluginLog.Warning($"No game object with dataId {step.DataId}");
+                        _logger.LogWarning("No game object with dataId {DataId}", step.DataId);
                         return;
                     }
 
@@ -555,7 +470,7 @@ internal sealed class QuestController
                         IncreaseStepCount();
                 }
                 else
-                    _pluginLog.Warning("Not interacting on current step, DataId is null");
+                    _logger.LogWarning("Not interacting on current step, DataId is null");
 
                 break;
 
@@ -584,8 +499,10 @@ internal sealed class QuestController
             case EInteractionType.AttuneAetherCurrent:
                 if (step.DataId != null)
                 {
-                    _pluginLog.Information(
-                        $"{step.AetherCurrentId} → {_gameFunctions.IsAetherCurrentUnlocked(step.AetherCurrentId.GetValueOrDefault())}");
+                    _logger.LogInformation(
+                        "{AetherCurrentId} is unlocked = {Unlocked}",
+                        step.AetherCurrentId,
+                        _gameFunctions.IsAetherCurrentUnlocked(step.AetherCurrentId.GetValueOrDefault()));
                     if (step.AetherCurrentId == null ||
                         !_gameFunctions.IsAetherCurrentUnlocked(step.AetherCurrentId.Value))
                         _gameFunctions.InteractWith(step.DataId.Value);
@@ -662,7 +579,8 @@ internal sealed class QuestController
 
                 if (step.ChatMessage != null)
                 {
-                    string? excelString = _gameFunctions.GetDialogueText(CurrentQuest.Quest, step.ChatMessage.ExcelSheet,
+                    string? excelString = _gameFunctions.GetDialogueText(CurrentQuest.Quest,
+                        step.ChatMessage.ExcelSheet,
                         step.ChatMessage.Key);
                     if (excelString == null)
                         return;
@@ -722,7 +640,7 @@ internal sealed class QuestController
                 break;
 
             default:
-                _pluginLog.Warning($"Action '{step.InteractionType}' is not implemented");
+                _logger.LogWarning("Action '{InteractionType}' is not implemented", step.InteractionType);
                 break;
         }
     }

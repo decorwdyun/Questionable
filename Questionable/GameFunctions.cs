@@ -22,6 +22,7 @@ using FFXIVClientStructs.FFXIV.Client.System.String;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using Lumina.Excel.CustomSheets;
 using Lumina.Excel.GeneratedSheets;
+using Microsoft.Extensions.Logging;
 using Questionable.Controller;
 using Questionable.Model.V1;
 using BattleChara = FFXIVClientStructs.FFXIV.Client.Game.Character.BattleChara;
@@ -51,17 +52,20 @@ internal sealed unsafe class GameFunctions
     private readonly ITargetManager _targetManager;
     private readonly ICondition _condition;
     private readonly IClientState _clientState;
-    private readonly IPluginLog _pluginLog;
+    private readonly QuestRegistry _questRegistry;
+    private readonly ILogger<GameFunctions> _logger;
 
     public GameFunctions(IDataManager dataManager, IObjectTable objectTable, ISigScanner sigScanner,
-        ITargetManager targetManager, ICondition condition, IClientState clientState, IPluginLog pluginLog)
+        ITargetManager targetManager, ICondition condition, IClientState clientState, QuestRegistry questRegistry,
+        ILogger<GameFunctions> logger)
     {
         _dataManager = dataManager;
         _objectTable = objectTable;
         _targetManager = targetManager;
         _condition = condition;
         _clientState = clientState;
-        _pluginLog = pluginLog;
+        _questRegistry = questRegistry;
+        _logger = logger;
         _processChatBox =
             Marshal.GetDelegateForFunctionPointer<ProcessChatBoxDelegate>(sigScanner.ScanText(Signatures.SendChat));
         _sanitiseString =
@@ -85,9 +89,6 @@ internal sealed unsafe class GameFunctions
             .AsReadOnly();
     }
 
-    // FIXME
-    public QuestController QuestController { private get; set; } = null!;
-
     public (ushort CurrentQuest, byte Sequence) GetCurrentQuest()
     {
         ushort currentQuest;
@@ -108,7 +109,7 @@ internal sealed unsafe class GameFunctions
                         break;
                 }
 
-                if (QuestController.IsKnownQuest(currentQuest))
+                if (_questRegistry.IsKnownQuest(currentQuest))
                     return (currentQuest, QuestManager.GetQuestSequence(currentQuest));
             }
         }
@@ -189,6 +190,8 @@ internal sealed unsafe class GameFunctions
                _territoryToAetherCurrentCompFlgSet.TryGetValue(territoryId, out byte aetherCurrentCompFlgSet) &&
                playerState->IsAetherCurrentZoneComplete(aetherCurrentCompFlgSet);
     }
+
+    public bool IsFlyingUnlockedInCurrentZone() => IsFlyingUnlocked(_clientState.TerritoryType);
 
     public bool IsAetherCurrentUnlocked(uint aetherCurrentId)
     {
@@ -335,7 +338,7 @@ internal sealed unsafe class GameFunctions
             }
         }
 
-        _pluginLog.Warning($"Could not find GameObject with dataId {dataId}");
+        _logger.LogWarning("Could not find GameObject with dataId {DataId}", dataId);
         return null;
     }
 
@@ -344,7 +347,7 @@ internal sealed unsafe class GameFunctions
         GameObject? gameObject = FindObjectByDataId(dataId);
         if (gameObject != null)
         {
-            _pluginLog.Information($"Setting target with {dataId} to {gameObject.ObjectId}");
+            _logger.LogInformation("Setting target with {DataId} to {ObjectId}", dataId, gameObject.ObjectId);
             _targetManager.Target = gameObject;
 
             TargetSystem.Instance()->InteractWithObject(
@@ -400,7 +403,7 @@ internal sealed unsafe class GameFunctions
 
     public bool HasStatusPreventingSprintOrMount()
     {
-        if (_condition[ConditionFlag.Swimming] && !IsFlyingUnlocked(_clientState.TerritoryType))
+        if (_condition[ConditionFlag.Swimming] && !IsFlyingUnlockedInCurrentZone())
             return true;
 
         // company chocobo is locked
@@ -428,7 +431,7 @@ internal sealed unsafe class GameFunctions
             {
                 if (ActionManager.Instance()->GetActionStatus(ActionType.Mount, 71) == 0)
                 {
-                    _pluginLog.Information("Using SDS Fenrir as mount");
+                    _logger.LogInformation("Using SDS Fenrir as mount");
                     ActionManager.Instance()->UseAction(ActionType.Mount, 71);
                 }
             }
@@ -436,7 +439,7 @@ internal sealed unsafe class GameFunctions
             {
                 if (ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, 9) == 0)
                 {
-                    _pluginLog.Information("Using mount roulette");
+                    _logger.LogInformation("Using mount roulette");
                     ActionManager.Instance()->UseAction(ActionType.GeneralAction, 9);
                 }
             }
@@ -449,11 +452,11 @@ internal sealed unsafe class GameFunctions
         {
             if (ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, 23) == 0)
             {
-                _pluginLog.Information("Unmounting...");
+                _logger.LogInformation("Unmounting...");
                 ActionManager.Instance()->UseAction(ActionType.GeneralAction, 23);
             }
             else
-                _pluginLog.Warning("Can't unmount right now?");
+                _logger.LogWarning("Can't unmount right now?");
 
             return true;
         }
@@ -468,11 +471,12 @@ internal sealed unsafe class GameFunctions
             if (UIState.IsInstanceContentUnlocked(contentId))
                 AgentContentsFinder.Instance()->OpenRegularDuty(contentFinderConditionId);
             else
-                _pluginLog.Error(
-                    $"Trying to access a locked duty (cf: {contentFinderConditionId}, content: {contentId})");
+                _logger.LogError(
+                    "Trying to access a locked duty (cf: {ContentFinderId}, content: {ContentId})",
+                    contentFinderConditionId, contentId);
         }
         else
-            _pluginLog.Error($"Could not find content for content finder condition (cf: {contentFinderConditionId})");
+            _logger.LogError("Could not find content for content finder condition (cf: {ContentFinderId})", contentFinderConditionId);
     }
 
     public string? GetDialogueText(Quest currentQuest, string? excelSheetName, string key)
@@ -482,7 +486,7 @@ internal sealed unsafe class GameFunctions
             var questRow = _dataManager.GetExcelSheet<Lumina.Excel.GeneratedSheets2.Quest>()!.GetRow((uint)currentQuest.QuestId + 0x10000);
             if (questRow == null)
             {
-                _pluginLog.Error($"Could not find quest row for {currentQuest.QuestId}");
+                _logger.LogError("Could not find quest row for {QuestId}", currentQuest.QuestId);
                 return null;
             }
 
@@ -492,7 +496,7 @@ internal sealed unsafe class GameFunctions
         var excelSheet = _dataManager.Excel.GetSheet<QuestDialogueText>(excelSheetName);
         if (excelSheet == null)
         {
-            _pluginLog.Error($"Unknown excel sheet '{excelSheetName}'");
+            _logger.LogError("Unknown excel sheet '{SheetName}'", excelSheetName);
             return null;
         }
 

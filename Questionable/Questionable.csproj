@@ -23,7 +23,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Dalamud.Extensions.MicrosoftLogging" Version="3.0.0" />
         <PackageReference Include="DalamudPackager" Version="2.1.12"/>
+        <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" ExcludeAssets="runtime"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
         <PackageReference Include="System.Text.Json" Version="8.0.3"/>
     </ItemGroup>
 

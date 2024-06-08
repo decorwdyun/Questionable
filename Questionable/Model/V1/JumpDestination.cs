@@ -1,10 +1,12 @@
 ﻿using System.Numerics;
 using System.Text.Json.Serialization;
+using JetBrains.Annotations;
 using Questionable.Model.V1.Converter;
 
 namespace Questionable.Model.V1;
 
-public sealed class JumpDestination
+[UsedImplicitly(ImplicitUseKindFlags.Assign, ImplicitUseTargetFlags.WithMembers)]
+internal sealed class JumpDestination
 {
     [JsonConverter(typeof(VectorConverter))]
     public Vector3 Position { get; set; }

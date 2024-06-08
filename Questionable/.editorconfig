@@ -290,7 +290,7 @@ dotnet_diagnostic.CA1806.severity = warning
 dotnet_diagnostic.CA1810.severity = warning
 
 # CA1812: Avoid uninstantiated internal classes
-dotnet_diagnostic.CA1812.severity = warning
+dotnet_diagnostic.CA1812.severity = suggestion
 
 # CA1813: Avoid unsealed attributes
 dotnet_diagnostic.CA1813.severity = warning
@@ -392,7 +392,7 @@ dotnet_diagnostic.CA1846.severity = warning
 dotnet_diagnostic.CA1847.severity = warning
 
 # CA1848: Use the LoggerMessage delegates
-dotnet_diagnostic.CA1848.severity = warning
+dotnet_diagnostic.CA1848.severity = suggestion
 
 # CA1849: Call async methods when in an async method
 dotnet_diagnostic.CA1849.severity = warning

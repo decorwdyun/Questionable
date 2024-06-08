@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using JetBrains.Annotations;
 
 namespace Questionable.Model.V1;
 
-public class QuestSequence
+[UsedImplicitly(ImplicitUseKindFlags.Assign, ImplicitUseTargetFlags.WithMembers)]
+internal sealed class QuestSequence
 {
     public required int Sequence { get; set; }
     public string? Comment { get; set; }

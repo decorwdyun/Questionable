@@ -2,7 +2,7 @@
 
 namespace Questionable.Model.V1.Converter;
 
-public sealed class EmoteConverter() : EnumConverter<EEmote>(Values)
+internal sealed class EmoteConverter() : EnumConverter<EEmote>(Values)
 {
     private static readonly Dictionary<EEmote, string> Values = new()
     {

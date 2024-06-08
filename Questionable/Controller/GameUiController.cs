@@ -9,6 +9,7 @@ using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using LLib.GameUI;
 using Lumina.Excel.GeneratedSheets;
+using Microsoft.Extensions.Logging;
 using Questionable.Model.V1;
 using Quest = Questionable.Model.Quest;
 
@@ -21,17 +22,17 @@ internal sealed class GameUiController : IDisposable
     private readonly GameFunctions _gameFunctions;
     private readonly QuestController _questController;
     private readonly IGameGui _gameGui;
-    private readonly IPluginLog _pluginLog;
+    private readonly ILogger<GameUiController> _logger;
 
     public GameUiController(IAddonLifecycle addonLifecycle, IDataManager dataManager, GameFunctions gameFunctions,
-        QuestController questController, IGameGui gameGui, IPluginLog pluginLog)
+        QuestController questController, IGameGui gameGui, ILogger<GameUiController> logger)
     {
         _addonLifecycle = addonLifecycle;
         _dataManager = dataManager;
         _gameFunctions = gameFunctions;
         _questController = questController;
         _gameGui = gameGui;
-        _pluginLog = pluginLog;
+        _logger = logger;
 
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "SelectString", SelectStringPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "CutSceneSelectString", CutsceneSelectStringPostSetup);
@@ -45,26 +46,26 @@ internal sealed class GameUiController : IDisposable
     {
         if (_gameGui.TryGetAddonByName("SelectString", out AddonSelectString* addonSelectString))
         {
-            _pluginLog.Information("SelectString window is open");
+            _logger.LogInformation("SelectString window is open");
             SelectStringPostSetup(addonSelectString, true);
         }
 
         if (_gameGui.TryGetAddonByName("CutSceneSelectString",
                 out AddonCutSceneSelectString* addonCutSceneSelectString))
         {
-            _pluginLog.Information("CutSceneSelectString window is open");
+            _logger.LogInformation("CutSceneSelectString window is open");
             CutsceneSelectStringPostSetup(addonCutSceneSelectString, true);
         }
 
         if (_gameGui.TryGetAddonByName("SelectIconString", out AddonSelectIconString* addonSelectIconString))
         {
-            _pluginLog.Information("SelectIconString window is open");
+            _logger.LogInformation("SelectIconString window is open");
             SelectIconStringPostSetup(addonSelectIconString, true);
         }
 
         if (_gameGui.TryGetAddonByName("SelectYesno", out AddonSelectYesno* addonSelectYesno))
         {
-            _pluginLog.Information("SelectYesno window is open");
+            _logger.LogInformation("SelectYesno window is open");
             SelectYesnoPostSetup(addonSelectYesno, true);
         }
     }
@@ -151,7 +152,7 @@ internal sealed class GameUiController : IDisposable
         var currentQuest = _questController.CurrentQuest;
         if (currentQuest == null)
         {
-            _pluginLog.Information("Ignoring list choice, no active quest");
+            _logger.LogInformation("Ignoring list choice, no active quest");
             return null;
         }
 
@@ -167,7 +168,7 @@ internal sealed class GameUiController : IDisposable
             var step = quest.FindSequence(currentQuest.Sequence)?.FindStep(currentQuest.Step);
             if (step == null)
             {
-                _pluginLog.Information("Ignoring list choice, no active step");
+                _logger.LogInformation("Ignoring list choice, no active step");
                 return null;
             }
 
@@ -178,7 +179,7 @@ internal sealed class GameUiController : IDisposable
         {
             if (dialogueChoice.Answer == null)
             {
-                _pluginLog.Information("Ignoring entry in DialogueChoices, no answer");
+                _logger.LogInformation("Ignoring entry in DialogueChoices, no answer");
                 continue;
             }
 
@@ -212,28 +213,31 @@ internal sealed class GameUiController : IDisposable
 
             if (actualPrompt == null && !string.IsNullOrEmpty(excelPrompt))
             {
-                _pluginLog.Information($"Unexpected excelPrompt: {excelPrompt}");
+                _logger.LogInformation("Unexpected excelPrompt: {ExcelPrompt}", excelPrompt);
                 continue;
             }
 
             if (actualPrompt != null && (excelPrompt == null || !GameStringEquals(actualPrompt, excelPrompt)))
             {
-                _pluginLog.Information($"Unexpected excelPrompt: {excelPrompt}, actualPrompt: {actualPrompt}");
+                _logger.LogInformation("Unexpected excelPrompt: {ExcelPrompt}, actualPrompt: {ActualPrompt}",
+                    excelPrompt, actualPrompt);
                 continue;
             }
 
             for (int i = 0; i < answers.Count; ++i)
             {
-                _pluginLog.Verbose($"Checking if {answers[i]} == {excelAnswer}");
+                _logger.LogTrace("Checking if {ActualAnswer} == {ExpectedAnswer}",
+                    answers[i], excelAnswer);
                 if (GameStringEquals(answers[i], excelAnswer))
                 {
-                    _pluginLog.Information($"Returning {i}: '{answers[i]}' for '{actualPrompt}'");
+                    _logger.LogInformation("Returning {Index}: '{Answer}' for '{Prompt}'",
+                        i, answers[i], actualPrompt);
                     return i;
                 }
             }
         }
 
-        _pluginLog.Information($"No matching answer found for {actualPrompt}.");
+        _logger.LogInformation("No matching answer found for {Prompt}.", actualPrompt);
         return null;
     }
 
@@ -249,7 +253,7 @@ internal sealed class GameUiController : IDisposable
         if (actualPrompt == null)
             return;
 
-        _pluginLog.Verbose($"Prompt: '{actualPrompt}'");
+        _logger.LogTrace("Prompt: '{Prompt}'", actualPrompt);
 
         var currentQuest = _questController.CurrentQuest;
         if (currentQuest == null)
@@ -277,7 +281,7 @@ internal sealed class GameUiController : IDisposable
     private unsafe bool HandleDefaultYesNo(AddonSelectYesno* addonSelectYesno, Quest quest,
         IList<DialogueChoice> dialogueChoices, string actualPrompt, bool checkAllSteps)
     {
-        _pluginLog.Verbose($"DefaultYesNo: Choice count: {dialogueChoices.Count}");
+        _logger.LogTrace("DefaultYesNo: Choice count: {Count}", dialogueChoices.Count);
         foreach (var dialogueChoice in dialogueChoices)
         {
             string? excelPrompt;
@@ -325,21 +329,22 @@ internal sealed class GameUiController : IDisposable
         bool increaseStepCount = true;
         QuestStep? step = sequence.FindStep(currentQuest.Step);
         if (step != null)
-            _pluginLog.Verbose($"Current step: {step.TerritoryId}, {step.TargetTerritoryId}");
+            _logger.LogTrace("Current step: {CurrentTerritory}, {TargetTerritory}", step.TerritoryId,
+                step.TargetTerritoryId);
 
         if (step == null || step.TargetTerritoryId == null)
         {
-            _pluginLog.Verbose("TravelYesNo: Checking previous step...");
+            _logger.LogTrace("TravelYesNo: Checking previous step...");
             step = sequence.FindStep(currentQuest.Step == 255 ? (sequence.Steps.Count - 1) : (currentQuest.Step - 1));
             increaseStepCount = false;
 
             if (step != null)
-                _pluginLog.Verbose($"Previous step: {step.TerritoryId}, {step.TargetTerritoryId}");
+                _logger.LogTrace("Previous step: {CurrentTerritory}, {TargetTerritory}", step.TerritoryId, step.TargetTerritoryId);
         }
 
         if (step == null || step.TargetTerritoryId == null)
         {
-            _pluginLog.Verbose("TravelYesNo: Not found");
+            _logger.LogTrace("TravelYesNo: Not found");
             return;
         }
 
@@ -351,11 +356,11 @@ internal sealed class GameUiController : IDisposable
             string? excelPrompt = entry.Question?.ToString();
             if (excelPrompt == null || !GameStringEquals(excelPrompt, actualPrompt))
             {
-                _pluginLog.Information($"Ignoring prompt '{excelPrompt}'");
+                _logger.LogDebug("Ignoring prompt '{Prompt}'", excelPrompt);
                 continue;
             }
 
-            _pluginLog.Information($"Using warp {entry.RowId}, {excelPrompt}");
+            _logger.LogInformation("Using warp {Id}, {Prompt}", entry.RowId, excelPrompt);
             addonSelectYesno->AtkUnitBase.FireCallbackInt(0);
             if (increaseStepCount)
                 _questController.IncreaseStepCount();
@@ -365,7 +370,7 @@ internal sealed class GameUiController : IDisposable
 
     private unsafe void CreditPostSetup(AddonEvent type, AddonArgs args)
     {
-        _pluginLog.Information("Closing Credits sequence");
+        _logger.LogInformation("Closing Credits sequence");
         AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
         addon->FireCallbackInt(-2);
     }
@@ -374,7 +379,7 @@ internal sealed class GameUiController : IDisposable
     {
         if (_questController.CurrentQuest?.Quest.QuestId == 4526)
         {
-            _pluginLog.Information("Closing Unending Codex");
+            _logger.LogInformation("Closing Unending Codex");
             AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
             addon->FireCallbackInt(-2);
         }

@@ -18,9 +18,10 @@ using Questionable.Model.V1;
 
 namespace Questionable.Windows;
 
-internal sealed class DebugWindow : LWindow, IPersistableWindowConfig
+internal sealed class DebugWindow : LWindow, IPersistableWindowConfig, IDisposable
 {
     private readonly DalamudPluginInterface _pluginInterface;
+    private readonly WindowSystem _windowSystem;
     private readonly MovementController _movementController;
     private readonly QuestController _questController;
     private readonly GameFunctions _gameFunctions;
@@ -30,12 +31,14 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig
     private readonly GameUiController _gameUiController;
     private readonly Configuration _configuration;
 
-    public DebugWindow(DalamudPluginInterface pluginInterface, MovementController movementController,
-        QuestController questController, GameFunctions gameFunctions, IClientState clientState, IFramework framework,
-        ITargetManager targetManager, GameUiController gameUiController, Configuration configuration)
+    public DebugWindow(DalamudPluginInterface pluginInterface, WindowSystem windowSystem,
+        MovementController movementController, QuestController questController, GameFunctions gameFunctions,
+        IClientState clientState, IFramework framework, ITargetManager targetManager, GameUiController gameUiController,
+        Configuration configuration)
         : base("Questionable", ImGuiWindowFlags.AlwaysAutoResize)
     {
         _pluginInterface = pluginInterface;
+        _windowSystem = windowSystem;
         _movementController = movementController;
         _questController = questController;
         _gameFunctions = gameFunctions;
@@ -51,6 +54,8 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig
             MinimumSize = new Vector2(200, 30),
             MaximumSize = default
         };
+
+        _windowSystem.AddWindow(this);
     }
 
     public WindowConfig WindowConfig => _configuration.DebugWindowConfig;
@@ -128,7 +133,7 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig
         ImGui.Separator();
 
         ImGui.Text(
-            $"Current TerritoryId: {_clientState.TerritoryType}, Flying: {(_gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType) ? "Yes" : "No")}");
+            $"Current TerritoryId: {_clientState.TerritoryType}, Flying: {(_gameFunctions.IsFlyingUnlockedInCurrentZone() ? "Yes" : "No")}");
 
         var q = _gameFunctions.GetCurrentQuest();
         ImGui.Text($"Current Quest: {q.CurrentQuest} → {q.Sequence}");
@@ -169,7 +174,7 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig
                 if (ImGui.Button("Move to Target"))
                 {
                     _movementController.NavigateTo(EMovementType.DebugWindow, _targetManager.Target.DataId,
-                        _targetManager.Target.Position, _gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType),
+                        _targetManager.Target.Position, _gameFunctions.IsFlyingUnlockedInCurrentZone(),
                         true);
                 }
             }
@@ -234,7 +239,7 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig
                             map->FlagMapMarker.TerritoryId != _clientState.TerritoryType);
         if (ImGui.Button("Move to Flag"))
             _gameFunctions.ExecuteCommand(
-                $"/vnav {(_gameFunctions.IsFlyingUnlocked(_clientState.TerritoryType) ? "flyflag" : "moveflag")}");
+                $"/vnav {(_gameFunctions.IsFlyingUnlockedInCurrentZone() ? "flyflag" : "moveflag")}");
         ImGui.EndDisabled();
 
         ImGui.SameLine();
@@ -250,5 +255,10 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig
             _framework.RunOnTick(() => _gameUiController.HandleCurrentDialogueChoices(),
                 TimeSpan.FromMilliseconds(200));
         }
+    }
+
+    public void Dispose()
+    {
+        _windowSystem.RemoveWindow(this);
     }
 }
