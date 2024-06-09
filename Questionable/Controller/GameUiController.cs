@@ -362,8 +362,8 @@ internal sealed class GameUiController : IDisposable
 
             _logger.LogInformation("Using warp {Id}, {Prompt}", entry.RowId, excelPrompt);
             addonSelectYesno->AtkUnitBase.FireCallbackInt(0);
-            if (increaseStepCount)
-                _questController.IncreaseStepCount();
+            //if (increaseStepCount)
+                //_questController.IncreaseStepCount();
             return;
         }
     }

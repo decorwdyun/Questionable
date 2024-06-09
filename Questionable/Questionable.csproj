@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net8.0-windows</TargetFramework>
-        <Version>0.5</Version>
+        <Version>0.6</Version>
         <LangVersion>12</LangVersion>
         <Nullable>enable</Nullable>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
@@ -23,7 +23,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Dalamud.Extensions.MicrosoftLogging" Version="3.0.0" />
+        <PackageReference Include="Dalamud.Extensions.MicrosoftLogging" Version="4.0.1" />
         <PackageReference Include="DalamudPackager" Version="2.1.12"/>
         <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" ExcludeAssets="runtime"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
@@ -59,6 +59,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\LLib\LLib.csproj" />
-      <ProjectReference Include="..\QuestPaths\QuestPaths.csproj" Condition="'$(Configuration)' == 'Release'" />
+      <ProjectReference Include="..\QuestPaths\QuestPaths.csproj" />
     </ItemGroup>
 </Project>

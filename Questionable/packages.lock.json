@@ -4,9 +4,9 @@
     "net8.0-windows7.0": {
       "Dalamud.Extensions.MicrosoftLogging": {
         "type": "Direct",
-        "requested": "[3.0.0, )",
-        "resolved": "3.0.0",
-        "contentHash": "jWK3r/cZUXN8H9vHf78gEzeRmMk4YAbCUYzLcTqUAcega8unUiFGwYy+iOjVYJ9urnr9r+hk+vBi1y9wyv+e7Q==",
+        "requested": "[4.0.1, )",
+        "resolved": "4.0.1",
+        "contentHash": "fMEL2ajtF/30SBBku7vMyG0yye5eHN/A9fgT//1CEjUth/Wz2CYco5Ehye21T8KN1IuAPwoqJuu49rB71j+8ug==",
         "dependencies": {
           "Microsoft.Extensions.Logging": "8.0.0"
         }

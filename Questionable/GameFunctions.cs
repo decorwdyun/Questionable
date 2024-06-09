@@ -20,6 +20,8 @@ using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using FFXIVClientStructs.FFXIV.Client.System.Memory;
 using FFXIVClientStructs.FFXIV.Client.System.String;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
+using FFXIVClientStructs.FFXIV.Component.GUI;
+using LLib.GameUI;
 using Lumina.Excel.CustomSheets;
 using Lumina.Excel.GeneratedSheets;
 using Microsoft.Extensions.Logging;
@@ -53,11 +55,12 @@ internal sealed unsafe class GameFunctions
     private readonly ICondition _condition;
     private readonly IClientState _clientState;
     private readonly QuestRegistry _questRegistry;
+    private readonly IGameGui _gameGui;
     private readonly ILogger<GameFunctions> _logger;
 
     public GameFunctions(IDataManager dataManager, IObjectTable objectTable, ISigScanner sigScanner,
         ITargetManager targetManager, ICondition condition, IClientState clientState, QuestRegistry questRegistry,
-        ILogger<GameFunctions> logger)
+        IGameGui gameGui, ILogger<GameFunctions> logger)
     {
         _dataManager = dataManager;
         _objectTable = objectTable;
@@ -65,6 +68,7 @@ internal sealed unsafe class GameFunctions
         _condition = condition;
         _clientState = clientState;
         _questRegistry = questRegistry;
+        _gameGui = gameGui;
         _logger = logger;
         _processChatBox =
             Marshal.GetDelegateForFunctionPointer<ProcessChatBoxDelegate>(sigScanner.ScanText(Signatures.SendChat));
@@ -165,6 +169,8 @@ internal sealed unsafe class GameFunctions
 
     public bool IsAetheryteUnlocked(EAetheryteLocation aetheryteLocation)
         => IsAetheryteUnlocked((uint)aetheryteLocation, out _);
+
+    public bool CanTeleport() => ActionManager.Instance()->GetActionStatus(ActionType.Action, 5) == 0;
 
     public bool TeleportAetheryte(uint aetheryteId)
     {
@@ -342,7 +348,7 @@ internal sealed unsafe class GameFunctions
         return null;
     }
 
-    public void InteractWith(uint dataId)
+    public bool InteractWith(uint dataId)
     {
         GameObject? gameObject = FindObjectByDataId(dataId);
         if (gameObject != null)
@@ -350,9 +356,12 @@ internal sealed unsafe class GameFunctions
             _logger.LogInformation("Setting target with {DataId} to {ObjectId}", dataId, gameObject.ObjectId);
             _targetManager.Target = gameObject;
 
-            TargetSystem.Instance()->InteractWithObject(
+            ulong result = TargetSystem.Instance()->InteractWithObject(
                 (FFXIVClientStructs.FFXIV.Client.Game.Object.GameObject*)gameObject.Address, false);
+            return result != 0;
         }
+
+        return false;
     }
 
     public void UseItem(uint itemId)
@@ -422,46 +431,46 @@ internal sealed unsafe class GameFunctions
         return false;
     }
 
-    public void Mount()
+    public bool Mount()
     {
-        if (!_condition[ConditionFlag.Mounted])
+        if (_condition[ConditionFlag.Mounted])
+            return true;
+
+        var playerState = PlayerState.Instance();
+        if (playerState != null && playerState->IsMountUnlocked(71))
         {
-            var playerState = PlayerState.Instance();
-            if (playerState != null && playerState->IsMountUnlocked(71))
+            if (ActionManager.Instance()->GetActionStatus(ActionType.Mount, 71) == 0)
             {
-                if (ActionManager.Instance()->GetActionStatus(ActionType.Mount, 71) == 0)
-                {
-                    _logger.LogInformation("Using SDS Fenrir as mount");
-                    ActionManager.Instance()->UseAction(ActionType.Mount, 71);
-                }
-            }
-            else
-            {
-                if (ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, 9) == 0)
-                {
-                    _logger.LogInformation("Using mount roulette");
-                    ActionManager.Instance()->UseAction(ActionType.GeneralAction, 9);
-                }
+                _logger.LogInformation("Using SDS Fenrir as mount");
+                return ActionManager.Instance()->UseAction(ActionType.Mount, 71);
             }
         }
+        else
+        {
+            if (ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, 9) == 0)
+            {
+                _logger.LogInformation("Using mount roulette");
+                return ActionManager.Instance()->UseAction(ActionType.GeneralAction, 9);
+            }
+        }
+
+        return false;
     }
 
     public bool Unmount()
     {
-        if (_condition[ConditionFlag.Mounted])
+        if (!_condition[ConditionFlag.Mounted])
+            return false;
+
+        if (ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, 23) == 0)
         {
-            if (ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, 23) == 0)
-            {
-                _logger.LogInformation("Unmounting...");
-                ActionManager.Instance()->UseAction(ActionType.GeneralAction, 23);
-            }
-            else
-                _logger.LogWarning("Can't unmount right now?");
-
-            return true;
+            _logger.LogInformation("Unmounting...");
+            ActionManager.Instance()->UseAction(ActionType.GeneralAction, 23);
         }
+        else
+            _logger.LogWarning("Can't unmount right now?");
 
-        return false;
+        return true;
     }
 
     public void OpenDutyFinder(uint contentFinderConditionId)
@@ -507,5 +516,20 @@ internal sealed unsafe class GameFunctions
     {
         var questRow = _dataManager.GetExcelSheet<ContentTalk>()!.GetRow(rowId);
         return questRow?.Text?.ToString();
+    }
+
+    public bool IsOccupied()
+    {
+        if (_gameGui.TryGetAddonByName("FadeMiddle", out AtkUnitBase* fade) &&
+            LAddon.IsAddonReady(fade) &&
+            fade->IsVisible)
+            return true;
+
+        return _condition[ConditionFlag.Occupied] || _condition[ConditionFlag.Occupied30] ||
+            _condition[ConditionFlag.Occupied33] || _condition[ConditionFlag.Occupied38] ||
+            _condition[ConditionFlag.Occupied39] || _condition[ConditionFlag.OccupiedInEvent] ||
+            _condition[ConditionFlag.OccupiedInQuestEvent] || _condition[ConditionFlag.OccupiedInCutSceneEvent] ||
+            _condition[ConditionFlag.Casting] || _condition[ConditionFlag.Unknown57] ||
+            _condition[ConditionFlag.BetweenAreas] || _condition[ConditionFlag.BetweenAreas51];
     }
 }

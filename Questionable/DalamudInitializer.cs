@@ -47,7 +47,15 @@ internal sealed class DalamudInitializer : IDisposable
     {
         _questController.Update();
         _navigationShortcutController.HandleNavigationShortcut();
-        _movementController.Update();
+
+        try
+        {
+            _movementController.Update();
+        }
+        catch (MovementController.PathfindingFailedException)
+        {
+            _questController.Stop();
+        }
     }
 
     private void ProcessCommand(string command, string arguments)

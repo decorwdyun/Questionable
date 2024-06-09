@@ -9,9 +9,11 @@ using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
+using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using ImGuiNET;
 using LLib.ImGui;
+using Microsoft.Extensions.Logging;
 using Questionable.Controller;
 using Questionable.Model;
 using Questionable.Model.V1;
@@ -30,11 +32,12 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig, IDisposab
     private readonly ITargetManager _targetManager;
     private readonly GameUiController _gameUiController;
     private readonly Configuration _configuration;
+    private readonly ILogger<DebugWindow> _logger;
 
     public DebugWindow(DalamudPluginInterface pluginInterface, WindowSystem windowSystem,
         MovementController movementController, QuestController questController, GameFunctions gameFunctions,
         IClientState clientState, IFramework framework, ITargetManager targetManager, GameUiController gameUiController,
-        Configuration configuration)
+        Configuration configuration, ILogger<DebugWindow> logger)
         : base("Questionable", ImGuiWindowFlags.AlwaysAutoResize)
     {
         _pluginInterface = pluginInterface;
@@ -47,6 +50,7 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig, IDisposab
         _targetManager = targetManager;
         _gameUiController = gameUiController;
         _configuration = configuration;
+        _logger = logger;
 
         IsOpen = true;
         SizeConstraints = new WindowSizeConstraints
@@ -109,23 +113,36 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig, IDisposab
             ImGui.EndDisabled();
             ImGui.TextUnformatted(_questController.Comment ?? "--");
 
-            var nextStep = _questController.GetNextStep();
-            ImGui.BeginDisabled(nextStep.Step == null);
-            ImGui.Text(string.Create(CultureInfo.InvariantCulture,
-                $"{nextStep.Step?.InteractionType} @ {nextStep.Step?.Position}"));
+            //var nextStep = _questController.GetNextStep();
+            //ImGui.BeginDisabled(nextStep.Step == null);
+            ImGui.Text(_questController.ToStatString());
+            //ImGui.EndDisabled();
+
             if (ImGuiComponents.IconButton(FontAwesomeIcon.Play))
             {
-                _questController.ExecuteNextStep();
+                _questController.ExecuteNextStep(true);
             }
 
             ImGui.SameLine();
 
-            if (ImGuiComponents.IconButton(FontAwesomeIcon.StepForward))
+            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.StepForward, "Step"))
             {
-                _questController.IncreaseStepCount();
+                _questController.ExecuteNextStep(false);
             }
 
-            ImGui.EndDisabled();
+            ImGui.SameLine();
+
+            if (ImGuiComponents.IconButton(FontAwesomeIcon.Stop))
+            {
+                _movementController.Stop();
+                _questController.Stop();
+            }
+
+            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.ArrowCircleRight, "Skip"))
+            {
+                _questController.Stop();
+                _questController.IncreaseStepCount();
+            }
         }
         else
             ImGui.Text("No active quest");
@@ -165,8 +182,10 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig, IDisposab
             ImGui.Separator();
             ImGui.Text(string.Create(CultureInfo.InvariantCulture,
                 $"Target: {_targetManager.Target.Name}  ({_targetManager.Target.ObjectKind}; {_targetManager.Target.DataId})"));
+
+            GameObject* gameObject = (GameObject*)_targetManager.Target.Address;
             ImGui.Text(string.Create(CultureInfo.InvariantCulture,
-                $"Distance: {(_targetManager.Target.Position - _clientState.LocalPlayer.Position).Length():F2}, Y: {_targetManager.Target.Position.Y - _clientState.LocalPlayer.Position.Y:F2}"));
+                $"Distance: {(_targetManager.Target.Position - _clientState.LocalPlayer.Position).Length():F2}, Y: {_targetManager.Target.Position.Y - _clientState.LocalPlayer.Position.Y:F2} | QM: {gameObject->NamePlateIconId}"));
 
             ImGui.BeginDisabled(!_movementController.IsNavmeshReady);
             if (!_movementController.IsPathfinding)
@@ -189,8 +208,9 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig, IDisposab
             ImGui.SameLine();
             if (ImGui.Button("Interact"))
             {
-                TargetSystem.Instance()->InteractWithObject(
+                ulong result = TargetSystem.Instance()->InteractWithObject(
                     (FFXIVClientStructs.FFXIV.Client.Game.Object.GameObject*)_targetManager.Target.Address, false);
+                _logger.LogInformation("XXXXX Interaction Result: {Result}", result);
             }
 
             ImGui.SameLine();
@@ -246,7 +266,11 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig, IDisposab
 
         ImGui.BeginDisabled(!_movementController.IsPathRunning);
         if (ImGui.Button("Stop Nav"))
+        {
             _movementController.Stop();
+            _questController.Stop();
+        }
+
         ImGui.EndDisabled();
 
         if (ImGui.Button("Reload Data"))
@@ -254,6 +278,16 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig, IDisposab
             _questController.Reload();
             _framework.RunOnTick(() => _gameUiController.HandleCurrentDialogueChoices(),
                 TimeSpan.FromMilliseconds(200));
+        }
+
+        var remainingTasks = _questController.GetRemainingTaskNames();
+        if (remainingTasks.Count > 0)
+        {
+            ImGui.Separator();
+            ImGui.BeginDisabled();
+            foreach (var task in remainingTasks)
+                ImGui.TextUnformatted(task);
+            ImGui.EndDisabled();
         }
     }
 

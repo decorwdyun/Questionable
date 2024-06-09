@@ -45,6 +45,7 @@ internal sealed class MovementController : IDisposable
     public bool IsPathRunning => _navmeshIpc.IsPathRunning;
     public bool IsPathfinding => _pathfindTask is { IsCompleted: false };
     public DestinationData? Destination { get; private set; }
+    public DateTime MovementStartedAt { get; private set; } = DateTime.MaxValue;
 
     public void Update()
     {
@@ -53,7 +54,14 @@ internal sealed class MovementController : IDisposable
             if (_pathfindTask.IsCompletedSuccessfully)
             {
                 _logger.LogInformation("Pathfinding complete, route: [{Route}]",
-                    string.Join(" → ", _pathfindTask.Result.Select(x => x.ToString("G", CultureInfo.InvariantCulture))));
+                    string.Join(" → ",
+                        _pathfindTask.Result.Select(x => x.ToString("G", CultureInfo.InvariantCulture))));
+
+                if (_pathfindTask.Result.Count == 0)
+                {
+                    ResetPathfinding();
+                    throw new PathfindingFailedException();
+                }
 
                 var navPoints = _pathfindTask.Result.Skip(1).ToList();
                 Vector3 start = _clientState.LocalPlayer?.Position ?? navPoints[0];
@@ -90,12 +98,15 @@ internal sealed class MovementController : IDisposable
                 }
 
                 _navmeshIpc.MoveTo(navPoints, Destination.IsFlying);
+                MovementStartedAt = DateTime.Now;
+
                 ResetPathfinding();
             }
             else if (_pathfindTask.IsCompleted)
             {
                 _logger.LogWarning("Unable to complete pathfinding task");
                 ResetPathfinding();
+                throw new PathfindingFailedException();
             }
         }
 
@@ -156,7 +167,8 @@ internal sealed class MovementController : IDisposable
         return pointOnFloor != null && Math.Abs(pointOnFloor.Value.Y - p.Y) > 0.5f;
     }
 
-    private void PrepareNavigation(EMovementType type, uint? dataId, Vector3 to, bool fly, bool sprint, float? stopDistance)
+    private void PrepareNavigation(EMovementType type, uint? dataId, Vector3 to, bool fly, bool sprint,
+        float? stopDistance)
     {
         ResetPathfinding();
 
@@ -164,9 +176,11 @@ internal sealed class MovementController : IDisposable
             _gameFunctions.ExecuteCommand("/automove off");
 
         Destination = new DestinationData(dataId, to, stopDistance ?? (DefaultStopDistance - 0.2f), fly, sprint);
+        MovementStartedAt = DateTime.MaxValue;
     }
 
-    public void NavigateTo(EMovementType type, uint? dataId, Vector3 to, bool fly, bool sprint, float? stopDistance = null)
+    public void NavigateTo(EMovementType type, uint? dataId, Vector3 to, bool fly, bool sprint,
+        float? stopDistance = null)
     {
         fly |= _condition[ConditionFlag.Diving];
         PrepareNavigation(type, dataId, to, fly, sprint, stopDistance);
@@ -178,13 +192,15 @@ internal sealed class MovementController : IDisposable
             _navmeshIpc.Pathfind(_clientState.LocalPlayer!.Position, to, fly, _cancellationTokenSource.Token);
     }
 
-    public void NavigateTo(EMovementType type, uint? dataId, List<Vector3> to, bool fly, bool sprint, float? stopDistance)
+    public void NavigateTo(EMovementType type, uint? dataId, List<Vector3> to, bool fly, bool sprint,
+        float? stopDistance)
     {
         fly |= _condition[ConditionFlag.Diving];
         PrepareNavigation(type, dataId, to.Last(), fly, sprint, stopDistance);
 
         _logger.LogInformation("Moving to {Destination}", Destination);
         _navmeshIpc.MoveTo(to, fly);
+        MovementStartedAt = DateTime.Now;
     }
 
     public void ResetPathfinding()
@@ -219,5 +235,27 @@ internal sealed class MovementController : IDisposable
         Stop();
     }
 
-    public sealed record DestinationData(uint? DataId, Vector3 Position, float StopDistance, bool IsFlying, bool CanSprint);
+    public sealed record DestinationData(
+        uint? DataId,
+        Vector3 Position,
+        float StopDistance,
+        bool IsFlying,
+        bool CanSprint);
+
+    public sealed class PathfindingFailedException : Exception
+    {
+        public PathfindingFailedException()
+        {
+        }
+
+        public PathfindingFailedException(string message)
+            : base(message)
+        {
+        }
+
+        public PathfindingFailedException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
+    }
 }

@@ -7,8 +7,13 @@ using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller;
+using Questionable.Controller.Steps;
+using Questionable.Controller.Steps.BaseFactory;
+using Questionable.Controller.Steps.BaseTasks;
+using Questionable.Controller.Steps.InteractionFactory;
 using Questionable.Data;
 using Questionable.External;
 using Questionable.Windows;
@@ -32,14 +37,15 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         ICondition condition,
         IChatGui chatGui,
         ICommandManager commandManager,
-        IAddonLifecycle addonLifecycle)
+        IAddonLifecycle addonLifecycle,
+        IKeyState keyState)
     {
         ArgumentNullException.ThrowIfNull(pluginInterface);
 
         ServiceCollection serviceCollection = new();
         serviceCollection.AddLogging(builder => builder.SetMinimumLevel(LogLevel.Trace)
             .ClearProviders()
-            .AddDalamudLogger(pluginLog));
+            .AddDalamudLogger(pluginLog, t => t[(t.LastIndexOf('.') + 1)..]));
         serviceCollection.AddSingleton<IDalamudPlugin>(this);
         serviceCollection.AddSingleton(pluginInterface);
         serviceCollection.AddSingleton(clientState);
@@ -53,6 +59,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton(chatGui);
         serviceCollection.AddSingleton(commandManager);
         serviceCollection.AddSingleton(addonLifecycle);
+        serviceCollection.AddSingleton(keyState);
         serviceCollection.AddSingleton(new WindowSystem(nameof(Questionable)));
         serviceCollection.AddSingleton((Configuration?)pluginInterface.GetPluginConfig() ?? new Configuration());
 
@@ -61,6 +68,39 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<TerritoryData>();
         serviceCollection.AddSingleton<NavmeshIpc>();
         serviceCollection.AddSingleton<LifestreamIpc>();
+
+        // individual tasks
+        serviceCollection.AddTransient<MountTask>();
+        serviceCollection.AddTransient<UnmountTask>();
+
+        // tasks with factories
+        serviceCollection.AddTaskWithFactory<StepDisabled.Factory, StepDisabled.Task>();
+        serviceCollection.AddTaskWithFactory<AetheryteShortcut.Factory, AetheryteShortcut.UseAetheryteShortcut>();
+        serviceCollection.AddTaskWithFactory<SkipCondition.Factory, SkipCondition.CheckTask>();
+        serviceCollection.AddTaskWithFactory<AethernetShortcut.Factory, AethernetShortcut.UseAethernetShortcut>();
+        serviceCollection.AddTaskWithFactory<Move.Factory, Move.MoveInternal, Move.ExpectToBeNearDataId>();
+        serviceCollection.AddTransient<Move.MoveBuilder>();
+
+        serviceCollection.AddTaskWithFactory<AetherCurrent.Factory, AetherCurrent.DoAttune>();
+        serviceCollection.AddTaskWithFactory<AethernetShard.Factory, AethernetShard.DoAttune>();
+        serviceCollection.AddTaskWithFactory<Aetheryte.Factory, Aetheryte.DoAttune>();
+        serviceCollection.AddSingleton<ITaskFactory, Combat.Factory>();
+        serviceCollection.AddTaskWithFactory<Duty.Factory, Duty.OpenDutyFinder>();
+        serviceCollection.AddTaskWithFactory<Emote.Factory, Emote.UseOnObject, Emote.Use>();
+        serviceCollection.AddTaskWithFactory<Interact.Factory, Interact.DoInteract>();
+        serviceCollection.AddTaskWithFactory<Jump.Factory, Jump.DoJump>();
+        serviceCollection.AddTaskWithFactory<Say.Factory, Say.UseChat>();
+        serviceCollection.AddTaskWithFactory<UseItem.Factory, UseItem.UseOnGround, UseItem.UseOnObject, UseItem.Use>();
+
+        // TODO sort this in properly
+        serviceCollection.AddTaskWithFactory<ZoneChange.Factory, ZoneChange.WaitForZone>();
+
+        serviceCollection
+            .AddTaskWithFactory<WaitAtEnd.Factory,
+                WaitAtEnd.WaitDelay,
+                WaitAtEnd.WaitNextStepOrSequence,
+                WaitAtEnd.WaitForCompletionFlags,
+                WaitAtEnd.WaitObjectAtPosition>();
 
         serviceCollection.AddSingleton<MovementController>();
         serviceCollection.AddSingleton<QuestRegistry>();
