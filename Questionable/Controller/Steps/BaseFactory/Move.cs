@@ -60,8 +60,10 @@ internal static class Move
                 yield break;
             }
 
-            yield return new WaitConditionTask(() => clientState.TerritoryType == Step.TerritoryId, $"Wait(territory: {Step.TerritoryId}");
-            yield return new WaitConditionTask(() => movementController.IsNavmeshReady, "Wait(navmesh ready)");
+            yield return new WaitConditionTask(() => clientState.TerritoryType == Step.TerritoryId,
+                $"Wait(territory: {Step.TerritoryId})");
+            yield return new WaitConditionTask(() => movementController.IsNavmeshReady,
+                "Wait(navmesh ready)");
 
             float distance;
             if (Step.InteractionType == EInteractionType.WalkTo)

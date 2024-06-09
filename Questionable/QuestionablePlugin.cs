@@ -92,9 +92,6 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTaskWithFactory<Say.Factory, Say.UseChat>();
         serviceCollection.AddTaskWithFactory<UseItem.Factory, UseItem.UseOnGround, UseItem.UseOnObject, UseItem.Use>();
 
-        // TODO sort this in properly
-        serviceCollection.AddTaskWithFactory<ZoneChange.Factory, ZoneChange.WaitForZone>();
-
         serviceCollection
             .AddTaskWithFactory<WaitAtEnd.Factory,
                 WaitAtEnd.WaitDelay,

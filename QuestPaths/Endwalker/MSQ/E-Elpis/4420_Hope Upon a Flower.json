@@ -34,7 +34,6 @@
             "[Crystarium] The Cabinet of Curiosity",
             "[Crystarium] The Dossal Gate"
           ],
-          "Comment": "TODO Check target territory id",
           "TargetTerritoryId": 844
         }
       ]
@@ -63,7 +62,7 @@
             null,
             null,
             null,
-            16
+            -16
           ]
         },
         {

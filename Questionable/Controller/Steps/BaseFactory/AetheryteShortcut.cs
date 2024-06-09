@@ -13,7 +13,10 @@ namespace Questionable.Controller.Steps.BaseFactory;
 
 internal static class AetheryteShortcut
 {
-    internal sealed class Factory(IServiceProvider serviceProvider, GameFunctions gameFunctions) : ITaskFactory
+    internal sealed class Factory(
+        IServiceProvider serviceProvider,
+        GameFunctions gameFunctions,
+        AetheryteData aetheryteData) : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -21,7 +24,7 @@ internal static class AetheryteShortcut
                 return [];
 
             var task = serviceProvider.GetRequiredService<UseAetheryteShortcut>()
-                .With(step, step.AetheryteShortcut.Value);
+                .With(step, step.AetheryteShortcut.Value, aetheryteData.TerritoryIds[step.AetheryteShortcut.Value]);
             return [new WaitConditionTask(gameFunctions.CanTeleport, "CanTeleport"), task];
         }
 
@@ -41,10 +44,17 @@ internal static class AetheryteShortcut
         public QuestStep Step { get; set; } = null!;
         public EAetheryteLocation TargetAetheryte { get; set; }
 
-        public ITask With(QuestStep step, EAetheryteLocation targetAetheryte)
+        /// <summary>
+        /// If using an aethernet shortcut after, the aetheryte's territory-id and the step's territory-id can differ,
+        /// we always use the aetheryte's territory-id.
+        /// </summary>
+        public ushort ExpectedTerritoryId { get; set; }
+
+        public ITask With(QuestStep step, EAetheryteLocation targetAetheryte, ushort expectedTerritoryId)
         {
             Step = step;
             TargetAetheryte = targetAetheryte;
+            ExpectedTerritoryId = expectedTerritoryId;
             return this;
         }
 
@@ -52,7 +62,7 @@ internal static class AetheryteShortcut
         {
             _continueAt = DateTime.Now.AddSeconds(8);
             ushort territoryType = clientState.TerritoryType;
-            if (Step.TerritoryId == territoryType)
+            if (ExpectedTerritoryId == territoryType)
             {
                 Vector3 pos = clientState.LocalPlayer!.Position;
                 if (aetheryteData.CalculateDistance(pos, territoryType, TargetAetheryte) < 11 ||
@@ -84,8 +94,7 @@ internal static class AetheryteShortcut
 
         public ETaskResult Update()
         {
-
-            if (DateTime.Now >= _continueAt && clientState.TerritoryType == Step.TerritoryId)
+            if (DateTime.Now >= _continueAt && clientState.TerritoryType == ExpectedTerritoryId)
                 return ETaskResult.TaskComplete;
 
             return ETaskResult.StillRunning;

@@ -108,9 +108,19 @@ internal static class AethernetShortcut
                 return ETaskResult.StillRunning;
             }
 
-            if (aetheryteData.CalculateDistance(clientState.LocalPlayer?.Position ?? Vector3.Zero,
-                    clientState.TerritoryType, To) > 11)
-                return ETaskResult.StillRunning;
+            if (aetheryteData.IsCityAetheryte(To))
+            {
+                if (aetheryteData.CalculateDistance(clientState.LocalPlayer?.Position ?? Vector3.Zero,
+                        clientState.TerritoryType, To) > 11)
+                    return ETaskResult.StillRunning;
+            }
+            else
+            {
+                // some overworld location (e.g. 'Tesselation (Lakeland)' would end up here
+                if (clientState.TerritoryType != aetheryteData.TerritoryIds[To])
+                    return ETaskResult.StillRunning;
+            }
+
 
             return ETaskResult.TaskComplete;
         }

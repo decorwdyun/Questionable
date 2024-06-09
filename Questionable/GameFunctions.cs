@@ -441,16 +441,26 @@ internal sealed unsafe class GameFunctions
         {
             if (ActionManager.Instance()->GetActionStatus(ActionType.Mount, 71) == 0)
             {
-                _logger.LogInformation("Using SDS Fenrir as mount");
-                return ActionManager.Instance()->UseAction(ActionType.Mount, 71);
+                if (ActionManager.Instance()->UseAction(ActionType.Mount, 71))
+                {
+                    _logger.LogInformation("Using SDS Fenrir as mount");
+                    return true;
+                }
+
+                return false;
             }
         }
         else
         {
             if (ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, 9) == 0)
             {
-                _logger.LogInformation("Using mount roulette");
-                return ActionManager.Instance()->UseAction(ActionType.GeneralAction, 9);
+                if (ActionManager.Instance()->UseAction(ActionType.GeneralAction, 9))
+                {
+                    _logger.LogInformation("Using mount roulette");
+                    return true;
+                }
+
+                return false;
             }
         }
 
@@ -485,14 +495,17 @@ internal sealed unsafe class GameFunctions
                     contentFinderConditionId, contentId);
         }
         else
-            _logger.LogError("Could not find content for content finder condition (cf: {ContentFinderId})", contentFinderConditionId);
+            _logger.LogError("Could not find content for content finder condition (cf: {ContentFinderId})",
+                contentFinderConditionId);
     }
 
     public string? GetDialogueText(Quest currentQuest, string? excelSheetName, string key)
     {
         if (excelSheetName == null)
         {
-            var questRow = _dataManager.GetExcelSheet<Lumina.Excel.GeneratedSheets2.Quest>()!.GetRow((uint)currentQuest.QuestId + 0x10000);
+            var questRow =
+                _dataManager.GetExcelSheet<Lumina.Excel.GeneratedSheets2.Quest>()!.GetRow((uint)currentQuest.QuestId +
+                    0x10000);
             if (questRow == null)
             {
                 _logger.LogError("Could not find quest row for {QuestId}", currentQuest.QuestId);
@@ -526,10 +539,10 @@ internal sealed unsafe class GameFunctions
             return true;
 
         return _condition[ConditionFlag.Occupied] || _condition[ConditionFlag.Occupied30] ||
-            _condition[ConditionFlag.Occupied33] || _condition[ConditionFlag.Occupied38] ||
-            _condition[ConditionFlag.Occupied39] || _condition[ConditionFlag.OccupiedInEvent] ||
-            _condition[ConditionFlag.OccupiedInQuestEvent] || _condition[ConditionFlag.OccupiedInCutSceneEvent] ||
-            _condition[ConditionFlag.Casting] || _condition[ConditionFlag.Unknown57] ||
-            _condition[ConditionFlag.BetweenAreas] || _condition[ConditionFlag.BetweenAreas51];
+               _condition[ConditionFlag.Occupied33] || _condition[ConditionFlag.Occupied38] ||
+               _condition[ConditionFlag.Occupied39] || _condition[ConditionFlag.OccupiedInEvent] ||
+               _condition[ConditionFlag.OccupiedInQuestEvent] || _condition[ConditionFlag.OccupiedInCutSceneEvent] ||
+               _condition[ConditionFlag.Casting] || _condition[ConditionFlag.Unknown57] ||
+               _condition[ConditionFlag.BetweenAreas] || _condition[ConditionFlag.BetweenAreas51];
     }
 }

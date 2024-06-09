@@ -13,7 +13,7 @@ internal static class Say
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
-            if (step.InteractionType != EInteractionType.Emote)
+            if (step.InteractionType != EInteractionType.Say)
                 return [];
 
 

@@ -10,6 +10,29 @@ namespace Questionable.Data;
 
 internal sealed class AetheryteData
 {
+    public AetheryteData(IDataManager dataManager)
+    {
+        Dictionary<EAetheryteLocation, string> aethernetNames = new();
+        Dictionary<EAetheryteLocation, ushort> territoryIds = new();
+        foreach (var aetheryte in dataManager.GetExcelSheet<Aetheryte>()!.Where(x => x.RowId > 0))
+        {
+            string? aethernetName = aetheryte.AethernetName?.Value?.Name.ToString();
+            if (!string.IsNullOrEmpty(aethernetName))
+                aethernetNames[(EAetheryteLocation)aetheryte.RowId] = aethernetName;
+
+            if (aetheryte.Territory != null && aetheryte.Territory.Row > 0)
+                territoryIds[(EAetheryteLocation)aetheryte.RowId] = (ushort)aetheryte.Territory.Row;
+        }
+
+        AethernetNames = aethernetNames.AsReadOnly();
+        TerritoryIds = territoryIds.AsReadOnly();
+
+        TownTerritoryIds = dataManager.GetExcelSheet<TerritoryType>()!
+            .Where(x => x.RowId > 0 && !string.IsNullOrEmpty(x.Name) && x.TerritoryIntendedUse == 0)
+            .Select(x => (ushort)x.RowId)
+            .ToList();
+    }
+
     public ReadOnlyDictionary<EAetheryteLocation, Vector3> Locations { get; } =
         new Dictionary<EAetheryteLocation, Vector3>
             {
@@ -196,24 +219,7 @@ internal sealed class AetheryteData
 
     public ReadOnlyDictionary<EAetheryteLocation, string> AethernetNames { get; }
     public ReadOnlyDictionary<EAetheryteLocation, ushort> TerritoryIds { get; }
-
-    public AetheryteData(IDataManager dataManager)
-    {
-        Dictionary<EAetheryteLocation, string> aethernetNames = new();
-        Dictionary<EAetheryteLocation, ushort> territoryIds = new();
-        foreach (var aetheryte in dataManager.GetExcelSheet<Aetheryte>()!.Where(x => x.RowId > 0))
-        {
-            string? aethernetName = aetheryte.AethernetName?.Value?.Name.ToString();
-            if (!string.IsNullOrEmpty(aethernetName))
-                aethernetNames[(EAetheryteLocation)aetheryte.RowId] = aethernetName;
-
-            if (aetheryte.Territory != null && aetheryte.Territory.Row > 0)
-                territoryIds[(EAetheryteLocation)aetheryte.RowId] = (ushort)aetheryte.Territory.Row;
-        }
-
-        AethernetNames = aethernetNames.AsReadOnly();
-        TerritoryIds = territoryIds.AsReadOnly();
-    }
+    public IReadOnlyList<ushort> TownTerritoryIds { get; set; }
 
     public float CalculateDistance(Vector3 fromPosition, ushort fromTerritoryType, EAetheryteLocation to)
     {
@@ -224,5 +230,11 @@ internal sealed class AetheryteData
             return float.MaxValue;
 
         return (fromPosition - toPosition).Length();
+    }
+
+    public bool IsCityAetheryte(EAetheryteLocation aetheryte)
+    {
+        var territoryId = TerritoryIds[aetheryte];
+        return TownTerritoryIds.Contains(territoryId);
     }
 }

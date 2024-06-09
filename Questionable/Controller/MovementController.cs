@@ -173,7 +173,10 @@ internal sealed class MovementController : IDisposable
         ResetPathfinding();
 
         if (InputManager.IsAutoRunning())
+        {
+            _logger.LogInformation("Turning off auto-move");
             _gameFunctions.ExecuteCommand("/automove off");
+        }
 
         Destination = new DestinationData(dataId, to, stopDistance ?? (DefaultStopDistance - 0.2f), fly, sprint);
         MovementStartedAt = DateTime.MaxValue;
@@ -227,7 +230,10 @@ internal sealed class MovementController : IDisposable
         ResetPathfinding();
 
         if (InputManager.IsAutoRunning())
+        {
+            _logger.LogInformation("Turning off auto-move [stop]");
             _gameFunctions.ExecuteCommand("/automove off");
+        }
     }
 
     public void Dispose()

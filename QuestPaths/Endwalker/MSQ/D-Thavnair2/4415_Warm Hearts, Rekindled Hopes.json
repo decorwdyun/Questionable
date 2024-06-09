@@ -99,7 +99,8 @@
           "TerritoryId": 957,
           "InteractionType": "WalkTo",
           "DisableNavmesh": true,
-          "Mount": true
+          "Mount": true,
+          "Comment": "FIXME Returning to the surface means navmesh won't move anymore, but the path is still 'running'"
         },
         {
           "Position": {
