@@ -43,7 +43,16 @@ internal static class WaitAtEnd
                     return [new NextStep()];
 
                 case EInteractionType.WaitForObjectAtPosition:
-                    return [serviceProvider.GetRequiredService<WaitObjectAtPosition>(), new NextStep()];
+                    ArgumentNullException.ThrowIfNull(step.DataId);
+                    ArgumentNullException.ThrowIfNull(step.Position);
+
+                    return
+                    [
+                        serviceProvider.GetRequiredService<WaitObjectAtPosition>()
+                            .With(step.DataId.Value, step.Position.Value),
+                        serviceProvider.GetRequiredService<WaitDelay>(),
+                        new NextStep()
+                    ];
 
                 default:
                     return [serviceProvider.GetRequiredService<WaitDelay>(), new NextStep()];
@@ -102,6 +111,13 @@ internal static class WaitAtEnd
     {
         public uint DataId { get; set; }
         public Vector3 Destination { get; set; }
+
+        public ITask With(uint dataId, Vector3 destination)
+        {
+            DataId = dataId;
+            Destination = destination;
+            return this;
+        }
 
         public bool Start() => true;
 
