@@ -12,6 +12,7 @@ using Lumina.Excel.GeneratedSheets;
 using Microsoft.Extensions.Logging;
 using Questionable.Model.V1;
 using Quest = Questionable.Model.Quest;
+using ValueType = FFXIVClientStructs.FFXIV.Component.GUI.ValueType;
 
 namespace Questionable.Controller;
 
@@ -84,7 +85,10 @@ internal sealed class GameUiController : IDisposable
 
         List<string?> answers = new();
         for (ushort i = 7; i < addonSelectString->AtkUnitBase.AtkValuesCount; ++i)
-            answers.Add(addonSelectString->AtkUnitBase.AtkValues[i].ReadAtkString());
+        {
+            if (addonSelectString->AtkUnitBase.AtkValues[i].Type == ValueType.String)
+                answers.Add(addonSelectString->AtkUnitBase.AtkValues[i].ReadAtkString());
+        }
 
         int? answer = HandleListChoice(actualPrompt, answers, checkAllSteps);
         if (answer != null)

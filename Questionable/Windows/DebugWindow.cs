@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.Numerics;
 using Dalamud.Game.ClientState.Objects;
@@ -75,14 +76,19 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig, IDisposab
         return currentQuest == null || !currentQuest.Quest.Data.TerritoryBlacklist.Contains(_clientState.TerritoryType);
     }
 
-    public override unsafe void Draw()
+    public override void Draw()
     {
-        if (!_clientState.IsLoggedIn || _clientState.LocalPlayer == null)
-        {
-            ImGui.Text("Not logged in.");
-            return;
-        }
+        DrawQuest();
+        ImGui.Separator();
 
+        DrawCreationUtils();
+        ImGui.Separator();
+
+        DrawQuickAccessButtons();
+    }
+
+    private unsafe void DrawQuest()
+    {
         var currentQuest = _questController.CurrentQuest;
         if (currentQuest != null)
         {
@@ -146,8 +152,11 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig, IDisposab
         }
         else
             ImGui.Text("No active quest");
+    }
 
-        ImGui.Separator();
+    private unsafe void DrawCreationUtils()
+    {
+        Debug.Assert(_clientState.LocalPlayer != null, "_clientState.LocalPlayer != null");
 
         ImGui.Text(
             $"Current TerritoryId: {_clientState.TerritoryType}, Flying: {(_gameFunctions.IsFlyingUnlockedInCurrentZone() ? "Yes" : "No")}");
@@ -209,7 +218,7 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig, IDisposab
             if (ImGui.Button("Interact"))
             {
                 ulong result = TargetSystem.Instance()->InteractWithObject(
-                    (FFXIVClientStructs.FFXIV.Client.Game.Object.GameObject*)_targetManager.Target.Address, false);
+                    (GameObject*)_targetManager.Target.Address, false);
                 _logger.LogInformation("XXXXX Interaction Result: {Result}", result);
             }
 
@@ -251,9 +260,10 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig, IDisposab
                                          """);
             }
         }
+    }
 
-        ImGui.Separator();
-
+    private unsafe void DrawQuickAccessButtons()
+    {
         var map = AgentMap.Instance();
         ImGui.BeginDisabled(map == null || map->IsFlagMarkerSet == 0 ||
                             map->FlagMapMarker.TerritoryId != _clientState.TerritoryType);
