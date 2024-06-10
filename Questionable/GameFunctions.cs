@@ -534,9 +534,7 @@ internal sealed unsafe class GameFunctions
 
     public bool IsOccupied()
     {
-        if (_gameGui.TryGetAddonByName("FadeMiddle", out AtkUnitBase* fade) &&
-            LAddon.IsAddonReady(fade) &&
-            fade->IsVisible)
+        if (IsLoadingScreenVisible())
             return true;
 
         return _condition[ConditionFlag.Occupied] || _condition[ConditionFlag.Occupied30] ||
@@ -545,5 +543,12 @@ internal sealed unsafe class GameFunctions
                _condition[ConditionFlag.OccupiedInQuestEvent] || _condition[ConditionFlag.OccupiedInCutSceneEvent] ||
                _condition[ConditionFlag.Casting] || _condition[ConditionFlag.Unknown57] ||
                _condition[ConditionFlag.BetweenAreas] || _condition[ConditionFlag.BetweenAreas51];
+    }
+
+    public bool IsLoadingScreenVisible()
+    {
+        return _gameGui.TryGetAddonByName("FadeMiddle", out AtkUnitBase* fade) &&
+               LAddon.IsAddonReady(fade) &&
+               fade->IsVisible;
     }
 }

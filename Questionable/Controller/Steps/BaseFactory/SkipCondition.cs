@@ -76,7 +76,7 @@ internal static class SkipCondition
             }
 
             QuestWork? questWork = gameFunctions.GetQuestEx(QuestId);
-            if (questWork != null && Step.MatchesQuestVariables(questWork.Value))
+            if (questWork != null && Step.MatchesQuestVariables(questWork.Value, true))
             {
                 logger.LogInformation("Skipping step, as quest variables match");
                 return true;

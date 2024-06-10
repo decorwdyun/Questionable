@@ -112,6 +112,12 @@ internal sealed class MovementController : IDisposable
 
         if (IsPathRunning && Destination != null)
         {
+            if (_gameFunctions.IsLoadingScreenVisible())
+            {
+                Stop();
+                return;
+            }
+
             Vector3 localPlayerPosition = _clientState.LocalPlayer?.Position ?? Vector3.Zero;
             if ((localPlayerPosition - Destination.Position).Length() < Destination.StopDistance)
             {

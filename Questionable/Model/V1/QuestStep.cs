@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Text.Json.Serialization;
@@ -50,7 +51,11 @@ internal sealed class QuestStep
     public IList<short?> CompletionQuestVariablesFlags { get; set; } = new List<short?>();
     public IList<DialogueChoice> DialogueChoices { get; set; } = new List<DialogueChoice>();
 
-    public unsafe bool MatchesQuestVariables(QuestWork questWork)
+    /// <summary>
+    /// Positive values: Must be set to this value; will wait for the step to have these set.
+    /// Negative values: Will skip if set to this value, won't wait for this to be set.
+    /// </summary>
+    public unsafe bool MatchesQuestVariables(QuestWork questWork, bool forSkip)
     {
         if (CompletionQuestVariablesFlags.Count != 6)
             return false;
@@ -62,11 +67,19 @@ internal sealed class QuestStep
                 continue;
 
             byte actualValue = questWork.Variables[i];
-            byte expectedValue = check > 0 ? (byte)check : (byte)0;
             byte checkByte = check > 0 ? (byte)check : (byte)-check;
-
-            if ((actualValue & checkByte) != expectedValue)
-                return false;
+            if (forSkip)
+            {
+                byte expectedValue = (byte)Math.Abs(check.Value);
+                if ((actualValue & checkByte) != expectedValue)
+                    return false;
+            }
+            else if (!forSkip && check > 0)
+            {
+                byte expectedValue = check > 0 ? (byte)check : (byte)0;
+                if ((actualValue & checkByte) != expectedValue)
+                    return false;
+            }
         }
 
         return true;

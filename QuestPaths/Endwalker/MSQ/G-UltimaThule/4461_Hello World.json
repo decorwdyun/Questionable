@@ -45,7 +45,7 @@
           },
           "TerritoryId": 960,
           "InteractionType": "WaitForManualProgress",
-          "Comment": "Identify Anomaly (Elbow/Knee)"
+          "Comment": "Identify Anomaly (Head, Elbow or Knee)"
         }
       ]
     },

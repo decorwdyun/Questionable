@@ -18,7 +18,7 @@ internal static class WaitAtEnd
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
-            if (step.CompletionQuestVariablesFlags.Count == 6)
+            if (step.CompletionQuestVariablesFlags.Count == 6 && step.CompletionQuestVariablesFlags.Any(x => x is > 0))
             {
                 var task = serviceProvider.GetRequiredService<WaitForCompletionFlags>()
                     .With(quest, step);
@@ -129,7 +129,7 @@ internal static class WaitAtEnd
         public ETaskResult Update()
         {
             QuestWork? questWork = gameFunctions.GetQuestEx(Quest.QuestId);
-            return questWork != null && Step.MatchesQuestVariables(questWork.Value)
+            return questWork != null && Step.MatchesQuestVariables(questWork.Value, false)
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
         }

@@ -110,18 +110,18 @@
           "InteractionType": "Jump",
           "JumpDestination": {
             "Position": {
-              "X": -444.84818,
-              "Y": -160.76439,
-              "Z": -645.7075
+              "X": -443.62042,
+              "Y": -160.7644,
+              "Z": -644.7719
             }
           },
           "Comment": "Platform 4"
         },
         {
           "Position": {
-            "X": -444.84818,
-            "Y": -160.76439,
-            "Z": -645.7075
+            "X": -443.62042,
+            "Y": -160.7644,
+            "Z": -644.7719
           },
           "TerritoryId": 959,
           "InteractionType": "Jump",
@@ -280,7 +280,8 @@
             "Z": -620.05035
           },
           "TerritoryId": 959,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Comment": "FIXME Auto-playing quests seems to get stuck here/do nothing"
         }
       ]
     }

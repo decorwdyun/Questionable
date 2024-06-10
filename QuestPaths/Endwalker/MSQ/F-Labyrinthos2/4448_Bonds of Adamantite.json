@@ -129,8 +129,7 @@
             "Z": 301.63266
           },
           "TerritoryId": 956,
-          "InteractionType": "Interact",
-          "Comment": "TODO Should cancel navmesh if condition is [OccupiedInCutsceneEvent OR BetweenAreas]; then verify next marker distance"
+          "InteractionType": "WalkTo"
         }
       ]
     },
