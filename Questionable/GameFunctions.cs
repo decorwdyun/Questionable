@@ -470,17 +470,18 @@ internal sealed unsafe class GameFunctions
     public bool Unmount()
     {
         if (!_condition[ConditionFlag.Mounted])
-            return false;
+            return true;
 
         if (ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, 23) == 0)
         {
             _logger.LogInformation("Unmounting...");
-            ActionManager.Instance()->UseAction(ActionType.GeneralAction, 23);
+            return ActionManager.Instance()->UseAction(ActionType.GeneralAction, 23);
         }
         else
+        {
             _logger.LogWarning("Can't unmount right now?");
-
-        return true;
+            return false;
+        }
     }
 
     public void OpenDutyFinder(uint contentFinderConditionId)

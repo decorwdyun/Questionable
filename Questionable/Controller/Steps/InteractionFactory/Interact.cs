@@ -21,21 +21,25 @@ internal static class Interact
 
             ArgumentNullException.ThrowIfNull(step.DataId);
 
-            return serviceProvider.GetRequiredService<DoInteract>().With(step.DataId.Value);
+            return serviceProvider.GetRequiredService<DoInteract>()
+                .With(step.DataId.Value, step.TargetTerritoryId != null);
         }
     }
 
     internal sealed class DoInteract(GameFunctions gameFunctions, ICondition condition, ILogger<DoInteract> logger)
         : ITask
     {
+        private bool _needsUnmount;
         private bool _interacted;
         private DateTime _continueAt = DateTime.MinValue;
 
         private uint DataId { get; set; }
+        private bool SkipMarkerCheck { get; set; }
 
-        public ITask With(uint dataId)
+        public ITask With(uint dataId, bool skipMarkerCheck)
         {
             DataId = dataId;
+            SkipMarkerCheck = skipMarkerCheck;
             return this;
         }
 
@@ -51,6 +55,7 @@ internal static class Interact
             // this is only relevant for followers on quests
             if (!gameObject.IsTargetable && condition[ConditionFlag.Mounted])
             {
+                _needsUnmount = true;
                 gameFunctions.Unmount();
                 _continueAt = DateTime.Now.AddSeconds(0.5);
                 return true;
@@ -71,6 +76,18 @@ internal static class Interact
             if (DateTime.Now <= _continueAt)
                 return ETaskResult.StillRunning;
 
+            if (_needsUnmount)
+            {
+                if (condition[ConditionFlag.Mounted])
+                {
+                    gameFunctions.Unmount();
+                    _continueAt = DateTime.Now.AddSeconds(0.5);
+                    return ETaskResult.StillRunning;
+                }
+                else
+                    _needsUnmount = false;
+            }
+
             if (!_interacted)
             {
                 GameObject? gameObject = gameFunctions.FindObjectByDataId(DataId);
@@ -87,7 +104,7 @@ internal static class Interact
 
         private unsafe bool HasAnyMarker(GameObject gameObject)
         {
-            if (gameObject.ObjectKind != ObjectKind.EventNpc)
+            if (SkipMarkerCheck || gameObject.ObjectKind != ObjectKind.EventNpc)
                 return true;
 
             var gameObjectStruct = (FFXIVClientStructs.FFXIV.Client.Game.Object.GameObject*)gameObject.Address;

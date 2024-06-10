@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Numerics;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Interface;
+using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
@@ -16,6 +17,7 @@ using ImGuiNET;
 using LLib.ImGui;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller;
+using Questionable.Controller.Steps.BaseFactory;
 using Questionable.Model;
 using Questionable.Model.V1;
 
@@ -85,6 +87,7 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig, IDisposab
         ImGui.Separator();
 
         DrawQuickAccessButtons();
+        DrawRemainingTasks();
     }
 
     private unsafe void DrawQuest()
@@ -141,14 +144,25 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig, IDisposab
             if (ImGuiComponents.IconButton(FontAwesomeIcon.Stop))
             {
                 _movementController.Stop();
-                _questController.Stop();
+                _questController.Stop("Manual");
             }
 
+            QuestStep? currentStep = currentQuest.Quest
+                .FindSequence(currentQuest.Sequence)
+                ?.FindStep(currentQuest.Step);
+            bool colored = currentStep != null && currentStep.InteractionType == EInteractionType.Instruction
+                && _questController.HasCurrentTaskMatching<WaitAtEnd.WaitNextStepOrSequence>();
+
+            if (colored)
+                ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.HealerGreen);
             if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.ArrowCircleRight, "Skip"))
             {
-                _questController.Stop();
+                _movementController.Stop();
+                _questController.Stop("Manual");
                 _questController.IncreaseStepCount();
             }
+            if (colored)
+                ImGui.PopStyleColor();
         }
         else
             ImGui.Text("No active quest");
@@ -278,7 +292,7 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig, IDisposab
         if (ImGui.Button("Stop Nav"))
         {
             _movementController.Stop();
-            _questController.Stop();
+            _questController.Stop("Manual");
         }
 
         ImGui.EndDisabled();
@@ -289,7 +303,10 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig, IDisposab
             _framework.RunOnTick(() => _gameUiController.HandleCurrentDialogueChoices(),
                 TimeSpan.FromMilliseconds(200));
         }
+    }
 
+    private void DrawRemainingTasks()
+    {
         var remainingTasks = _questController.GetRemainingTaskNames();
         if (remainingTasks.Count > 0)
         {

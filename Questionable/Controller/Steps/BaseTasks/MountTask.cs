@@ -32,7 +32,10 @@ internal sealed class MountTask(
         }
 
         if (gameFunctions.HasStatusPreventingSprintOrMount())
+        {
+            logger.LogInformation("Can't mount due to status preventing sprint or mount");
             return false;
+        }
 
         logger.LogInformation("Step wants a mount, trying to mount in territory {Id}...", _territoryId);
         if (!condition[ConditionFlag.InCombat])
@@ -48,6 +51,12 @@ internal sealed class MountTask(
     {
         if (!_mountTriggered)
         {
+            if (gameFunctions.HasStatusPreventingSprintOrMount())
+            {
+                logger.LogInformation("Can't mount due to status preventing sprint or mount");
+                return ETaskResult.TaskComplete;
+            }
+
             _mountTriggered = gameFunctions.Mount();
             return ETaskResult.StillRunning;
         }

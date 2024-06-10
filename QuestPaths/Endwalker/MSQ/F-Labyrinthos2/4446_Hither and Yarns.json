@@ -22,6 +22,16 @@
       "Sequence": 1,
       "Steps": [
         {
+          "Position": {
+            "X": -148.48793,
+            "Y": -10.30035,
+            "Z": -247.25652
+          },
+          "TerritoryId": 956,
+          "InteractionType": "WalkTo",
+          "Comment": "Avoids Combat"
+        },
+        {
           "DataId": 2011987,
           "Position": {
             "X": -176.4096,
@@ -42,6 +52,16 @@
           "InteractionType": "WalkTo",
           "Mount": true,
           "DisableNavmesh": true
+        },
+        {
+          "Position": {
+            "X": -480.30975,
+            "Y": -22.946651,
+            "Z": -145.08534
+          },
+          "TerritoryId": 956,
+          "InteractionType": "WalkTo",
+          "Comment": "Avoids Combat (typically)"
         },
         {
           "DataId": 2011988,

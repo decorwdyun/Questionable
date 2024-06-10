@@ -54,7 +54,7 @@ internal sealed class DalamudInitializer : IDisposable
         }
         catch (MovementController.PathfindingFailedException)
         {
-            _questController.Stop();
+            _questController.Stop("Pathfinding failed");
         }
     }
 

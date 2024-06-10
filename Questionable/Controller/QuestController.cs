@@ -71,7 +71,8 @@ internal sealed class QuestController
 
         if (_keyState[VirtualKey.ESCAPE])
         {
-            Stop();
+            if (_currentTask != null || _taskQueue.Count > 0)
+                Stop("ESC pressed");
             _movementController.Stop();
         }
 
@@ -92,7 +93,7 @@ internal sealed class QuestController
             {
                 _logger.LogInformation("No current quest, resetting data");
                 CurrentQuest = null;
-                Stop();
+                Stop("Resetting current quest");
             }
         }
         else if (CurrentQuest == null || CurrentQuest.Quest.QuestId != currentQuestId)
@@ -101,14 +102,15 @@ internal sealed class QuestController
             {
                 _logger.LogInformation("New quest: {QuestName}", quest.Name);
                 CurrentQuest = new QuestProgress(quest, currentSequence, 0);
+                Stop("Different Quest");
             }
             else if (CurrentQuest != null)
             {
                 _logger.LogInformation("No active quest anymore? Not sure what happened...");
                 CurrentQuest = null;
+                Stop("No active Quest");
             }
 
-            Stop();
             return;
         }
 
@@ -116,7 +118,7 @@ internal sealed class QuestController
         {
             DebugState = "No quest active";
             Comment = null;
-            Stop();
+            Stop("No quest active");
             return;
         }
 
@@ -140,11 +142,7 @@ internal sealed class QuestController
         if (CurrentQuest.Sequence != currentSequence)
         {
             CurrentQuest = CurrentQuest with { Sequence = currentSequence, Step = 0 };
-
-            bool automatic = _automatic;
-            Stop();
-            if (automatic)
-                ExecuteNextStep(true);
+            Stop("New sequence", continueIfAutomatic: true);
         }
 
         var q = CurrentQuest.Quest;
@@ -153,7 +151,7 @@ internal sealed class QuestController
         {
             DebugState = "Sequence not found";
             Comment = null;
-            Stop();
+            Stop("Unknown sequence");
             return;
         }
 
@@ -161,7 +159,8 @@ internal sealed class QuestController
         {
             DebugState = "Step completed";
             Comment = null;
-            Stop();
+            if (_currentTask != null || _taskQueue.Count > 0)
+                Stop("Step complete", continueIfAutomatic: true);
             return;
         }
 
@@ -169,7 +168,7 @@ internal sealed class QuestController
         {
             DebugState = "Step not found";
             Comment = null;
-            Stop();
+            Stop("Unknown step");
             return;
         }
 
@@ -249,15 +248,31 @@ internal sealed class QuestController
             */
     }
 
-    public void Stop()
+    private void ClearTasksInternal()
     {
         _currentTask = null;
 
         if (_taskQueue.Count > 0)
             _taskQueue.Clear();
+    }
+
+    public void Stop(string label, bool continueIfAutomatic = false)
+    {
+        using var scope = _logger.BeginScope(label);
+
+        ClearTasksInternal();
 
         // reset task queue
-        _automatic = false;
+        if (continueIfAutomatic && _automatic)
+        {
+            if (CurrentQuest?.Step is >= 0 and < 255)
+                ExecuteNextStep(true);
+        }
+        else
+        {
+            _logger.LogInformation("Stopping automatic questing");
+            _automatic = false;
+        }
     }
 
     private void UpdateCurrentTask()
@@ -286,7 +301,7 @@ internal sealed class QuestController
                 catch (Exception e)
                 {
                     _logger.LogError(e, "Failed to start task {TaskName}", upcomingTask.ToString());
-                    Stop();
+                    Stop("Task failed to start");
                     return;
                 }
             }
@@ -302,7 +317,7 @@ internal sealed class QuestController
         catch (Exception e)
         {
             _logger.LogError(e, "Failed to update task {TaskName}", _currentTask.ToString());
-            Stop();
+            Stop("Task failed to update");
             return;
         }
 
@@ -312,7 +327,8 @@ internal sealed class QuestController
                 return;
 
             case ETaskResult.SkipRemainingTasksForStep:
-                _logger.LogInformation("Result: {Result}, skipping remaining tasks for step", result);
+                _logger.LogInformation("{Task} → {Result}, skipping remaining tasks for step",
+                    _currentTask, result);
                 _currentTask = null;
 
                 while (_taskQueue.TryDequeue(out ITask? nextTask))
@@ -327,28 +343,28 @@ internal sealed class QuestController
                 return;
 
             case ETaskResult.TaskComplete:
-                _logger.LogInformation("Result: {Result}, remaining tasks: {RemainingTaskCount}", result,
-                    _taskQueue.Count);
+                _logger.LogInformation("{Task} → {Result}, remaining tasks: {RemainingTaskCount}",
+                    _currentTask, result, _taskQueue.Count);
                 _currentTask = null;
 
                 // handled in next update
                 return;
 
             case ETaskResult.NextStep:
-                _logger.LogInformation("Result: {Result}", result);
+                _logger.LogInformation("{Task} → {Result}", _currentTask, result);
                 IncreaseStepCount(true);
                 return;
 
             case ETaskResult.End:
-                _logger.LogInformation("Result: {Result}", result);
-                Stop();
+                _logger.LogInformation("{Task} → {Result}", _currentTask, result);
+                Stop("Task end");
                 return;
         }
     }
 
     public void ExecuteNextStep(bool automatic)
     {
-        Stop();
+        ClearTasksInternal();
         _automatic = automatic;
 
         (QuestSequence? seq, QuestStep? step) = GetNextStep();
@@ -382,6 +398,9 @@ internal sealed class QuestController
             return;
         }
 
+        _logger.LogInformation("Tasks for {QuestId}, {Sequence}, {Step}: {Tasks}",
+            CurrentQuest.Quest.QuestId, seq.Sequence, seq.Steps.IndexOf(step),
+            string.Join(", ", newTasks.Select(x => x.ToString())));
         foreach (var task in newTasks)
             _taskQueue.Enqueue(task);
     }
@@ -393,6 +412,9 @@ internal sealed class QuestController
     {
         return _currentTask == null ? $"- (+{_taskQueue.Count})" : $"{_currentTask} (+{_taskQueue.Count})";
     }
+
+    public bool HasCurrentTaskMatching<T>() =>
+        _currentTask is T;
 
     public sealed record QuestProgress(
         Quest Quest,

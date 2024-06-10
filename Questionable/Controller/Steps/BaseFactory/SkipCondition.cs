@@ -14,10 +14,10 @@ internal static class SkipCondition
     {
         public ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
-            if (step.SkipIf.Count == 0)
+            if (step.SkipIf.Contains(ESkipCondition.Never))
                 return null;
 
-            if (step.SkipIf.Contains(ESkipCondition.Never))
+            if (step.SkipIf.Count == 0 && step.CompletionQuestVariablesFlags.Count == 0)
                 return null;
 
             return serviceProvider.GetRequiredService<CheckTask>()

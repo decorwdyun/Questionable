@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
+using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using Microsoft.Extensions.DependencyInjection;
 using Questionable.Controller.Steps.BaseTasks;
@@ -13,7 +14,7 @@ namespace Questionable.Controller.Steps.BaseFactory;
 
 internal static class WaitAtEnd
 {
-    internal sealed class Factory(IServiceProvider serviceProvider) : ITaskFactory
+    internal sealed class Factory(IServiceProvider serviceProvider, IClientState clientState) : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -54,6 +55,36 @@ internal static class WaitAtEnd
                         new NextStep()
                     ];
 
+                case EInteractionType.Interact when step.TargetTerritoryId != null:
+                    ITask waitInteraction;
+                    if (step.TerritoryId != step.TargetTerritoryId)
+                    {
+                        // interaction moves to a different territory
+                        waitInteraction = new WaitConditionTask(() => clientState.TerritoryType == step.TerritoryId,
+                            $"Wait(tp to territory: {step.TerritoryId})");
+                    }
+                    else
+                    {
+                        Vector3 lastPosition = step.Position ?? clientState.LocalPlayer?.Position ?? Vector3.Zero;
+                        waitInteraction = new WaitConditionTask(() =>
+                            {
+                                Vector3? currentPosition = clientState.LocalPlayer?.Position;
+                                if (currentPosition == null)
+                                    return false;
+
+                                // interaction moved to elsewhere in the zone
+                                return (lastPosition - currentPosition.Value).Length() > 20;
+                            }, $"Wait(tp away from {lastPosition.ToString("G", CultureInfo.InvariantCulture)})");
+                    }
+
+                    return
+                    [
+                        waitInteraction,
+                        serviceProvider.GetRequiredService<WaitDelay>(),
+                        new NextStep()
+                    ];
+
+                case EInteractionType.Interact:
                 default:
                     return [serviceProvider.GetRequiredService<WaitDelay>(), new NextStep()];
             }
@@ -136,7 +167,7 @@ internal static class WaitAtEnd
 
         public ETaskResult Update() => ETaskResult.NextStep;
 
-        public override string ToString() => "Next Step";
+        public override string ToString() => "NextStep";
     }
 
     internal sealed class EndAutomation : ILastTask
@@ -145,6 +176,6 @@ internal static class WaitAtEnd
 
         public ETaskResult Update() => ETaskResult.End;
 
-        public override string ToString() => "End automation";
+        public override string ToString() => "EndAutomation";
     }
 }

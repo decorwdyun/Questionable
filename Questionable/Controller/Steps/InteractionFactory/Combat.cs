@@ -24,7 +24,7 @@ internal static class Combat
                 ArgumentNullException.ThrowIfNull(step.DataId);
 
                 var task = serviceProvider.GetRequiredService<Interact.DoInteract>()
-                    .With(step.DataId.Value);
+                    .With(step.DataId.Value, true);
                 return [unmount, task];
             }
             else if (step.EnemySpawnType == EEnemySpawnType.AfterItemUse)

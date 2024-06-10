@@ -52,7 +52,15 @@
             "Z": -503.2578
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 2012094,
@@ -64,7 +72,15 @@
           "TerritoryId": 958,
           "InteractionType": "Interact",
           "Comment": "Map",
-          "Mount": true
+          "Mount": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 2012005,
@@ -86,7 +102,15 @@
           },
           "TerritoryId": 958,
           "InteractionType": "Interact",
-          "Comment": "Warmachine Wreckage"
+          "Comment": "Warmachine Wreckage",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 2012096,
@@ -97,7 +121,15 @@
           },
           "TerritoryId": 958,
           "InteractionType": "Interact",
-          "Comment": "Children's Slide"
+          "Comment": "Children's Slide",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            16
+          ]
         }
       ]
     },
