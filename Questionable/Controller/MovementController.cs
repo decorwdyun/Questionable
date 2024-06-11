@@ -118,6 +118,19 @@ internal sealed class MovementController : IDisposable
                 return;
             }
 
+            if (Destination is { IsFlying: true } && _condition[ConditionFlag.Swimming])
+            {
+                _logger.LogInformation("Flying but swimming, restarting as non-flying path...");
+                var dest = Destination;
+                Stop();
+
+                if (dest.UseNavmesh)
+                    NavigateTo(EMovementType.None, dest.DataId, dest.Position, false, false, dest.StopDistance);
+                else
+                    NavigateTo(EMovementType.None, dest.DataId, [dest.Position], false, false, dest.StopDistance);
+                return;
+            }
+
             Vector3 localPlayerPosition = _clientState.LocalPlayer?.Position ?? Vector3.Zero;
             if ((localPlayerPosition - Destination.Position).Length() < Destination.StopDistance)
             {
@@ -174,7 +187,7 @@ internal sealed class MovementController : IDisposable
     }
 
     private void PrepareNavigation(EMovementType type, uint? dataId, Vector3 to, bool fly, bool sprint,
-        float? stopDistance)
+        float? stopDistance, bool useNavmesh)
     {
         ResetPathfinding();
 
@@ -184,7 +197,8 @@ internal sealed class MovementController : IDisposable
             _gameFunctions.ExecuteCommand("/automove off");
         }
 
-        Destination = new DestinationData(dataId, to, stopDistance ?? (DefaultStopDistance - 0.2f), fly, sprint);
+        Destination = new DestinationData(dataId, to, stopDistance ?? (DefaultStopDistance - 0.2f), fly, sprint,
+            useNavmesh);
         MovementStartedAt = DateTime.MaxValue;
     }
 
@@ -192,7 +206,7 @@ internal sealed class MovementController : IDisposable
         float? stopDistance = null)
     {
         fly |= _condition[ConditionFlag.Diving];
-        PrepareNavigation(type, dataId, to, fly, sprint, stopDistance);
+        PrepareNavigation(type, dataId, to, fly, sprint, stopDistance, true);
         _logger.LogInformation("Pathfinding to {Destination}", Destination);
 
         _cancellationTokenSource = new();
@@ -205,7 +219,7 @@ internal sealed class MovementController : IDisposable
         float? stopDistance)
     {
         fly |= _condition[ConditionFlag.Diving];
-        PrepareNavigation(type, dataId, to.Last(), fly, sprint, stopDistance);
+        PrepareNavigation(type, dataId, to.Last(), fly, sprint, stopDistance, false);
 
         _logger.LogInformation("Moving to {Destination}", Destination);
         _navmeshIpc.MoveTo(to, fly);
@@ -252,7 +266,8 @@ internal sealed class MovementController : IDisposable
         Vector3 Position,
         float StopDistance,
         bool IsFlying,
-        bool CanSprint);
+        bool CanSprint,
+        bool UseNavmesh);
 
     public sealed class PathfindingFailedException : Exception
     {
