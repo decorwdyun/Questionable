@@ -268,7 +268,7 @@ internal sealed class QuestController
             if (CurrentQuest?.Step is >= 0 and < 255)
                 ExecuteNextStep(true);
         }
-        else
+        else if (_automatic)
         {
             _logger.LogInformation("Stopping automatic questing");
             _automatic = false;
