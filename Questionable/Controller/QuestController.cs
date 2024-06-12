@@ -84,7 +84,8 @@ internal sealed class QuestController
             return;
 
         // not verified to work
-        if (_automatic && _currentTask == null && _taskQueue.Count == 0 && CurrentQuest is { Sequence: 0, Step: 255 }
+        if (_automatic && _currentTask == null && _taskQueue.Count == 0
+            && CurrentQuest is { Sequence: 0, Step: 0 } or { Sequence: 0, Step: 255 }
             && DateTime.Now >= CurrentQuest.StepProgress.StartedAt.AddSeconds(15))
         {
             _logger.LogWarning("Quest accept apparently didn't work out, resetting progress");
@@ -376,11 +377,13 @@ internal sealed class QuestController
 
             case ETaskResult.NextStep:
                 _logger.LogInformation("{Task} → {Result}", _currentTask, result);
+                _currentTask = null;
                 IncreaseStepCount(true);
                 return;
 
             case ETaskResult.End:
                 _logger.LogInformation("{Task} → {Result}", _currentTask, result);
+                _currentTask = null;
                 Stop("Task end");
                 return;
         }
