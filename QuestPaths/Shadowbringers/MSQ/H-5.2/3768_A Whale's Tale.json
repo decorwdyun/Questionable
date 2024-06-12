@@ -28,7 +28,7 @@
           },
           "TerritoryId": 813,
           "InteractionType": "WalkTo",
-          "AetheryteShortcut": "Lakeland - Ostall Imperative",
+          "AetheryteShortcut": "Lakeland - Fort Jobb",
           "Fly": true
         },
         {
@@ -95,7 +95,15 @@
           "TerritoryId": 813,
           "InteractionType": "Interact",
           "DisableNavmesh": true,
-          "$.1": "QuestVariables if done first: 1 0 0 0 0 64"
+          "$.1": "QuestVariables if done first: 1 0 0 0 0 64",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 2010278,
@@ -106,7 +114,15 @@
           },
           "TerritoryId": 813,
           "InteractionType": "Interact",
-          "DisableNavmesh": true
+          "DisableNavmesh": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 2010282,
@@ -117,7 +133,16 @@
           },
           "TerritoryId": 813,
           "InteractionType": "Interact",
-          "DisableNavmesh": true
+          "DisableNavmesh": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ],
+          "Comment": "TODO Check if pathfinding works automatically now"
         }
       ]
     },

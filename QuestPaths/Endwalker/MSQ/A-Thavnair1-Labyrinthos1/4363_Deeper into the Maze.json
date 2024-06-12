@@ -68,7 +68,15 @@
             "Z": -464.7746
           },
           "TerritoryId": 956,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 1038716,
@@ -78,7 +86,15 @@
             "Z": -458.2132
           },
           "TerritoryId": 956,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         }
       ]
     },
@@ -108,8 +124,8 @@
             "Z": -519.18823
           },
           "TerritoryId": 956,
-          "InteractionType": "SinglePlayerDuty",
-          "Comment": "Duty - Shoot Large Green Bird"
+          "InteractionType": "WaitForManualProgress",
+          "Comment": "Shoot Large Green Bird"
         }
       ]
     },

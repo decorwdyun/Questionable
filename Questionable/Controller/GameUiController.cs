@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Dalamud.Game.Addon.Lifecycle;
 using Dalamud.Game.Addon.Lifecycle.AddonArgTypes;
+using Dalamud.Game.ClientState.Objects;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Component.GUI;
@@ -23,16 +24,19 @@ internal sealed class GameUiController : IDisposable
     private readonly GameFunctions _gameFunctions;
     private readonly QuestController _questController;
     private readonly IGameGui _gameGui;
+    private readonly ITargetManager _targetManager;
     private readonly ILogger<GameUiController> _logger;
 
     public GameUiController(IAddonLifecycle addonLifecycle, IDataManager dataManager, GameFunctions gameFunctions,
-        QuestController questController, IGameGui gameGui, ILogger<GameUiController> logger)
+        QuestController questController, IGameGui gameGui, ITargetManager targetManager,
+        ILogger<GameUiController> logger)
     {
         _addonLifecycle = addonLifecycle;
         _dataManager = dataManager;
         _gameFunctions = gameFunctions;
         _questController = questController;
         _gameGui = gameGui;
+        _targetManager = targetManager;
         _logger = logger;
 
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "SelectString", SelectStringPostSetup);
@@ -181,39 +185,25 @@ internal sealed class GameUiController : IDisposable
 
         foreach (var dialogueChoice in dialogueChoices)
         {
+            if (dialogueChoice.Type != EDialogChoiceType.List)
+                continue;
+
             if (dialogueChoice.Answer == null)
             {
-                _logger.LogInformation("Ignoring entry in DialogueChoices, no answer");
+                _logger.LogDebug("Ignoring entry in DialogueChoices, no answer");
                 continue;
             }
 
-            string? excelPrompt = null, excelAnswer;
-            switch (dialogueChoice.Type)
+            if (dialogueChoice.DataId != null && dialogueChoice.DataId != _targetManager.Target?.DataId)
             {
-                case EDialogChoiceType.ContentTalkList:
-                    if (dialogueChoice.Prompt != null)
-                    {
-                        excelPrompt =
-                            _gameFunctions.GetContentTalk(uint.Parse(dialogueChoice.Prompt,
-                                CultureInfo.InvariantCulture));
-                    }
-
-                    excelAnswer =
-                        _gameFunctions.GetContentTalk(uint.Parse(dialogueChoice.Answer, CultureInfo.InvariantCulture));
-                    break;
-                case EDialogChoiceType.List:
-                    if (dialogueChoice.Prompt != null)
-                    {
-                        excelPrompt =
-                            _gameFunctions.GetDialogueText(quest, dialogueChoice.ExcelSheet, dialogueChoice.Prompt);
-                    }
-
-                    excelAnswer =
-                        _gameFunctions.GetDialogueText(quest, dialogueChoice.ExcelSheet, dialogueChoice.Answer);
-                    break;
-                default:
-                    continue;
+                _logger.LogDebug(
+                    "Skipping entry in DialogueChoice expecting target dataId {ExpectedDataId}, actual target is {ActualTargetId}",
+                    dialogueChoice.DataId, _targetManager.Target?.DataId);
+                continue;
             }
+
+            string? excelPrompt = ResolveReference(quest, dialogueChoice.ExcelSheet, dialogueChoice.Prompt);
+            string? excelAnswer = ResolveReference(quest, dialogueChoice.ExcelSheet, dialogueChoice.Answer);
 
             if (actualPrompt == null && !string.IsNullOrEmpty(excelPrompt))
             {
@@ -288,29 +278,24 @@ internal sealed class GameUiController : IDisposable
         _logger.LogTrace("DefaultYesNo: Choice count: {Count}", dialogueChoices.Count);
         foreach (var dialogueChoice in dialogueChoices)
         {
-            string? excelPrompt;
-            if (dialogueChoice.Prompt != null)
-            {
-                switch (dialogueChoice.Type)
-                {
-                    case EDialogChoiceType.ContentTalkYesNo:
-                        excelPrompt =
-                            _gameFunctions.GetContentTalk(uint.Parse(dialogueChoice.Prompt,
-                                CultureInfo.InvariantCulture));
-                        break;
-                    case EDialogChoiceType.YesNo:
-                        excelPrompt =
-                            _gameFunctions.GetDialogueText(quest, dialogueChoice.ExcelSheet, dialogueChoice.Prompt);
-                        break;
-                    default:
-                        continue;
-                }
-            }
-            else
-                excelPrompt = null;
-
-            if (excelPrompt == null || !GameStringEquals(actualPrompt, excelPrompt))
+            if (dialogueChoice.Type != EDialogChoiceType.YesNo)
                 continue;
+
+            if (dialogueChoice.DataId != null && dialogueChoice.DataId != _targetManager.Target?.DataId)
+            {
+                _logger.LogDebug(
+                    "Skipping entry in DialogueChoice expecting target dataId {ExpectedDataId}, actual target is {ActualTargetId}",
+                    dialogueChoice.DataId, _targetManager.Target?.DataId);
+                continue;
+            }
+
+            string? excelPrompt = ResolveReference(quest, dialogueChoice.ExcelSheet, dialogueChoice.Prompt);
+            if (excelPrompt == null || !GameStringEquals(actualPrompt, excelPrompt))
+            {
+                _logger.LogInformation("Unexpected excelPrompt: {ExcelPrompt}, actualPrompt: {ActualPrompt}",
+                    excelPrompt, actualPrompt);
+                continue;
+            }
 
             addonSelectYesno->AtkUnitBase.FireCallbackInt(dialogueChoice.Yes ? 0 : 1);
             if (!checkAllSteps)
@@ -343,7 +328,8 @@ internal sealed class GameUiController : IDisposable
             increaseStepCount = false;
 
             if (step != null)
-                _logger.LogTrace("Previous step: {CurrentTerritory}, {TargetTerritory}", step.TerritoryId, step.TargetTerritoryId);
+                _logger.LogTrace("Previous step: {CurrentTerritory}, {TargetTerritory}", step.TerritoryId,
+                    step.TargetTerritoryId);
         }
 
         if (step == null || step.TargetTerritoryId == null)
@@ -367,7 +353,7 @@ internal sealed class GameUiController : IDisposable
             _logger.LogInformation("Using warp {Id}, {Prompt}", entry.RowId, excelPrompt);
             addonSelectYesno->AtkUnitBase.FireCallbackInt(0);
             //if (increaseStepCount)
-                //_questController.IncreaseStepCount();
+            //_questController.IncreaseStepCount();
             return;
         }
     }
@@ -401,6 +387,19 @@ internal sealed class GameUiController : IDisposable
             return false;
 
         return a.ReplaceLineEndings().Replace('\u2013', '-') == b.ReplaceLineEndings().Replace('\u2013', '-');
+    }
+
+    private string? ResolveReference(Quest quest, string? excelSheet, ExcelRef? excelRef)
+    {
+        if (excelRef == null)
+            return null;
+
+        if (excelRef.Type == ExcelRef.EType.Key)
+            return _gameFunctions.GetDialogueText(quest, excelSheet, excelRef.AsKey());
+        else if (excelRef.Type == ExcelRef.EType.RowId)
+            return _gameFunctions.GetDialogueTextByRowId(excelSheet, excelRef.AsRowId());
+
+        return null;
     }
 
     public void Dispose()

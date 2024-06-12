@@ -45,8 +45,38 @@ internal static class UseItem
             => throw new InvalidOperationException();
     }
 
+    internal abstract class UseItemBase : ITask
+    {
+        private bool _usedItem;
+        private DateTime _continueAt;
 
-    internal sealed class UseOnGround(GameFunctions gameFunctions) : AbstractDelayedTask
+        protected abstract bool UseItem();
+
+        public bool Start()
+        {
+            _usedItem = UseItem();
+            _continueAt = DateTime.Now.AddSeconds(2);
+            return true;
+        }
+
+        public ETaskResult Update()
+        {
+            if (DateTime.Now > _continueAt)
+                return ETaskResult.StillRunning;
+
+            if (!_usedItem)
+            {
+                _usedItem = UseItem();
+                _continueAt = DateTime.Now.AddSeconds(2);
+                return ETaskResult.StillRunning;
+            }
+
+            return ETaskResult.TaskComplete;
+        }
+    }
+
+
+    internal sealed class UseOnGround(GameFunctions gameFunctions) : UseItemBase
     {
         public uint DataId { get; set; }
         public uint ItemId { get; set; }
@@ -58,16 +88,12 @@ internal static class UseItem
             return this;
         }
 
-        protected override bool StartInternal()
-        {
-            gameFunctions.UseItemOnGround(DataId, ItemId);
-            return true;
-        }
+        protected override bool UseItem() => gameFunctions.UseItemOnGround(DataId, ItemId);
 
         public override string ToString() => $"UseItem({ItemId} on ground at {DataId})";
     }
 
-    internal sealed class UseOnObject(GameFunctions gameFunctions) : AbstractDelayedTask
+    internal sealed class UseOnObject(GameFunctions gameFunctions) : UseItemBase
     {
         public uint DataId { get; set; }
         public uint ItemId { get; set; }
@@ -79,16 +105,12 @@ internal static class UseItem
             return this;
         }
 
-        protected override bool StartInternal()
-        {
-            gameFunctions.UseItem(DataId, ItemId);
-            return true;
-        }
+        protected override bool UseItem() => gameFunctions.UseItem(DataId, ItemId);
 
         public override string ToString() => $"UseItem({ItemId} on {DataId})";
     }
 
-    internal sealed class Use(GameFunctions gameFunctions) : AbstractDelayedTask
+    internal sealed class Use(GameFunctions gameFunctions) : UseItemBase
     {
         public uint ItemId { get; set; }
 
@@ -98,11 +120,7 @@ internal static class UseItem
             return this;
         }
 
-        protected override bool StartInternal()
-        {
-            gameFunctions.UseItem(ItemId);
-            return true;
-        }
+        protected override bool UseItem() => gameFunctions.UseItem(ItemId);
 
         public override string ToString() => $"UseItem({ItemId})";
     }

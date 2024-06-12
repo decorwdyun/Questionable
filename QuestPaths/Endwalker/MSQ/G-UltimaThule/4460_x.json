@@ -97,7 +97,7 @@
           },
           "TerritoryId": 960,
           "InteractionType": "WaitForManualProgress",
-          "Comment": "Duty - Find Errant Omicron"
+          "Comment": "Find Errant Omicron"
         }
       ]
     },

@@ -35,13 +35,13 @@
           "Comment": "A Frosty Reception",
           "DialogueChoices": [
             {
-              "Type": "ContentTalkList",
-              "Prompt": "264",
-              "Answer": "267"
+              "Type": "List",
+              "Prompt": 264,
+              "Answer": 267
             },
             {
-              "Type": "ContentTalkYesNo",
-              "Prompt": "268",
+              "Type": "YesNo",
+              "Prompt": 268,
               "Yes": true
             }
           ]

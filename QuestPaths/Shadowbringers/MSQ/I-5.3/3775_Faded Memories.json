@@ -42,7 +42,14 @@
             "Z": 604.27246
           },
           "TerritoryId": 814,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_LUCKMI105_03775_Q2_000_052",
+              "Yes": true
+            }
+          ]
         }
       ]
     },

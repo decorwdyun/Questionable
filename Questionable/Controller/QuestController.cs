@@ -10,6 +10,7 @@ using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps;
 using Questionable.Data;
@@ -28,6 +29,7 @@ internal sealed class QuestController
     private readonly ILogger<QuestController> _logger;
     private readonly QuestRegistry _questRegistry;
     private readonly IKeyState _keyState;
+    private readonly Configuration _configuration;
     private readonly IReadOnlyList<ITaskFactory> _taskFactories;
 
     private readonly Queue<ITask> _taskQueue = new();
@@ -41,6 +43,7 @@ internal sealed class QuestController
         ILogger<QuestController> logger,
         QuestRegistry questRegistry,
         IKeyState keyState,
+        Configuration configuration,
         IEnumerable<ITaskFactory> taskFactories)
     {
         _clientState = clientState;
@@ -49,6 +52,7 @@ internal sealed class QuestController
         _logger = logger;
         _questRegistry = questRegistry;
         _keyState = keyState;
+        _configuration = configuration;
         _taskFactories = taskFactories.ToList().AsReadOnly();
     }
 
@@ -79,6 +83,20 @@ internal sealed class QuestController
         if (CurrentQuest != null && CurrentQuest.Quest.Data.TerritoryBlacklist.Contains(_clientState.TerritoryType))
             return;
 
+        // not verified to work
+        if (_automatic && _currentTask == null && _taskQueue.Count == 0 && CurrentQuest is { Sequence: 0, Step: 255 }
+            && DateTime.Now >= CurrentQuest.StepProgress.StartedAt.AddSeconds(15))
+        {
+            _logger.LogWarning("Quest accept apparently didn't work out, resetting progress");
+            CurrentQuest = CurrentQuest with
+            {
+                Step = 0
+            };
+
+            ExecuteNextStep(true);
+            return;
+        }
+
         UpdateCurrentTask();
     }
 
@@ -102,7 +120,13 @@ internal sealed class QuestController
             {
                 _logger.LogInformation("New quest: {QuestName}", quest.Name);
                 CurrentQuest = new QuestProgress(quest, currentSequence, 0);
-                Stop("Different Quest");
+
+                bool continueAutomatically = _configuration.General.AutoAcceptNextQuest;
+
+                if (_clientState.LocalPlayer?.Level < quest.Level)
+                    continueAutomatically = false;
+
+                Stop("Different Quest", continueAutomatically);
             }
             else if (CurrentQuest != null)
             {
@@ -208,7 +232,7 @@ internal sealed class QuestController
             CurrentQuest = CurrentQuest with
             {
                 Step = CurrentQuest.Step + 1,
-                StepProgress = new()
+                StepProgress = new(DateTime.Now),
             };
         }
         else
@@ -216,7 +240,7 @@ internal sealed class QuestController
             CurrentQuest = CurrentQuest with
             {
                 Step = 255,
-                StepProgress = new()
+                StepProgress = new(DateTime.Now),
             };
         }
 
@@ -416,6 +440,8 @@ internal sealed class QuestController
     public bool HasCurrentTaskMatching<T>() =>
         _currentTask is T;
 
+    public bool IsRunning => _currentTask != null || _taskQueue.Count > 0;
+
     public sealed record QuestProgress(
         Quest Quest,
         byte Sequence,
@@ -423,12 +449,13 @@ internal sealed class QuestController
         StepProgress StepProgress)
     {
         public QuestProgress(Quest quest, byte sequence, int step)
-            : this(quest, sequence, step, new StepProgress())
+            : this(quest, sequence, step, new StepProgress(DateTime.Now))
         {
         }
     }
 
     // TODO is this still required?
     public sealed record StepProgress(
+        DateTime StartedAt,
         int DialogueChoicesSelected = 0);
 }

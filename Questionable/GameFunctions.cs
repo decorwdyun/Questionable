@@ -23,13 +23,17 @@ using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using LLib.GameUI;
 using Lumina.Excel.CustomSheets;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.GeneratedSheets2;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller;
 using Questionable.Model.V1;
 using BattleChara = FFXIVClientStructs.FFXIV.Client.Game.Character.BattleChara;
+using ContentFinderCondition = Lumina.Excel.GeneratedSheets.ContentFinderCondition;
+using ContentTalk = Lumina.Excel.GeneratedSheets.ContentTalk;
+using Emote = Lumina.Excel.GeneratedSheets.Emote;
 using GameObject = Dalamud.Game.ClientState.Objects.Types.GameObject;
 using Quest = Questionable.Model.Quest;
+using TerritoryType = Lumina.Excel.GeneratedSheets.TerritoryType;
 
 namespace Questionable;
 
@@ -56,11 +60,12 @@ internal sealed unsafe class GameFunctions
     private readonly IClientState _clientState;
     private readonly QuestRegistry _questRegistry;
     private readonly IGameGui _gameGui;
+    private readonly Configuration _configuration;
     private readonly ILogger<GameFunctions> _logger;
 
     public GameFunctions(IDataManager dataManager, IObjectTable objectTable, ISigScanner sigScanner,
         ITargetManager targetManager, ICondition condition, IClientState clientState, QuestRegistry questRegistry,
-        IGameGui gameGui, ILogger<GameFunctions> logger)
+        IGameGui gameGui, Configuration configuration, ILogger<GameFunctions> logger)
     {
         _dataManager = dataManager;
         _objectTable = objectTable;
@@ -69,6 +74,7 @@ internal sealed unsafe class GameFunctions
         _clientState = clientState;
         _questRegistry = questRegistry;
         _gameGui = gameGui;
+        _configuration = configuration;
         _logger = logger;
         _processChatBox =
             Marshal.GetDelegateForFunctionPointer<ProcessChatBoxDelegate>(sigScanner.ScanText(Signatures.SendChat));
@@ -364,29 +370,33 @@ internal sealed unsafe class GameFunctions
         return false;
     }
 
-    public void UseItem(uint itemId)
+    public bool UseItem(uint itemId)
     {
-        AgentInventoryContext.Instance()->UseItem(itemId);
+        return AgentInventoryContext.Instance()->UseItem(itemId) == 0;
     }
 
-    public void UseItem(uint dataId, uint itemId)
+    public bool UseItem(uint dataId, uint itemId)
     {
         GameObject? gameObject = FindObjectByDataId(dataId);
         if (gameObject != null)
         {
             _targetManager.Target = gameObject;
-            AgentInventoryContext.Instance()->UseItem(itemId);
+            return AgentInventoryContext.Instance()->UseItem(itemId) == 0;
         }
+
+        return false;
     }
 
-    public void UseItemOnGround(uint dataId, uint itemId)
+    public bool UseItemOnGround(uint dataId, uint itemId)
     {
         GameObject? gameObject = FindObjectByDataId(dataId);
         if (gameObject != null)
         {
             var position = (FFXIVClientStructs.FFXIV.Common.Math.Vector3)gameObject.Position;
-            ActionManager.Instance()->UseActionLocation(ActionType.KeyItem, itemId, location: &position);
+            return ActionManager.Instance()->UseActionLocation(ActionType.KeyItem, itemId, location: &position);
         }
+
+        return false;
     }
 
     public void UseEmote(uint dataId, EEmote emote)
@@ -410,8 +420,11 @@ internal sealed unsafe class GameFunctions
         return gameObject != null && (gameObject.Position - position).Length() < 0.05f;
     }
 
-    public bool HasStatusPreventingSprintOrMount()
+    public bool HasStatusPreventingSprintOrMount(bool skipConfigCheck = false)
     {
+        if (!skipConfigCheck && _configuration.Advanced.NeverFly)
+            return true;
+
         if (_condition[ConditionFlag.Swimming] && !IsFlyingUnlockedInCurrentZone())
             return true;
 
@@ -437,13 +450,14 @@ internal sealed unsafe class GameFunctions
             return true;
 
         var playerState = PlayerState.Instance();
-        if (playerState != null && playerState->IsMountUnlocked(71))
+        if (playerState != null && _configuration.General.MountId != 0 &&
+            playerState->IsMountUnlocked(_configuration.General.MountId))
         {
-            if (ActionManager.Instance()->GetActionStatus(ActionType.Mount, 71) == 0)
+            if (ActionManager.Instance()->GetActionStatus(ActionType.Mount, _configuration.General.MountId) == 0)
             {
-                if (ActionManager.Instance()->UseAction(ActionType.Mount, 71))
+                if (ActionManager.Instance()->UseAction(ActionType.Mount, _configuration.General.MountId))
                 {
-                    _logger.LogInformation("Using SDS Fenrir as mount");
+                    _logger.LogInformation("Using preferred mount");
                     return true;
                 }
 
@@ -526,10 +540,20 @@ internal sealed unsafe class GameFunctions
         return excelSheet.FirstOrDefault(x => x.Key == key)?.Value?.ToDalamudString().ToString();
     }
 
-    public string? GetContentTalk(uint rowId)
+    public string? GetDialogueTextByRowId(string? excelSheet, uint rowId)
     {
-        var questRow = _dataManager.GetExcelSheet<ContentTalk>()!.GetRow(rowId);
-        return questRow?.Text?.ToString();
+        if (excelSheet == "GimmickYesNo")
+        {
+            var questRow = _dataManager.GetExcelSheet<GimmickYesNo>()!.GetRow(rowId);
+            return questRow?.Unknown0?.ToString();
+        }
+        else if (excelSheet is "ContentTalk" or null)
+        {
+            var questRow = _dataManager.GetExcelSheet<ContentTalk>()!.GetRow(rowId);
+            return questRow?.Text?.ToString();
+        }
+        else
+            throw new ArgumentOutOfRangeException(nameof(excelSheet), $"Unsupported excel sheet {excelSheet}");
     }
 
     public bool IsOccupied()

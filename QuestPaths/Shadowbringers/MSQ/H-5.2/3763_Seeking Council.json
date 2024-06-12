@@ -28,7 +28,8 @@
             "Z": 14.22064
           },
           "TerritoryId": 844,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 819
         },
         {
           "DataId": 1030370,
@@ -38,7 +39,14 @@
             "Z": 13.321045
           },
           "TerritoryId": 819,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_LUCKMH103_03763_Q1_000_500",
+              "Answer": "TEXT_LUCKMH103_03763_A1_000_500"
+            }
+          ]
         }
       ]
     },

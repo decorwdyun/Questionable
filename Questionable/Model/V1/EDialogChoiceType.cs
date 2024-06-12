@@ -5,6 +5,4 @@ internal enum EDialogChoiceType
     None,
     YesNo,
     List,
-    ContentTalkYesNo,
-    ContentTalkList,
 }

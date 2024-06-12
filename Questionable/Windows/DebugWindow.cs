@@ -23,10 +23,9 @@ using Questionable.Model.V1;
 
 namespace Questionable.Windows;
 
-internal sealed class DebugWindow : LWindow, IPersistableWindowConfig, IDisposable
+internal sealed class DebugWindow : LWindow, IPersistableWindowConfig
 {
     private readonly DalamudPluginInterface _pluginInterface;
-    private readonly WindowSystem _windowSystem;
     private readonly MovementController _movementController;
     private readonly QuestController _questController;
     private readonly GameFunctions _gameFunctions;
@@ -37,14 +36,19 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig, IDisposab
     private readonly Configuration _configuration;
     private readonly ILogger<DebugWindow> _logger;
 
-    public DebugWindow(DalamudPluginInterface pluginInterface, WindowSystem windowSystem,
-        MovementController movementController, QuestController questController, GameFunctions gameFunctions,
-        IClientState clientState, IFramework framework, ITargetManager targetManager, GameUiController gameUiController,
-        Configuration configuration, ILogger<DebugWindow> logger)
+    public DebugWindow(DalamudPluginInterface pluginInterface,
+        MovementController movementController,
+        QuestController questController,
+        GameFunctions gameFunctions,
+        IClientState clientState,
+        IFramework framework,
+        ITargetManager targetManager,
+        GameUiController gameUiController,
+        Configuration configuration,
+        ILogger<DebugWindow> logger)
         : base("Questionable", ImGuiWindowFlags.AlwaysAutoResize)
     {
         _pluginInterface = pluginInterface;
-        _windowSystem = windowSystem;
         _movementController = movementController;
         _questController = questController;
         _gameFunctions = gameFunctions;
@@ -61,8 +65,6 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig, IDisposab
             MinimumSize = new Vector2(200, 30),
             MaximumSize = default
         };
-
-        _windowSystem.AddWindow(this);
     }
 
     public WindowConfig WindowConfig => _configuration.DebugWindowConfig;
@@ -127,6 +129,7 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig, IDisposab
             ImGui.Text(_questController.ToStatString());
             //ImGui.EndDisabled();
 
+            ImGui.BeginDisabled(_questController.IsRunning);
             if (ImGuiComponents.IconButton(FontAwesomeIcon.Play))
             {
                 _questController.ExecuteNextStep(true);
@@ -139,6 +142,7 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig, IDisposab
                 _questController.ExecuteNextStep(false);
             }
 
+            ImGui.EndDisabled();
             ImGui.SameLine();
 
             if (ImGuiComponents.IconButton(FontAwesomeIcon.Stop))
@@ -151,7 +155,8 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig, IDisposab
                 .FindSequence(currentQuest.Sequence)
                 ?.FindStep(currentQuest.Step);
             bool colored = currentStep != null && currentStep.InteractionType == EInteractionType.Instruction
-                && _questController.HasCurrentTaskMatching<WaitAtEnd.WaitNextStepOrSequence>();
+                                               && _questController
+                                                   .HasCurrentTaskMatching<WaitAtEnd.WaitNextStepOrSequence>();
 
             if (colored)
                 ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.HealerGreen);
@@ -161,8 +166,16 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig, IDisposab
                 _questController.Stop("Manual");
                 _questController.IncreaseStepCount();
             }
+
             if (colored)
                 ImGui.PopStyleColor();
+
+            bool autoAcceptNextQuest = _configuration.General.AutoAcceptNextQuest;
+            if (ImGui.Checkbox("Automatically accept next quest", ref autoAcceptNextQuest))
+            {
+                _configuration.General.AutoAcceptNextQuest = autoAcceptNextQuest;
+                _pluginInterface.SavePluginConfig(_configuration);
+            }
         }
         else
             ImGui.Text("No active quest");
@@ -261,7 +274,8 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig, IDisposab
         }
         else
         {
-            if (ImGui.Button($"Copy"))
+            ImGui.Button($"Copy");
+            if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
             {
                 ImGui.SetClipboardText($$"""
                                          "Position": {
@@ -272,6 +286,12 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig, IDisposab
                                          "TerritoryId": {{_clientState.TerritoryType}},
                                          "InteractionType": ""
                                          """);
+            }
+            else if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
+            {
+                Vector3 position = _clientState.LocalPlayer!.Position;
+                ImGui.SetClipboardText(string.Create(CultureInfo.InvariantCulture,
+                    $"new({position.X}f, {position.Y}f, {position.Z}f)"));
             }
         }
     }
@@ -316,10 +336,5 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig, IDisposab
                 ImGui.TextUnformatted(task);
             ImGui.EndDisabled();
         }
-    }
-
-    public void Dispose()
-    {
-        _windowSystem.RemoveWindow(this);
     }
 }

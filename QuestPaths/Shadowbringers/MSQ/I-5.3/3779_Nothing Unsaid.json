@@ -85,8 +85,13 @@
       "Sequence": 5,
       "Steps": [
         {
+          "Position": {
+            "X": 0,
+            "Y": 0,
+            "Z": 0
+          },
           "TerritoryId": 820,
-          "InteractionType": "Interact",
+          "InteractionType": "WalkTo",
           "AetheryteShortcut": "Eulmore"
         }
       ]

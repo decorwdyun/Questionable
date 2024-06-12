@@ -64,7 +64,8 @@
           "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
             12661
-          ]
+          ],
+          "Fly": true
         }
       ]
     },

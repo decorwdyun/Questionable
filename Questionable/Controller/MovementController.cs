@@ -76,7 +76,7 @@ internal sealed class MovementController : IDisposable
                     }
                 }
                 else if (!Destination.IsFlying && !_condition[ConditionFlag.Mounted] && navPoints.Count > 0 &&
-                         !_gameFunctions.HasStatusPreventingSprintOrMount() && Destination.CanSprint)
+                         !_gameFunctions.HasStatusPreventingSprintOrMount(true) && Destination.CanSprint)
                 {
                     float actualDistance = 0;
                     foreach (Vector3 end in navPoints)
@@ -210,7 +210,7 @@ internal sealed class MovementController : IDisposable
         _logger.LogInformation("Pathfinding to {Destination}", Destination);
 
         _cancellationTokenSource = new();
-        _cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(10));
+        _cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(30));
         _pathfindTask =
             _navmeshIpc.Pathfind(_clientState.LocalPlayer!.Position, to, fly, _cancellationTokenSource.Token);
     }

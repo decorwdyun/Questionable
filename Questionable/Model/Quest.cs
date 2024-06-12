@@ -7,6 +7,7 @@ internal sealed class Quest
 {
     public required ushort QuestId { get; init; }
     public required string Name { get; set; }
+    public ushort Level { get; set; }
     public required QuestData Data { get; init; }
 
     public QuestSequence? FindSequence(byte currentSequence)

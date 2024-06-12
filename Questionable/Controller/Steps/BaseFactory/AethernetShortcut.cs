@@ -108,7 +108,13 @@ internal static class AethernetShortcut
                 return ETaskResult.StillRunning;
             }
 
-            if (aetheryteData.IsCityAetheryte(To))
+            if (aetheryteData.IsAirshipLanding(To))
+            {
+                if (aetheryteData.CalculateAirshipLandingDistance(clientState.LocalPlayer?.Position ?? Vector3.Zero,
+                        clientState.TerritoryType, To) > 5)
+                    return ETaskResult.StillRunning;
+            }
+            else if (aetheryteData.IsCityAetheryte(To))
             {
                 if (aetheryteData.CalculateDistance(clientState.LocalPlayer?.Position ?? Vector3.Zero,
                         clientState.TerritoryType, To) > 11)

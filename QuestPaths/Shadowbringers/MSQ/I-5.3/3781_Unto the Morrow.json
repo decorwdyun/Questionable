@@ -75,7 +75,15 @@
             "Z": 3.982544
           },
           "TerritoryId": 819,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Crystarium",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_LUCKMI111_03781_Q1_000_153",
+              "Answer": "TEXT_LUCKMI111_03781_A1_000_154"
+            }
+          ]
         }
       ]
     },

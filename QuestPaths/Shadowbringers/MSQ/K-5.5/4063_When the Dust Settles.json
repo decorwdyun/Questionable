@@ -33,6 +33,13 @@
           "AethernetShortcut": [
             "[Ul'dah] Aetheryte Plaza",
             "[Ul'dah] Alchemists' Guild"
+          ],
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_LUCKMK106_04063_Q1_000_100",
+              "Answer": "TEXT_LUCKMK106_04063_A2_000_100"
+            }
           ]
         }
       ]

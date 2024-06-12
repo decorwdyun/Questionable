@@ -33,7 +33,8 @@
           "AethernetShortcut": [
             "[Crystarium] Aetheryte Plaza",
             "[Crystarium] The Dossal Gate"
-          ]
+          ],
+          "TargetTerritoryId": 844
         },
         {
           "DataId": 1032121,

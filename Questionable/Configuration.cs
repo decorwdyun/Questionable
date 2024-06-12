@@ -6,5 +6,19 @@ namespace Questionable;
 internal sealed class Configuration : IPluginConfiguration
 {
     public int Version { get; set; } = 1;
-    public WindowConfig DebugWindowConfig { get; set; } = new();
+    public GeneralConfiguration General { get; } = new();
+    public AdvancedConfiguration Advanced { get; } = new();
+    public WindowConfig DebugWindowConfig { get; } = new();
+    public WindowConfig ConfigWindowConfig { get; } = new();
+
+    internal sealed class GeneralConfiguration
+    {
+        public bool AutoAcceptNextQuest { get; set; }
+        public uint MountId { get; set; } = 71;
+    }
+
+    internal sealed class AdvancedConfiguration
+    {
+        public bool NeverFly { get; set; }
+    }
 }

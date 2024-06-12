@@ -106,6 +106,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<NavigationShortcutController>();
 
         serviceCollection.AddSingleton<DebugWindow>();
+        serviceCollection.AddSingleton<ConfigWindow>();
         serviceCollection.AddSingleton<DalamudInitializer>();
 
         _serviceProvider = serviceCollection.BuildServiceProvider();

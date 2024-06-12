@@ -5,6 +5,7 @@ using System.Linq;
 using System.Numerics;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using Microsoft.Extensions.DependencyInjection;
 using Questionable.Controller.Steps.BaseTasks;
 using Questionable.Model;
@@ -23,7 +24,7 @@ internal static class WaitAtEnd
                 var task = serviceProvider.GetRequiredService<WaitForCompletionFlags>()
                     .With(quest, step);
                 var delay = serviceProvider.GetRequiredService<WaitDelay>();
-                return [task, delay, new NextStep()];
+                return [task, delay, Next(quest, sequence, step)];
             }
 
             switch (step.InteractionType)
@@ -41,7 +42,7 @@ internal static class WaitAtEnd
                 case EInteractionType.WalkTo:
                 case EInteractionType.Jump:
                     // no need to wait if we're just moving around
-                    return [new NextStep()];
+                    return [Next(quest, sequence, step)];
 
                 case EInteractionType.WaitForObjectAtPosition:
                     ArgumentNullException.ThrowIfNull(step.DataId);
@@ -52,7 +53,7 @@ internal static class WaitAtEnd
                         serviceProvider.GetRequiredService<WaitObjectAtPosition>()
                             .With(step.DataId.Value, step.Position.Value),
                         serviceProvider.GetRequiredService<WaitDelay>(),
-                        new NextStep()
+                        Next(quest, sequence, step)
                     ];
 
                 case EInteractionType.Interact when step.TargetTerritoryId != null:
@@ -81,17 +82,40 @@ internal static class WaitAtEnd
                     [
                         waitInteraction,
                         serviceProvider.GetRequiredService<WaitDelay>(),
-                        new NextStep()
+                        Next(quest, sequence, step)
                     ];
 
                 case EInteractionType.Interact:
                 default:
-                    return [serviceProvider.GetRequiredService<WaitDelay>(), new NextStep()];
+                    return [serviceProvider.GetRequiredService<WaitDelay>(), Next(quest, sequence, step)];
             }
         }
 
         public ITask CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
             => throw new InvalidOperationException();
+
+        public ITask Next(Quest quest, QuestSequence sequence, QuestStep step)
+        {
+            bool lastStep = step == sequence.Steps.LastOrDefault();
+            if (sequence.Sequence == 0 && lastStep)
+            {
+                return new WaitConditionTask(() =>
+                {
+                    unsafe
+                    {
+                        var questManager = QuestManager.Instance();
+                        return questManager != null && questManager->IsQuestAccepted(quest.QuestId);
+                    }
+                }, "Wait(questAccepted)");
+            }
+            else if (sequence.Sequence == 255 && lastStep)
+            {
+                return new WaitConditionTask(() => QuestManager.IsQuestComplete(quest.QuestId),
+                    "Wait(questComplete)");
+            }
+            else
+                return new NextStep();
+        }
     }
 
     internal sealed class WaitDelay() : AbstractDelayedTask(TimeSpan.FromSeconds(1))

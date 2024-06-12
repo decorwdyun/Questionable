@@ -38,6 +38,7 @@
     },
     {
       "Sequence": 2,
+      "Comment": "This isn't solving for the 'best' results, but for the closest waypoints",
       "Steps": [
         {
           "DataId": 2011078,
@@ -56,7 +57,15 @@
           ],
           "Fly": true,
           "$.0": "[1]",
-          "$.1": "QuestVariables if done first: 0 0 0 3 0 0 during fight; 16 1 0 2 16 8 after"
+          "$.1": "QuestVariables if done first: 0 0 0 3 0 0 during fight; 16 1 0 2 16 8 after",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            8
+          ]
         },
         {
           "DataId": 2011076,
@@ -69,10 +78,19 @@
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterItemUse",
           "ItemId": 2003001,
-          "KillEnemyDataIds": [],
-          "Comment": "TODO Missing enemy ids",
+          "KillEnemyDataIds": [
+            12166
+          ],
           "Fly": true,
-          "$.1": "QuestVariables if done after [1]: 34 1 0 1 48 40"
+          "$.1": "QuestVariables if done after [1]: 34 1 0 1 48 40",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 2011079,
@@ -86,10 +104,11 @@
           "EnemySpawnType": "AfterItemUse",
           "ItemId": 2003001,
           "KillEnemyDataIds": [
+            12168
           ],
           "Comment": "TODO Missing enemy ids",
           "Fly": true,
-          "$.2": "QuestVariables if done after [1, 2]: 0 64 0 0 0 0"
+          "$.2": "QuestVariables if done after [1, 2]: irrelevant because it automatically progresses to the next step"
         }
       ]
     },

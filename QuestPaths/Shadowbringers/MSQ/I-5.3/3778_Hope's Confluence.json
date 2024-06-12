@@ -16,12 +16,19 @@
             "Z": 1.6021729
           },
           "TerritoryId": 819,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_LUCKMI108_03778_Q1_000_001",
+              "Answer": "TEXT_LUCKMI108_03778_A1_000_002"
+            }
+          ]
         }
       ]
     },
     {
-      "Sequence": 1,
+      "Sequence": 2,
       "Steps": [
         {
           "TerritoryId": 931,

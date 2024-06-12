@@ -29,7 +29,14 @@
           },
           "TerritoryId": 129,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "Limsa Lominsa"
+          "AetheryteShortcut": "Limsa Lominsa",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_LUCKMJ108_04014_SYSTEM_100_010",
+              "Yes": true
+            }
+          ]
         },
         {
           "DataId": 1002694,

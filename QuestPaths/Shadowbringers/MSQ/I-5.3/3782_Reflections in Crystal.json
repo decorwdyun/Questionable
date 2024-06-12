@@ -29,7 +29,14 @@
             "Z": 7.156433
           },
           "TerritoryId": 819,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_LUCKMI112_03782_Q1_000_007",
+              "Yes": true
+            }
+          ]
         },
         {
           "DataId": 1033888,
@@ -39,7 +46,14 @@
             "Z": -5.081299
           },
           "TerritoryId": 844,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_LUCKMI112_03782_Q2_000_044",
+              "Yes": true
+            }
+          ]
         }
       ]
     },

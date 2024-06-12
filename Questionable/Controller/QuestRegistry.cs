@@ -57,6 +57,7 @@ internal sealed class QuestRegistry
                 continue;
 
             quest.Name = questData.Name.ToString();
+            quest.Level = questData.ClassJobLevel0;
         }
     }
 

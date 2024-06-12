@@ -47,7 +47,31 @@
           "TerritoryId": 817,
           "InteractionType": "SinglePlayerDuty",
           "Fly": true,
-          "Comment": "Duty - A Sleep Disturbed (Opo-Opo, Wolf, Serpent)"
+          "Comment": "A Sleep Disturbed (Opo-Opo, Wolf, Serpent)",
+          "$": "The dialogue choices and data ids here are recycled",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "DataId": 2011009,
+              "ExcelSheet": "GimmickYesNo",
+              "Prompt": 138,
+              "Yes": true
+            },
+            {
+              "Type": "YesNo",
+              "DataId": 2011006,
+              "ExcelSheet": "GimmickYesNo",
+              "Prompt": 139,
+              "Yes": true
+            },
+            {
+              "Type": "YesNo",
+              "DataId": 2011007,
+              "ExcelSheet": "GimmickYesNo",
+              "Prompt": 142,
+              "Yes": true
+            }
+          ]
         }
       ]
     },

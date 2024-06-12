@@ -217,6 +217,18 @@ internal sealed class AetheryteData
             }
             .AsReadOnly();
 
+    /// <summary>
+    /// Airship landings are special as they're one-way only (except for Radz-at-Han, which is a normal aetheryte).
+    /// </summary>
+    public ReadOnlyDictionary<EAetheryteLocation, Vector3> AirshipLandingLocations { get; } =
+        new Dictionary<EAetheryteLocation, Vector3>
+        {
+            { EAetheryteLocation.LimsaAirship, new(-19.44352f, 91.99999f, -9.892939f) },
+            { EAetheryteLocation.GridaniaAirship, new(24.86354f, -19.000002f, 96f) },
+            { EAetheryteLocation.UldahAirship, new(-16.954851f, 82.999985f, -9.421141f) },
+            { EAetheryteLocation.KuganeAirship, new(-55.72525f, 79.10602f, 46.23109f) },
+        }.AsReadOnly();
+
     public ReadOnlyDictionary<EAetheryteLocation, string> AethernetNames { get; }
     public ReadOnlyDictionary<EAetheryteLocation, ushort> TerritoryIds { get; }
     public IReadOnlyList<ushort> TownTerritoryIds { get; set; }
@@ -232,9 +244,22 @@ internal sealed class AetheryteData
         return (fromPosition - toPosition).Length();
     }
 
+    public float CalculateAirshipLandingDistance(Vector3 fromPosition, ushort fromTerritoryType, EAetheryteLocation to)
+    {
+        if (!TerritoryIds.TryGetValue(to, out ushort toTerritoryType) || fromTerritoryType != toTerritoryType)
+            return float.MaxValue;
+
+        if (!AirshipLandingLocations.TryGetValue(to, out Vector3 toPosition))
+            return float.MaxValue;
+
+        return (fromPosition - toPosition).Length();
+    }
+
     public bool IsCityAetheryte(EAetheryteLocation aetheryte)
     {
         var territoryId = TerritoryIds[aetheryte];
         return TownTerritoryIds.Contains(territoryId);
     }
+
+    public bool IsAirshipLanding(EAetheryteLocation aetheryte) => AirshipLandingLocations.ContainsKey(aetheryte);
 }

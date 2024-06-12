@@ -28,7 +28,14 @@
             "Z": 305.19568
           },
           "TerritoryId": 815,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_LUCKMG104_03676_Q2_000_100",
+              "Answer": "TEXT_LUCKMG104_03676_A1_000_100"
+            }
+          ]
         }
       ]
     },
@@ -61,7 +68,16 @@
           "StopDistance": 1,
           "TerritoryId": 815,
           "InteractionType": "Interact",
-          "$.1": "QuestVariables if done first: 16 16 16 0 0 32"
+          "$.1": "QuestVariables if done first: 16 16 16 0 0 32",
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 2010810,
@@ -72,7 +88,15 @@
           },
           "TerritoryId": 815,
           "InteractionType": "Interact",
-          "$.1": "QuestVariables if done after [1]: 33 16 32 0 0 96"
+          "$.1": "QuestVariables if done after [1]: 33 16 32 0 0 96",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 2010809,
@@ -83,13 +107,31 @@
           },
           "TerritoryId": 815,
           "InteractionType": "Interact",
-          "Comment": "Combat not necessary to progress quest"
+          "Comment": "Combat not necessary to progress quest",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         }
       ]
     },
     {
       "Sequence": 4,
       "Steps": [
+        {
+          "Position": {
+            "X": 47.593674,
+            "Y": 42.681213,
+            "Z": -511.2799
+          },
+          "TerritoryId": 815,
+          "InteractionType": "WalkTo",
+          "Comment": "Should be far enough to reset combat"
+        },
         {
           "DataId": 1031732,
           "Position": {
@@ -99,7 +141,14 @@
           },
           "TerritoryId": 815,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "Amh Araeng - Inn at Journey's Head"
+          "AetheryteShortcut": "Amh Araeng - Inn at Journey's Head",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_LUCKMG104_03676_Q3_000_200",
+              "Answer": "TEXT_LUCKMG104_03676_A1_000_200"
+            }
+          ]
         }
       ]
     },

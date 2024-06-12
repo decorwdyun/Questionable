@@ -36,7 +36,8 @@
           "AethernetShortcut": [
             "[Crystarium] Aetheryte Plaza",
             "[Crystarium] The Dossal Gate"
-          ]
+          ],
+          "TargetTerritoryId": 844
         },
         {
           "DataId": 1032121,
@@ -74,7 +75,14 @@
           },
           "TerritoryId": 351,
           "InteractionType": "SinglePlayerDuty",
-          "Comment": "Estinien vs. Arch Ultima"
+          "Comment": "Estinien vs. Arch Ultima",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_LUCKMG110_03682_Q1_100_125",
+              "Yes": true
+            }
+          ]
         }
       ]
     },

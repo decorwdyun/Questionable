@@ -1,4 +1,5 @@
-﻿using Dalamud.Game.ClientState.Conditions;
+﻿using System;
+using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.Logging;
 
@@ -8,6 +9,7 @@ internal sealed class UnmountTask(ICondition condition, ILogger<UnmountTask> log
     : ITask
 {
     private bool _unmountTriggered;
+    private DateTime _unmountedAt = DateTime.MinValue;
 
     public bool Start()
     {
@@ -16,6 +18,8 @@ internal sealed class UnmountTask(ICondition condition, ILogger<UnmountTask> log
 
         logger.LogInformation("Step explicitly wants no mount, trying to unmount...");
         _unmountTriggered = gameFunctions.Unmount();
+        if (_unmountTriggered)
+            _unmountedAt = DateTime.Now;
         return true;
     }
 
@@ -24,8 +28,14 @@ internal sealed class UnmountTask(ICondition condition, ILogger<UnmountTask> log
         if (!_unmountTriggered)
         {
             _unmountTriggered = gameFunctions.Unmount();
+            if (_unmountTriggered)
+                _unmountedAt = DateTime.Now;
+
             return ETaskResult.StillRunning;
         }
+
+        if (DateTime.Now < _unmountedAt.AddSeconds(1))
+            return ETaskResult.StillRunning;
 
         return condition[ConditionFlag.Mounted]
             ? ETaskResult.StillRunning

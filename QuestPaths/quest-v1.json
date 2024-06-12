@@ -672,49 +672,40 @@
                               "type": "string",
                               "enum": [
                                 "YesNo",
-                                "List",
-                                "ContentTalkYesNo",
-                                "ContentTalkList"
+                                "List"
                               ]
                             },
                             "ExcelSheet": {
                               "type": "string"
-                            },
-                            "Prompt": {
-                              "type": [
-                                "string",
-                                "null"
-                              ]
                             }
                           },
                           "required": [
-                            "Type",
-                            "Prompt"
+                            "Type"
                           ],
                           "allOf": [
                             {
                               "if": {
                                 "properties": {
                                   "Type": {
-                                    "anyOf": [
-                                      {
-                                        "const": "YesNo"
-                                      },
-                                      {
-                                        "const": "ContentTalkYesNo"
-                                      }
-                                    ]
+                                    "const": "YesNo"
                                   }
                                 }
                               },
                               "then": {
                                 "properties": {
+                                  "Prompt": {
+                                    "type": [
+                                      "string",
+                                      "integer"
+                                    ]
+                                  },
                                   "Yes": {
                                     "type": "boolean",
                                     "default": true
                                   }
                                 },
                                 "required": [
+                                  "Prompt",
                                   "Yes"
                                 ]
                               }
@@ -723,24 +714,28 @@
                               "if": {
                                 "properties": {
                                   "Type": {
-                                    "anyOf": [
-                                      {
-                                        "const": "List"
-                                      },
-                                      {
-                                        "const": "ContentTalkList"
-                                      }
-                                    ]
+                                    "const": "List"
                                   }
                                 }
                               },
                               "then": {
                                 "properties": {
+                                  "Prompt": {
+                                    "type": [
+                                      "string",
+                                      "integer",
+                                      "null"
+                                    ]
+                                  },
                                   "Answer": {
-                                    "type": "string"
+                                    "type": [
+                                      "string",
+                                      "integer"
+                                    ]
                                   }
                                 },
                                 "required": [
+                                  "Prompt",
                                   "Answer"
                                 ]
                               }

@@ -79,7 +79,15 @@
           "TerritoryId": 402,
           "InteractionType": "Interact",
           "Fly": true,
-          "$.1": "QuestVariables if done first: 1 16 0 0 0 64"
+          "$.1": "QuestVariables if done first: 1 16 0 0 0 64",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 1036359,
@@ -92,7 +100,15 @@
           "InteractionType": "Interact",
           "Mount": true,
           "Fly": true,
-          "$.1": "QuestVariables if done after [1]: 2 16 0 0 0 96"
+          "$.1": "QuestVariables if done after [1]: 2 16 0 0 0 96",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 1036357,
@@ -103,7 +119,15 @@
           },
           "TerritoryId": 402,
           "InteractionType": "Interact",
-          "DisableNavmesh": true
+          "DisableNavmesh": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         }
       ]
     },
@@ -119,7 +143,14 @@
           },
           "TerritoryId": 402,
           "InteractionType": "Interact",
-          "Fly": true
+          "Fly": true,
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_LUCKMK103_04060_Q1_000_100",
+              "Answer": "TEXT_LUCKMK103_04060_A2_000_100"
+            }
+          ]
         }
       ]
     },
