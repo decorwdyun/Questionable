@@ -1,4 +1,5 @@
-﻿using Dalamud.Game.ClientState.Conditions;
+﻿using System;
+using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.Logging;
 using Questionable.Data;
@@ -13,6 +14,7 @@ internal sealed class MountTask(
 {
     private ushort _territoryId;
     private bool _mountTriggered;
+    private DateTime _retryAt = DateTime.MinValue;
 
     public ITask With(ushort territoryId)
     {
@@ -40,7 +42,7 @@ internal sealed class MountTask(
         logger.LogInformation("Step wants a mount, trying to mount in territory {Id}...", _territoryId);
         if (!condition[ConditionFlag.InCombat])
         {
-            _mountTriggered = gameFunctions.Mount();
+            _retryAt = DateTime.Now.AddSeconds(0.5);
             return true;
         }
 
@@ -49,6 +51,13 @@ internal sealed class MountTask(
 
     public ETaskResult Update()
     {
+        if (_mountTriggered && !condition[ConditionFlag.Mounted] && DateTime.Now > _retryAt)
+        {
+            logger.LogInformation("Not mounted, retrying...");
+            _mountTriggered = false;
+            _retryAt = DateTime.MaxValue;
+        }
+
         if (!_mountTriggered)
         {
             if (gameFunctions.HasStatusPreventingSprintOrMount())
@@ -58,6 +67,7 @@ internal sealed class MountTask(
             }
 
             _mountTriggered = gameFunctions.Mount();
+            _retryAt = DateTime.Now.AddSeconds(5);
             return ETaskResult.StillRunning;
         }
 

@@ -61,6 +61,14 @@
           "InteractionType": "UseItem",
           "ItemId": 2003234,
           "GroundTarget": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ],
           "$": "QuestValues after: 1 16 0 0 0 128"
         },
         {
@@ -73,7 +81,15 @@
           "TerritoryId": 961,
           "InteractionType": "UseItem",
           "ItemId": 2003234,
-          "GroundTarget": true
+          "GroundTarget": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         }
       ]
     },
