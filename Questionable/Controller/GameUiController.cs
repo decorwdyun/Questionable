@@ -159,7 +159,6 @@ internal sealed class GameUiController : IDisposable
             int questSelection = answers.FindIndex(x => GameStringEquals(questName, x));
             if (questSelection >= 0)
                 addonSelectIconString->AtkUnitBase.FireCallbackInt(questSelection);
-            return;
         }
     }
 
@@ -267,14 +266,13 @@ internal sealed class GameUiController : IDisposable
         {
             var sequence = quest.FindSequence(currentQuest.Sequence);
             if (sequence != null && HandleDefaultYesNo(addonSelectYesno, quest,
-                    sequence.Steps.SelectMany(x => x.DialogueChoices).ToList(), actualPrompt, checkAllSteps))
+                    sequence.Steps.SelectMany(x => x.DialogueChoices).ToList(), actualPrompt))
                 return;
         }
         else
         {
             var step = quest.FindSequence(currentQuest.Sequence)?.FindStep(currentQuest.Step);
-            if (step != null && HandleDefaultYesNo(addonSelectYesno, quest, step.DialogueChoices, actualPrompt,
-                    checkAllSteps))
+            if (step != null && HandleDefaultYesNo(addonSelectYesno, quest, step.DialogueChoices, actualPrompt))
                 return;
         }
 
@@ -282,7 +280,7 @@ internal sealed class GameUiController : IDisposable
     }
 
     private unsafe bool HandleDefaultYesNo(AddonSelectYesno* addonSelectYesno, Quest quest,
-        IList<DialogueChoice> dialogueChoices, string actualPrompt, bool checkAllSteps)
+        IList<DialogueChoice> dialogueChoices, string actualPrompt)
     {
         _logger.LogTrace("DefaultYesNo: Choice count: {Count}", dialogueChoices.Count);
         foreach (var dialogueChoice in dialogueChoices)
@@ -329,7 +327,6 @@ internal sealed class GameUiController : IDisposable
         if (sequence == null)
             return;
 
-        bool increaseStepCount = true;
         QuestStep? step = sequence.FindStep(currentQuest.Step);
         if (step != null)
             _logger.LogTrace("Current step: {CurrentTerritory}, {TargetTerritory}", step.TerritoryId,
@@ -339,7 +336,6 @@ internal sealed class GameUiController : IDisposable
         {
             _logger.LogTrace("TravelYesNo: Checking previous step...");
             step = sequence.FindStep(currentQuest.Step == 255 ? (sequence.Steps.Count - 1) : (currentQuest.Step - 1));
-            increaseStepCount = false;
 
             if (step != null)
                 _logger.LogTrace("Previous step: {CurrentTerritory}, {TargetTerritory}", step.TerritoryId,
@@ -365,8 +361,6 @@ internal sealed class GameUiController : IDisposable
 
             _logger.LogInformation("Using warp {Id}, {Prompt}", entry.RowId, excelPrompt);
             addonSelectYesno->AtkUnitBase.FireCallbackInt(0);
-            //if (increaseStepCount)
-            //_questController.IncreaseStepCount();
             return;
         }
     }
