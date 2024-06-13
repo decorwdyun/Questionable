@@ -31,7 +31,7 @@ internal static class AethernetShortcut
         IClientState clientState,
         AetheryteData aetheryteData,
         LifestreamIpc lifestreamIpc,
-        MovementController movementController) : ITask
+        MovementController movementController) : ISkippableTask
     {
         private bool _moving;
         private bool _teleported;
@@ -117,7 +117,7 @@ internal static class AethernetShortcut
             else if (aetheryteData.IsCityAetheryte(To))
             {
                 if (aetheryteData.CalculateDistance(clientState.LocalPlayer?.Position ?? Vector3.Zero,
-                        clientState.TerritoryType, To) > 11)
+                        clientState.TerritoryType, To) > 20)
                     return ETaskResult.StillRunning;
             }
             else

@@ -1,0 +1,114 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "TerritoryBlacklist": [
+    1038,
+    274
+  ],
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1001353,
+          "Position": {
+            "X": 21.072632,
+            "Y": 7.45,
+            "Z": -78.78235
+          },
+          "TerritoryId": 130,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1004621,
+          "Position": {
+            "X": 23.11737,
+            "Y": 6.9999914,
+            "Z": -86.533936
+          },
+          "TerritoryId": 130,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 17,
+          "Position": {
+            "X": 68.0094,
+            "Y": 48.203125,
+            "Z": -227.039
+          },
+          "TerritoryId": 140,
+          "InteractionType": "AttuneAetheryte",
+          "AethernetShortcut": [
+            "[Ul'dah] Adventurers' Guild",
+            "[Ul'dah] Gate of the Sultana (Western Thanalan)"
+          ]
+        },
+        {
+          "DataId": 1002285,
+          "Position": {
+            "X": 326.46667,
+            "Y": 63,
+            "Z": -231.64728
+          },
+          "TerritoryId": 140,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "TerritoryId": 140,
+          "InteractionType": "Duty",
+          "ContentFinderConditionId": 3
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 1004621,
+          "Position": {
+            "X": 23.11737,
+            "Y": 6.9999914,
+            "Z": -86.533936
+          },
+          "TerritoryId": 130,
+          "InteractionType": "SinglePlayerDuty",
+          "AetheryteShortcut": "Ul'dah",
+          "AethernetShortcut": [
+            "[Ul'dah] Aetheryte Plaza",
+            "[Ul'dah] Adventurers' Guild"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1001353,
+          "Position": {
+            "X": 21.072632,
+            "Y": 7.45,
+            "Z": -78.78235
+          },
+          "TerritoryId": 130,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

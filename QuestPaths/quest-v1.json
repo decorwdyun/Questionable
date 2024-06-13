@@ -507,6 +507,25 @@
                     "properties": {
                       "InteractionType": {
                         "const": "UseItem"
+                      },
+                      "ItemId": {
+                        "not": {
+                          "const": 30362
+                        }
+                      }
+                    }
+                  },
+                  "then": {
+                    "required": [
+                      "Position"
+                    ]
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "InteractionType": {
+                        "const": "UseItem"
                       }
                     }
                   },
@@ -521,7 +540,6 @@
                       }
                     },
                     "required": [
-                      "Position",
                       "ItemId"
                     ]
                   }

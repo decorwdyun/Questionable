@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Dalamud.Game.Addon.Lifecycle;
 using Dalamud.Game.Addon.Lifecycle.AddonArgTypes;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Component.GUI;
+using LLib;
 using LLib.GameUI;
 using Lumina.Excel.GeneratedSheets;
 using Microsoft.Extensions.Logging;
@@ -26,9 +28,10 @@ internal sealed class GameUiController : IDisposable
     private readonly IGameGui _gameGui;
     private readonly ITargetManager _targetManager;
     private readonly ILogger<GameUiController> _logger;
+    private readonly Regex _returnRegex;
 
     public GameUiController(IAddonLifecycle addonLifecycle, IDataManager dataManager, GameFunctions gameFunctions,
-        QuestController questController, IGameGui gameGui, ITargetManager targetManager,
+        QuestController questController, IGameGui gameGui, ITargetManager targetManager, IPluginLog pluginLog,
         ILogger<GameUiController> logger)
     {
         _addonLifecycle = addonLifecycle;
@@ -39,12 +42,16 @@ internal sealed class GameUiController : IDisposable
         _targetManager = targetManager;
         _logger = logger;
 
+        _returnRegex = _dataManager.GetExcelSheet<Addon>()!.GetRow(196)!.GetRegex(addon => addon.Text, pluginLog)!;
+
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "SelectString", SelectStringPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "CutSceneSelectString", CutsceneSelectStringPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "SelectIconString", SelectIconStringPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "SelectYesno", SelectYesnoPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "Credit", CreditPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "AkatsukiNote", UnendingCodexPostSetup);
+        _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "ContentsTutorial", ContentsTutorialPostSetup);
+        _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "MultipleHelpWindow", MultipleHelpWindowPostSetup);
     }
 
     internal unsafe void HandleCurrentDialogueChoices()
@@ -96,11 +103,7 @@ internal sealed class GameUiController : IDisposable
 
         int? answer = HandleListChoice(actualPrompt, answers, checkAllSteps);
         if (answer != null)
-        {
-            if (!checkAllSteps)
-                _questController.IncreaseDialogueChoicesSelected();
             addonSelectString->AtkUnitBase.FireCallbackInt(answer.Value);
-        }
     }
 
     private unsafe void CutsceneSelectStringPostSetup(AddonEvent type, AddonArgs args)
@@ -122,11 +125,7 @@ internal sealed class GameUiController : IDisposable
 
         int? answer = HandleListChoice(actualPrompt, answers, checkAllSteps);
         if (answer != null)
-        {
-            if (!checkAllSteps)
-                _questController.IncreaseDialogueChoicesSelected();
             addonCutSceneSelectString->AtkUnitBase.FireCallbackInt(answer.Value);
-        }
     }
 
     private unsafe void SelectIconStringPostSetup(AddonEvent type, AddonArgs args)
@@ -148,9 +147,19 @@ internal sealed class GameUiController : IDisposable
         int? answer = HandleListChoice(actualPrompt, answers, checkAllSteps);
         if (answer != null)
         {
-            if (!checkAllSteps)
-                _questController.IncreaseDialogueChoicesSelected();
             addonSelectIconString->AtkUnitBase.FireCallbackInt(answer.Value);
+            return;
+        }
+
+        var currentQuest = _questController.CurrentQuest;
+        if (currentQuest != null && actualPrompt == null)
+        {
+            // it is possible for this to be a quest selection
+            string questName = currentQuest.Quest.Name;
+            int questSelection = answers.FindIndex(x => GameStringEquals(questName, x));
+            if (questSelection >= 0)
+                addonSelectIconString->AtkUnitBase.FireCallbackInt(questSelection);
+            return;
         }
     }
 
@@ -298,8 +307,6 @@ internal sealed class GameUiController : IDisposable
             }
 
             addonSelectYesno->AtkUnitBase.FireCallbackInt(dialogueChoice.Yes ? 0 : 1);
-            if (!checkAllSteps)
-                _questController.IncreaseDialogueChoicesSelected();
             return true;
         }
 
@@ -309,6 +316,13 @@ internal sealed class GameUiController : IDisposable
     private unsafe void HandleTravelYesNo(AddonSelectYesno* addonSelectYesno,
         QuestController.QuestProgress currentQuest, string actualPrompt)
     {
+        if (_gameFunctions.ReturnRequestedAt >= DateTime.Now.AddSeconds(-2) && _returnRegex.IsMatch(actualPrompt))
+        {
+            _logger.LogInformation("Automatically confirming return...");
+            addonSelectYesno->AtkUnitBase.FireCallbackInt(0);
+            return;
+        }
+
         // this can be triggered either manually (in which case we should increase the step counter), or automatically
         // (in which case it is ~1 frame later, and the step counter has already been increased)
         var sequence = currentQuest.Quest.FindSequence(currentQuest.Sequence);
@@ -339,8 +353,7 @@ internal sealed class GameUiController : IDisposable
         }
 
         var warps = _dataManager.GetExcelSheet<Warp>()!
-            .Where(x => x.RowId > 0 && x.TerritoryType.Row == step.TargetTerritoryId)
-            .Where(x => x.ConfirmEvent.Row == 0); // unsure if this is needed
+            .Where(x => x.RowId > 0 && x.TerritoryType.Row == step.TargetTerritoryId);
         foreach (var entry in warps)
         {
             string? excelPrompt = entry.Question?.ToString();
@@ -375,6 +388,29 @@ internal sealed class GameUiController : IDisposable
         }
     }
 
+    private unsafe void ContentsTutorialPostSetup(AddonEvent type, AddonArgs args)
+    {
+        if (_questController.CurrentQuest?.Quest.QuestId == 245)
+        {
+            // TODO Test this
+            _logger.LogInformation("Closing ContentsTutorial");
+            AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
+            //addon->FireCallbackInt(-2);
+            addon->FireCallbackInt(13);
+        }
+    }
+
+    private unsafe void MultipleHelpWindowPostSetup(AddonEvent type, AddonArgs args)
+    {
+        if (_questController.CurrentQuest?.Quest.QuestId == 245)
+        {
+            _logger.LogInformation("Closing MultipleHelpWindow");
+            AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
+            addon->FireCallbackInt(-2);
+            addon->FireCallbackInt(-1);
+        }
+    }
+
     /// <summary>
     /// Ensures characters like '-' are handled equally in both strings.
     /// </summary>
@@ -404,6 +440,8 @@ internal sealed class GameUiController : IDisposable
 
     public void Dispose()
     {
+        _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "MultipleHelpWindow", MultipleHelpWindowPostSetup);
+        _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "ContentsTutorial", ContentsTutorialPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "AkatsukiNote", UnendingCodexPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "Credit", CreditPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "SelectYesno", SelectYesnoPostSetup);

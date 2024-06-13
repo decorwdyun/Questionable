@@ -37,7 +37,7 @@ internal static class AetheryteShortcut
         GameFunctions gameFunctions,
         IClientState clientState,
         IChatGui chatGui,
-        AetheryteData aetheryteData) : ITask
+        AetheryteData aetheryteData) : ISkippableTask
     {
         private DateTime _continueAt;
 

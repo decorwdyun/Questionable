@@ -1,0 +1,83 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1003239,
+          "Position": {
+            "X": -283.68048,
+            "Y": 10.593393,
+            "Z": -249.34778
+          },
+          "TerritoryId": 134,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 2001255,
+          "Position": {
+            "X": -320.57678,
+            "Y": 25.833496,
+            "Z": -527.5502
+          },
+          "TerritoryId": 134,
+          "InteractionType": "Interact",
+          "Comment": "Technically triggers combat, but can be ignored"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "Position": {
+            "X": -380.10605,
+            "Y": 32.598312,
+            "Z": -608.40186
+          },
+          "TerritoryId": 134,
+          "InteractionType": "WalkTo",
+          "TargetTerritoryId": 138
+        },
+        {
+          "DataId": 13,
+          "Position": {
+            "X": 651.5449,
+            "Y": 11.734131,
+            "Z": 513.35913
+          },
+          "StopDistance": 10,
+          "TerritoryId": 138,
+          "InteractionType": "AttuneAetheryte"
+        },
+        {
+          "Position": {
+            "X": 652.74164,
+            "Y": 8.129893,
+            "Z": 522.6646
+          },
+          "TerritoryId": 138,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "DataId": 1003244,
+          "Position": {
+            "X": 650.72095,
+            "Y": 7.856781,
+            "Z": 527.21436
+          },
+          "StopDistance": 6,
+          "TerritoryId": 138,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

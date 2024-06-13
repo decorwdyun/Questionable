@@ -1,0 +1,40 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1000972,
+          "Position": {
+            "X": 20.279175,
+            "Y": 40.19993,
+            "Z": -6.1189575
+          },
+          "TerritoryId": 128,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1003239,
+          "Position": {
+            "X": -283.68048,
+            "Y": 10.593393,
+            "Z": -249.34778
+          },
+          "TerritoryId": 134,
+          "InteractionType": "Interact",
+          "AethernetShortcut": [
+            "[Limsa Lominsa] The Aftcastle",
+            "[Limsa Lominsa] Zephyr Gate (Middle La Noscea)"
+          ]
+        }
+      ]
+    }
+  ]
+}

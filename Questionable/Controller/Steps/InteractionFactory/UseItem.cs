@@ -50,18 +50,23 @@ internal static class UseItem
         private bool _usedItem;
         private DateTime _continueAt;
 
+        public uint ItemId { get; set; }
+
         protected abstract bool UseItem();
 
         public bool Start()
         {
             _usedItem = UseItem();
-            _continueAt = DateTime.Now.AddSeconds(2);
+            if (ItemId == 30362) // vesper bay aether ticket
+                _continueAt = DateTime.Now.AddSeconds(11);
+            else
+                _continueAt = DateTime.Now.AddSeconds(2);
             return true;
         }
 
         public ETaskResult Update()
         {
-            if (DateTime.Now > _continueAt)
+            if (DateTime.Now <= _continueAt)
                 return ETaskResult.StillRunning;
 
             if (!_usedItem)
@@ -79,7 +84,6 @@ internal static class UseItem
     internal sealed class UseOnGround(GameFunctions gameFunctions) : UseItemBase
     {
         public uint DataId { get; set; }
-        public uint ItemId { get; set; }
 
         public ITask With(uint dataId, uint itemId)
         {
@@ -96,7 +100,6 @@ internal static class UseItem
     internal sealed class UseOnObject(GameFunctions gameFunctions) : UseItemBase
     {
         public uint DataId { get; set; }
-        public uint ItemId { get; set; }
 
         public ITask With(uint dataId, uint itemId)
         {
@@ -112,8 +115,6 @@ internal static class UseItem
 
     internal sealed class Use(GameFunctions gameFunctions) : UseItemBase
     {
-        public uint ItemId { get; set; }
-
         public ITask With(uint itemId)
         {
             ItemId = itemId;

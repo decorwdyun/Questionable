@@ -15,6 +15,7 @@ internal sealed class NavmeshIpc
     private readonly ICallGateSubscriber<List<Vector3>, bool, object> _pathMoveTo;
     private readonly ICallGateSubscriber<object> _pathStop;
     private readonly ICallGateSubscriber<bool> _pathIsRunning;
+    private readonly ICallGateSubscriber<List<Vector3>> _pathListWaypoints;
     private readonly ICallGateSubscriber<float> _pathGetTolerance;
     private readonly ICallGateSubscriber<float, object> _pathSetTolerance;
     private readonly ICallGateSubscriber<Vector3, bool, float, Vector3?> _queryPointOnFloor;
@@ -28,6 +29,7 @@ internal sealed class NavmeshIpc
         _pathMoveTo = pluginInterface.GetIpcSubscriber<List<Vector3>, bool, object>("vnavmesh.Path.MoveTo");
         _pathStop = pluginInterface.GetIpcSubscriber<object>("vnavmesh.Path.Stop");
         _pathIsRunning = pluginInterface.GetIpcSubscriber<bool>("vnavmesh.Path.IsRunning");
+        _pathListWaypoints = pluginInterface.GetIpcSubscriber<List<Vector3>>("vnavmesh.Path.ListWaypoints");
         _pathGetTolerance = pluginInterface.GetIpcSubscriber<float>("vnavmesh.Path.GetTolerance");
         _pathSetTolerance = pluginInterface.GetIpcSubscriber<float, object>("vnavmesh.Path.SetTolerance");
         _queryPointOnFloor =
@@ -69,4 +71,12 @@ internal sealed class NavmeshIpc
 
     public Vector3? GetPointOnFloor(Vector3 position)
         => _queryPointOnFloor.InvokeFunc(position, true, 1);
+
+    public List<Vector3> GetWaypoints()
+    {
+        if (IsPathRunning)
+            return _pathListWaypoints.InvokeFunc();
+        else
+            return [];
+    }
 }

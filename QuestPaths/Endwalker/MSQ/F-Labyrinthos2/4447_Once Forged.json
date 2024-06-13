@@ -73,6 +73,27 @@
       "Sequence": 255,
       "Steps": [
         {
+          "Position": {
+            "X": -601.1813,
+            "Y": -24.48022,
+            "Z": 633.1958
+          },
+          "TerritoryId": 956,
+          "InteractionType": "WalkTo",
+          "Comment": "Avoids aggro + possible navmesh issue",
+          "Mount": true
+        },
+        {
+          "Position": {
+            "X": -596.4733,
+            "Y": -22.860794,
+            "Z": 666.64417
+          },
+          "TerritoryId": 956,
+          "InteractionType": "WalkTo",
+          "Comment": "Avoids aggro + possible navmesh issue"
+        },
+        {
           "DataId": 2011985,
           "Position": {
             "X": -547.7532,

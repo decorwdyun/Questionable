@@ -99,6 +99,8 @@ internal sealed unsafe class GameFunctions
             .AsReadOnly();
     }
 
+    public DateTime ReturnRequestedAt { get; set; } = DateTime.MinValue;
+
     public (ushort CurrentQuest, byte Sequence) GetCurrentQuest()
     {
         ushort currentQuest;
@@ -133,7 +135,12 @@ internal sealed unsafe class GameFunctions
 
         currentQuest = scenarioTree->Data->CurrentScenarioQuest;
         if (currentQuest == 0)
+        {
+            if (_clientState.TerritoryType == 181) // Starting Limsa
+                return (107, 0);
+
             return default;
+        }
 
         return (currentQuest, QuestManager.GetQuestSequence(currentQuest));
     }
@@ -186,6 +193,15 @@ internal sealed unsafe class GameFunctions
 
         if (IsAetheryteUnlocked(aetheryteId, out var subIndex))
         {
+            if (aetheryteId == PlayerState.Instance()->HomeAetheryteId &&
+                ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, 8) == 0)
+            {
+                ReturnRequestedAt = DateTime.Now;
+                if (ActionManager.Instance()->UseAction(ActionType.GeneralAction, 8))
+                    return true;
+            }
+
+            // fallback if return isn't available or (more likely) on a different aetheryte
             return Telepo.Instance()->Teleport(aetheryteId, subIndex);
         }
 
@@ -197,6 +213,9 @@ internal sealed unsafe class GameFunctions
 
     public bool IsFlyingUnlocked(ushort territoryId)
     {
+        if (_configuration.Advanced.NeverFly)
+            return false;
+
         var playerState = PlayerState.Instance();
         return playerState != null &&
                _territoryToAetherCurrentCompFlgSet.TryGetValue(territoryId, out byte aetherCurrentCompFlgSet) &&
@@ -360,19 +379,26 @@ internal sealed unsafe class GameFunctions
         if (gameObject != null)
         {
             _logger.LogInformation("Setting target with {DataId} to {ObjectId}", dataId, gameObject.ObjectId);
+            _targetManager.Target = null;
             _targetManager.Target = gameObject;
 
-            ulong result = TargetSystem.Instance()->InteractWithObject(
+            long result = (long)TargetSystem.Instance()->InteractWithObject(
                 (FFXIVClientStructs.FFXIV.Client.Game.Object.GameObject*)gameObject.Address, false);
-            return result != 0;
+
+            _logger.LogInformation("Interact result: {Result}", result);
+            return result > 0;
         }
 
+        _logger.LogDebug("Game object is null");
         return false;
     }
 
     public bool UseItem(uint itemId)
     {
-        return AgentInventoryContext.Instance()->UseItem(itemId) == 0;
+        long result = AgentInventoryContext.Instance()->UseItem(itemId);
+        _logger.LogInformation("UseItem result: {Result}", result);
+
+        return result == 0;
     }
 
     public bool UseItem(uint dataId, uint itemId)
@@ -381,7 +407,10 @@ internal sealed unsafe class GameFunctions
         if (gameObject != null)
         {
             _targetManager.Target = gameObject;
-            return AgentInventoryContext.Instance()->UseItem(itemId) == 0;
+            long result = AgentInventoryContext.Instance()->UseItem(itemId);
+
+            _logger.LogInformation("UseItem result on {DataId}: {Result}", dataId, result);
+            return result == 0;
         }
 
         return false;
@@ -420,11 +449,8 @@ internal sealed unsafe class GameFunctions
         return gameObject != null && (gameObject.Position - position).Length() < 0.05f;
     }
 
-    public bool HasStatusPreventingSprintOrMount(bool skipConfigCheck = false)
+    public bool HasStatusPreventingMount()
     {
-        if (!skipConfigCheck && _configuration.Advanced.NeverFly)
-            return true;
-
         if (_condition[ConditionFlag.Swimming] && !IsFlyingUnlockedInCurrentZone())
             return true;
 
@@ -433,6 +459,13 @@ internal sealed unsafe class GameFunctions
         if (playerState != null && !playerState->IsMountUnlocked(1))
             return true;
 
+        return HasCharacterStatusPreventingMountOrSprint();
+    }
+
+    public bool HasStatusPreventingSprint() => HasCharacterStatusPreventingMountOrSprint();
+
+    private bool HasCharacterStatusPreventingMountOrSprint()
+    {
         var gameObject = GameObjectManager.GetGameObjectByIndex(0);
         if (gameObject != null && gameObject->ObjectKind == 1)
         {
@@ -546,6 +579,11 @@ internal sealed unsafe class GameFunctions
         {
             var questRow = _dataManager.GetExcelSheet<GimmickYesNo>()!.GetRow(rowId);
             return questRow?.Unknown0?.ToString();
+        }
+        else if (excelSheet == "Warp")
+        {
+            var questRow = _dataManager.GetExcelSheet<Warp>()!.GetRow(rowId);
+            return questRow?.Name?.ToString();
         }
         else if (excelSheet is "ContentTalk" or null)
         {

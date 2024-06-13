@@ -1,0 +1,79 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [],
+      "Comment": "Quest start is intentionally empty, so you pick a Grand Company"
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1002388,
+          "Position": {
+            "X": 95.68933,
+            "Y": 40.250286,
+            "Z": 74.54028
+          },
+          "StopDistance": 5,
+          "TerritoryId": 128,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Limsa Lominsa",
+          "AethernetShortcut": [
+            "[Limsa Lominsa] Aetheryte Plaza",
+            "[Limsa Lominsa] The Aftcastle"
+          ],
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_MANSEA302_00681_Q2_000_1",
+              "Answer": "TEXT_MANSEA302_00681_A2_000_2"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1004888,
+          "Position": {
+            "X": 389.2423,
+            "Y": 78.360275,
+            "Z": -349.05017
+          },
+          "TerritoryId": 135,
+          "InteractionType": "SinglePlayerDuty",
+          "AethernetShortcut": [
+            "[Limsa Lominsa] The Aftcastle",
+            "[Limsa Lominsa] Tempest Gate (Lower La Noscea)"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1002388,
+          "Position": {
+            "X": 95.68933,
+            "Y": 40.250286,
+            "Z": 74.54028
+          },
+          "StopDistance": 5,
+          "TerritoryId": 128,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Limsa Lominsa",
+          "AethernetShortcut": [
+            "[Limsa Lominsa] Aetheryte Plaza",
+            "[Limsa Lominsa] The Aftcastle"
+          ]
+        }
+      ]
+    }
+  ]
+}

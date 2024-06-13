@@ -32,6 +32,8 @@ internal sealed class QuestController
     private readonly Configuration _configuration;
     private readonly IReadOnlyList<ITaskFactory> _taskFactories;
 
+    private readonly object _lock = new();
+
     private readonly Queue<ITask> _taskQueue = new();
     private ITask? _currentTask;
     private bool _automatic;
@@ -63,10 +65,13 @@ internal sealed class QuestController
 
     public void Reload()
     {
-        CurrentQuest = null;
-        DebugState = null;
+        lock (_lock)
+        {
+            CurrentQuest = null;
+            DebugState = null;
 
-        _questRegistry.Reload();
+            _questRegistry.Reload();
+        }
     }
 
     public void Update()
@@ -88,11 +93,14 @@ internal sealed class QuestController
             && CurrentQuest is { Sequence: 0, Step: 0 } or { Sequence: 0, Step: 255 }
             && DateTime.Now >= CurrentQuest.StepProgress.StartedAt.AddSeconds(15))
         {
-            _logger.LogWarning("Quest accept apparently didn't work out, resetting progress");
-            CurrentQuest = CurrentQuest with
+            lock (_lock)
             {
-                Step = 0
-            };
+                _logger.LogWarning("Quest accept apparently didn't work out, resetting progress");
+                CurrentQuest = CurrentQuest with
+                {
+                    Step = 0
+                };
+            }
 
             ExecuteNextStep(true);
             return;
@@ -103,103 +111,106 @@ internal sealed class QuestController
 
     private void UpdateCurrentQuest()
     {
-        DebugState = null;
-
-        (ushort currentQuestId, byte currentSequence) = _gameFunctions.GetCurrentQuest();
-        if (currentQuestId == 0)
+        lock (_lock)
         {
-            if (CurrentQuest != null)
+            DebugState = null;
+
+            (ushort currentQuestId, byte currentSequence) = _gameFunctions.GetCurrentQuest();
+            if (currentQuestId == 0)
             {
-                _logger.LogInformation("No current quest, resetting data");
-                CurrentQuest = null;
-                Stop("Resetting current quest");
+                if (CurrentQuest != null)
+                {
+                    _logger.LogInformation("No current quest, resetting data");
+                    CurrentQuest = null;
+                    Stop("Resetting current quest");
+                }
             }
-        }
-        else if (CurrentQuest == null || CurrentQuest.Quest.QuestId != currentQuestId)
-        {
-            if (_questRegistry.TryGetQuest(currentQuestId, out var quest))
+            else if (CurrentQuest == null || CurrentQuest.Quest.QuestId != currentQuestId)
             {
-                _logger.LogInformation("New quest: {QuestName}", quest.Name);
-                CurrentQuest = new QuestProgress(quest, currentSequence, 0);
+                if (_questRegistry.TryGetQuest(currentQuestId, out var quest))
+                {
+                    _logger.LogInformation("New quest: {QuestName}", quest.Name);
+                    CurrentQuest = new QuestProgress(quest, currentSequence, 0);
 
-                bool continueAutomatically = _configuration.General.AutoAcceptNextQuest;
+                    bool continueAutomatically = _configuration.General.AutoAcceptNextQuest;
 
-                if (_clientState.LocalPlayer?.Level < quest.Level)
-                    continueAutomatically = false;
+                    if (_clientState.LocalPlayer?.Level < quest.Level)
+                        continueAutomatically = false;
 
-                Stop("Different Quest", continueAutomatically);
+                    Stop("Different Quest", continueAutomatically);
+                }
+                else if (CurrentQuest != null)
+                {
+                    _logger.LogInformation("No active quest anymore? Not sure what happened...");
+                    CurrentQuest = null;
+                    Stop("No active Quest");
+                }
+
+                return;
             }
-            else if (CurrentQuest != null)
+
+            if (CurrentQuest == null)
             {
-                _logger.LogInformation("No active quest anymore? Not sure what happened...");
-                CurrentQuest = null;
-                Stop("No active Quest");
+                DebugState = "No quest active";
+                Comment = null;
+                Stop("No quest active");
+                return;
             }
 
-            return;
-        }
+            if (_gameFunctions.IsOccupied())
+            {
+                DebugState = "Occupied";
+                return;
+            }
 
-        if (CurrentQuest == null)
-        {
-            DebugState = "No quest active";
-            Comment = null;
-            Stop("No quest active");
-            return;
-        }
+            if (!_movementController.IsNavmeshReady)
+            {
+                DebugState = "Navmesh not ready";
+                return;
+            }
+            else if (_movementController.IsPathfinding || _movementController.IsPathRunning)
+            {
+                DebugState = "Path is running";
+                return;
+            }
 
-        if (_gameFunctions.IsOccupied())
-        {
-            DebugState = "Occupied";
-            return;
-        }
+            if (CurrentQuest.Sequence != currentSequence)
+            {
+                CurrentQuest = CurrentQuest with { Sequence = currentSequence, Step = 0 };
+                Stop("New sequence", continueIfAutomatic: true);
+            }
 
-        if (!_movementController.IsNavmeshReady)
-        {
-            DebugState = "Navmesh not ready";
-            return;
-        }
-        else if (_movementController.IsPathfinding || _movementController.IsPathRunning)
-        {
-            DebugState = "Path is running";
-            return;
-        }
+            var q = CurrentQuest.Quest;
+            var sequence = q.FindSequence(CurrentQuest.Sequence);
+            if (sequence == null)
+            {
+                DebugState = "Sequence not found";
+                Comment = null;
+                Stop("Unknown sequence");
+                return;
+            }
 
-        if (CurrentQuest.Sequence != currentSequence)
-        {
-            CurrentQuest = CurrentQuest with { Sequence = currentSequence, Step = 0 };
-            Stop("New sequence", continueIfAutomatic: true);
-        }
+            if (CurrentQuest.Step == 255)
+            {
+                DebugState = "Step completed";
+                Comment = null;
+                if (_currentTask != null || _taskQueue.Count > 0)
+                    Stop("Step complete", continueIfAutomatic: true);
+                return;
+            }
 
-        var q = CurrentQuest.Quest;
-        var sequence = q.FindSequence(CurrentQuest.Sequence);
-        if (sequence == null)
-        {
-            DebugState = "Sequence not found";
-            Comment = null;
-            Stop("Unknown sequence");
-            return;
-        }
+            if (CurrentQuest.Step >= sequence.Steps.Count)
+            {
+                DebugState = "Step not found";
+                Comment = null;
+                Stop("Unknown step");
+                return;
+            }
 
-        if (CurrentQuest.Step == 255)
-        {
-            DebugState = "Step completed";
-            Comment = null;
-            if (_currentTask != null || _taskQueue.Count > 0)
-                Stop("Step complete", continueIfAutomatic: true);
-            return;
+            var step = sequence.Steps[CurrentQuest.Step];
+            DebugState = null;
+            Comment = step.Comment ?? sequence.Comment ?? q.Data.Comment;
         }
-
-        if (CurrentQuest.Step >= sequence.Steps.Count)
-        {
-            DebugState = "Step not found";
-            Comment = null;
-            Stop("Unknown step");
-            return;
-        }
-
-        var step = sequence.Steps[CurrentQuest.Step];
-        DebugState = null;
-        Comment = step.Comment ?? sequence.Comment ?? q.Data.Comment;
     }
 
     public (QuestSequence? Sequence, QuestStep? Step) GetNextStep()
@@ -218,59 +229,53 @@ internal sealed class QuestController
         return (seq, seq.Steps[CurrentQuest.Step]);
     }
 
-    public void IncreaseStepCount(bool shouldContinue = false)
+    public void IncreaseStepCount(ushort? questId, int? sequence, bool shouldContinue = false)
     {
-        (QuestSequence? seq, QuestStep? step) = GetNextStep();
-        if (CurrentQuest == null || seq == null || step == null)
+        lock (_lock)
         {
-            _logger.LogWarning("Unable to retrieve next quest step, not increasing step count");
-            return;
-        }
-
-        _logger.LogInformation("Increasing step count from {CurrentValue}", CurrentQuest.Step);
-        if (CurrentQuest.Step + 1 < seq.Steps.Count)
-        {
-            CurrentQuest = CurrentQuest with
+            (QuestSequence? seq, QuestStep? step) = GetNextStep();
+            if (CurrentQuest == null || seq == null || step == null)
             {
-                Step = CurrentQuest.Step + 1,
-                StepProgress = new(DateTime.Now),
-            };
-        }
-        else
-        {
-            CurrentQuest = CurrentQuest with
-            {
-                Step = 255,
-                StepProgress = new(DateTime.Now),
-            };
-        }
+                _logger.LogWarning("Unable to retrieve next quest step, not increasing step count");
+                return;
+            }
 
+            if (questId != null && CurrentQuest.Quest.QuestId != questId)
+            {
+                _logger.LogWarning(
+                    "Ignoring 'increase step count' for different quest (expected {ExpectedQuestId}, but we are at {CurrentQuestId}",
+                    questId, CurrentQuest.Quest.QuestId);
+                return;
+            }
+
+            if (sequence != null && seq.Sequence != sequence.Value)
+            {
+                _logger.LogWarning(
+                    "Ignoring 'increase step count' for different sequence (expected {ExpectedSequence}, but we are at {CurrentSequence}",
+                    sequence, seq.Sequence);
+            }
+
+            _logger.LogInformation("Increasing step count from {CurrentValue}", CurrentQuest.Step);
+            if (CurrentQuest.Step + 1 < seq.Steps.Count)
+            {
+                CurrentQuest = CurrentQuest with
+                {
+                    Step = CurrentQuest.Step + 1,
+                    StepProgress = new(DateTime.Now),
+                };
+            }
+            else
+            {
+                CurrentQuest = CurrentQuest with
+                {
+                    Step = 255,
+                    StepProgress = new(DateTime.Now),
+                };
+            }
+        }
 
         if (shouldContinue && _automatic)
             ExecuteNextStep(true);
-    }
-
-    public void IncreaseDialogueChoicesSelected()
-    {
-        (QuestSequence? seq, QuestStep? step) = GetNextStep();
-        if (CurrentQuest == null || seq == null || step == null)
-        {
-            _logger.LogWarning("Unable to retrieve next quest step, not increasing dialogue choice count");
-            return;
-        }
-
-        CurrentQuest = CurrentQuest with
-        {
-            StepProgress = CurrentQuest.StepProgress with
-            {
-                DialogueChoicesSelected = CurrentQuest.StepProgress.DialogueChoicesSelected + 1
-            }
-        };
-
-        /* TODO Is this required?
-        if (CurrentQuest.StepProgress.DialogueChoicesSelected >= step.DialogueChoices.Count)
-            IncreaseStepCount();
-            */
     }
 
     private void ClearTasksInternal()
@@ -377,8 +382,10 @@ internal sealed class QuestController
 
             case ETaskResult.NextStep:
                 _logger.LogInformation("{Task} → {Result}", _currentTask, result);
+
+                var lastTask = (ILastTask)_currentTask;
                 _currentTask = null;
-                IncreaseStepCount(true);
+                IncreaseStepCount(lastTask.QuestId, lastTask.Sequence, true);
                 return;
 
             case ETaskResult.End:
@@ -461,4 +468,34 @@ internal sealed class QuestController
     public sealed record StepProgress(
         DateTime StartedAt,
         int DialogueChoicesSelected = 0);
+
+    public void Skip(ushort questQuestId, byte currentQuestSequence)
+    {
+        lock (_lock)
+        {
+            if (_currentTask is ISkippableTask)
+                _currentTask = null;
+            else if (_currentTask != null)
+            {
+                _currentTask = null;
+                while (_taskQueue.Count > 0)
+                {
+                    var task = _taskQueue.Dequeue();
+                    if (task is ISkippableTask)
+                        return;
+                }
+
+                if (_taskQueue.Count == 0)
+                {
+                    Stop("Skip");
+                    IncreaseStepCount(questQuestId, currentQuestSequence);
+                }
+            }
+            else
+            {
+                Stop("SkipNx");
+                IncreaseStepCount(questQuestId, currentQuestSequence);
+            }
+        }
+    }
 }

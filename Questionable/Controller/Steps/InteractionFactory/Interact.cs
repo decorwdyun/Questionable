@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Questionable.Controller.Steps.BaseFactory;
 using Questionable.Model;
 using Questionable.Model.V1;
 
@@ -14,16 +16,23 @@ internal static class Interact
 {
     internal sealed class Factory(IServiceProvider serviceProvider) : ITaskFactory
     {
-        public ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
+        public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
             if (step.InteractionType != EInteractionType.Interact)
-                return null;
+                yield break;
 
             ArgumentNullException.ThrowIfNull(step.DataId);
 
-            return serviceProvider.GetRequiredService<DoInteract>()
+            // if we're fast enough, it is possible to get the smalltalk prompt
+            if (sequence.Sequence == 0 && sequence.Steps.IndexOf(step) == 0)
+                yield return serviceProvider.GetRequiredService<WaitAtEnd.WaitDelay>();
+
+            yield return serviceProvider.GetRequiredService<DoInteract>()
                 .With(step.DataId.Value, step.TargetTerritoryId != null);
         }
+
+        public ITask CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
+            => throw new InvalidOperationException();
     }
 
     internal sealed class DoInteract(GameFunctions gameFunctions, ICondition condition, ILogger<DoInteract> logger)

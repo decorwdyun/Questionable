@@ -10,6 +10,12 @@
         <PathMap Condition="$(SolutionDir) != ''">$(SolutionDir)=X:\</PathMap>
     </PropertyGroup>
 
+    <Target Name="ZipARealmReborn" BeforeTargets="BeforeResGen" Condition="'$(Configuration)' == 'Release'">
+        <ZipDirectory SourceDirectory="$(ProjectDir)\ARealmReborn"
+                      DestinationFile="$(TargetDir)\ARealmReborn.zip"
+                      Overwrite="true"/>
+    </Target>
+
     <Target Name="ZipShadowbringers" BeforeTargets="BeforeResGen" Condition="'$(Configuration)' == 'Release'">
         <ZipDirectory SourceDirectory="$(ProjectDir)\Shadowbringers"
                       DestinationFile="$(TargetDir)\Shadowbringers.zip"
@@ -23,6 +29,7 @@
     </Target>
 
     <ItemGroup Condition="'$(Configuration)' == 'Release'">
+        <EmbeddedResource Include="$(TargetDir)\ARealmReborn.zip"/>
         <EmbeddedResource Include="$(TargetDir)\Shadowbringers.zip"/>
         <EmbeddedResource Include="$(TargetDir)\Endwalker.zip"/>
     </ItemGroup>

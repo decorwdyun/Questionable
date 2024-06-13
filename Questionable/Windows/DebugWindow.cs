@@ -6,7 +6,6 @@ using Dalamud.Game.ClientState.Objects;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
-using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
@@ -18,6 +17,7 @@ using LLib.ImGui;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller;
 using Questionable.Controller.Steps.BaseFactory;
+using Questionable.External;
 using Questionable.Model;
 using Questionable.Model.V1;
 
@@ -34,6 +34,7 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig
     private readonly ITargetManager _targetManager;
     private readonly GameUiController _gameUiController;
     private readonly Configuration _configuration;
+    private readonly NavmeshIpc _navmeshIpc;
     private readonly ILogger<DebugWindow> _logger;
 
     public DebugWindow(DalamudPluginInterface pluginInterface,
@@ -45,6 +46,7 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig
         ITargetManager targetManager,
         GameUiController gameUiController,
         Configuration configuration,
+        NavmeshIpc navmeshIpc,
         ILogger<DebugWindow> logger)
         : base("Questionable", ImGuiWindowFlags.AlwaysAutoResize)
     {
@@ -57,6 +59,7 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig
         _targetManager = targetManager;
         _gameUiController = gameUiController;
         _configuration = configuration;
+        _navmeshIpc = navmeshIpc;
         _logger = logger;
 
         IsOpen = true;
@@ -65,6 +68,7 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig
             MinimumSize = new Vector2(200, 30),
             MaximumSize = default
         };
+        RespectCloseHotkey = false;
     }
 
     public WindowConfig WindowConfig => _configuration.DebugWindowConfig;
@@ -167,8 +171,7 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig
             if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.ArrowCircleRight, "Skip"))
             {
                 _movementController.Stop();
-                _questController.Stop("Manual");
-                _questController.IncreaseStepCount();
+                _questController.Skip(currentQuest.Quest.QuestId, currentQuest.Sequence);
             }
 
             if (colored)
@@ -304,7 +307,8 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig
     {
         var map = AgentMap.Instance();
         ImGui.BeginDisabled(map == null || map->IsFlagMarkerSet == 0 ||
-                            map->FlagMapMarker.TerritoryId != _clientState.TerritoryType);
+                            map->FlagMapMarker.TerritoryId != _clientState.TerritoryType ||
+                            !_navmeshIpc.IsReady);
         if (ImGui.Button("Move to Flag"))
             _gameFunctions.ExecuteCommand(
                 $"/vnav {(_gameFunctions.IsFlyingUnlockedInCurrentZone() ? "flyflag" : "moveflag")}");

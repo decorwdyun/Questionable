@@ -1,0 +1,63 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1001353,
+          "Position": {
+            "X": 21.072632,
+            "Y": 7.45,
+            "Z": -78.78235
+          },
+          "TerritoryId": 130,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1004603,
+          "Position": {
+            "X": -489.8299,
+            "Y": 21.48999,
+            "Z": -381.97913
+          },
+          "TerritoryId": 140,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Western Thanalan - Horizon"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 2001711,
+          "Position": {
+            "X": -480.9181,
+            "Y": 18.00103,
+            "Z": -386.862
+          },
+          "TerritoryId": 140,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 212
+        },
+        {
+          "DataId": 1005012,
+          "Position": {
+            "X": 22.507019,
+            "Y": 0.9999986,
+            "Z": -2.02948
+          },
+          "TerritoryId": 212,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

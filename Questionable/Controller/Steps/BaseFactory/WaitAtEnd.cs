@@ -65,12 +65,13 @@ internal static class WaitAtEnd
                     ];
 
                 case EInteractionType.Interact when step.TargetTerritoryId != null:
+                case EInteractionType.UseItem when step.TargetTerritoryId != null:
                     ITask waitInteraction;
                     if (step.TerritoryId != step.TargetTerritoryId)
                     {
                         // interaction moves to a different territory
-                        waitInteraction = new WaitConditionTask(() => clientState.TerritoryType == step.TerritoryId,
-                            $"Wait(tp to territory: {step.TerritoryId})");
+                        waitInteraction = new WaitConditionTask(() => clientState.TerritoryType == step.TargetTerritoryId,
+                            $"Wait(tp to territory: {step.TargetTerritoryId})");
                     }
                     else
                     {
@@ -82,7 +83,10 @@ internal static class WaitAtEnd
                                     return false;
 
                                 // interaction moved to elsewhere in the zone
-                                return (lastPosition - currentPosition.Value).Length() > 20;
+                                // the 'closest' locations are probably
+                                //   - waking sands' solar
+                                //   - rising stones' solar + dawn's respite
+                                return (lastPosition - currentPosition.Value).Length() > 2;
                             }, $"Wait(tp away from {lastPosition.ToString("G", CultureInfo.InvariantCulture)})");
                     }
 
@@ -122,7 +126,7 @@ internal static class WaitAtEnd
                     "Wait(questComplete)");
             }
             else
-                return new NextStep();
+                return new NextStep(quest.QuestId, sequence.Sequence);
         }
     }
 
@@ -193,8 +197,11 @@ internal static class WaitAtEnd
             $"WaitObj({DataId} at {Destination.ToString("G", CultureInfo.InvariantCulture)})";
     }
 
-    internal sealed class NextStep : ILastTask
+    internal sealed class NextStep(ushort questId, int sequence) : ILastTask
     {
+        public ushort QuestId { get; } = questId;
+        public int Sequence { get; } = sequence;
+
         public bool Start() => true;
 
         public ETaskResult Update() => ETaskResult.NextStep;
@@ -204,6 +211,9 @@ internal static class WaitAtEnd
 
     internal sealed class EndAutomation : ILastTask
     {
+        public ushort QuestId => throw new InvalidOperationException();
+        public int Sequence => throw new InvalidOperationException();
+
         public bool Start() => true;
 
         public ETaskResult Update() => ETaskResult.End;

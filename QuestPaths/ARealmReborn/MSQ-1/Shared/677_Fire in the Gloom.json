@@ -1,0 +1,80 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "TerritoryBlacklist": [
+    1037
+  ],
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1000100,
+          "Position": {
+            "X": 23.819275,
+            "Y": -8,
+            "Z": 115.92273
+          },
+          "TerritoryId": 132,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 3,
+          "Position": {
+            "X": 13.076904,
+            "Y": 0.56451416,
+            "Z": 35.90442
+          },
+          "StopDistance": 10,
+          "TerritoryId": 148,
+          "InteractionType": "AttuneAetheryte",
+          "AethernetShortcut": [
+            "[Gridania] Aetheryte Plaza",
+            "[Gridania] Blue Badger Gate (Central Shroud)"
+          ]
+        },
+        {
+          "DataId": 1004612,
+          "Position": {
+            "X": -114.94629,
+            "Y": -39.702168,
+            "Z": 335.46948
+          },
+          "TerritoryId": 148,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "TerritoryId": 148,
+          "InteractionType": "Duty",
+          "ContentFinderConditionId": 2
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1000100,
+          "Position": {
+            "X": 23.819275,
+            "Y": -8,
+            "Z": 115.92273
+          },
+          "TerritoryId": 132,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Gridania"
+        }
+      ]
+    }
+  ]
+}

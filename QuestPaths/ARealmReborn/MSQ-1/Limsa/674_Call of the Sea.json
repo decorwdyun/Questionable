@@ -1,0 +1,171 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "$": "This is the follow-up quest for both Lominsan Envoy & Gridanian Envoy (Ul'dahn Envoy has a quest with the same name, but different id)",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1001821,
+          "Position": {
+            "X": -24.124573,
+            "Y": 38.000004,
+            "Z": 85.31323
+          },
+          "TerritoryId": 131,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 37,
+          "Position": {
+            "X": -98.22869,
+            "Y": 42.37336,
+            "Z": 88.46719
+          },
+          "TerritoryId": 131,
+          "InteractionType": "AttuneAethernetShard",
+          "Comment": "Alchemists' Guild"
+        },
+        {
+          "Position": {
+            "X": 5.7796226,
+            "Y": 30,
+            "Z": -21.571625
+          },
+          "TerritoryId": 131,
+          "InteractionType": "Jump",
+          "JumpDestination": {
+            "Position": {
+              "X": 3.6504946,
+              "Y": 14.688499,
+              "Z": -13.443354
+            },
+            "StopDistance": 5
+          },
+          "AethernetShortcut": [
+            "[Ul'dah] Alchemists' Guild",
+            "[Ul'dah] The Chamber of Rule"
+          ]
+        },
+        {
+          "DataId": 35,
+          "Position": {
+            "X": -53.8269,
+            "Y": 10.72502,
+            "Z": 12.24082
+          },
+          "TerritoryId": 131,
+          "InteractionType": "AttuneAethernetShard",
+          "Comment": "Gladiators' Guild"
+        },
+        {
+          "DataId": 50,
+          "Position": {
+            "X": -19.31449,
+            "Y": 14.63075,
+            "Z": 72.0533
+          },
+          "TerritoryId": 131,
+          "InteractionType": "AttuneAethernetShard",
+          "Comment": "Goldsmiths' Guild"
+        },
+        {
+          "DataId": 36,
+          "Position": {
+            "X": 33.52188,
+            "Y": 13.23228,
+            "Z": 113.2191
+          },
+          "TerritoryId": 131,
+          "InteractionType": "AttuneAethernetShard",
+          "Comment": "Miners' Guild"
+        },
+        {
+          "DataId": 47,
+          "Position": {
+            "X": 89.67633,
+            "Y": 12.93493,
+            "Z": 58.2767
+          },
+          "TerritoryId": 131,
+          "InteractionType": "AttuneAethernetShard",
+          "Comment": "Weavers' Guild"
+        },
+        {
+          "DataId": 125,
+          "Position": {
+            "X": 131.9447,
+            "Y": 4.714966,
+            "Z": -29.800903
+          },
+          "TerritoryId": 131,
+          "InteractionType": "AttuneAethernetShard",
+          "Comment": "Sapphire Avenue Exchange"
+        },
+        {
+          "Position": {
+            "X": 88.335236,
+            "Y": 4,
+            "Z": -110.905876
+          },
+          "TerritoryId": 131,
+          "InteractionType": "WalkTo",
+          "TargetTerritoryId": 130
+        },
+        {
+          "DataId": 33,
+          "Position": {
+            "X": 64.22522,
+            "Y": 4.5318604,
+            "Z": -115.31244
+          },
+          "TerritoryId": 130,
+          "InteractionType": "AttuneAethernetShard",
+          "Comment": "Adventurers' Guild"
+        },
+        {
+          "DataId": 9,
+          "Position": {
+            "X": -144.51825,
+            "Y": -1.3580933,
+            "Z": -169.6651
+          },
+          "StopDistance": 10,
+          "TerritoryId": 130,
+          "InteractionType": "AttuneAetheryte"
+        },
+        {
+          "DataId": 34,
+          "Position": {
+            "X": -154.83331,
+            "Y": 14.633362,
+            "Z": 73.07532
+          },
+          "TerritoryId": 130,
+          "InteractionType": "AttuneAethernetShard"
+        },
+        {
+          "DataId": 1000972,
+          "Position": {
+            "X": 20.279175,
+            "Y": 40.19993,
+            "Z": -6.1189575
+          },
+          "TerritoryId": 128,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Limsa Lominsa",
+          "AethernetShortcut": [
+            "[Limsa Lominsa] Aetheryte Plaza",
+            "[Limsa Lominsa] The Aftcastle"
+          ]
+        }
+      ]
+    }
+  ]
+}

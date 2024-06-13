@@ -75,27 +75,6 @@ internal sealed class MovementController : IDisposable
                         }
                     }
                 }
-                else if (!Destination.IsFlying && !_condition[ConditionFlag.Mounted] && navPoints.Count > 0 &&
-                         !_gameFunctions.HasStatusPreventingSprintOrMount(true) && Destination.CanSprint)
-                {
-                    float actualDistance = 0;
-                    foreach (Vector3 end in navPoints)
-                    {
-                        actualDistance += (start - end).Length();
-                        start = end;
-                    }
-
-                    unsafe
-                    {
-                        // 70 is ~10 seconds of sprint
-                        if (actualDistance > 100f &&
-                            ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, 4) == 0)
-                        {
-                            _logger.LogInformation("Triggering Sprint");
-                            ActionManager.Instance()->UseAction(ActionType.GeneralAction, 4);
-                        }
-                    }
-                }
 
                 _navmeshIpc.MoveTo(navPoints, Destination.IsFlying);
                 MovementStartedAt = DateTime.Now;
@@ -176,6 +155,32 @@ internal sealed class MovementController : IDisposable
                 }
                 else
                     Stop();
+            }
+            else if (!Destination.IsFlying && !_condition[ConditionFlag.Mounted] &&
+                     !_gameFunctions.HasStatusPreventingSprint() && Destination.CanSprint)
+            {
+                List<Vector3> navPoints = _navmeshIpc.GetWaypoints();
+                Vector3? start = _clientState.LocalPlayer?.Position;
+                if (start != null)
+                {
+                    float actualDistance = 0;
+                    foreach (Vector3 end in navPoints)
+                    {
+                        actualDistance += (start.Value - end).Length();
+                        start = end;
+                    }
+
+                    unsafe
+                    {
+                        // 70 is ~10 seconds of sprint
+                        if (actualDistance > 100f &&
+                            ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, 4) == 0)
+                        {
+                            _logger.LogInformation("Triggering Sprint");
+                            ActionManager.Instance()->UseAction(ActionType.GeneralAction, 4);
+                        }
+                    }
+                }
             }
         }
     }

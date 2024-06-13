@@ -1,0 +1,94 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1003783,
+          "Position": {
+            "X": 39.29187,
+            "Y": 1.2148079,
+            "Z": 0.8086548
+          },
+          "StopDistance": 5,
+          "TerritoryId": 212,
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_MANFST207_00510_Q1_000_1",
+              "Answer": "TEXT_MANFST207_00510_A1_000_1"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1005119,
+          "Position": {
+            "X": 33.37146,
+            "Y": 1.1999971,
+            "Z": 6.454529
+          },
+          "TerritoryId": 212,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 53,
+          "Position": {
+            "X": -16.159302,
+            "Y": 0.32037354,
+            "Z": -166.58276
+          },
+          "TerritoryId": 141,
+          "InteractionType": "AttuneAetheryte",
+          "AetheryteShortcut": "Ul'dah",
+          "AethernetShortcut": [
+            "[Ul'dah] Aetheryte Plaza",
+            "[Ul'dah] Gate of Nald (Central Thanalan)"
+          ]
+        },
+        {
+          "Position": {
+            "X": 454.0109,
+            "Y": -17.999832,
+            "Z": -183.1808
+          },
+          "TerritoryId": 141,
+          "InteractionType": "WalkTo",
+          "TargetTerritoryId": 145
+        },
+        {
+          "DataId": 18,
+          "Position": {
+            "X": -386.3432,
+            "Y": -57.1756,
+            "Z": 142.59558
+          },
+          "TerritoryId": 145,
+          "InteractionType": "AttuneAetheryte"
+        },
+        {
+          "DataId": 1003929,
+          "Position": {
+            "X": -378.65265,
+            "Y": -55.75492,
+            "Z": 106.79785
+          },
+          "TerritoryId": 145,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

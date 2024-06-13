@@ -1,0 +1,37 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1002626,
+          "Position": {
+            "X": 207.2633,
+            "Y": 112.860374,
+            "Z": -222.43079
+          },
+          "TerritoryId": 134,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1002626,
+          "Position": {
+            "X": 207.2633,
+            "Y": 112.860374,
+            "Z": -222.43079
+          },
+          "TerritoryId": 134,
+          "InteractionType": "Interact",
+          "Comment": "All starting gear (except the hat) is ilvl 5 already"
+        }
+      ]
+    }
+  ]
+}

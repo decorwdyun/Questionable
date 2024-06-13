@@ -1,0 +1,57 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1001000,
+          "Position": {
+            "X": -32.028687,
+            "Y": 41.499985,
+            "Z": 208.39233
+          },
+          "TerritoryId": 128,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "Position": {
+            "X": 24.438343,
+            "Y": 44.499928,
+            "Z": 183.94363
+          },
+          "TerritoryId": 128,
+          "InteractionType": "WalkTo",
+          "TargetTerritoryId": 135
+        },
+        {
+          "DataId": 10,
+          "Position": {
+            "X": 156.11499,
+            "Y": 15.518433,
+            "Z": 673.21277
+          },
+          "StopDistance": 10,
+          "TerritoryId": 135,
+          "InteractionType": "AttuneAetheryte"
+        },
+        {
+          "DataId": 1002238,
+          "Position": {
+            "X": 247.36401,
+            "Y": 14.02301,
+            "Z": 611.9325
+          },
+          "TerritoryId": 135,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

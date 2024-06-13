@@ -1,0 +1,54 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "TerritoryBlacklist": [
+    252
+  ],
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1002626,
+          "Position": {
+            "X": 207.2633,
+            "Y": 112.860374,
+            "Z": -222.43079
+          },
+          "TerritoryId": 134,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 2001582,
+          "Position": {
+            "X": -58.640503,
+            "Y": 27.145752,
+            "Z": -141.7716
+          },
+          "TerritoryId": 134,
+          "InteractionType": "SinglePlayerDuty"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1002626,
+          "Position": {
+            "X": 207.2633,
+            "Y": 112.860374,
+            "Z": -222.43079
+          },
+          "TerritoryId": 134,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

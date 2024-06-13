@@ -62,7 +62,7 @@
           "InteractionType": "Interact",
           "AethernetShortcut": [
             "[Limsa Lominsa] Aetheryte Plaza",
-            "[Limsa Lominsa] Marauder's Guild"
+            "[Limsa Lominsa] Marauders' Guild"
           ],
           "$.1": "QuestVariables if done first: 1 0 0 0 0 128"
         },
@@ -77,7 +77,7 @@
           "TerritoryId": 128,
           "InteractionType": "Interact",
           "AethernetShortcut": [
-            "[Limsa Lominsa] Marauder's Guild",
+            "[Limsa Lominsa] Marauders' Guild",
             "[Limsa Lominsa] The Aftcastle"
           ]
         }

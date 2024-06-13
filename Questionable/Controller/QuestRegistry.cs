@@ -42,6 +42,7 @@ internal sealed class QuestRegistry
                 new DirectoryInfo(Path.Combine(solutionDirectory.FullName, "QuestPaths"));
             if (pathProjectDirectory.Exists)
             {
+                LoadFromDirectory(new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "ARealmReborn")));
                 LoadFromDirectory(new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "Shadowbringers")));
                 LoadFromDirectory(new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "Endwalker")));
             }

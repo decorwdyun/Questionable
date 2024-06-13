@@ -33,7 +33,7 @@ internal sealed class MountTask(
             return false;
         }
 
-        if (gameFunctions.HasStatusPreventingSprintOrMount())
+        if (gameFunctions.HasStatusPreventingMount())
         {
             logger.LogInformation("Can't mount due to status preventing sprint or mount");
             return false;
@@ -60,7 +60,7 @@ internal sealed class MountTask(
 
         if (!_mountTriggered)
         {
-            if (gameFunctions.HasStatusPreventingSprintOrMount())
+            if (gameFunctions.HasStatusPreventingMount())
             {
                 logger.LogInformation("Can't mount due to status preventing sprint or mount");
                 return ETaskResult.TaskComplete;
