@@ -106,7 +106,11 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig
                 var qw = questWork.Value;
                 string vars = "";
                 for (int i = 0; i < 6; ++i)
+                {
                     vars += qw.Variables[i] + " ";
+                    if (i % 2 == 1)
+                        vars += "   ";
+                }
 
                 // For combat quests, a sequence to kill 3 enemies works a bit like this:
                 // Trigger enemies → 0
@@ -115,7 +119,7 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig
                 // Last enemy → increase sequence, reset variable to 0
                 // The order in which enemies are killed doesn't seem to matter.
                 // If multiple waves spawn, this continues to count up (e.g. 1 enemy from wave 1, 2 enemies from wave 2, 1 from wave 3) would count to 3 then 0
-                ImGui.Text($"QW: {vars.Trim()} / {qw.Flags}");
+                ImGui.Text($"QW: {vars.Trim()}");
             }
             else
                 ImGui.TextUnformatted("(Not accepted)");

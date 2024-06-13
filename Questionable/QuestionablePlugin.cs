@@ -55,6 +55,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton(dataManager);
         serviceCollection.AddSingleton(sigScanner);
         serviceCollection.AddSingleton(objectTable);
+        serviceCollection.AddSingleton(pluginLog);
         serviceCollection.AddSingleton(condition);
         serviceCollection.AddSingleton(chatGui);
         serviceCollection.AddSingleton(commandManager);
@@ -91,6 +92,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTaskWithFactory<Jump.Factory, Jump.DoJump>();
         serviceCollection.AddTaskWithFactory<Say.Factory, Say.UseChat>();
         serviceCollection.AddTaskWithFactory<UseItem.Factory, UseItem.UseOnGround, UseItem.UseOnObject, UseItem.Use>();
+        serviceCollection.AddTaskWithFactory<EquipItem.Factory, EquipItem.DoEquip>();
 
         serviceCollection
             .AddTaskWithFactory<WaitAtEnd.Factory,

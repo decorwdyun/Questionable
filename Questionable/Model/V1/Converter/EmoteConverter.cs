@@ -11,5 +11,8 @@ internal sealed class EmoteConverter() : EnumConverter<EEmote>(Values)
         { EEmote.Rally, "rally" },
         { EEmote.Deny, "deny" },
         { EEmote.Pray, "pray" },
+        { EEmote.Slap, "slap" },
+        { EEmote.Doubt, "doubt" },
+        { EEmote.Psych, "psych" },
     };
 }

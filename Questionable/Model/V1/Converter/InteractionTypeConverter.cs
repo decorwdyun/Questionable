@@ -13,6 +13,7 @@ internal sealed class InteractionTypeConverter() : EnumConverter<EInteractionTyp
         { EInteractionType.AttuneAetherCurrent, "AttuneAetherCurrent" },
         { EInteractionType.Combat, "Combat" },
         { EInteractionType.UseItem, "UseItem" },
+        { EInteractionType.EquipItem, "EquipItem" },
         { EInteractionType.Say, "Say" },
         { EInteractionType.Emote, "Emote" },
         { EInteractionType.WaitForObjectAtPosition, "WaitForNpcAtPosition" },

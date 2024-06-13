@@ -13,6 +13,7 @@ internal enum EInteractionType
     AttuneAetherCurrent,
     Combat,
     UseItem,
+    EquipItem,
     Say,
     Emote,
     WaitForObjectAtPosition,

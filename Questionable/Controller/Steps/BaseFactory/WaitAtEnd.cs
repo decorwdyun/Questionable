@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
+using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using FFXIVClientStructs.FFXIV.Client.Game;
@@ -15,7 +16,7 @@ namespace Questionable.Controller.Steps.BaseFactory;
 
 internal static class WaitAtEnd
 {
-    internal sealed class Factory(IServiceProvider serviceProvider, IClientState clientState) : ITaskFactory
+    internal sealed class Factory(IServiceProvider serviceProvider, IClientState clientState, ICondition condition) : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -30,6 +31,13 @@ internal static class WaitAtEnd
             switch (step.InteractionType)
             {
                 case EInteractionType.Combat:
+                    var notInCombat = new WaitConditionTask(() => !condition[ConditionFlag.InCombat], "Wait(not in combat)");
+                    return [
+                        serviceProvider.GetRequiredService<WaitDelay>(),
+                        notInCombat,
+                        Next(quest, sequence, step)
+                    ];
+
                 case EInteractionType.WaitForManualProgress:
                 case EInteractionType.ShouldBeAJump:
                 case EInteractionType.Instruction:

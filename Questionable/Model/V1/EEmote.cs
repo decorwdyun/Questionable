@@ -13,4 +13,7 @@ internal enum EEmote
     Rally = 34,
     Deny = 25,
     Pray = 58,
+    Slap = 111,
+    Doubt = 12,
+    Psych = 30,
 }
