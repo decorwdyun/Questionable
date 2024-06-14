@@ -2,7 +2,7 @@
 
 namespace Questionable.Model.V1.Converter;
 
-internal sealed class InteractionTypeConverter() : EnumConverter<EInteractionType>(Values)
+public sealed class InteractionTypeConverter() : EnumConverter<EInteractionType>(Values)
 {
     private static readonly Dictionary<EInteractionType, string> Values = new()
     {

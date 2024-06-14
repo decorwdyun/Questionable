@@ -33,7 +33,17 @@ internal sealed class QuestRegistry
 
 #if RELEASE
         _logger.LogInformation("Loading quests from assembly");
-        QuestPaths.AssemblyQuestLoader.LoadQuestsFromEmbeddedResources(LoadQuestFromStream);
+
+        foreach ((ushort questId, QuestData questData) in QuestPaths.AssemblyQuestLoader.GetQuests())
+        {
+            Quest quest = new()
+            {
+                QuestId = questId,
+                Name = string.Empty,
+                Data = questData,
+            };
+            _quests[questId] = quest;
+        }
 #else
         DirectoryInfo? solutionDirectory = _pluginInterface.AssemblyLocation?.Directory?.Parent?.Parent;
         if (solutionDirectory != null)
@@ -48,6 +58,7 @@ internal sealed class QuestRegistry
             }
         }
 #endif
+
         LoadFromDirectory(new DirectoryInfo(Path.Combine(_pluginInterface.ConfigDirectory.FullName, "Quests")));
 
         foreach (var (questId, quest) in _quests)
@@ -60,6 +71,8 @@ internal sealed class QuestRegistry
             quest.Name = questData.Name.ToString();
             quest.Level = questData.ClassJobLevel0;
         }
+
+        _logger.LogInformation("Loaded {Count} quests", _quests.Count);
     }
 
 

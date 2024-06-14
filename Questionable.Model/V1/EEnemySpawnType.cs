@@ -4,7 +4,7 @@ using Questionable.Model.V1.Converter;
 namespace Questionable.Model.V1;
 
 [JsonConverter(typeof(EnemySpawnTypeConverter))]
-internal enum EEnemySpawnType
+public enum EEnemySpawnType
 {
     None = 0,
     AfterInteraction,

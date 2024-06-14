@@ -6,7 +6,7 @@ using System.Text.Json.Serialization;
 
 namespace Questionable.Model.V1.Converter;
 
-internal sealed class AethernetShortcutConverter : JsonConverter<AethernetShortcut>
+public sealed class AethernetShortcutConverter : JsonConverter<AethernetShortcut>
 {
     private static readonly Dictionary<EAetheryteLocation, string> EnumToString = new()
     {
@@ -151,9 +151,6 @@ internal sealed class AethernetShortcutConverter : JsonConverter<AethernetShortc
 
     public override void Write(Utf8JsonWriter writer, AethernetShortcut value, JsonSerializerOptions options)
     {
-        ArgumentNullException.ThrowIfNull(writer);
-        ArgumentNullException.ThrowIfNull(value);
-
         writer.WriteStartArray();
         writer.WriteStringValue(EnumToString[value.From]);
         writer.WriteStringValue(EnumToString[value.To]);

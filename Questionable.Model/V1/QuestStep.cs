@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Text.Json.Serialization;
-using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
-using JetBrains.Annotations;
 using Questionable.Model.V1.Converter;
 
 namespace Questionable.Model.V1;
 
-[UsedImplicitly(ImplicitUseKindFlags.Assign, ImplicitUseTargetFlags.WithMembers)]
-internal sealed class QuestStep
+public sealed class QuestStep
 {
     public EInteractionType InteractionType { get; set; }
 
@@ -42,8 +39,8 @@ internal sealed class QuestStep
     public ChatMessage? ChatMessage { get; set; }
 
     public EEnemySpawnType? EnemySpawnType { get; set; }
-
     public IList<uint> KillEnemyDataIds { get; set; } = new List<uint>();
+
     public JumpDestination? JumpDestination { get; set; }
     public uint? ContentFinderConditionId { get; set; }
 
@@ -51,37 +48,16 @@ internal sealed class QuestStep
     public IList<short?> CompletionQuestVariablesFlags { get; set; } = new List<short?>();
     public IList<DialogueChoice> DialogueChoices { get; set; } = new List<DialogueChoice>();
 
-    /// <summary>
-    /// Positive values: Must be set to this value; will wait for the step to have these set.
-    /// Negative values: Will skip if set to this value, won't wait for this to be set.
-    /// </summary>
-    public unsafe bool MatchesQuestVariables(QuestWork questWork, bool forSkip)
+    [JsonConstructor]
+    public QuestStep()
     {
-        if (CompletionQuestVariablesFlags.Count != 6)
-            return false;
+    }
 
-        for (int i = 0; i < 6; ++i)
-        {
-            short? check = CompletionQuestVariablesFlags[i];
-            if (check == null)
-                continue;
-
-            byte actualValue = questWork.Variables[i];
-            byte checkByte = check > 0 ? (byte)check : (byte)-check;
-            if (forSkip)
-            {
-                byte expectedValue = (byte)Math.Abs(check.Value);
-                if ((actualValue & checkByte) != expectedValue)
-                    return false;
-            }
-            else if (!forSkip && check > 0)
-            {
-                byte expectedValue = check > 0 ? (byte)check : (byte)0;
-                if ((actualValue & checkByte) != expectedValue)
-                    return false;
-            }
-        }
-
-        return true;
+    public QuestStep(EInteractionType interactionType, uint? dataId, Vector3? position, ushort territoryId)
+    {
+        InteractionType = interactionType;
+        DataId = dataId;
+        Position = position;
+        TerritoryId = territoryId;
     }
 }

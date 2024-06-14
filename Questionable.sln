@@ -6,6 +6,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LLib", "LLib\LLib.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuestPaths", "QuestPaths\QuestPaths.csproj", "{7A136F28-8D5C-478D-B993-0F39F1451A47}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuestPaths", "QuestPathGenerator\QuestPathGenerator.csproj", "{DFFD56A8-FA89-4585-A47B-C6AB27B65F0F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Questionable.Model", "Questionable.Model\Questionable.Model.csproj", "{E15144A5-AFF5-4D86-9561-AFF7DF7F505D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,13 @@ Global
 		{7A136F28-8D5C-478D-B993-0F39F1451A47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A136F28-8D5C-478D-B993-0F39F1451A47}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A136F28-8D5C-478D-B993-0F39F1451A47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFFD56A8-FA89-4585-A47B-C6AB27B65F0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DFFD56A8-FA89-4585-A47B-C6AB27B65F0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFFD56A8-FA89-4585-A47B-C6AB27B65F0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DFFD56A8-FA89-4585-A47B-C6AB27B65F0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E15144A5-AFF5-4D86-9561-AFF7DF7F505D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E15144A5-AFF5-4D86-9561-AFF7DF7F505D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E15144A5-AFF5-4D86-9561-AFF7DF7F505D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E15144A5-AFF5-4D86-9561-AFF7DF7F505D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

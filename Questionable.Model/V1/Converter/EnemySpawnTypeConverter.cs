@@ -2,7 +2,7 @@
 
 namespace Questionable.Model.V1.Converter;
 
-internal sealed class EnemySpawnTypeConverter() : EnumConverter<EEnemySpawnType>(Values)
+public sealed class EnemySpawnTypeConverter() : EnumConverter<EEnemySpawnType>(Values)
 {
     private static readonly Dictionary<EEnemySpawnType, string> Values = new()
     {

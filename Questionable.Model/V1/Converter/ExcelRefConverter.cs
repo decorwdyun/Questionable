@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace Questionable.Model.V1.Converter;
 
-internal sealed class ExcelRefConverter : JsonConverter<ExcelRef>
+public sealed class ExcelRefConverter : JsonConverter<ExcelRef>
 {
     public override ExcelRef? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {

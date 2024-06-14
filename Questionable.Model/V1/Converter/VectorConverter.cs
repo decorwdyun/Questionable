@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace Questionable.Model.V1.Converter;
 
-internal sealed class VectorConverter : JsonConverter<Vector3>
+public sealed class VectorConverter : JsonConverter<Vector3>
 {
     public override Vector3 Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
@@ -55,8 +55,6 @@ internal sealed class VectorConverter : JsonConverter<Vector3>
 
     public override void Write(Utf8JsonWriter writer, Vector3 value, JsonSerializerOptions options)
     {
-        ArgumentNullException.ThrowIfNull(writer);
-
         writer.WriteStartObject();
         writer.WriteNumber(nameof(Vector3.X), value.X);
         writer.WriteNumber(nameof(Vector3.Y), value.X);

@@ -1,30 +1,11 @@
-﻿#if RELEASE
-using System;
-using System.IO;
-using System.IO.Compression;
+﻿using System.Collections.Generic;
+using Questionable.Model.V1;
 
+#if RELEASE
 namespace Questionable.QuestPaths;
 
-public static class AssemblyQuestLoader
+public static partial class AssemblyQuestLoader
 {
-    public static void LoadQuestsFromEmbeddedResources(Action<string, Stream> loadFunction)
-    {
-        foreach (string resourceName in typeof(AssemblyQuestLoader).Assembly.GetManifestResourceNames())
-        {
-            if (resourceName.EndsWith(".zip"))
-            {
-                using ZipArchive zipArchive =
-                    new ZipArchive(typeof(AssemblyQuestLoader).Assembly.GetManifestResourceStream(resourceName)!);
-                foreach (ZipArchiveEntry entry in zipArchive.Entries)
-                {
-                    if (entry.Name.EndsWith(".json"))
-                    {
-                        using Stream stream = entry.Open();
-                        loadFunction(entry.Name, stream);
-                    }
-                }
-            }
-        }
-    }
+    public static IReadOnlyDictionary<ushort, QuestData> GetQuests() => Quests;
 }
 #endif

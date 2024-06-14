@@ -59,6 +59,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\LLib\LLib.csproj" />
-      <ProjectReference Include="..\QuestPaths\QuestPaths.csproj" />
+        <ProjectReference Include="..\Questionable.Model\Questionable.Model.csproj" />
+        <ProjectReference Include="..\QuestPaths\QuestPaths.csproj" />
     </ItemGroup>
 </Project>

@@ -4,7 +4,7 @@ using Questionable.Model.V1.Converter;
 namespace Questionable.Model.V1;
 
 [JsonConverter(typeof(AetheryteConverter))]
-internal enum EAetheryteLocation
+public enum EAetheryteLocation
 {
     None = 0,
 

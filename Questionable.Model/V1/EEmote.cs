@@ -4,7 +4,7 @@ using Questionable.Model.V1.Converter;
 namespace Questionable.Model.V1;
 
 [JsonConverter(typeof(EmoteConverter))]
-internal enum EEmote
+public enum EEmote
 {
     None = 0,
 

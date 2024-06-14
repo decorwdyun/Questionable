@@ -4,7 +4,7 @@ using Questionable.Model.V1.Converter;
 namespace Questionable.Model.V1;
 
 [JsonConverter(typeof(InteractionTypeConverter))]
-internal enum EInteractionType
+public enum EInteractionType
 {
     Interact,
     WalkTo,

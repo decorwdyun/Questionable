@@ -86,8 +86,17 @@
       "llib": {
         "type": "Project"
       },
+      "questionable.model": {
+        "type": "Project",
+        "dependencies": {
+          "System.Text.Json": "[8.0.3, )"
+        }
+      },
       "questpaths": {
-        "type": "Project"
+        "type": "Project",
+        "dependencies": {
+          "Questionable.Model": "[1.0.0, )"
+        }
       }
     }
   }

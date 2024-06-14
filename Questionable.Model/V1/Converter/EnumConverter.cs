@@ -7,7 +7,7 @@ using System.Text.Json.Serialization;
 
 namespace Questionable.Model.V1.Converter;
 
-internal abstract class EnumConverter<T> : JsonConverter<T>
+public abstract class EnumConverter<T> : JsonConverter<T>
     where T : Enum
 {
     private readonly ReadOnlyDictionary<T, string> _enumToString;
@@ -17,9 +17,8 @@ internal abstract class EnumConverter<T> : JsonConverter<T>
     {
         _enumToString = values is IDictionary<T, string> dict
             ? new ReadOnlyDictionary<T, string>(dict)
-            : values.ToDictionary(x => x.Key, x => x.Value).AsReadOnly();
-        _stringToEnum = _enumToString.ToDictionary(x => x.Value, x => x.Key)
-            .AsReadOnly();
+            : new ReadOnlyDictionary<T, string>(values.ToDictionary(x => x.Key, x => x.Value));
+        _stringToEnum = new ReadOnlyDictionary<string, T>(_enumToString.ToDictionary(x => x.Value, x => x.Key));
     }
 
     public override T? Read(ref Utf8JsonReader reader, Type typeToConvert,
@@ -37,7 +36,6 @@ internal abstract class EnumConverter<T> : JsonConverter<T>
 
     public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
     {
-        ArgumentNullException.ThrowIfNull(writer);
         writer.WriteStringValue(_enumToString[value]);
     }
 }

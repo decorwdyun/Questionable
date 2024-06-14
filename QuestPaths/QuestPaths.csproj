@@ -8,29 +8,22 @@
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
         <DebugType>none</DebugType>
         <PathMap Condition="$(SolutionDir) != ''">$(SolutionDir)=X:\</PathMap>
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     </PropertyGroup>
 
-    <Target Name="ZipARealmReborn" BeforeTargets="BeforeResGen" Condition="'$(Configuration)' == 'Release'">
-        <ZipDirectory SourceDirectory="$(ProjectDir)\ARealmReborn"
-                      DestinationFile="$(TargetDir)\ARealmReborn.zip"
-                      Overwrite="true"/>
-    </Target>
-
-    <Target Name="ZipShadowbringers" BeforeTargets="BeforeResGen" Condition="'$(Configuration)' == 'Release'">
-        <ZipDirectory SourceDirectory="$(ProjectDir)\Shadowbringers"
-                      DestinationFile="$(TargetDir)\Shadowbringers.zip"
-                      Overwrite="true"/>
-    </Target>
-
-    <Target Name="ZipEndwalker" BeforeTargets="BeforeResGen" Condition="'$(Configuration)' == 'Release'">
-        <ZipDirectory SourceDirectory="$(ProjectDir)\Endwalker"
-                      DestinationFile="$(TargetDir)\Endwalker.zip"
-                      Overwrite="true"/>
-    </Target>
+    <ItemGroup>
+        <ProjectReference Include="..\Questionable.Model\Questionable.Model.csproj" />
+        <ProjectReference Include="..\QuestPathGenerator\QuestPathGenerator.csproj"
+                          OutputItemType="Analyzer"
+                          ReferenceOutputAssembly="false" />
+    </ItemGroup>
 
     <ItemGroup Condition="'$(Configuration)' == 'Release'">
-        <EmbeddedResource Include="$(TargetDir)\ARealmReborn.zip"/>
-        <EmbeddedResource Include="$(TargetDir)\Shadowbringers.zip"/>
-        <EmbeddedResource Include="$(TargetDir)\Endwalker.zip"/>
+        <None Remove="ARealmReborn"/>
+        <None Remove="Shadowbringers"/>
+        <None Remove="Endwalker"/>
+        <AdditionalFiles Include="ARealmReborn\**\*.json" />
+        <AdditionalFiles Include="Shadowbringers\**\*.json" />
+        <AdditionalFiles Include="Endwalker\**\*.json" />
     </ItemGroup>
 </Project>
