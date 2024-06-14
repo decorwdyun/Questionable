@@ -17,8 +17,11 @@ public static class AssemblyQuestLoader
                     new ZipArchive(typeof(AssemblyQuestLoader).Assembly.GetManifestResourceStream(resourceName)!);
                 foreach (ZipArchiveEntry entry in zipArchive.Entries)
                 {
-                    using Stream stream = entry.Open();
-                    loadFunction(entry.Name, stream);
+                    if (entry.Name.EndsWith(".json"))
+                    {
+                        using Stream stream = entry.Open();
+                        loadFunction(entry.Name, stream);
+                    }
                 }
             }
         }
