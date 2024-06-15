@@ -9,7 +9,7 @@ internal sealed class UnmountTask(ICondition condition, ILogger<UnmountTask> log
     : ITask
 {
     private bool _unmountTriggered;
-    private DateTime _unmountedAt = DateTime.MinValue;
+    private DateTime _continueAt = DateTime.MinValue;
 
     public bool Start()
     {
@@ -17,25 +17,33 @@ internal sealed class UnmountTask(ICondition condition, ILogger<UnmountTask> log
             return false;
 
         logger.LogInformation("Step explicitly wants no mount, trying to unmount...");
+        if (condition[ConditionFlag.InFlight])
+        {
+            gameFunctions.Unmount();
+            return true;
+        }
+
         _unmountTriggered = gameFunctions.Unmount();
-        if (_unmountTriggered)
-            _unmountedAt = DateTime.Now;
+        _continueAt = DateTime.Now.AddSeconds(1);
         return true;
     }
 
     public ETaskResult Update()
     {
+        if (_continueAt >= DateTime.Now)
+            return ETaskResult.StillRunning;
+
         if (!_unmountTriggered)
         {
-            _unmountTriggered = gameFunctions.Unmount();
-            if (_unmountTriggered)
-                _unmountedAt = DateTime.Now;
+            // if still flying, we still need to land
+            if (condition[ConditionFlag.InFlight])
+                gameFunctions.Unmount();
+            else
+                _unmountTriggered = gameFunctions.Unmount();
 
+            _continueAt = DateTime.Now.AddSeconds(0.5);
             return ETaskResult.StillRunning;
         }
-
-        if (DateTime.Now < _unmountedAt.AddSeconds(1))
-            return ETaskResult.StillRunning;
 
         return condition[ConditionFlag.Mounted]
             ? ETaskResult.StillRunning
