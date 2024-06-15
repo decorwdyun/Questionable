@@ -22,8 +22,10 @@
         <None Remove="ARealmReborn"/>
         <None Remove="Shadowbringers"/>
         <None Remove="Endwalker"/>
+        <None Remove="quest-v1.json" />
         <AdditionalFiles Include="ARealmReborn\**\*.json" />
         <AdditionalFiles Include="Shadowbringers\**\*.json" />
         <AdditionalFiles Include="Endwalker\**\*.json" />
+        <AdditionalFiles Include="quest-v1.json" />
     </ItemGroup>
 </Project>

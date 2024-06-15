@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Nodes;
+using Json.Schema;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -17,8 +21,16 @@ namespace Questionable.QuestPathGenerator;
 /// When using a simple text file as a baseline, we can create a non-incremental source generator.
 /// </summary>
 [Generator]
+[SuppressMessage("MicrosoftCodeAnalysisReleaseTracking", "RS2008")]
 public class QuestSourceGenerator : ISourceGenerator
 {
+    private static readonly DiagnosticDescriptor InvalidJson = new("QSG0001",
+        "Invalid JSON",
+        "Invalid quest file {0}",
+        nameof(QuestSourceGenerator),
+        DiagnosticSeverity.Error,
+        true);
+
     public void Initialize(GeneratorInitializationContext context)
     {
         // No initialization required for this generator.
@@ -28,10 +40,15 @@ public class QuestSourceGenerator : ISourceGenerator
     {
         List<(ushort, QuestData)> quests = [];
 
+        // Find schema definition
+        AdditionalText jsonSchemaFile =
+            context.AdditionalFiles.Single(x => Path.GetFileName(x.Path) == "quest-v1.json");
+        var questSchema = JsonSchema.FromText(jsonSchemaFile.GetText()!.ToString());
+
         // Go through all files marked as an Additional File in file properties.
         foreach (var additionalFile in context.AdditionalFiles)
         {
-            if (additionalFile == null)
+            if (additionalFile == null || additionalFile == jsonSchemaFile)
                 continue;
 
             if (Path.GetExtension(additionalFile.Path) != ".json")
@@ -44,7 +61,21 @@ public class QuestSourceGenerator : ISourceGenerator
             if (text == null)
                 continue;
 
-            var quest = JsonSerializer.Deserialize<QuestData>(text.ToString())!;
+            var questNode = JsonNode.Parse(text.ToString());
+            var evaluationResult = questSchema.Evaluate(questNode, new EvaluationOptions()
+            {
+                Culture = CultureInfo.InvariantCulture,
+                OutputFormat = OutputFormat.List
+            });
+            if (!evaluationResult.IsValid)
+            {
+                var error = Diagnostic.Create(InvalidJson,
+                    null,
+                    Path.GetFileName(additionalFile.Path));
+                context.ReportDiagnostic(error);
+            }
+
+            var quest = questNode.Deserialize<QuestData>()!;
             quests.Add((id, quest));
         }
 

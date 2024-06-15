@@ -400,7 +400,14 @@
                   "if": {
                     "properties": {
                       "InteractionType": {
-                        "const": "Interact"
+                        "anyOf": [
+                          {
+                            "const": "Interact"
+                          },
+                          {
+                            "const": "SinglePlayerDuty"
+                          }
+                        ]
                       }
                     }
                   },
