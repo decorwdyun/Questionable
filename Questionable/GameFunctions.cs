@@ -629,7 +629,8 @@ internal sealed unsafe class GameFunctions
                _condition[ConditionFlag.Occupied39] || _condition[ConditionFlag.OccupiedInEvent] ||
                _condition[ConditionFlag.OccupiedInQuestEvent] || _condition[ConditionFlag.OccupiedInCutSceneEvent] ||
                _condition[ConditionFlag.Casting] || _condition[ConditionFlag.Unknown57] ||
-               _condition[ConditionFlag.BetweenAreas] || _condition[ConditionFlag.BetweenAreas51];
+               _condition[ConditionFlag.BetweenAreas] || _condition[ConditionFlag.BetweenAreas51] ||
+               _condition[ConditionFlag.Jumping61];
     }
 
     public bool IsLoadingScreenVisible()
