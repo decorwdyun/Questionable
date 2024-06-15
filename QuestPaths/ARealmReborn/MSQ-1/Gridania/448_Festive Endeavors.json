@@ -1,13 +1,37 @@
-{
+﻿{
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
-  "TerritoryBlacklist": [
-    1037
-  ],
   "QuestSequence": [
     {
       "Sequence": 0,
       "Steps": [
+        {
+          "DataId": 1003061,
+          "Position": {
+            "X": -0.015319824,
+            "Y": 0.500025,
+            "Z": -4.3793945
+          },
+          "StopDistance": 7,
+          "TerritoryId": 204,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 2001215,
+          "Position": {
+            "X": 0.002457563,
+            "Y": 1.052062,
+            "Z": 9.820032
+          },
+          "TerritoryId": 204,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 132
+        },
         {
           "DataId": 1000100,
           "Position": {
@@ -16,12 +40,16 @@
             "Z": 115.92273
           },
           "TerritoryId": 132,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AethernetShortcut": [
+            "[Gridania] Archers' Guild",
+            "[Gridania] Airship Landing"
+          ]
         }
       ]
     },
     {
-      "Sequence": 1,
+      "Sequence": 2,
       "Steps": [
         {
           "Position": {
@@ -34,39 +62,14 @@
           "$": "New Gridania Navmesh workaround"
         },
         {
-          "DataId": 3,
+          "DataId": 1000153,
           "Position": {
-            "X": 13.076904,
-            "Y": 0.56451416,
-            "Z": 35.90442
+            "X": -44.87683,
+            "Y": -1.2500024,
+            "Z": 56.839844
           },
-          "StopDistance": 10,
-          "TerritoryId": 148,
-          "InteractionType": "AttuneAetheryte",
-          "AethernetShortcut": [
-            "[Gridania] Aetheryte Plaza",
-            "[Gridania] Blue Badger Gate (Central Shroud)"
-          ]
-        },
-        {
-          "DataId": 1004612,
-          "Position": {
-            "X": -114.94629,
-            "Y": -39.702168,
-            "Z": 335.46948
-          },
-          "TerritoryId": 148,
+          "TerritoryId": 132,
           "InteractionType": "Interact"
-        }
-      ]
-    },
-    {
-      "Sequence": 2,
-      "Steps": [
-        {
-          "TerritoryId": 148,
-          "InteractionType": "Duty",
-          "ContentFinderConditionId": 2
         }
       ]
     },
@@ -81,8 +84,7 @@
           },
           "TerritoryId": 132,
           "InteractionType": "WalkTo",
-          "$": "New Gridania Navmesh workaround",
-          "AetheryteShortcut": "Gridania"
+          "$": "New Gridania Navmesh workaround"
         },
         {
           "DataId": 1000100,

@@ -50,6 +50,7 @@
             "Y": 0.32037354,
             "Z": -166.58276
           },
+          "StopDistance": 10,
           "TerritoryId": 141,
           "InteractionType": "AttuneAetheryte",
           "AetheryteShortcut": "Ul'dah",
@@ -69,12 +70,23 @@
           "TargetTerritoryId": 145
         },
         {
+          "Position": {
+            "X": -423.0189,
+            "Y": -37.96352,
+            "Z": 176.73677
+          },
+          "TerritoryId": 145,
+          "InteractionType": "WalkTo",
+          "$": "Camp Drybone Lantern"
+        },
+        {
           "DataId": 18,
           "Position": {
             "X": -386.3432,
             "Y": -57.1756,
             "Z": 142.59558
           },
+          "StopDistance": 10,
           "TerritoryId": 145,
           "InteractionType": "AttuneAetheryte"
         },

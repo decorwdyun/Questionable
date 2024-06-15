@@ -44,7 +44,7 @@ internal sealed class MovementController : IDisposable
     public bool IsNavmeshReady => _navmeshIpc.IsReady;
     public bool IsPathRunning => _navmeshIpc.IsPathRunning;
     public bool IsPathfinding => _pathfindTask is { IsCompleted: false };
-    public DestinationData? Destination { get; private set; }
+    public DestinationData? Destination { get; set; }
     public DateTime MovementStartedAt { get; private set; } = DateTime.MaxValue;
 
     public void Update()

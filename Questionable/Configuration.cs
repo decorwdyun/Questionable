@@ -1,4 +1,5 @@
 ﻿using Dalamud.Configuration;
+using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using LLib.ImGui;
 
 namespace Questionable;
@@ -15,6 +16,7 @@ internal sealed class Configuration : IPluginConfiguration
     {
         public bool AutoAcceptNextQuest { get; set; }
         public uint MountId { get; set; } = 71;
+        public GrandCompany GrandCompany { get; set; } = GrandCompany.None;
     }
 
     internal sealed class AdvancedConfiguration

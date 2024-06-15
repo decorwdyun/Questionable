@@ -27,8 +27,7 @@ internal static class EquipItem
         }
     }
 
-    internal sealed class DoEquip(IDataManager dataManager, ILogger<DoEquip> logger)
-        : AbstractDelayedTask(TimeSpan.FromSeconds(1))
+    internal sealed class DoEquip(IDataManager dataManager, ILogger<DoEquip> logger) : ITask
     {
         private static readonly IReadOnlyList<InventoryType> SourceInventoryTypes =
         [
@@ -55,6 +54,8 @@ internal static class EquipItem
         private Item _item = null!;
         private List<ushort> _targetSlots = [];
 
+        private DateTime _continueAt = DateTime.MaxValue;
+
         public ITask With(uint itemId)
         {
             _itemId = itemId;
@@ -64,7 +65,32 @@ internal static class EquipItem
             return this;
         }
 
-        protected override unsafe bool StartInternal()
+        public bool Start()
+        {
+            Equip();
+            _continueAt = DateTime.Now.AddSeconds(1);
+            return true;
+        }
+
+        public unsafe ETaskResult Update()
+        {
+            if (DateTime.Now < _continueAt)
+                return ETaskResult.StillRunning;
+
+            InventoryManager* inventoryManager = InventoryManager.Instance();
+            if (inventoryManager == null)
+                return ETaskResult.StillRunning;
+
+            if (_targetSlots.Any(x =>
+                    inventoryManager->GetInventorySlot(InventoryType.EquippedItems, x)->ItemID == _itemId))
+                return ETaskResult.TaskComplete;
+
+            Equip();
+            _continueAt = DateTime.Now.AddSeconds(1);
+            return ETaskResult.StillRunning;
+        }
+
+        private unsafe bool Equip()
         {
             var inventoryManager = InventoryManager.Instance();
             if (inventoryManager == null)
@@ -108,24 +134,11 @@ internal static class EquipItem
                     int result = inventoryManager->MoveItemSlot(sourceInventoryType, sourceSlot,
                         InventoryType.EquippedItems, targetSlot, 1);
                     logger.LogInformation("MoveItemSlot result: {Result}", result);
-                    return true;
+                    return result == 0;
                 }
             }
 
             return false;
-        }
-
-        protected override unsafe ETaskResult UpdateInternal()
-        {
-            InventoryManager* inventoryManager = InventoryManager.Instance();
-            if (inventoryManager == null)
-                return ETaskResult.StillRunning;
-
-            if (_targetSlots.Any(x =>
-                    inventoryManager->GetInventorySlot(InventoryType.EquippedItems, x)->ItemID == _itemId))
-                return ETaskResult.TaskComplete;
-
-            return ETaskResult.StillRunning;
         }
 
         private static List<ushort>? GetEquipSlot(Item item)

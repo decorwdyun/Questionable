@@ -25,7 +25,11 @@ internal static class AetheryteShortcut
 
             var task = serviceProvider.GetRequiredService<UseAetheryteShortcut>()
                 .With(step, step.AetheryteShortcut.Value, aetheryteData.TerritoryIds[step.AetheryteShortcut.Value]);
-            return [new WaitConditionTask(gameFunctions.CanTeleport, "CanTeleport"), task];
+            return
+            [
+                new WaitConditionTask(() => gameFunctions.CanTeleport(step.AetheryteShortcut.Value), "CanTeleport"),
+                task
+            ];
         }
 
         public ITask CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
@@ -64,6 +68,12 @@ internal static class AetheryteShortcut
             ushort territoryType = clientState.TerritoryType;
             if (ExpectedTerritoryId == territoryType)
             {
+                if (Step.SkipIf.Contains(ESkipCondition.AetheryteShortcutIfInSameTerritory))
+                {
+                    logger.LogInformation("Skipping aetheryte teleport due to SkipIf");
+                    return false;
+                }
+
                 Vector3 pos = clientState.LocalPlayer!.Position;
                 if (aetheryteData.CalculateDistance(pos, territoryType, TargetAetheryte) < 11 ||
                     (Step.AethernetShortcut != null &&

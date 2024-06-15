@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Dalamud.Interface.Colors;
@@ -8,6 +7,7 @@ using Dalamud.Plugin.Services;
 using ImGuiNET;
 using LLib.ImGui;
 using Lumina.Excel.GeneratedSheets;
+using GrandCompany = FFXIVClientStructs.FFXIV.Client.UI.Agent.GrandCompany;
 
 namespace Questionable.Windows;
 
@@ -18,6 +18,9 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
 
     private readonly uint[] _mountIds;
     private readonly string[] _mountNames;
+
+    private readonly string[] _grandCompanyNames =
+        ["None (manually pick quest)", "Maelstrom", "Twin Adder"/*, "Immortal Flames"*/];
 
     [SuppressMessage("Performance", "CA1861", Justification = "One time initialization")]
     public ConfigWindow(DalamudPluginInterface pluginInterface, Configuration configuration, IDataManager dataManager)
@@ -55,6 +58,14 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
                 if (ImGui.Combo("Preferred Mount", ref selectedMount, _mountNames, _mountNames.Length))
                 {
                     _configuration.General.MountId = _mountIds[selectedMount];
+                    Save();
+                }
+
+                int grandCompany = (int)_configuration.General.GrandCompany;
+                if (ImGui.Combo("Preferred Grand Company", ref grandCompany, _grandCompanyNames,
+                        _grandCompanyNames.Length))
+                {
+                    _configuration.General.GrandCompany = (GrandCompany)grandCompany;
                     Save();
                 }
 

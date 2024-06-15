@@ -4,8 +4,25 @@
   "QuestSequence": [
     {
       "Sequence": 0,
-      "Steps": [],
-      "Comment": "Quest start is intentionally empty, so you pick a Grand Company"
+      "Steps": [
+        {
+          "DataId": 1004885,
+          "Position": {
+            "X": 36.453735,
+            "Y": 1.2000011,
+            "Z": 4.6845093
+          },
+          "TerritoryId": 212,
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_MANSEA302_00681_Q1_000_1",
+              "Yes": true
+            }
+          ]
+        }
+      ]
     },
     {
       "Sequence": 1,

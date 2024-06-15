@@ -10,4 +10,6 @@ public enum ESkipCondition
     Never,
     FlyingLocked,
     FlyingUnlocked,
+    ChocoboUnlocked,
+    AetheryteShortcutIfInSameTerritory,
 }

@@ -137,7 +137,7 @@
       "Sequence": 255,
       "Steps": [
         {
-          "TerritoryId": 145,
+          "TerritoryId": 133,
           "InteractionType": "UseItem",
           "ItemId": 30362,
           "TargetTerritoryId": 140

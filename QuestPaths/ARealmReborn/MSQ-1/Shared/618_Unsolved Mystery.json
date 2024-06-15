@@ -96,6 +96,26 @@
       "Sequence": 255,
       "Steps": [
         {
+          "Position": {
+            "X": -378.46735,
+            "Y": -38.009487,
+            "Z": 159.38092
+          },
+          "TerritoryId": 145,
+          "InteractionType": "WalkTo",
+          "$": "Camp Drybone cliff jump"
+        },
+        {
+          "Position": {
+            "X": -379.3895,
+            "Y": -59.000004,
+            "Z": 147.99257
+          },
+          "TerritoryId": 145,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true
+        },
+        {
           "DataId": 1003929,
           "Position": {
             "X": -378.65265,

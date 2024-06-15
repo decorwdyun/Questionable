@@ -29,7 +29,8 @@
           },
           "TerritoryId": 141,
           "InteractionType": "Interact",
-          "Comment": "'Forging the Spirit'"
+          "Comment": "'Forging the Spirit'",
+          "AetheryteShortcut": "Central Thanalan - Black Brush Station"
         },
         {
           "DataId": 1001426,

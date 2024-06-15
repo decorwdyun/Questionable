@@ -35,6 +35,7 @@ internal static class WaitAtEnd
                     return [
                         serviceProvider.GetRequiredService<WaitDelay>(),
                         notInCombat,
+                        serviceProvider.GetRequiredService<WaitDelay>(),
                         Next(quest, sequence, step)
                     ];
 

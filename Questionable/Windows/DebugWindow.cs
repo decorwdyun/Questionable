@@ -310,8 +310,12 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig
                             map->FlagMapMarker.TerritoryId != _clientState.TerritoryType ||
                             !_navmeshIpc.IsReady);
         if (ImGui.Button("Move to Flag"))
+        {
+            _movementController.Destination = null;
             _gameFunctions.ExecuteCommand(
                 $"/vnav {(_gameFunctions.IsFlyingUnlockedInCurrentZone() ? "flyflag" : "moveflag")}");
+        }
+
         ImGui.EndDisabled();
 
         ImGui.SameLine();

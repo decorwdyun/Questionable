@@ -386,10 +386,8 @@ internal sealed class GameUiController : IDisposable
     {
         if (_questController.CurrentQuest?.Quest.QuestId == 245)
         {
-            // TODO Test this
             _logger.LogInformation("Closing ContentsTutorial");
             AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
-            //addon->FireCallbackInt(-2);
             addon->FireCallbackInt(13);
         }
     }

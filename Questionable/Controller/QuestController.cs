@@ -1,23 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Numerics;
-using System.Threading;
-using System.Threading.Tasks;
-using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Keys;
-using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
-using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
-using FFXIVClientStructs.FFXIV.Client.Game;
-using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps;
-using Questionable.Data;
-using Questionable.External;
 using Questionable.Model;
 using Questionable.Model.V1;
-using Questionable.Model.V1.Converter;
 
 namespace Questionable.Controller;
 
@@ -464,11 +453,6 @@ internal sealed class QuestController
         }
     }
 
-    // TODO is this still required?
-    public sealed record StepProgress(
-        DateTime StartedAt,
-        int DialogueChoicesSelected = 0);
-
     public void Skip(ushort questQuestId, byte currentQuestSequence)
     {
         lock (_lock)
@@ -498,4 +482,7 @@ internal sealed class QuestController
             }
         }
     }
+
+    public sealed record StepProgress(
+        DateTime StartedAt);
 }

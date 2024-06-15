@@ -32,6 +32,7 @@ using ContentFinderCondition = Lumina.Excel.GeneratedSheets.ContentFinderConditi
 using ContentTalk = Lumina.Excel.GeneratedSheets.ContentTalk;
 using Emote = Lumina.Excel.GeneratedSheets.Emote;
 using GameObject = Dalamud.Game.ClientState.Objects.Types.GameObject;
+using GrandCompany = FFXIVClientStructs.FFXIV.Client.UI.Agent.GrandCompany;
 using Quest = Questionable.Model.Quest;
 using TerritoryType = Lumina.Excel.GeneratedSheets.TerritoryType;
 
@@ -103,6 +104,50 @@ internal sealed unsafe class GameFunctions
 
     public (ushort CurrentQuest, byte Sequence) GetCurrentQuest()
     {
+        var (currentQuest, sequence) = GetCurrentQuestInternal();
+        QuestManager* questManager = QuestManager.Instance();
+        PlayerState* playerState = PlayerState.Instance();
+
+        if (currentQuest == 0)
+        {
+            if (_clientState.TerritoryType == 181) // Starting in Limsa
+                return (107, 0);
+            if (_clientState.TerritoryType == 183) // Starting in Gridania
+                return (39, 0);
+            return default;
+        }
+        else if (currentQuest == 681)
+        {
+            // if we have already picked up the GC quest, just return the progress for it
+            if (questManager->IsQuestAccepted(currentQuest) || QuestManager.IsQuestComplete(currentQuest))
+                return (currentQuest, sequence);
+
+            // The company you keep...
+            return _configuration.General.GrandCompany switch
+            {
+                GrandCompany.TwinAdder => (680, 0),
+                GrandCompany.Maelstrom => (681, 0),
+                _ => default
+            };
+        }
+        else if (currentQuest == 3856 && !playerState->IsMountUnlocked(1)) // we come in peace
+        {
+            ushort chocoboQuest = (GrandCompany)playerState->GrandCompany switch
+            {
+                GrandCompany.TwinAdder => 700,
+                GrandCompany.Maelstrom => 701,
+                _ => 0
+            };
+
+            if (chocoboQuest != 0 && !QuestManager.IsQuestComplete(chocoboQuest))
+                return (chocoboQuest, QuestManager.GetQuestSequence(chocoboQuest));
+        }
+
+        return (currentQuest, sequence);
+    }
+
+    public (ushort CurrentQuest, byte Sequence) GetCurrentQuestInternal()
+    {
         ushort currentQuest;
 
         // if any quest that is currently tracked (i.e. in the to-do list) exists as mapped quest, we use that
@@ -135,12 +180,7 @@ internal sealed unsafe class GameFunctions
 
         currentQuest = scenarioTree->Data->CurrentScenarioQuest;
         if (currentQuest == 0)
-        {
-            if (_clientState.TerritoryType == 181) // Starting Limsa
-                return (107, 0);
-
             return default;
-        }
 
         return (currentQuest, QuestManager.GetQuestSequence(currentQuest));
     }
@@ -157,39 +197,23 @@ internal sealed unsafe class GameFunctions
 
         var uiState = UIState.Instance();
         return uiState != null && uiState->IsAetheryteUnlocked(aetheryteId);
-        /*
-        var telepo = Telepo.Instance();
-        if (telepo == null || telepo->UpdateAetheryteList() == null)
-        {
-            subIndex = 0;
-            return false;
-        }
-
-        for (ulong i = 0; i < telepo->TeleportList.Size(); ++i)
-        {
-            var data = telepo->TeleportList.Get(i);
-            if (data.AetheryteId == aetheryteId)
-            {
-                subIndex = data.SubIndex;
-                return true;
-            }
-        }
-
-        subIndex = 0;
-        return false;
-        */
     }
 
     public bool IsAetheryteUnlocked(EAetheryteLocation aetheryteLocation)
         => IsAetheryteUnlocked((uint)aetheryteLocation, out _);
 
-    public bool CanTeleport() => ActionManager.Instance()->GetActionStatus(ActionType.Action, 5) == 0;
+    public bool CanTeleport(EAetheryteLocation aetheryteLocation)
+    {
+        if ((ushort)aetheryteLocation == PlayerState.Instance()->HomeAetheryteId &&
+            ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, 8) == 0)
+            return true;
+
+        return ActionManager.Instance()->GetActionStatus(ActionType.Action, 5) == 0;
+    }
 
     public bool TeleportAetheryte(uint aetheryteId)
     {
-        var status = ActionManager.Instance()->GetActionStatus(ActionType.Action, 5);
-        if (status != 0)
-            return false;
+
 
         if (IsAetheryteUnlocked(aetheryteId, out var subIndex))
         {
@@ -201,8 +225,9 @@ internal sealed unsafe class GameFunctions
                     return true;
             }
 
-            // fallback if return isn't available or (more likely) on a different aetheryte
-            return Telepo.Instance()->Teleport(aetheryteId, subIndex);
+            if (ActionManager.Instance()->GetActionStatus(ActionType.Action, 5) == 0)
+                // fallback if return isn't available or (more likely) on a different aetheryte
+                return Telepo.Instance()->Teleport(aetheryteId, subIndex);
         }
 
         return false;

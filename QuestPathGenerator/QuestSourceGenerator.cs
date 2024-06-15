@@ -48,6 +48,9 @@ public class QuestSourceGenerator : ISourceGenerator
             quests.Add((id, quest));
         }
 
+        if (quests.Count == 0)
+            return;
+
         quests = quests.OrderBy(x => x.Item1).ToList();
 
         var code =

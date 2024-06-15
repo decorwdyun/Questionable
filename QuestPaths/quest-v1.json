@@ -350,7 +350,9 @@
                       "Never",
                       "FlyingLocked",
                       "FlyingUnlocked",
-                      "DifferentTerritory"
+                      "DifferentTerritory",
+                      "ChocoboUnlocked",
+                      "AetheryteShortcutIfInSameTerritory"
                     ]
                   }
                 },

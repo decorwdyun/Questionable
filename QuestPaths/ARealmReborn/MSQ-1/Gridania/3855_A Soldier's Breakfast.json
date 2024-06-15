@@ -1,0 +1,79 @@
+﻿{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1000685,
+          "Position": {
+            "X": 287.92236,
+            "Y": -3.297,
+            "Z": -32.6391
+          },
+          "TerritoryId": 148,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Comment": "TODO Figure out quest flags if picking up egg first OR doing the combat first",
+      "Steps": [
+        {
+          "DataId": 2000010,
+          "Position": {
+            "X": 480.88794,
+            "Y": 30.746826,
+            "Z": -49.729187
+          },
+          "TerritoryId": 148,
+          "InteractionType": "Interact"
+        },
+        {
+          "Position": {
+            "X": 480.88794,
+            "Y": 30.746826,
+            "Z": -49.729187
+          },
+          "TerritoryId": 148,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "OverworldEnemies",
+          "KillEnemyDataIds": [142],
+          "Comment": "Depending on how many enemies you fought on the way to the egg, this step could be optional"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1000685,
+          "Position": {
+            "X": 287.92236,
+            "Y": -3.297,
+            "Z": -32.6391
+          },
+          "TerritoryId": 148,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1000408,
+          "Position": {
+            "X": 106.85889,
+            "Y": -8,
+            "Z": -75.669556
+          },
+          "TerritoryId": 148,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

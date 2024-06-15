@@ -1,4 +1,4 @@
-{
+﻿{
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
   "QuestSequence": [
@@ -6,38 +6,13 @@
       "Sequence": 0,
       "Steps": [
         {
-          "DataId": 1001353,
+          "DataId": 1002394,
           "Position": {
-            "X": 21.072632,
-            "Y": 7.45,
-            "Z": -78.78235
+            "X": -69.5354,
+            "Y": -0.50095016,
+            "Z": -9.99469
           },
-          "TerritoryId": 130,
-          "InteractionType": "Interact"
-        }
-      ]
-    },
-    {
-      "Sequence": 1,
-      "Steps": [
-        {
-          "Position": {
-            "X": -316.29608,
-            "Y": 23.44405,
-            "Z": -345.24487
-          },
-          "TerritoryId": 140,
-          "InteractionType": "WalkTo",
-          "AetheryteShortcut": "Western Thanalan - Horizon"
-        },
-        {
-          "DataId": 1004603,
-          "Position": {
-            "X": -489.8299,
-            "Y": 21.48999,
-            "Z": -381.97913
-          },
-          "TerritoryId": 140,
+          "TerritoryId": 132,
           "InteractionType": "Interact"
         }
       ]
@@ -46,10 +21,16 @@
       "Sequence": 255,
       "Steps": [
         {
+          "TerritoryId": 132,
+          "InteractionType": "UseItem",
+          "ItemId": 30362,
+          "TargetTerritoryId": 140
+        },
+        {
           "Position": {
-            "X": -493.3852,
-            "Y": 21,
-            "Z": -382.50455
+            "X": -492.96475,
+            "Y": 20.999884,
+            "Z": -380.82272
           },
           "TerritoryId": 140,
           "InteractionType": "WalkTo"

@@ -46,6 +46,7 @@
             "Y": 48.203125,
             "Z": -227.039
           },
+          "StopDistance": 10,
           "TerritoryId": 140,
           "InteractionType": "AttuneAetheryte",
           "AethernetShortcut": [
