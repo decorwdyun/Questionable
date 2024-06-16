@@ -77,14 +77,16 @@ internal static class Move
             float actualDistance = (position - Destination).Length();
 
             if (Step.Mount == true)
-                yield return serviceProvider.GetRequiredService<MountTask>().With(Step.TerritoryId);
+                yield return serviceProvider.GetRequiredService<MountTask>()
+                    .With(Step.TerritoryId, MountTask.EMountIf.Always);
             else if (Step.Mount == false)
                 yield return serviceProvider.GetRequiredService<UnmountTask>();
 
             if (!Step.DisableNavmesh)
             {
-                if (Step.Mount == null && actualDistance > 30f)
-                    yield return serviceProvider.GetRequiredService<MountTask>().With(Step.TerritoryId);
+                if (Step.Mount == null)
+                    yield return serviceProvider.GetRequiredService<MountTask>()
+                        .With(Step.TerritoryId, MountTask.EMountIf.AwayFromPosition, Destination);
 
                 if (actualDistance > distance)
                 {
