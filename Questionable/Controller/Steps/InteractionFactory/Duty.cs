@@ -1,4 +1,6 @@
 ﻿using System;
+using Dalamud.Game.ClientState.Conditions;
+using Dalamud.Plugin.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Questionable.Model;
 using Questionable.Model.V1;
@@ -21,7 +23,7 @@ internal static class Duty
         }
     }
 
-    internal sealed class OpenDutyFinder(GameFunctions gameFunctions) : ITask
+    internal sealed class OpenDutyFinder(GameFunctions gameFunctions, ICondition condition) : ITask
     {
         public uint ContentFinderConditionId { get; set; }
 
@@ -33,6 +35,9 @@ internal static class Duty
 
         public bool Start()
         {
+            if (condition[ConditionFlag.InDutyQueue])
+                return false;
+
             gameFunctions.OpenDutyFinder(ContentFinderConditionId);
             return true;
         }
