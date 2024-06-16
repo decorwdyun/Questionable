@@ -75,7 +75,7 @@ internal static class AetheryteShortcut
                 }
 
                 Vector3 pos = clientState.LocalPlayer!.Position;
-                if (aetheryteData.CalculateDistance(pos, territoryType, TargetAetheryte) < 11 ||
+                if (aetheryteData.CalculateDistance(pos, territoryType, TargetAetheryte) < 20 ||
                     (Step.AethernetShortcut != null &&
                      (aetheryteData.CalculateDistance(pos, territoryType, Step.AethernetShortcut.From) < 20 ||
                       aetheryteData.CalculateDistance(pos, territoryType, Step.AethernetShortcut.To) < 20)))
