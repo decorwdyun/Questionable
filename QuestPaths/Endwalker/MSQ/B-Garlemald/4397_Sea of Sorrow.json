@@ -89,8 +89,80 @@
             "Z": 419.7605
           },
           "TerritoryId": 959,
-          "InteractionType": "Instruction",
-          "Comment": "Follow Argos"
+          "InteractionType": "Interact",
+          "NpcWaitDistance": 5
+        },
+        {
+          "DataId": 1039985,
+          "Position": {
+            "X": -144.128,
+            "Y": 57.30617,
+            "Z": 459.4606
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WaitForNpcAtPosition",
+          "NpcWaitDistance": 1,
+          "Mount": true
+        },
+        {
+          "DataId": 1039985,
+          "Position": {
+            "X": -67.99789,
+            "Y": 52.72147,
+            "Z": 481.2938
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WaitForNpcAtPosition",
+          "NpcWaitDistance": 1
+        },
+        {
+          "Position": {
+            "X": -50.280434,
+            "Y": 42.36871,
+            "Z": 467.25403
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "DataId": 1039985,
+          "Position": {
+            "X": 19.588282,
+            "Y": 34.185432,
+            "Z": 427.5583
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WaitForNpcAtPosition",
+          "NpcWaitDistance": 1
+        },
+        {
+          "DataId": 1039985,
+          "Position": {
+            "X": 104.9116,
+            "Y": 41.95557,
+            "Z": 455.229
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WaitForNpcAtPosition",
+          "NpcWaitDistance": 1
+        },
+        {
+          "Position": {
+            "X": 118.55694,
+            "Y": 46.506252,
+            "Z": 456.90314
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "Position": {
+            "X": 131.81705,
+            "Y": 54.55443,
+            "Z": 468.51056
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo"
         },
         {
           "DataId": 1039986,
@@ -100,7 +172,7 @@
             "Z": 523.5217
           },
           "TerritoryId": 959,
-          "InteractionType": "Interact"
+          "InteractionType": "WalkTo"
         }
       ]
     },
@@ -148,8 +220,40 @@
             "Z": 523.5217
           },
           "TerritoryId": 959,
-          "InteractionType": "Instruction",
-          "Comment": "Follow Argos"
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1039986,
+          "Position": {
+            "X": 87.202805,
+            "Y": 66.4619,
+            "Z": 565.21094
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WaitForNpcAtPosition",
+          "NpcWaitDistance": 1
+        },
+        {
+          "DataId": 1039986,
+          "Position": {
+            "X": 193.26242,
+            "Y": 105.96505,
+            "Z": 674.10205
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WaitForNpcAtPosition",
+          "NpcWaitDistance": 1
+        },
+        {
+          "DataId": 1039986,
+          "Position": {
+            "X": 216.4619,
+            "Y": 74.850296,
+            "Z": 526.7501
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WaitForNpcAtPosition",
+          "NpcWaitDistance": 1
         },
         {
           "DataId": 1039987,

@@ -152,6 +152,17 @@
       "Sequence": 4,
       "Steps": [
         {
+          "Position": {
+            "X": 434.73416,
+            "Y": 15.085039,
+            "Z": -614.55194
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true,
+          "Mount": true
+        },
+        {
           "DataId": 2012100,
           "Position": {
             "X": 445.76172,
@@ -159,7 +170,8 @@
             "Z": -648.61523
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DisableNavmesh": true
         }
       ]
     },

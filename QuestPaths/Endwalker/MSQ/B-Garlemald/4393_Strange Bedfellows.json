@@ -74,13 +74,37 @@
         },
         {
           "Position": {
-            "X": 78.52435,
+            "X": 74.8118,
             "Y": 10.5,
-            "Z": -337.21478
+            "Z": -335.1508
           },
           "TerritoryId": 958,
-          "InteractionType": "Instruction",
-          "Comment": "Jump onto the Highway"
+          "InteractionType": "Jump",
+          "Comment": "Jump onto the Highway",
+          "JumpDestination": {
+            "Position": {
+              "X": 77.69889,
+              "Y": 12.075623,
+              "Z": -341.72333
+            }
+          }
+        },
+        {
+          "Position": {
+            "X": 72.64196,
+            "Y": 13.914492,
+            "Z": -347.6495
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Jump",
+          "Comment": "Jump onto the Highway 2",
+          "JumpDestination": {
+            "Position": {
+              "X": 72.97841,
+              "Y": 15.635607,
+              "Z": -355.94916
+            }
+          }
         },
         {
           "DataId": 2012007,
@@ -200,7 +224,15 @@
           "TerritoryId": 958,
           "InteractionType": "WalkTo",
           "Mount": true,
-          "DisableNavmesh": true
+          "DisableNavmesh": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            -64
+          ]
         },
         {
           "DataId": 2012111,
@@ -254,6 +286,24 @@
           "$.1": "QuestVariables if done after [1]: 32 17 1 0 0 96"
         },
         {
+          "Position": {
+            "X": 88.57295,
+            "Y": 1.3869624,
+            "Z": 124.77198
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            -128
+          ],
+          "Comment": "Avoids combat"
+        },
+        {
           "DataId": 2012108,
           "Position": {
             "X": 79.42322,
@@ -274,6 +324,24 @@
           "$.1": "QuestVariables if done after [1, 2]: 49 17 1 0 0 224"
         },
         {
+          "Position": {
+            "X": -20.886705,
+            "Y": -0.47744966,
+            "Z": 353.66968
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo",
+          "Comment": "Avoids combat",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            -16
+          ]
+        },
+        {
           "DataId": 2012110,
           "Position": {
             "X": -25.558899,
@@ -289,6 +357,7 @@
           "Comment": "TODO Needs item use?",
           "ItemId": 2003231,
           "ItemUseHealthMaxPercent": 10,
+          "DisableNavmesh": true,
           "CompletionQuestVariablesFlags": [
             null,
             null,
