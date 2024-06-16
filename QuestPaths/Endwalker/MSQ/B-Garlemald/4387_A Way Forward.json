@@ -77,7 +77,7 @@
             "Z": 365.7129
           },
           "TerritoryId": 958,
-          "InteractionType": "SinglePlayerDuty",
+          "InteractionType": "WaitForManualProgress",
           "Comment": "Follow Alphinaud and Alisaie",
           "DialogueChoices": [
             {
