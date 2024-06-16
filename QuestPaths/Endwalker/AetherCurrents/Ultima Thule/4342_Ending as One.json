@@ -29,7 +29,10 @@
           "TerritoryId": 960,
           "InteractionType": "Combat",
           "EnemySpawnType": "OverworldEnemies",
-          "Comment": "Kill 2 Drifting Ea, TODO: add data ids",
+          "KillEnemyDataIds": [
+            13315,
+            14097
+          ],
           "$": "QuestVariables: 0 0-16-32 0 0 0 0"
         }
       ]

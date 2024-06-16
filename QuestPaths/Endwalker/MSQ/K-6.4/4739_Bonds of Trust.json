@@ -23,6 +23,18 @@
       "Steps": [
         {
           "Position": {
+            "X": 252.4148,
+            "Y": 10.8,
+            "Z": -659.2858
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo",
+          "SkipIf": [
+            "FlyingUnlocked"
+          ]
+        },
+        {
+          "Position": {
             "X": -80.826256,
             "Y": 10.8,
             "Z": -663.8825
@@ -34,8 +46,7 @@
           "KillEnemyDataIds": [
             16332
           ],
-          "Fly": true,
-          "Comment": "TODO Verify that navmesh can still get you here if flying is locked, and doesn't get stuck on rubble"
+          "Fly": true
         }
       ]
     },

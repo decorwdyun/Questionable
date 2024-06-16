@@ -151,8 +151,8 @@
             null,
             64
           ],
-          "$.0": "[1]",
-          "$.1": "QuestVariables if done after [1]: 2 0 0 0 0 ??"
+          "$.0": "[2]",
+          "$.1": "QuestVariables if done after [1]: 2 0 0 0 0 96"
         },
         {
           "DataId": 2012281,
@@ -170,8 +170,7 @@
             null,
             null,
             128
-          ],
-          "Comment": "TODO Verify quest variables flags"
+          ]
         }
       ]
     },

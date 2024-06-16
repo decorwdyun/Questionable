@@ -107,9 +107,9 @@
       "Steps": [
         {
           "Position": {
-            "X": 26.119669,
-            "Y": 269.043,
-            "Z": -587.29144
+            "X": 37.10138,
+            "Y": 269.016,
+            "Z": -591.87366
           },
           "TerritoryId": 960,
           "InteractionType": "WalkTo",
@@ -132,6 +132,7 @@
           "StopDistance": 4,
           "TerritoryId": 960,
           "InteractionType": "Interact",
+          "DisableNavmesh": true,
           "CompletionQuestVariablesFlags": [
             null,
             null,
