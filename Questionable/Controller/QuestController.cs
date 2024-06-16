@@ -278,7 +278,6 @@ internal sealed class QuestController
         if (_taskQueue.Count > 0)
             _taskQueue.Clear();
 
-        _movementController.Stop();
         _yesAlreadyIpc.DisableYesAlready();
     }
 
@@ -403,6 +402,8 @@ internal sealed class QuestController
             _logger.LogWarning("Could not retrieve next quest step, not doing anything");
             return;
         }
+
+        _movementController.Stop();
 
         var newTasks = _taskFactories
             .SelectMany(x =>
