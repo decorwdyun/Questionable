@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Numerics;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Interface;
@@ -162,10 +163,14 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig
             QuestStep? currentStep = currentQuest.Quest
                 .FindSequence(currentQuest.Sequence)
                 ?.FindStep(currentQuest.Step);
-            bool colored = currentStep != null && currentStep.InteractionType == EInteractionType.Instruction
-                                               && _questController
-                                                   .HasCurrentTaskMatching<WaitAtEnd.WaitNextStepOrSequence>();
+            bool lastStep = currentStep ==
+                            currentQuest.Quest.FindSequence(currentQuest.Sequence)?.Steps.LastOrDefault();
+            bool colored = currentStep != null
+                           && !lastStep
+                           && currentStep.InteractionType == EInteractionType.Instruction
+                           && _questController.HasCurrentTaskMatching<WaitAtEnd.WaitNextStepOrSequence>();
 
+            ImGui.BeginDisabled(lastStep);
             if (colored)
                 ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.HealerGreen);
             if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.ArrowCircleRight, "Skip"))
@@ -176,6 +181,7 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig
 
             if (colored)
                 ImGui.PopStyleColor();
+            ImGui.EndDisabled();
 
             bool autoAcceptNextQuest = _configuration.General.AutoAcceptNextQuest;
             if (ImGui.Checkbox("Automatically accept next quest", ref autoAcceptNextQuest))
