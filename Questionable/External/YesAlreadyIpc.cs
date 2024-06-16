@@ -18,16 +18,22 @@ internal sealed class YesAlreadyIpc : IDisposable
 
     public void DisableYesAlready()
     {
-        _pluginLog.Debug("Disabling YesAlready");
-        if (_pluginInterface.TryGetData<HashSet<string>>("YesAlready.StopRequests", out var data))
+        if (_pluginInterface.TryGetData<HashSet<string>>("YesAlready.StopRequests", out var data) &&
+            !data.Contains(nameof(Questionable)))
+        {
+            _pluginLog.Debug("Disabling YesAlready");
             data.Add(nameof(Questionable));
+        }
     }
 
     public void RestoreYesAlready()
     {
-        _pluginLog.Debug("Restoring YesAlready");
-        if (_pluginInterface.TryGetData<HashSet<string>>("YesAlready.StopRequests", out var data))
+        if (_pluginInterface.TryGetData<HashSet<string>>("YesAlready.StopRequests", out var data) &&
+            data.Contains(nameof(Questionable)))
+        {
+            _pluginLog.Debug("Restoring YesAlready");
             data.Remove(nameof(Questionable));
+        }
     }
 
     public void Dispose() => RestoreYesAlready();

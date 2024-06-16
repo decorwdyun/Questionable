@@ -278,7 +278,7 @@ internal sealed class QuestController
         if (_taskQueue.Count > 0)
             _taskQueue.Clear();
 
-        _yesAlreadyIpc.DisableYesAlready();
+        _yesAlreadyIpc.RestoreYesAlready();
     }
 
     public void Stop(string label, bool continueIfAutomatic = false)
