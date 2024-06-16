@@ -63,7 +63,9 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig
         _navmeshIpc = navmeshIpc;
         _logger = logger;
 
+#if DEBUG
         IsOpen = true;
+#endif
         SizeConstraints = new WindowSizeConstraints
         {
             MinimumSize = new Vector2(200, 30),
