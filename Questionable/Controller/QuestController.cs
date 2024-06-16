@@ -5,6 +5,7 @@ using Dalamud.Game.ClientState.Keys;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps;
+using Questionable.External;
 using Questionable.Model;
 using Questionable.Model.V1;
 
@@ -19,6 +20,7 @@ internal sealed class QuestController
     private readonly QuestRegistry _questRegistry;
     private readonly IKeyState _keyState;
     private readonly Configuration _configuration;
+    private readonly YesAlreadyIpc _yesAlreadyIpc;
     private readonly IReadOnlyList<ITaskFactory> _taskFactories;
 
     private readonly object _lock = new();
@@ -35,6 +37,7 @@ internal sealed class QuestController
         QuestRegistry questRegistry,
         IKeyState keyState,
         Configuration configuration,
+        YesAlreadyIpc yesAlreadyIpc,
         IEnumerable<ITaskFactory> taskFactories)
     {
         _clientState = clientState;
@@ -44,6 +47,7 @@ internal sealed class QuestController
         _questRegistry = questRegistry;
         _keyState = keyState;
         _configuration = configuration;
+        _yesAlreadyIpc = yesAlreadyIpc;
         _taskFactories = taskFactories.ToList().AsReadOnly();
     }
 
@@ -273,6 +277,9 @@ internal sealed class QuestController
 
         if (_taskQueue.Count > 0)
             _taskQueue.Clear();
+
+        _movementController.Stop();
+        _yesAlreadyIpc.DisableYesAlready();
     }
 
     public void Stop(string label, bool continueIfAutomatic = false)

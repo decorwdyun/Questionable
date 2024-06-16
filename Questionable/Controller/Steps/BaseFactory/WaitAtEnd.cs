@@ -60,7 +60,7 @@ internal static class WaitAtEnd
                     return
                     [
                         serviceProvider.GetRequiredService<WaitObjectAtPosition>()
-                            .With(step.DataId.Value, step.Position.Value),
+                            .With(step.DataId.Value, step.Position.Value, step.NpcWaitDistance ?? 0.05f),
                         serviceProvider.GetRequiredService<WaitDelay>(),
                         Next(quest, sequence, step)
                     ];
@@ -179,18 +179,20 @@ internal static class WaitAtEnd
     {
         public uint DataId { get; set; }
         public Vector3 Destination { get; set; }
+        public float Distance { get; set; }
 
-        public ITask With(uint dataId, Vector3 destination)
+        public ITask With(uint dataId, Vector3 destination, float distance)
         {
             DataId = dataId;
             Destination = destination;
+            Distance = distance;
             return this;
         }
 
         public bool Start() => true;
 
         public ETaskResult Update() =>
-            gameFunctions.IsObjectAtPosition(DataId, Destination)
+            gameFunctions.IsObjectAtPosition(DataId, Destination, Distance)
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
 

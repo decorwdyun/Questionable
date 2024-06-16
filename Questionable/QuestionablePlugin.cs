@@ -69,6 +69,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<TerritoryData>();
         serviceCollection.AddSingleton<NavmeshIpc>();
         serviceCollection.AddSingleton<LifestreamIpc>();
+        serviceCollection.AddSingleton<YesAlreadyIpc>();
 
         // individual tasks
         serviceCollection.AddTransient<MountTask>();
@@ -93,6 +94,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTaskWithFactory<Say.Factory, Say.UseChat>();
         serviceCollection.AddTaskWithFactory<UseItem.Factory, UseItem.UseOnGround, UseItem.UseOnObject, UseItem.Use>();
         serviceCollection.AddTaskWithFactory<EquipItem.Factory, EquipItem.DoEquip>();
+        serviceCollection.AddTaskWithFactory<SinglePlayerDuty.Factory, SinglePlayerDuty.DisableYesAlready, SinglePlayerDuty.RestoreYesAlready>();
 
         serviceCollection
             .AddTaskWithFactory<WaitAtEnd.Factory,
