@@ -144,7 +144,7 @@
             "Z": 390.46313
           },
           "TerritoryId": 958,
-          "InteractionType": "WaitForManualProgress",
+          "InteractionType": "Instruction",
           "Comment": "Follow Girl in Green"
         }
       ]

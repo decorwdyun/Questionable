@@ -468,10 +468,10 @@ internal sealed unsafe class GameFunctions
         ExecuteCommand($"{_emoteCommands[emote]} motion");
     }
 
-    public bool IsObjectAtPosition(uint dataId, Vector3 position)
+    public bool IsObjectAtPosition(uint dataId, Vector3 position, float distance)
     {
         GameObject? gameObject = FindObjectByDataId(dataId);
-        return gameObject != null && (gameObject.Position - position).Length() < 0.05f;
+        return gameObject != null && (gameObject.Position - position).Length() < distance;
     }
 
     public bool HasStatusPreventingMount()

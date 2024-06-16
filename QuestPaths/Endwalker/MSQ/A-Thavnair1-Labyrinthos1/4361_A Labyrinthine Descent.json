@@ -47,8 +47,65 @@
             "Z": -27.054321
           },
           "TerritoryId": 962,
-          "InteractionType": "WaitForManualProgress",
-          "Comment": "Follow Alisaie"
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1038753,
+          "Position": {
+            "X": -202.6663,
+            "Y": 13.470648,
+            "Z": -49.497906
+          },
+          "TerritoryId": 962,
+          "InteractionType": "WaitForNpcAtPosition",
+          "NpcWaitDistance": 1,
+          "Sprint": false
+        },
+        {
+          "DataId": 1038753,
+          "Position": {
+            "X": -138.0897,
+            "Y": 21.879826,
+            "Z": -144.57791
+          },
+          "TerritoryId": 962,
+          "InteractionType": "WaitForNpcAtPosition",
+          "NpcWaitDistance": 1,
+          "Sprint": false
+        },
+        {
+          "DataId": 1038753,
+          "Position": {
+            "X": -89.6808,
+            "Y": 24.953402,
+            "Z": -138.54071
+          },
+          "TerritoryId": 962,
+          "InteractionType": "WaitForNpcAtPosition",
+          "NpcWaitDistance": 1,
+          "Sprint": false
+        },
+        {
+          "DataId": 1038753,
+          "Position": {
+            "X": -16.652283,
+            "Y": 41.37599,
+            "Z": -145.70506
+          },
+          "TerritoryId": 962,
+          "InteractionType": "WaitForNpcAtPosition",
+          "NpcWaitDistance": 1,
+          "Sprint": false
+        },
+        {
+          "DataId": 1038753,
+          "Position": {
+            "X": -77.90129,
+            "Y": 41.37599,
+            "Z": -209.40958
+          },
+          "TerritoryId": 962,
+          "InteractionType": "Interact"
         }
       ]
     },

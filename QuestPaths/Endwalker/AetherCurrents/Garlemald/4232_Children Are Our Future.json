@@ -43,7 +43,7 @@
             "Z": -668.9708
           },
           "TerritoryId": 958,
-          "InteractionType": "WaitForManualProgress",
+          "InteractionType": "Instruction",
           "Comment": "Follow Azure-haired Boy"
         },
         {

@@ -810,6 +810,23 @@
                       "ContentFinderConditionId"
                     ]
                   }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "InteractionType": {
+                        "const": "WaitForNpcAtPosition"
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "NpcWaitDistance": {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      }
+                    }
+                  }
                 }
               ]
             }

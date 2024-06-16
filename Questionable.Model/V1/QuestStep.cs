@@ -17,6 +17,7 @@ public sealed class QuestStep
     public Vector3? Position { get; set; }
 
     public float? StopDistance { get; set; }
+    public float? NpcWaitDistance { get; set; }
     public ushort TerritoryId { get; set; }
     public ushort? TargetTerritoryId { get; set; }
 

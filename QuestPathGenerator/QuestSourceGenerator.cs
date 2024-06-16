@@ -291,6 +291,9 @@ public class QuestSourceGenerator : ISourceGenerator
                                             Assignment(nameof(QuestStep.StopDistance), step.StopDistance,
                                                     emptyStep.StopDistance)
                                                 .AsSyntaxNodeOrToken(),
+                                            Assignment(nameof(QuestStep.NpcWaitDistance), step.NpcWaitDistance,
+                                                    emptyStep.NpcWaitDistance)
+                                                .AsSyntaxNodeOrToken(),
                                             Assignment(nameof(QuestStep.TargetTerritoryId), step.TargetTerritoryId,
                                                     emptyStep.TargetTerritoryId)
                                                 .AsSyntaxNodeOrToken(),

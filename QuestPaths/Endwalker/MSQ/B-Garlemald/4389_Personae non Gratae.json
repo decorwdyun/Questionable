@@ -205,6 +205,16 @@
           "InteractionType": "WalkTo"
         },
         {
+          "Position": {
+            "X": 549.7444,
+            "Y": -36.61608,
+            "Z": -225.64955
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true
+        },
+        {
           "DataId": 1039899,
           "Position": {
             "X": 549.6758,

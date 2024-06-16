@@ -77,7 +77,7 @@
             "Z": 365.7129
           },
           "TerritoryId": 958,
-          "InteractionType": "WaitForManualProgress",
+          "InteractionType": "Instruction",
           "Comment": "Follow Alphinaud and Alisaie",
           "DialogueChoices": [
             {
@@ -93,6 +93,44 @@
       "Sequence": 5,
       "Steps": [
         {
+          "DataId": 1039882,
+          "Position": {
+            "X": -286.71664,
+            "Y": 5.6315875,
+            "Z": 264.1926
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WaitForNpcAtPosition",
+          "NpcWaitDistance": 5,
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "DataId": 1039882,
+          "Position": {
+            "X": -126.2175,
+            "Y": 0.18809877,
+            "Z": 233.39058
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WaitForNpcAtPosition",
+          "NpcWaitDistance": 5,
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "DataId": 1039882,
+          "Position": {
+            "X": 67.2465,
+            "Y": 0.33215836,
+            "Z": 149.8282
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo",
+          "Mount": false,
+          "Sprint": false
+        },
+        {
           "DataId": 1039880,
           "Position": {
             "X": 66.50907,
@@ -101,8 +139,7 @@
           },
           "StopDistance": 1,
           "TerritoryId": 958,
-          "InteractionType": "Interact",
-          "Comment": "Follow Alphinaud and Alisaie"
+          "InteractionType": "Interact"
         }
       ]
     },
