@@ -94,7 +94,7 @@ internal static class Move
                         .With(Destination, m =>
                         {
                             m.NavigateTo(EMovementType.Quest, Step.DataId, Destination,
-                                fly: Step.Fly == true && gameFunctions.IsFlyingUnlockedInCurrentZone(),
+                                fly: Step.Fly == true && gameFunctions.IsFlyingUnlocked(Step.TerritoryId),
                                 sprint: Step.Sprint != false,
                                 stopDistance: distance);
                         });
