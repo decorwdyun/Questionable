@@ -36,6 +36,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
     private readonly GameUiController _gameUiController;
     private readonly Configuration _configuration;
     private readonly NavmeshIpc _navmeshIpc;
+    private readonly QuestRegistry _questRegistry;
     private readonly ILogger<QuestWindow> _logger;
 
     public QuestWindow(DalamudPluginInterface pluginInterface,
@@ -48,6 +49,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         GameUiController gameUiController,
         Configuration configuration,
         NavmeshIpc navmeshIpc,
+        QuestRegistry questRegistry,
         ILogger<QuestWindow> logger)
         : base("Questionable###Questionable", ImGuiWindowFlags.AlwaysAutoResize)
     {
@@ -61,6 +63,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         _gameUiController = gameUiController;
         _configuration = configuration;
         _navmeshIpc = navmeshIpc;
+        _questRegistry = questRegistry;
         _logger = logger;
 
 #if DEBUG
@@ -206,11 +209,11 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         var q = _gameFunctions.GetCurrentQuest();
         ImGui.Text($"Current Quest: {q.CurrentQuest} → {q.Sequence}");
 
+#if false
         var questManager = QuestManager.Instance();
         if (questManager != null)
         {
-            // unsure how these are sorted
-            for (int i = 0; i < 1 /*questManager->TrackedQuestsSpan.Length*/; ++i)
+            for (int i = questManager->TrackedQuestsSpan.Length - 1; i >= 0; --i)
             {
                 var trackedQuest = questManager->TrackedQuestsSpan[i];
                 switch (trackedQuest.QuestType)
@@ -220,13 +223,15 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
                         break;
 
                     case 1:
+                        _questRegistry.TryGetQuest(questManager->NormalQuestsSpan[trackedQuest.Index].QuestId,
+                            out var quest);
                         ImGui.Text(
-                            $"Tracked quest: {questManager->NormalQuestsSpan[trackedQuest.Index].QuestId}, {trackedQuest.Index}");
+                            $"Tracked quest: {questManager->NormalQuestsSpan[trackedQuest.Index].QuestId}, {trackedQuest.Index}: {quest?.Name}");
                         break;
                 }
             }
         }
-
+#endif
 
         if (_targetManager.Target != null)
         {

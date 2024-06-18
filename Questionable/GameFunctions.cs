@@ -148,29 +148,47 @@ internal sealed unsafe class GameFunctions
 
     public (ushort CurrentQuest, byte Sequence) GetCurrentQuestInternal()
     {
-        ushort currentQuest;
-
-        // if any quest that is currently tracked (i.e. in the to-do list) exists as mapped quest, we use that
         var questManager = QuestManager.Instance();
         if (questManager != null)
         {
-            foreach (var tracked in questManager->TrackedQuestsSpan)
+            // always prioritize accepting MSQ quests, to make sure we don't turn in one MSQ quest and then go off to do
+            // side quests until the end of time.
+            var msqQuest = GetMainStoryQuest(questManager);
+            if (msqQuest.CurrentQuest != 0 && !questManager->IsQuestAccepted(msqQuest.CurrentQuest))
+                return msqQuest;
+
+            // Use the quests in the same order as they're shown in the to-do list, e.g. if the MSQ is the first item,
+            // do the MSQ; if a side quest is the first item do that side quest.
+            //
+            // If no quests are marked as 'priority', accepting a new quest adds it to the top of the list.
+            for (int i = questManager->TrackedQuestsSpan.Length - 1; i >= 0; --i)
             {
-                switch (tracked.QuestType)
+                ushort currentQuest;
+                var trackedQuest = questManager->TrackedQuestsSpan[i];
+                switch (trackedQuest.QuestType)
                 {
                     default:
                         continue;
 
                     case 1: // normal quest
-                        currentQuest = questManager->NormalQuestsSpan[tracked.Index].QuestId;
+                        currentQuest = questManager->NormalQuestsSpan[trackedQuest.Index].QuestId;
                         break;
                 }
 
                 if (_questRegistry.IsKnownQuest(currentQuest))
                     return (currentQuest, QuestManager.GetQuestSequence(currentQuest));
             }
+
+            // if we know no quest of those currently in the to-do list, just do MSQ
+            return msqQuest;
         }
 
+        return default;
+    }
+
+    // TODO This doesn't work with unaccepted quests in NG+, only accepted quests
+    private (ushort CurrentQuest, byte Sequence) GetMainStoryQuest(QuestManager* questManager)
+    {
         var scenarioTree = AgentScenarioTree.Instance();
         if (scenarioTree == null)
             return default;
@@ -178,8 +196,12 @@ internal sealed unsafe class GameFunctions
         if (scenarioTree->Data == null)
             return default;
 
-        currentQuest = scenarioTree->Data->CurrentScenarioQuest;
+        ushort currentQuest = scenarioTree->Data->CurrentScenarioQuest;
         if (currentQuest == 0)
+            return default;
+
+        // if the MSQ is hidden, we generally ignore it
+        if (questManager->IsQuestAccepted(currentQuest) && questManager->GetQuestById(currentQuest)->IsHidden)
             return default;
 
         return (currentQuest, QuestManager.GetQuestSequence(currentQuest));

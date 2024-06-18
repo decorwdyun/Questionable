@@ -52,6 +52,25 @@
       "Sequence": 3,
       "Steps": [
         {
+          "Position": {
+            "X": 81.33277,
+            "Y": 1.8631814,
+            "Z": -96.56102
+          },
+          "TerritoryId": 963,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            -128
+          ],
+          "Sprint": true
+        },
+        {
           "DataId": 1037314,
           "Position": {
             "X": 15.701477,
