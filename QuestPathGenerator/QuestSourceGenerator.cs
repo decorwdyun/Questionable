@@ -297,6 +297,9 @@ public class QuestSourceGenerator : ISourceGenerator
                                             Assignment(nameof(QuestStep.TargetTerritoryId), step.TargetTerritoryId,
                                                     emptyStep.TargetTerritoryId)
                                                 .AsSyntaxNodeOrToken(),
+                                            Assignment(nameof(QuestStep.DelaySecondsAtStart), step.DelaySecondsAtStart,
+                                                    emptyStep.DelaySecondsAtStart)
+                                                .AsSyntaxNodeOrToken(),
                                             Assignment(nameof(QuestStep.Disabled), step.Disabled, emptyStep.Disabled)
                                                 .AsSyntaxNodeOrToken(),
                                             Assignment(nameof(QuestStep.DisableNavmesh), step.DisableNavmesh,

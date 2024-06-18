@@ -105,7 +105,8 @@
             "Z": -209.40958
           },
           "TerritoryId": 962,
-          "InteractionType": "Interact"
+          "InteractionType": "WalkTo",
+          "Comment": "Should auto-trigger the next step once Alisaie is here"
         }
       ]
     },

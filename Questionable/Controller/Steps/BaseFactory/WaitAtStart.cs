@@ -1,0 +1,35 @@
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
+using Questionable.Controller.Steps.BaseTasks;
+using Questionable.Model;
+using Questionable.Model.V1;
+
+namespace Questionable.Controller.Steps.BaseFactory;
+
+internal static class WaitAtStart
+{
+    internal sealed class Factory(IServiceProvider serviceProvider) : ITaskFactory
+    {
+        public ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
+        {
+            if (step.DelaySecondsAtStart == null)
+                return null;
+
+            return serviceProvider.GetRequiredService<WaitDelay>()
+                .With(TimeSpan.FromSeconds(step.DelaySecondsAtStart.Value));
+        }
+    }
+
+    internal sealed class WaitDelay : AbstractDelayedTask
+    {
+        public ITask With(TimeSpan delay)
+        {
+            Delay = delay;
+            return this;
+        }
+
+        protected override bool StartInternal() => true;
+
+        public override string ToString() => $"Wait[S](seconds: {Delay.TotalSeconds})";
+    }
+}

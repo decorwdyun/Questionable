@@ -20,6 +20,7 @@ public sealed class QuestStep
     public float? NpcWaitDistance { get; set; }
     public ushort TerritoryId { get; set; }
     public ushort? TargetTerritoryId { get; set; }
+    public float? DelaySecondsAtStart { get; set; }
 
     public bool Disabled { get; set; }
     public bool DisableNavmesh { get; set; }

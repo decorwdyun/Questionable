@@ -153,6 +153,149 @@
       "Sequence": 6,
       "Steps": [
         {
+          "DataId": 1038845,
+          "Position": {
+            "X": 156.66682,
+            "Y": -18.078814,
+            "Z": 361.58972
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WaitForNpcAtPosition",
+          "NpcWaitDistance": 5,
+          "StopDistance": 100,
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "Position": {
+            "X": 204.82344,
+            "Y": -19.113703,
+            "Z": 373.52936
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo",
+          "Mount": false,
+          "Sprint": false,
+          "DelaySecondsAtStart": 1
+        },
+        {
+          "DataId": 1038845,
+          "Position": {
+            "X": 232.28406,
+            "Y": -16.777779,
+            "Z": 339.1168
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WaitForNpcAtPosition",
+          "NpcWaitDistance": 5,
+          "StopDistance": 100,
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "Position": {
+            "X": 272.79572,
+            "Y": -13.174152,
+            "Z": 317.53406
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo",
+          "Mount": false,
+          "Sprint": false,
+          "DelaySecondsAtStart": 8
+        },
+        {
+          "DataId": 1038845,
+          "Position": {
+            "X": 287.9112,
+            "Y": -11.811615,
+            "Z": 292.6589
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WaitForNpcAtPosition",
+          "NpcWaitDistance": 5,
+          "StopDistance": 100,
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "Position": {
+            "X": 323.9364,
+            "Y": -10.539692,
+            "Z": 254.19264
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo",
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "DataId": 1038845,
+          "Position": {
+            "X": 354.5913,
+            "Y": -5.5008125,
+            "Z": 245.22939
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WaitForNpcAtPosition",
+          "NpcWaitDistance": 5,
+          "StopDistance": 100,
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "Position": {
+            "X": 354.71964,
+            "Y": -2.2201555,
+            "Z": 233.99152
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo",
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "DataId": 1038845,
+          "Position": {
+            "X": 382.75116,
+            "Y": 2.7549856,
+            "Z": 226.49387
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WaitForNpcAtPosition",
+          "NpcWaitDistance": 5,
+          "StopDistance": 40,
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "DataId": 1038845,
+          "Position": {
+            "X": 408.44272,
+            "Y": 4.965298,
+            "Z": 208.22794
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo",
+          "StopDistance": 45,
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "DataId": 1038845,
+          "Position": {
+            "X": 426.39246,
+            "Y": 5.348692,
+            "Z": 194.86263
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WaitForNpcAtPosition",
+          "NpcWaitDistance": 5,
+          "StopDistance": 100,
+          "Mount": false,
+          "Sprint": false
+        },
+        {
           "DataId": 1038846,
           "Position": {
             "X": 555.8098,
@@ -160,7 +303,8 @@
             "Z": 159.10571
           },
           "TerritoryId": 958,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "Mount": false
         }
       ]
     },

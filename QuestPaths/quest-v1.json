@@ -387,6 +387,13 @@
                   "minItems": 6,
                   "maxItems": 6
                 },
+                "DelaySecondsAtStart": {
+                  "description": "Time to wait before starting",
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
                 "Comment": {
                   "type": "string"
                 }

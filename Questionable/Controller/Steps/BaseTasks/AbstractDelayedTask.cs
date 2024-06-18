@@ -4,13 +4,14 @@ namespace Questionable.Controller.Steps.BaseTasks;
 
 internal abstract class AbstractDelayedTask : ITask
 {
-    protected readonly TimeSpan Delay;
     private DateTime _continueAt;
 
     protected AbstractDelayedTask(TimeSpan delay)
     {
         Delay = delay;
     }
+
+    protected TimeSpan Delay { get; set; }
 
     protected AbstractDelayedTask()
         : this(TimeSpan.FromSeconds(5))
