@@ -53,7 +53,7 @@ internal sealed class DebugOverlay : Window
         for (int i = currentQuest.Step; i <= sequence.Steps.Count; ++i)
         {
             QuestStep? step = sequence.FindStep(i);
-            if (step == null || step.Position == null)
+            if (step == null || step.Position == null || step.Disabled)
                 continue;
 
             bool visible = _gameGui.WorldToScreen(step.Position.Value, out Vector2 screenPos);

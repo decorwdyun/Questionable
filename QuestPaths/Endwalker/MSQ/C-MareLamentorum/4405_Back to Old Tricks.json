@@ -45,7 +45,7 @@
             "Z": -269.24548
           },
           "TerritoryId": 959,
-          "InteractionType": "Instruction",
+          "InteractionType": "Interact",
           "Comment": "Follow Urianger"
         }
       ]
@@ -54,15 +54,93 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 2012185,
           "Position": {
-            "X": -5.416992,
-            "Y": -49.05786,
-            "Z": -269.24548
+            "X": -6.025082,
+            "Y": -28.32315,
+            "Z": -215.77702
           },
           "TerritoryId": 959,
-          "InteractionType": "Instruction",
-          "Comment": "Follow Urianger"
+          "InteractionType": "WalkTo",
+          "Mount": false,
+          "Sprint": false,
+          "DisableNavmesh": true,
+          "DelaySecondsAtStart": 2
+        },
+        {
+          "DataId": 1038933,
+          "Position": {
+            "X": 15.536669,
+            "Y": -7.1210613,
+            "Z": -177.33519
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WaitForNpcAtPosition",
+          "NpcWaitDistance": 3,
+          "StopDistance": 100,
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "Position": {
+            "X": 10.73667,
+            "Y": -5.0926046,
+            "Z": -171.87782
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo",
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "DataId": 1038933,
+          "Position": {
+            "X": -22.370995,
+            "Y": 14.627041,
+            "Z": -132.87657
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WaitForNpcAtPosition",
+          "NpcWaitDistance": 3,
+          "StopDistance": 100,
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "Position": {
+            "X": -25.210857,
+            "Y": 26.867788,
+            "Z": -109.43445
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo",
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "DataId": 1038933,
+          "Position": {
+            "X": 1.7508065,
+            "Y": 46.95068,
+            "Z": -69.89246
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WaitForNpcAtPosition",
+          "NpcWaitDistance": 3,
+          "StopDistance": 100,
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "Position": {
+            "X": 48.261765,
+            "Y": 74.98867,
+            "Z": -32.961533
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo",
+          "Mount": false,
+          "Sprint": true,
+          "DelaySecondsAtStart": 1
         }
       ]
     },
