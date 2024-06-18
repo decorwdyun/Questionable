@@ -24,7 +24,7 @@ using Questionable.Model.V1;
 
 namespace Questionable.Windows;
 
-internal sealed class DebugWindow : LWindow, IPersistableWindowConfig
+internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
 {
     private readonly DalamudPluginInterface _pluginInterface;
     private readonly MovementController _movementController;
@@ -36,9 +36,9 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig
     private readonly GameUiController _gameUiController;
     private readonly Configuration _configuration;
     private readonly NavmeshIpc _navmeshIpc;
-    private readonly ILogger<DebugWindow> _logger;
+    private readonly ILogger<QuestWindow> _logger;
 
-    public DebugWindow(DalamudPluginInterface pluginInterface,
+    public QuestWindow(DalamudPluginInterface pluginInterface,
         MovementController movementController,
         QuestController questController,
         GameFunctions gameFunctions,
@@ -48,8 +48,8 @@ internal sealed class DebugWindow : LWindow, IPersistableWindowConfig
         GameUiController gameUiController,
         Configuration configuration,
         NavmeshIpc navmeshIpc,
-        ILogger<DebugWindow> logger)
-        : base("Questionable", ImGuiWindowFlags.AlwaysAutoResize)
+        ILogger<QuestWindow> logger)
+        : base("Questionable###Questionable", ImGuiWindowFlags.AlwaysAutoResize)
     {
         _pluginInterface = pluginInterface;
         _movementController = movementController;

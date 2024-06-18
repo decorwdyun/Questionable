@@ -285,8 +285,7 @@
           },
           "TerritoryId": 958,
           "InteractionType": "Interact",
-          "Mount": false,
-          "Comment": "TODO Should cancel Navmesh on fade out"
+          "Mount": false
         }
       ]
     },

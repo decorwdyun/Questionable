@@ -79,6 +79,13 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
 
                 ImGui.Separator();
 
+                bool debugOverlay = _configuration.Advanced.DebugOverlay;
+                if (ImGui.Checkbox("Enable debug overlay", ref debugOverlay))
+                {
+                    _configuration.Advanced.DebugOverlay = debugOverlay;
+                    Save();
+                }
+
                 bool neverFly = _configuration.Advanced.NeverFly;
                 if (ImGui.Checkbox("Disable flying (even if unlocked for the zone)", ref neverFly))
                 {

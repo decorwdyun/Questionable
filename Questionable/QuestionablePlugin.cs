@@ -80,6 +80,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTaskWithFactory<AetheryteShortcut.Factory, AetheryteShortcut.UseAetheryteShortcut>();
         serviceCollection.AddTaskWithFactory<SkipCondition.Factory, SkipCondition.CheckTask>();
         serviceCollection.AddTaskWithFactory<AethernetShortcut.Factory, AethernetShortcut.UseAethernetShortcut>();
+        serviceCollection.AddTaskWithFactory<WaitAtStart.Factory, WaitAtStart.WaitDelay>();
         serviceCollection.AddTaskWithFactory<Move.Factory, Move.MoveInternal, Move.ExpectToBeNearDataId>();
         serviceCollection.AddTransient<Move.MoveBuilder>();
 
@@ -109,13 +110,14 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<GameUiController>();
         serviceCollection.AddSingleton<NavigationShortcutController>();
 
-        serviceCollection.AddSingleton<DebugWindow>();
+        serviceCollection.AddSingleton<QuestWindow>();
         serviceCollection.AddSingleton<ConfigWindow>();
+        serviceCollection.AddSingleton<DebugOverlay>();
         serviceCollection.AddSingleton<DalamudInitializer>();
 
         _serviceProvider = serviceCollection.BuildServiceProvider();
         _serviceProvider.GetRequiredService<QuestRegistry>().Reload();
-        _serviceProvider.GetRequiredService<DebugWindow>();
+        _serviceProvider.GetRequiredService<QuestWindow>();
         _serviceProvider.GetRequiredService<DalamudInitializer>();
     }
 

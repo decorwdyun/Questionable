@@ -21,6 +21,7 @@ internal sealed class Configuration : IPluginConfiguration
 
     internal sealed class AdvancedConfiguration
     {
+        public bool DebugOverlay { get; set; }
         public bool NeverFly { get; set; }
     }
 }
