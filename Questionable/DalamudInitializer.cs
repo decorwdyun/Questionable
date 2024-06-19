@@ -70,7 +70,14 @@ internal sealed class DalamudInitializer : IDisposable
     {
         if (arguments is "c" or "config")
             _configWindow.Toggle();
-        else
+        if (arguments is "start")
+            _questController.ExecuteNextStep(true);
+        else if (arguments is "stop")
+        {
+            _movementController.Stop();
+            _questController.Stop("Stop command");
+        }
+        else if (string.IsNullOrEmpty(arguments))
             _questWindow.Toggle();
     }
 
