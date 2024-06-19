@@ -9,6 +9,7 @@ using System.Text;
 using Dalamud.Game;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects;
+using Dalamud.Memory;
 using Dalamud.Plugin.Services;
 using Dalamud.Utility;
 using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
@@ -153,7 +154,7 @@ internal sealed unsafe class GameFunctions
         {
             // always prioritize accepting MSQ quests, to make sure we don't turn in one MSQ quest and then go off to do
             // side quests until the end of time.
-            var msqQuest = GetMainStoryQuest(questManager);
+            var msqQuest = GetMainScenarioQuest(questManager);
             if (msqQuest.CurrentQuest != 0 && !questManager->IsQuestAccepted(msqQuest.CurrentQuest))
                 return msqQuest;
 
@@ -186,9 +187,31 @@ internal sealed unsafe class GameFunctions
         return default;
     }
 
-    // TODO This doesn't work with unaccepted quests in NG+, only accepted quests
-    private (ushort CurrentQuest, byte Sequence) GetMainStoryQuest(QuestManager* questManager)
+    private (ushort CurrentQuest, byte Sequence) GetMainScenarioQuest(QuestManager* questManager)
     {
+        if (QuestManager.IsQuestComplete(3759)) // Memories Rekindled
+        {
+            AgentInterface* questRedoHud = AgentModule.Instance()->GetAgentByInternalId(AgentId.QuestRedoHud);
+            if (questRedoHud != null && questRedoHud->IsAgentActive())
+            {
+                // there's surely better ways to check this, but the one in the OOB Plugin was even less reliable
+                if (_gameGui.TryGetAddonByName<AtkUnitBase>("QuestRedoHud", out var addon) &&
+                    addon->AtkValuesCount == 4 &&
+                    // 0 seems to be active,
+                    // 1 seems to be paused,
+                    // 2 is unknown, but it happens e.g. before the quest 'Alzadaal's Legacy'
+                    // 3 seems to be having /ng+ open while active,
+                    // 4 seems to be when (a) suspending the chapter, or (b) having turned in a quest
+                    addon->AtkValues[0].UInt is 0 or 2 or 3 or 4)
+                {
+                    // redoHud+44 is chapter
+                    // redoHud+46 is quest
+                    ushort questId = MemoryHelper.Read<ushort>((nint)questRedoHud + 46);
+                    return (questId, QuestManager.GetQuestSequence(questId));
+                }
+            }
+        }
+
         var scenarioTree = AgentScenarioTree.Instance();
         if (scenarioTree == null)
             return default;

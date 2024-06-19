@@ -85,6 +85,16 @@
           ]
         },
         {
+          "Position": {
+            "X": -431.53903,
+            "Y": -220.1193,
+            "Z": 301.76364
+          },
+          "TerritoryId": 956,
+          "InteractionType": "WalkTo",
+          "Fly": true
+        },
+        {
           "DataId": 1039582,
           "Position": {
             "X": -325.2461,
@@ -93,7 +103,7 @@
           },
           "TerritoryId": 956,
           "InteractionType": "Interact",
-          "Fly": true
+          "Fly": false
         }
       ]
     },

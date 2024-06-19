@@ -37,6 +37,16 @@
           "TargetTerritoryId": 956
         },
         {
+          "Position": {
+            "X": -431.53903,
+            "Y": -220.1193,
+            "Z": 301.76364
+          },
+          "TerritoryId": 956,
+          "InteractionType": "WalkTo",
+          "Fly": true
+        },
+        {
           "DataId": 1039827,
           "Position": {
             "X": -323.38446,
@@ -45,7 +55,7 @@
           },
           "TerritoryId": 956,
           "InteractionType": "Interact",
-          "Fly": true
+          "Fly": false
         }
       ]
     },
