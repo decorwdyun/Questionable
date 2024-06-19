@@ -235,8 +235,6 @@ internal sealed unsafe class GameFunctions
 
     public bool TeleportAetheryte(uint aetheryteId)
     {
-
-
         if (IsAetheryteUnlocked(aetheryteId, out var subIndex))
         {
             if (aetheryteId == PlayerState.Instance()->HomeAetheryteId &&
@@ -518,7 +516,10 @@ internal sealed unsafe class GameFunctions
         {
             var battleChara = (BattleChara*)gameObject;
             StatusManager* statusManager = battleChara->GetStatusManager;
-            return statusManager->HasStatus(565) || statusManager->HasStatus(404) || statusManager->HasStatus(2730);
+            return statusManager->HasStatus(565) ||
+                   statusManager->HasStatus(404) ||
+                   statusManager->HasStatus(2729) ||
+                   statusManager->HasStatus(2730);
         }
 
         return false;
