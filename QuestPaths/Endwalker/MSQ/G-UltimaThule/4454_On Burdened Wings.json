@@ -135,6 +135,24 @@
           "$.1": "QuestVariables if done first: 1 0 0 0 0 32"
         },
         {
+          "DataId": 2012281,
+          "Position": {
+            "X": -472.25153,
+            "Y": 56.26001,
+            "Z": -20.676025
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
+        },
+        {
           "DataId": 2012282,
           "Position": {
             "X": -479.3927,
@@ -153,24 +171,6 @@
           ],
           "$.0": "[2]",
           "$.1": "QuestVariables if done after [1]: 2 0 0 0 0 96"
-        },
-        {
-          "DataId": 2012281,
-          "Position": {
-            "X": -472.25153,
-            "Y": 56.26001,
-            "Z": -20.676025
-          },
-          "TerritoryId": 960,
-          "InteractionType": "Interact",
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            128
-          ]
         }
       ]
     },

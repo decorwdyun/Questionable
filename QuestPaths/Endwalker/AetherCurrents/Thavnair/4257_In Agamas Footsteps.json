@@ -46,7 +46,8 @@
           "TerritoryId": 957,
           "InteractionType": "Interact",
           "Mount": false,
-          "Sprint": false
+          "Sprint": false,
+          "DelaySecondsAtStart": 3
         }
       ]
     },

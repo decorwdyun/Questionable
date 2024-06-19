@@ -68,6 +68,7 @@
             "Y": 11.389343,
             "Z": -398.82806
           },
+          "StopDistance": 20,
           "TerritoryId": 958,
           "InteractionType": "Instruction",
           "Comment": "Leave the Aether Current location"
