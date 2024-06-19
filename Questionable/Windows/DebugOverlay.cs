@@ -15,15 +15,18 @@ internal sealed class DebugOverlay : Window
 {
     private readonly QuestController _questController;
     private readonly IGameGui _gameGui;
+    private readonly IClientState _clientState;
     private readonly Configuration _configuration;
 
-    public DebugOverlay(QuestController questController, IGameGui gameGui, Configuration configuration)
+    public DebugOverlay(QuestController questController, IGameGui gameGui, IClientState clientState,
+        Configuration configuration)
         : base("Questionable Debug Overlay###QuestionableDebugOverlay",
             ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoBackground |
             ImGuiWindowFlags.NoInputs | ImGuiWindowFlags.NoSavedSettings, true)
     {
         _questController = questController;
         _gameGui = gameGui;
+        _clientState = clientState;
         _configuration = configuration;
 
         Position = Vector2.Zero;
@@ -53,7 +56,10 @@ internal sealed class DebugOverlay : Window
         for (int i = currentQuest.Step; i <= sequence.Steps.Count; ++i)
         {
             QuestStep? step = sequence.FindStep(i);
-            if (step == null || step.Position == null || step.Disabled)
+            if (step == null ||
+                step.Position == null ||
+                step.Disabled ||
+                step.TerritoryId != _clientState.TerritoryType)
                 continue;
 
             bool visible = _gameGui.WorldToScreen(step.Position.Value, out Vector2 screenPos);
