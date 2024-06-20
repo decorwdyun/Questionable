@@ -410,7 +410,7 @@ internal sealed class QuestController
             {
                 IList<ITask> tasks = x.CreateAllTasks(CurrentQuest.Quest, seq, step).ToList();
 
-                if (_logger.IsEnabled(LogLevel.Trace))
+                if (tasks.Count > 0 && _logger.IsEnabled(LogLevel.Trace))
                 {
                     string factoryName = x.GetType().FullName ?? x.GetType().Name;
                     if (factoryName.Contains('.', StringComparison.Ordinal))
