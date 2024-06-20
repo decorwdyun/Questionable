@@ -30,6 +30,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
     private readonly MovementController _movementController;
     private readonly QuestController _questController;
     private readonly GameFunctions _gameFunctions;
+    private readonly ChatFunctions _chatFunctions;
     private readonly IClientState _clientState;
     private readonly IFramework _framework;
     private readonly ITargetManager _targetManager;
@@ -43,6 +44,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         MovementController movementController,
         QuestController questController,
         GameFunctions gameFunctions,
+        ChatFunctions chatFunctions,
         IClientState clientState,
         IFramework framework,
         ITargetManager targetManager,
@@ -57,6 +59,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         _movementController = movementController;
         _questController = questController;
         _gameFunctions = gameFunctions;
+        _chatFunctions = chatFunctions;
         _clientState = clientState;
         _framework = framework;
         _targetManager = targetManager;
@@ -325,7 +328,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         if (ImGui.Button("Move to Flag"))
         {
             _movementController.Destination = null;
-            _gameFunctions.ExecuteCommand(
+            _chatFunctions.ExecuteCommand(
                 $"/vnav {(_gameFunctions.IsFlyingUnlockedInCurrentZone() ? "flyflag" : "moveflag")}");
         }
 

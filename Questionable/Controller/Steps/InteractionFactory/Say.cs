@@ -19,7 +19,8 @@ internal static class Say
 
             ArgumentNullException.ThrowIfNull(step.ChatMessage);
 
-            string? excelString = gameFunctions.GetDialogueText(quest, step.ChatMessage.ExcelSheet, step.ChatMessage.Key);
+            string? excelString =
+                gameFunctions.GetDialogueText(quest, step.ChatMessage.ExcelSheet, step.ChatMessage.Key);
             ArgumentNullException.ThrowIfNull(excelString);
 
             var unmount = serviceProvider.GetRequiredService<UnmountTask>();
@@ -31,7 +32,7 @@ internal static class Say
             => throw new InvalidOperationException();
     }
 
-    internal sealed class UseChat(GameFunctions gameFunctions) : AbstractDelayedTask
+    internal sealed class UseChat(ChatFunctions chatFunctions) : AbstractDelayedTask
     {
         public string ChatMessage { get; set; } = null!;
 
@@ -43,7 +44,7 @@ internal static class Say
 
         protected override bool StartInternal()
         {
-            gameFunctions.ExecuteCommand($"/say {ChatMessage}");
+            chatFunctions.ExecuteCommand($"/say {ChatMessage}");
             return true;
         }
 

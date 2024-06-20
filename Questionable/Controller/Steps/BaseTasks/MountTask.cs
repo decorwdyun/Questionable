@@ -59,7 +59,9 @@ internal sealed class MountTask(
                 return false;
             }
 
-            logger.LogInformation("Want to use mount if away from destination ({Distance} yalms), trying (in territory {Id})...", distance, _territoryId);
+            logger.LogInformation(
+                "Want to use mount if away from destination ({Distance} yalms), trying (in territory {Id})...",
+                distance, _territoryId);
         }
         else
             logger.LogInformation("Want to use mount, trying (in territory {Id})...", _territoryId);

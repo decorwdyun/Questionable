@@ -26,17 +26,19 @@ internal sealed class MovementController : IDisposable
     private readonly NavmeshIpc _navmeshIpc;
     private readonly IClientState _clientState;
     private readonly GameFunctions _gameFunctions;
+    private readonly ChatFunctions _chatFunctions;
     private readonly ICondition _condition;
     private readonly ILogger<MovementController> _logger;
     private CancellationTokenSource? _cancellationTokenSource;
     private Task<List<Vector3>>? _pathfindTask;
 
     public MovementController(NavmeshIpc navmeshIpc, IClientState clientState, GameFunctions gameFunctions,
-        ICondition condition, ILogger<MovementController> logger)
+        ChatFunctions chatFunctions, ICondition condition, ILogger<MovementController> logger)
     {
         _navmeshIpc = navmeshIpc;
         _clientState = clientState;
         _gameFunctions = gameFunctions;
+        _chatFunctions = chatFunctions;
         _condition = condition;
         _logger = logger;
     }
@@ -199,7 +201,7 @@ internal sealed class MovementController : IDisposable
         if (InputManager.IsAutoRunning())
         {
             _logger.LogInformation("Turning off auto-move");
-            _gameFunctions.ExecuteCommand("/automove off");
+            _chatFunctions.ExecuteCommand("/automove off");
         }
 
         Destination = new DestinationData(dataId, to, stopDistance ?? (DefaultStopDistance - 0.2f), fly, sprint,
@@ -257,7 +259,7 @@ internal sealed class MovementController : IDisposable
         if (InputManager.IsAutoRunning())
         {
             _logger.LogInformation("Turning off auto-move [stop]");
-            _gameFunctions.ExecuteCommand("/automove off");
+            _chatFunctions.ExecuteCommand("/automove off");
         }
     }
 

@@ -16,7 +16,8 @@ namespace Questionable.Controller.Steps.BaseFactory;
 
 internal static class WaitAtEnd
 {
-    internal sealed class Factory(IServiceProvider serviceProvider, IClientState clientState, ICondition condition) : ITaskFactory
+    internal sealed class Factory(IServiceProvider serviceProvider, IClientState clientState, ICondition condition)
+        : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -31,8 +32,10 @@ internal static class WaitAtEnd
             switch (step.InteractionType)
             {
                 case EInteractionType.Combat:
-                    var notInCombat = new WaitConditionTask(() => !condition[ConditionFlag.InCombat], "Wait(not in combat)");
-                    return [
+                    var notInCombat =
+                        new WaitConditionTask(() => !condition[ConditionFlag.InCombat], "Wait(not in combat)");
+                    return
+                    [
                         serviceProvider.GetRequiredService<WaitDelay>(),
                         notInCombat,
                         serviceProvider.GetRequiredService<WaitDelay>(),
@@ -71,7 +74,8 @@ internal static class WaitAtEnd
                     if (step.TerritoryId != step.TargetTerritoryId)
                     {
                         // interaction moves to a different territory
-                        waitInteraction = new WaitConditionTask(() => clientState.TerritoryType == step.TargetTerritoryId,
+                        waitInteraction = new WaitConditionTask(
+                            () => clientState.TerritoryType == step.TargetTerritoryId,
                             $"Wait(tp to territory: {step.TargetTerritoryId})");
                     }
                     else

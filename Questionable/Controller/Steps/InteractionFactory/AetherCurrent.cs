@@ -45,7 +45,8 @@ internal static class AetherCurrent
                 return true;
             }
 
-            logger.LogInformation("Already attuned to aether current {AetherCurrentId} / {DataId}", AetherCurrentId, DataId);
+            logger.LogInformation("Already attuned to aether current {AetherCurrentId} / {DataId}", AetherCurrentId,
+                DataId);
             return false;
         }
 

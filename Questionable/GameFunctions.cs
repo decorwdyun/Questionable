@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
-using System.Runtime.InteropServices;
-using System.Text;
 using Dalamud.Game;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects;
@@ -17,9 +14,6 @@ using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
-using FFXIVClientStructs.FFXIV.Client.System.Framework;
-using FFXIVClientStructs.FFXIV.Client.System.Memory;
-using FFXIVClientStructs.FFXIV.Client.System.String;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using LLib.GameUI;
@@ -41,18 +35,7 @@ namespace Questionable;
 
 internal sealed unsafe class GameFunctions
 {
-    private static class Signatures
-    {
-        internal const string SendChat = "48 89 5C 24 ?? 57 48 83 EC 20 48 8B FA 48 8B D9 45 84 C9";
-        internal const string SanitiseString = "E8 ?? ?? ?? ?? EB 0A 48 8D 4C 24 ?? E8 ?? ?? ?? ?? 48 8D 8D";
-    }
-
-    private delegate void ProcessChatBoxDelegate(IntPtr uiModule, IntPtr message, IntPtr unused, byte a4);
-
-    private readonly ProcessChatBoxDelegate _processChatBox;
-    private readonly delegate* unmanaged<Utf8String*, int, IntPtr, void> _sanitiseString;
     private readonly ReadOnlyDictionary<ushort, byte> _territoryToAetherCurrentCompFlgSet;
-    private readonly ReadOnlyDictionary<EEmote, string> _emoteCommands;
     private readonly ReadOnlyDictionary<uint, ushort> _contentFinderConditionToContentId;
 
     private readonly IDataManager _dataManager;
@@ -65,9 +48,15 @@ internal sealed unsafe class GameFunctions
     private readonly Configuration _configuration;
     private readonly ILogger<GameFunctions> _logger;
 
-    public GameFunctions(IDataManager dataManager, IObjectTable objectTable, ISigScanner sigScanner,
-        ITargetManager targetManager, ICondition condition, IClientState clientState, QuestRegistry questRegistry,
-        IGameGui gameGui, Configuration configuration, ILogger<GameFunctions> logger)
+    public GameFunctions(IDataManager dataManager,
+        IObjectTable objectTable,
+        ITargetManager targetManager,
+        ICondition condition,
+        IClientState clientState,
+        QuestRegistry questRegistry,
+        IGameGui gameGui,
+        Configuration configuration,
+        ILogger<GameFunctions> logger)
     {
         _dataManager = dataManager;
         _objectTable = objectTable;
@@ -78,22 +67,11 @@ internal sealed unsafe class GameFunctions
         _gameGui = gameGui;
         _configuration = configuration;
         _logger = logger;
-        _processChatBox =
-            Marshal.GetDelegateForFunctionPointer<ProcessChatBoxDelegate>(sigScanner.ScanText(Signatures.SendChat));
-        _sanitiseString =
-            (delegate* unmanaged<Utf8String*, int, IntPtr, void>)sigScanner.ScanText(Signatures.SanitiseString);
 
         _territoryToAetherCurrentCompFlgSet = dataManager.GetExcelSheet<TerritoryType>()!
             .Where(x => x.RowId > 0)
             .Where(x => x.Unknown32 > 0)
             .ToDictionary(x => (ushort)x.RowId, x => x.Unknown32)
-            .AsReadOnly();
-        _emoteCommands = dataManager.GetExcelSheet<Emote>()!
-            .Where(x => x.RowId > 0)
-            .Where(x => x.TextCommand != null && x.TextCommand.Value != null)
-            .Select(x => (x.RowId, Command: x.TextCommand.Value!.Command?.ToString()))
-            .Where(x => x.Command != null && x.Command.StartsWith('/'))
-            .ToDictionary(x => (EEmote)x.RowId, x => x.Command!)
             .AsReadOnly();
         _contentFinderConditionToContentId = dataManager.GetExcelSheet<ContentFinderCondition>()!
             .Where(x => x.RowId > 0 && x.Content > 0)
@@ -258,6 +236,7 @@ internal sealed unsafe class GameFunctions
 
     public bool TeleportAetheryte(uint aetheryteId)
     {
+        _logger.LogDebug("Attempting to teleport to aetheryte {AetheryteId}", aetheryteId);
         if (IsAetheryteUnlocked(aetheryteId, out var subIndex))
         {
             if (aetheryteId == PlayerState.Instance()->HomeAetheryteId &&
@@ -265,12 +244,18 @@ internal sealed unsafe class GameFunctions
             {
                 ReturnRequestedAt = DateTime.Now;
                 if (ActionManager.Instance()->UseAction(ActionType.GeneralAction, 8))
+                {
+                    _logger.LogInformation("Using 'return' for home aetheryte");
                     return true;
+                }
             }
 
             if (ActionManager.Instance()->GetActionStatus(ActionType.Action, 5) == 0)
+            {
                 // fallback if return isn't available or (more likely) on a different aetheryte
+                _logger.LogInformation("Teleporting to aetheryte {AetheryteId}", aetheryteId);
                 return Telepo.Instance()->Teleport(aetheryteId, subIndex);
+            }
         }
 
         return false;
@@ -298,134 +283,6 @@ internal sealed unsafe class GameFunctions
         return playerState != null &&
                playerState->IsAetherCurrentUnlocked(aetherCurrentId);
     }
-
-    public void ExecuteCommand(string command)
-    {
-        if (!command.StartsWith('/'))
-            return;
-
-        SendMessage(command);
-    }
-
-    #region SendMessage
-
-    /// <summary>
-    /// <para>
-    /// Send a given message to the chat box. <b>This can send chat to the server.</b>
-    /// </para>
-    /// <para>
-    /// <b>This method is unsafe.</b> This method does no checking on your input and
-    /// may send content to the server that the normal client could not. You must
-    /// verify what you're sending and handle content and length to properly use
-    /// this.
-    /// </para>
-    /// </summary>
-    /// <param name="message">Message to send</param>
-    /// <exception cref="InvalidOperationException">If the signature for this function could not be found</exception>
-    private void SendMessageUnsafe(byte[] message)
-    {
-        var uiModule = (IntPtr)Framework.Instance()->GetUiModule();
-
-        using var payload = new ChatPayload(message);
-        var mem1 = Marshal.AllocHGlobal(400);
-        Marshal.StructureToPtr(payload, mem1, false);
-
-        _processChatBox(uiModule, mem1, IntPtr.Zero, 0);
-
-        Marshal.FreeHGlobal(mem1);
-    }
-
-    /// <summary>
-    /// <para>
-    /// Send a given message to the chat box. <b>This can send chat to the server.</b>
-    /// </para>
-    /// <para>
-    /// This method is slightly less unsafe than <see cref="SendMessageUnsafe"/>. It
-    /// will throw exceptions for certain inputs that the client can't normally send,
-    /// but it is still possible to make mistakes. Use with caution.
-    /// </para>
-    /// </summary>
-    /// <param name="message">message to send</param>
-    /// <exception cref="ArgumentException">If <paramref name="message"/> is empty, longer than 500 bytes in UTF-8, or contains invalid characters.</exception>
-    /// <exception cref="InvalidOperationException">If the signature for this function could not be found</exception>
-    public void SendMessage(string message)
-    {
-        var bytes = Encoding.UTF8.GetBytes(message);
-        if (bytes.Length == 0)
-        {
-            throw new ArgumentException("message is empty", nameof(message));
-        }
-
-        if (bytes.Length > 500)
-        {
-            throw new ArgumentException("message is longer than 500 bytes", nameof(message));
-        }
-
-        if (message.Length != SanitiseText(message).Length)
-        {
-            throw new ArgumentException("message contained invalid characters", nameof(message));
-        }
-
-        SendMessageUnsafe(bytes);
-    }
-
-    /// <summary>
-    /// <para>
-    /// Sanitises a string by removing any invalid input.
-    /// </para>
-    /// <para>
-    /// The result of this method is safe to use with
-    /// <see cref="SendMessage"/>, provided that it is not empty or too
-    /// long.
-    /// </para>
-    /// </summary>
-    /// <param name="text">text to sanitise</param>
-    /// <returns>sanitised text</returns>
-    /// <exception cref="InvalidOperationException">If the signature for this function could not be found</exception>
-    public string SanitiseText(string text)
-    {
-        var uText = Utf8String.FromString(text);
-
-        _sanitiseString(uText, 0x27F, IntPtr.Zero);
-        var sanitised = uText->ToString();
-
-        uText->Dtor();
-        IMemorySpace.Free(uText);
-
-        return sanitised;
-    }
-
-    [StructLayout(LayoutKind.Explicit)]
-    [SuppressMessage("ReSharper", "PrivateFieldCanBeConvertedToLocalVariable")]
-    private readonly struct ChatPayload : IDisposable
-    {
-        [FieldOffset(0)] private readonly IntPtr textPtr;
-
-        [FieldOffset(16)] private readonly ulong textLen;
-
-        [FieldOffset(8)] private readonly ulong unk1;
-
-        [FieldOffset(24)] private readonly ulong unk2;
-
-        internal ChatPayload(byte[] stringBytes)
-        {
-            textPtr = Marshal.AllocHGlobal(stringBytes.Length + 30);
-            Marshal.Copy(stringBytes, 0, textPtr, stringBytes.Length);
-            Marshal.WriteByte(textPtr + stringBytes.Length, 0);
-
-            textLen = (ulong)(stringBytes.Length + 1);
-
-            unk1 = 64;
-            unk2 = 0;
-        }
-
-        public void Dispose()
-        {
-            Marshal.FreeHGlobal(textPtr);
-        }
-    }
-
-    #endregion
 
     public GameObject? FindObjectByDataId(uint dataId)
     {
@@ -496,21 +353,6 @@ internal sealed unsafe class GameFunctions
         return false;
     }
 
-    public void UseEmote(uint dataId, EEmote emote)
-    {
-        GameObject? gameObject = FindObjectByDataId(dataId);
-        if (gameObject != null)
-        {
-            _targetManager.Target = gameObject;
-            ExecuteCommand($"{_emoteCommands[emote]} motion");
-        }
-    }
-
-    public void UseEmote(EEmote emote)
-    {
-        ExecuteCommand($"{_emoteCommands[emote]} motion");
-    }
-
     public bool IsObjectAtPosition(uint dataId, Vector3 position, float distance)
     {
         GameObject? gameObject = FindObjectByDataId(dataId);
@@ -559,6 +401,7 @@ internal sealed unsafe class GameFunctions
         {
             if (ActionManager.Instance()->GetActionStatus(ActionType.Mount, _configuration.General.MountId) == 0)
             {
+                _logger.LogDebug("Attempting to use preferred mount...");
                 if (ActionManager.Instance()->UseAction(ActionType.Mount, _configuration.General.MountId))
                 {
                     _logger.LogInformation("Using preferred mount");
@@ -572,6 +415,7 @@ internal sealed unsafe class GameFunctions
         {
             if (ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, 9) == 0)
             {
+                _logger.LogDebug("Attempting to use mount roulette...");
                 if (ActionManager.Instance()->UseAction(ActionType.GeneralAction, 9))
                 {
                     _logger.LogInformation("Using mount roulette");
@@ -592,8 +436,14 @@ internal sealed unsafe class GameFunctions
 
         if (ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, 23) == 0)
         {
-            _logger.LogInformation("Unmounting...");
-            return ActionManager.Instance()->UseAction(ActionType.GeneralAction, 23);
+            _logger.LogDebug("Attempting to unmount...");
+            if (ActionManager.Instance()->UseAction(ActionType.GeneralAction, 23))
+            {
+                _logger.LogInformation("Unmounted");
+                return true;
+            }
+
+            return false;
         }
         else
         {

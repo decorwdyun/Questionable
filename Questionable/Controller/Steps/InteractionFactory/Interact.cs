@@ -66,7 +66,7 @@ internal static class Interact
             {
                 _needsUnmount = true;
                 gameFunctions.Unmount();
-                _continueAt = DateTime.Now.AddSeconds(0.5);
+                _continueAt = DateTime.Now.AddSeconds(1);
                 return true;
             }
 
@@ -90,7 +90,7 @@ internal static class Interact
                 if (condition[ConditionFlag.Mounted])
                 {
                     gameFunctions.Unmount();
-                    _continueAt = DateTime.Now.AddSeconds(0.5);
+                    _continueAt = DateTime.Now.AddSeconds(1);
                     return ETaskResult.StillRunning;
                 }
                 else

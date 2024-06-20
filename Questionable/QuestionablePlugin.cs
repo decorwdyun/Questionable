@@ -65,6 +65,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton((Configuration?)pluginInterface.GetPluginConfig() ?? new Configuration());
 
         serviceCollection.AddSingleton<GameFunctions>();
+        serviceCollection.AddSingleton<ChatFunctions>();
         serviceCollection.AddSingleton<AetheryteData>();
         serviceCollection.AddSingleton<TerritoryData>();
         serviceCollection.AddSingleton<NavmeshIpc>();
@@ -95,7 +96,9 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTaskWithFactory<Say.Factory, Say.UseChat>();
         serviceCollection.AddTaskWithFactory<UseItem.Factory, UseItem.UseOnGround, UseItem.UseOnObject, UseItem.Use>();
         serviceCollection.AddTaskWithFactory<EquipItem.Factory, EquipItem.DoEquip>();
-        serviceCollection.AddTaskWithFactory<SinglePlayerDuty.Factory, SinglePlayerDuty.DisableYesAlready, SinglePlayerDuty.RestoreYesAlready>();
+        serviceCollection
+            .AddTaskWithFactory<SinglePlayerDuty.Factory, SinglePlayerDuty.DisableYesAlready,
+                SinglePlayerDuty.RestoreYesAlready>();
 
         serviceCollection
             .AddTaskWithFactory<WaitAtEnd.Factory,

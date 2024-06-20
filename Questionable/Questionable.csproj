@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net8.0-windows</TargetFramework>
-        <Version>0.18</Version>
+        <Version>0.19</Version>
         <LangVersion>12</LangVersion>
         <Nullable>enable</Nullable>
         <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
@@ -23,10 +23,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Dalamud.Extensions.MicrosoftLogging" Version="4.0.1" />
+        <PackageReference Include="Dalamud.Extensions.MicrosoftLogging" Version="4.0.1"/>
         <PackageReference Include="DalamudPackager" Version="2.1.12"/>
         <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" ExcludeAssets="runtime"/>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
         <PackageReference Include="System.Text.Json" Version="8.0.3"/>
     </ItemGroup>
 
@@ -58,8 +58,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\LLib\LLib.csproj" />
-        <ProjectReference Include="..\Questionable.Model\Questionable.Model.csproj" />
-        <ProjectReference Include="..\QuestPaths\QuestPaths.csproj" />
+        <ProjectReference Include="..\LLib\LLib.csproj"/>
+        <ProjectReference Include="..\Questionable.Model\Questionable.Model.csproj"/>
+        <ProjectReference Include="..\QuestPaths\QuestPaths.csproj"/>
     </ItemGroup>
 </Project>

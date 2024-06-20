@@ -20,7 +20,8 @@ internal sealed class QuestRegistry
 
     private readonly Dictionary<ushort, Quest> _quests = new();
 
-    public QuestRegistry(DalamudPluginInterface pluginInterface, IDataManager dataManager, ILogger<QuestRegistry> logger)
+    public QuestRegistry(DalamudPluginInterface pluginInterface, IDataManager dataManager,
+        ILogger<QuestRegistry> logger)
     {
         _pluginInterface = pluginInterface;
         _dataManager = dataManager;

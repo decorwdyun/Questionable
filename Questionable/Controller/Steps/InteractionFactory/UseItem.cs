@@ -95,7 +95,8 @@ internal static class UseItem
                 if (itemCount == _itemCount)
                 {
                     // TODO Better handling for game-provided errors, i.e. reacting to the 'Could not use' messages. UseItem() is successful in this case (and returns 0)
-                    logger.LogInformation("Attempted to use vesper bay aetheryte ticket, but it didn't consume an item - reattempting next frame");
+                    logger.LogInformation(
+                        "Attempted to use vesper bay aetheryte ticket, but it didn't consume an item - reattempting next frame");
                     _usedItem = false;
                     return ETaskResult.StillRunning;
                 }

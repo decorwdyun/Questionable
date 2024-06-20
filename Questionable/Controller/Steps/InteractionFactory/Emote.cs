@@ -35,7 +35,7 @@ internal static class Emote
             => throw new InvalidOperationException();
     }
 
-    internal sealed class UseOnObject(GameFunctions gameFunctions) : AbstractDelayedTask
+    internal sealed class UseOnObject(ChatFunctions chatFunctions) : AbstractDelayedTask
     {
         public EEmote Emote { get; set; }
         public uint DataId { get; set; }
@@ -49,14 +49,14 @@ internal static class Emote
 
         protected override bool StartInternal()
         {
-            gameFunctions.UseEmote(DataId, Emote);
+            chatFunctions.UseEmote(DataId, Emote);
             return true;
         }
 
         public override string ToString() => $"Emote({Emote} on {DataId})";
     }
 
-    internal sealed class Use(GameFunctions gameFunctions) : AbstractDelayedTask
+    internal sealed class Use(ChatFunctions chatFunctions) : AbstractDelayedTask
     {
         public EEmote Emote { get; set; }
 
@@ -68,7 +68,7 @@ internal static class Emote
 
         protected override bool StartInternal()
         {
-            gameFunctions.UseEmote(Emote);
+            chatFunctions.UseEmote(Emote);
             return true;
         }
 

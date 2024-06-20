@@ -20,6 +20,7 @@ internal sealed class UnmountTask(ICondition condition, ILogger<UnmountTask> log
         if (condition[ConditionFlag.InFlight])
         {
             gameFunctions.Unmount();
+            _continueAt = DateTime.Now.AddSeconds(1);
             return true;
         }
 
@@ -41,7 +42,7 @@ internal sealed class UnmountTask(ICondition condition, ILogger<UnmountTask> log
             else
                 _unmountTriggered = gameFunctions.Unmount();
 
-            _continueAt = DateTime.Now.AddSeconds(0.5);
+            _continueAt = DateTime.Now.AddSeconds(1);
             return ETaskResult.StillRunning;
         }
 
