@@ -114,8 +114,7 @@
           "Fly": true,
           "SkipIf": [
             "FlyingLocked"
-          ],
-          "Comment": "TODO Verify; there's some weird shenanigans happening with navmesh not moving to coords 'below' it"
+          ]
         },
         {
           "DataId": 2012847,
