@@ -13,7 +13,7 @@
             "Z": 115.861694
           },
           "TerritoryId": 183,
-          "InteractionType": "Interact"
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
@@ -189,7 +189,7 @@
             "Z": 115.92273
           },
           "TerritoryId": 132,
-          "InteractionType": "Interact",
+          "InteractionType": "CompleteQuest",
           "AethernetShortcut": [
             "[Gridania] Conjurers' Guild",
             "[Gridania] Airship Landing"

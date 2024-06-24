@@ -13,7 +13,7 @@
             "Z": 63.70642
           },
           "TerritoryId": 961,
-          "InteractionType": "Interact",
+          "InteractionType": "AcceptQuest",
           "DialogueChoices": [
             {
               "Type": "List",
@@ -202,7 +202,7 @@
             "Z": 88.91431
           },
           "TerritoryId": 961,
-          "InteractionType": "Interact",
+          "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Elpis - Anagnorisis"
         }
       ]

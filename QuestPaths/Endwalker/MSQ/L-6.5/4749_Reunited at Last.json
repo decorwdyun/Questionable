@@ -14,7 +14,7 @@
           },
           "StopDistance": 15,
           "TerritoryId": 1162,
-          "InteractionType": "Interact"
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
@@ -60,7 +60,7 @@
             "Z": -164.41602
           },
           "TerritoryId": 962,
-          "InteractionType": "Interact",
+          "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Old Sharlayan",
           "AethernetShortcut": [
             "[Old Sharlayan] Aetheryte Plaza",

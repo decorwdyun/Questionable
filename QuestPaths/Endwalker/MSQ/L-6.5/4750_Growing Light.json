@@ -14,7 +14,7 @@
           },
           "StopDistance": 7,
           "TerritoryId": 962,
-          "InteractionType": "Interact"
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
@@ -122,7 +122,7 @@
             "Z": -68.40625
           },
           "TerritoryId": 963,
-          "InteractionType": "Interact",
+          "InteractionType": "CompleteQuest",
           "AethernetShortcut": [
             "[Radz-at-Han] Mehryde's Meyhane",
             "[Radz-at-Han] Meghaduta"

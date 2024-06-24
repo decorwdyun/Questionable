@@ -13,7 +13,7 @@
             "Z": -222.43079
           },
           "TerritoryId": 134,
-          "InteractionType": "Interact"
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
@@ -28,7 +28,7 @@
             "Z": -222.43079
           },
           "TerritoryId": 134,
-          "InteractionType": "Interact",
+          "InteractionType": "CompleteQuest",
           "Comment": "All starting gear (except the hat) is ilvl 5 already"
         }
       ]

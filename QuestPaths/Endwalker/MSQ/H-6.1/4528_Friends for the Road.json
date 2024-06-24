@@ -13,7 +13,7 @@
             "Z": 571.5265
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
@@ -118,7 +118,7 @@
             "Z": 603.41797
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact",
+          "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Thavnair - Yedlihmad",
           "Fly": true
         }

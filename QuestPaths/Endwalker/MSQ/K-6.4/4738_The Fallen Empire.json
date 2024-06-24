@@ -14,7 +14,7 @@
           },
           "StopDistance": 5,
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
@@ -170,7 +170,7 @@
             "Z": -202.99078
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact",
+          "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Garlemald - Tertium"
         }
       ]

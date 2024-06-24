@@ -13,7 +13,7 @@
             "Z": -350.3319
           },
           "TerritoryId": 402,
-          "InteractionType": "Interact"
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
@@ -126,7 +126,7 @@
             "Z": -13.290649
           },
           "TerritoryId": 419,
-          "InteractionType": "Interact",
+          "InteractionType": "CompleteQuest",
           "AethernetShortcut": [
             "[Ishgard] Skysteel Manufactory",
             "[Ishgard] Athenaeum Astrologicum"

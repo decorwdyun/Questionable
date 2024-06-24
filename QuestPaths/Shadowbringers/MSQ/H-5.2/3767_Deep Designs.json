@@ -13,7 +13,7 @@
             "Z": 19.69934
           },
           "TerritoryId": 817,
-          "InteractionType": "Interact"
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
@@ -82,7 +82,7 @@
             "Z": -197.95532
           },
           "TerritoryId": 818,
-          "InteractionType": "Interact",
+          "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Tempest - Ondo Cups"
         }
       ]

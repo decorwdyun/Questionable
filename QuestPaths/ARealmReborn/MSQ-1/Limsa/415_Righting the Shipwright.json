@@ -13,7 +13,7 @@
             "Z": 861.4479
           },
           "TerritoryId": 135,
-          "InteractionType": "Interact"
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
@@ -118,7 +118,7 @@
             "Z": 611.9325
           },
           "TerritoryId": 135,
-          "InteractionType": "Interact",
+          "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Lower La Noscea - Moraby Drydocks"
         }
       ]

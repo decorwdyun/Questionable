@@ -102,7 +102,9 @@
                     "SinglePlayerDuty",
                     "Jump",
                     "ShouldBeAJump",
-                    "Instruction"
+                    "Instruction",
+                    "AcceptQuest",
+                    "CompleteQuest"
                   ]
                 },
                 "Disabled": {
@@ -831,6 +833,26 @@
                       "NpcWaitDistance": {
                         "type": "number",
                         "exclusiveMinimum": 0
+                      }
+                    }
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "InteractionType": {
+                        "const": "AcceptQuest"
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "QuestId": {
+                        "type": [
+                          "null",
+                          "number"
+                        ],
+                        "description": "Determines the quest which should be accepted. If empty/null, accepts the quest corresponding to the file name."
                       }
                     }
                   }

@@ -14,7 +14,7 @@
           },
           "StopDistance": 5,
           "TerritoryId": 963,
-          "InteractionType": "Interact"
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
@@ -67,7 +67,7 @@
             "Z": -66.17847
           },
           "TerritoryId": 963,
-          "InteractionType": "Interact",
+          "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Radz-at-Han",
           "AethernetShortcut": [
             "[Radz-at-Han] Aetheryte Plaza",

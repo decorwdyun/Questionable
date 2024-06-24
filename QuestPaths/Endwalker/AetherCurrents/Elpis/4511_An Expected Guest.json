@@ -13,7 +13,7 @@
             "Z": -189.47137
           },
           "TerritoryId": 961,
-          "InteractionType": "Interact"
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
@@ -71,7 +71,7 @@
             "Z": -189.47137
           },
           "TerritoryId": 961,
-          "InteractionType": "Interact",
+          "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Elpis - Poieten Oikos"
         }
       ]

@@ -17,7 +17,7 @@
           },
           "StopDistance": 5,
           "TerritoryId": 962,
-          "InteractionType": "Interact"
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
@@ -90,7 +90,7 @@
           },
           "StopDistance": 5,
           "TerritoryId": 963,
-          "InteractionType": "Interact"
+          "InteractionType": "CompleteQuest"
         }
       ]
     }

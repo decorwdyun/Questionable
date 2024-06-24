@@ -13,7 +13,7 @@
             "Z": -20.767578
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
@@ -131,7 +131,7 @@
             "Z": -20.767578
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact",
+          "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Thavnair - Great Work"
         }
       ]

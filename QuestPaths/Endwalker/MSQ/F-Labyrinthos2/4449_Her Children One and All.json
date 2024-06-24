@@ -17,7 +17,7 @@
             "Z": 304.1886
           },
           "TerritoryId": 956,
-          "InteractionType": "Interact"
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
@@ -83,7 +83,7 @@
           },
           "StopDistance": 5,
           "TerritoryId": 962,
-          "InteractionType": "Interact",
+          "InteractionType": "CompleteQuest",
           "AethernetShortcut": [
             "[Old Sharlayan] The Rostra",
             "[Old Sharlayan] The Baldesion Annex"

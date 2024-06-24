@@ -23,5 +23,7 @@ public sealed class InteractionTypeConverter() : EnumConverter<EInteractionType>
         { EInteractionType.Jump, "Jump" },
         { EInteractionType.ShouldBeAJump, "ShouldBeAJump" },
         { EInteractionType.Instruction, "Instruction" },
+        { EInteractionType.AcceptQuest, "AcceptQuest" },
+        { EInteractionType.CompleteQuest, "CompleteQuest" },
     };
 }

@@ -13,7 +13,7 @@
             "Z": 4.6845093
           },
           "TerritoryId": 212,
-          "InteractionType": "Interact",
+          "InteractionType": "AcceptQuest",
           "DialogueChoices": [
             {
               "Type": "YesNo",
@@ -83,7 +83,7 @@
           },
           "StopDistance": 5,
           "TerritoryId": 128,
-          "InteractionType": "Interact",
+          "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Limsa Lominsa",
           "AethernetShortcut": [
             "[Limsa Lominsa] Aetheryte Plaza",

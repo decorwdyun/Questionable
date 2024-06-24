@@ -13,7 +13,7 @@
             "Z": -74.84558
           },
           "TerritoryId": 963,
-          "InteractionType": "Interact"
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
@@ -121,7 +121,7 @@
             "Z": -1.1750488
           },
           "TerritoryId": 962,
-          "InteractionType": "Interact"
+          "InteractionType": "CompleteQuest"
         }
       ]
     }

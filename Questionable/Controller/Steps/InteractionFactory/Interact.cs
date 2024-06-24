@@ -18,7 +18,12 @@ internal static class Interact
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
-            if (step.InteractionType != EInteractionType.Interact)
+            if (step.InteractionType is EInteractionType.AcceptQuest or EInteractionType.CompleteQuest)
+            {
+                if (step.Emote != null)
+                    yield break;
+            }
+            else if (step.InteractionType != EInteractionType.Interact)
                 yield break;
 
             ArgumentNullException.ThrowIfNull(step.DataId);

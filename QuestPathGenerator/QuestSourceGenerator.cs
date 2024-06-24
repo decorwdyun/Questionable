@@ -349,6 +349,8 @@ public class QuestSourceGenerator : ISourceGenerator
                                                     step.CompletionQuestVariablesFlags)
                                                 .AsSyntaxNodeOrToken(),
                                             AssignmentList(nameof(QuestStep.DialogueChoices), step.DialogueChoices)
+                                                .AsSyntaxNodeOrToken(),
+                                            Assignment(nameof(QuestStep.QuestId), step.QuestId, emptyStep.QuestId)
                                                 .AsSyntaxNodeOrToken()))))),
                     Token(SyntaxKind.CommaToken),
                 }.ToArray())));

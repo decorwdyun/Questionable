@@ -13,7 +13,7 @@
             "Z": 3.463745
           },
           "TerritoryId": 212,
-          "InteractionType": "Interact",
+          "InteractionType": "AcceptQuest",
           "DialogueChoices": [
             {
               "Type": "YesNo",
@@ -96,7 +96,7 @@
             "Z": -9.99469
           },
           "TerritoryId": 132,
-          "InteractionType": "Interact",
+          "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Gridania"
         }
       ]

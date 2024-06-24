@@ -106,6 +106,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
                 WaitAtEnd.WaitNextStepOrSequence,
                 WaitAtEnd.WaitForCompletionFlags,
                 WaitAtEnd.WaitObjectAtPosition>();
+        serviceCollection.AddTransient<WaitAtEnd.WaitQuestAccepted>();
+        serviceCollection.AddTransient<WaitAtEnd.WaitQuestCompleted>();
 
         serviceCollection.AddSingleton<MovementController>();
         serviceCollection.AddSingleton<QuestRegistry>();

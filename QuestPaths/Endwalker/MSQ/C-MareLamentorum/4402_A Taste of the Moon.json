@@ -13,7 +13,7 @@
             "Z": -494.31604
           },
           "TerritoryId": 959,
-          "InteractionType": "Interact"
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
@@ -281,7 +281,7 @@
             "Z": -620.05035
           },
           "TerritoryId": 959,
-          "InteractionType": "Interact",
+          "InteractionType": "CompleteQuest",
           "DelaySecondsAtStart": 2,
           "Comment": "FIXME Auto-playing quests seems to get stuck here/do nothing"
         }

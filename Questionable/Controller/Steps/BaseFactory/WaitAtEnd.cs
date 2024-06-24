@@ -26,7 +26,7 @@ internal static class WaitAtEnd
                 var task = serviceProvider.GetRequiredService<WaitForCompletionFlags>()
                     .With(quest, step);
                 var delay = serviceProvider.GetRequiredService<WaitDelay>();
-                return [task, delay, Next(quest, sequence, step)];
+                return [task, delay, Next(quest, sequence)];
             }
 
             switch (step.InteractionType)
@@ -39,7 +39,7 @@ internal static class WaitAtEnd
                         serviceProvider.GetRequiredService<WaitDelay>(),
                         notInCombat,
                         serviceProvider.GetRequiredService<WaitDelay>(),
-                        Next(quest, sequence, step)
+                        Next(quest, sequence)
                     ];
 
                 case EInteractionType.WaitForManualProgress:
@@ -54,7 +54,7 @@ internal static class WaitAtEnd
                 case EInteractionType.WalkTo:
                 case EInteractionType.Jump:
                     // no need to wait if we're just moving around
-                    return [Next(quest, sequence, step)];
+                    return [Next(quest, sequence)];
 
                 case EInteractionType.WaitForObjectAtPosition:
                     ArgumentNullException.ThrowIfNull(step.DataId);
@@ -65,7 +65,7 @@ internal static class WaitAtEnd
                         serviceProvider.GetRequiredService<WaitObjectAtPosition>()
                             .With(step.DataId.Value, step.Position.Value, step.NpcWaitDistance ?? 0.05f),
                         serviceProvider.GetRequiredService<WaitDelay>(),
-                        Next(quest, sequence, step)
+                        Next(quest, sequence)
                     ];
 
                 case EInteractionType.Interact when step.TargetTerritoryId != null:
@@ -99,39 +99,35 @@ internal static class WaitAtEnd
                     [
                         waitInteraction,
                         serviceProvider.GetRequiredService<WaitDelay>(),
-                        Next(quest, sequence, step)
+                        Next(quest, sequence)
+                    ];
+
+                case EInteractionType.AcceptQuest:
+                    return
+                    [
+                        serviceProvider.GetRequiredService<WaitQuestAccepted>().With(step.QuestId ?? quest.QuestId),
+                        serviceProvider.GetRequiredService<WaitDelay>()
+                    ];
+
+                case EInteractionType.CompleteQuest:
+                    return
+                    [
+                        serviceProvider.GetRequiredService<WaitQuestCompleted>().With(step.QuestId ?? quest.QuestId),
+                        serviceProvider.GetRequiredService<WaitDelay>()
                     ];
 
                 case EInteractionType.Interact:
                 default:
-                    return [serviceProvider.GetRequiredService<WaitDelay>(), Next(quest, sequence, step)];
+                    return [serviceProvider.GetRequiredService<WaitDelay>(), Next(quest, sequence)];
             }
         }
 
         public ITask CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
             => throw new InvalidOperationException();
 
-        public ITask Next(Quest quest, QuestSequence sequence, QuestStep step)
+        private static NextStep Next(Quest quest, QuestSequence sequence)
         {
-            bool lastStep = step == sequence.Steps.LastOrDefault();
-            if (sequence.Sequence == 0 && lastStep)
-            {
-                return new WaitConditionTask(() =>
-                {
-                    unsafe
-                    {
-                        var questManager = QuestManager.Instance();
-                        return questManager != null && questManager->IsQuestAccepted(quest.QuestId);
-                    }
-                }, "Wait(questAccepted)");
-            }
-            else if (sequence.Sequence == 255 && lastStep)
-            {
-                return new WaitConditionTask(() => QuestManager.IsQuestComplete(quest.QuestId),
-                    "Wait(questComplete)");
-            }
-            else
-                return new NextStep(quest.QuestId, sequence.Sequence);
+            return new NextStep(quest.QuestId, sequence.Sequence);
         }
     }
 
@@ -202,6 +198,52 @@ internal static class WaitAtEnd
 
         public override string ToString() =>
             $"WaitObj({DataId} at {Destination.ToString("G", CultureInfo.InvariantCulture)})";
+    }
+
+    internal sealed class WaitQuestAccepted : ITask
+    {
+        public ushort QuestId { get; set; }
+
+        public ITask With(ushort questId)
+        {
+            QuestId = questId;
+            return this;
+        }
+
+        public bool Start() => true;
+
+        public ETaskResult Update()
+        {
+            unsafe
+            {
+                var questManager = QuestManager.Instance();
+                return questManager != null && questManager->IsQuestAccepted(QuestId)
+                    ? ETaskResult.TaskComplete
+                    : ETaskResult.StillRunning;
+            }
+        }
+
+        public override string ToString() => $"WaitQuestAccepted({QuestId})";
+    }
+
+    internal sealed class WaitQuestCompleted : ITask
+    {
+        public ushort QuestId { get; set; }
+
+        public ITask With(ushort questId)
+        {
+            QuestId = questId;
+            return this;
+        }
+
+        public bool Start() => true;
+
+        public ETaskResult Update()
+        {
+            return QuestManager.IsQuestComplete(QuestId) ? ETaskResult.TaskComplete : ETaskResult.StillRunning;
+        }
+
+        public override string ToString() => $"WaitQuestComplete({QuestId})";
     }
 
     internal sealed class NextStep(ushort questId, int sequence) : ILastTask

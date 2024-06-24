@@ -16,7 +16,7 @@
             "Z": 605.6763
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
@@ -42,7 +42,7 @@
           },
           "StopDistance": 7,
           "TerritoryId": 1056,
-          "InteractionType": "Interact"
+          "InteractionType": "CompleteQuest"
         }
       ]
     }

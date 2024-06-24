@@ -31,4 +31,7 @@ public enum EInteractionType
     /// Needs to be manually continued.
     /// </summary>
     Instruction,
+
+    AcceptQuest,
+    CompleteQuest,
 }

@@ -13,7 +13,7 @@
             "Z": -68.40625
           },
           "TerritoryId": 963,
-          "InteractionType": "Interact",
+          "InteractionType": "AcceptQuest",
           "DialogueChoices": [
             {
               "Type": "List",
@@ -56,7 +56,7 @@
             "Z": -44.327515
           },
           "TerritoryId": 962,
-          "InteractionType": "Interact",
+          "InteractionType": "CompleteQuest",
           "AethernetShortcut": [
             "[Old Sharlayan] The Baldesion Annex",
             "[Old Sharlayan] The Studium"

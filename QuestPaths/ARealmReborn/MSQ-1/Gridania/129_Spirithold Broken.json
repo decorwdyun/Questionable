@@ -16,7 +16,7 @@
             "Z": -78.446655
           },
           "TerritoryId": 148,
-          "InteractionType": "Interact"
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
@@ -197,7 +197,7 @@
             "Z": 115.92273
           },
           "TerritoryId": 132,
-          "InteractionType": "Interact",
+          "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Gridania",
           "AethernetShortcut": [
             "[Gridania] Aetheryte Plaza",

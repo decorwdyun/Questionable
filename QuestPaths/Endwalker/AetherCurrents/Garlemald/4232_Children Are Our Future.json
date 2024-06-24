@@ -13,7 +13,7 @@
             "Z": -418.57025
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
@@ -280,7 +280,7 @@
             "Z": -418.57025
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact",
+          "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Garlemald - Tertium"
         }
       ]

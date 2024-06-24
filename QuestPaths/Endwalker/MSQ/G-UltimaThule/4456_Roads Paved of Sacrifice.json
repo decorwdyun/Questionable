@@ -14,7 +14,7 @@
           },
           "StopDistance": 5,
           "TerritoryId": 960,
-          "InteractionType": "Interact"
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
@@ -231,7 +231,7 @@
             "Z": -535.0271
           },
           "TerritoryId": 960,
-          "InteractionType": "Interact"
+          "InteractionType": "CompleteQuest"
         }
       ]
     }

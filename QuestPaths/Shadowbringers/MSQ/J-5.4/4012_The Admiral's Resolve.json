@@ -13,7 +13,7 @@
             "Z": -223.40735
           },
           "TerritoryId": 399,
-          "InteractionType": "Interact"
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
@@ -94,7 +94,7 @@
             "Z": -13.839966
           },
           "TerritoryId": 129,
-          "InteractionType": "Interact",
+          "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Limsa Lominsa"
         }
       ]

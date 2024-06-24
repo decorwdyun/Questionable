@@ -14,7 +14,7 @@
           },
           "StopDistance": 5,
           "TerritoryId": 351,
-          "InteractionType": "Interact",
+          "InteractionType": "AcceptQuest",
           "DialogueChoices": [
             {
               "Type": "List",
@@ -57,7 +57,7 @@
           },
           "StopDistance": 5,
           "TerritoryId": 128,
-          "InteractionType": "Interact"
+          "InteractionType": "CompleteQuest"
         }
       ]
     }
