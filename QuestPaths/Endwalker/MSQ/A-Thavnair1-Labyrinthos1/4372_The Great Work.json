@@ -1,7 +1,6 @@
 ﻿{
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
-  "Comment": "This is possibly the least polished quest so far, as the follow steps are awkward (need to move >10 units away to trigger the follow-up)",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -117,7 +116,8 @@
           },
           "StopDistance": 4,
           "TerritoryId": 957,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "DelaySecondsAtStart": 2
         }
       ]
     },
@@ -164,7 +164,8 @@
           },
           "StopDistance": 4,
           "TerritoryId": 957,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "DelaySecondsAtStart": 2
         }
       ]
     },
@@ -212,7 +213,8 @@
           },
           "StopDistance": 4,
           "TerritoryId": 957,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "DelaySecondsAtStart": 2
         }
       ]
     },
@@ -259,7 +261,8 @@
           },
           "StopDistance": 4,
           "TerritoryId": 957,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "DelaySecondsAtStart": 2
         }
       ]
     },
