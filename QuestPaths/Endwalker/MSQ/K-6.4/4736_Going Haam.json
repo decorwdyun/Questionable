@@ -107,7 +107,8 @@
           "AetheryteShortcut": "Labyrinthos - Sharlayan Hamlet",
           "SkipIf": [
             "FlyingUnlocked"
-          ]
+          ],
+          "Mount": true
         },
         {
           "DataId": 1045407,
