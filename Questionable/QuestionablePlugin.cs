@@ -7,7 +7,6 @@ using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller;
 using Questionable.Controller.Steps;
@@ -25,7 +24,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
 {
     private readonly ServiceProvider? _serviceProvider;
 
-    public QuestionablePlugin(DalamudPluginInterface pluginInterface,
+    public QuestionablePlugin(IDalamudPluginInterface pluginInterface,
         IClientState clientState,
         ITargetManager targetManager,
         IFramework framework,

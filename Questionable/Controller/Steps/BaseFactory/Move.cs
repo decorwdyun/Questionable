@@ -161,7 +161,7 @@ internal static class Move
 
         public ETaskResult Update()
         {
-            GameObject? gameObject = gameFunctions.FindObjectByDataId(DataId);
+            IGameObject? gameObject = gameFunctions.FindObjectByDataId(DataId);
             if (gameObject == null ||
                 (gameObject.Position - clientState.LocalPlayer!.Position).Length() > StopDistance)
             {

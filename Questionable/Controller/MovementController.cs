@@ -9,6 +9,7 @@ using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects.Types;
+using Dalamud.Plugin.Ipc.Exceptions;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
@@ -43,8 +44,36 @@ internal sealed class MovementController : IDisposable
         _logger = logger;
     }
 
-    public bool IsNavmeshReady => _navmeshIpc.IsReady;
-    public bool IsPathRunning => _navmeshIpc.IsPathRunning;
+    public bool IsNavmeshReady
+    {
+        get
+        {
+            try
+            {
+                return _navmeshIpc.IsReady;
+            }
+            catch (IpcNotReadyError)
+            {
+                return false;
+            }
+        }
+    }
+
+    public bool IsPathRunning
+    {
+        get
+        {
+            try
+            {
+                return _navmeshIpc.IsPathRunning;
+            }
+            catch (IpcNotReadyError)
+            {
+                return false;
+            }
+        }
+    }
+
     public bool IsPathfinding => _pathfindTask is { IsCompleted: false };
     public DestinationData? Destination { get; set; }
     public DateTime MovementStartedAt { get; private set; } = DateTime.MaxValue;
@@ -121,8 +150,8 @@ internal sealed class MovementController : IDisposable
                 }
                 else if (Destination.DataId != null)
                 {
-                    GameObject? gameObject = _gameFunctions.FindObjectByDataId(Destination.DataId.Value);
-                    if (gameObject is Character or EventObj)
+                    IGameObject? gameObject = _gameFunctions.FindObjectByDataId(Destination.DataId.Value);
+                    if (gameObject is ICharacter or IEventObj)
                     {
                         if (Math.Abs(localPlayerPosition.Y - gameObject.Position.Y) < 1.95f)
                             Stop();

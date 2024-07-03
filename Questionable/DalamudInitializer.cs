@@ -10,7 +10,7 @@ namespace Questionable;
 
 internal sealed class DalamudInitializer : IDisposable
 {
-    private readonly DalamudPluginInterface _pluginInterface;
+    private readonly IDalamudPluginInterface _pluginInterface;
     private readonly IFramework _framework;
     private readonly ICommandManager _commandManager;
     private readonly QuestController _questController;
@@ -20,7 +20,7 @@ internal sealed class DalamudInitializer : IDisposable
     private readonly QuestWindow _questWindow;
     private readonly ConfigWindow _configWindow;
 
-    public DalamudInitializer(DalamudPluginInterface pluginInterface, IFramework framework,
+    public DalamudInitializer(IDalamudPluginInterface pluginInterface, IFramework framework,
         ICommandManager commandManager, QuestController questController, MovementController movementController,
         GameUiController gameUiController, NavigationShortcutController navigationShortcutController,
         WindowSystem windowSystem, QuestWindow questWindow, DebugOverlay debugOverlay, ConfigWindow configWindow)

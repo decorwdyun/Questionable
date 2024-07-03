@@ -26,7 +26,7 @@ namespace Questionable.Windows;
 
 internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
 {
-    private readonly DalamudPluginInterface _pluginInterface;
+    private readonly IDalamudPluginInterface _pluginInterface;
     private readonly MovementController _movementController;
     private readonly QuestController _questController;
     private readonly GameFunctions _gameFunctions;
@@ -40,7 +40,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
     private readonly QuestRegistry _questRegistry;
     private readonly ILogger<QuestWindow> _logger;
 
-    public QuestWindow(DalamudPluginInterface pluginInterface,
+    public QuestWindow(IDalamudPluginInterface pluginInterface,
         MovementController movementController,
         QuestController questController,
         GameFunctions gameFunctions,

@@ -118,6 +118,30 @@ public sealed class AethernetShortcutConverter : JsonConverter<AethernetShortcut
         { EAetheryteLocation.RadzAtHanKama, "[Radz-at-Han] Kama" },
         { EAetheryteLocation.RadzAtHanHighCrucible, "[Radz-at-Han] The High Crucible of Al-Kimiya" },
         { EAetheryteLocation.RadzAtHanGateOfFirstSight, "[Radz-at-Han] The Gate of First Sight (Thavnair)" },
+
+        { EAetheryteLocation.Tuliyollal, "[Tuliyollal] Aetheryte Plaza" },
+        { EAetheryteLocation.TuliyollalDirigibleLanding, "[Tuliyollal] Dirigible Landing" },
+        { EAetheryteLocation.TuliyollalTheResplendentQuarter, "[Tuliyollal] The Resplendent Quarter" },
+        { EAetheryteLocation.TuliyollalTheForardCabins, "[Tuliyollal] The For'ard Cabins" },
+        { EAetheryteLocation.TuliyollalBaysideBevyMarketplace, "[Tuliyollal] Bayside Bevy Marketplace" },
+        { EAetheryteLocation.TuliyollalVollokShoonsa, "[Tuliyollal] Vollok Shoonsa" },
+        { EAetheryteLocation.TuliyollalWachumeqimeqi, "[Tuliyollal] Wachumeqimeqi" },
+        { EAetheryteLocation.TuliyollalBrightploomPost, "[Tuliyollal] Brightploom Post" },
+        { EAetheryteLocation.TuliyollalArchOfTheDawnUrqopacha, "[Tuliyollal] Arch of the Dawn (Urqopacha)" },
+        { EAetheryteLocation.TuliyollalArchOfTheDawnKozamauka, "[Tuliyollal] Arch of the Dawn (Kozama'uka)" },
+        { EAetheryteLocation.TuliyollalIhuykatumu, "[Tuliyollal] Ihuykatumu (Kozama'uka)" },
+        { EAetheryteLocation.TuliyollalDirigibleLandingYakTel, "[Tuliyollal] Dirigible Landing (Yak T'el)" },
+        { EAetheryteLocation.TuliyollalXakTuralSkygate, "[Tuliyollal] Xak Tural Skygate (Shaaloani)" },
+
+        { EAetheryteLocation.SolutionNine, "[Solution Nine] Aetheryte Plaza" },
+        { EAetheryteLocation.SolutionNineInformationCenter, "[Solution Nine] Information Center" },
+        { EAetheryteLocation.SolutionNineTrueVue, "[Solution Nine] True Vue" },
+        { EAetheryteLocation.SolutionNineNeonStein, "[Solution Nine] Neon Stein" },
+        { EAetheryteLocation.SolutionNineTheArcadion, "[Solution Nine] The Arcadion" },
+        { EAetheryteLocation.SolutionNineResolution, "[Solution Nine] Resolution" },
+        { EAetheryteLocation.SolutionNineNexusArcade, "[Solution Nine] Nexus Arcade" },
+        { EAetheryteLocation.SolutionNineResidentialSector, "[Solution Nine] Residential Sector" },
+        { EAetheryteLocation.SolutionNineScanningPortNine, "[Solution Nine] Scanning Port Nine (Heritage Found)" },
     };
 
     private static readonly Dictionary<string, EAetheryteLocation> StringToEnum =

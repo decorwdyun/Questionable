@@ -82,7 +82,7 @@ internal static class EquipItem
                 return ETaskResult.StillRunning;
 
             if (_targetSlots.Any(x =>
-                    inventoryManager->GetInventorySlot(InventoryType.EquippedItems, x)->ItemID == _itemId))
+                    inventoryManager->GetInventorySlot(InventoryType.EquippedItems, x)->ItemId == _itemId))
                 return ETaskResult.TaskComplete;
 
             Equip();
@@ -100,7 +100,7 @@ internal static class EquipItem
             if (equippedContainer == null)
                 return false;
 
-            if (_targetSlots.Any(slot => equippedContainer->GetInventorySlot(slot)->ItemID == _itemId))
+            if (_targetSlots.Any(slot => equippedContainer->GetInventorySlot(slot)->ItemId == _itemId))
             {
                 logger.LogInformation("Already equipped {Item}, skipping step", _item.Name?.ToString());
                 return false;
@@ -119,12 +119,12 @@ internal static class EquipItem
                 for (ushort sourceSlot = 0; sourceSlot < sourceContainer->Size; sourceSlot++)
                 {
                     var sourceItem = sourceContainer->GetInventorySlot(sourceSlot);
-                    if (sourceItem == null || sourceItem->ItemID != _itemId)
+                    if (sourceItem == null || sourceItem->ItemId != _itemId)
                         continue;
 
                     // Move the item to the first available slot
                     ushort targetSlot = _targetSlots
-                        .Where(x => inventoryManager->GetInventorySlot(InventoryType.EquippedItems, x)->ItemID == 0)
+                        .Where(x => inventoryManager->GetInventorySlot(InventoryType.EquippedItems, x)->ItemId == 0)
                         .Concat(_targetSlots).First();
 
                     logger.LogInformation(

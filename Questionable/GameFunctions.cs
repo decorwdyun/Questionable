@@ -6,6 +6,7 @@ using System.Numerics;
 using Dalamud.Game;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects;
+using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Memory;
 using Dalamud.Plugin.Services;
 using Dalamud.Utility;
@@ -25,8 +26,6 @@ using Questionable.Model.V1;
 using BattleChara = FFXIVClientStructs.FFXIV.Client.Game.Character.BattleChara;
 using ContentFinderCondition = Lumina.Excel.GeneratedSheets.ContentFinderCondition;
 using ContentTalk = Lumina.Excel.GeneratedSheets.ContentTalk;
-using Emote = Lumina.Excel.GeneratedSheets.Emote;
-using GameObject = Dalamud.Game.ClientState.Objects.Types.GameObject;
 using GrandCompany = FFXIVClientStructs.FFXIV.Client.UI.Agent.GrandCompany;
 using Quest = Questionable.Model.Quest;
 using TerritoryType = Lumina.Excel.GeneratedSheets.TerritoryType;
@@ -140,17 +139,17 @@ internal sealed unsafe class GameFunctions
             // do the MSQ; if a side quest is the first item do that side quest.
             //
             // If no quests are marked as 'priority', accepting a new quest adds it to the top of the list.
-            for (int i = questManager->TrackedQuestsSpan.Length - 1; i >= 0; --i)
+            for (int i = questManager->TrackedQuests.Length - 1; i >= 0; --i)
             {
                 ushort currentQuest;
-                var trackedQuest = questManager->TrackedQuestsSpan[i];
+                var trackedQuest = questManager->TrackedQuests[i];
                 switch (trackedQuest.QuestType)
                 {
                     default:
                         continue;
 
                     case 1: // normal quest
-                        currentQuest = questManager->NormalQuestsSpan[trackedQuest.Index].QuestId;
+                        currentQuest = questManager->NormalQuests[trackedQuest.Index].QuestId;
                         break;
                 }
 
@@ -284,7 +283,7 @@ internal sealed unsafe class GameFunctions
                playerState->IsAetherCurrentUnlocked(aetherCurrentId);
     }
 
-    public GameObject? FindObjectByDataId(uint dataId)
+    public IGameObject? FindObjectByDataId(uint dataId)
     {
         foreach (var gameObject in _objectTable)
         {
@@ -300,15 +299,14 @@ internal sealed unsafe class GameFunctions
 
     public bool InteractWith(uint dataId)
     {
-        GameObject? gameObject = FindObjectByDataId(dataId);
+        IGameObject? gameObject = FindObjectByDataId(dataId);
         if (gameObject != null)
         {
-            _logger.LogInformation("Setting target with {DataId} to {ObjectId}", dataId, gameObject.ObjectId);
+            _logger.LogInformation("Setting target with {DataId} to {ObjectId}", dataId, gameObject.EntityId);
             _targetManager.Target = null;
             _targetManager.Target = gameObject;
 
-            long result = (long)TargetSystem.Instance()->InteractWithObject(
-                (FFXIVClientStructs.FFXIV.Client.Game.Object.GameObject*)gameObject.Address, false);
+            long result = (long)TargetSystem.Instance()->InteractWithObject((GameObject*)gameObject.Address, false);
 
             _logger.LogInformation("Interact result: {Result}", result);
             return result > 0;
@@ -328,7 +326,7 @@ internal sealed unsafe class GameFunctions
 
     public bool UseItem(uint dataId, uint itemId)
     {
-        GameObject? gameObject = FindObjectByDataId(dataId);
+        IGameObject? gameObject = FindObjectByDataId(dataId);
         if (gameObject != null)
         {
             _targetManager.Target = gameObject;
@@ -343,10 +341,10 @@ internal sealed unsafe class GameFunctions
 
     public bool UseItemOnGround(uint dataId, uint itemId)
     {
-        GameObject? gameObject = FindObjectByDataId(dataId);
+        IGameObject? gameObject = FindObjectByDataId(dataId);
         if (gameObject != null)
         {
-            var position = (FFXIVClientStructs.FFXIV.Common.Math.Vector3)gameObject.Position;
+            Vector3 position = gameObject.Position;
             return ActionManager.Instance()->UseActionLocation(ActionType.KeyItem, itemId, location: &position);
         }
 
@@ -355,7 +353,7 @@ internal sealed unsafe class GameFunctions
 
     public bool IsObjectAtPosition(uint dataId, Vector3 position, float distance)
     {
-        GameObject? gameObject = FindObjectByDataId(dataId);
+        IGameObject? gameObject = FindObjectByDataId(dataId);
         return gameObject != null && (gameObject.Position - position).Length() < distance;
     }
 
@@ -376,18 +374,16 @@ internal sealed unsafe class GameFunctions
 
     private bool HasCharacterStatusPreventingMountOrSprint()
     {
-        var gameObject = GameObjectManager.GetGameObjectByIndex(0);
-        if (gameObject != null && gameObject->ObjectKind == 1)
-        {
-            var battleChara = (BattleChara*)gameObject;
-            StatusManager* statusManager = battleChara->GetStatusManager;
-            return statusManager->HasStatus(565) ||
-                   statusManager->HasStatus(404) ||
-                   statusManager->HasStatus(2729) ||
-                   statusManager->HasStatus(2730);
-        }
+        var localPlayer = _clientState.LocalPlayer;
+        if (localPlayer == null)
+            return false;
 
-        return false;
+        var battleChara = (BattleChara*)localPlayer.Address;
+        StatusManager* statusManager = battleChara->GetStatusManager();
+        return statusManager->HasStatus(565) ||
+               statusManager->HasStatus(404) ||
+               statusManager->HasStatus(2729) ||
+               statusManager->HasStatus(2730);
     }
 
     public bool Mount()

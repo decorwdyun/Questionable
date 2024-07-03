@@ -65,7 +65,7 @@ internal sealed unsafe class ChatFunctions
     /// <exception cref="InvalidOperationException">If the signature for this function could not be found</exception>
     private void SendMessageUnsafe(byte[] message)
     {
-        var uiModule = (IntPtr)Framework.Instance()->GetUiModule();
+        var uiModule = (IntPtr)Framework.Instance()->GetUIModule();
 
         using var payload = new ChatPayload(message);
         var mem1 = Marshal.AllocHGlobal(400);
@@ -141,7 +141,7 @@ internal sealed unsafe class ChatFunctions
 
     public void UseEmote(uint dataId, EEmote emote)
     {
-        GameObject? gameObject = _gameFunctions.FindObjectByDataId(dataId);
+        IGameObject? gameObject = _gameFunctions.FindObjectByDataId(dataId);
         if (gameObject != null)
         {
             _targetManager.Target = gameObject;
@@ -157,7 +157,7 @@ internal sealed unsafe class ChatFunctions
     private static class Signatures
     {
         internal const string SendChat = "48 89 5C 24 ?? 57 48 83 EC 20 48 8B FA 48 8B D9 45 84 C9";
-        internal const string SanitiseString = "E8 ?? ?? ?? ?? EB 0A 48 8D 4C 24 ?? E8 ?? ?? ?? ?? 48 8D 8D";
+        internal const string SanitiseString = "E8 ?? ?? ?? ?? 48 8D 4C 24 ?? 0F B6 F0 E8 ?? ?? ?? ?? 48 8D 4D C0";
     }
 
     [StructLayout(LayoutKind.Explicit)]

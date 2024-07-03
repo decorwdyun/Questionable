@@ -7,10 +7,10 @@ namespace Questionable.External;
 
 internal sealed class YesAlreadyIpc : IDisposable
 {
-    private readonly DalamudPluginInterface _pluginInterface;
+    private readonly IDalamudPluginInterface _pluginInterface;
     private readonly IPluginLog _pluginLog;
 
-    public YesAlreadyIpc(DalamudPluginInterface pluginInterface, IPluginLog pluginLog)
+    public YesAlreadyIpc(IDalamudPluginInterface pluginInterface, IPluginLog pluginLog)
     {
         _pluginInterface = pluginInterface;
         _pluginLog = pluginLog;

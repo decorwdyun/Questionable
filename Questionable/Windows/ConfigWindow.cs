@@ -13,7 +13,7 @@ namespace Questionable.Windows;
 
 internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
 {
-    private readonly DalamudPluginInterface _pluginInterface;
+    private readonly IDalamudPluginInterface _pluginInterface;
     private readonly Configuration _configuration;
 
     private readonly uint[] _mountIds;
@@ -23,7 +23,7 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
         ["None (manually pick quest)", "Maelstrom", "Twin Adder" /*, "Immortal Flames"*/];
 
     [SuppressMessage("Performance", "CA1861", Justification = "One time initialization")]
-    public ConfigWindow(DalamudPluginInterface pluginInterface, Configuration configuration, IDataManager dataManager)
+    public ConfigWindow(IDalamudPluginInterface pluginInterface, Configuration configuration, IDataManager dataManager)
         : base("Config - Questionable###QuestionableConfig", ImGuiWindowFlags.AlwaysAutoResize)
     {
         _pluginInterface = pluginInterface;

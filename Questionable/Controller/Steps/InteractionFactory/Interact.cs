@@ -59,7 +59,7 @@ internal static class Interact
 
         public bool Start()
         {
-            GameObject? gameObject = gameFunctions.FindObjectByDataId(DataId);
+            IGameObject? gameObject = gameFunctions.FindObjectByDataId(DataId);
             if (gameObject == null)
             {
                 logger.LogWarning("No game object with dataId {DataId}", DataId);
@@ -104,7 +104,7 @@ internal static class Interact
 
             if (!_interacted)
             {
-                GameObject? gameObject = gameFunctions.FindObjectByDataId(DataId);
+                IGameObject? gameObject = gameFunctions.FindObjectByDataId(DataId);
                 if (gameObject == null || !gameObject.IsTargetable || !HasAnyMarker(gameObject))
                     return ETaskResult.StillRunning;
 
@@ -116,7 +116,7 @@ internal static class Interact
             return ETaskResult.TaskComplete;
         }
 
-        private unsafe bool HasAnyMarker(GameObject gameObject)
+        private unsafe bool HasAnyMarker(IGameObject gameObject)
         {
             if (SkipMarkerCheck || gameObject.ObjectKind != ObjectKind.EventNpc)
                 return true;

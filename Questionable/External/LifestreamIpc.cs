@@ -10,7 +10,7 @@ internal sealed class LifestreamIpc
     private readonly AetheryteData _aetheryteData;
     private readonly ICallGateSubscriber<string, bool> _aethernetTeleport;
 
-    public LifestreamIpc(DalamudPluginInterface pluginInterface, AetheryteData aetheryteData)
+    public LifestreamIpc(IDalamudPluginInterface pluginInterface, AetheryteData aetheryteData)
     {
         _aetheryteData = aetheryteData;
         _aethernetTeleport = pluginInterface.GetIpcSubscriber<string, bool>("Lifestream.AethernetTeleport");

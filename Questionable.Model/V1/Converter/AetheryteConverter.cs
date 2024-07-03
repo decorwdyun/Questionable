@@ -7,7 +7,6 @@ public sealed class AetheryteConverter() : EnumConverter<EAetheryteLocation>(Val
     private static readonly Dictionary<EAetheryteLocation, string> Values = new()
     {
         { EAetheryteLocation.Gridania, "Gridania" },
-
         { EAetheryteLocation.CentralShroudBentbranchMeadows, "Central Shroud - Bentbranch Meadows" },
         { EAetheryteLocation.EastShroudHawthorneHut, "East Shroud - Hawthorne Hut" },
         { EAetheryteLocation.SouthShroudQuarrymill, "South Shroud - Quarrymill" },
@@ -101,7 +100,26 @@ public sealed class AetheryteConverter() : EnumConverter<EAetheryteLocation>(Val
         { EAetheryteLocation.ElpisPoietenOikos, "Elpis - Poieten Oikos" },
         { EAetheryteLocation.UltimaThuleReahTahra, "Ultima Thule - Reah Tahra" },
         { EAetheryteLocation.UltimaThuleAbodeOfTheEa, "Ultima Thule - Abode of the Ea" },
-        { EAetheryteLocation.UltimaThuleBaseOmicron, "Ultima Thule - Base Omicron" }
+        { EAetheryteLocation.UltimaThuleBaseOmicron, "Ultima Thule - Base Omicron" },
+
+        { EAetheryteLocation.Tuliyollal, "Tuliyollal" },
+        { EAetheryteLocation.SolutionNine, "Solution Nine" },
+        { EAetheryteLocation.UrqopachaWachunpelo, "Urqopacha - Wachunpelo" },
+        { EAetheryteLocation.UrqopachaWorlarsEcho, "Urqopacha - Worlar's Echo" },
+        { EAetheryteLocation.KozamaukaOkHanu, "Kozama'uka - Ok'hanu" },
+        { EAetheryteLocation.KozamaukaManyFires, "Kozama'uka - Many Fires" },
+        { EAetheryteLocation.KozamaukaEarthenshire, "Kozama'uka - Earthenshire" },
+        { EAetheryteLocation.YakTelIqBraax, "Yak T'el - Iq Br'aax" },
+        { EAetheryteLocation.YakTelMamook, "Yak T'el - Mamook" },
+        { EAetheryteLocation.ShaaloaniHhusatahwi, "Shaaloani - Hhusatahwi" },
+        { EAetheryteLocation.ShaaloaniShesheneweziSprings, "Shaaloani - Sheshenewezi Springs" },
+        { EAetheryteLocation.ShaaloaniMehwahhetsoan, "Shaaloani - Mehwahhetsoan" },
+        { EAetheryteLocation.HeritageFoundYyasulaniStation, "Heritage Found - Yyasulani Station" },
+        { EAetheryteLocation.HeritageFoundTheOutskirts, "Heritage Found - The Outskirts" },
+        { EAetheryteLocation.HeritageFoundElectropeStrike, "Heritage Found - Electrope Strike" },
+        { EAetheryteLocation.LivingMemoryLeynodeMnemo, "Living Memory - Leynode Mnemo" },
+        { EAetheryteLocation.LivingMemoryLeynodePyro, "Living Memory - Leynode Pyro" },
+        { EAetheryteLocation.LivingMemoryLeynodeAero, "Living Memory - Leynode Aero" },
     };
 
     public static bool IsLargeAetheryte(EAetheryteLocation aetheryte) => Values.ContainsKey(aetheryte);

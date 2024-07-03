@@ -28,7 +28,7 @@ internal sealed class AetheryteData
         TerritoryIds = territoryIds.AsReadOnly();
 
         TownTerritoryIds = dataManager.GetExcelSheet<TerritoryType>()!
-            .Where(x => x.RowId > 0 && !string.IsNullOrEmpty(x.Name) && x.TerritoryIntendedUse == 0)
+            .Where(x => x.RowId > 0 && !string.IsNullOrEmpty(x.Name) && x.TerritoryIntendedUse.Row == 0)
             .Select(x => (ushort)x.RowId)
             .ToList();
     }
@@ -214,6 +214,41 @@ internal sealed class AetheryteData
                 { EAetheryteLocation.UltimaThuleReahTahra, new(-544.152f, 74.32666f, 269.6421f) },
                 { EAetheryteLocation.UltimaThuleAbodeOfTheEa, new(64.286255f, 272.48022f, -657.49603f) },
                 { EAetheryteLocation.UltimaThuleBaseOmicron, new(489.2804f, 437.5829f, 333.63843f) },
+
+                { EAetheryteLocation.Tuliyollal, new(-24.093994f, 0.77819824f, 7.583679f) },
+                { EAetheryteLocation.TuliyollalDirigibleLanding, new(-413.68738f, 2.9754639f, -45.975464f) },
+                { EAetheryteLocation.TuliyollalTheResplendentQuarter, new(-187.1214f, 39.93274f, 6.088318f) },
+                { EAetheryteLocation.TuliyollalTheForardCabins, new(-149.73682f, -15.030151f, 198.90125f) },
+                { EAetheryteLocation.TuliyollalBaysideBevyMarketplace, new(-14.999634f, -10.025269f, 135.57642f) },
+                { EAetheryteLocation.TuliyollalVollokShoonsa, new(-99.13794f, 100.72473f, -222.03406f) },
+                { EAetheryteLocation.TuliyollalWachumeqimeqi, new(166.27747f, -17.990417f, 38.742676f) },
+                { EAetheryteLocation.TuliyollalBrightploomPost, new(71.7937f, 47.074097f, -333.21124f) },
+
+                { EAetheryteLocation.SolutionNine, new(-0.015319824f, 8.987488f, -0.015319824f) },
+                { EAetheryteLocation.SolutionNineInformationCenter, new(-30.441833f, -6.0579224f, 209.3385f) },
+                { EAetheryteLocation.SolutionNineTrueVue, new(382.6809f, 59.983154f, 76.67651f) },
+                { EAetheryteLocation.SolutionNineNeonStein, new(258.28943f, 50.736206f, 148.72961f) },
+                { EAetheryteLocation.SolutionNineTheArcadion, new(374.77686f, 60.01367f, 325.67322f) },
+                { EAetheryteLocation.SolutionNineResolution, new(-32.059265f, 38.04065f, -345.2354f) },
+                { EAetheryteLocation.SolutionNineNexusArcade, new(-160.05188f, -0.015319824f, 21.591492f) },
+                { EAetheryteLocation.SolutionNineResidentialSector, new(-378.13385f, 13.992493f, 136.49194f) },
+
+                { EAetheryteLocation.UrqopachaWachunpelo, new(332.96704f, -160.11298f, -416.22034f) },
+                { EAetheryteLocation.UrqopachaWorlarsEcho, new(465.62903f, 114.94617f, 634.9126f) },
+                { EAetheryteLocation.KozamaukaOkHanu, new(-169.51251f, 6.576599f, -479.42322f) },
+                { EAetheryteLocation.KozamaukaManyFires, new(541.16125f, 117.41809f, 203.60107f) },
+                { EAetheryteLocation.KozamaukaEarthenshire, new(-477.53113f, 124.04053f, 311.32983f) },
+                { EAetheryteLocation.YakTelIqBraax, new(-397.05505f, 23.5141f, -431.93713f) },
+                { EAetheryteLocation.YakTelMamook, new(721.40076f, -132.31104f, 526.1769f) },
+                { EAetheryteLocation.ShaaloaniHhusatahwi, new(386.40417f, -0.19836426f, 467.61267f) },
+                { EAetheryteLocation.ShaaloaniShesheneweziSprings, new(-291.70673f, 19.08899f, -114.54956f) },
+                { EAetheryteLocation.ShaaloaniMehwahhetsoan, new(311.36023f, -14.175659f, -567.74243f) },
+                { EAetheryteLocation.HeritageFoundYyasulaniStation, new(514.6105f, 145.86096f, 207.56836f) },
+                { EAetheryteLocation.HeritageFoundTheOutskirts, new(-223.0412f, 31.937134f, -584.03906f) },
+                { EAetheryteLocation.HeritageFoundElectropeStrike, new(-219.53156f, 32.913696f, 120.77515f) },
+                { EAetheryteLocation.LivingMemoryLeynodeMnemo, new(-0.22894287f, 57.175537f, 796.9634f) },
+                { EAetheryteLocation.LivingMemoryLeynodePyro, new(657.98413f, 28.976807f, -284.01617f) },
+                { EAetheryteLocation.LivingMemoryLeynodeAero, new(-255.26825f, 59.433838f, -397.6654f) },
             }
             .AsReadOnly();
 

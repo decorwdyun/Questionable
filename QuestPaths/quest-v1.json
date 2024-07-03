@@ -223,7 +223,25 @@
                     "Elpis - Poieten Oikos",
                     "Ultima Thule - Reah Tahra",
                     "Ultima Thule - Abode of the Ea",
-                    "Ultima Thule - Base Omicron"
+                    "Ultima Thule - Base Omicron",
+                    "Tuliyollal",
+                    "Solution Nine",
+                    "Urqopacha - Wachunpelo",
+                    "Urqopacha - Worlar's Echo",
+                    "Kozama'uka - Ok'hanu",
+                    "Kozama'uka - Many Fires",
+                    "Kozama'uka - Earthenshire",
+                    "Yak T'el - Iq Br'aax",
+                    "Yak T'el - Mamook",
+                    "Shaaloani - Hhusatahwi",
+                    "Shaaloani - Sheshenewezi Springs",
+                    "Shaaloani - Mehwahhetsoan",
+                    "Heritage Found - Yyasulani Station",
+                    "Heritage Found - The Outskirts",
+                    "Heritage Found - Electrope Strike",
+                    "Living Memory - Leynode Mnemo",
+                    "Living Memory - Leynode Pyro",
+                    "Living Memory - Leynode Aero"
                   ]
                 },
                 "AethernetShortcut": {
@@ -331,7 +349,29 @@
                       "[Radz-at-Han] Mehryde's Meyhane",
                       "[Radz-at-Han] Kama",
                       "[Radz-at-Han] The High Crucible of Al-Kimiya",
-                      "[Radz-at-Han] The Gate of First Sight (Thavnair)"
+                      "[Radz-at-Han] The Gate of First Sight (Thavnair)",
+                      "[Tuliyollal] Aetheryte Plaza",
+                      "[Tuliyollal] Dirigible Landing",
+                      "[Tuliyollal] The Resplendent Quarter",
+                      "[Tuliyollal] The For'ard Cabins",
+                      "[Tuliyollal] Bayside Bevy Marketplace",
+                      "[Tuliyollal] Vollok Shoonsa",
+                      "[Tuliyollal] Wachumeqimeqi",
+                      "[Tuliyollal] Brightploom Post",
+                      "[Tuliyollal] Arch of the Dawn (Urqopacha)",
+                      "[Tuliyollal] Arch of the Dawn (Kozama'uka)",
+                      "[Tuliyollal] Ihuykatumu (Kozama'uka)",
+                      "[Tuliyollal] Dirigible Landing (Yak T'el)",
+                      "[Tuliyollal] Xak Tural Skygate (Shaaloani)",
+                      "[Solution Nine] Aetheryte Plaza",
+                      "[Solution Nine] Information Center",
+                      "[Solution Nine] True Vue",
+                      "[Solution Nine] Neon Stein",
+                      "[Solution Nine] The Arcadion",
+                      "[Solution Nine] Resolution",
+                      "[Solution Nine] Nexus Arcade",
+                      "[Solution Nine] Residential Sector",
+                      "[Solution Nine] Scanning Port Nine (Heritage Found)"
                     ]
                   }
                 },
@@ -345,7 +385,6 @@
                 },
                 "SkipIf": {
                   "type": "array",
-                  "description": "TODO Not implemented",
                   "items": {
                     "type": "string",
                     "enum": [

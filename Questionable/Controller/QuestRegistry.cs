@@ -14,13 +14,13 @@ namespace Questionable.Controller;
 
 internal sealed class QuestRegistry
 {
-    private readonly DalamudPluginInterface _pluginInterface;
+    private readonly IDalamudPluginInterface _pluginInterface;
     private readonly IDataManager _dataManager;
     private readonly ILogger<QuestRegistry> _logger;
 
     private readonly Dictionary<ushort, Quest> _quests = new();
 
-    public QuestRegistry(DalamudPluginInterface pluginInterface, IDataManager dataManager,
+    public QuestRegistry(IDalamudPluginInterface pluginInterface, IDataManager dataManager,
         ILogger<QuestRegistry> logger)
     {
         _pluginInterface = pluginInterface;

@@ -20,7 +20,7 @@ internal sealed class NavmeshIpc
     private readonly ICallGateSubscriber<float, object> _pathSetTolerance;
     private readonly ICallGateSubscriber<Vector3, bool, float, Vector3?> _queryPointOnFloor;
 
-    public NavmeshIpc(DalamudPluginInterface pluginInterface)
+    public NavmeshIpc(IDalamudPluginInterface pluginInterface)
     {
         _isNavReady = pluginInterface.GetIpcSubscriber<bool>("vnavmesh.Nav.IsReady");
         _navPathfind =

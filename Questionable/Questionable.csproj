@@ -1,60 +1,18 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Dalamud.NET.Sdk/9.0.2">
     <PropertyGroup>
-        <TargetFramework>net8.0-windows</TargetFramework>
-        <Version>0.20</Version>
-        <LangVersion>12</LangVersion>
-        <Nullable>enable</Nullable>
-        <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-        <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+        <Version>1.0</Version>
         <OutputPath>dist</OutputPath>
-        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <PathMap Condition="$(SolutionDir) != ''">$(SolutionDir)=X:\</PathMap>
-        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
-        <DebugType>portable</DebugType>
     </PropertyGroup>
 
-    <PropertyGroup>
-        <DalamudLibPath>$(appdata)\XIVLauncher\addon\Hooks\dev\</DalamudLibPath>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$([System.Runtime.InteropServices.RuntimeInformation]::IsOSPlatform($([System.Runtime.InteropServices.OSPlatform]::Linux)))'">
-        <DalamudLibPath>$(DALAMUD_HOME)/</DalamudLibPath>
-    </PropertyGroup>
+    <Import Project="..\LLib\LLib.targets"/>
+    <Import Project="..\LLib\RenameZip.targets"/>
 
     <ItemGroup>
         <PackageReference Include="Dalamud.Extensions.MicrosoftLogging" Version="4.0.1"/>
-        <PackageReference Include="DalamudPackager" Version="2.1.12"/>
         <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" ExcludeAssets="runtime"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
         <PackageReference Include="System.Text.Json" Version="8.0.3"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Reference Include="Dalamud">
-            <HintPath>$(DalamudLibPath)Dalamud.dll</HintPath>
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="ImGui.NET">
-            <HintPath>$(DalamudLibPath)ImGui.NET.dll</HintPath>
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="Lumina">
-            <HintPath>$(DalamudLibPath)Lumina.dll</HintPath>
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="Lumina.Excel">
-            <HintPath>$(DalamudLibPath)Lumina.Excel.dll</HintPath>
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="Newtonsoft.Json">
-            <HintPath>$(DalamudLibPath)Newtonsoft.Json.dll</HintPath>
-            <Private>false</Private>
-        </Reference>
-        <Reference Include="FFXIVClientStructs">
-            <HintPath>$(DalamudLibPath)FFXIVClientStructs.dll</HintPath>
-            <Private>false</Private>
-        </Reference>
     </ItemGroup>
 
     <ItemGroup>
