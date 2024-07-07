@@ -14,7 +14,7 @@ Generally, the folder name is derived from SE's classification of quests.
       folder
 - `MSQ-2`: All quests from `We Come in Peace` until the end of ARR (incl. patches)
     - original quests: `GaiUs@[...]`, with `@` being the letter used as part of the folder name
-    - reworked quests: `Xx[...]`, updated in 5.3 probabbly → see original quest
+    - reworked quests: `Xx[...]`, updated in 5.3 probably → see original quest
 
 ### Heavensward
 
@@ -27,3 +27,7 @@ Generally, the folder name is derived from SE's classification of quests.
 ### Endwalker
 
 - `MSQ`: `AktKm@` with `@` being the letter used as part of the folder name
+
+### Dawntrail
+
+- `MSQ`: `KinGm@` with `@` being the letter used as part of the folder name

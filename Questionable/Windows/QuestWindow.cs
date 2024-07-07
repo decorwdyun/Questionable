@@ -18,6 +18,7 @@ using LLib.ImGui;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller;
 using Questionable.Controller.Steps.BaseFactory;
+using Questionable.Data;
 using Questionable.External;
 using Questionable.Model;
 using Questionable.Model.V1;
@@ -38,6 +39,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
     private readonly Configuration _configuration;
     private readonly NavmeshIpc _navmeshIpc;
     private readonly QuestRegistry _questRegistry;
+    private readonly TerritoryData _territoryData;
     private readonly ILogger<QuestWindow> _logger;
 
     public QuestWindow(IDalamudPluginInterface pluginInterface,
@@ -52,6 +54,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         Configuration configuration,
         NavmeshIpc navmeshIpc,
         QuestRegistry questRegistry,
+        TerritoryData territoryData,
         ILogger<QuestWindow> logger)
         : base("Questionable###Questionable", ImGuiWindowFlags.AlwaysAutoResize)
     {
@@ -67,6 +70,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         _configuration = configuration;
         _navmeshIpc = navmeshIpc;
         _questRegistry = questRegistry;
+        _territoryData = territoryData;
         _logger = logger;
 
 #if DEBUG
@@ -206,8 +210,18 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
     {
         Debug.Assert(_clientState.LocalPlayer != null, "_clientState.LocalPlayer != null");
 
-        ImGui.Text(
-            $"Current TerritoryId: {_clientState.TerritoryType}, Flying: {(_gameFunctions.IsFlyingUnlockedInCurrentZone() ? "Yes" : "No")}");
+        string? territoryName = _territoryData.GetName(_clientState.TerritoryType);
+        if (territoryName != null)
+            territoryName += string.Create(CultureInfo.InvariantCulture, $" ({_clientState.TerritoryType})");
+        else
+            territoryName = _clientState.TerritoryType.ToString(CultureInfo.InvariantCulture);
+
+        ImGui.Text(territoryName);
+        if (_gameFunctions.IsFlyingUnlockedInCurrentZone())
+        {
+            ImGui.Text("+ Fly");
+            ImGui.SameLine();
+        }
 
         var q = _gameFunctions.GetCurrentQuest();
         ImGui.Text($"Current Quest: {q.CurrentQuest} → {q.Sequence}");
@@ -277,6 +291,13 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
             ImGui.Button("Copy");
             if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
             {
+                string interactionType = gameObject->NamePlateIconId switch
+                {
+                    71201 or 71211 or 71221 or 71231 or 71341 => "AcceptQuest",
+                    71202 or 71212 or 71222 or 71232 or 71342 => "AcceptQuest", // repeatable
+                    71205 or 71215 or 71225 or 71235 or 71345 => "CompleteQuest",
+                    _ => "Interact",
+                };
                 ImGui.SetClipboardText($$"""
                                          "DataId": {{_targetManager.Target.DataId}},
                                          "Position": {
@@ -285,7 +306,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
                                              "Z": {{_targetManager.Target.Position.Z.ToString(CultureInfo.InvariantCulture)}}
                                          },
                                          "TerritoryId": {{_clientState.TerritoryType}},
-                                         "InteractionType": "Interact"
+                                         "InteractionType": "{{interactionType}}"
                                          """);
             }
             else if (ImGui.IsItemClicked(ImGuiMouseButton.Right))

@@ -1,0 +1,108 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1046918,
+          "Position": {
+            "X": 365.31616,
+            "Y": 130.34726,
+            "Z": 602.34985
+          },
+          "StopDistance": 7,
+          "TerritoryId": 1187,
+          "InteractionType": "AcceptQuest"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1046926,
+          "Position": {
+            "X": -163.95825,
+            "Y": -14.999357,
+            "Z": 208.27039
+          },
+          "TerritoryId": 1185,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Tuliyollal",
+          "AethernetShortcut": [
+            "[Tuliyollal] Aetheryte Plaza",
+            "[Tuliyollal] The For'ard Cabins"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1046940,
+          "Position": {
+            "X": -202.74664,
+            "Y": -15,
+            "Z": 296.55908
+          },
+          "TerritoryId": 1185,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1046929,
+          "Position": {
+            "X": -199.08447,
+            "Y": -14.999306,
+            "Z": 306.35522
+          },
+          "StopDistance": 5,
+          "TerritoryId": 1185,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 1046930,
+          "Position": {
+            "X": -141.31384,
+            "Y": 51.999996,
+            "Z": 7.94989
+          },
+          "TerritoryId": 1185,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Tuliyollal",
+          "AethernetShortcut": [
+            "[Tuliyollal] Aetheryte Plaza",
+            "[Tuliyollal] The Resplendent Quarter"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1046933,
+          "Position": {
+            "X": -163.86664,
+            "Y": -14.999357,
+            "Z": 203.75366
+          },
+          "TerritoryId": 1185,
+          "InteractionType": "CompleteQuest"
+        }
+      ]
+    }
+  ]
+}

@@ -30,7 +30,10 @@
           "StopDistance": 10,
           "TerritoryId": 148,
           "InteractionType": "AttuneAetheryte",
-          "AethernetShortcut": ["[Gridania] Aetheryte Plaza", "[Gridania] Blue Badger Gate (Central Shroud)"]
+          "AethernetShortcut": [
+            "[Gridania] Aetheryte Plaza",
+            "[Gridania] Blue Badger Gate (Central Shroud)"
+          ]
         },
         {
           "DataId": 1000470,

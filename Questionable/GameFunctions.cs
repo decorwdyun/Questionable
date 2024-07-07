@@ -502,6 +502,11 @@ internal sealed unsafe class GameFunctions
             var questRow = _dataManager.GetExcelSheet<Warp>()!.GetRow(rowId);
             return questRow?.Name?.ToString();
         }
+        else if (excelSheet is "Addon")
+        {
+            var questRow = _dataManager.GetExcelSheet<Addon>()!.GetRow(rowId);
+            return questRow?.Text?.ToString();
+        }
         else if (excelSheet is "ContentTalk" or null)
         {
             var questRow = _dataManager.GetExcelSheet<ContentTalk>()!.GetRow(rowId);

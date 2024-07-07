@@ -56,6 +56,7 @@ internal sealed class QuestRegistry
                 LoadFromDirectory(new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "ARealmReborn")));
                 LoadFromDirectory(new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "Shadowbringers")));
                 LoadFromDirectory(new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "Endwalker")));
+                LoadFromDirectory(new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "Dawntrail")));
             }
         }
 #endif

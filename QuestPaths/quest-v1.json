@@ -636,7 +636,9 @@
                           "pray",
                           "slap",
                           "doubt",
-                          "psych"
+                          "psych",
+                          "cheer",
+                          "happy"
                         ]
                       }
                     },
@@ -749,6 +751,12 @@
                           },
                           {
                             "const": "WaitForManualProgress"
+                          },
+                          {
+                            "const": "AcceptQuest"
+                          },
+                          {
+                            "const": "CompleteQuest"
                           }
                         ]
                       }

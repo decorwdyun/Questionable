@@ -40,7 +40,9 @@
           "TerritoryId": 148,
           "InteractionType": "Combat",
           "EnemySpawnType": "OverworldEnemies",
-          "KillEnemyDataIds": [142],
+          "KillEnemyDataIds": [
+            142
+          ],
           "Comment": "Depending on how many enemies you fought on the way to the egg, this step could be optional"
         }
       ]

@@ -101,7 +101,7 @@ internal sealed class GameUiController : IDisposable
                 answers.Add(addonSelectString->AtkUnitBase.AtkValues[i].ReadAtkString());
         }
 
-        int? answer = HandleListChoice(actualPrompt, answers, checkAllSteps);
+        int? answer = HandleListChoice(actualPrompt, answers, checkAllSteps) ?? HandleInstanceListChoice(actualPrompt);
         if (answer != null)
             addonSelectString->AtkUnitBase.FireCallbackInt(answer.Value);
     }
@@ -240,6 +240,21 @@ internal sealed class GameUiController : IDisposable
         }
 
         _logger.LogInformation("No matching answer found for {Prompt}.", actualPrompt);
+        return null;
+    }
+
+    private int? HandleInstanceListChoice(string? actualPrompt)
+    {
+        if (!_questController.IsRunning)
+            return null;
+
+        string? expectedPrompt = _gameFunctions.GetDialogueTextByRowId("Addon", 2090);
+        if (GameStringEquals(actualPrompt, expectedPrompt))
+        {
+            _logger.LogInformation("Selecting no prefered instance as answer for '{Prompt}'", actualPrompt);
+            return 0; // any instance
+        }
+
         return null;
     }
 

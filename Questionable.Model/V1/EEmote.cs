@@ -16,4 +16,6 @@ public enum EEmote
     Slap = 111,
     Doubt = 12,
     Psych = 30,
+    Cheer = 6,
+    Happy = 48,
 }

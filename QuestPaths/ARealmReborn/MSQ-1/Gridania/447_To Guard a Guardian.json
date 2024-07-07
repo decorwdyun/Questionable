@@ -39,7 +39,10 @@
           },
           "TerritoryId": 132,
           "InteractionType": "Interact",
-          "AethernetShortcut": ["[Gridania] Aetheryte Plaza", "[Gridania] Archers' Guild"],
+          "AethernetShortcut": [
+            "[Gridania] Aetheryte Plaza",
+            "[Gridania] Archers' Guild"
+          ],
           "DialogueChoices": [
             {
               "Type": "YesNo",
@@ -91,7 +94,10 @@
           "TerritoryId": 132,
           "InteractionType": "Interact",
           "AetheryteShortcut": "Gridania",
-          "AethernetShortcut": ["[Gridania] Aetheryte Plaza", "[Gridania] Archers' Guild"],
+          "AethernetShortcut": [
+            "[Gridania] Aetheryte Plaza",
+            "[Gridania] Archers' Guild"
+          ],
           "DialogueChoices": [
             {
               "Type": "YesNo",

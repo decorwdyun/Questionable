@@ -1,5 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project>
+    <Target Name="PackagePlugin" AfterTargets="Build" Condition="'$(Configuration)' == 'Debug'">
+        <DalamudPackager
+                ProjectDir="$(ProjectDir)"
+                OutputPath="$(OutputPath)"
+                AssemblyName="$(AssemblyName)"
+                MakeZip="false"
+                VersionComponents="2"/>
+    </Target>
+
     <Target Name="PackagePlugin" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
         <DalamudPackager
                 ProjectDir="$(ProjectDir)"
@@ -7,10 +16,6 @@
                 AssemblyName="$(AssemblyName)"
                 MakeZip="true"
                 VersionComponents="2"
-                Exclude="Questionable.json;Questionable.deps.json;LLib.pdb"/>
-    </Target>
-
-    <Target Name="RenameLatestZip" AfterTargets="PackagePlugin" Condition="'$(Configuration)' == 'Release'">
-        <Exec Command="rename $(OutDir)$(AssemblyName)\latest.zip $(AssemblyName)-$(Version).zip"/>
+                Exclude="Questionable.deps.json;LLib.pdb"/>
     </Target>
 </Project>

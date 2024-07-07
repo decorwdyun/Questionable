@@ -1,0 +1,111 @@
+﻿{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1046785,
+          "Position": {
+            "X": 577.7523,
+            "Y": 119.49004,
+            "Z": 148.66858
+          },
+          "StopDistance": 5,
+          "TerritoryId": 1188,
+          "InteractionType": "AcceptQuest"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 2013943,
+          "Position": {
+            "X": 485.89294,
+            "Y": 121.3855,
+            "Z": 831.29626
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818428
+        },
+        {
+          "DataId": 203,
+          "Position": {
+            "X": 541.1674,
+            "Y": 117.4462,
+            "Z": 203.6108
+          },
+          "StopDistance": 10,
+          "TerritoryId": 1188,
+          "InteractionType": "AttuneAetheryte"
+        },
+        {
+          "DataId": 1046603,
+          "Position": {
+            "X": 127.15344,
+            "Y": 110.20095,
+            "Z": 259.66272
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 2013940,
+          "Position": {
+            "X": 48.966187,
+            "Y": 111.31445,
+            "Z": 287.15955
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818422
+        },
+        {
+          "DataId": 1046608,
+          "Position": {
+            "X": -427.84772,
+            "Y": 121.633446,
+            "Z": 280.93384
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 204,
+          "Position": {
+            "X": -477.53113,
+            "Y": 124.04053,
+            "Z": 311.32983
+          },
+          "StopDistance": 10,
+          "TerritoryId": 1188,
+          "InteractionType": "AttuneAetheryte"
+        },
+        {
+          "DataId": 1046613,
+          "Position": {
+            "X": -471.5191,
+            "Y": 121.63345,
+            "Z": 344.89966
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "CompleteQuest"
+        }
+      ]
+    }
+  ]
+}
