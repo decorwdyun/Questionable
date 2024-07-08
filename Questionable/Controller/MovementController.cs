@@ -24,6 +24,12 @@ namespace Questionable.Controller;
 internal sealed class MovementController : IDisposable
 {
     public const float DefaultStopDistance = 3f;
+
+    private static readonly List<BlacklistedArea> BlacklistedAreas =
+    [
+        new(1191, new(-223.0412f, 31.937134f, -584.03906f), 5f, 7.75f),
+    ];
+
     private readonly NavmeshIpc _navmeshIpc;
     private readonly IClientState _clientState;
     private readonly GameFunctions _gameFunctions;
@@ -107,6 +113,31 @@ internal sealed class MovementController : IDisposable
                     }
                 }
 
+                if (!Destination.IsFlying)
+                {
+                    // certain areas shouldn't have navmesh points in them, e.g. the aetheryte in HF Outskirts can't be
+                    // walked on without jumping, but if you teleport to the wrong side you're fucked otherwise.
+                    foreach (var blacklistedArea in BlacklistedAreas)
+                    {
+                        if (_clientState.TerritoryType != blacklistedArea.TerritoryId)
+                            continue;
+
+                        for (int i = 0; i < navPoints.Count; ++i)
+                        {
+                            var point = navPoints[i];
+                            float distance = (point - blacklistedArea.Center).Length();
+                            if (distance < blacklistedArea.MinDistance || distance > blacklistedArea.MaxDistance)
+                                continue;
+
+                            _logger.LogInformation("Fudging navmesh point {Point} in blacklisted area",
+                                point.ToString("G", CultureInfo.InvariantCulture));
+                            navPoints[i] = blacklistedArea.Center +
+                                           Vector3.Normalize(point - blacklistedArea.Center) *
+                                           blacklistedArea.MaxDistance;
+                        }
+                    }
+                }
+
                 _navmeshIpc.MoveTo(navPoints, Destination.IsFlying);
                 MovementStartedAt = DateTime.Now;
 
@@ -144,7 +175,9 @@ internal sealed class MovementController : IDisposable
             Vector3 localPlayerPosition = _clientState.LocalPlayer?.Position ?? Vector3.Zero;
             if ((localPlayerPosition - Destination.Position).Length() < Destination.StopDistance)
             {
-                if (Destination.DataId is 2012173 or 2012174 or 2012175 or 2012176)
+                if (Destination.DataId
+                    is 2012173 or 2012174 or 2012175 or 2012176
+                    or 2014133 or 2014134 or 2014135)
                 {
                     Stop();
                 }
@@ -304,6 +337,12 @@ internal sealed class MovementController : IDisposable
         bool IsFlying,
         bool CanSprint,
         bool UseNavmesh);
+
+    public sealed record BlacklistedArea(
+        ushort TerritoryId,
+        Vector3 Center,
+        float MinDistance,
+        float MaxDistance);
 
     public sealed class PathfindingFailedException : Exception
     {

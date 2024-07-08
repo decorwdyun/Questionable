@@ -18,7 +18,7 @@ internal static class Emote
                 if (step.Emote == null)
                     return [];
             }
-            if (step.InteractionType != EInteractionType.Emote)
+            else if (step.InteractionType != EInteractionType.Emote)
                 return [];
 
             ArgumentNullException.ThrowIfNull(step.Emote);

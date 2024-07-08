@@ -1,6 +1,8 @@
 ﻿using System;
+using Dalamud.Plugin.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Questionable.Data;
 using Questionable.Model;
 using Questionable.Model.V1;
 
@@ -8,7 +10,7 @@ namespace Questionable.Controller.Steps.InteractionFactory;
 
 internal static class AetherCurrent
 {
-    internal sealed class Factory(IServiceProvider serviceProvider) : ITaskFactory
+    internal sealed class Factory(IServiceProvider serviceProvider, AetherCurrentData aetherCurrentData, IChatGui chatGui) : ITaskFactory
     {
         public ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -17,6 +19,12 @@ internal static class AetherCurrent
 
             ArgumentNullException.ThrowIfNull(step.DataId);
             ArgumentNullException.ThrowIfNull(step.AetherCurrentId);
+
+            if (!aetherCurrentData.IsValidAetherCurrent(step.TerritoryId, step.AetherCurrentId.Value))
+            {
+                chatGui.PrintError($"[Questionable] Aether current with id {step.AetherCurrentId} is referencing an invalid aether current, will skip attunement");
+                return null;
+            }
 
             return serviceProvider.GetRequiredService<DoAttune>()
                 .With(step.DataId.Value, step.AetherCurrentId.Value);

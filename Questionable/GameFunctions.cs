@@ -26,6 +26,7 @@ using Questionable.Model.V1;
 using BattleChara = FFXIVClientStructs.FFXIV.Client.Game.Character.BattleChara;
 using ContentFinderCondition = Lumina.Excel.GeneratedSheets.ContentFinderCondition;
 using ContentTalk = Lumina.Excel.GeneratedSheets.ContentTalk;
+using EventPathMove = Lumina.Excel.GeneratedSheets.EventPathMove;
 using GrandCompany = FFXIVClientStructs.FFXIV.Client.UI.Agent.GrandCompany;
 using Quest = Questionable.Model.Quest;
 using TerritoryType = Lumina.Excel.GeneratedSheets.TerritoryType;
@@ -202,6 +203,10 @@ internal sealed unsafe class GameFunctions
 
         // if the MSQ is hidden, we generally ignore it
         if (questManager->IsQuestAccepted(currentQuest) && questManager->GetQuestById(currentQuest)->IsHidden)
+            return default;
+
+        // if we're not at a high enough level to continue, we also ignore it
+        if (_questRegistry.TryGetQuest(currentQuest, out Quest? quest) && quest.Level > (_clientState.LocalPlayer?.Level ?? 0))
             return default;
 
         return (currentQuest, QuestManager.GetQuestSequence(currentQuest));
@@ -506,6 +511,11 @@ internal sealed unsafe class GameFunctions
         {
             var questRow = _dataManager.GetExcelSheet<Addon>()!.GetRow(rowId);
             return questRow?.Text?.ToString();
+        }
+        else if (excelSheet is "EventPathMove")
+        {
+            var questRow = _dataManager.GetExcelSheet<EventPathMove>()!.GetRow(rowId);
+            return questRow?.Unknown10?.ToString();
         }
         else if (excelSheet is "ContentTalk" or null)
         {

@@ -18,4 +18,6 @@ public enum EEmote
     Psych = 30,
     Cheer = 6,
     Happy = 48,
+    Poke = 28,
+    Flex = 139,
 }

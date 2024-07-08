@@ -128,18 +128,6 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 2013941,
-          "Position": {
-            "X": -754.11615,
-            "Y": 138.68921,
-            "Z": 122.66724
-          },
-          "TerritoryId": 1188,
-          "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818426,
-          "Comment": "TODO Move to some side quest maybe?"
-        },
-        {
           "DataId": 1046877,
           "Position": {
             "X": -529.0761,

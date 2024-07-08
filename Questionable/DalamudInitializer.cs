@@ -3,7 +3,9 @@ using Dalamud.Game.Command;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
+using Microsoft.Extensions.Logging;
 using Questionable.Controller;
+using Questionable.Data;
 using Questionable.Windows;
 
 namespace Questionable;
@@ -19,6 +21,7 @@ internal sealed class DalamudInitializer : IDisposable
     private readonly WindowSystem _windowSystem;
     private readonly QuestWindow _questWindow;
     private readonly ConfigWindow _configWindow;
+    private readonly DebugOverlay _debugOverlay;
 
     public DalamudInitializer(IDalamudPluginInterface pluginInterface, IFramework framework,
         ICommandManager commandManager, QuestController questController, MovementController movementController,
@@ -34,6 +37,7 @@ internal sealed class DalamudInitializer : IDisposable
         _windowSystem = windowSystem;
         _questWindow = questWindow;
         _configWindow = configWindow;
+        _debugOverlay = debugOverlay;
 
         _windowSystem.AddWindow(questWindow);
         _windowSystem.AddWindow(configWindow);
@@ -76,6 +80,13 @@ internal sealed class DalamudInitializer : IDisposable
         {
             _movementController.Stop();
             _questController.Stop("Stop command");
+        }
+        else if (arguments.StartsWith("do", StringComparison.Ordinal))
+        {
+            if (arguments.Length >= 4 && ushort.TryParse(arguments.AsSpan(3), out ushort questId))
+                _debugOverlay.HighlightedQuest = questId;
+            else
+                _debugOverlay.HighlightedQuest = null;
         }
         else if (string.IsNullOrEmpty(arguments))
             _questWindow.Toggle();

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1048308,
+          "Position": {
+            "X": -38.95636,
+            "Y": -17.972864,
+            "Z": 203.38745
+          },
+          "TerritoryId": 1185,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

@@ -619,7 +619,17 @@
                   "if": {
                     "properties": {
                       "InteractionType": {
-                        "const": "Emote"
+                        "anyOf": [
+                          {
+                            "const": "Emote"
+                          },
+                          {
+                            "const": "AcceptQuest"
+                          },
+                          {
+                            "const": "CompleteQuest"
+                          }
+                        ]
                       }
                     }
                   },
@@ -638,10 +648,23 @@
                           "doubt",
                           "psych",
                           "cheer",
-                          "happy"
+                          "happy",
+                          "poke",
+                          "flex"
                         ]
                       }
-                    },
+                    }
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "InteractionType": {
+                        "const": "Emote"
+                      }
+                    }
+                  },
+                  "then": {
                     "required": [
                       "Position",
                       "Emote"

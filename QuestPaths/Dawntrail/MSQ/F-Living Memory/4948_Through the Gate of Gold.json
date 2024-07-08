@@ -1,0 +1,150 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1047810,
+          "Position": {
+            "X": -47.470886,
+            "Y": -10.00001,
+            "Z": 98.649536
+          },
+          "TerritoryId": 1185,
+          "InteractionType": "AcceptQuest"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1048029,
+          "Position": {
+            "X": -711.1162,
+            "Y": -199.5873,
+            "Z": 624.1703
+          },
+          "StopDistance": 5,
+          "TerritoryId": 1189,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Yak T'el - Mamook",
+          "TargetTerritoryId": 1189,
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "ExcelSheet": "EventPathMove",
+              "Prompt": 3997700,
+              "Yes": true
+            }
+          ],
+          "SkipIf": [
+            "FlyingUnlocked"
+          ]
+        },
+        {
+          "DataId": 1047813,
+          "Position": {
+            "X": -826.32184,
+            "Y": -297.8752,
+            "Z": 875.15063
+          },
+          "TerritoryId": 1189,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1047818,
+          "Position": {
+            "X": -0.9918823,
+            "Y": 0.20000042,
+            "Z": -51.499268
+          },
+          "TerritoryId": 1222,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "DataId": 1047829,
+          "Position": {
+            "X": -0.13739014,
+            "Y": 105.00008,
+            "Z": 848.7831
+          },
+          "DisableNavmesh": true,
+          "TerritoryId": 1192,
+          "InteractionType": "Interact",
+          "Comment": "TODO Check the distance"
+        }
+      ]
+    },
+    {
+      "Sequence": 6,
+      "Steps": [
+        {
+          "DataId": 1047833,
+          "Position": {
+            "X": -26.657532,
+            "Y": 53.200012,
+            "Z": 794.67444
+          },
+          "TerritoryId": 1192,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 7,
+      "Steps": [
+        {
+          "DataId": 213,
+          "Position": {
+            "X": -0.2035947,
+            "Y": 57.20005,
+            "Z": 796.9656
+          },
+          "StopDistance": 10,
+          "TerritoryId": 1192,
+          "InteractionType": "Interact",
+          "DisableNavmesh": true
+        },
+        {
+          "DataId": 1047837,
+          "Position": {
+            "X": -0.045776367,
+            "Y": 50.124947,
+            "Z": 365.16357
+          },
+          "TerritoryId": 1192,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1047842,
+          "Position": {
+            "X": 0.015197754,
+            "Y": 50.124947,
+            "Z": 361.95923
+          },
+          "StopDistance": 7,
+          "TerritoryId": 1192,
+          "InteractionType": "CompleteQuest"
+        }
+      ]
+    }
+  ]
+}

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Game.ClientState.Objects;
+using Dalamud.Game.Text;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
@@ -219,8 +220,8 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         ImGui.Text(territoryName);
         if (_gameFunctions.IsFlyingUnlockedInCurrentZone())
         {
-            ImGui.Text("+ Fly");
             ImGui.SameLine();
+            ImGui.Text(SeIconChar.BotanistSprout.ToIconString());
         }
 
         var q = _gameFunctions.GetCurrentQuest();
@@ -230,9 +231,9 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         var questManager = QuestManager.Instance();
         if (questManager != null)
         {
-            for (int i = questManager->TrackedQuestsSpan.Length - 1; i >= 0; --i)
+            for (int i = questManager->TrackedQuests.Length - 1; i >= 0; --i)
             {
-                var trackedQuest = questManager->TrackedQuestsSpan[i];
+                var trackedQuest = questManager->TrackedQuests[i];
                 switch (trackedQuest.QuestType)
                 {
                     default:
@@ -240,10 +241,10 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
                         break;
 
                     case 1:
-                        _questRegistry.TryGetQuest(questManager->NormalQuestsSpan[trackedQuest.Index].QuestId,
+                        _questRegistry.TryGetQuest(questManager->NormalQuests[trackedQuest.Index].QuestId,
                             out var quest);
                         ImGui.Text(
-                            $"Tracked quest: {questManager->NormalQuestsSpan[trackedQuest.Index].QuestId}, {trackedQuest.Index}: {quest?.Name}");
+                            $"Tracked quest: {questManager->NormalQuests[trackedQuest.Index].QuestId}, {trackedQuest.Index}: {quest?.Name}");
                         break;
                 }
             }

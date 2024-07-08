@@ -1,0 +1,103 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1048067,
+          "Position": {
+            "X": -403.9826,
+            "Y": 13.999998,
+            "Z": 275.8678
+          },
+          "TerritoryId": 1186,
+          "InteractionType": "AcceptQuest"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1048071,
+          "Position": {
+            "X": 2.029419,
+            "Y": 0.00054359436,
+            "Z": -97.45941
+          },
+          "TerritoryId": 1186,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Solution Nine"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "Position": {
+            "X": 5.0530143,
+            "Y": 0.49999952,
+            "Z": -117.162285
+          },
+          "TerritoryId": 1186,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "DataId": 234,
+          "Position": {
+            "X": -32.059265,
+            "Y": 38.04065,
+            "Z": -345.2354
+          },
+          "TerritoryId": 1186,
+          "InteractionType": "AttuneAethernetShard",
+          "Comment": "Resolution"
+        },
+        {
+          "DataId": 1048073,
+          "Position": {
+            "X": 4.0740967,
+            "Y": 38.056595,
+            "Z": -375.50934
+          },
+          "TerritoryId": 1186,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1051346,
+          "Position": {
+            "X": 6.515503,
+            "Y": 38.056484,
+            "Z": -217.91418
+          },
+          "TerritoryId": 1186,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 1048075,
+          "Position": {
+            "X": 133.83679,
+            "Y": 0.00054359436,
+            "Z": 3.5248413
+          },
+          "TerritoryId": 1186,
+          "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Solution Nine"
+        }
+      ]
+    }
+  ]
+}
