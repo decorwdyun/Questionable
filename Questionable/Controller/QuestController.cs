@@ -399,7 +399,8 @@ internal sealed class QuestController
         (QuestSequence? seq, QuestStep? step) = GetNextStep();
         if (CurrentQuest == null || seq == null || step == null)
         {
-            _logger.LogWarning("Could not retrieve next quest step, not doing anything");
+            _logger.LogWarning("Could not retrieve next quest step, not doing anything [{QuestId}, {Sequence}, {Step}]",
+                CurrentQuest?.Quest.QuestId, CurrentQuest?.Sequence, CurrentQuest?.Step);
             return;
         }
 
@@ -492,5 +493,6 @@ internal sealed class QuestController
     }
 
     public sealed record StepProgress(
-        DateTime StartedAt);
+        DateTime StartedAt,
+        int PointMenuCounter = 0);
 }

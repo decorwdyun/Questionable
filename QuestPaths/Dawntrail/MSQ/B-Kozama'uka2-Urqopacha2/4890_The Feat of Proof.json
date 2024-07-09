@@ -166,9 +166,18 @@
         },
         {
           "Position": {
-            "X": 282.9373,
-            "Y": 47.77521,
-            "Z": 140.4986
+            "X": 341.56342,
+            "Y": 57.53834,
+            "Z": 10.309054
+          },
+          "TerritoryId": 1187,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "Position": {
+            "X": 308.72827,
+            "Y": 60.2934,
+            "Z": 111.43004
           },
           "TerritoryId": 1187,
           "InteractionType": "WalkTo"

@@ -84,14 +84,16 @@
             "Z": -171.58777
           },
           "TerritoryId": 1187,
-          "InteractionType": "WaitForManualProgress",
-          "Comment": "Pick Disconcerted Hoobigo",
+          "InteractionType": "Interact",
           "DialogueChoices": [
             {
               "Type": "List",
               "Prompt": "TEXT_KINGMA114_04873_Q1_000_000",
               "Answer": "TEXT_KINGMA114_04873_A1_000_001"
             }
+          ],
+          "PointMenuChoices": [
+            3
           ]
         }
       ]

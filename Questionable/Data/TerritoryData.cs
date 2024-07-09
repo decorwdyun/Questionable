@@ -1,6 +1,8 @@
 ﻿using System.Collections.Immutable;
+using System.Globalization;
 using System.Linq;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Client.Game.Character;
 using Lumina.Excel.GeneratedSheets;
 
 namespace Questionable.Data;
@@ -30,6 +32,15 @@ internal sealed class TerritoryData
     }
 
     public string? GetName(ushort territoryId) => _territoryNames.GetValueOrDefault(territoryId);
+
+    public string GetNameAndId(ushort territoryId)
+    {
+        string? territoryName = GetName(territoryId);
+        if (territoryName != null)
+            return string.Create(CultureInfo.InvariantCulture, $"{territoryName} ({territoryId})");
+        else
+            return territoryId.ToString(CultureInfo.InvariantCulture);
+    }
 
     public bool CanUseMount(ushort territoryId) => _territoriesWithMount.Contains(territoryId);
 }

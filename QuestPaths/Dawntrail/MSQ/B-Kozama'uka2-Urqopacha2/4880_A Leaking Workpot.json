@@ -22,17 +22,6 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 2013943,
-          "Position": {
-            "X": 485.89294,
-            "Y": 121.3855,
-            "Z": 831.29626
-          },
-          "TerritoryId": 1188,
-          "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818428
-        },
-        {
           "DataId": 203,
           "Position": {
             "X": 541.1674,
@@ -44,6 +33,41 @@
           "InteractionType": "AttuneAetheryte"
         },
         {
+          "Position": {
+            "X": 533.37555,
+            "Y": 122.98077,
+            "Z": 790.01416
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Tuliyollal",
+          "AethernetShortcut": [
+            "[Tuliyollal] Aetheryte Plaza",
+            "[Tuliyollal] Ihuykatumu (Kozama'uka)"
+          ]
+        },
+        {
+          "Position": {
+            "X": 522.3003,
+            "Y": 120.81023,
+            "Z": 803.62744
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true
+        },
+        {
+          "DataId": 2013943,
+          "Position": {
+            "X": 485.89294,
+            "Y": 121.3855,
+            "Z": 831.29626
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818428
+        },
+        {
           "DataId": 1046603,
           "Position": {
             "X": 127.15344,
@@ -51,7 +75,8 @@
             "Z": 259.66272
           },
           "TerritoryId": 1188,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Kozama'uka - Many Fires"
         }
       ]
     },

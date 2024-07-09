@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 using System.IO;
 using System.Text.Json;
 using Dalamud.Plugin;
@@ -72,6 +73,12 @@ internal sealed class QuestRegistry
 
             quest.Name = questData.Name.ToString();
             quest.Level = questData.ClassJobLevel0;
+
+#if !RELEASE
+            int missingSteps = quest.Data.QuestSequence.Where(x => x.Sequence < 255).Max(x => x.Sequence) - quest.Data.QuestSequence.Count(x => x.Sequence < 255) + 1;
+            if (missingSteps != 0)
+                _logger.LogWarning("Quest has missing steps: {QuestId} / {QuestName} → {Count}", quest.QuestId, quest.Name, missingSteps);
+#endif
         }
 
         _logger.LogInformation("Loaded {Count} quests", _quests.Count);

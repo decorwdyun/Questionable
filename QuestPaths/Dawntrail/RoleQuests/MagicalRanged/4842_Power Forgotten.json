@@ -13,7 +13,69 @@
             "Z": 194.72034
           },
           "TerritoryId": 1185,
+          "InteractionType": "AcceptQuest"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1048335,
+          "Position": {
+            "X": -16.739136,
+            "Y": 0.5999997,
+            "Z": -55.10034
+          },
+          "TerritoryId": 963,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Radz-at-Han"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1048337,
+          "Position": {
+            "X": 155.87085,
+            "Y": 5.297462,
+            "Z": 618.2803
+          },
+          "TerritoryId": 957,
           "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 2013708,
+          "Position": {
+            "X": 48.90515,
+            "Y": 90.22656,
+            "Z": -83.024414
+          },
+          "StopDistance": 0.5,
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1048331,
+          "Position": {
+            "X": 214.03821,
+            "Y": 5.2600574,
+            "Z": 628.3817
+          },
+          "TerritoryId": 957,
+          "InteractionType": "CompleteQuest"
         }
       ]
     }

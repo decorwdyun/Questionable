@@ -188,7 +188,7 @@
           },
           "TerritoryId": 1188,
           "InteractionType": "WaitForNpcAtPosition",
-          "NpcWaitDistance": 1
+          "NpcWaitDistance": 3
         },
         {
           "DataId": 1046648,

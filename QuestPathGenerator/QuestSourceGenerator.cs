@@ -350,6 +350,8 @@ public class QuestSourceGenerator : ISourceGenerator
                                                 .AsSyntaxNodeOrToken(),
                                             AssignmentList(nameof(QuestStep.DialogueChoices), step.DialogueChoices)
                                                 .AsSyntaxNodeOrToken(),
+                                            AssignmentList(nameof(QuestStep.PointMenuChoices), step.PointMenuChoices)
+                                                .AsSyntaxNodeOrToken(),
                                             Assignment(nameof(QuestStep.QuestId), step.QuestId, emptyStep.QuestId)
                                                 .AsSyntaxNodeOrToken()))))),
                     Token(SyntaxKind.CommaToken),

@@ -866,6 +866,13 @@
                             }
                           ]
                         }
+                      },
+                      "PointMenuChoices": {
+                        "type": "array",
+                        "items": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
                       }
                     }
                   }

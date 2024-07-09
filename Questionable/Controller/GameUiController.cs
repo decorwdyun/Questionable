@@ -48,6 +48,7 @@ internal sealed class GameUiController : IDisposable
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "CutSceneSelectString", CutsceneSelectStringPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "SelectIconString", SelectIconStringPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "SelectYesno", SelectYesnoPostSetup);
+        _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "PointMenu", PointMenuPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "Credit", CreditPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "AkatsukiNote", UnendingCodexPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "ContentsTutorial", ContentsTutorialPostSetup);
@@ -79,6 +80,12 @@ internal sealed class GameUiController : IDisposable
         {
             _logger.LogInformation("SelectYesno window is open");
             SelectYesnoPostSetup(addonSelectYesno, true);
+        }
+
+        if (_gameGui.TryGetAddonByName("PointMenu", out AtkUnitBase* addonPointMenu))
+        {
+            _logger.LogInformation("PointMenu is open");
+            PointMenuPostSetup(addonPointMenu);
         }
     }
 
@@ -380,6 +387,61 @@ internal sealed class GameUiController : IDisposable
         }
     }
 
+    private unsafe void PointMenuPostSetup(AddonEvent type, AddonArgs args)
+    {
+        AtkUnitBase* addonPointMenu = (AtkUnitBase*)args.Addon;
+        PointMenuPostSetup(addonPointMenu);
+    }
+
+    private unsafe void PointMenuPostSetup(AtkUnitBase* addonPointMenu)
+    {
+        var currentQuest = _questController.CurrentQuest;
+        if (currentQuest == null)
+        {
+            _logger.LogInformation("Ignoring point menu, no active quest");
+            return;
+        }
+
+        var sequence = currentQuest.Quest.FindSequence(currentQuest.Sequence);
+        if (sequence == null)
+            return;
+
+        QuestStep? step = sequence.FindStep(currentQuest.Step);
+        if (step == null)
+            return;
+
+        if (step.PointMenuChoices.Count == 0)
+        {
+            _logger.LogWarning("No point menu choices");
+            return;
+        }
+
+        int counter = currentQuest.StepProgress.PointMenuCounter;
+        if (counter >= step.PointMenuChoices.Count)
+        {
+            _logger.LogWarning("No remaining point menu choices");
+            return;
+        }
+
+        uint choice = step.PointMenuChoices[counter];
+
+        _logger.LogInformation("Handling point menu, picking choice {Choice} (index = {Index})", choice, counter);
+        var selectChoice = stackalloc AtkValue[]
+        {
+            new() { Type = ValueType.Int, Int = 13 },
+            new() { Type = ValueType.UInt, UInt = choice }
+        };
+        addonPointMenu->FireCallback(2, selectChoice);
+
+        _questController.CurrentQuest = currentQuest with
+        {
+            StepProgress = currentQuest.StepProgress with
+            {
+                PointMenuCounter = counter + 1,
+            }
+        };
+    }
+
     private unsafe void CreditPostSetup(AddonEvent type, AddonArgs args)
     {
         _logger.LogInformation("Closing Credits sequence");
@@ -451,6 +513,7 @@ internal sealed class GameUiController : IDisposable
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "ContentsTutorial", ContentsTutorialPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "AkatsukiNote", UnendingCodexPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "Credit", CreditPostSetup);
+        _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "PointMenu", PointMenuPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "SelectYesno", SelectYesnoPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "SelectIconString", SelectIconStringPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "CutSceneSelectString", CutsceneSelectStringPostSetup);

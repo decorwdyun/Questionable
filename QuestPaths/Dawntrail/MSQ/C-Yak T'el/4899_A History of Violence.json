@@ -43,8 +43,7 @@
             "Z": -403.21973
           },
           "TerritoryId": 1189,
-          "InteractionType": "Interact",
-          "Comment": "TODO Verify this shouldn't have a teleport (was removed due to AC moving)"
+          "InteractionType": "Interact"
         }
       ]
     },

@@ -29,8 +29,7 @@
             "Z": 129.80847
           },
           "TerritoryId": 1185,
-          "InteractionType": "WaitForManualProgress",
-          "Comment": "Click all tablets (PointMenu)",
+          "InteractionType": "Interact",
           "DialogueChoices": [
             {
               "Type": "YesNo",
@@ -47,6 +46,16 @@
               "Prompt": "TEXT_KINGMA104_04863_Q2_000_000",
               "Answer": "TEXT_KINGMA104_04863_A2_000_001"
             }
+          ],
+          "PointMenuChoices": [
+            0,
+            1,
+            2,
+            3,
+            0,
+            1,
+            2,
+            3
           ]
         }
       ]

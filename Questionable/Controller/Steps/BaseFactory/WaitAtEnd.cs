@@ -9,6 +9,7 @@ using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using Microsoft.Extensions.DependencyInjection;
 using Questionable.Controller.Steps.BaseTasks;
+using Questionable.Data;
 using Questionable.Model;
 using Questionable.Model.V1;
 
@@ -16,7 +17,8 @@ namespace Questionable.Controller.Steps.BaseFactory;
 
 internal static class WaitAtEnd
 {
-    internal sealed class Factory(IServiceProvider serviceProvider, IClientState clientState, ICondition condition)
+    internal sealed class Factory(IServiceProvider serviceProvider, IClientState clientState, ICondition condition,
+        TerritoryData territoryData)
         : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
@@ -76,7 +78,7 @@ internal static class WaitAtEnd
                         // interaction moves to a different territory
                         waitInteraction = new WaitConditionTask(
                             () => clientState.TerritoryType == step.TargetTerritoryId,
-                            $"Wait(tp to territory: {step.TargetTerritoryId})");
+                            $"Wait(tp to territory: {territoryData.GetNameAndId(step.TargetTerritoryId.Value)})");
                     }
                     else
                     {

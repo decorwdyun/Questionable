@@ -85,7 +85,8 @@
             "Z": -388.50995
           },
           "TerritoryId": 1188,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Kozama'uka - Ok'hanu"
         }
       ]
     },
@@ -148,6 +149,16 @@
     {
       "Sequence": 8,
       "Steps": [
+        {
+          "Position": {
+            "X": -510.96463,
+            "Y": -0.47684515,
+            "Z": -305.96155
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "WalkTo",
+          "Comment": "Waypoint after swimming through the river"
+        },
         {
           "DataId": 2013936,
           "Position": {

@@ -7,6 +7,7 @@ using Dalamud.Plugin.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.BaseTasks;
+using Questionable.Data;
 using Questionable.Model;
 using Questionable.Model.V1;
 
@@ -45,7 +46,8 @@ internal static class Move
         ILogger<MoveBuilder> logger,
         GameFunctions gameFunctions,
         IClientState clientState,
-        MovementController movementController)
+        MovementController movementController,
+        TerritoryData territoryData)
     {
         public QuestStep Step { get; set; } = null!;
         public Vector3 Destination { get; set; }
@@ -61,7 +63,7 @@ internal static class Move
             }
 
             yield return new WaitConditionTask(() => clientState.TerritoryType == Step.TerritoryId,
-                $"Wait(territory: {Step.TerritoryId})");
+                $"Wait(territory: {territoryData.GetNameAndId(Step.TerritoryId)})");
 
             if (!Step.DisableNavmesh)
                 yield return new WaitConditionTask(() => movementController.IsNavmeshReady,

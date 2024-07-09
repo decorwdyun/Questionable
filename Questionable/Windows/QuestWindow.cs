@@ -211,13 +211,9 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
     {
         Debug.Assert(_clientState.LocalPlayer != null, "_clientState.LocalPlayer != null");
 
-        string? territoryName = _territoryData.GetName(_clientState.TerritoryType);
-        if (territoryName != null)
-            territoryName += string.Create(CultureInfo.InvariantCulture, $" ({_clientState.TerritoryType})");
-        else
-            territoryName = _clientState.TerritoryType.ToString(CultureInfo.InvariantCulture);
-
+        string territoryName = _territoryData.GetNameAndId(_clientState.TerritoryType);
         ImGui.Text(territoryName);
+
         if (_gameFunctions.IsFlyingUnlockedInCurrentZone())
         {
             ImGui.SameLine();
@@ -294,9 +290,9 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
             {
                 string interactionType = gameObject->NamePlateIconId switch
                 {
-                    71201 or 71211 or 71221 or 71231 or 71341 => "AcceptQuest",
-                    71202 or 71212 or 71222 or 71232 or 71342 => "AcceptQuest", // repeatable
-                    71205 or 71215 or 71225 or 71235 or 71345 => "CompleteQuest",
+                    71201 or 71211 or 71221 or 71231 or 71341 or 71351 => "AcceptQuest",
+                    71202 or 71212 or 71222 or 71232 or 71342 or 71352 => "AcceptQuest", // repeatable
+                    71205 or 71215 or 71225 or 71235 or 71345 or 71355 => "CompleteQuest",
                     _ => "Interact",
                 };
                 ImGui.SetClipboardText($$"""

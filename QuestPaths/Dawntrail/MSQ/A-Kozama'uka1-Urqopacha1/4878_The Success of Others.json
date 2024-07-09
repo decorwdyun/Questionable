@@ -62,6 +62,29 @@
           "Comment": "Wachumeqimeqi"
         },
         {
+          "Position": {
+            "X": -130.34163,
+            "Y": -14.999287,
+            "Z": 198.40685
+          },
+          "TerritoryId": 1185,
+          "InteractionType": "WalkTo",
+          "AethernetShortcut": [
+            "[Tuliyollal] Wachumeqimeqi",
+            "[Tuliyollal] The For'ard Cabins"
+          ]
+        },
+        {
+          "Position": {
+            "X": -122.40268,
+            "Y": -19.754322,
+            "Z": 202.20439
+          },
+          "TerritoryId": 1185,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true
+        },
+        {
           "DataId": 1046763,
           "Position": {
             "X": -114.64105,
@@ -69,11 +92,7 @@
             "Z": 201.12915
           },
           "TerritoryId": 1185,
-          "InteractionType": "Interact",
-          "AethernetShortcut": [
-            "[Tuliyollal] Wachumeqimeqi",
-            "[Tuliyollal] The For'ard Cabins"
-          ]
+          "InteractionType": "Interact"
         }
       ]
     },

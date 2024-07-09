@@ -22,6 +22,15 @@
       "Sequence": 1,
       "Steps": [
         {
+          "Position": {
+            "X": 531.60944,
+            "Y": 116.17938,
+            "Z": 166.65599
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 2013610,
           "Position": {
             "X": 454.7036,
@@ -42,6 +51,7 @@
             "Y": 110.795235,
             "Z": 256.5983
           },
+          "StopDistance": 0.25,
           "TerritoryId": 1188,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
@@ -79,8 +89,7 @@
             "Z": 229.96863
           },
           "TerritoryId": 1188,
-          "InteractionType": "Interact",
-          "Comment": "TODO Verify this is the correct sequence"
+          "InteractionType": "Interact"
         }
       ]
     },
