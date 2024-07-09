@@ -33,12 +33,42 @@
       ]
     },
     {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "Position": {
+            "X": 0,
+            "Y": 0,
+            "Z": 0
+          },
+          "TerritoryId": 1,
+          "InteractionType": "WalkTo",
+          "Comment": "Filler"
+        }
+      ]
+    },
+    {
       "Sequence": 3,
       "Steps": [
         {
           "TerritoryId": 1029,
           "InteractionType": "Duty",
           "ContentFinderConditionId": 796
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "Position": {
+            "X": 0,
+            "Y": 0,
+            "Z": 0
+          },
+          "TerritoryId": 1,
+          "InteractionType": "WalkTo",
+          "Comment": "Filler"
         }
       ]
     },
@@ -55,6 +85,21 @@
           "TerritoryId": 1026,
           "InteractionType": "SinglePlayerDuty",
           "Comment": "Zenos"
+        }
+      ]
+    },
+    {
+      "Sequence": 6,
+      "Steps": [
+        {
+          "Position": {
+            "X": 0,
+            "Y": 0,
+            "Z": 0
+          },
+          "TerritoryId": 1,
+          "InteractionType": "WalkTo",
+          "Comment": "Filler"
         }
       ]
     },

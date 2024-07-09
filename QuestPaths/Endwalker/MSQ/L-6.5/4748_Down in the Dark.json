@@ -33,6 +33,21 @@
       ]
     },
     {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "Position": {
+            "X": 0,
+            "Y": 0,
+            "Z": 0
+          },
+          "TerritoryId": 1,
+          "InteractionType": "WalkTo",
+          "Comment": "Filler"
+        }
+      ]
+    },
+    {
       "Sequence": 3,
       "Steps": [
         {
@@ -51,6 +66,21 @@
               "Yes": true
             }
           ]
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "Position": {
+            "X": 0,
+            "Y": 0,
+            "Z": 0
+          },
+          "TerritoryId": 1,
+          "InteractionType": "WalkTo",
+          "Comment": "Filler"
         }
       ]
     },
