@@ -29,8 +29,7 @@
           },
           "TerritoryId": 1190,
           "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818453,
-          "Comment": "TODO maybe move"
+          "AetherCurrentId": 2818453
         },
         {
           "Position": {
@@ -82,7 +81,8 @@
             "Z": -62.308163
           },
           "TerritoryId": 1190,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "Mount": true
         },
         {
           "Position": {
@@ -103,6 +103,16 @@
           "TerritoryId": 1190,
           "InteractionType": "AttuneAetherCurrent",
           "AetherCurrentId": 2818450
+        },
+        {
+          "Position": {
+            "X": -725.3725,
+            "Y": 28.795446,
+            "Z": -39.464005
+          },
+          "TerritoryId": 1190,
+          "InteractionType": "WalkTo",
+          "Mount": true
         },
         {
           "DataId": 2013799,

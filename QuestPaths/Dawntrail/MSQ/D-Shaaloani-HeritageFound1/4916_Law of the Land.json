@@ -75,6 +75,15 @@
       "Sequence": 4,
       "Steps": [
         {
+          "Position": {
+            "X": -35.49104,
+            "Y": 1.3946064,
+            "Z": 178.915
+          },
+          "TerritoryId": 1190,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 2013806,
           "Position": {
             "X": 5.081238,
@@ -121,6 +130,7 @@
             "Y": 4.776001,
             "Z": 297.68823
           },
+          "StopDistance": 1,
           "TerritoryId": 1190,
           "InteractionType": "Interact",
           "DialogueChoices": [

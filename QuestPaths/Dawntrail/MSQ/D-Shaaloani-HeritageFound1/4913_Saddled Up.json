@@ -70,18 +70,6 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 2013957,
-          "Position": {
-            "X": -192.18744,
-            "Y": 36.66736,
-            "Z": -53.177734
-          },
-          "TerritoryId": 1190,
-          "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818454,
-          "Comment": "TODO maybe move this"
-        },
-        {
           "DataId": 208,
           "Position": {
             "X": -291.70673,
@@ -91,6 +79,16 @@
           "StopDistance": 8,
           "TerritoryId": 1190,
           "InteractionType": "AttuneAetheryte"
+        },
+        {
+          "Position": {
+            "X": -288.2827,
+            "Y": 18.558346,
+            "Z": -133.59453
+          },
+          "TerritoryId": 1190,
+          "InteractionType": "WalkTo",
+          "Comment": "Sheshenewezi Springs Navmesh workaround"
         },
         {
           "DataId": 1046957,
@@ -128,6 +126,7 @@
             "Y": 18.081078,
             "Z": -196.42653
           },
+          "StopDistance": 0.25,
           "TerritoryId": 1190,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
@@ -157,6 +156,17 @@
       "Sequence": 255,
       "Steps": [
         {
+          "Position": {
+            "X": -288.2827,
+            "Y": 18.558346,
+            "Z": -133.59453
+          },
+          "TerritoryId": 1190,
+          "InteractionType": "WalkTo",
+          "Comment": "Sheshenewezi Springs Navmesh workaround",
+          "AetheryteShortcut": "Shaaloani - Sheshenewezi Springs"
+        },
+        {
           "DataId": 1046991,
           "Position": {
             "X": -315.5719,
@@ -164,8 +174,7 @@
             "Z": -178.88159
           },
           "TerritoryId": 1190,
-          "InteractionType": "CompleteQuest",
-          "AetheryteShortcut": "Shaaloani - Sheshenewezi Springs"
+          "InteractionType": "CompleteQuest"
         }
       ]
     }
