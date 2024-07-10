@@ -75,6 +75,12 @@ internal static class AetheryteShortcut
                 }
 
                 Vector3 pos = clientState.LocalPlayer!.Position;
+                if (Step.Position != null && (pos - Step.Position.Value).Length() < Step.CalculateActualStopDistance())
+                {
+                    logger.LogInformation("Skipping aetheryte teleport, we're near the target");
+                    return false;
+                }
+
                 if (aetheryteData.CalculateDistance(pos, territoryType, TargetAetheryte) < 20 ||
                     (Step.AethernetShortcut != null &&
                      (aetheryteData.CalculateDistance(pos, territoryType, Step.AethernetShortcut.From) < 20 ||

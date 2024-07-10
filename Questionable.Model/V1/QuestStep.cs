@@ -9,6 +9,8 @@ namespace Questionable.Model.V1;
 
 public sealed class QuestStep
 {
+    public const float DefaultStopDistance = 3f;
+
     public EInteractionType InteractionType { get; set; }
 
     public uint? DataId { get; set; }
@@ -63,5 +65,13 @@ public sealed class QuestStep
         DataId = dataId;
         Position = position;
         TerritoryId = territoryId;
+    }
+
+    public float CalculateActualStopDistance()
+    {
+        if (InteractionType == EInteractionType.WalkTo)
+            return StopDistance ?? 0.25f;
+        else
+            return StopDistance ?? DefaultStopDistance;
     }
 }

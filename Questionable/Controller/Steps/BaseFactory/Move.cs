@@ -69,12 +69,7 @@ internal static class Move
                 yield return new WaitConditionTask(() => movementController.IsNavmeshReady,
                     "Wait(navmesh ready)");
 
-            float distance;
-            if (Step.InteractionType == EInteractionType.WalkTo)
-                distance = Step.StopDistance ?? 0.25f;
-            else
-                distance = Step.StopDistance ?? MovementController.DefaultStopDistance;
-
+            float distance = Step.CalculateActualStopDistance();
             var position = clientState.LocalPlayer?.Position ?? new Vector3();
             float actualDistance = (position - Destination).Length();
 

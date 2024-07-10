@@ -23,8 +23,6 @@ namespace Questionable.Controller;
 
 internal sealed class MovementController : IDisposable
 {
-    public const float DefaultStopDistance = 3f;
-
     private static readonly List<BlacklistedArea> BlacklistedAreas =
     [
         new(1191, new(-223.0412f, 31.937134f, -584.03906f), 5f, 7.75f),
@@ -266,7 +264,7 @@ internal sealed class MovementController : IDisposable
             _chatFunctions.ExecuteCommand("/automove off");
         }
 
-        Destination = new DestinationData(dataId, to, stopDistance ?? (DefaultStopDistance - 0.2f), fly, sprint,
+        Destination = new DestinationData(dataId, to, stopDistance ?? (QuestStep.DefaultStopDistance - 0.2f), fly, sprint,
             useNavmesh);
         MovementStartedAt = DateTime.MaxValue;
     }
