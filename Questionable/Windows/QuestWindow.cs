@@ -8,6 +8,7 @@ using Dalamud.Game.Text;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
+using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
@@ -201,6 +202,101 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
             {
                 _configuration.General.AutoAcceptNextQuest = autoAcceptNextQuest;
                 _pluginInterface.SavePluginConfig(_configuration);
+            }
+
+
+            if (_questController.SimulatedQuest != null)
+            {
+                ImGui.Separator();
+                ImGui.TextColored(ImGuiColors.DalamudRed, "Quest sim active (experimental)");
+                ImGui.Text($"Sequence: {_questController.SimulatedQuest.Sequence}");
+
+                ImGui.BeginDisabled(_questController.SimulatedQuest.Sequence == 0);
+                if (ImGuiComponents.IconButton(FontAwesomeIcon.Minus))
+                {
+                    _movementController.Stop();
+                    _questController.Stop("Sim-");
+
+                    byte oldSequence = _questController.SimulatedQuest.Sequence;
+                    byte newSequence = _questController.SimulatedQuest.Quest.Data.QuestSequence
+                        .Select(x => (byte)x.Sequence)
+                        .LastOrDefault(x => x < oldSequence, byte.MinValue);
+
+                    _questController.SimulatedQuest = _questController.SimulatedQuest with
+                    {
+                        Sequence = newSequence,
+                    };
+                }
+
+                ImGui.EndDisabled();
+
+                ImGui.SameLine();
+                ImGui.BeginDisabled(_questController.SimulatedQuest.Sequence >= 255);
+                if (ImGuiComponents.IconButton(FontAwesomeIcon.Plus))
+                {
+                    _movementController.Stop();
+                    _questController.Stop("Sim+");
+
+                    byte oldSequence = _questController.SimulatedQuest.Sequence;
+                    byte newSequence = _questController.SimulatedQuest.Quest.Data.QuestSequence
+                        .Select(x => (byte)x.Sequence)
+                        .FirstOrDefault(x => x > oldSequence, byte.MaxValue);
+
+                    _questController.SimulatedQuest = _questController.SimulatedQuest with
+                    {
+                        Sequence = newSequence,
+                    };
+                }
+
+                ImGui.EndDisabled();
+
+                var simulatedSequence =
+                    _questController.SimulatedQuest.Quest.FindSequence(_questController.SimulatedQuest.Sequence);
+                if (simulatedSequence != null)
+                {
+                    using var _ = ImRaii.PushId("SimulatedStep");
+
+                    ImGui.Text($"Step: {currentQuest.Step} / {simulatedSequence.Steps.Count - 1}");
+
+                    ImGui.BeginDisabled(currentQuest.Step == 0);
+                    if (ImGuiComponents.IconButton(FontAwesomeIcon.Minus))
+                    {
+                        _movementController.Stop();
+                        _questController.Stop("SimStep-");
+
+                        _questController.CurrentQuest = currentQuest with
+                        {
+                            Step = Math.Min(currentQuest.Step - 1, simulatedSequence.Steps.Count - 1),
+                        };
+                    }
+
+                    ImGui.EndDisabled();
+
+                    ImGui.SameLine();
+                    ImGui.BeginDisabled(currentQuest.Step >= simulatedSequence.Steps.Count);
+                    if (ImGuiComponents.IconButton(FontAwesomeIcon.Plus))
+                    {
+                        _movementController.Stop();
+                        _questController.Stop("SimStep+");
+
+                        _questController.CurrentQuest = currentQuest with
+                        {
+                            Step = currentQuest.Step == simulatedSequence.Steps.Count - 1
+                                ? 255
+                                : (currentQuest.Step + 1),
+                        };
+                    }
+
+                    ImGui.EndDisabled();
+
+                    if (ImGui.Button("Clear sim"))
+                    {
+                        _questController.SimulateQuest(null);
+
+                        _movementController.Stop();
+                        _questController.Stop("ClearSim");
+                    }
+                }
             }
         }
         else

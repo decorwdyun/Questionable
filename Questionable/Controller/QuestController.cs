@@ -53,6 +53,7 @@ internal sealed class QuestController
 
 
     public QuestProgress? CurrentQuest { get; set; }
+    public SimulationProgress? SimulatedQuest { get; set; }
     public string? DebugState { get; private set; }
     public string? Comment { get; private set; }
 
@@ -110,7 +111,16 @@ internal sealed class QuestController
         {
             DebugState = null;
 
-            (ushort currentQuestId, byte currentSequence) = _gameFunctions.GetCurrentQuest();
+            ushort currentQuestId;
+            byte currentSequence;
+            if (SimulatedQuest != null)
+            {
+                currentQuestId = SimulatedQuest.Quest.QuestId;
+                currentSequence = SimulatedQuest.Sequence;
+            }
+            else
+                (currentQuestId, currentSequence) = _gameFunctions.GetCurrentQuest();
+
             if (currentQuestId == 0)
             {
                 if (CurrentQuest != null)
@@ -302,6 +312,14 @@ internal sealed class QuestController
         }
     }
 
+    public void SimulateQuest(Quest? quest)
+    {
+        if (quest != null)
+            SimulatedQuest = new SimulationProgress(quest, 0);
+        else
+            SimulatedQuest = null;
+    }
+
     private void UpdateCurrentTask()
     {
         if (_gameFunctions.IsOccupied())
@@ -463,6 +481,8 @@ internal sealed class QuestController
         {
         }
     }
+
+    public sealed record SimulationProgress(Quest Quest, byte Sequence);
 
     public void Skip(ushort questQuestId, byte currentQuestSequence)
     {
