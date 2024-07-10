@@ -332,6 +332,8 @@ public class QuestSourceGenerator : ISourceGenerator
                                             Assignment(nameof(QuestStep.ChatMessage), step.ChatMessage,
                                                     emptyStep.ChatMessage)
                                                 .AsSyntaxNodeOrToken(),
+                                            Assignment(nameof(QuestStep.Action), step.Action, emptyStep.Action)
+                                                .AsSyntaxNodeOrToken(),
                                             Assignment(nameof(QuestStep.EnemySpawnType), step.EnemySpawnType,
                                                     emptyStep.EnemySpawnType)
                                                 .AsSyntaxNodeOrToken(),

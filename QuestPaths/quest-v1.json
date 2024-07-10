@@ -96,6 +96,7 @@
                     "EquipItem",
                     "Say",
                     "Emote",
+                    "Action",
                     "WaitForNpcAtPosition",
                     "WaitForManualProgress",
                     "Duty",
@@ -699,6 +700,29 @@
                     },
                     "required": [
                       "ChatMessage"
+                    ]
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "InteractionType": {
+                        "const": "Action"
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "Action": {
+                        "type": "string",
+                        "description": "The action to use",
+                        "enum": [
+                          "Esuna"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "Action"
                     ]
                   }
                 },

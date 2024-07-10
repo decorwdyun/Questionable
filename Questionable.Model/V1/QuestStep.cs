@@ -41,6 +41,7 @@ public sealed class QuestStep
 
     public EEmote? Emote { get; set; }
     public ChatMessage? ChatMessage { get; set; }
+    public EAction? Action { get; set; }
 
     public EEnemySpawnType? EnemySpawnType { get; set; }
     public IList<uint> KillEnemyDataIds { get; set; } = new List<uint>();

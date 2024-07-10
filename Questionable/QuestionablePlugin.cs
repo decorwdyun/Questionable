@@ -16,6 +16,7 @@ using Questionable.Controller.Steps.InteractionFactory;
 using Questionable.Data;
 using Questionable.External;
 using Questionable.Windows;
+using Action = Questionable.Controller.Steps.InteractionFactory.Action;
 
 namespace Questionable;
 
@@ -91,6 +92,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<ITaskFactory, Combat.Factory>();
         serviceCollection.AddTaskWithFactory<Duty.Factory, Duty.OpenDutyFinder>();
         serviceCollection.AddTaskWithFactory<Emote.Factory, Emote.UseOnObject, Emote.Use>();
+        serviceCollection.AddTaskWithFactory<Action.Factory, Action.UseOnObject>();
         serviceCollection.AddTaskWithFactory<Interact.Factory, Interact.DoInteract>();
         serviceCollection.AddTaskWithFactory<Jump.Factory, Jump.DoJump>();
         serviceCollection.AddTaskWithFactory<Say.Factory, Say.UseChat>();

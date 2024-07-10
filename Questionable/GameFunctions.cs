@@ -356,6 +356,26 @@ internal sealed unsafe class GameFunctions
         return false;
     }
 
+    public bool UseAction(IGameObject gameObject, EAction action)
+    {
+        if (!ActionManager.CanUseActionOnTarget((uint)action, (GameObject*)gameObject.Address))
+        {
+            _logger.LogWarning("Can not use action {Action} on target {Target}", action, gameObject);
+            return false;
+        }
+
+        _targetManager.Target = gameObject;
+        if (ActionManager.Instance()->GetActionStatus(ActionType.Action, (uint)action, gameObject.GameObjectId) == 0)
+        {
+            bool result = ActionManager.Instance()->UseAction(ActionType.Action, (uint)action, gameObject.GameObjectId);
+            _logger.LogInformation("UseAction {Action} on target {Target} result: {Result}", action, gameObject, result);
+
+            return result;
+        }
+
+        return false;
+    }
+
     public bool IsObjectAtPosition(uint dataId, Vector3 position, float distance)
     {
         IGameObject? gameObject = FindObjectByDataId(dataId);

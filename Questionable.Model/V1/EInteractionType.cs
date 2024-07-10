@@ -16,6 +16,7 @@ public enum EInteractionType
     EquipItem,
     Say,
     Emote,
+    Action,
     WaitForObjectAtPosition,
     WaitForManualProgress,
     Duty,
