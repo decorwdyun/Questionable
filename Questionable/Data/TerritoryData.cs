@@ -10,7 +10,8 @@ namespace Questionable.Data;
 internal sealed class TerritoryData
 {
     private readonly ImmutableDictionary<uint, string> _territoryNames;
-    private readonly ImmutableHashSet<uint> _territoriesWithMount;
+    private readonly ImmutableHashSet<ushort> _territoriesWithMount;
+    private readonly ImmutableHashSet<ushort> _dutyTerritories;
 
     public TerritoryData(IDataManager dataManager)
     {
@@ -27,7 +28,12 @@ internal sealed class TerritoryData
 
         _territoriesWithMount = dataManager.GetExcelSheet<TerritoryType>()!
             .Where(x => x.RowId > 0 && x.Mount)
-            .Select(x => x.RowId)
+            .Select(x => (ushort)x.RowId)
+            .ToImmutableHashSet();
+
+        _dutyTerritories = dataManager.GetExcelSheet<TerritoryType>()!
+            .Where(x => x.RowId > 0 && x.ContentFinderCondition.Row != 0)
+            .Select(x => (ushort)x.RowId)
             .ToImmutableHashSet();
     }
 
@@ -43,4 +49,6 @@ internal sealed class TerritoryData
     }
 
     public bool CanUseMount(ushort territoryId) => _territoriesWithMount.Contains(territoryId);
+
+    public bool IsDutyInstance(ushort territoryId) => _dutyTerritories.Contains(territoryId);
 }

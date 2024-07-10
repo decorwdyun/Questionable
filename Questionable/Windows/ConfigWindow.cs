@@ -69,6 +69,13 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
                     Save();
                 }
 
+                bool hideInAllInstances = _configuration.General.HideInAllInstances;
+                if (ImGui.Checkbox("Hide quest window in all instanced duties", ref hideInAllInstances))
+                {
+                    _configuration.General.HideInAllInstances = hideInAllInstances;
+                    Save();
+                }
+
                 ImGui.EndTabItem();
             }
 
