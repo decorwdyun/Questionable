@@ -74,8 +74,10 @@ internal sealed class QuestController
         if (_keyState[VirtualKey.ESCAPE])
         {
             if (_currentTask != null || _taskQueue.Count > 0)
+            {
                 Stop("ESC pressed");
-            _movementController.Stop();
+                _movementController.Stop();
+            }
         }
 
         if (CurrentQuest != null && CurrentQuest.Quest.Data.TerritoryBlacklist.Contains(_clientState.TerritoryType))
