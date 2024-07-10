@@ -59,7 +59,7 @@
             "Y": 145.86096,
             "Z": 207.56836
           },
-          "StopDistance": 5,
+          "StopDistance": 8,
           "TerritoryId": 1191,
           "InteractionType": "AttuneAetheryte"
         },
@@ -111,12 +111,30 @@
           "AetherCurrentId": 2818464
         },
         {
+          "Position": {
+            "X": 483.82584,
+            "Y": 145.82513,
+            "Z": 186.19025
+          },
+          "TerritoryId": 1191,
+          "InteractionType": "WalkTo",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            -32
+          ]
+        },
+        {
           "DataId": 2013819,
           "Position": {
             "X": 485.83203,
             "Y": 147.50891,
             "Z": 184.22205
           },
+          "StopDistance": 4.5,
           "TerritoryId": 1191,
           "InteractionType": "Interact",
           "CompletionQuestVariablesFlags": [

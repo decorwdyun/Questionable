@@ -27,7 +27,7 @@
             "Y": 120.75,
             "Z": -332.87555
           },
-          "StopDistance": 5,
+          "StopDistance": 7,
           "TerritoryId": 1185,
           "InteractionType": "Interact"
         }
@@ -49,7 +49,8 @@
           "AethernetShortcut": [
             "[Tuliyollal] Aetheryte Plaza",
             "[Tuliyollal] Bayside Bevy Marketplace"
-          ]
+          ],
+          "Comment": "Stops at the place where you can buy Lv99 gear"
         }
       ]
     }

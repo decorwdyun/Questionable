@@ -22,6 +22,24 @@
       "Steps": [
         {
           "Position": {
+            "X": -415.87146,
+            "Y": -13.798597,
+            "Z": 656.2935
+          },
+          "TerritoryId": 1191,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "Position": {
+            "X": -442.4273,
+            "Y": -14.000011,
+            "Z": 696.89746
+          },
+          "TerritoryId": 1191,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "Position": {
             "X": -457.70477,
             "Y": -14.000011,
             "Z": 697.2411
@@ -41,6 +59,15 @@
           "InteractionType": "AttuneAetherCurrent",
           "AetherCurrentId": 2818473,
           "Comment": "While counterintuitive, this is the closest aether current/msq quest"
+        },
+        {
+          "Position": {
+            "X": -264.81693,
+            "Y": -2.2232819,
+            "Z": 665.8315
+          },
+          "TerritoryId": 1191,
+          "InteractionType": "WalkTo"
         },
         {
           "DataId": 1050668,

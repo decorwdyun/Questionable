@@ -88,8 +88,7 @@
           },
           "TerritoryId": 1189,
           "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818434,
-          "Comment": "TODO verify"
+          "AetherCurrentId": 2818434
         },
         {
           "DataId": 1047515,

@@ -37,6 +37,16 @@
       "Sequence": 2,
       "Steps": [
         {
+          "Position": {
+            "X": -56.819763,
+            "Y": 28.072628,
+            "Z": -399.17023
+          },
+          "TerritoryId": 1191,
+          "InteractionType": "WalkTo",
+          "Comment": "Outskirts Navmesh workaround"
+        },
+        {
           "DataId": 1047397,
           "Position": {
             "X": -149.03491,
@@ -60,8 +70,7 @@
           },
           "StopDistance": 10,
           "TerritoryId": 1191,
-          "InteractionType": "AttuneAetheryte",
-          "Comment": "TODO Verify"
+          "InteractionType": "AttuneAetheryte"
         },
         {
           "DataId": 1047403,

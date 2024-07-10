@@ -174,7 +174,7 @@ internal static class WaitAtEnd
         }
 
         public override string ToString() =>
-            $"WaitCF({string.Join(", ", Flags.Select(x => x?.ToString(CultureInfo.InvariantCulture) ?? "-"))})";
+            $"Wait(QW: {string.Join(", ", Flags.Select(x => x?.ToString(CultureInfo.InvariantCulture) ?? "-"))})";
     }
 
     internal sealed class WaitObjectAtPosition(GameFunctions gameFunctions) : ITask

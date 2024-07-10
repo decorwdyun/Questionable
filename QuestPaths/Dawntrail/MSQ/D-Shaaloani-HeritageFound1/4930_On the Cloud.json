@@ -141,6 +141,16 @@
       "Sequence": 6,
       "Steps": [
         {
+          "Position": {
+            "X": 230.06555,
+            "Y": 67.24928,
+            "Z": -473.94547
+          },
+          "TerritoryId": 1191,
+          "InteractionType": "WalkTo",
+          "Comment": "TODO Verify this avoids combat"
+        },
+        {
           "DataId": 1047428,
           "Position": {
             "X": 248.70679,

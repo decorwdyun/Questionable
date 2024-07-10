@@ -29,8 +29,7 @@
             "Z": -51.529785
           },
           "TerritoryId": 1186,
-          "InteractionType": "WaitForManualProgress",
-          "Comment": "Pick anything (PointMenu)",
+          "InteractionType": "Interact",
           "DialogueChoices": [
             {
               "Type": "YesNo",
@@ -42,6 +41,9 @@
               "Prompt": "TEXT_KINGME103_04934_Q1_000_000",
               "Answer": "TEXT_KINGME103_04934_A1_000_003"
             }
+          ],
+          "PointMenuChoices": [
+            2
           ]
         }
       ]
@@ -158,6 +160,7 @@
             "Y": 13.999998,
             "Z": 275.8678
           },
+          "StopDistance": 5,
           "TerritoryId": 1186,
           "InteractionType": "CompleteQuest"
         }

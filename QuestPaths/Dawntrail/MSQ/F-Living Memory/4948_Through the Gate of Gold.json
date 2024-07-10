@@ -45,6 +45,19 @@
           ]
         },
         {
+          "Position": {
+            "X": -573.30396,
+            "Y": -153.01865,
+            "Z": 529.2467
+          },
+          "TerritoryId": 1189,
+          "InteractionType": "WalkTo",
+          "Fly": true,
+          "SkipIf": [
+            "FlyingLocked"
+          ]
+        },
+        {
           "DataId": 1047813,
           "Position": {
             "X": -826.32184,
@@ -52,7 +65,8 @@
             "Z": 875.15063
           },
           "TerritoryId": 1189,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
@@ -81,6 +95,7 @@
             "Y": 0.20000042,
             "Z": -51.499268
           },
+          "StopDistance": 7,
           "TerritoryId": 1222,
           "InteractionType": "Interact"
         }
@@ -111,10 +126,10 @@
             "Y": 105.00008,
             "Z": 848.7831
           },
+          "StopDistance": 7,
           "DisableNavmesh": true,
           "TerritoryId": 1192,
-          "InteractionType": "Interact",
-          "Comment": "TODO Check the distance"
+          "InteractionType": "Interact"
         }
       ]
     },

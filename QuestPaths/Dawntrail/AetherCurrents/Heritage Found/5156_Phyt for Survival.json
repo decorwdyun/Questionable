@@ -48,44 +48,6 @@
       "Sequence": 2,
       "Steps": [
         {
-          "Position": {
-            "X": -592.5055,
-            "Y": 35.94439,
-            "Z": -324.25006
-          },
-          "TerritoryId": 1191,
-          "InteractionType": "WalkTo",
-          "Mount": false,
-          "Sprint": false,
-          "Comment": "Needs manual babysitting to kill enemies"
-        },
-        {
-          "DataId": 17678,
-          "Position": {
-            "X": -619.23193,
-            "Y": 11.514403,
-            "Z": -436.67496
-          },
-          "TerritoryId": 1191,
-          "InteractionType": "WaitForNpcAtPosition",
-          "NpcWaitDistance": 4,
-          "Mount": false,
-          "Sprint": false
-        },
-        {
-          "DataId": 17678,
-          "Position": {
-            "X": -618.6356,
-            "Y": 5.743476,
-            "Z": -457.91925
-          },
-          "TerritoryId": 1191,
-          "InteractionType": "WaitForNpcAtPosition",
-          "NpcWaitDistance": 4,
-          "Mount": false,
-          "Sprint": false
-        },
-        {
           "DataId": 1049501,
           "Position": {
             "X": -592.7062,
@@ -93,9 +55,8 @@
             "Z": -489.28055
           },
           "TerritoryId": 1191,
-          "InteractionType": "Interact",
-          "Mount": false,
-          "Sprint": false
+          "InteractionType": "Instruction",
+          "Comment": "Needs manual babysitting, NPC will stop any time they are hit (even if you de-aggro the enemy)"
         }
       ]
     },

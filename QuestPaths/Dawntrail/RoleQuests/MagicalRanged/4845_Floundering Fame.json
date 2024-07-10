@@ -1,0 +1,157 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1048331,
+          "Position": {
+            "X": 214.03821,
+            "Y": 5.2600574,
+            "Z": 628.3817
+          },
+          "TerritoryId": 957,
+          "InteractionType": "AcceptQuest",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_KINGBA531_04845_Q2_000_200",
+              "Answer": "TEXT_KINGBA531_04845_A1_000_200"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1048357,
+          "Position": {
+            "X": -183.21509,
+            "Y": 36,
+            "Z": 53.116577
+          },
+          "TerritoryId": 963,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Radz-at-Han",
+          "AethernetShortcut": [
+            "[Radz-at-Han] Aetheryte Plaza",
+            "[Radz-at-Han] Ruveydah Fibers"
+          ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
+        },
+        {
+          "DataId": 1048359,
+          "Position": {
+            "X": -175.0058,
+            "Y": 36.051327,
+            "Z": 104.20386
+          },
+          "TerritoryId": 963,
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
+        },
+        {
+          "DataId": 1048360,
+          "Position": {
+            "X": -237.41516,
+            "Y": 35.999996,
+            "Z": 102.067505
+          },
+          "TerritoryId": 963,
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1048362,
+          "Position": {
+            "X": -10.544006,
+            "Y": 2.999996,
+            "Z": -204.91345
+          },
+          "TerritoryId": 963,
+          "InteractionType": "Interact",
+          "AethernetShortcut": [
+            "[Radz-at-Han] Ruveydah Fibers",
+            "[Radz-at-Han] Mehryde's Meyhane"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1048361,
+          "Position": {
+            "X": 9.262146,
+            "Y": 0.92,
+            "Z": -103.31885
+          },
+          "TerritoryId": 963,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 1048363,
+          "Position": {
+            "X": 369.40564,
+            "Y": 3.9809039,
+            "Z": -219.40955
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Thavnair - Palaka's Stand"
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "DataId": 2013713,
+          "Position": {
+            "X": 362.35596,
+            "Y": 3.616333,
+            "Z": -241.77924
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}

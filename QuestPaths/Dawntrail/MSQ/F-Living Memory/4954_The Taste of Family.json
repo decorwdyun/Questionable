@@ -52,11 +52,11 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 1047942,
+          "DataId": 1047944,
           "Position": {
-            "X": 634.14966,
-            "Y": 24.999489,
-            "Z": -292.77484
+            "X": 665.5221,
+            "Y": 24.999493,
+            "Z": -266.55988
           },
           "TerritoryId": 1192,
           "InteractionType": "Interact",
@@ -66,8 +66,19 @@
             null,
             null,
             null,
-            128
+            32
           ]
+        },
+        {
+          "DataId": 214,
+          "Position": {
+            "X": 657.98413,
+            "Y": 28.976807,
+            "Z": -284.01617
+          },
+          "StopDistance": 10,
+          "TerritoryId": 1192,
+          "InteractionType": "AttuneAetheryte"
         },
         {
           "DataId": 1047943,
@@ -88,22 +99,11 @@
           ]
         },
         {
-          "DataId": 214,
+          "DataId": 1047942,
           "Position": {
-            "X": 657.98413,
-            "Y": 28.976807,
-            "Z": -284.01617
-          },
-          "StopDistance": 10,
-          "TerritoryId": 1192,
-          "InteractionType": "AttuneAetheryte"
-        },
-        {
-          "DataId": 1047944,
-          "Position": {
-            "X": 665.5221,
-            "Y": 24.999493,
-            "Z": -266.55988
+            "X": 634.14966,
+            "Y": 24.999489,
+            "Z": -292.77484
           },
           "TerritoryId": 1192,
           "InteractionType": "Interact",
@@ -113,7 +113,7 @@
             null,
             null,
             null,
-            32
+            128
           ]
         }
       ]

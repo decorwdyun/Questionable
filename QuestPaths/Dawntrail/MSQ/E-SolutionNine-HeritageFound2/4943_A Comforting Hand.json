@@ -12,6 +12,7 @@
             "Y": 70.0001,
             "Z": 8.316162
           },
+          "StopDistance": 5,
           "TerritoryId": 1186,
           "InteractionType": "AcceptQuest"
         }
@@ -21,11 +22,11 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 1048128,
+          "DataId": 1048126,
           "Position": {
-            "X": 339.22327,
-            "Y": 52.212578,
-            "Z": 186.57202
+            "X": 371.4198,
+            "Y": 50.75,
+            "Z": 185.19873
           },
           "TerritoryId": 1186,
           "InteractionType": "Interact",
@@ -35,7 +36,7 @@
             null,
             null,
             null,
-            32
+            128
           ]
         },
         {
@@ -57,11 +58,11 @@
           ]
         },
         {
-          "DataId": 1048126,
+          "DataId": 1048128,
           "Position": {
-            "X": 371.4198,
-            "Y": 50.75,
-            "Z": 185.19873
+            "X": 339.22327,
+            "Y": 52.212578,
+            "Z": 186.57202
           },
           "TerritoryId": 1186,
           "InteractionType": "Interact",
@@ -71,7 +72,7 @@
             null,
             null,
             null,
-            128
+            32
           ]
         }
       ]
