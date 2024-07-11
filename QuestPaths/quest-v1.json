@@ -651,7 +651,8 @@
                           "cheer",
                           "happy",
                           "poke",
-                          "flex"
+                          "flex",
+                          "soothe"
                         ]
                       }
                     }
@@ -948,12 +949,39 @@
                   },
                   "then": {
                     "properties": {
-                      "QuestId": {
+                      "PickUpQuestId": {
                         "type": [
                           "null",
                           "number"
                         ],
                         "description": "Determines the quest which should be accepted. If empty/null, accepts the quest corresponding to the file name."
+                      }
+                    }
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "InteractionType": {
+                        "const": "CompleteQuest"
+                      }
+                    }
+                  },
+                  "then": {
+                    "properties": {
+                      "TurnInQuestId": {
+                        "type": [
+                          "null",
+                          "number"
+                        ],
+                        "description": "Determines the quest which should be turned in. If empty/null, turns in the quest corresponding to the file name."
+                      },
+                      "NextQuestId": {
+                        "type": [
+                          "null",
+                          "number"
+                        ],
+                        "description": "For quest chains (e.g. DT healer role quests) Which quest to do next, given that you meet the required level."
                       }
                     }
                   }

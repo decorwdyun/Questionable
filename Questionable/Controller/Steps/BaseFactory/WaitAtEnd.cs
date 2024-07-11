@@ -107,14 +107,14 @@ internal static class WaitAtEnd
                 case EInteractionType.AcceptQuest:
                     return
                     [
-                        serviceProvider.GetRequiredService<WaitQuestAccepted>().With(step.QuestId ?? quest.QuestId),
+                        serviceProvider.GetRequiredService<WaitQuestAccepted>().With(step.PickupQuestId ?? quest.QuestId),
                         serviceProvider.GetRequiredService<WaitDelay>()
                     ];
 
                 case EInteractionType.CompleteQuest:
                     return
                     [
-                        serviceProvider.GetRequiredService<WaitQuestCompleted>().With(step.QuestId ?? quest.QuestId),
+                        serviceProvider.GetRequiredService<WaitQuestCompleted>().With(step.TurnInQuestId ?? quest.QuestId),
                         serviceProvider.GetRequiredService<WaitDelay>()
                     ];
 

@@ -206,7 +206,10 @@ internal sealed unsafe class GameFunctions
             return default;
 
         // if we're not at a high enough level to continue, we also ignore it
-        if (_questRegistry.TryGetQuest(currentQuest, out Quest? quest) && quest.Level > (_clientState.LocalPlayer?.Level ?? 0))
+        var currentLevel = _clientState.LocalPlayer?.Level ?? 0;
+        if (currentLevel != 0 &&
+            _questRegistry.TryGetQuest(currentQuest, out Quest? quest)
+            && quest.Info.Level > currentLevel)
             return default;
 
         return (currentQuest, QuestManager.GetQuestSequence(currentQuest));
@@ -216,6 +219,30 @@ internal sealed unsafe class GameFunctions
     {
         QuestWork* questWork = QuestManager.Instance()->GetQuestById(questId);
         return questWork != null ? *questWork : null;
+    }
+
+    public bool IsReadyToAcceptQuest(ushort questId)
+    {
+        if (IsQuestAcceptedOrComplete(questId))
+            return false;
+
+        // if we're not at a high enough level to continue, we also ignore it
+        var currentLevel = _clientState.LocalPlayer?.Level ?? 0;
+        if (currentLevel != 0 &&
+            _questRegistry.TryGetQuest(questId, out Quest? quest) &&
+            quest.Info.Level > currentLevel)
+            return false;
+
+        return true;
+    }
+
+    public bool IsQuestAcceptedOrComplete(ushort questId)
+    {
+        if (QuestManager.IsQuestComplete(questId))
+            return true;
+
+        QuestManager* questManager = QuestManager.Instance();
+        return questManager->IsQuestAccepted(questId);
     }
 
     public bool IsAetheryteUnlocked(uint aetheryteId, out byte subIndex)
@@ -548,6 +575,9 @@ internal sealed unsafe class GameFunctions
 
     public bool IsOccupied()
     {
+        if (!_clientState.IsLoggedIn || _clientState.LocalPlayer == null)
+            return true;
+
         if (IsLoadingScreenVisible())
             return true;
 

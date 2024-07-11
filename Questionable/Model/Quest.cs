@@ -6,10 +6,9 @@ namespace Questionable.Model;
 internal sealed class Quest
 {
     public required ushort QuestId { get; init; }
-    public required string Name { get; set; }
-    public ushort Level { get; set; }
-    public required QuestData Data { get; init; }
+    public required QuestRoot Root { get; init; }
+    public required QuestInfo Info { get; init; }
 
     public QuestSequence? FindSequence(byte currentSequence)
-        => Data.QuestSequence.SingleOrDefault(seq => seq.Sequence == currentSequence);
+        => Root.QuestSequence.SingleOrDefault(seq => seq.Sequence == currentSequence);
 }

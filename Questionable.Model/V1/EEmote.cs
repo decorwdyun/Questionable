@@ -20,4 +20,5 @@ public enum EEmote
     Happy = 48,
     Poke = 28,
     Flex = 139,
+    Soothe = 35,
 }

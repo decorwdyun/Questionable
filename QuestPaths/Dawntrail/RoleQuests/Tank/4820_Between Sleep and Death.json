@@ -143,7 +143,8 @@
           "AethernetShortcut": [
             "[Ishgard] Aetheryte Plaza",
             "[Ishgard] The Forgotten Knight"
-          ]
+          ],
+          "NextQuestId": 4821
         }
       ]
     }

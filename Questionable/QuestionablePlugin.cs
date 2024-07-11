@@ -68,6 +68,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<ChatFunctions>();
         serviceCollection.AddSingleton<AetherCurrentData>();
         serviceCollection.AddSingleton<AetheryteData>();
+        serviceCollection.AddSingleton<QuestData>();
         serviceCollection.AddSingleton<TerritoryData>();
         serviceCollection.AddSingleton<NavmeshIpc>();
         serviceCollection.AddSingleton<LifestreamIpc>();
@@ -110,6 +111,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
                 WaitAtEnd.WaitObjectAtPosition>();
         serviceCollection.AddTransient<WaitAtEnd.WaitQuestAccepted>();
         serviceCollection.AddTransient<WaitAtEnd.WaitQuestCompleted>();
+        serviceCollection.AddTaskWithFactory<NextQuest.Factory, NextQuest.SetQuest>();
 
         serviceCollection.AddSingleton<MovementController>();
         serviceCollection.AddSingleton<QuestRegistry>();
@@ -120,11 +122,12 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<QuestWindow>();
         serviceCollection.AddSingleton<ConfigWindow>();
         serviceCollection.AddSingleton<DebugOverlay>();
+        serviceCollection.AddSingleton<CommandHandler>();
         serviceCollection.AddSingleton<DalamudInitializer>();
 
         _serviceProvider = serviceCollection.BuildServiceProvider();
         _serviceProvider.GetRequiredService<QuestRegistry>().Reload();
-        _serviceProvider.GetRequiredService<QuestWindow>();
+        _serviceProvider.GetRequiredService<CommandHandler>();
         _serviceProvider.GetRequiredService<DalamudInitializer>();
     }
 

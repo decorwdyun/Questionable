@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Dalamud.Game.Addon.Lifecycle;
@@ -13,6 +12,7 @@ using LLib;
 using LLib.GameUI;
 using Lumina.Excel.GeneratedSheets;
 using Microsoft.Extensions.Logging;
+using Questionable.Data;
 using Questionable.Model.V1;
 using Quest = Questionable.Model.Quest;
 using ValueType = FFXIVClientStructs.FFXIV.Component.GUI.ValueType;
@@ -25,19 +25,23 @@ internal sealed class GameUiController : IDisposable
     private readonly IDataManager _dataManager;
     private readonly GameFunctions _gameFunctions;
     private readonly QuestController _questController;
+    private readonly QuestRegistry _questRegistry;
+    private readonly QuestData _questData;
     private readonly IGameGui _gameGui;
     private readonly ITargetManager _targetManager;
     private readonly ILogger<GameUiController> _logger;
     private readonly Regex _returnRegex;
 
     public GameUiController(IAddonLifecycle addonLifecycle, IDataManager dataManager, GameFunctions gameFunctions,
-        QuestController questController, IGameGui gameGui, ITargetManager targetManager, IPluginLog pluginLog,
-        ILogger<GameUiController> logger)
+        QuestController questController, QuestRegistry questRegistry, QuestData questData, IGameGui gameGui,
+        ITargetManager targetManager, IPluginLog pluginLog, ILogger<GameUiController> logger)
     {
         _addonLifecycle = addonLifecycle;
         _dataManager = dataManager;
         _gameFunctions = gameFunctions;
         _questController = questController;
+        _questRegistry = questRegistry;
+        _questData = questData;
         _gameGui = gameGui;
         _targetManager = targetManager;
         _logger = logger;
@@ -162,7 +166,7 @@ internal sealed class GameUiController : IDisposable
         if (currentQuest != null && actualPrompt == null)
         {
             // it is possible for this to be a quest selection
-            string questName = currentQuest.Quest.Name;
+            string questName = currentQuest.Quest.Info.Name;
             int questSelection = answers.FindIndex(x => GameStringEquals(questName, x));
             if (questSelection >= 0)
                 addonSelectIconString->AtkUnitBase.FireCallbackInt(questSelection);
@@ -172,33 +176,55 @@ internal sealed class GameUiController : IDisposable
 
     private int? HandleListChoice(string? actualPrompt, List<string?> answers, bool checkAllSteps)
     {
+        List<DialogueChoiceInfo> dialogueChoices = [];
         var currentQuest = _questController.CurrentQuest;
-        if (currentQuest == null)
+        if (currentQuest != null)
         {
-            _logger.LogInformation("Ignoring list choice, no active quest");
-            return null;
-        }
-
-        var quest = currentQuest.Quest;
-        IList<DialogueChoice> dialogueChoices;
-        if (checkAllSteps)
-        {
-            var sequence = quest.FindSequence(currentQuest.Sequence);
-            dialogueChoices = sequence?.Steps.SelectMany(x => x.DialogueChoices).ToList() ?? new List<DialogueChoice>();
+            var quest = currentQuest.Quest;
+            if (checkAllSteps)
+            {
+                var sequence = quest.FindSequence(currentQuest.Sequence);
+                var choices = sequence?.Steps.SelectMany(x => x.DialogueChoices);
+                if (choices != null)
+                    dialogueChoices.AddRange(choices.Select(x => new DialogueChoiceInfo(quest, x)));
+            }
+            else
+            {
+                var step = quest.FindSequence(currentQuest.Sequence)?.FindStep(currentQuest.Step);
+                if (step == null)
+                    _logger.LogInformation("Ignoring current quest dialogue choices, no active step");
+                else
+                    dialogueChoices.AddRange(step.DialogueChoices.Select(x => new DialogueChoiceInfo(quest, x)));
+            }
         }
         else
-        {
-            var step = quest.FindSequence(currentQuest.Sequence)?.FindStep(currentQuest.Step);
-            if (step == null)
-            {
-                _logger.LogInformation("Ignoring list choice, no active step");
-                return null;
-            }
+            _logger.LogInformation("Ignoring current quest dialogue choices, no active quest");
 
-            dialogueChoices = step.DialogueChoices;
+        // add all quests that start with the targeted npc
+        var target = _targetManager.Target;
+        if (target != null)
+        {
+            foreach (var questInfo in _questData.GetAllByIssuerDataId(target.DataId))
+            {
+                if (_gameFunctions.IsReadyToAcceptQuest(questInfo.QuestId) &&
+                    _questRegistry.TryGetQuest(questInfo.QuestId, out Quest? knownQuest))
+                {
+                    var questChoices = knownQuest.FindSequence(0)?.Steps
+                        .SelectMany(x => x.DialogueChoices)
+                        .ToList();
+                    if (questChoices != null && questChoices.Count > 0)
+                    {
+                        _logger.LogInformation("Adding {Count} dialogue choices from not accepted quest {QuestName}", questChoices.Count, questInfo.Name);
+                        dialogueChoices.AddRange(questChoices.Select(x => new DialogueChoiceInfo(knownQuest, x)));
+                    }
+                }
+            }
         }
 
-        foreach (var dialogueChoice in dialogueChoices)
+        if (dialogueChoices.Count == 0)
+            return null;
+
+        foreach (var (quest, dialogueChoice) in dialogueChoices)
         {
             if (dialogueChoice.Type != EDialogChoiceType.List)
                 continue;
@@ -433,13 +459,7 @@ internal sealed class GameUiController : IDisposable
         };
         addonPointMenu->FireCallback(2, selectChoice);
 
-        _questController.CurrentQuest = currentQuest with
-        {
-            StepProgress = currentQuest.StepProgress with
-            {
-                PointMenuCounter = counter + 1,
-            }
-        };
+        currentQuest.IncreasePointMenuCounter();
     }
 
     private unsafe void CreditPostSetup(AddonEvent type, AddonArgs args)
@@ -519,4 +539,6 @@ internal sealed class GameUiController : IDisposable
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "CutSceneSelectString", CutsceneSelectStringPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "SelectString", SelectStringPostSetup);
     }
+
+    private sealed record DialogueChoiceInfo(Quest Quest, DialogueChoice DialogueChoice);
 }

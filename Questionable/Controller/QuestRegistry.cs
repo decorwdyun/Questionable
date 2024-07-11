@@ -8,6 +8,7 @@ using System.Text.Json;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.Logging;
+using Questionable.Data;
 using Questionable.Model;
 using Questionable.Model.V1;
 
@@ -16,16 +17,16 @@ namespace Questionable.Controller;
 internal sealed class QuestRegistry
 {
     private readonly IDalamudPluginInterface _pluginInterface;
-    private readonly IDataManager _dataManager;
+    private readonly QuestData _questData;
     private readonly ILogger<QuestRegistry> _logger;
 
     private readonly Dictionary<ushort, Quest> _quests = new();
 
-    public QuestRegistry(IDalamudPluginInterface pluginInterface, IDataManager dataManager,
+    public QuestRegistry(IDalamudPluginInterface pluginInterface, QuestData questData,
         ILogger<QuestRegistry> logger)
     {
         _pluginInterface = pluginInterface;
-        _dataManager = dataManager;
+        _questData = questData;
         _logger = logger;
     }
 
@@ -47,7 +48,7 @@ internal sealed class QuestRegistry
             _quests[questId] = quest;
         }
 #else
-        DirectoryInfo? solutionDirectory = _pluginInterface.AssemblyLocation?.Directory?.Parent?.Parent;
+        DirectoryInfo? solutionDirectory = _pluginInterface.AssemblyLocation.Directory?.Parent?.Parent;
         if (solutionDirectory != null)
         {
             DirectoryInfo pathProjectDirectory =
@@ -64,22 +65,14 @@ internal sealed class QuestRegistry
 
         LoadFromDirectory(new DirectoryInfo(Path.Combine(_pluginInterface.ConfigDirectory.FullName, "Quests")));
 
-        foreach (var (questId, quest) in _quests)
-        {
-            var questData =
-                _dataManager.GetExcelSheet<Lumina.Excel.GeneratedSheets.Quest>()!.GetRow((uint)questId + 0x10000);
-            if (questData == null)
-                continue;
-
-            quest.Name = questData.Name.ToString();
-            quest.Level = questData.ClassJobLevel0;
-
 #if !RELEASE
-            int missingSteps = quest.Data.QuestSequence.Where(x => x.Sequence < 255).Max(x => x.Sequence) - quest.Data.QuestSequence.Count(x => x.Sequence < 255) + 1;
+        foreach (var quest in _quests.Values)
+        {
+            int missingSteps = quest.Root.QuestSequence.Where(x => x.Sequence < 255).Max(x => x.Sequence) - quest.Root.QuestSequence.Count(x => x.Sequence < 255) + 1;
             if (missingSteps != 0)
-                _logger.LogWarning("Quest has missing steps: {QuestId} / {QuestName} → {Count}", quest.QuestId, quest.Name, missingSteps);
-#endif
+                _logger.LogWarning("Quest has missing steps: {QuestId} / {QuestName} → {Count}", quest.QuestId, quest.Info.Name, missingSteps);
         }
+#endif
 
         _logger.LogInformation("Loaded {Count} quests", _quests.Count);
     }
@@ -88,12 +81,12 @@ internal sealed class QuestRegistry
     private void LoadQuestFromStream(string fileName, Stream stream)
     {
         _logger.LogTrace("Loading quest from '{FileName}'", fileName);
-        var (questId, name) = ExtractQuestDataFromName(fileName);
+        var questId = ExtractQuestIdFromName(fileName);
         Quest quest = new Quest
         {
             QuestId = questId,
-            Name = name,
-            Data = JsonSerializer.Deserialize<QuestData>(stream)!,
+            Root = JsonSerializer.Deserialize<QuestRoot>(stream)!,
+            Info = _questData.GetQuestInfo(questId),
         };
         _quests[questId] = quest;
     }
@@ -124,13 +117,13 @@ internal sealed class QuestRegistry
             LoadFromDirectory(childDirectory);
     }
 
-    private static (ushort QuestId, string Name) ExtractQuestDataFromName(string resourceName)
+    private static ushort ExtractQuestIdFromName(string resourceName)
     {
         string name = resourceName.Substring(0, resourceName.Length - ".json".Length);
         name = name.Substring(name.LastIndexOf('.') + 1);
 
         string[] parts = name.Split('_', 2);
-        return (ushort.Parse(parts[0], CultureInfo.InvariantCulture), parts[1]);
+        return ushort.Parse(parts[0], CultureInfo.InvariantCulture);
     }
 
     public bool IsKnownQuest(ushort questId) => _quests.ContainsKey(questId);

@@ -2,7 +2,7 @@
 
 namespace Questionable.Model.V1;
 
-public sealed class QuestData
+public sealed class QuestRoot
 {
     public string Author { get; set; } = null!;
     public List<string> Contributors { get; set; } = new();

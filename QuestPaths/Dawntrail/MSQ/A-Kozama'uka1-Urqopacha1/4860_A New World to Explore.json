@@ -14,7 +14,11 @@
           },
           "StopDistance": 7,
           "TerritoryId": 962,
-          "InteractionType": "AcceptQuest"
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Old Sharlayan",
+          "SkipIf": [
+            "AetheryteShortcutIfInSameTerritory"
+          ]
         }
       ]
     },

@@ -38,7 +38,7 @@ public class QuestSourceGenerator : ISourceGenerator
 
     public void Execute(GeneratorExecutionContext context)
     {
-        List<(ushort, QuestData)> quests = [];
+        List<(ushort, QuestRoot)> quests = [];
 
         // Find schema definition
         AdditionalText jsonSchemaFile =
@@ -75,7 +75,7 @@ public class QuestSourceGenerator : ISourceGenerator
                 context.ReportDiagnostic(error);
             }
 
-            var quest = questNode.Deserialize<QuestData>()!;
+            var quest = questNode.Deserialize<QuestRoot>()!;
             quests.Add((id, quest));
         }
 
@@ -196,7 +196,7 @@ public class QuestSourceGenerator : ISourceGenerator
         context.AddSource("AssemblyQuestLoader.g.cs", code.ToFullString());
     }
 
-    private static IEnumerable<SyntaxNodeOrToken> CreateQuestInitializer(ushort questId, QuestData quest)
+    private static IEnumerable<SyntaxNodeOrToken> CreateQuestInitializer(ushort questId, QuestRoot quest)
     {
         return new SyntaxNodeOrToken[]
         {
@@ -210,23 +210,23 @@ public class QuestSourceGenerator : ISourceGenerator
                             Literal(questId)),
                         Token(SyntaxKind.CommaToken),
                         ObjectCreationExpression(
-                                IdentifierName(nameof(QuestData)))
+                                IdentifierName(nameof(QuestRoot)))
                             .WithInitializer(
                                 InitializerExpression(
                                     SyntaxKind.ObjectInitializerExpression,
                                     SeparatedList<ExpressionSyntax>(
                                         SyntaxNodeList(
-                                            Assignment(nameof(QuestData.Author), quest.Author, null)
+                                            Assignment(nameof(QuestRoot.Author), quest.Author, null)
                                                 .AsSyntaxNodeOrToken(),
-                                            AssignmentList(nameof(QuestData.Contributors), quest.Contributors)
+                                            AssignmentList(nameof(QuestRoot.Contributors), quest.Contributors)
                                                 .AsSyntaxNodeOrToken(),
-                                            Assignment(nameof(QuestData.Comment), quest.Comment, null)
+                                            Assignment(nameof(QuestRoot.Comment), quest.Comment, null)
                                                 .AsSyntaxNodeOrToken(),
-                                            AssignmentList(nameof(QuestData.TerritoryBlacklist),
+                                            AssignmentList(nameof(QuestRoot.TerritoryBlacklist),
                                                 quest.TerritoryBlacklist).AsSyntaxNodeOrToken(),
                                             AssignmentExpression(
                                                 SyntaxKind.SimpleAssignmentExpression,
-                                                IdentifierName(nameof(QuestData.QuestSequence)),
+                                                IdentifierName(nameof(QuestRoot.QuestSequence)),
                                                 CreateQuestSequence(quest.QuestSequence))
                                         ))))
                     })),
@@ -354,7 +354,11 @@ public class QuestSourceGenerator : ISourceGenerator
                                                 .AsSyntaxNodeOrToken(),
                                             AssignmentList(nameof(QuestStep.PointMenuChoices), step.PointMenuChoices)
                                                 .AsSyntaxNodeOrToken(),
-                                            Assignment(nameof(QuestStep.QuestId), step.QuestId, emptyStep.QuestId)
+                                            Assignment(nameof(QuestStep.PickupQuestId), step.PickupQuestId, emptyStep.PickupQuestId)
+                                                .AsSyntaxNodeOrToken(),
+                                            Assignment(nameof(QuestStep.TurnInQuestId), step.TurnInQuestId, emptyStep.TurnInQuestId)
+                                                .AsSyntaxNodeOrToken(),
+                                            Assignment(nameof(QuestStep.NextQuestId), step.NextQuestId, emptyStep.NextQuestId)
                                                 .AsSyntaxNodeOrToken()))))),
                     Token(SyntaxKind.CommaToken),
                 }.ToArray())));

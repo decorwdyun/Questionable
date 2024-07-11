@@ -137,7 +137,8 @@
               "Prompt": "TEXT_KINGBA141_04822_Q3_000_000",
               "Answer": "TEXT_KINGBA141_04822_A3_000_002"
             }
-          ]
+          ],
+          "NextQuestId": 4823
         }
       ]
     }

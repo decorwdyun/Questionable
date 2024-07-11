@@ -76,7 +76,7 @@ internal sealed class DebugOverlay : Window
         if (HighlightedQuest == null || !_questRegistry.TryGetQuest(HighlightedQuest.Value, out var quest))
             return;
 
-        foreach (var sequence in quest.Data.QuestSequence)
+        foreach (var sequence in quest.Root.QuestSequence)
         {
             for (int i = 0; i < sequence.Steps.Count; ++i)
             {

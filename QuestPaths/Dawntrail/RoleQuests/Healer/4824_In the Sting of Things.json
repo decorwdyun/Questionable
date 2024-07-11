@@ -13,7 +13,11 @@
             "Z": 201.28174
           },
           "TerritoryId": 1185,
-          "InteractionType": "AcceptQuest"
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Tuliyollal",
+          "SkipIf": [
+            "AetheryteShortcutIfInSameTerritory"
+          ]
         }
       ]
     },
@@ -187,7 +191,8 @@
             "Z": 111.436646
           },
           "TerritoryId": 129,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "NextQuestId": 4825
         }
       ]
     }

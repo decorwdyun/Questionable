@@ -41,6 +41,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
     private readonly Configuration _configuration;
     private readonly NavmeshIpc _navmeshIpc;
     private readonly QuestRegistry _questRegistry;
+    private readonly QuestData _questData;
     private readonly TerritoryData _territoryData;
     private readonly ILogger<QuestWindow> _logger;
 
@@ -56,6 +57,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         Configuration configuration,
         NavmeshIpc navmeshIpc,
         QuestRegistry questRegistry,
+        QuestData questData,
         TerritoryData territoryData,
         ILogger<QuestWindow> logger)
         : base("Questionable###Questionable", ImGuiWindowFlags.AlwaysAutoResize)
@@ -72,6 +74,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         _configuration = configuration;
         _navmeshIpc = navmeshIpc;
         _questRegistry = questRegistry;
+        _questData = questData;
         _territoryData = territoryData;
         _logger = logger;
 
@@ -99,7 +102,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
             return false;
 
         var currentQuest = _questController.CurrentQuest;
-        return currentQuest == null || !currentQuest.Quest.Data.TerritoryBlacklist.Contains(_clientState.TerritoryType);
+        return currentQuest == null || !currentQuest.Quest.Root.TerritoryBlacklist.Contains(_clientState.TerritoryType);
     }
 
     public override void Draw()
@@ -114,12 +117,12 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         DrawRemainingTasks();
     }
 
-    private unsafe void DrawQuest()
+    private void DrawQuest()
     {
         var currentQuest = _questController.CurrentQuest;
         if (currentQuest != null)
         {
-            ImGui.TextUnformatted($"Quest: {currentQuest.Quest.Name} / {currentQuest.Sequence} / {currentQuest.Step}");
+            ImGui.TextUnformatted($"Quest: {currentQuest.Quest.Info.Name} / {currentQuest.Sequence} / {currentQuest.Step}");
 
             ImGui.BeginDisabled();
             var questWork = _gameFunctions.GetQuestEx(currentQuest.Quest.QuestId);
@@ -144,7 +147,12 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
                 ImGui.Text($"QW: {vars.Trim()}");
             }
             else
-                ImGui.TextUnformatted("(Not accepted)");
+            {
+                if (currentQuest.Quest.QuestId == _questController.NextQuest?.Quest.QuestId)
+                    ImGui.TextUnformatted("(Next quest in story line not accepted)");
+                else
+                    ImGui.TextUnformatted("(Not accepted)");
+            }
 
             ImGui.TextUnformatted(_questController.DebugState ?? "--");
             ImGui.EndDisabled();
@@ -158,6 +166,10 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
             ImGui.BeginDisabled(_questController.IsRunning);
             if (ImGuiComponents.IconButton(FontAwesomeIcon.Play))
             {
+                // if we haven't accepted this quest, mark it as next quest so that we can optionally use aetherytes to travel
+                if (questWork == null)
+                    _questController.SetNextQuest(currentQuest.Quest);
+
                 _questController.ExecuteNextStep(true);
             }
 
@@ -210,84 +222,75 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
 
             if (_questController.SimulatedQuest != null)
             {
+                var simulatedQuest = _questController.SimulatedQuest;
+
                 ImGui.Separator();
                 ImGui.TextColored(ImGuiColors.DalamudRed, "Quest sim active (experimental)");
-                ImGui.Text($"Sequence: {_questController.SimulatedQuest.Sequence}");
+                ImGui.Text($"Sequence: {simulatedQuest.Sequence}");
 
-                ImGui.BeginDisabled(_questController.SimulatedQuest.Sequence == 0);
+                ImGui.BeginDisabled(simulatedQuest.Sequence == 0);
                 if (ImGuiComponents.IconButton(FontAwesomeIcon.Minus))
                 {
                     _movementController.Stop();
                     _questController.Stop("Sim-");
 
-                    byte oldSequence = _questController.SimulatedQuest.Sequence;
-                    byte newSequence = _questController.SimulatedQuest.Quest.Data.QuestSequence
+                    byte oldSequence = simulatedQuest.Sequence;
+                    byte newSequence = simulatedQuest.Quest.Root.QuestSequence
                         .Select(x => (byte)x.Sequence)
                         .LastOrDefault(x => x < oldSequence, byte.MinValue);
 
-                    _questController.SimulatedQuest = _questController.SimulatedQuest with
-                    {
-                        Sequence = newSequence,
-                    };
+                    _questController.SimulatedQuest.SetSequence(newSequence);
                 }
 
                 ImGui.EndDisabled();
 
                 ImGui.SameLine();
-                ImGui.BeginDisabled(_questController.SimulatedQuest.Sequence >= 255);
+                ImGui.BeginDisabled(simulatedQuest.Sequence >= 255);
                 if (ImGuiComponents.IconButton(FontAwesomeIcon.Plus))
                 {
                     _movementController.Stop();
                     _questController.Stop("Sim+");
 
-                    byte oldSequence = _questController.SimulatedQuest.Sequence;
-                    byte newSequence = _questController.SimulatedQuest.Quest.Data.QuestSequence
+                    byte oldSequence = simulatedQuest.Sequence;
+                    byte newSequence = simulatedQuest.Quest.Root.QuestSequence
                         .Select(x => (byte)x.Sequence)
                         .FirstOrDefault(x => x > oldSequence, byte.MaxValue);
 
-                    _questController.SimulatedQuest = _questController.SimulatedQuest with
-                    {
-                        Sequence = newSequence,
-                    };
+                    simulatedQuest.SetSequence(newSequence);
                 }
 
                 ImGui.EndDisabled();
 
-                var simulatedSequence =
-                    _questController.SimulatedQuest.Quest.FindSequence(_questController.SimulatedQuest.Sequence);
+                var simulatedSequence = simulatedQuest.Quest.FindSequence(simulatedQuest.Sequence);
                 if (simulatedSequence != null)
                 {
                     using var _ = ImRaii.PushId("SimulatedStep");
 
-                    ImGui.Text($"Step: {currentQuest.Step} / {simulatedSequence.Steps.Count - 1}");
+                    ImGui.Text($"Step: {simulatedQuest.Step} / {simulatedSequence.Steps.Count - 1}");
 
-                    ImGui.BeginDisabled(currentQuest.Step == 0);
+                    ImGui.BeginDisabled(simulatedQuest.Step == 0);
                     if (ImGuiComponents.IconButton(FontAwesomeIcon.Minus))
                     {
                         _movementController.Stop();
                         _questController.Stop("SimStep-");
 
-                        _questController.CurrentQuest = currentQuest with
-                        {
-                            Step = Math.Min(currentQuest.Step - 1, simulatedSequence.Steps.Count - 1),
-                        };
+                        simulatedQuest.SetStep(Math.Min(simulatedQuest.Step - 1,
+                            simulatedSequence.Steps.Count - 1));
                     }
 
                     ImGui.EndDisabled();
 
                     ImGui.SameLine();
-                    ImGui.BeginDisabled(currentQuest.Step >= simulatedSequence.Steps.Count);
+                    ImGui.BeginDisabled(simulatedQuest.Step >= simulatedSequence.Steps.Count);
                     if (ImGuiComponents.IconButton(FontAwesomeIcon.Plus))
                     {
                         _movementController.Stop();
                         _questController.Stop("SimStep+");
 
-                        _questController.CurrentQuest = currentQuest with
-                        {
-                            Step = currentQuest.Step == simulatedSequence.Steps.Count - 1
+                        simulatedQuest.SetStep(
+                            simulatedQuest.Step == simulatedSequence.Steps.Count - 1
                                 ? 255
-                                : (currentQuest.Step + 1),
-                        };
+                                : (simulatedQuest.Step + 1));
                     }
 
                     ImGui.EndDisabled();
@@ -375,7 +378,13 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
             ImGui.EndDisabled();
 
             ImGui.SameLine();
-            if (ImGui.Button("Interact"))
+            ImGui.BeginDisabled(gameObject->NamePlateIconId == 0);
+            if (ImGuiComponents.IconButton(FontAwesomeIcon.Bars))
+                _questData.ShowQuestsIssuedByTarget();
+            ImGui.EndDisabled();
+
+            ImGui.SameLine();
+            if (ImGuiComponents.IconButton(FontAwesomeIcon.MousePointer))
             {
                 ulong result = TargetSystem.Instance()->InteractWithObject(
                     (GameObject*)_targetManager.Target.Address, false);
@@ -384,7 +393,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
 
             ImGui.SameLine();
 
-            ImGui.Button("Copy");
+            ImGuiComponents.IconButton(FontAwesomeIcon.Copy);
             if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
             {
                 string interactionType = gameObject->NamePlateIconId switch
@@ -414,7 +423,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         }
         else
         {
-            ImGui.Button($"Copy");
+            ImGuiComponents.IconButton(FontAwesomeIcon.Copy);
             if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
             {
                 ImGui.SetClipboardText($$"""

@@ -13,7 +13,11 @@
             "Z": 111.436646
           },
           "TerritoryId": 129,
-          "InteractionType": "AcceptQuest"
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Limsa Lominsa",
+          "SkipIf": [
+            "AetheryteShortcutIfInSameTerritory"
+          ]
         }
       ]
     },
@@ -99,7 +103,8 @@
           },
           "TerritoryId": 129,
           "InteractionType": "CompleteQuest",
-          "AetheryteShortcut": "Limsa Lominsa"
+          "AetheryteShortcut": "Limsa Lominsa",
+          "NextQuestId": 4827
         }
       ]
     }
