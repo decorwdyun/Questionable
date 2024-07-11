@@ -78,6 +78,8 @@ internal sealed class QuestController
     {
         lock (_lock)
         {
+            _logger.LogInformation("Reload, resetting curent quest progress");
+
             _startedQuest = null;
             _nextQuest = null;
             _simulatedQuest = null;
@@ -328,9 +330,8 @@ internal sealed class QuestController
         {
             _logger.LogInformation("Stopping automatic questing");
             _automatic = false;
+            _nextQuest = null;
         }
-
-        _nextQuest = null;
     }
 
     public void SimulateQuest(Quest? quest)

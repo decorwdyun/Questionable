@@ -50,5 +50,7 @@ internal static class NextQuest
         }
 
         public ETaskResult Update() => ETaskResult.TaskComplete;
+
+        public override string ToString() => $"SetNextQuest({NextQuestId})";
     }
 }

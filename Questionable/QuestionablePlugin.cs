@@ -87,6 +87,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTaskWithFactory<Move.Factory, Move.MoveInternal, Move.ExpectToBeNearDataId>();
         serviceCollection.AddTransient<Move.MoveBuilder>();
 
+        serviceCollection.AddTaskWithFactory<NextQuest.Factory, NextQuest.SetQuest>();
         serviceCollection.AddTaskWithFactory<AetherCurrent.Factory, AetherCurrent.DoAttune>();
         serviceCollection.AddTaskWithFactory<AethernetShard.Factory, AethernetShard.DoAttune>();
         serviceCollection.AddTaskWithFactory<Aetheryte.Factory, Aetheryte.DoAttune>();
@@ -111,7 +112,6 @@ public sealed class QuestionablePlugin : IDalamudPlugin
                 WaitAtEnd.WaitObjectAtPosition>();
         serviceCollection.AddTransient<WaitAtEnd.WaitQuestAccepted>();
         serviceCollection.AddTransient<WaitAtEnd.WaitQuestCompleted>();
-        serviceCollection.AddTaskWithFactory<NextQuest.Factory, NextQuest.SetQuest>();
 
         serviceCollection.AddSingleton<MovementController>();
         serviceCollection.AddSingleton<QuestRegistry>();

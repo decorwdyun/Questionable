@@ -93,10 +93,10 @@ internal sealed class CommandHandler : IDisposable
 
         if (arguments.Length >= 1 && ushort.TryParse(arguments[0], out ushort questId))
         {
-            if (_questRegistry.IsKnownQuest(questId))
+            if (_questRegistry.TryGetQuest(questId, out Quest? quest))
             {
                 _debugOverlay.HighlightedQuest = questId;
-                _chatGui.Print($"[Questionable] Set highlighted quest to {questId}.");
+                _chatGui.Print($"[Questionable] Set highlighted quest to {questId} ({quest.Info.Name}).");
             }
             else
                 _chatGui.PrintError($"[Questionable] Unknown quest {questId}.");
@@ -115,7 +115,7 @@ internal sealed class CommandHandler : IDisposable
             if (_questRegistry.TryGetQuest(questId, out Quest? quest))
             {
                 _questController.SetNextQuest(quest);
-                _chatGui.Print($"[Questionable] Set next quest to {questId}.");
+                _chatGui.Print($"[Questionable] Set next quest to {questId} ({quest.Info.Name}).");
             }
             else
             {
@@ -136,7 +136,7 @@ internal sealed class CommandHandler : IDisposable
             if (_questRegistry.TryGetQuest(questId, out Quest? quest))
             {
                 _questController.SimulateQuest(quest);
-                _chatGui.Print($"[Questionable] Simulating quest {questId}.");
+                _chatGui.Print($"[Questionable] Simulating quest {questId} ({quest.Info.Name}).");
             }
             else
                 _chatGui.PrintError($"[Questionable] Unknown quest {questId}.");
