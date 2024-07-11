@@ -37,13 +37,13 @@ internal sealed class QuestRegistry
 #if RELEASE
         _logger.LogInformation("Loading quests from assembly");
 
-        foreach ((ushort questId, QuestData questData) in QuestPaths.AssemblyQuestLoader.GetQuests())
+        foreach ((ushort questId, QuestRoot questRoot) in QuestPaths.AssemblyQuestLoader.GetQuests())
         {
             Quest quest = new()
             {
                 QuestId = questId,
-                Name = string.Empty,
-                Data = questData,
+                Root = questRoot,
+                Info = _questData.GetQuestInfo(questId),
             };
             _quests[questId] = quest;
         }

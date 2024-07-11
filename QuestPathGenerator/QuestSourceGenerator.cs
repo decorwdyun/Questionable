@@ -141,7 +141,7 @@ public class QuestSourceGenerator : ISourceGenerator
                                                                                         Token(SyntaxKind
                                                                                             .UShortKeyword)),
                                                                                     Token(SyntaxKind.CommaToken),
-                                                                                    IdentifierName("QuestData")
+                                                                                    IdentifierName("QuestRoot")
                                                                                 }))))
                                                             .WithVariables(
                                                                 SingletonSeparatedList(
@@ -169,7 +169,7 @@ public class QuestSourceGenerator : ISourceGenerator
                                                                                                                     SyntaxKind
                                                                                                                         .CommaToken),
                                                                                                                 IdentifierName(
-                                                                                                                    "QuestData")
+                                                                                                                    "QuestRoot")
                                                                                                             }))))
                                                                                     .WithArgumentList(
                                                                                         ArgumentList())

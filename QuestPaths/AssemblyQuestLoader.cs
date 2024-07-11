@@ -6,6 +6,6 @@ namespace Questionable.QuestPaths;
 
 public static partial class AssemblyQuestLoader
 {
-    public static IReadOnlyDictionary<ushort, QuestData> GetQuests() => Quests;
+    public static IReadOnlyDictionary<ushort, QuestRoot> GetQuests() => Quests;
 }
 #endif
