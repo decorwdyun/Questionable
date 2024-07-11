@@ -5,32 +5,33 @@ using System.Threading.Tasks;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Ipc;
 using Dalamud.Plugin.Ipc.Exceptions;
+using Microsoft.Extensions.Logging;
 
 namespace Questionable.External;
 
 internal sealed class NavmeshIpc
 {
+    private readonly ILogger<NavmeshIpc> _logger;
     private readonly ICallGateSubscriber<bool> _isNavReady;
     private readonly ICallGateSubscriber<Vector3, Vector3, bool, CancellationToken, Task<List<Vector3>>> _navPathfind;
     private readonly ICallGateSubscriber<List<Vector3>, bool, object> _pathMoveTo;
     private readonly ICallGateSubscriber<object> _pathStop;
     private readonly ICallGateSubscriber<bool> _pathIsRunning;
     private readonly ICallGateSubscriber<List<Vector3>> _pathListWaypoints;
-    private readonly ICallGateSubscriber<float> _pathGetTolerance;
     private readonly ICallGateSubscriber<float, object> _pathSetTolerance;
     private readonly ICallGateSubscriber<Vector3, bool, float, Vector3?> _queryPointOnFloor;
 
-    public NavmeshIpc(IDalamudPluginInterface pluginInterface)
+    public NavmeshIpc(IDalamudPluginInterface pluginInterface, ILogger<NavmeshIpc> logger)
     {
+        _logger = logger;
         _isNavReady = pluginInterface.GetIpcSubscriber<bool>("vnavmesh.Nav.IsReady");
         _navPathfind =
             pluginInterface.GetIpcSubscriber<Vector3, Vector3, bool, CancellationToken, Task<List<Vector3>>>(
-                $"vnavmesh.Nav.PathfindCancelable");
+                "vnavmesh.Nav.PathfindCancelable");
         _pathMoveTo = pluginInterface.GetIpcSubscriber<List<Vector3>, bool, object>("vnavmesh.Path.MoveTo");
         _pathStop = pluginInterface.GetIpcSubscriber<object>("vnavmesh.Path.Stop");
         _pathIsRunning = pluginInterface.GetIpcSubscriber<bool>("vnavmesh.Path.IsRunning");
         _pathListWaypoints = pluginInterface.GetIpcSubscriber<List<Vector3>>("vnavmesh.Path.ListWaypoints");
-        _pathGetTolerance = pluginInterface.GetIpcSubscriber<float>("vnavmesh.Path.GetTolerance");
         _pathSetTolerance = pluginInterface.GetIpcSubscriber<float, object>("vnavmesh.Path.SetTolerance");
         _queryPointOnFloor =
             pluginInterface.GetIpcSubscriber<Vector3, bool, float, Vector3?>("vnavmesh.Query.Mesh.PointOnFloor");
@@ -51,31 +52,87 @@ internal sealed class NavmeshIpc
         }
     }
 
-    public bool IsPathRunning => _pathIsRunning.InvokeFunc();
+    public bool IsPathRunning
+    {
+        get
+        {
+            try
+            {
+                return _pathIsRunning.InvokeFunc();
+            }
+            catch (IpcError)
+            {
+                return false;
+            }
+        }
+    }
 
-    public void Stop() => _pathStop.InvokeAction();
+    public void Stop()
+    {
+        try
+        {
+            _pathStop.InvokeAction();
+        }
+        catch (IpcError e)
+        {
+            _logger.LogWarning(e, "Could not stop navigating via navmesh");
+        }
+    }
 
     public Task<List<Vector3>> Pathfind(Vector3 localPlayerPosition, Vector3 targetPosition, bool fly,
         CancellationToken cancellationToken)
     {
-        _pathSetTolerance.InvokeAction(0.25f);
-        return _navPathfind.InvokeFunc(localPlayerPosition, targetPosition, fly, cancellationToken);
+        try
+        {
+            _pathSetTolerance.InvokeAction(0.25f);
+            return _navPathfind.InvokeFunc(localPlayerPosition, targetPosition, fly, cancellationToken);
+        }
+        catch (IpcError e)
+        {
+            _logger.LogWarning(e, "Could not pathfind via navmesh");
+            return Task.FromException<List<Vector3>>(e);
+        }
     }
 
     public void MoveTo(List<Vector3> position, bool fly)
     {
         Stop();
 
-        _pathMoveTo.InvokeAction(position, fly);
+        try
+        {
+            _pathMoveTo.InvokeAction(position, fly);
+        }
+        catch (IpcError e)
+        {
+            _logger.LogWarning(e, "Could not move via navmesh");
+        }
     }
 
     public Vector3? GetPointOnFloor(Vector3 position)
-        => _queryPointOnFloor.InvokeFunc(position, true, 1);
+    {
+        try
+        {
+            return _queryPointOnFloor.InvokeFunc(position, true, 1);
+        }
+        catch (IpcError)
+        {
+            return null;
+        }
+    }
 
     public List<Vector3> GetWaypoints()
     {
         if (IsPathRunning)
-            return _pathListWaypoints.InvokeFunc();
+        {
+            try
+            {
+                return _pathListWaypoints.InvokeFunc();
+            }
+            catch (IpcError)
+            {
+                return [];
+            }
+        }
         else
             return [];
     }
