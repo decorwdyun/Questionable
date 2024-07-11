@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.DependencyInjection;
@@ -64,6 +66,23 @@ internal static class AethernetShortcut
                         lifestreamIpc.Teleport(To);
 
                         _teleported = true;
+                        return true;
+                    }
+                    else if (From == EAetheryteLocation.SolutionNine)
+                    {
+                        logger.LogInformation("Moving to S9 aetheryte");
+                        List<Vector3> nearbyPoints =
+                        [
+                            new(7.225532f, 8.467899f, -7.1670876f),
+                            new(7.177844f, 8.467899f, 7.2216787f),
+                            new(-7.0762224f, 8.467898f, 7.1924725f),
+                            new(-7.1289554f, 8.467898f, -7.0594683f)
+                        ];
+
+                        Vector3 closestPoint = nearbyPoints.MinBy(x => (playerPosition - x).Length());
+                        _moving = true;
+                        movementController.NavigateTo(EMovementType.Quest, (uint)From, closestPoint, false, true,
+                            0.25f);
                         return true;
                     }
                     else
