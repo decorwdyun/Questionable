@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Questionable.Controller.Steps.BaseTasks;
+namespace Questionable.Controller.Steps.Common;
 
 internal abstract class AbstractDelayedTask : ITask
 {

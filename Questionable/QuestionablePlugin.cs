@@ -11,13 +11,13 @@ using Microsoft.Extensions.Logging;
 using Questionable.Controller;
 using Questionable.Controller.NavigationOverrides;
 using Questionable.Controller.Steps;
-using Questionable.Controller.Steps.BaseFactory;
-using Questionable.Controller.Steps.BaseTasks;
-using Questionable.Controller.Steps.InteractionFactory;
+using Questionable.Controller.Steps.Shared;
+using Questionable.Controller.Steps.Common;
+using Questionable.Controller.Steps.Interactions;
 using Questionable.Data;
 using Questionable.External;
 using Questionable.Windows;
-using Action = Questionable.Controller.Steps.InteractionFactory.Action;
+using Action = Questionable.Controller.Steps.Interactions.Action;
 
 namespace Questionable;
 

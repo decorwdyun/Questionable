@@ -8,12 +8,12 @@ using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using Microsoft.Extensions.DependencyInjection;
-using Questionable.Controller.Steps.BaseTasks;
+using Questionable.Controller.Steps.Common;
 using Questionable.Data;
 using Questionable.Model;
 using Questionable.Model.V1;
 
-namespace Questionable.Controller.Steps.BaseFactory;
+namespace Questionable.Controller.Steps.Shared;
 
 internal static class WaitAtEnd
 {

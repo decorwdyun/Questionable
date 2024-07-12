@@ -1,10 +1,10 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
-using Questionable.Controller.Steps.BaseTasks;
+using Questionable.Controller.Steps.Common;
 using Questionable.Model;
 using Questionable.Model.V1;
 
-namespace Questionable.Controller.Steps.BaseFactory;
+namespace Questionable.Controller.Steps.Shared;
 
 internal static class WaitAtStart
 {

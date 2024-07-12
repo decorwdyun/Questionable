@@ -5,7 +5,7 @@ using Dalamud.Game.ClientState.Keys;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps;
-using Questionable.Controller.Steps.BaseFactory;
+using Questionable.Controller.Steps.Shared;
 using Questionable.External;
 using Questionable.Model;
 using Questionable.Model.V1;

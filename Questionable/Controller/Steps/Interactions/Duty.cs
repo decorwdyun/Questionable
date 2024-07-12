@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Questionable.Model;
 using Questionable.Model.V1;
 
-namespace Questionable.Controller.Steps.InteractionFactory;
+namespace Questionable.Controller.Steps.Interactions;
 
 internal static class Duty
 {

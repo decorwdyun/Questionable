@@ -4,12 +4,12 @@ using System.Numerics;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Questionable.Controller.Steps.BaseTasks;
+using Questionable.Controller.Steps.Common;
 using Questionable.Data;
 using Questionable.Model;
 using Questionable.Model.V1;
 
-namespace Questionable.Controller.Steps.BaseFactory;
+namespace Questionable.Controller.Steps.Shared;
 
 internal static class AetheryteShortcut
 {

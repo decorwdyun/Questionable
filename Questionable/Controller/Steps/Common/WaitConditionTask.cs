@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Questionable.Controller.Steps.BaseTasks;
+namespace Questionable.Controller.Steps.Common;
 
 internal sealed class WaitConditionTask(Func<bool> predicate, string description) : ITask
 {

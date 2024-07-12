@@ -6,11 +6,11 @@ using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Questionable.Controller.Steps.BaseFactory;
+using Questionable.Controller.Steps.Shared;
 using Questionable.Model;
 using Questionable.Model.V1;
 
-namespace Questionable.Controller.Steps.InteractionFactory;
+namespace Questionable.Controller.Steps.Interactions;
 
 internal static class Interact
 {

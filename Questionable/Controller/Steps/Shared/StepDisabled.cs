@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Questionable.Model;
 using Questionable.Model.V1;
 
-namespace Questionable.Controller.Steps.BaseFactory;
+namespace Questionable.Controller.Steps.Shared;
 
 internal static class StepDisabled
 {

@@ -11,7 +11,7 @@ using Questionable.Model;
 using Questionable.Model.V1;
 using Questionable.Model.V1.Converter;
 
-namespace Questionable.Controller.Steps.BaseFactory;
+namespace Questionable.Controller.Steps.Shared;
 
 internal static class AethernetShortcut
 {

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Questionable.Controller.Steps.BaseTasks;
+using Questionable.Controller.Steps.Common;
 using Questionable.Model;
 using Questionable.Model.V1;
 
-namespace Questionable.Controller.Steps.InteractionFactory;
+namespace Questionable.Controller.Steps.Interactions;
 
 internal static class UseItem
 {

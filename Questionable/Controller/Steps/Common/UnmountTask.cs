@@ -3,7 +3,7 @@ using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.Logging;
 
-namespace Questionable.Controller.Steps.BaseTasks;
+namespace Questionable.Controller.Steps.Common;
 
 internal sealed class UnmountTask(ICondition condition, ILogger<UnmountTask> logger, GameFunctions gameFunctions)
     : ITask

@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using Questionable.Model;
 using Questionable.Model.V1;
 
-namespace Questionable.Controller.Steps.BaseTasks;
+namespace Questionable.Controller.Steps.Common;
 
 internal static class NextQuest
 {

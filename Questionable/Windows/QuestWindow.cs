@@ -19,7 +19,7 @@ using ImGuiNET;
 using LLib.ImGui;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller;
-using Questionable.Controller.Steps.BaseFactory;
+using Questionable.Controller.Steps.Shared;
 using Questionable.Data;
 using Questionable.External;
 using Questionable.Model;
@@ -96,7 +96,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
 
     public override bool DrawConditions()
     {
-        if (!_clientState.IsLoggedIn || _clientState.LocalPlayer == null)
+        if (!_clientState.IsLoggedIn || _clientState.LocalPlayer == null || _clientState.IsPvPExcludingDen)
             return false;
 
         if (_configuration.General.HideInAllInstances && _territoryData.IsDutyInstance(_clientState.TerritoryType))

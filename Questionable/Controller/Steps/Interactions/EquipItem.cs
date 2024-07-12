@@ -6,11 +6,11 @@ using FFXIVClientStructs.FFXIV.Client.Game;
 using Lumina.Excel.GeneratedSheets;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Questionable.Controller.Steps.BaseTasks;
+using Questionable.Controller.Steps.Common;
 using Questionable.Model.V1;
 using Quest = Questionable.Model.Quest;
 
-namespace Questionable.Controller.Steps.InteractionFactory;
+namespace Questionable.Controller.Steps.Interactions;
 
 internal static class EquipItem
 {

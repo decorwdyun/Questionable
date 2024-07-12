@@ -41,7 +41,11 @@ internal sealed class DebugOverlay : Window
 
     public ushort? HighlightedQuest { get; set; }
 
-    public override bool DrawConditions() => _configuration.Advanced.DebugOverlay;
+    public override bool DrawConditions()
+    {
+        return _configuration.Advanced.DebugOverlay && _clientState is
+            { IsLoggedIn: true, LocalPlayer: not null, IsPvPExcludingDen: false };
+    }
 
     public override void PreDraw()
     {

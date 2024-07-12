@@ -6,12 +6,12 @@ using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Questionable.Controller.Steps.BaseTasks;
+using Questionable.Controller.Steps.Common;
 using Questionable.Data;
 using Questionable.Model;
 using Questionable.Model.V1;
 
-namespace Questionable.Controller.Steps.BaseFactory;
+namespace Questionable.Controller.Steps.Shared;
 
 internal static class Move
 {
@@ -82,8 +82,15 @@ internal static class Move
             if (!Step.DisableNavmesh)
             {
                 if (Step.Mount == null)
+                {
+                    MountTask.EMountIf mountIf =
+                        actualDistance > distance && Step.Fly == true &&
+                        gameFunctions.IsFlyingUnlocked(Step.TerritoryId)
+                            ? MountTask.EMountIf.Always
+                            : MountTask.EMountIf.AwayFromPosition;
                     yield return serviceProvider.GetRequiredService<MountTask>()
-                        .With(Step.TerritoryId, MountTask.EMountIf.AwayFromPosition, Destination);
+                        .With(Step.TerritoryId, mountIf, Destination);
+                }
 
                 if (actualDistance > distance)
                 {

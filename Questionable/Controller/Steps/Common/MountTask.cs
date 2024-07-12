@@ -5,7 +5,7 @@ using Dalamud.Plugin.Services;
 using Microsoft.Extensions.Logging;
 using Questionable.Data;
 
-namespace Questionable.Controller.Steps.BaseTasks;
+namespace Questionable.Controller.Steps.Common;
 
 internal sealed class MountTask(
     GameFunctions gameFunctions,
