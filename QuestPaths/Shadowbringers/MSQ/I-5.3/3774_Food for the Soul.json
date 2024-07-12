@@ -38,7 +38,8 @@
             "Z": -653.85443
           },
           "TerritoryId": 156,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "Mount": true
         },
         {
           "Position": {

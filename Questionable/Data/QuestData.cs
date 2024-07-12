@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Dalamud.Game.ClientState.Objects;
+using Dalamud.Game.Text;
 using Dalamud.Plugin.Services;
 using Questionable.Model;
 using Quest = Lumina.Excel.GeneratedSheets.Quest;
@@ -40,6 +41,8 @@ internal sealed class QuestData
             .ToList();
     }
 
+    public bool IsIssuerOfAnyQuest(uint targetId) => _quests.Values.Any(x => x.IssuerDataId == targetId);
+
     public void ShowQuestsIssuedByTarget()
     {
         var targetId = _targetManager.Target?.DataId;
@@ -53,6 +56,6 @@ internal sealed class QuestData
         _chatGui.Print($"{quests.Count} quest(s) issued by target {_targetManager.Target?.Name}:");
 
         foreach (QuestInfo quest in quests)
-            _chatGui.Print($"  {quest.QuestId}: {quest.Name}");
+            _chatGui.Print($"  {quest.QuestId}_{quest.SimplifiedName}");
     }
 }

@@ -133,7 +133,6 @@
           },
           "TerritoryId": 813,
           "InteractionType": "Interact",
-          "DisableNavmesh": true,
           "CompletionQuestVariablesFlags": [
             null,
             null,

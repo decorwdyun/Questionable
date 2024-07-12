@@ -152,6 +152,195 @@
           "InteractionType": "Interact"
         }
       ]
+    },
+    {
+      "Sequence": 6,
+      "Steps": [
+        {
+          "DataId": 2013713,
+          "Position": {
+            "X": 362.35596,
+            "Y": 3.616333,
+            "Z": -241.77924
+          },
+          "StopDistance": 0.25,
+          "TerritoryId": 957,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "SkipIf": [
+            "NotTargetable"
+          ],
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_KINGBA531_04845_Q1_000_054",
+              "Yes": true
+            }
+          ],
+          "Comment": "retry point"
+        },
+        {
+          "DataId": 1048364,
+          "Position": {
+            "X": 387.43045,
+            "Y": 5.8062716,
+            "Z": -203.20459
+          },
+          "TerritoryId": 957,
+          "InteractionType": "WaitForNpcAtPosition",
+          "StopDistance": 50,
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "Position": {
+            "X": 386.85394,
+            "Y": 3.0972311,
+            "Z": -220.57103
+          },
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo",
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "DataId": 1048364,
+          "Position": {
+            "X": 398.46808,
+            "Y": 12.103142,
+            "Z": -174.068
+          },
+          "TerritoryId": 957,
+          "InteractionType": "WaitForNpcAtPosition",
+          "StopDistance": 50,
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "Position": {
+            "X": 395.88028,
+            "Y": 10.267179,
+            "Z": -192.21916
+          },
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo",
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "DataId": 1048364,
+          "Position": {
+            "X": 395.6862,
+            "Y": 11.099065,
+            "Z": -169.7558
+          },
+          "TerritoryId": 957,
+          "InteractionType": "WaitForNpcAtPosition",
+          "StopDistance": 50,
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "Position": {
+            "X": 398.42825,
+            "Y": 12.946791,
+            "Z": -180.08061
+          },
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo",
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "Position": {
+            "X": 368.02908,
+            "Y": 5.7749786,
+            "Z": -135.06207
+          },
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo",
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "Position": {
+            "X": 300.81885,
+            "Y": 18.925224,
+            "Z": -43.56831
+          },
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo",
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "DataId": 1048364,
+          "Position": {
+            "X": 274.41418,
+            "Y": 17.838093,
+            "Z": -2.1020741
+          },
+          "TerritoryId": 957,
+          "InteractionType": "WaitForNpcAtPosition",
+          "StopDistance": 50,
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "Position": {
+            "X": 256.60135,
+            "Y": 19.312042,
+            "Z": -1.2628903
+          },
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo",
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "Position": {
+            "X": 244.453,
+            "Y": 16.725914,
+            "Z": 14.936783
+          },
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo",
+          "Mount": false,
+          "Sprint": false
+        }
+      ]
+    },
+    {
+      "Sequence": 7,
+      "Steps": [
+        {
+          "DataId": 1048368,
+          "Position": {
+            "X": 239.33765,
+            "Y": 11.061386,
+            "Z": 69.99304
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1048331,
+          "Position": {
+            "X": 214.03821,
+            "Y": 5.2600574,
+            "Z": 628.3817
+          },
+          "TerritoryId": 957,
+          "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Thavnair - Yedlihmad",
+          "NextQuestId": 4846
+        }
+      ]
     }
   ]
 }

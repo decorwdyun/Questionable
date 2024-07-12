@@ -162,7 +162,7 @@ internal sealed class GameUiController : IDisposable
             return;
         }
 
-        var currentQuest = _questController.CurrentQuest;
+        var currentQuest = _questController.StartedQuest;
         if (currentQuest != null && actualPrompt == null)
         {
             // it is possible for this to be a quest selection
@@ -177,7 +177,7 @@ internal sealed class GameUiController : IDisposable
     private int? HandleListChoice(string? actualPrompt, List<string?> answers, bool checkAllSteps)
     {
         List<DialogueChoiceInfo> dialogueChoices = [];
-        var currentQuest = _questController.CurrentQuest;
+        var currentQuest = _questController.StartedQuest;
         if (currentQuest != null)
         {
             var quest = currentQuest.Quest;
@@ -305,7 +305,7 @@ internal sealed class GameUiController : IDisposable
 
         _logger.LogTrace("Prompt: '{Prompt}'", actualPrompt);
 
-        var currentQuest = _questController.CurrentQuest;
+        var currentQuest = _questController.StartedQuest;
         if (currentQuest == null)
             return;
 
@@ -421,7 +421,7 @@ internal sealed class GameUiController : IDisposable
 
     private unsafe void PointMenuPostSetup(AtkUnitBase* addonPointMenu)
     {
-        var currentQuest = _questController.CurrentQuest;
+        var currentQuest = _questController.StartedQuest;
         if (currentQuest == null)
         {
             _logger.LogInformation("Ignoring point menu, no active quest");
@@ -471,7 +471,7 @@ internal sealed class GameUiController : IDisposable
 
     private unsafe void UnendingCodexPostSetup(AddonEvent type, AddonArgs args)
     {
-        if (_questController.CurrentQuest?.Quest.QuestId == 4526)
+        if (_questController.StartedQuest?.Quest.QuestId == 4526)
         {
             _logger.LogInformation("Closing Unending Codex");
             AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
@@ -481,7 +481,7 @@ internal sealed class GameUiController : IDisposable
 
     private unsafe void ContentsTutorialPostSetup(AddonEvent type, AddonArgs args)
     {
-        if (_questController.CurrentQuest?.Quest.QuestId == 245)
+        if (_questController.StartedQuest?.Quest.QuestId == 245)
         {
             _logger.LogInformation("Closing ContentsTutorial");
             AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
@@ -491,7 +491,7 @@ internal sealed class GameUiController : IDisposable
 
     private unsafe void MultipleHelpWindowPostSetup(AddonEvent type, AddonArgs args)
     {
-        if (_questController.CurrentQuest?.Quest.QuestId == 245)
+        if (_questController.StartedQuest?.Quest.QuestId == 245)
         {
             _logger.LogInformation("Closing MultipleHelpWindow");
             AtkUnitBase* addon = (AtkUnitBase*)args.Addon;

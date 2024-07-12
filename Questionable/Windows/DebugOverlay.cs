@@ -100,6 +100,6 @@ internal sealed class DebugOverlay : Window
 
         ImGui.GetWindowDrawList().AddCircleFilled(screenPos, 3f, color);
         ImGui.GetWindowDrawList().AddText(screenPos + new Vector2(10, -8), color,
-            $"{counter}: {step.InteractionType}\n{step.Position.Value.ToString("G", CultureInfo.InvariantCulture)}\n{step.Comment}");
+            $"{counter}: {step.InteractionType}\n{step.Position.Value.ToString("G", CultureInfo.InvariantCulture)} [{(step.Position.Value - _clientState.LocalPlayer!.Position).Length():N2}]\n{step.Comment}");
     }
 }

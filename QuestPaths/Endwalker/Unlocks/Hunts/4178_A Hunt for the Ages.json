@@ -1,0 +1,41 @@
+﻿{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1037060,
+          "Position": {
+            "X": 25.894531,
+            "Y": -15.646991,
+            "Z": 99.68713
+          },
+          "TerritoryId": 962,
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Old Sharlayan",
+          "SkipIf": [
+            "AetheryteShortcutIfInSameTerritory"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1037059,
+          "Position": {
+            "X": 35.202515,
+            "Y": -15.646992,
+            "Z": 102.4032
+          },
+          "TerritoryId": 962,
+          "InteractionType": "CompleteQuest",
+          "NextQuestId": 4179
+        }
+      ]
+    }
+  ]
+}

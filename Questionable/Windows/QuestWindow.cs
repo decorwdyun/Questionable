@@ -119,10 +119,37 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
 
     private void DrawQuest()
     {
-        var currentQuest = _questController.CurrentQuest;
+        var currentQuestDetails = _questController.CurrentQuestDetails;
+        QuestController.QuestProgress? currentQuest = currentQuestDetails?.Progress;
+        QuestController.CurrentQuestType? currentQuestType = currentQuestDetails?.Type;
         if (currentQuest != null)
         {
-            ImGui.TextUnformatted($"Quest: {currentQuest.Quest.Info.Name} / {currentQuest.Sequence} / {currentQuest.Step}");
+            if (currentQuestType == QuestController.CurrentQuestType.Simulated)
+            {
+                var simulatedQuest = _questController.SimulatedQuest ?? currentQuest;
+                using var _ = ImRaii.PushColor(ImGuiCol.Text, 0xFF0000FF);
+                ImGui.TextUnformatted(
+                    $"Simulated Quest: {simulatedQuest.Quest.Info.Name} / {simulatedQuest.Sequence} / {simulatedQuest.Step}");
+            }
+            else if (currentQuestType == QuestController.CurrentQuestType.Next)
+            {
+                var startedQuest = _questController.StartedQuest;
+                if (startedQuest != null)
+                {
+                    ImGui.TextUnformatted(
+                        $"Quest: {startedQuest.Quest.Info.Name} / {startedQuest.Sequence} / {startedQuest.Step}");
+                }
+
+                using var _ = ImRaii.PushColor(ImGuiCol.Text, 0xFF00FFFF);
+                ImGui.TextUnformatted(
+                    $"Next Quest: {currentQuest.Quest.Info.Name} / {currentQuest.Sequence} / {currentQuest.Step}");
+            }
+            else
+            {
+                ImGui.TextUnformatted(
+                    $"Quest: {currentQuest.Quest.Info.Name} / {currentQuest.Sequence} / {currentQuest.Step}");
+            }
+
 
             ImGui.BeginDisabled();
             var questWork = _gameFunctions.GetQuestEx(currentQuest.Quest.QuestId);
@@ -295,6 +322,12 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
 
                     ImGui.EndDisabled();
 
+                    if (ImGui.Button("Skip current task"))
+                    {
+                        _questController.SkipSimulatedTask();
+                    }
+
+                    ImGui.SameLine();
                     if (ImGui.Button("Clear sim"))
                     {
                         _questController.SimulateQuest(null);
@@ -378,7 +411,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
             ImGui.EndDisabled();
 
             ImGui.SameLine();
-            ImGui.BeginDisabled(gameObject->NamePlateIconId == 0);
+            ImGui.BeginDisabled(!_questData.IsIssuerOfAnyQuest(_targetManager.Target.DataId));
             if (ImGuiComponents.IconButton(FontAwesomeIcon.Bars))
                 _questData.ShowQuestsIssuedByTarget();
             ImGui.EndDisabled();

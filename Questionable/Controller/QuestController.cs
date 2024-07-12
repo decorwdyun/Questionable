@@ -5,6 +5,7 @@ using Dalamud.Game.ClientState.Keys;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps;
+using Questionable.Controller.Steps.BaseFactory;
 using Questionable.External;
 using Questionable.Model;
 using Questionable.Model.V1;
@@ -55,19 +56,24 @@ internal sealed class QuestController
         _taskFactories = taskFactories.ToList().AsReadOnly();
     }
 
-    public QuestProgress? CurrentQuest
+    public (QuestProgress Progress, CurrentQuestType Type)? CurrentQuestDetails
     {
         get
         {
             if (_simulatedQuest != null)
-                return _simulatedQuest;
+                return (_simulatedQuest, CurrentQuestType.Simulated);
             else if (_nextQuest != null && _gameFunctions.IsReadyToAcceptQuest(_nextQuest.Quest.QuestId))
-                return _nextQuest;
+                return (_nextQuest, CurrentQuestType.Next);
+            else if (_startedQuest != null)
+                return (_startedQuest, CurrentQuestType.Normal);
             else
-                return _startedQuest;
+                return null;
         }
     }
 
+    public QuestProgress? CurrentQuest => CurrentQuestDetails?.Progress;
+
+    public QuestProgress? StartedQuest => _startedQuest;
     public QuestProgress? SimulatedQuest => _simulatedQuest;
     public QuestProgress? NextQuest => _nextQuest;
 
@@ -106,7 +112,6 @@ internal sealed class QuestController
         if (CurrentQuest != null && CurrentQuest.Quest.Root.TerritoryBlacklist.Contains(_clientState.TerritoryType))
             return;
 
-        // not verified to work
         if (_automatic && _currentTask == null && _taskQueue.Count == 0
             && CurrentQuest is { Sequence: 0, Step: 0 } or { Sequence: 0, Step: 255 }
             && DateTime.Now >= CurrentQuest.StepProgress.StartedAt.AddSeconds(15))
@@ -140,12 +145,16 @@ internal sealed class QuestController
                 // if the quest is accepted, we no longer track it
                 if (_gameFunctions.IsQuestAcceptedOrComplete(_nextQuest.Quest.QuestId))
                 {
+                    _logger.LogInformation("Next quest {QuestId} accepted or completed", _nextQuest.Quest.QuestId);
+
                     _nextQuest = null;
                     currentSequence = 0;
                 }
                 else
                 {
                     currentSequence = _nextQuest.Sequence; // by definition, this should always be 0
+                    if (_nextQuest.Step == 0 && _currentTask == null && _taskQueue.Count == 0 && _automatic)
+                        ExecuteNextStep(true);
                 }
             }
 
@@ -325,6 +334,8 @@ internal sealed class QuestController
         {
             if (CurrentQuest?.Step is >= 0 and < 255)
                 ExecuteNextStep(true);
+            else
+                _logger.LogInformation("Couldn't execute next step during Stop() call");
         }
         else if (_automatic)
         {
@@ -422,6 +433,10 @@ internal sealed class QuestController
             case ETaskResult.TaskComplete:
                 _logger.LogInformation("{Task} → {Result}, remaining tasks: {RemainingTaskCount}",
                     _currentTask, result, _taskQueue.Count);
+
+                if (_currentTask is WaitAtEnd.WaitQuestCompleted)
+                    _simulatedQuest = null;
+
                 _currentTask = null;
 
                 // handled in next update
@@ -566,7 +581,19 @@ internal sealed class QuestController
         }
     }
 
+    public void SkipSimulatedTask()
+    {
+        _currentTask = null;
+    }
+
     public sealed record StepProgress(
         DateTime StartedAt,
         int PointMenuCounter = 0);
+
+    public enum CurrentQuestType
+    {
+        Normal,
+        Next,
+        Simulated,
+    }
 }

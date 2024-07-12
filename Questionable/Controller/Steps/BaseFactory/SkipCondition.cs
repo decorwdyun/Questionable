@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Dalamud.Game.ClientState.Objects.Types;
+using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
@@ -32,7 +34,8 @@ internal static class SkipCondition
 
     internal sealed class CheckTask(
         ILogger<CheckTask> logger,
-        GameFunctions gameFunctions) : ITask
+        GameFunctions gameFunctions,
+        IClientState clientState) : ITask
     {
         public QuestStep Step { get; set; } = null!;
         public List<ESkipCondition> SkipConditions { get; set; } = null!;
@@ -69,6 +72,25 @@ internal static class SkipCondition
             {
                 logger.LogInformation("Skipping step, as chocobo is unlocked");
                 return true;
+            }
+
+            if (SkipConditions.Contains(ESkipCondition.NotTargetable) &&
+                Step is { DataId: not null })
+            {
+                IGameObject? gameObject = gameFunctions.FindObjectByDataId(Step.DataId.Value);
+                if (gameObject == null)
+                {
+                    if ((Step.Position.GetValueOrDefault() - clientState.LocalPlayer!.Position).Length() < 100)
+                    {
+                        logger.LogInformation("Skipping step, object is not nearby (but we are)");
+                        return true;
+                    }
+                }
+                else if (!gameObject.IsTargetable)
+                {
+                    logger.LogInformation("Skipping step, object is not targetable");
+                    return true;
+                }
             }
 
             if (Step is

@@ -1,4 +1,6 @@
-﻿using ExcelQuest = Lumina.Excel.GeneratedSheets.Quest;
+﻿using System;
+using Dalamud.Game.Text;
+using ExcelQuest = Lumina.Excel.GeneratedSheets.Quest;
 
 namespace Questionable.Model;
 
@@ -16,4 +18,7 @@ internal sealed class QuestInfo
     public string Name { get; }
     public ushort Level { get; }
     public uint IssuerDataId { get; }
+
+    public string SimplifiedName => Name
+        .TrimStart(SeIconChar.QuestSync.ToIconChar(), SeIconChar.QuestRepeatable.ToIconChar(), ' ');
 }

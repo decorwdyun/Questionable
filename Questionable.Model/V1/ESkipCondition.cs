@@ -12,4 +12,5 @@ public enum ESkipCondition
     FlyingUnlocked,
     ChocoboUnlocked,
     AetheryteShortcutIfInSameTerritory,
+    NotTargetable,
 }

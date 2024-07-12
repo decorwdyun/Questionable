@@ -394,7 +394,8 @@
                       "FlyingUnlocked",
                       "DifferentTerritory",
                       "ChocoboUnlocked",
-                      "AetheryteShortcutIfInSameTerritory"
+                      "AetheryteShortcutIfInSameTerritory",
+                      "NotTargetable"
                     ]
                   }
                 },

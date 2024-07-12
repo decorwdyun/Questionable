@@ -106,7 +106,6 @@
           "KillEnemyDataIds": [
             12168
           ],
-          "Comment": "TODO Missing enemy ids",
           "Fly": true,
           "$.2": "QuestVariables if done after [1, 2]: irrelevant because it automatically progresses to the next step"
         }

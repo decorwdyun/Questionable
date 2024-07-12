@@ -15,6 +15,7 @@
             "Y": -2.0168546E-08,
             "Z": 1.9378662
           },
+          "StopDistance": 5,
           "TerritoryId": 819,
           "InteractionType": "AcceptQuest"
         }
@@ -80,7 +81,27 @@
           },
           "TerritoryId": 918,
           "InteractionType": "SinglePlayerDuty",
-          "Comment": "Fight NPCs, then Elidibus"
+          "Comment": "Fight NPCs, then Elidibus",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "ExcelSheet": "ContentTalk",
+              "Prompt": 209,
+              "Answer": 211
+            },
+            {
+              "Type": "List",
+              "ExcelSheet": "ContentTalk",
+              "Prompt": 209,
+              "Answer": 216
+            },
+            {
+              "Type": "List",
+              "ExcelSheet": "ContentTalk",
+              "Prompt": 241,
+              "Answer": 222
+            }
+          ]
         }
       ]
     },
