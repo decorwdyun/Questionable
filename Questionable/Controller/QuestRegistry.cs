@@ -30,6 +30,8 @@ internal sealed class QuestRegistry
         _logger = logger;
     }
 
+    public int Count => _quests.Count;
+
     public void Reload()
     {
         _quests.Clear();
@@ -55,10 +57,10 @@ internal sealed class QuestRegistry
                 new DirectoryInfo(Path.Combine(solutionDirectory.FullName, "QuestPaths"));
             if (pathProjectDirectory.Exists)
             {
-                LoadFromDirectory(new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "ARealmReborn")));
-                LoadFromDirectory(new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "Shadowbringers")));
-                LoadFromDirectory(new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "Endwalker")));
-                LoadFromDirectory(new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "Dawntrail")));
+                LoadFromDirectory(new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "2.x - A Realm Reborn")));
+                LoadFromDirectory(new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "5.x - Shadowbringers")));
+                LoadFromDirectory(new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "6.x - Endwalker")));
+                LoadFromDirectory(new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "7.x - Dawntrail")));
             }
         }
 #endif

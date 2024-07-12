@@ -19,15 +19,15 @@
     </ItemGroup>
 
     <ItemGroup Condition="'$(Configuration)' == 'Release'">
-        <None Remove="ARealmReborn"/>
-        <None Remove="Shadowbringers"/>
-        <None Remove="Endwalker"/>
-        <None Remove="Dawntrail"/>
+        <None Remove="2.x - A Realm Reborn"/>
+        <None Remove="5.x - Shadowbringers"/>
+        <None Remove="6.x - Endwalker"/>
+        <None Remove="7.x - Dawntrail"/>
         <None Remove="quest-v1.json"/>
-        <AdditionalFiles Include="ARealmReborn\**\*.json"/>
-        <AdditionalFiles Include="Shadowbringers\**\*.json"/>
-        <AdditionalFiles Include="Endwalker\**\*.json" />
-        <AdditionalFiles Include="Dawntrail\**\*.json"/>
+        <AdditionalFiles Include="2.x - A Realm Reborn\**\*.json"/>
+        <AdditionalFiles Include="5.x - Shadowbringers\**\*.json"/>
+        <AdditionalFiles Include="6.x - Endwalker\**\*.json" />
+        <AdditionalFiles Include="7.x - Dawntrail\**\*.json"/>
         <AdditionalFiles Include="quest-v1.json"/>
     </ItemGroup>
 </Project>
