@@ -23,6 +23,7 @@ using Lumina.Excel.GeneratedSheets2;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller;
 using Questionable.Model.V1;
+using Action = Lumina.Excel.GeneratedSheets2.Action;
 using BattleChara = FFXIVClientStructs.FFXIV.Client.Game.Character.BattleChara;
 using ContentFinderCondition = Lumina.Excel.GeneratedSheets.ContentFinderCondition;
 using ContentTalk = Lumina.Excel.GeneratedSheets.ContentTalk;
@@ -383,8 +384,22 @@ internal sealed unsafe class GameFunctions
         return false;
     }
 
+    public bool UseAction(EAction action)
+    {
+        if (ActionManager.Instance()->GetActionStatus(ActionType.Action, (uint)action) == 0)
+        {
+            bool result = ActionManager.Instance()->UseAction(ActionType.Action, (uint)action);
+            _logger.LogInformation("UseAction {Action} result: {Result}", action, result);
+
+            return result;
+        }
+
+        return false;
+    }
+
     public bool UseAction(IGameObject gameObject, EAction action)
     {
+        var actionRow = _dataManager.GetExcelSheet<Action>()!.GetRow((uint)action)!;
         if (!ActionManager.CanUseActionOnTarget((uint)action, (GameObject*)gameObject.Address))
         {
             _logger.LogWarning("Can not use action {Action} on target {Target}", action, gameObject);
@@ -394,8 +409,19 @@ internal sealed unsafe class GameFunctions
         _targetManager.Target = gameObject;
         if (ActionManager.Instance()->GetActionStatus(ActionType.Action, (uint)action, gameObject.GameObjectId) == 0)
         {
-            bool result = ActionManager.Instance()->UseAction(ActionType.Action, (uint)action, gameObject.GameObjectId);
-            _logger.LogInformation("UseAction {Action} on target {Target} result: {Result}", action, gameObject, result);
+            bool result;
+            if (actionRow.TargetArea)
+            {
+                Vector3 position = gameObject.Position;
+                result = ActionManager.Instance()->UseActionLocation(ActionType.Action, (uint)action, location: &position);
+                _logger.LogInformation("UseAction {Action} on target area {Target} result: {Result}", action, gameObject,
+                    result);
+            }
+            else {
+                result = ActionManager.Instance()->UseAction(ActionType.Action, (uint)action, gameObject.GameObjectId);
+                _logger.LogInformation("UseAction {Action} on target {Target} result: {Result}", action, gameObject,
+                    result);
+            }
 
             return result;
         }

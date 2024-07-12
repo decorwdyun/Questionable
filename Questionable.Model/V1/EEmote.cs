@@ -21,4 +21,5 @@ public enum EEmote
     Poke = 28,
     Flex = 139,
     Soothe = 35,
+    Me = 23,
 }

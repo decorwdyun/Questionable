@@ -20,13 +20,17 @@ internal static class Action
             if (step.InteractionType != EInteractionType.Action)
                 return [];
 
-            ArgumentNullException.ThrowIfNull(step.DataId);
             ArgumentNullException.ThrowIfNull(step.Action);
 
-            var unmount = serviceProvider.GetRequiredService<UnmountTask>();
             var task = serviceProvider.GetRequiredService<UseOnObject>()
-                .With(step.DataId.Value, step.Action.Value);
-            return [unmount, task];
+                .With(step.DataId, step.Action.Value);
+            if (step.Action.Value.RequiresMount())
+                return [task];
+            else
+            {
+                var unmount = serviceProvider.GetRequiredService<UnmountTask>();
+                return [unmount, task];
+            }
         }
 
         public ITask CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
@@ -38,10 +42,10 @@ internal static class Action
         private bool _usedAction;
         private DateTime _continueAt = DateTime.MinValue;
 
-        public uint DataId { get; set; }
+        public uint? DataId { get; set; }
         public EAction Action { get; set; }
 
-        public ITask With(uint dataId, EAction action)
+        public ITask With(uint? dataId, EAction action)
         {
             DataId = dataId;
             Action = action;
@@ -50,16 +54,25 @@ internal static class Action
 
         public bool Start()
         {
-            IGameObject? gameObject = gameFunctions.FindObjectByDataId(DataId);
-            if (gameObject == null)
+            if (DataId != null)
             {
-                logger.LogWarning("No game object with dataId {DataId}", DataId);
-                return false;
-            }
+                IGameObject? gameObject = gameFunctions.FindObjectByDataId(DataId.Value);
+                if (gameObject == null)
+                {
+                    logger.LogWarning("No game object with dataId {DataId}", DataId);
+                    return false;
+                }
 
-            if (gameObject.IsTargetable)
+                if (gameObject.IsTargetable)
+                {
+                    _usedAction = gameFunctions.UseAction(gameObject, Action);
+                    _continueAt = DateTime.Now.AddSeconds(0.5);
+                    return true;
+                }
+            }
+            else
             {
-                _usedAction = gameFunctions.UseAction(gameObject, Action);
+                _usedAction = gameFunctions.UseAction(Action);
                 _continueAt = DateTime.Now.AddSeconds(0.5);
                 return true;
             }
@@ -74,12 +87,21 @@ internal static class Action
 
             if (!_usedAction)
             {
-                IGameObject? gameObject = gameFunctions.FindObjectByDataId(DataId);
-                if (gameObject == null || !gameObject.IsTargetable)
-                    return ETaskResult.StillRunning;
+                if (DataId != null)
+                {
+                    IGameObject? gameObject = gameFunctions.FindObjectByDataId(DataId.Value);
+                    if (gameObject == null || !gameObject.IsTargetable)
+                        return ETaskResult.StillRunning;
 
-                _usedAction = gameFunctions.UseAction(gameObject, Action);
-                _continueAt = DateTime.Now.AddSeconds(0.5);
+                    _usedAction = gameFunctions.UseAction(gameObject, Action);
+                    _continueAt = DateTime.Now.AddSeconds(0.5);
+                }
+                else
+                {
+                    _usedAction = gameFunctions.UseAction(Action);
+                    _continueAt = DateTime.Now.AddSeconds(0.5);
+                }
+
                 return ETaskResult.StillRunning;
             }
 

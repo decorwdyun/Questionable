@@ -309,6 +309,8 @@ public class QuestSourceGenerator : ISourceGenerator
                                                 .AsSyntaxNodeOrToken(),
                                             Assignment(nameof(QuestStep.Fly), step.Fly, emptyStep.Fly)
                                                 .AsSyntaxNodeOrToken(),
+                                            Assignment(nameof(QuestStep.Land), step.Land, emptyStep.Land)
+                                                .AsSyntaxNodeOrToken(),
                                             Assignment(nameof(QuestStep.Sprint), step.Sprint, emptyStep.Sprint)
                                                 .AsSyntaxNodeOrToken(),
                                             Assignment(nameof(QuestStep.Comment), step.Comment, emptyStep.Comment)

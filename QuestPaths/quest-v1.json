@@ -127,6 +127,10 @@
                   "type": "boolean",
                   "description": "If true and flying is unlocked in a zone, will use a flight path"
                 },
+                "Land": {
+                  "type": "boolean",
+                  "description": "If true and flying, will attempt to land on the ground"
+                },
                 "Sprint": {
                   "type": [
                     "boolean",
@@ -653,7 +657,8 @@
                           "happy",
                           "poke",
                           "flex",
-                          "soothe"
+                          "soothe",
+                          "me"
                         ]
                       }
                     }
@@ -719,7 +724,10 @@
                         "type": "string",
                         "description": "The action to use",
                         "enum": [
-                          "Esuna"
+                          "Esuna",
+                          "Red Gulal",
+                          "Yellow Gulal",
+                          "Blue Gulal"
                         ]
                       }
                     },

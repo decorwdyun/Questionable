@@ -148,7 +148,12 @@ internal sealed class MovementController : IDisposable
             }
 
             Vector3 localPlayerPosition = _clientState.LocalPlayer?.Position ?? Vector3.Zero;
-            if ((localPlayerPosition - Destination.Position).Length() < Destination.StopDistance)
+            if (Destination.MovementType == EMovementType.Landing)
+            {
+                if (!_condition[ConditionFlag.InFlight])
+                    Stop();
+            }
+            else if ((localPlayerPosition - Destination.Position).Length() < Destination.StopDistance)
             {
                 if (Destination.DataId
                     is 2012173 or 2012174 or 2012175 or 2012176
@@ -242,7 +247,7 @@ internal sealed class MovementController : IDisposable
             _chatFunctions.ExecuteCommand("/automove off");
         }
 
-        Destination = new DestinationData(dataId, to, stopDistance ?? (QuestStep.DefaultStopDistance - 0.2f), fly, sprint,
+        Destination = new DestinationData(type, dataId, to, stopDistance ?? (QuestStep.DefaultStopDistance - 0.2f), fly, sprint,
             useNavmesh);
         MovementStartedAt = DateTime.MaxValue;
     }
@@ -307,6 +312,7 @@ internal sealed class MovementController : IDisposable
     }
 
     public sealed record DestinationData(
+        EMovementType MovementType,
         uint? DataId,
         Vector3 Position,
         float StopDistance,

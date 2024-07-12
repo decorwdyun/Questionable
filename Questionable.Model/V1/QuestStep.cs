@@ -28,6 +28,7 @@ public sealed class QuestStep
     public bool DisableNavmesh { get; set; }
     public bool? Mount { get; set; }
     public bool? Fly { get; set; }
+    public bool? Land { get; set; }
     public bool? Sprint { get; set; }
     public string? Comment { get; set; }
 

@@ -7,5 +7,8 @@ public sealed class ActionConverter() : EnumConverter<EAction>(Values)
     private static readonly Dictionary<EAction, string> Values = new()
     {
         { EAction.Esuna, "Esuna" },
+        { EAction.RedGulal, "Red Gulal" },
+        { EAction.YellowGulal, "Yellow Gulal" },
+        { EAction.BlueGulal, "Blue Gulal" },
     };
 }

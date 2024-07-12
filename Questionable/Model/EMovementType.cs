@@ -6,4 +6,5 @@ public enum EMovementType
     Quest,
     DebugWindow,
     Shortcut,
+    Landing,
 }

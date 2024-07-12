@@ -85,7 +85,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTaskWithFactory<SkipCondition.Factory, SkipCondition.CheckTask>();
         serviceCollection.AddTaskWithFactory<AethernetShortcut.Factory, AethernetShortcut.UseAethernetShortcut>();
         serviceCollection.AddTaskWithFactory<WaitAtStart.Factory, WaitAtStart.WaitDelay>();
-        serviceCollection.AddTaskWithFactory<Move.Factory, Move.MoveInternal, Move.ExpectToBeNearDataId>();
+        serviceCollection.AddTaskWithFactory<Move.Factory, Move.MoveInternal, Move.ExpectToBeNearDataId, Move.Land>();
         serviceCollection.AddTransient<Move.MoveBuilder>();
 
         serviceCollection.AddTaskWithFactory<NextQuest.Factory, NextQuest.SetQuest>();

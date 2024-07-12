@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Numerics;
+using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Questionable.Controller.NavigationOverrides;
 using Questionable.Controller.Steps.Common;
 using Questionable.Data;
 using Questionable.Model;
@@ -119,6 +121,9 @@ internal static class Move
                         });
                 }
             }
+
+            if (Step.Fly == true && Step.Land == true)
+                yield return serviceProvider.GetRequiredService<Land>();
         }
     }
 
@@ -173,6 +178,45 @@ internal static class Move
             }
 
             return ETaskResult.TaskComplete;
+        }
+    }
+
+    internal sealed class Land(MovementController movementController, IClientState clientState, ICondition condition, ILogger<Land> logger) : ITask
+    {
+        public bool Start()
+        {
+            if (!condition[ConditionFlag.InFlight])
+            {
+                logger.LogInformation("Not flying, not attempting to land");
+                return false;
+            }
+
+            AttemptLanding();
+            return true;
+        }
+
+        public ETaskResult Update()
+        {
+            if (movementController.IsPathfinding || movementController.IsPathRunning)
+                return ETaskResult.StillRunning;
+
+            if (condition[ConditionFlag.InFlight])
+            {
+                AttemptLanding();
+                return ETaskResult.StillRunning;
+            }
+
+            return ETaskResult.TaskComplete;
+        }
+
+        private void AttemptLanding()
+        {
+            Vector3 playerPosition = clientState.LocalPlayer!.Position;
+            playerPosition.Y -= 3;
+
+            Vector3 nearbyPosition = Vector3.Normalize(playerPosition with { Y = 0 }) * 0.05f;
+            playerPosition += nearbyPosition;
+            movementController.NavigateTo(EMovementType.Landing, null, [playerPosition], true, false, 0);
         }
     }
 }
