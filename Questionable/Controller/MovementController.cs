@@ -14,6 +14,7 @@ using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
 using Microsoft.Extensions.Logging;
+using Questionable.Controller.NavigationOverrides;
 using Questionable.External;
 using Questionable.Model;
 using Questionable.Model.V1;
@@ -23,28 +24,26 @@ namespace Questionable.Controller;
 
 internal sealed class MovementController : IDisposable
 {
-    private static readonly List<BlacklistedArea> BlacklistedAreas =
-    [
-        new(1191, new(-223.0412f, 31.937134f, -584.03906f), 5f, 7.75f),
-    ];
-
     private readonly NavmeshIpc _navmeshIpc;
     private readonly IClientState _clientState;
     private readonly GameFunctions _gameFunctions;
     private readonly ChatFunctions _chatFunctions;
     private readonly ICondition _condition;
+    private readonly MovementOverrideController _movementOverrideController;
     private readonly ILogger<MovementController> _logger;
     private CancellationTokenSource? _cancellationTokenSource;
     private Task<List<Vector3>>? _pathfindTask;
 
     public MovementController(NavmeshIpc navmeshIpc, IClientState clientState, GameFunctions gameFunctions,
-        ChatFunctions chatFunctions, ICondition condition, ILogger<MovementController> logger)
+        ChatFunctions chatFunctions, ICondition condition, MovementOverrideController movementOverrideController,
+        ILogger<MovementController> logger)
     {
         _navmeshIpc = navmeshIpc;
         _clientState = clientState;
         _gameFunctions = gameFunctions;
         _chatFunctions = chatFunctions;
         _condition = condition;
+        _movementOverrideController = movementOverrideController;
         _logger = logger;
     }
 
@@ -112,29 +111,7 @@ internal sealed class MovementController : IDisposable
                 }
 
                 if (!Destination.IsFlying)
-                {
-                    // certain areas shouldn't have navmesh points in them, e.g. the aetheryte in HF Outskirts can't be
-                    // walked on without jumping, but if you teleport to the wrong side you're fucked otherwise.
-                    foreach (var blacklistedArea in BlacklistedAreas)
-                    {
-                        if (_clientState.TerritoryType != blacklistedArea.TerritoryId)
-                            continue;
-
-                        for (int i = 0; i < navPoints.Count; ++i)
-                        {
-                            var point = navPoints[i];
-                            float distance = (point - blacklistedArea.Center).Length();
-                            if (distance < blacklistedArea.MinDistance || distance > blacklistedArea.MaxDistance)
-                                continue;
-
-                            _logger.LogInformation("Fudging navmesh point {Point} in blacklisted area",
-                                point.ToString("G", CultureInfo.InvariantCulture));
-                            navPoints[i] = blacklistedArea.Center +
-                                           Vector3.Normalize(point - blacklistedArea.Center) *
-                                           blacklistedArea.MaxDistance;
-                        }
-                    }
-                }
+                    _movementOverrideController.AdjustPath(navPoints);
 
                 _navmeshIpc.MoveTo(navPoints, Destination.IsFlying);
                 MovementStartedAt = DateTime.Now;
@@ -175,7 +152,8 @@ internal sealed class MovementController : IDisposable
             {
                 if (Destination.DataId
                     is 2012173 or 2012174 or 2012175 or 2012176
-                    or 2014133 or 2014134 or 2014135)
+                    or 2014133 or 2014134 or 2014135
+                    or 2014105)
                 {
                     Stop();
                 }
@@ -335,12 +313,6 @@ internal sealed class MovementController : IDisposable
         bool IsFlying,
         bool CanSprint,
         bool UseNavmesh);
-
-    public sealed record BlacklistedArea(
-        ushort TerritoryId,
-        Vector3 Center,
-        float MinDistance,
-        float MaxDistance);
 
     public sealed class PathfindingFailedException : Exception
     {

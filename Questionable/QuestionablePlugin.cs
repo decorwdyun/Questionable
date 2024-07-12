@@ -9,6 +9,7 @@ using Dalamud.Plugin.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller;
+using Questionable.Controller.NavigationOverrides;
 using Questionable.Controller.Steps;
 using Questionable.Controller.Steps.BaseFactory;
 using Questionable.Controller.Steps.BaseTasks;
@@ -114,6 +115,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTransient<WaitAtEnd.WaitQuestCompleted>();
 
         serviceCollection.AddSingleton<MovementController>();
+        serviceCollection.AddSingleton<MovementOverrideController>();
         serviceCollection.AddSingleton<QuestRegistry>();
         serviceCollection.AddSingleton<QuestController>();
         serviceCollection.AddSingleton<GameUiController>();
