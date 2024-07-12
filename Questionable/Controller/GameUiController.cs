@@ -192,13 +192,13 @@ internal sealed class GameUiController : IDisposable
             {
                 var step = quest.FindSequence(currentQuest.Sequence)?.FindStep(currentQuest.Step);
                 if (step == null)
-                    _logger.LogInformation("Ignoring current quest dialogue choices, no active step");
+                    _logger.LogDebug("Ignoring current quest dialogue choices, no active step");
                 else
                     dialogueChoices.AddRange(step.DialogueChoices.Select(x => new DialogueChoiceInfo(quest, x)));
             }
         }
         else
-            _logger.LogInformation("Ignoring current quest dialogue choices, no active quest");
+            _logger.LogDebug("Ignoring current quest dialogue choices, no active quest");
 
         // add all quests that start with the targeted npc
         var target = _targetManager.Target;

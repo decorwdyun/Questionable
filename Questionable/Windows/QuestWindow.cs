@@ -24,6 +24,7 @@ using Questionable.Data;
 using Questionable.External;
 using Questionable.Model;
 using Questionable.Model.V1;
+using ObjectKind = Dalamud.Game.ClientState.Objects.Enums.ObjectKind;
 
 namespace Questionable.Windows;
 
@@ -339,7 +340,10 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
             }
         }
         else
+        {
             ImGui.Text("No active quest");
+            ImGui.TextColored(ImGuiColors.DalamudGrey, $"{_questRegistry.Count} quests loaded");
+        }
     }
 
     private unsafe void DrawCreationUtils()
@@ -412,12 +416,18 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
 
             ImGui.SameLine();
             ImGui.BeginDisabled(!_questData.IsIssuerOfAnyQuest(_targetManager.Target.DataId));
-            if (ImGuiComponents.IconButton(FontAwesomeIcon.Bars))
+            bool showQuests = ImGuiComponents.IconButton(FontAwesomeIcon.Bars);
+            if (ImGui.IsItemHovered())
+                ImGui.SetTooltip("Show all Quests starting with your current target.");
+            if (showQuests)
                 _questData.ShowQuestsIssuedByTarget();
             ImGui.EndDisabled();
 
             ImGui.SameLine();
-            if (ImGuiComponents.IconButton(FontAwesomeIcon.MousePointer))
+            bool interact = ImGuiComponents.IconButton(FontAwesomeIcon.MousePointer);
+            if (ImGui.IsItemHovered())
+                ImGui.SetTooltip("Interact with your current target.");
+            if (interact)
             {
                 ulong result = TargetSystem.Instance()->InteractWithObject(
                     (GameObject*)_targetManager.Target.Address, false);
@@ -427,6 +437,8 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
             ImGui.SameLine();
 
             ImGuiComponents.IconButton(FontAwesomeIcon.Copy);
+            if (ImGui.IsItemHovered())
+                ImGui.SetTooltip("Left click: Copy target position as JSON.\nRight click: Copy target position as C# code.");
             if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
             {
                 string interactionType = gameObject->NamePlateIconId switch
@@ -449,14 +461,22 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
             }
             else if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
             {
-                EAetheryteLocation location = (EAetheryteLocation)_targetManager.Target.DataId;
-                ImGui.SetClipboardText(string.Create(CultureInfo.InvariantCulture,
-                    $"{{EAetheryteLocation.{location}, new({_targetManager.Target.Position.X}f, {_targetManager.Target.Position.Y}f, {_targetManager.Target.Position.Z}f)}},"));
+                if (_targetManager.Target.ObjectKind == ObjectKind.Aetheryte)
+                {
+                    EAetheryteLocation location = (EAetheryteLocation)_targetManager.Target.DataId;
+                    ImGui.SetClipboardText(string.Create(CultureInfo.InvariantCulture,
+                        $"{{EAetheryteLocation.{location}, new({_targetManager.Target.Position.X}f, {_targetManager.Target.Position.Y}f, {_targetManager.Target.Position.Z}f)}},"));
+                }
+                else
+                    ImGui.SetClipboardText(string.Create(CultureInfo.InvariantCulture,
+                        $"new({_targetManager.Target.Position.X}f, {_targetManager.Target.Position.Y}f, {_targetManager.Target.Position.Z}f)"));
             }
         }
         else
         {
             ImGuiComponents.IconButton(FontAwesomeIcon.Copy);
+            if (ImGui.IsItemHovered())
+                ImGui.SetTooltip("Left click: Copy target position as JSON.\nRight click: Copy target position as C# code.");
             if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
             {
                 ImGui.SetClipboardText($$"""
