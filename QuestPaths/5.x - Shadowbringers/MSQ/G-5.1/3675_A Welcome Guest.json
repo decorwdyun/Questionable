@@ -83,7 +83,6 @@
           "TerritoryId": 815,
           "InteractionType": "UseItem",
           "ItemId": 2002904,
-          "$.1": "QuestVariables if done first: 1 32 0 0 0 64",
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -103,7 +102,6 @@
           "TerritoryId": 815,
           "InteractionType": "UseItem",
           "ItemId": 2002904,
-          "$.1": "QuestVariables if done after [1]: 2 16 0 0 0 96",
           "CompletionQuestVariablesFlags": [
             null,
             null,

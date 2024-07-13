@@ -66,7 +66,7 @@ internal static class Jump
                 return ETaskResult.StillRunning;
 
             DateTime movementStartedAt = movementController.MovementStartedAt;
-            if (movementStartedAt == DateTime.MaxValue || movementStartedAt.AddSeconds(2) >= DateTime.Now)
+            if (movementStartedAt == DateTime.MaxValue || movementStartedAt.AddSeconds(1) >= DateTime.Now)
                 return ETaskResult.StillRunning;
 
             return ETaskResult.TaskComplete;

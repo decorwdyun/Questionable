@@ -54,6 +54,27 @@
       "Sequence": 3,
       "Steps": [
         {
+          "DataId": 2012185,
+          "Position": {
+            "X": -5.416992,
+            "Y": -49.05786,
+            "Z": -269.24548
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact",
+          "SkipIf": [
+            "NotTargetable"
+          ],
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMC107_04405_Q1_000_043",
+              "Yes": true
+            }
+          ],
+          "Comment": "retry point"
+        },
+        {
           "Position": {
             "X": -6.025082,
             "Y": -28.32315,

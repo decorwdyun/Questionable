@@ -13,7 +13,14 @@
             "Z": -521.6602
           },
           "TerritoryId": 959,
-          "InteractionType": "AcceptQuest"
+          "InteractionType": "AcceptQuest",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKZE014_04253_Q1_000_000",
+              "Answer": "TEXT_AKTKZE014_04253_A1_000_002"
+            }
+          ]
         }
       ]
     },
@@ -21,17 +28,13 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 2012015,
           "Position": {
-            "X": 591.3633,
-            "Y": 149.33997,
-            "Z": 114.91565
+            "X": 425.62292,
+            "Y": 123.48844,
+            "Z": 89.52347
           },
-          "StopDistance": 4,
           "TerritoryId": 959,
-          "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818364,
-          "Comment": "TODO Unsure if this can be reached via navmesh directly from Bestways Burrows"
+          "InteractionType": "WalkTo"
         },
         {
           "DataId": 1041127,
@@ -57,7 +60,15 @@
           },
           "TerritoryId": 959,
           "InteractionType": "Interact",
-          "$.1": "QuestVariables if done first: 17 0 0 0 0 32"
+          "$.1": "QuestVariables if done first: 17 0 0 0 0 32",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 1041125,
@@ -72,7 +83,15 @@
           "KillEnemyDataIds": [
             14050
           ],
-          "$.1": "QuestVariables if done after [1]: 33 1 0 0 0 160"
+          "$.1": "QuestVariables if done after [1]: 33 1 0 0 0 160",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 1041124,
@@ -82,7 +101,15 @@
             "Z": 188.18945
           },
           "TerritoryId": 959,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         }
       ]
     },
@@ -125,17 +152,6 @@
     {
       "Sequence": 255,
       "Steps": [
-        {
-          "DataId": 2012016,
-          "Position": {
-            "X": 388.3573,
-            "Y": 99.90076,
-            "Z": 306.05017
-          },
-          "TerritoryId": 959,
-          "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818365
-        },
         {
           "DataId": 1041123,
           "Position": {

@@ -61,6 +61,7 @@
             "Z": 640.772
           },
           "StopDistance": 3,
+          "IgnoreDistanceToObject": true,
           "TerritoryId": 1187,
           "InteractionType": "UseItem",
           "ItemId": 2003618,
@@ -81,6 +82,7 @@
             "Z": 698.3596
           },
           "StopDistance": 3,
+          "IgnoreDistanceToObject": true,
           "TerritoryId": 1187,
           "InteractionType": "UseItem",
           "ItemId": 2003618,
@@ -126,6 +128,7 @@
             "Z": 603.0823
           },
           "StopDistance": 3,
+          "IgnoreDistanceToObject": true,
           "TerritoryId": 1187,
           "InteractionType": "UseItem",
           "ItemId": 2003618,

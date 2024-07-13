@@ -30,6 +30,7 @@ public sealed class QuestStep
     public bool? Fly { get; set; }
     public bool? Land { get; set; }
     public bool? Sprint { get; set; }
+    public bool? IgnoreDistanceToObject { get; set; }
     public string? Comment { get; set; }
 
     public EAetheryteLocation? AetheryteShortcut { get; set; }

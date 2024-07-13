@@ -102,7 +102,8 @@ internal static class Move
                             m.NavigateTo(EMovementType.Quest, Step.DataId, Destination,
                                 fly: Step.Fly == true && gameFunctions.IsFlyingUnlocked(Step.TerritoryId),
                                 sprint: Step.Sprint != false,
-                                stopDistance: distance);
+                                stopDistance: distance,
+                                ignoreDistanceToObject: Step.IgnoreDistanceToObject == true);
                         });
                 }
             }

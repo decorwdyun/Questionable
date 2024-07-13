@@ -22,59 +22,6 @@
       "Sequence": 1,
       "Steps": [
         {
-          "Position": {
-            "X": -148.48793,
-            "Y": -10.30035,
-            "Z": -247.25652
-          },
-          "TerritoryId": 956,
-          "InteractionType": "WalkTo",
-          "Comment": "Avoids Combat"
-        },
-        {
-          "DataId": 2011987,
-          "Position": {
-            "X": -176.4096,
-            "Y": -10.11676,
-            "Z": -242.26752
-          },
-          "TerritoryId": 956,
-          "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818321
-        },
-        {
-          "Position": {
-            "X": -198.16975,
-            "Y": -19.32426,
-            "Z": -238.2704
-          },
-          "TerritoryId": 956,
-          "InteractionType": "WalkTo",
-          "Mount": true,
-          "DisableNavmesh": true
-        },
-        {
-          "Position": {
-            "X": -480.30975,
-            "Y": -22.946651,
-            "Z": -145.08534
-          },
-          "TerritoryId": 956,
-          "InteractionType": "WalkTo",
-          "Comment": "Avoids Combat (typically)"
-        },
-        {
-          "DataId": 2011988,
-          "Position": {
-            "X": -505.14993,
-            "Y": -21.835754,
-            "Z": -122.60626
-          },
-          "TerritoryId": 956,
-          "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818322
-        },
-        {
           "DataId": 1040444,
           "Position": {
             "X": -424.24664,

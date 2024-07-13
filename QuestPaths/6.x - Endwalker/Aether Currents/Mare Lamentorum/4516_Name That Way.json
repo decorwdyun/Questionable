@@ -45,8 +45,14 @@
           "TerritoryId": 959,
           "InteractionType": "Interact",
           "Comment": "Cheerful Loporrit",
-          "$.0": "[1]",
-          "$.1": "QuestVariables if done first: 1 0 0 0 0 64"
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 1041746,
@@ -58,8 +64,14 @@
           "TerritoryId": 959,
           "InteractionType": "Interact",
           "Comment": "Stern Loporrit",
-          "$.0": "[2]",
-          "$.1": "QuestVariables if done after [1]: 2 0 0 0 0 96"
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 1041744,
@@ -70,7 +82,15 @@
           },
           "TerritoryId": 959,
           "InteractionType": "Interact",
-          "Comment": "Easygoing Loporrit"
+          "Comment": "Easygoing Loporrit",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         }
       ]
     },
@@ -85,7 +105,14 @@
             "Z": -465.17133
           },
           "TerritoryId": 959,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKZE101_04516_Q3_000_000",
+              "Answer": "TEXT_AKTKZE101_04516_A3_000_001"
+            }
+          ]
         }
       ]
     }

@@ -68,7 +68,6 @@
           "StopDistance": 1,
           "TerritoryId": 815,
           "InteractionType": "Interact",
-          "$.1": "QuestVariables if done first: 16 16 16 0 0 32",
           "Fly": true,
           "CompletionQuestVariablesFlags": [
             null,
@@ -88,7 +87,6 @@
           },
           "TerritoryId": 815,
           "InteractionType": "Interact",
-          "$.1": "QuestVariables if done after [1]: 33 16 32 0 0 96",
           "CompletionQuestVariablesFlags": [
             null,
             null,

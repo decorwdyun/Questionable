@@ -282,8 +282,7 @@
           },
           "TerritoryId": 959,
           "InteractionType": "CompleteQuest",
-          "DelaySecondsAtStart": 2,
-          "Comment": "FIXME Auto-playing quests seems to get stuck here/do nothing"
+          "DelaySecondsAtStart": 2
         }
       ]
     }

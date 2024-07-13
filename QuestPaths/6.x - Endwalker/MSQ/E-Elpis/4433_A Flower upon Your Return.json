@@ -70,18 +70,6 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 2012027,
-          "Position": {
-            "X": -392.08063,
-            "Y": 173.72388,
-            "Z": -293.59882
-          },
-          "TerritoryId": 961,
-          "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818381,
-          "AetheryteShortcut": "Elpis - Poieten Oikos"
-        },
-        {
           "DataId": 2012151,
           "Position": {
             "X": -481.8647,
@@ -90,6 +78,7 @@
           },
           "TerritoryId": 961,
           "InteractionType": "Interact",
+          "AetheryteShortcut": "Elpis - Poieten Oikos",
           "DialogueChoices": [
             {
               "Type": "YesNo",

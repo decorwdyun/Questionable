@@ -52,6 +52,15 @@
       "Sequence": 3,
       "Steps": [
         {
+          "Position": {
+            "X": -308.91977,
+            "Y": 262.7334,
+            "Z": -332.3608
+          },
+          "TerritoryId": 960,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 2012030,
           "Position": {
             "X": -333.547,
@@ -63,17 +72,6 @@
           "AetherCurrentId": 2818389
         },
         {
-          "DataId": 2012035,
-          "Position": {
-            "X": -238.81903,
-            "Y": 320.36304,
-            "Z": -295.15533
-          },
-          "TerritoryId": 960,
-          "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818394
-        },
-        {
           "DataId": 1040317,
           "Position": {
             "X": -200.57983,
@@ -81,9 +79,7 @@
             "Z": -312.58112
           },
           "TerritoryId": 960,
-          "InteractionType": "Interact",
-          "Mount": true,
-          "DisableNavmesh": true
+          "InteractionType": "Interact"
         }
       ]
     },

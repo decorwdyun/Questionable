@@ -44,7 +44,7 @@
           },
           "TerritoryId": 1191,
           "InteractionType": "WalkTo",
-          "Comment": "Outskirts Navmesh workaround"
+          "$": "Outskirts Navmesh workaround"
         },
         {
           "DataId": 1047397,

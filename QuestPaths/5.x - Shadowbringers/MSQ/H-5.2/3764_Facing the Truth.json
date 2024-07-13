@@ -72,8 +72,6 @@
           "TerritoryId": 819,
           "InteractionType": "Interact",
           "Comment": "Chessamile",
-          "$.0": "[1]",
-          "$.1": "QuestVariables if done first: 1 0 0 0 0 64",
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -93,8 +91,6 @@
           "TerritoryId": 819,
           "InteractionType": "Interact",
           "Comment": "Bragi",
-          "$.0": "[2]",
-          "$.1": "QuestVariables if done after [1]: 2 0 0 0 0 192",
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -115,8 +111,6 @@
           "TerritoryId": 819,
           "InteractionType": "Interact",
           "Comment": "Glynard",
-          "$.0": "[3]",
-          "$.1": "QuestVariables if done after [1, 2]: 3 0 0 0 0 200",
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -140,8 +134,6 @@
             "[Crystarium] The Pendants",
             "[Crystarium] The Crystalline Mean"
           ],
-          "$.0": "[4]",
-          "$.1": "QuestVariables if done after [1, 2, 3]: 4 0 0 0 0 216",
           "CompletionQuestVariablesFlags": [
             null,
             null,

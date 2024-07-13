@@ -72,6 +72,10 @@
                   "description": "Set if pathfinding should stop closer or further away from the default stop distance",
                   "exclusiveMinimum": 0
                 },
+                "IgnoreDistanceToObject": {
+                  "type": "boolean",
+                  "description": "Most interactions with objects are checked for a Y (height) difference of 2 in-game units. If set to true, the game won't attempt to get any closer if the height difference is larger than this."
+                },
                 "TerritoryId": {
                   "type": "integer",
                   "description": "The territory id associated with the location",

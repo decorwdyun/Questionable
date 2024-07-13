@@ -153,6 +153,27 @@
       "Sequence": 6,
       "Steps": [
         {
+          "DataId": 2012078,
+          "Position": {
+            "X": 117.81482,
+            "Y": -16.922302,
+            "Z": 390.46313
+          },
+          "TerritoryId": 958,
+          "InteractionType": "Interact",
+          "SkipIf": [
+            "NotTargetable"
+          ],
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_AKTKMB105_04384_Q1_000_116",
+              "Yes": true
+            }
+          ],
+          "Comment": "retry point"
+        },
+        {
           "DataId": 1038845,
           "Position": {
             "X": 156.66682,
@@ -252,7 +273,8 @@
           "TerritoryId": 958,
           "InteractionType": "WalkTo",
           "Mount": false,
-          "Sprint": false
+          "Sprint": false,
+          "DelaySecondsAtStart": 1
         },
         {
           "DataId": 1038845,
@@ -278,6 +300,7 @@
           "TerritoryId": 958,
           "InteractionType": "WalkTo",
           "StopDistance": 45,
+          "IgnoreDistanceToObject": true,
           "Mount": false,
           "Sprint": false
         },

@@ -32,47 +32,6 @@
           "DisableNavmesh": true
         },
         {
-          "Position": {
-            "X": 30.28816,
-            "Y": -133.50012,
-            "Z": -394.98798
-          },
-          "StopDistance": 5,
-          "TerritoryId": 959,
-          "InteractionType": "WalkTo",
-          "DisableNavmesh": true
-        },
-        {
-          "DataId": 2012019,
-          "Position": {
-            "X": 21.7081,
-            "Y": -133.5001,
-            "Z": -385.7313
-          },
-          "TerritoryId": 959,
-          "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818368
-        },
-        {
-          "DataId": 2012019,
-          "Position": {
-            "X": 23.67959,
-            "Y": -133.50012,
-            "Z": -399.96643
-          },
-          "StopDistance": 0.5,
-          "TerritoryId": 959,
-          "InteractionType": "Jump",
-          "JumpDestination": {
-            "Position": {
-              "X": 22.27572,
-              "Y": -137,
-              "Z": -416.6249
-            },
-            "StopDistance": 5
-          }
-        },
-        {
           "DataId": 1038897,
           "Position": {
             "X": 30.838379,
@@ -80,8 +39,7 @@
             "Z": -435.47723
           },
           "TerritoryId": 959,
-          "InteractionType": "Interact",
-          "DisableNavmesh": true
+          "InteractionType": "Interact"
         }
       ]
     },

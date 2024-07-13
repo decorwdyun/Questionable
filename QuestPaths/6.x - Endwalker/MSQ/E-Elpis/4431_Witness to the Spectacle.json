@@ -43,17 +43,6 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 2012028,
-          "Position": {
-            "X": -761.7151,
-            "Y": 159.99072,
-            "Z": -108.99524
-          },
-          "TerritoryId": 961,
-          "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818382
-        },
-        {
           "DataId": 1040121,
           "Position": {
             "X": -833.9513,

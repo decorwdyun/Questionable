@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
+using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.Text;
 using Dalamud.Interface;
@@ -44,6 +45,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
     private readonly QuestRegistry _questRegistry;
     private readonly QuestData _questData;
     private readonly TerritoryData _territoryData;
+    private readonly ICondition _condition;
     private readonly ILogger<QuestWindow> _logger;
 
     public QuestWindow(IDalamudPluginInterface pluginInterface,
@@ -60,6 +62,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         QuestRegistry questRegistry,
         QuestData questData,
         TerritoryData territoryData,
+        ICondition condition,
         ILogger<QuestWindow> logger)
         : base("Questionable###Questionable", ImGuiWindowFlags.AlwaysAutoResize)
     {
@@ -77,6 +80,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         _questRegistry = questRegistry;
         _questData = questData;
         _territoryData = territoryData;
+        _condition = condition;
         _logger = logger;
 
 #if DEBUG
@@ -128,7 +132,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
             if (currentQuestType == QuestController.CurrentQuestType.Simulated)
             {
                 var simulatedQuest = _questController.SimulatedQuest ?? currentQuest;
-                using var _ = ImRaii.PushColor(ImGuiCol.Text, 0xFF0000FF);
+                using var _ = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudRed);
                 ImGui.TextUnformatted(
                     $"Simulated Quest: {simulatedQuest.Quest.Info.Name} / {simulatedQuest.Sequence} / {simulatedQuest.Step}");
             }
@@ -141,7 +145,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
                         $"Quest: {startedQuest.Quest.Info.Name} / {startedQuest.Sequence} / {startedQuest.Step}");
                 }
 
-                using var _ = ImRaii.PushColor(ImGuiCol.Text, 0xFF00FFFF);
+                using var _ = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
                 ImGui.TextUnformatted(
                     $"Next Quest: {currentQuest.Quest.Info.Name} / {currentQuest.Sequence} / {currentQuest.Step}");
             }
@@ -393,8 +397,18 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
                 $"Target: {_targetManager.Target.Name}  ({_targetManager.Target.ObjectKind}; {_targetManager.Target.DataId})"));
 
             GameObject* gameObject = (GameObject*)_targetManager.Target.Address;
-            ImGui.Text(string.Create(CultureInfo.InvariantCulture,
-                $"Distance: {(_targetManager.Target.Position - _clientState.LocalPlayer.Position).Length():F2}, Y: {_targetManager.Target.Position.Y - _clientState.LocalPlayer.Position.Y:F2} | QM: {gameObject->NamePlateIconId}"));
+            ImGui.Text(string.Create(CultureInfo.InvariantCulture, $"Distance: {(_targetManager.Target.Position - _clientState.LocalPlayer.Position).Length():F2}"));
+            ImGui.SameLine();
+
+            float verticalDistance = _targetManager.Target.Position.Y - _clientState.LocalPlayer.Position.Y;
+            string verticalDistanceText = string.Create(CultureInfo.InvariantCulture, $"Y: {verticalDistance:F2}");
+            if (Math.Abs(verticalDistance) >= MovementController.DefaultVerticalInteractionDistance)
+                ImGui.TextColored(ImGuiColors.DalamudOrange, verticalDistanceText);
+            else
+                ImGui.Text(verticalDistanceText);
+
+            ImGui.SameLine();
+            ImGui.Text($"QM: {gameObject->NamePlateIconId}");
 
             ImGui.BeginDisabled(!_movementController.IsNavmeshReady);
             if (!_movementController.IsPathfinding)
@@ -402,8 +416,9 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
                 if (ImGui.Button("Move to Target"))
                 {
                     _movementController.NavigateTo(EMovementType.DebugWindow, _targetManager.Target.DataId,
-                        _targetManager.Target.Position, _gameFunctions.IsFlyingUnlockedInCurrentZone(),
-                        true);
+                        _targetManager.Target.Position,
+                        fly: _condition[ConditionFlag.Mounted] && _gameFunctions.IsFlyingUnlockedInCurrentZone(),
+                        sprint: true);
                 }
             }
             else

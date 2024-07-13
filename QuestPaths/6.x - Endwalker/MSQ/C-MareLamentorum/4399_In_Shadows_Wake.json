@@ -44,6 +44,7 @@
             "Z": 548.94324
           },
           "StopDistance": 5,
+          "IgnoreDistanceToObject": true,
           "TerritoryId": 959,
           "InteractionType": "Interact"
         }
@@ -60,6 +61,7 @@
             "Z": 593.0419
           },
           "StopDistance": 5,
+          "IgnoreDistanceToObject": true,
           "TerritoryId": 959,
           "InteractionType": "Interact"
         }
@@ -76,6 +78,7 @@
             "Z": 594.23206
           },
           "StopDistance": 5,
+          "IgnoreDistanceToObject": true,
           "TerritoryId": 959,
           "InteractionType": "Interact"
         }
@@ -92,6 +95,7 @@
             "Z": 566.1554
           },
           "StopDistance": 5,
+          "IgnoreDistanceToObject": true,
           "TerritoryId": 959,
           "InteractionType": "Interact"
         }

@@ -24,17 +24,6 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 2012004,
-          "Position": {
-            "X": -516.1059,
-            "Y": 42.46582,
-            "Z": 67.826294
-          },
-          "TerritoryId": 958,
-          "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818348
-        },
-        {
           "DataId": 1039942,
           "Position": {
             "X": -462.57727,
@@ -111,6 +100,21 @@
           "TerritoryId": 958,
           "InteractionType": "Duty",
           "ContentFinderConditionId": 785
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "Position": {
+            "X": 0,
+            "Y": 0,
+            "Z": 0
+          },
+          "TerritoryId": 1,
+          "InteractionType": "WalkTo",
+          "Comment": "Filler"
         }
       ]
     },

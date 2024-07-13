@@ -28,7 +28,7 @@
           },
           "TerritoryId": 1190,
           "InteractionType": "WalkTo",
-          "Comment": "Sheshenewezi Springs Navmesh workaround 2"
+          "$": "Sheshenewezi Springs Navmesh workaround 2"
         },
         {
           "Position": {

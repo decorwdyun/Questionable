@@ -70,7 +70,11 @@
             "Z": -35.324707
           },
           "TerritoryId": 963,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AethernetShortcut": [
+            "[Radz-at-Han] Alzadaal's Peace",
+            "[Radz-at-Han] Ruveydah Fibers"
+          ]
         }
       ]
     },

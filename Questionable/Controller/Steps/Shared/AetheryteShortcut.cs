@@ -93,7 +93,7 @@ internal static class AetheryteShortcut
 
             if (!gameFunctions.IsAetheryteUnlocked(TargetAetheryte))
             {
-                chatGui.Print($"[Questionable] Aetheryte {TargetAetheryte} is not unlocked.");
+                chatGui.PrintError($"[Questionable] Aetheryte {TargetAetheryte} is not unlocked.");
                 throw new TaskException("Aetheryte is not unlocked");
             }
             else if (gameFunctions.TeleportAetheryte(TargetAetheryte))

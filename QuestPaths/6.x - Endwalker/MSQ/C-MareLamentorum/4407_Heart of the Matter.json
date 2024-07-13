@@ -58,16 +58,17 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 13996,
           "Position": {
-            "X": 166.0768,
+            "X": 167.0076,
             "Y": -49.589592,
-            "Z": -641.8327
+            "Z": -637.9577
           },
+          "StopDistance": 3,
           "TerritoryId": 959,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
+            13995,
             13996,
             13997,
             13995

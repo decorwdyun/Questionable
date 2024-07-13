@@ -313,6 +313,8 @@ public class QuestSourceGenerator : ISourceGenerator
                                                 .AsSyntaxNodeOrToken(),
                                             Assignment(nameof(QuestStep.Sprint), step.Sprint, emptyStep.Sprint)
                                                 .AsSyntaxNodeOrToken(),
+                                            Assignment(nameof(QuestStep.IgnoreDistanceToObject), step.IgnoreDistanceToObject, emptyStep.IgnoreDistanceToObject)
+                                                .AsSyntaxNodeOrToken(),
                                             Assignment(nameof(QuestStep.Comment), step.Comment, emptyStep.Comment)
                                                 .AsSyntaxNodeOrToken(),
                                             Assignment(nameof(QuestStep.AetheryteShortcut), step.AetheryteShortcut,

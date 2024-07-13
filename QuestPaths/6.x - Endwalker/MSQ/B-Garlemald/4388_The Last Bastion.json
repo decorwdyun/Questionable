@@ -12,6 +12,7 @@
             "Y": 0.21427588,
             "Z": 147.8446
           },
+          "StopDistance": 5,
           "TerritoryId": 958,
           "InteractionType": "AcceptQuest"
         }
@@ -20,17 +21,6 @@
     {
       "Sequence": 1,
       "Steps": [
-        {
-          "DataId": 2012002,
-          "Position": {
-            "X": 83.08533,
-            "Y": 1.5106201,
-            "Z": 102.00659
-          },
-          "TerritoryId": 958,
-          "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818346
-        },
         {
           "Position": {
             "X": 168.04597,

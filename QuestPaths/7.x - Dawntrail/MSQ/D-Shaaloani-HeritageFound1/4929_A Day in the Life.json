@@ -29,7 +29,7 @@
           },
           "TerritoryId": 1191,
           "InteractionType": "WalkTo",
-          "Comment": "Farm Navmesh workaround"
+          "$": "Farm Navmesh workaround"
         },
         {
           "DataId": 1047405,
@@ -54,7 +54,7 @@
           },
           "TerritoryId": 1191,
           "InteractionType": "WalkTo",
-          "Comment": "Farm Navmesh workaround"
+          "$": "Farm Navmesh workaround"
         },
         {
           "DataId": 1047408,
@@ -187,7 +187,7 @@
           },
           "TerritoryId": 1191,
           "InteractionType": "WalkTo",
-          "Comment": "Farm Navmesh workaround"
+          "$": "Farm Navmesh workaround"
         },
         {
           "DataId": 1047406,

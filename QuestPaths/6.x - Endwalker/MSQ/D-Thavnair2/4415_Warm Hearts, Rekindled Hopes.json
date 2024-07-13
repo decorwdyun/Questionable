@@ -21,28 +21,6 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 2011998,
-          "Position": {
-            "X": 294.3922,
-            "Y": 4.0740967,
-            "Z": 425.10107
-          },
-          "TerritoryId": 957,
-          "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818337
-        },
-        {
-          "DataId": 2011999,
-          "Position": {
-            "X": 53.177612,
-            "Y": 11.36792,
-            "Z": 187.396
-          },
-          "TerritoryId": 957,
-          "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818338
-        },
-        {
           "DataId": 2012207,
           "Position": {
             "X": 270.0083,

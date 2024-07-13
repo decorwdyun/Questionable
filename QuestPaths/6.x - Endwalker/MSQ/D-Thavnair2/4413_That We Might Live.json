@@ -48,17 +48,6 @@
           "AetherCurrentId": 2818331
         },
         {
-          "DataId": 2011997,
-          "Position": {
-            "X": 93.095215,
-            "Y": 36.66736,
-            "Z": -447.8676
-          },
-          "TerritoryId": 957,
-          "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818336
-        },
-        {
           "DataId": 1039023,
           "Position": {
             "X": 55.77173,
@@ -87,6 +76,7 @@
             "Y": 21.255978,
             "Z": -224.04822
           },
+          "StopDistance": 0.25,
           "TerritoryId": 957,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",

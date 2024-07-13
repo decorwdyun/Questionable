@@ -40,27 +40,6 @@
       "Sequence": 255,
       "Steps": [
         {
-          "Position": {
-            "X": -719.5691,
-            "Y": -152.90369,
-            "Z": -807.82135
-          },
-          "TerritoryId": 959,
-          "InteractionType": "ShouldBeAJump",
-          "Comment": "Navmesh can't jump (TODO this is super out of the way)"
-        },
-        {
-          "DataId": 2012018,
-          "Position": {
-            "X": -733.63855,
-            "Y": -139.6659,
-            "Z": -733.30286
-          },
-          "TerritoryId": 959,
-          "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818367
-        },
-        {
           "DataId": 1037867,
           "Position": {
             "X": -301.62512,
@@ -68,8 +47,7 @@
             "Z": -491.14215
           },
           "TerritoryId": 959,
-          "InteractionType": "CompleteQuest",
-          "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow"
+          "InteractionType": "CompleteQuest"
         }
       ]
     }

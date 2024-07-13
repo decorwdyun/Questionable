@@ -88,7 +88,7 @@
           },
           "TerritoryId": 1190,
           "InteractionType": "WalkTo",
-          "Comment": "Sheshenewezi Springs Navmesh workaround"
+          "$": "Sheshenewezi Springs Navmesh workaround"
         },
         {
           "DataId": 1046957,
@@ -163,7 +163,7 @@
           },
           "TerritoryId": 1190,
           "InteractionType": "WalkTo",
-          "Comment": "Sheshenewezi Springs Navmesh workaround",
+          "$": "Sheshenewezi Springs Navmesh workaround",
           "AetheryteShortcut": "Shaaloani - Sheshenewezi Springs"
         },
         {

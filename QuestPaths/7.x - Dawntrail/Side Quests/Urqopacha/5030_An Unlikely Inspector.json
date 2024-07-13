@@ -63,6 +63,7 @@
             "Y": -158.06824,
             "Z": -399.8932
           },
+          "IgnoreDistanceToObject": true,
           "TerritoryId": 1187,
           "InteractionType": "Interact",
           "CompletionQuestVariablesFlags": [

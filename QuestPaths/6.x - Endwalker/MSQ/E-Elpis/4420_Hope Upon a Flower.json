@@ -96,9 +96,7 @@
             null,
             null,
             16
-          ],
-          "$.0": "[1]",
-          "$.1": "QuestVariables if done first: 16 0 16 0 0 16"
+          ]
         },
         {
           "DataId": 1039993,
@@ -116,9 +114,7 @@
             null,
             null,
             128
-          ],
-          "$.0": "[2]",
-          "$": "QuestVariables after: 32 1 16 0 0 144"
+          ]
         },
         {
           "DataId": 1039994,
@@ -136,9 +132,7 @@
             null,
             null,
             64
-          ],
-          "$.0": "[3]",
-          "$.1": "QuestVariables after: 49 1 16 0 0 208"
+          ]
         },
         {
           "DataId": 1039995,
@@ -156,9 +150,7 @@
             null,
             null,
             32
-          ],
-          "$.0": "[4]",
-          "$.2": "QuestVariables if done first: 16 16 0 0 0 32"
+          ]
         }
       ]
     },

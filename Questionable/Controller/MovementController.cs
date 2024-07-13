@@ -24,6 +24,8 @@ namespace Questionable.Controller;
 
 internal sealed class MovementController : IDisposable
 {
+    public const float DefaultVerticalInteractionDistance = 1.95f;
+
     private readonly NavmeshIpc _navmeshIpc;
     private readonly IClientState _clientState;
     private readonly GameFunctions _gameFunctions;
@@ -141,9 +143,16 @@ internal sealed class MovementController : IDisposable
                 Stop();
 
                 if (dest.UseNavmesh)
-                    NavigateTo(EMovementType.None, dest.DataId, dest.Position, false, false, dest.StopDistance);
+                {
+                    NavigateTo(EMovementType.None, dest.DataId, dest.Position, false, false, dest.StopDistance,
+                        dest.IgnoreDistanceToObject);
+                }
                 else
-                    NavigateTo(EMovementType.None, dest.DataId, [dest.Position], false, false, dest.StopDistance);
+                {
+                    NavigateTo(EMovementType.None, dest.DataId, [dest.Position], false, false, dest.StopDistance,
+                        dest.IgnoreDistanceToObject);
+                }
+
                 return;
             }
 
@@ -155,10 +164,7 @@ internal sealed class MovementController : IDisposable
             }
             else if ((localPlayerPosition - Destination.Position).Length() < Destination.StopDistance)
             {
-                if (Destination.DataId
-                    is 2012173 or 2012174 or 2012175 or 2012176
-                    or 2014133 or 2014134 or 2014135
-                    or 2014105)
+                if (Destination.IgnoreDistanceToObject)
                 {
                     Stop();
                 }
@@ -167,7 +173,8 @@ internal sealed class MovementController : IDisposable
                     IGameObject? gameObject = _gameFunctions.FindObjectByDataId(Destination.DataId.Value);
                     if (gameObject is ICharacter or IEventObj)
                     {
-                        if (Math.Abs(localPlayerPosition.Y - gameObject.Position.Y) < 1.95f)
+                        if (Math.Abs(localPlayerPosition.Y - gameObject.Position.Y) <
+                            DefaultVerticalInteractionDistance)
                             Stop();
                     }
                     else if (gameObject != null && gameObject.ObjectKind == ObjectKind.Aetheryte)
@@ -191,7 +198,8 @@ internal sealed class MovementController : IDisposable
                         else
                         {
                             // aethernet shard
-                            if (Math.Abs(localPlayerPosition.Y - gameObject.Position.Y) < 1.95f)
+                            if (Math.Abs(localPlayerPosition.Y - gameObject.Position.Y) <
+                                DefaultVerticalInteractionDistance)
                                 Stop();
                         }
                     }
@@ -237,7 +245,7 @@ internal sealed class MovementController : IDisposable
     }
 
     private void PrepareNavigation(EMovementType type, uint? dataId, Vector3 to, bool fly, bool sprint,
-        float? stopDistance, bool useNavmesh)
+        float? stopDistance, bool ignoreDistanceToObject, bool useNavmesh)
     {
         ResetPathfinding();
 
@@ -247,16 +255,17 @@ internal sealed class MovementController : IDisposable
             _chatFunctions.ExecuteCommand("/automove off");
         }
 
-        Destination = new DestinationData(type, dataId, to, stopDistance ?? (QuestStep.DefaultStopDistance - 0.2f), fly, sprint,
-            useNavmesh);
+        Destination = new DestinationData(type, dataId, to, stopDistance ?? (QuestStep.DefaultStopDistance - 0.2f), fly,
+            sprint,
+            ignoreDistanceToObject, useNavmesh);
         MovementStartedAt = DateTime.MaxValue;
     }
 
     public void NavigateTo(EMovementType type, uint? dataId, Vector3 to, bool fly, bool sprint,
-        float? stopDistance = null)
+        float? stopDistance = null, bool ignoreDistanceToObject = false)
     {
         fly |= _condition[ConditionFlag.Diving];
-        PrepareNavigation(type, dataId, to, fly, sprint, stopDistance, true);
+        PrepareNavigation(type, dataId, to, fly, sprint, stopDistance, ignoreDistanceToObject, true);
         _logger.LogInformation("Pathfinding to {Destination}", Destination);
 
         _cancellationTokenSource = new();
@@ -266,10 +275,10 @@ internal sealed class MovementController : IDisposable
     }
 
     public void NavigateTo(EMovementType type, uint? dataId, List<Vector3> to, bool fly, bool sprint,
-        float? stopDistance)
+        float? stopDistance, bool ignoreDistanceToObject = false)
     {
         fly |= _condition[ConditionFlag.Diving];
-        PrepareNavigation(type, dataId, to.Last(), fly, sprint, stopDistance, false);
+        PrepareNavigation(type, dataId, to.Last(), fly, sprint, stopDistance, ignoreDistanceToObject, false);
 
         _logger.LogInformation("Moving to {Destination}", Destination);
         _navmeshIpc.MoveTo(to, fly);
@@ -318,6 +327,7 @@ internal sealed class MovementController : IDisposable
         float StopDistance,
         bool IsFlying,
         bool CanSprint,
+        bool IgnoreDistanceToObject,
         bool UseNavmesh);
 
     public sealed class PathfindingFailedException : Exception

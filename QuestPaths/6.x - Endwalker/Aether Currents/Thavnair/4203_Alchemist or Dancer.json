@@ -51,8 +51,7 @@
             null,
             null,
             128
-          ],
-          "$": "QuestVariables after: 16 1 0 0 0 128"
+          ]
         },
         {
           "Position": {
@@ -82,8 +81,7 @@
             null,
             null,
             32
-          ],
-          "$": "QuestVariables after: 32 17 0 0 0 160"
+          ]
         },
         {
           "DataId": 2011913,
