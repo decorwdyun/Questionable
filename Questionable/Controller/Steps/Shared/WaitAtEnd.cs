@@ -45,7 +45,6 @@ internal static class WaitAtEnd
                     ];
 
                 case EInteractionType.WaitForManualProgress:
-                case EInteractionType.ShouldBeAJump:
                 case EInteractionType.Instruction:
                     return [serviceProvider.GetRequiredService<WaitNextStepOrSequence>()];
 

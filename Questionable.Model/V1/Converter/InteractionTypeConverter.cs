@@ -22,7 +22,6 @@ public sealed class InteractionTypeConverter() : EnumConverter<EInteractionType>
         { EInteractionType.Duty, "Duty" },
         { EInteractionType.SinglePlayerDuty, "SinglePlayerDuty" },
         { EInteractionType.Jump, "Jump" },
-        { EInteractionType.ShouldBeAJump, "ShouldBeAJump" },
         { EInteractionType.Instruction, "Instruction" },
         { EInteractionType.AcceptQuest, "AcceptQuest" },
         { EInteractionType.CompleteQuest, "CompleteQuest" },
