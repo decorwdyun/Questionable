@@ -27,6 +27,7 @@
             "Y": -16.246998,
             "Z": 147.02063
           },
+          "StopDistance": 5,
           "TerritoryId": 962,
           "InteractionType": "Interact"
         }

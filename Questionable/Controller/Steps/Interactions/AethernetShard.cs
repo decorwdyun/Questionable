@@ -1,8 +1,10 @@
 ﻿using System;
+using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Model;
 using Questionable.Model.V1;
+using ObjectKind = Dalamud.Game.ClientState.Objects.Enums.ObjectKind;
 
 namespace Questionable.Controller.Steps.Interactions;
 
@@ -37,7 +39,7 @@ internal static class AethernetShard
             if (!gameFunctions.IsAetheryteUnlocked(AetheryteLocation))
             {
                 logger.LogInformation("Attuning to aethernet shard {AethernetShard}", AetheryteLocation);
-                gameFunctions.InteractWith((uint)AetheryteLocation);
+                gameFunctions.InteractWith((uint)AetheryteLocation, ObjectKind.Aetheryte);
                 return true;
             }
 

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
-using Dalamud.Game;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.ClientState.Objects.Types;
@@ -29,6 +28,7 @@ using ContentFinderCondition = Lumina.Excel.GeneratedSheets.ContentFinderConditi
 using ContentTalk = Lumina.Excel.GeneratedSheets.ContentTalk;
 using EventPathMove = Lumina.Excel.GeneratedSheets.EventPathMove;
 using GrandCompany = FFXIVClientStructs.FFXIV.Client.UI.Agent.GrandCompany;
+using ObjectKind = Dalamud.Game.ClientState.Objects.Enums.ObjectKind;
 using Quest = Questionable.Model.Quest;
 using TerritoryType = Lumina.Excel.GeneratedSheets.TerritoryType;
 
@@ -316,11 +316,15 @@ internal sealed unsafe class GameFunctions
                playerState->IsAetherCurrentUnlocked(aetherCurrentId);
     }
 
-    public IGameObject? FindObjectByDataId(uint dataId)
+    public IGameObject? FindObjectByDataId(uint dataId, ObjectKind? kind = null)
     {
         foreach (var gameObject in _objectTable)
         {
-            if (gameObject.DataId == dataId)
+            if (gameObject.ObjectKind is ObjectKind.Player or ObjectKind.Companion or ObjectKind.MountType
+                or ObjectKind.Retainer or ObjectKind.Housing)
+                continue;
+
+            if (gameObject.DataId == dataId && (kind == null || kind.Value == gameObject.ObjectKind))
             {
                 return gameObject;
             }
@@ -330,9 +334,9 @@ internal sealed unsafe class GameFunctions
         return null;
     }
 
-    public bool InteractWith(uint dataId)
+    public bool InteractWith(uint dataId, ObjectKind? kind = null)
     {
-        IGameObject? gameObject = FindObjectByDataId(dataId);
+        IGameObject? gameObject = FindObjectByDataId(dataId, kind);
         if (gameObject != null)
         {
             _logger.LogInformation("Setting target with {DataId} to {ObjectId}", dataId, gameObject.EntityId);
@@ -342,7 +346,7 @@ internal sealed unsafe class GameFunctions
             long result = (long)TargetSystem.Instance()->InteractWithObject((GameObject*)gameObject.Address, false);
 
             _logger.LogInformation("Interact result: {Result}", result);
-            return result > 0;
+            return result != 7 && result > 0;
         }
 
         _logger.LogDebug("Game object is null");
@@ -413,11 +417,14 @@ internal sealed unsafe class GameFunctions
             if (actionRow.TargetArea)
             {
                 Vector3 position = gameObject.Position;
-                result = ActionManager.Instance()->UseActionLocation(ActionType.Action, (uint)action, location: &position);
-                _logger.LogInformation("UseAction {Action} on target area {Target} result: {Result}", action, gameObject,
+                result = ActionManager.Instance()->UseActionLocation(ActionType.Action, (uint)action,
+                    location: &position);
+                _logger.LogInformation("UseAction {Action} on target area {Target} result: {Result}", action,
+                    gameObject,
                     result);
             }
-            else {
+            else
+            {
                 result = ActionManager.Instance()->UseAction(ActionType.Action, (uint)action, gameObject.GameObjectId);
                 _logger.LogInformation("UseAction {Action} on target {Target} result: {Result}", action, gameObject,
                     result);
