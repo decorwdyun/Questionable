@@ -22,4 +22,6 @@ public enum EEmote
     Flex = 139,
     Soothe = 35,
     Me = 23,
+    Welcome = 41,
+    ImperialSalute = 59,
 }
