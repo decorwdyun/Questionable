@@ -112,9 +112,10 @@ internal sealed class QuestController
         if (CurrentQuest != null && CurrentQuest.Quest.Root.TerritoryBlacklist.Contains(_clientState.TerritoryType))
             return;
 
-        if (_automatic && _currentTask == null && _taskQueue.Count == 0
-            && CurrentQuest is { Sequence: 0, Step: 0 } or { Sequence: 0, Step: 255 }
-            && DateTime.Now >= CurrentQuest.StepProgress.StartedAt.AddSeconds(15))
+        if (_automatic && ((_currentTask == null && _taskQueue.Count == 0) ||
+                           _currentTask is WaitAtEnd.WaitQuestAccepted)
+                       && CurrentQuest is { Sequence: 0, Step: 0 } or { Sequence: 0, Step: 255 }
+                       && DateTime.Now >= CurrentQuest.StepProgress.StartedAt.AddSeconds(15))
         {
             lock (_lock)
             {

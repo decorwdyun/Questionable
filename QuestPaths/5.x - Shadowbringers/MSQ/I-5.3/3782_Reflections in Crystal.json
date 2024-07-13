@@ -61,6 +61,15 @@
       "Sequence": 255,
       "Steps": [
         {
+          "Position": {
+            "X": 0.1512314,
+            "Y": 1.9999986,
+            "Z": 19.4396
+          },
+          "TerritoryId": 351,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 1033896,
           "Position": {
             "X": 1.5106201,
