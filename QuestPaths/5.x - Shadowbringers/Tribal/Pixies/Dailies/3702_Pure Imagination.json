@@ -21,18 +21,14 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 2010859,
+          "DataId": 2010900,
           "Position": {
-            "X": -743.86206,
-            "Y": 78.96533,
-            "Z": 457.14502
+            "X": 787.92993,
+            "Y": 187.33496,
+            "Z": 174.33423
           },
           "TerritoryId": 816,
-          "InteractionType": "Combat",
-          "EnemySpawnType": "AfterInteraction",
-          "KillEnemyDataIds": [
-            11443
-          ],
+          "InteractionType": "Interact",
           "Fly": true
         }
       ]
@@ -40,6 +36,16 @@
     {
       "Sequence": 255,
       "Steps": [
+        {
+          "Position": {
+            "X": 743.3476,
+            "Y": 186.89098,
+            "Z": 193.8602
+          },
+          "TerritoryId": 816,
+          "InteractionType": "WalkTo",
+          "Comment": "TODO it probably isn't necessary to walk that far"
+        },
         {
           "DataId": 1031809,
           "Position": {
@@ -49,6 +55,7 @@
           },
           "TerritoryId": 816,
           "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Il Mheg - Lydha Lran",
           "Fly": true
         }
       ]

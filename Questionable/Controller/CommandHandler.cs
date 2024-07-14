@@ -17,24 +17,27 @@ internal sealed class CommandHandler : IDisposable
     private readonly QuestController _questController;
     private readonly MovementController _movementController;
     private readonly QuestRegistry _questRegistry;
-    private readonly QuestData _questData;
     private readonly ConfigWindow _configWindow;
     private readonly DebugOverlay _debugOverlay;
     private readonly QuestWindow _questWindow;
+    private readonly QuestSelectionWindow _questSelectionWindow;
+    private readonly ITargetManager _targetManager;
 
     public CommandHandler(ICommandManager commandManager, IChatGui chatGui, QuestController questController,
-        MovementController movementController, QuestRegistry questRegistry, QuestData questData,
-        ConfigWindow configWindow, DebugOverlay debugOverlay, QuestWindow questWindow)
+        MovementController movementController, QuestRegistry questRegistry,
+        ConfigWindow configWindow, DebugOverlay debugOverlay, QuestWindow questWindow,
+        QuestSelectionWindow questSelectionWindow, ITargetManager targetManager)
     {
         _commandManager = commandManager;
         _chatGui = chatGui;
         _questController = questController;
         _movementController = movementController;
         _questRegistry = questRegistry;
-        _questData = questData;
         _configWindow = configWindow;
         _debugOverlay = debugOverlay;
         _questWindow = questWindow;
+        _questSelectionWindow = questSelectionWindow;
+        _targetManager = targetManager;
 
         _commandManager.AddHandler("/qst", new CommandInfo(ProcessCommand)
         {
@@ -74,7 +77,7 @@ internal sealed class CommandHandler : IDisposable
                 break;
 
             case "which":
-                _questData.ShowQuestsIssuedByTarget();
+                _questSelectionWindow.Open(_targetManager.Target);
                 break;
 
             default:

@@ -49,6 +49,7 @@
           },
           "TerritoryId": 957,
           "InteractionType": "Interact",
+          "Fly": true,
           "CompletionQuestVariablesFlags": [
             null,
             null,

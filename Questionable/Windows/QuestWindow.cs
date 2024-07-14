@@ -46,6 +46,8 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
     private readonly QuestData _questData;
     private readonly TerritoryData _territoryData;
     private readonly ICondition _condition;
+    private readonly IGameGui _gameGui;
+    private readonly QuestSelectionWindow _questSelectionWindow;
     private readonly ILogger<QuestWindow> _logger;
 
     public QuestWindow(IDalamudPluginInterface pluginInterface,
@@ -64,6 +66,8 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         QuestData questData,
         TerritoryData territoryData,
         ICondition condition,
+        IGameGui gameGui,
+        QuestSelectionWindow questSelectionWindow,
         ILogger<QuestWindow> logger)
         : base("Questionable###Questionable", ImGuiWindowFlags.AlwaysAutoResize)
     {
@@ -83,6 +87,8 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         _questData = questData;
         _territoryData = territoryData;
         _condition = condition;
+        _gameGui = gameGui;
+        _questSelectionWindow = questSelectionWindow;
         _logger = logger;
 
 #if DEBUG
@@ -442,11 +448,12 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
 
             ImGui.SameLine();
             ImGui.BeginDisabled(!_questData.IsIssuerOfAnyQuest(_targetManager.Target.DataId));
-            bool showQuests = ImGuiComponents.IconButton(FontAwesomeIcon.Bars);
+            bool showQuests = ImGuiComponents.IconButton(FontAwesomeIcon.MapMarkerAlt);
             if (ImGui.IsItemHovered())
                 ImGui.SetTooltip("Show all Quests starting with your current target.");
             if (showQuests)
-                _questData.ShowQuestsIssuedByTarget();
+                _questSelectionWindow.Open(_targetManager.Target);
+
             ImGui.EndDisabled();
 
             ImGui.SameLine();
@@ -462,10 +469,10 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
 
             ImGui.SameLine();
 
-            ImGuiComponents.IconButton(FontAwesomeIcon.Copy);
+            bool copy = ImGuiComponents.IconButton(FontAwesomeIcon.Copy);
             if (ImGui.IsItemHovered())
                 ImGui.SetTooltip("Left click: Copy target position as JSON.\nRight click: Copy target position as C# code.");
-            if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
+            if (copy)
             {
                 string interactionType = gameObject->NamePlateIconId switch
                 {
@@ -500,10 +507,10 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         }
         else
         {
-            ImGuiComponents.IconButton(FontAwesomeIcon.Copy);
+            bool copy = ImGuiComponents.IconButton(FontAwesomeIcon.Copy);
             if (ImGui.IsItemHovered())
-                ImGui.SetTooltip("Left click: Copy target position as JSON.\nRight click: Copy target position as C# code.");
-            if (ImGui.IsItemClicked(ImGuiMouseButton.Left))
+                ImGui.SetTooltip("Left click: Copy your position as JSON.\nRight click: Copy your position as C# code.");
+            if (copy)
             {
                 ImGui.SetClipboardText($$"""
                                          "Position": {
@@ -521,6 +528,13 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
                 ImGui.SetClipboardText(string.Create(CultureInfo.InvariantCulture,
                     $"new({position.X}f, {position.Y}f, {position.Z}f)"));
             }
+        }
+
+        ulong hoveredItemId = _gameGui.HoveredItem;
+        if (hoveredItemId != 0)
+        {
+            ImGui.Separator();
+            ImGui.Text($"Hovered Item: {hoveredItemId}");
         }
     }
 

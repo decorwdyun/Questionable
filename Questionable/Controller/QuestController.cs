@@ -148,7 +148,13 @@ internal sealed class QuestController
             else if (_nextQuest != null)
             {
                 // if the quest is accepted, we no longer track it
-                if (_gameFunctions.IsQuestAcceptedOrComplete(_nextQuest.Quest.QuestId))
+                bool canUseNextQuest;
+                if (_nextQuest.Quest.Info.IsRepeatable)
+                    canUseNextQuest = !_gameFunctions.IsQuestAccepted(_nextQuest.Quest.QuestId);
+                else
+                    canUseNextQuest = !_gameFunctions.IsQuestAcceptedOrComplete(_nextQuest.Quest.QuestId);
+
+                if (!canUseNextQuest)
                 {
                     _logger.LogInformation("Next quest {QuestId} accepted or completed", _nextQuest.Quest.QuestId);
 

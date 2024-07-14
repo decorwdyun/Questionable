@@ -1,4 +1,4 @@
-{
+﻿{
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
   "QuestSequence": [
@@ -6,13 +6,13 @@
       "Sequence": 0,
       "Steps": [
         {
-          "DataId": 1042301,
+          "DataId": 1048781,
           "Position": {
-            "X": -66.02582,
-            "Y": 39.994705,
-            "Z": 321.06494
+            "X": -213.09229,
+            "Y": 6.2771482,
+            "Z": -510.70422
           },
-          "TerritoryId": 957,
+          "TerritoryId": 1188,
           "InteractionType": "AcceptQuest"
         }
       ]
@@ -21,18 +21,18 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 2012850,
+          "DataId": 2014196,
           "Position": {
-            "X": -399.74066,
-            "Y": 58.91504,
-            "Z": -354.97064
+            "X": 728.7556,
+            "Y": 8.010925,
+            "Z": -287.95306
           },
-          "TerritoryId": 957,
+          "TerritoryId": 1188,
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
-            14674,
-            14675
+            17657,
+            17658
           ],
           "Fly": true
         }
@@ -42,16 +42,15 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 1042301,
+          "DataId": 1048781,
           "Position": {
-            "X": -66.02582,
-            "Y": 39.994705,
-            "Z": 321.06494
+            "X": -213.09229,
+            "Y": 6.2771482,
+            "Z": -510.70422
           },
-          "TerritoryId": 957,
+          "TerritoryId": 1188,
           "InteractionType": "CompleteQuest",
-          "AetheryteShortcut": "Thavnair - Yedlihmad",
-          "Fly": true
+          "AetheryteShortcut": "Kozama'uka - Ok'hanu"
         }
       ]
     }

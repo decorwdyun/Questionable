@@ -47,8 +47,7 @@ internal static class Combat
                     return [unmount, CreateTask(quest, sequence, step)];
 
                 case EEnemySpawnType.OverworldEnemies:
-                    // TODO currently not handled
-                    return [unmount];
+                    return [unmount, CreateTask(quest, sequence, step)];
 
                 default:
                     throw new ArgumentOutOfRangeException(nameof(step), $"Unknown spawn type {step.EnemySpawnType}");
@@ -57,27 +56,31 @@ internal static class Combat
 
         public ITask CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
+            ArgumentNullException.ThrowIfNull(step.EnemySpawnType);
+
             bool isLastStep = sequence.Steps.Last() == step;
             return serviceProvider.GetRequiredService<HandleCombat>()
-                .With(quest.QuestId, isLastStep, step.KillEnemyDataIds, step.CompletionQuestVariablesFlags);
+                .With(quest.QuestId, isLastStep, step.EnemySpawnType.Value, step.KillEnemyDataIds,
+                    step.CompletionQuestVariablesFlags, step.ComplexCombatData);
         }
     }
 
     internal sealed class HandleCombat(CombatController combatController, GameFunctions gameFunctions) : ITask
     {
-        private ushort _questId;
         private bool _isLastStep;
         private CombatController.CombatData _combatData = null!;
         private IList<short?> _completionQuestVariableFlags = null!;
 
-        public ITask With(ushort questId, bool isLastStep, IList<uint> killEnemyDataIds,
-            IList<short?> completionQuestVariablesFlags)
+        public ITask With(ushort questId, bool isLastStep, EEnemySpawnType enemySpawnType, IList<uint> killEnemyDataIds,
+            IList<short?> completionQuestVariablesFlags, IList<ComplexCombatData> complexCombatData)
         {
-            _questId = questId;
             _isLastStep = isLastStep;
             _combatData = new CombatController.CombatData
             {
-                KillEnemyDataIds = killEnemyDataIds.AsReadOnly(),
+                QuestId = questId,
+                SpawnType = enemySpawnType,
+                KillEnemyDataIds = killEnemyDataIds.ToList(),
+                ComplexCombatDatas = complexCombatData.ToList(),
             };
             _completionQuestVariableFlags = completionQuestVariablesFlags;
             return this;
@@ -93,7 +96,7 @@ internal static class Combat
             // if our quest step has any completion flags, we need to check if they are set
             if (QuestWorkUtils.HasCompletionFlags(_completionQuestVariableFlags))
             {
-                var questWork = gameFunctions.GetQuestEx(_questId);
+                var questWork = gameFunctions.GetQuestEx(_combatData.QuestId);
                 if (questWork == null)
                     return ETaskResult.StillRunning;
 

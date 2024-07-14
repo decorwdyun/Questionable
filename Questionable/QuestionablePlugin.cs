@@ -127,6 +127,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<QuestWindow>();
         serviceCollection.AddSingleton<ConfigWindow>();
         serviceCollection.AddSingleton<DebugOverlay>();
+        serviceCollection.AddSingleton<QuestSelectionWindow>();
+
         serviceCollection.AddSingleton<CommandHandler>();
         serviceCollection.AddSingleton<DalamudInitializer>();
 

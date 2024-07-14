@@ -228,8 +228,11 @@ internal static class Move
             var character = (Character*)(clientState.LocalPlayer?.Address ?? 0);
             if (character != null)
             {
-                logger.LogInformation("Attempting to land");
-                return ActionManager.Instance()->UseAction(ActionType.Mount, character->Mount.MountId);
+                if (ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, 23) == 0)
+                {
+                    logger.LogInformation("Attempting to land");
+                    return ActionManager.Instance()->UseAction(ActionType.GeneralAction, 23);
+                }
             }
 
             return false;

@@ -159,15 +159,38 @@ internal sealed class GameUiController : IDisposable
             return;
         }
 
+        // this is 'Daily Quests' for tribal quests, but not set for normal selections
+        string? title = addonSelectIconString->AtkValues[0].ReadAtkString();
+
         var currentQuest = _questController.StartedQuest;
-        if (currentQuest != null && actualPrompt == null)
+        if (currentQuest != null && (actualPrompt == null || title != null))
         {
-            // it is possible for this to be a quest selection
-            string questName = currentQuest.Quest.Info.Name;
-            int questSelection = answers.FindIndex(x => GameStringEquals(questName, x));
-            if (questSelection >= 0)
-                addonSelectIconString->AtkUnitBase.FireCallbackInt(questSelection);
+            _logger.LogInformation("Checking if current quest {Name} is on the list", currentQuest.Quest.Info.Name);
+            if (CheckQuestSelection(addonSelectIconString, currentQuest.Quest, answers))
+                return;
         }
+
+        var nextQuest = _questController.NextQuest;
+        if (nextQuest != null && (actualPrompt == null || title != null))
+        {
+            _logger.LogInformation("Checking if next quest {Name} is on the list", nextQuest.Quest.Info.Name);
+            if (CheckQuestSelection(addonSelectIconString, nextQuest.Quest, answers))
+                return;
+        }
+    }
+
+    private unsafe bool CheckQuestSelection(AddonSelectIconString* addonSelectIconString, Quest quest, List<string?> answers)
+    {
+        // it is possible for this to be a quest selection
+        string questName = quest.Info.Name;
+        int questSelection = answers.FindIndex(x => GameStringEquals(questName, x));
+        if (questSelection >= 0)
+        {
+            addonSelectIconString->AtkUnitBase.FireCallbackInt(questSelection);
+            return true;
+        }
+
+        return false;
     }
 
     public static unsafe List<string?> GetChoices(AddonSelectIconString* addonSelectIconString)

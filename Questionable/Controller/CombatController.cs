@@ -6,9 +6,12 @@ using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.CombatModules;
+using Questionable.Controller.Utils;
+using Questionable.Model.V1;
 
 namespace Questionable.Controller;
 
@@ -19,18 +22,21 @@ internal sealed class CombatController
     private readonly IObjectTable _objectTable;
     private readonly ICondition _condition;
     private readonly IClientState _clientState;
+    private readonly GameFunctions _gameFunctions;
     private readonly ILogger<CombatController> _logger;
 
     private CurrentFight? _currentFight;
 
     public CombatController(IEnumerable<ICombatModule> combatModules, ITargetManager targetManager,
-        IObjectTable objectTable, ICondition condition, IClientState clientState, ILogger<CombatController> logger)
+        IObjectTable objectTable, ICondition condition, IClientState clientState, GameFunctions gameFunctions,
+        ILogger<CombatController> logger)
     {
         _combatModules = combatModules.ToList();
         _targetManager = targetManager;
         _objectTable = objectTable;
         _condition = condition;
         _clientState = clientState;
+        _gameFunctions = gameFunctions;
         _logger = logger;
     }
 
@@ -100,6 +106,50 @@ internal sealed class CombatController
 
     private IGameObject? FindNextTarget()
     {
+        if (_currentFight == null)
+            return null;
+
+        // check if any complex combat conditions are fulfilled
+        var complexCombatData = _currentFight.Data.ComplexCombatDatas;
+        if (complexCombatData.Count > 0)
+        {
+            for (int i = 0; i < complexCombatData.Count; ++i)
+            {
+                if (_currentFight.Data.CompletedComplexDatas.Contains(i))
+                    continue;
+
+                var condition = complexCombatData[i];
+                if (condition.RewardItemId != null && condition.RewardItemCount != null)
+                {
+                    unsafe
+                    {
+                        var inventoryManager = InventoryManager.Instance();
+                        if (inventoryManager->GetInventoryItemCount(condition.RewardItemId.Value) >=
+                            condition.RewardItemCount.Value)
+                        {
+                            _logger.LogInformation(
+                                "Complex combat condition fulfilled: itemCount({ItemId}) >= {ItemCount}",
+                                condition.RewardItemId, condition.RewardItemCount);
+                            _currentFight.Data.CompletedComplexDatas.Add(i);
+                            continue;
+                        }
+                    }
+                }
+
+                if (QuestWorkUtils.HasCompletionFlags(condition.CompletionQuestVariablesFlags))
+                {
+                    var questWork = _gameFunctions.GetQuestEx(_currentFight.Data.QuestId);
+                    if (questWork != null && QuestWorkUtils.MatchesQuestWork(condition.CompletionQuestVariablesFlags,
+                            questWork.Value, false))
+                    {
+                        _logger.LogInformation("Complex combat condition fulfilled: QuestWork matches");
+                        _currentFight.Data.CompletedComplexDatas.Add(i);
+                        continue;
+                    }
+                }
+            }
+        }
+
         return _objectTable.Where(IsEnemyToKill).MinBy(x => (x.Position - _clientState.LocalPlayer!.Position).Length());
     }
 
@@ -107,8 +157,14 @@ internal sealed class CombatController
     {
         if (gameObject is IBattleChara battleChara)
         {
-            if (battleChara.IsDead)
-                return false;
+            // TODO this works as somewhat of a delay between killing enemies if certain items/flags are checked
+            // but also delays killing the next enemy a little
+            if (_currentFight == null || _currentFight.Data.SpawnType != EEnemySpawnType.OverworldEnemies ||
+                _currentFight.Data.ComplexCombatDatas.Count == 0)
+            {
+                if (battleChara.IsDead)
+                    return false;
+            }
 
             if (!battleChara.IsTargetable)
                 return false;
@@ -116,8 +172,26 @@ internal sealed class CombatController
             if (battleChara.TargetObjectId == _clientState.LocalPlayer?.GameObjectId)
                 return true;
 
-            if (_currentFight != null && _currentFight.Data.KillEnemyDataIds.Contains(battleChara.DataId))
-                return true;
+            if (_currentFight != null)
+            {
+                var complexCombatData = _currentFight.Data.ComplexCombatDatas;
+                if (complexCombatData.Count >= 0)
+                {
+                    for (int i = 0; i < complexCombatData.Count; ++i)
+                    {
+                        if (_currentFight.Data.CompletedComplexDatas.Contains(i))
+                            continue;
+
+                        if (complexCombatData[i].DataId == battleChara.DataId)
+                            return true;
+                    }
+                }
+                else
+                {
+                    if (_currentFight.Data.KillEnemyDataIds.Contains(battleChara.DataId))
+                        return true;
+                }
+            }
 
             if (battleChara.StatusFlags.HasFlag(StatusFlags.Hostile))
             {
@@ -150,6 +224,11 @@ internal sealed class CombatController
 
     public sealed class CombatData
     {
-        public required ReadOnlyCollection<uint> KillEnemyDataIds { get; init; }
+        public required ushort QuestId { get; init; }
+        public required EEnemySpawnType SpawnType { get; init; }
+        public required List<uint> KillEnemyDataIds { get; init; }
+        public required List<ComplexCombatData> ComplexCombatDatas { get; init; }
+
+        public HashSet<int> CompletedComplexDatas { get; } = new();
     }
 }

@@ -415,35 +415,7 @@
                   }
                 },
                 "CompletionQuestVariablesFlags": {
-                  "type": "array",
-                  "description": "Quest Variables that dictate whether or not this step is skipped: null is don't check, positive values need to be set, negative values need to be unset",
-                  "items": {
-                    "type": [
-                      "integer",
-                      "null"
-                    ],
-                    "enum": [
-                      null,
-                      1,
-                      2,
-                      4,
-                      8,
-                      16,
-                      32,
-                      64,
-                      128,
-                      -1,
-                      -2,
-                      -4,
-                      -8,
-                      -16,
-                      -32,
-                      -64,
-                      -128
-                    ]
-                  },
-                  "minItems": 6,
-                  "maxItems": 6
+                  "$ref": "#/$defs/CompletionFlags"
                 },
                 "DelaySecondsAtStart": {
                   "description": "Time to wait before starting",
@@ -567,12 +539,48 @@
                         "items": {
                           "type": "integer"
                         }
+                      },
+                      "ComplexCombatData": {
+                        "description": "If multiple different enemies are supposed to be killed in a single quest step, this typically is handled via items",
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "DataId": {
+                              "description": "The enemy data id which is supposed to be killed",
+                              "type": "integer"
+                            },
+                            "RewardItemId": {
+                              "type": "integer"
+                            },
+                            "RewardItemCount": {
+                              "type": "integer"
+                            },
+                            "CompletionQuestVariablesFlags": {
+                              "$ref": "#/$defs/CompletionFlags"
+                            }
+                          },
+                          "required": [
+                            "DataId"
+                          ]
+                        }
                       }
                     },
                     "required": [
                       "Position",
-                      "EnemySpawnType",
-                      "KillEnemyDataIds"
+                      "EnemySpawnType"
+                    ],
+                    "oneOf": [
+                      {
+                        "required": [
+                          "KillEnemyDataIds"
+                        ]
+                      },
+                      {
+                        "required": [
+                          "ComplexCombatData"
+                        ]
+                      }
                     ]
                   }
                 },
@@ -1027,5 +1035,38 @@
     "QuestSequence",
     "Author"
   ],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "$defs": {
+    "CompletionFlags": {
+      "type": "array",
+      "description": "Quest Variables that dictate whether or not this step is skipped: null is don't check, positive values need to be set, negative values need to be unset",
+      "items": {
+        "type": [
+          "integer",
+          "null"
+        ],
+        "enum": [
+          null,
+          1,
+          2,
+          4,
+          8,
+          16,
+          32,
+          64,
+          128,
+          -1,
+          -2,
+          -4,
+          -8,
+          -16,
+          -32,
+          -64,
+          -128
+        ]
+      },
+      "minItems": 6,
+      "maxItems": 6
+    }
+  }
 }

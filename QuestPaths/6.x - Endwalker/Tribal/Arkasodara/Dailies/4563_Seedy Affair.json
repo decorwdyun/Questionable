@@ -21,20 +21,32 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 2012850,
+          "DataId": 2012884,
           "Position": {
-            "X": -399.74066,
-            "Y": 58.91504,
-            "Z": -354.97064
+            "X": 111.46704,
+            "Y": 5.935669,
+            "Z": -294.36182
           },
           "TerritoryId": 957,
-          "InteractionType": "Combat",
-          "EnemySpawnType": "AfterInteraction",
-          "KillEnemyDataIds": [
-            14674,
-            14675
-          ],
-          "Fly": true
+          "InteractionType": "UseItem",
+          "ItemId": 2003420,
+          "Fly": true,
+          "AetheryteShortcut": "Thavnair - Palaka's Stand"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 2012884,
+          "Position": {
+            "X": 111.46704,
+            "Y": 5.935669,
+            "Z": -294.36182
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
         }
       ]
     },
@@ -50,7 +62,6 @@
           },
           "TerritoryId": 957,
           "InteractionType": "CompleteQuest",
-          "AetheryteShortcut": "Thavnair - Yedlihmad",
           "Fly": true
         }
       ]

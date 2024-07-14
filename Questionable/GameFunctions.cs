@@ -224,14 +224,21 @@ internal sealed unsafe class GameFunctions
 
     public bool IsReadyToAcceptQuest(ushort questId)
     {
-        if (IsQuestAcceptedOrComplete(questId))
-            return false;
+        _questRegistry.TryGetQuest(questId, out var quest);
+        if (quest is { Info.IsRepeatable: true })
+        {
+            if (IsQuestAccepted(questId))
+                return false;
+        }
+        else
+        {
+            if (IsQuestAcceptedOrComplete(questId))
+                return false;
+        }
 
         // if we're not at a high enough level to continue, we also ignore it
         var currentLevel = _clientState.LocalPlayer?.Level ?? 0;
-        if (currentLevel != 0 &&
-            _questRegistry.TryGetQuest(questId, out Quest? quest) &&
-            quest.Info.Level > currentLevel)
+        if (currentLevel != 0 && quest != null && quest.Info.Level > currentLevel)
             return false;
 
         return true;
@@ -239,9 +246,11 @@ internal sealed unsafe class GameFunctions
 
     public bool IsQuestAcceptedOrComplete(ushort questId)
     {
-        if (QuestManager.IsQuestComplete(questId))
-            return true;
+        return QuestManager.IsQuestComplete(questId) || IsQuestAccepted(questId);
+    }
 
+    public bool IsQuestAccepted(ushort questId)
+    {
         QuestManager* questManager = QuestManager.Instance();
         return questManager->IsQuestAccepted(questId);
     }
