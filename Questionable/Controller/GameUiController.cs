@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Dalamud.Game.Addon.Lifecycle;
@@ -179,7 +180,8 @@ internal sealed class GameUiController : IDisposable
         }
     }
 
-    private unsafe bool CheckQuestSelection(AddonSelectIconString* addonSelectIconString, Quest quest, List<string?> answers)
+    private unsafe bool CheckQuestSelection(AddonSelectIconString* addonSelectIconString, Quest quest,
+        List<string?> answers)
     {
         // it is possible for this to be a quest selection
         string questName = quest.Info.Name;
@@ -197,7 +199,7 @@ internal sealed class GameUiController : IDisposable
     {
         List<string?> answers = new();
         for (ushort i = 0; i < addonSelectIconString->AtkUnitBase.AtkValues[5].Int; i++)
-            answers.Add( addonSelectIconString->AtkValues[i * 3 + 7].ReadAtkString());
+            answers.Add(addonSelectIconString->AtkValues[i * 3 + 7].ReadAtkString());
 
         return answers;
     }
@@ -205,7 +207,7 @@ internal sealed class GameUiController : IDisposable
     private int? HandleListChoice(string? actualPrompt, List<string?> answers, bool checkAllSteps)
     {
         List<DialogueChoiceInfo> dialogueChoices = [];
-        var currentQuest = _questController.StartedQuest;
+        var currentQuest = _questController.SimulatedQuest ?? _questController.StartedQuest;
         if (currentQuest != null)
         {
             var quest = currentQuest.Quest;
@@ -223,6 +225,29 @@ internal sealed class GameUiController : IDisposable
                     _logger.LogDebug("Ignoring current quest dialogue choices, no active step");
                 else
                     dialogueChoices.AddRange(step.DialogueChoices.Select(x => new DialogueChoiceInfo(quest, x)));
+            }
+
+            // add all travel dialogue choices
+            var targetTerritoryId = FindTargetTerritoryFromQuestStep(currentQuest);
+            if (targetTerritoryId != null)
+            {
+                foreach (string? answer in answers)
+                {
+                    if (answer == null)
+                        continue;
+
+                    if (TryFindWarp(targetTerritoryId.Value, answer, out uint? warpId, out string? warpText))
+                    {
+                        _logger.LogInformation("Adding warp {Id}, {Prompt}", warpId, warpText);
+                        dialogueChoices.Add(new DialogueChoiceInfo(quest, new DialogueChoice
+                        {
+                            Type = EDialogChoiceType.List,
+                            ExcelSheet = null,
+                            Prompt = null,
+                            Answer = ExcelRef.FromSheetValue(warpText),
+                        }));
+                    }
+                }
             }
         }
         else
@@ -242,7 +267,8 @@ internal sealed class GameUiController : IDisposable
                         .ToList();
                     if (questChoices != null && questChoices.Count > 0)
                     {
-                        _logger.LogInformation("Adding {Count} dialogue choices from not accepted quest {QuestName}", questChoices.Count, questInfo.Name);
+                        _logger.LogInformation("Adding {Count} dialogue choices from not accepted quest {QuestName}",
+                            questChoices.Count, questInfo.Name);
                         dialogueChoices.AddRange(questChoices.Select(x => new DialogueChoiceInfo(knownQuest, x)));
                     }
                 }
@@ -334,25 +360,30 @@ internal sealed class GameUiController : IDisposable
         _logger.LogTrace("Prompt: '{Prompt}'", actualPrompt);
 
         var currentQuest = _questController.StartedQuest;
-        if (currentQuest == null)
-            return;
-
-        var quest = currentQuest.Quest;
-        if (checkAllSteps)
+        if (currentQuest != null)
         {
-            var sequence = quest.FindSequence(currentQuest.Sequence);
-            if (sequence != null && HandleDefaultYesNo(addonSelectYesno, quest,
-                    sequence.Steps.SelectMany(x => x.DialogueChoices).ToList(), actualPrompt))
+            var quest = currentQuest.Quest;
+            if (checkAllSteps)
+            {
+                var sequence = quest.FindSequence(currentQuest.Sequence);
+                if (sequence != null && HandleDefaultYesNo(addonSelectYesno, quest,
+                        sequence.Steps.SelectMany(x => x.DialogueChoices).ToList(), actualPrompt))
+                    return;
+            }
+            else
+            {
+                var step = quest.FindSequence(currentQuest.Sequence)?.FindStep(currentQuest.Step);
+                if (step != null && HandleDefaultYesNo(addonSelectYesno, quest, step.DialogueChoices, actualPrompt))
+                    return;
+            }
+
+            if (HandleTravelYesNo(addonSelectYesno, currentQuest, actualPrompt))
                 return;
         }
-        else
-        {
-            var step = quest.FindSequence(currentQuest.Sequence)?.FindStep(currentQuest.Step);
-            if (step != null && HandleDefaultYesNo(addonSelectYesno, quest, step.DialogueChoices, actualPrompt))
-                return;
-        }
 
-        HandleTravelYesNo(addonSelectYesno, currentQuest, actualPrompt);
+        var simulatedQuest = _questController.SimulatedQuest;
+        if (simulatedQuest != null)
+            HandleTravelYesNo(addonSelectYesno, simulatedQuest, actualPrompt);
     }
 
     private unsafe bool HandleDefaultYesNo(AddonSelectYesno* addonSelectYesno, Quest quest,
@@ -387,21 +418,35 @@ internal sealed class GameUiController : IDisposable
         return false;
     }
 
-    private unsafe void HandleTravelYesNo(AddonSelectYesno* addonSelectYesno,
+    private unsafe bool HandleTravelYesNo(AddonSelectYesno* addonSelectYesno,
         QuestController.QuestProgress currentQuest, string actualPrompt)
     {
         if (_gameFunctions.ReturnRequestedAt >= DateTime.Now.AddSeconds(-2) && _returnRegex.IsMatch(actualPrompt))
         {
             _logger.LogInformation("Automatically confirming return...");
             addonSelectYesno->AtkUnitBase.FireCallbackInt(0);
-            return;
+            return true;
         }
 
+        var targetTerritoryId = FindTargetTerritoryFromQuestStep(currentQuest);
+        if (targetTerritoryId != null &&
+            TryFindWarp(targetTerritoryId.Value, actualPrompt, out uint? warpId, out string? warpText))
+        {
+            _logger.LogInformation("Using warp {Id}, {Prompt}", warpId, warpText);
+            addonSelectYesno->AtkUnitBase.FireCallbackInt(0);
+            return true;
+        }
+
+        return false;
+    }
+
+    private ushort? FindTargetTerritoryFromQuestStep(QuestController.QuestProgress currentQuest)
+    {
         // this can be triggered either manually (in which case we should increase the step counter), or automatically
         // (in which case it is ~1 frame later, and the step counter has already been increased)
         var sequence = currentQuest.Quest.FindSequence(currentQuest.Sequence);
         if (sequence == null)
-            return;
+            return null;
 
         QuestStep? step = sequence.FindStep(currentQuest.Step);
         if (step != null)
@@ -421,24 +466,44 @@ internal sealed class GameUiController : IDisposable
         if (step == null || step.TargetTerritoryId == null)
         {
             _logger.LogTrace("TravelYesNo: Not found");
-            return;
+            return null;
         }
 
+        _logger.LogDebug("Target territory for quest step: {TargetTerritory}", step.TargetTerritoryId);
+        return step.TargetTerritoryId;
+    }
+
+    private bool TryFindWarp(ushort targetTerritoryId, string actualPrompt, [NotNullWhen(true)] out uint? warpId,
+        [NotNullWhen(true)] out string? warpText)
+    {
         var warps = _dataManager.GetExcelSheet<Warp>()!
-            .Where(x => x.RowId > 0 && x.TerritoryType.Row == step.TargetTerritoryId);
+            .Where(x => x.RowId > 0 && x.TerritoryType.Row == targetTerritoryId);
         foreach (var entry in warps)
         {
-            string? excelPrompt = entry.Question?.ToString();
-            if (excelPrompt == null || !GameStringEquals(excelPrompt, actualPrompt))
-            {
-                _logger.LogDebug("Ignoring prompt '{Prompt}'", excelPrompt);
-                continue;
-            }
+            string? excelName = entry.Name?.ToString();
+            string? excelQuestion = entry.Question?.ToString();
 
-            _logger.LogInformation("Using warp {Id}, {Prompt}", entry.RowId, excelPrompt);
-            addonSelectYesno->AtkUnitBase.FireCallbackInt(0);
-            return;
+            if (excelQuestion != null && GameStringEquals(excelQuestion, actualPrompt))
+            {
+                warpId = entry.RowId;
+                warpText = excelQuestion;
+                return true;
+            }
+            else if (excelName != null && GameStringEquals(excelName, actualPrompt))
+            {
+                warpId = entry.RowId;
+                warpText = excelName;
+                return true;
+            }
+            else
+            {
+                _logger.LogDebug("Ignoring prompt '{Prompt}'", excelQuestion);
+            }
         }
+
+        warpId = null;
+        warpText = null;
+        return false;
     }
 
     private unsafe void PointMenuPostSetup(AddonEvent type, AddonArgs args)
@@ -551,6 +616,8 @@ internal sealed class GameUiController : IDisposable
             return _gameFunctions.GetDialogueText(quest, excelSheet, excelRef.AsKey());
         else if (excelRef.Type == ExcelRef.EType.RowId)
             return _gameFunctions.GetDialogueTextByRowId(excelSheet, excelRef.AsRowId());
+        else if (excelRef.Type == ExcelRef.EType.RawString)
+            return excelRef.AsRawString();
 
         return null;
     }

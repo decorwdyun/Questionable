@@ -85,15 +85,7 @@
           "StopDistance": 7,
           "TerritoryId": 129,
           "InteractionType": "Interact",
-          "TargetTerritoryId": 138,
-          "DialogueChoices": [
-            {
-              "Type": "List",
-              "ExcelSheet": "Warp",
-              "Prompt": null,
-              "Answer": 131109
-            }
-          ]
+          "TargetTerritoryId": 138
         },
         {
           "DataId": 14,
