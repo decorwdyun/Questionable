@@ -162,7 +162,24 @@ public static class RoslynShortcuts
             else
                 throw new Exception($"Unsupported ExcelRef type {excelRef.Type}");
         }
-        else if (value is null)
+        else if (value is ComplexCombatData complexCombatData)
+        {
+            return ObjectCreationExpression(
+                    IdentifierName(nameof(ComplexCombatData)))
+                .WithInitializer(
+                    InitializerExpression(
+                        SyntaxKind.ObjectInitializerExpression,
+                        SeparatedList<ExpressionSyntax>(
+                            SyntaxNodeList(
+                                Assignment(nameof(ComplexCombatData.DataId), complexCombatData.DataId, default(uint))
+                                    .AsSyntaxNodeOrToken(),
+                                Assignment(nameof(ComplexCombatData.RewardItemId), complexCombatData.RewardItemId, null)
+                                    .AsSyntaxNodeOrToken(),
+                                Assignment(nameof(ComplexCombatData.RewardItemCount), complexCombatData.RewardItemCount, null)
+                                    .AsSyntaxNodeOrToken(),
+                                AssignmentList(nameof(ComplexCombatData.CompletionQuestVariablesFlags), complexCombatData.CompletionQuestVariablesFlags)
+                                    .AsSyntaxNodeOrToken()))));
+        }else if (value is null)
             return LiteralExpression(SyntaxKind.NullLiteralExpression);
         else
             throw new Exception($"Unsupported data type {value.GetType()} = {value}");
