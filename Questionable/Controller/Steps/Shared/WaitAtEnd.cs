@@ -205,7 +205,7 @@ internal static class WaitAtEnd
                 : ETaskResult.StillRunning;
 
         public override string ToString() =>
-            $"WaitObj({DataId} at {Destination.ToString("G", CultureInfo.InvariantCulture)})";
+            $"WaitObj({DataId} at {Destination.ToString("G", CultureInfo.InvariantCulture)} < {Distance})";
     }
 
     internal sealed class WaitQuestAccepted : ITask

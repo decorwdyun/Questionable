@@ -245,7 +245,7 @@ internal sealed class MovementController : IDisposable
     }
 
     private void PrepareNavigation(EMovementType type, uint? dataId, Vector3 to, bool fly, bool sprint,
-        float? stopDistance, bool ignoreDistanceToObject, bool useNavmesh)
+        float? stopDistance, bool ignoreDistanceToObject, bool land, bool useNavmesh)
     {
         ResetPathfinding();
 
@@ -256,16 +256,18 @@ internal sealed class MovementController : IDisposable
         }
 
         Destination = new DestinationData(type, dataId, to, stopDistance ?? (QuestStep.DefaultStopDistance - 0.2f), fly,
-            sprint,
-            ignoreDistanceToObject, useNavmesh);
+            sprint, ignoreDistanceToObject, land, useNavmesh);
         MovementStartedAt = DateTime.MaxValue;
     }
 
     public void NavigateTo(EMovementType type, uint? dataId, Vector3 to, bool fly, bool sprint,
-        float? stopDistance = null, bool ignoreDistanceToObject = false)
+        float? stopDistance = null, bool ignoreDistanceToObject = false, bool land = false)
     {
         fly |= _condition[ConditionFlag.Diving];
-        PrepareNavigation(type, dataId, to, fly, sprint, stopDistance, ignoreDistanceToObject, true);
+        if (fly && land)
+            to = to with { Y = to.Y + 2.6f };
+
+        PrepareNavigation(type, dataId, to, fly, sprint, stopDistance, ignoreDistanceToObject, land, true);
         _logger.LogInformation("Pathfinding to {Destination}", Destination);
 
         _cancellationTokenSource = new();
@@ -275,10 +277,13 @@ internal sealed class MovementController : IDisposable
     }
 
     public void NavigateTo(EMovementType type, uint? dataId, List<Vector3> to, bool fly, bool sprint,
-        float? stopDistance, bool ignoreDistanceToObject = false)
+        float? stopDistance, bool ignoreDistanceToObject = false, bool land = false)
     {
         fly |= _condition[ConditionFlag.Diving];
-        PrepareNavigation(type, dataId, to.Last(), fly, sprint, stopDistance, ignoreDistanceToObject, false);
+        if (fly && land && to.Count > 0)
+            to[^1] = to[^1] with { Y = to[^1].Y + 2.6f };
+
+        PrepareNavigation(type, dataId, to.Last(), fly, sprint, stopDistance, ignoreDistanceToObject, land, false);
 
         _logger.LogInformation("Moving to {Destination}", Destination);
         _navmeshIpc.MoveTo(to, fly);
@@ -328,6 +333,7 @@ internal sealed class MovementController : IDisposable
         bool IsFlying,
         bool CanSprint,
         bool IgnoreDistanceToObject,
+        bool Land,
         bool UseNavmesh);
 
     public sealed class PathfindingFailedException : Exception

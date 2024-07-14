@@ -5,6 +5,10 @@
   "description": "A series of quest sequences",
   "type": "object",
   "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "https://carvel.li/questionable/quest-1.0"
+    },
     "Author": {
       "description": "Author of the quest sequence",
       "type": "string"
@@ -1015,6 +1019,7 @@
     }
   },
   "required": [
+    "$schema",
     "QuestSequence",
     "Author"
   ],

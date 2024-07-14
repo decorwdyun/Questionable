@@ -28,14 +28,44 @@
             "Z": -178.63745
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact",
-          "Comment": "Unclear if this can be done automatically, enemies seem to despawn"
+          "InteractionType": "Interact"
         }
       ]
     },
     {
       "Sequence": 2,
       "Steps": [
+        {
+          "Position": {
+            "X": 46.32264,
+            "Y": 21.089579,
+            "Z": -190.2062
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AutoOnEnterArea",
+          "KillEnemyDataIds": [
+            14114
+          ],
+          "Mount": false,
+          "Sprint": false,
+          "DelaySecondsAtStart": 3
+        },
+        {
+          "DataId": 14115,
+          "Position": {
+            "X": 333.8999,
+            "Y": 13.173893,
+            "Z": -239.1983
+          },
+          "StopDistance": 1,
+          "TerritoryId": 957,
+          "InteractionType": "WaitForNpcAtPosition",
+          "NpcWaitDistance": 4,
+          "Mount": false,
+          "Sprint": false,
+          "DelaySecondsAtStart": 3
+        },
         {
           "DataId": 2012261,
           "Position": {
@@ -44,10 +74,7 @@
             "Z": -239.7956
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact",
-          "Mount": false,
-          "Sprint": false,
-          "DelaySecondsAtStart": 3
+          "InteractionType": "Interact"
         }
       ]
     },

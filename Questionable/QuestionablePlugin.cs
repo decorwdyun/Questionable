@@ -11,7 +11,6 @@ using Microsoft.Extensions.Logging;
 using Questionable.Controller;
 using Questionable.Controller.CombatModules;
 using Questionable.Controller.NavigationOverrides;
-using Questionable.Controller.Steps;
 using Questionable.Controller.Steps.Shared;
 using Questionable.Controller.Steps.Common;
 using Questionable.Controller.Steps.Interactions;

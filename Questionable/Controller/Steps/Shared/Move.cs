@@ -5,6 +5,8 @@ using System.Numerics;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Client.Game;
+using FFXIVClientStructs.FFXIV.Client.Game.Character;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.NavigationOverrides;
@@ -103,7 +105,8 @@ internal static class Move
                                 fly: Step.Fly == true && gameFunctions.IsFlyingUnlocked(Step.TerritoryId),
                                 sprint: Step.Sprint != false,
                                 stopDistance: distance,
-                                ignoreDistanceToObject: Step.IgnoreDistanceToObject == true);
+                                ignoreDistanceToObject: Step.IgnoreDistanceToObject == true,
+                                land: Step.Land == true);
                         });
                 }
             }
@@ -118,7 +121,8 @@ internal static class Move
                             m.NavigateTo(EMovementType.Quest, Step.DataId, [Destination],
                                 fly: Step.Fly == true && gameFunctions.IsFlyingUnlockedInCurrentZone(),
                                 sprint: Step.Sprint != false,
-                                stopDistance: distance);
+                                stopDistance: distance,
+                                land: Step.Land == true);
                         });
                 }
             }
@@ -182,8 +186,11 @@ internal static class Move
         }
     }
 
-    internal sealed class Land(MovementController movementController, IClientState clientState, ICondition condition, ILogger<Land> logger) : ITask
+    internal sealed class Land(IClientState clientState, ICondition condition, ILogger<Land> logger) : ITask
     {
+        private bool _landing;
+        private DateTime _continueAt;
+
         public bool Start()
         {
             if (!condition[ConditionFlag.InFlight])
@@ -192,32 +199,40 @@ internal static class Move
                 return false;
             }
 
-            AttemptLanding();
+            _landing = AttemptLanding();
+            _continueAt = DateTime.Now.AddSeconds(0.25);
             return true;
         }
 
         public ETaskResult Update()
         {
-            if (movementController.IsPathfinding || movementController.IsPathRunning)
+            if (DateTime.Now < _continueAt)
                 return ETaskResult.StillRunning;
 
             if (condition[ConditionFlag.InFlight])
             {
-                AttemptLanding();
+                if (!_landing)
+                {
+                    _landing = AttemptLanding();
+                    _continueAt = DateTime.Now.AddSeconds(0.25);
+                }
+
                 return ETaskResult.StillRunning;
             }
 
             return ETaskResult.TaskComplete;
         }
 
-        private void AttemptLanding()
+        private unsafe bool AttemptLanding()
         {
-            Vector3 playerPosition = clientState.LocalPlayer!.Position;
-            playerPosition.Y -= 3;
+            var character = (Character*)(clientState.LocalPlayer?.Address ?? 0);
+            if (character != null)
+            {
+                logger.LogInformation("Attempting to land");
+                return ActionManager.Instance()->UseAction(ActionType.Mount, character->Mount.MountId);
+            }
 
-            Vector3 nearbyPosition = Vector3.Normalize(playerPosition with { Y = 0 }) * 0.05f;
-            playerPosition += nearbyPosition;
-            movementController.NavigateTo(EMovementType.Landing, null, [playerPosition], true, false, 0);
+            return false;
         }
     }
 }
