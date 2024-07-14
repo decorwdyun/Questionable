@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Questionable.Controller.Steps.Common;
+using Questionable.Controller.Utils;
 using Questionable.Model;
 using Questionable.Model.V1;
 
@@ -19,29 +21,105 @@ internal static class Combat
             ArgumentNullException.ThrowIfNull(step.EnemySpawnType);
 
             var unmount = serviceProvider.GetRequiredService<UnmountTask>();
-            if (step.EnemySpawnType == EEnemySpawnType.AfterInteraction)
+            switch (step.EnemySpawnType)
             {
-                ArgumentNullException.ThrowIfNull(step.DataId);
+                case EEnemySpawnType.AfterInteraction:
+                {
+                    ArgumentNullException.ThrowIfNull(step.DataId);
 
-                var task = serviceProvider.GetRequiredService<Interact.DoInteract>()
-                    .With(step.DataId.Value, true);
-                return [unmount, task];
-            }
-            else if (step.EnemySpawnType == EEnemySpawnType.AfterItemUse)
-            {
-                ArgumentNullException.ThrowIfNull(step.DataId);
-                ArgumentNullException.ThrowIfNull(step.ItemId);
+                    var interaction = serviceProvider.GetRequiredService<Interact.DoInteract>()
+                        .With(step.DataId.Value, true);
+                    return [unmount, interaction, CreateTask(quest, sequence, step)];
+                }
 
-                var task = serviceProvider.GetRequiredService<UseItem.UseOnObject>()
-                    .With(step.DataId.Value, step.ItemId.Value);
-                return [unmount, task];
+                case EEnemySpawnType.AfterItemUse:
+                {
+                    ArgumentNullException.ThrowIfNull(step.DataId);
+                    ArgumentNullException.ThrowIfNull(step.ItemId);
+
+                    var useItem = serviceProvider.GetRequiredService<UseItem.UseOnObject>()
+                        .With(step.DataId.Value, step.ItemId.Value);
+                    return [unmount, useItem, CreateTask(quest, sequence, step)];
+                }
+
+                case EEnemySpawnType.AutoOnEnterArea:
+                    // automatically triggered when entering area, i.e. only unmount
+                    return [unmount, CreateTask(quest, sequence, step)];
+
+                case EEnemySpawnType.OverworldEnemies:
+                    // TODO currently not handled
+                    return [unmount];
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(step), $"Unknown spawn type {step.EnemySpawnType}");
             }
-            else
-                // automatically triggered when entering area, i.e. only unmount
-                return [unmount];
         }
 
-        public ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
-            => throw new InvalidOperationException();
+        public ITask CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
+        {
+            bool isLastStep = sequence.Steps.Last() == step;
+            return serviceProvider.GetRequiredService<HandleCombat>()
+                .With(quest.QuestId, isLastStep, step.KillEnemyDataIds, step.CompletionQuestVariablesFlags);
+        }
+    }
+
+    internal sealed class HandleCombat(CombatController combatController, GameFunctions gameFunctions) : ITask
+    {
+        private ushort _questId;
+        private bool _isLastStep;
+        private CombatController.CombatData _combatData = null!;
+        private IList<short?> _completionQuestVariableFlags = null!;
+
+        public ITask With(ushort questId, bool isLastStep, IList<uint> killEnemyDataIds,
+            IList<short?> completionQuestVariablesFlags)
+        {
+            _questId = questId;
+            _isLastStep = isLastStep;
+            _combatData = new CombatController.CombatData
+            {
+                KillEnemyDataIds = killEnemyDataIds.AsReadOnly(),
+            };
+            _completionQuestVariableFlags = completionQuestVariablesFlags;
+            return this;
+        }
+
+        public bool Start() => combatController.Start(_combatData);
+
+        public ETaskResult Update()
+        {
+            if (combatController.Update())
+                return ETaskResult.StillRunning;
+
+            // if our quest step has any completion flags, we need to check if they are set
+            if (QuestWorkUtils.HasCompletionFlags(_completionQuestVariableFlags))
+            {
+                var questWork = gameFunctions.GetQuestEx(_questId);
+                if (questWork == null)
+                    return ETaskResult.StillRunning;
+
+                if (!QuestWorkUtils.MatchesQuestWork(_completionQuestVariableFlags, questWork.Value, false))
+                    return ETaskResult.StillRunning;
+            }
+
+            // the last step, by definition, can only be progressed by the game recognizing we're in a new sequence,
+            // so this is an indefinite wait
+            if (_isLastStep)
+                return ETaskResult.StillRunning;
+            else
+            {
+                combatController.Stop();
+                return ETaskResult.TaskComplete;
+            }
+        }
+
+        public override string ToString()
+        {
+            if (QuestWorkUtils.HasCompletionFlags(_completionQuestVariableFlags))
+                return "HandleCombat(wait: QW flags)";
+            else if (_isLastStep)
+                return "HandleCombat(wait: next sequence)";
+            else
+                return "HandleCombat(wait: not in combat)";
+        }
     }
 }

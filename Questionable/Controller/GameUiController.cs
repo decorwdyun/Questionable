@@ -151,10 +151,7 @@ internal sealed class GameUiController : IDisposable
         if (string.IsNullOrEmpty(actualPrompt))
             actualPrompt = null;
 
-        List<string?> answers = new();
-        for (ushort i = 0; i < addonSelectIconString->AtkUnitBase.AtkValues[5].Int; i++)
-            answers.Add(addonSelectIconString->AtkUnitBase.AtkValues[i * 3 + 7].ReadAtkString());
-
+        var answers = GetChoices(addonSelectIconString);
         int? answer = HandleListChoice(actualPrompt, answers, checkAllSteps);
         if (answer != null)
         {
@@ -173,6 +170,14 @@ internal sealed class GameUiController : IDisposable
         }
     }
 
+    public static unsafe List<string?> GetChoices(AddonSelectIconString* addonSelectIconString)
+    {
+        List<string?> answers = new();
+        for (ushort i = 0; i < addonSelectIconString->AtkUnitBase.AtkValues[5].Int; i++)
+            answers.Add( addonSelectIconString->AtkValues[i * 3 + 7].ReadAtkString());
+
+        return answers;
+    }
 
     private int? HandleListChoice(string? actualPrompt, List<string?> answers, bool checkAllSteps)
     {
@@ -503,7 +508,7 @@ internal sealed class GameUiController : IDisposable
     /// <summary>
     /// Ensures characters like '-' are handled equally in both strings.
     /// </summary>
-    private static bool GameStringEquals(string? a, string? b)
+    public static bool GameStringEquals(string? a, string? b)
     {
         if (a == null)
             return b == null;

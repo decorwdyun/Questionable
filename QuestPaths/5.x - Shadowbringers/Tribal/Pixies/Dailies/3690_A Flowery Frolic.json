@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
   "QuestSequence": [
@@ -6,13 +6,13 @@
       "Sequence": 0,
       "Steps": [
         {
-          "DataId": 1042301,
+          "DataId": 1031809,
           "Position": {
-            "X": -66.02582,
-            "Y": 39.994705,
-            "Z": 321.06494
+            "X": -454.3069,
+            "Y": 71.43217,
+            "Z": 575.1278
           },
-          "TerritoryId": 957,
+          "TerritoryId": 816,
           "InteractionType": "AcceptQuest"
         }
       ]
@@ -21,19 +21,18 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 2012855,
+          "DataId": 2010859,
           "Position": {
-            "X": -255.23767,
-            "Y": 69.13855,
-            "Z": -527.8248
+            "X": -743.86206,
+            "Y": 78.96533,
+            "Z": 457.14502
           },
-          "TerritoryId": 957,
+          "TerritoryId": 816,
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
-            14677
-          ],
-          "Fly": true
+            11443
+          ]
         }
       ]
     },
@@ -41,15 +40,14 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 1042301,
+          "DataId": 1031809,
           "Position": {
-            "X": -66.02582,
-            "Y": 39.994705,
-            "Z": 321.06494
+            "X": -454.3069,
+            "Y": 71.43217,
+            "Z": 575.1278
           },
-          "TerritoryId": 957,
+          "TerritoryId": 816,
           "InteractionType": "CompleteQuest",
-          "AetheryteShortcut": "Thavnair - Yedlihmad",
           "Fly": true
         }
       ]

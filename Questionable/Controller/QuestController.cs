@@ -17,6 +17,7 @@ internal sealed class QuestController
     private readonly IClientState _clientState;
     private readonly GameFunctions _gameFunctions;
     private readonly MovementController _movementController;
+    private readonly CombatController _combatController;
     private readonly ILogger<QuestController> _logger;
     private readonly QuestRegistry _questRegistry;
     private readonly IKeyState _keyState;
@@ -38,6 +39,7 @@ internal sealed class QuestController
         IClientState clientState,
         GameFunctions gameFunctions,
         MovementController movementController,
+        CombatController combatController,
         ILogger<QuestController> logger,
         QuestRegistry questRegistry,
         IKeyState keyState,
@@ -48,6 +50,7 @@ internal sealed class QuestController
         _clientState = clientState;
         _gameFunctions = gameFunctions;
         _movementController = movementController;
+        _combatController = combatController;
         _logger = logger;
         _questRegistry = questRegistry;
         _keyState = keyState;
@@ -106,6 +109,7 @@ internal sealed class QuestController
             {
                 Stop("ESC pressed");
                 _movementController.Stop();
+                _combatController.Stop();
             }
         }
 
@@ -322,6 +326,7 @@ internal sealed class QuestController
             _taskQueue.Clear();
 
         _yesAlreadyIpc.RestoreYesAlready();
+        _combatController.Stop();
     }
 
     public void Stop(string label, bool continueIfAutomatic = false)
@@ -473,6 +478,7 @@ internal sealed class QuestController
         }
 
         _movementController.Stop();
+        _combatController.Stop();
 
         var newTasks = _taskFactories
             .SelectMany(x =>

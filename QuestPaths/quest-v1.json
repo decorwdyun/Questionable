@@ -1009,12 +1009,14 @@
         },
         "required": [
           "Sequence"
-        ]
+        ],
+        "additionalProperties": false
       }
     }
   },
   "required": [
     "QuestSequence",
     "Author"
-  ]
+  ],
+  "additionalProperties": false
 }

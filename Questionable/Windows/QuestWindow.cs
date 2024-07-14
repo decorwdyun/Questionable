@@ -12,7 +12,6 @@ using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
-using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
@@ -40,6 +39,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
     private readonly IFramework _framework;
     private readonly ITargetManager _targetManager;
     private readonly GameUiController _gameUiController;
+    private readonly CombatController _combatController;
     private readonly Configuration _configuration;
     private readonly NavmeshIpc _navmeshIpc;
     private readonly QuestRegistry _questRegistry;
@@ -57,6 +57,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         IFramework framework,
         ITargetManager targetManager,
         GameUiController gameUiController,
+        CombatController combatController,
         Configuration configuration,
         NavmeshIpc navmeshIpc,
         QuestRegistry questRegistry,
@@ -75,6 +76,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         _framework = framework;
         _targetManager = targetManager;
         _gameUiController = gameUiController;
+        _combatController = combatController;
         _configuration = configuration;
         _navmeshIpc = navmeshIpc;
         _questRegistry = questRegistry;
@@ -186,8 +188,17 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
                     ImGui.TextUnformatted("(Not accepted)");
             }
 
-            ImGui.TextUnformatted(_questController.DebugState ?? "--");
             ImGui.EndDisabled();
+
+            if (_combatController.IsRunning)
+                ImGui.TextColored(ImGuiColors.DalamudOrange, "In Combat");
+            else
+            {
+                ImGui.BeginDisabled();
+                ImGui.TextUnformatted(_questController.DebugState ?? "--");
+                ImGui.EndDisabled();
+            }
+
             ImGui.TextUnformatted(_questController.Comment ?? "--");
 
             //var nextStep = _questController.GetNextStep();
@@ -523,7 +534,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         {
             _movementController.Destination = null;
             _chatFunctions.ExecuteCommand(
-                $"/vnav {(_gameFunctions.IsFlyingUnlockedInCurrentZone() ? "flyflag" : "moveflag")}");
+                $"/vnav {(_condition[ConditionFlag.Mounted] && _gameFunctions.IsFlyingUnlockedInCurrentZone() ? "flyflag" : "moveflag")}");
         }
 
         ImGui.EndDisabled();

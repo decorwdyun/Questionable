@@ -1,0 +1,106 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1031809,
+          "Position": {
+            "X": -454.3069,
+            "Y": 71.43217,
+            "Z": 575.1278
+          },
+          "TerritoryId": 816,
+          "InteractionType": "AcceptQuest"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Comment": "TODO Has multiple possible targets, unsure if QW works",
+      "Steps": [
+        {
+          "Position": {
+            "X": -342.05676,
+            "Y": 37.5036,
+            "Z": 434.53723
+          },
+          "TerritoryId": 816,
+          "InteractionType": "WalkTo",
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            -128
+          ]
+        },
+        {
+          "DataId": 2010860,
+          "Position": {
+            "X": -340.38306,
+            "Y": 38.77307,
+            "Z": 434.07336
+          },
+          "TerritoryId": 816,
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
+        },
+        {
+          "DataId": 2010861,
+          "Position": {
+            "X": -332.44836,
+            "Y": 44.47998,
+            "Z": 462.15002
+          },
+          "TerritoryId": 816,
+          "InteractionType": "Interact",
+          "SkipIf": [
+            "NotTargetable"
+          ]
+        },
+        {
+          "DataId": 2010863,
+          "Position": {
+            "X": -293.08008,
+            "Y": 42.70996,
+            "Z": 463.61487
+          },
+          "TerritoryId": 816,
+          "InteractionType": "Interact",
+          "SkipIf": [
+            "NotTargetable"
+          ],
+          "IgnoreDistanceToObject": true
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1031809,
+          "Position": {
+            "X": -454.3069,
+            "Y": 71.43217,
+            "Z": 575.1278
+          },
+          "TerritoryId": 816,
+          "InteractionType": "CompleteQuest",
+          "Fly": true
+        }
+      ]
+    }
+  ]
+}

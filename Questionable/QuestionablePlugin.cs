@@ -9,6 +9,7 @@ using Dalamud.Plugin.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller;
+using Questionable.Controller.CombatModules;
 using Questionable.Controller.NavigationOverrides;
 using Questionable.Controller.Steps;
 using Questionable.Controller.Steps.Shared;
@@ -92,7 +93,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTaskWithFactory<AetherCurrent.Factory, AetherCurrent.DoAttune>();
         serviceCollection.AddTaskWithFactory<AethernetShard.Factory, AethernetShard.DoAttune>();
         serviceCollection.AddTaskWithFactory<Aetheryte.Factory, Aetheryte.DoAttune>();
-        serviceCollection.AddSingleton<ITaskFactory, Combat.Factory>();
+        serviceCollection.AddTaskWithFactory<Combat.Factory, Combat.HandleCombat>();
         serviceCollection.AddTaskWithFactory<Duty.Factory, Duty.OpenDutyFinder>();
         serviceCollection.AddTaskWithFactory<Emote.Factory, Emote.UseOnObject, Emote.Use>();
         serviceCollection.AddTaskWithFactory<Action.Factory, Action.UseOnObject>();
@@ -120,6 +121,9 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<QuestController>();
         serviceCollection.AddSingleton<GameUiController>();
         serviceCollection.AddSingleton<NavigationShortcutController>();
+        serviceCollection.AddSingleton<CombatController>();
+
+        serviceCollection.AddSingleton<ICombatModule, RotationSolverRebornModule>();
 
         serviceCollection.AddSingleton<QuestWindow>();
         serviceCollection.AddSingleton<ConfigWindow>();

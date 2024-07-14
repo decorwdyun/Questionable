@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
   "QuestSequence": [
@@ -21,15 +21,15 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 1042469,
+          "DataId": 1042367,
           "Position": {
-            "X": -578.5153,
-            "Y": -0.01527307,
-            "Z": -36.514893
+            "X": 507.01135,
+            "Y": 12.589098,
+            "Z": -482.96332
           },
           "TerritoryId": 957,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "Thavnair - Great Work",
+          "AetheryteShortcut": "Thavnair - Palaka's Stand",
           "Fly": true
         }
       ]
@@ -38,16 +38,15 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 1042470,
+          "DataId": 2012851,
           "Position": {
-            "X": -579.553,
-            "Y": -0.058757372,
-            "Z": -31.23523
+            "X": 427.4204,
+            "Y": 18.44812,
+            "Z": -451.37714
           },
-          "StopDistance": 4,
           "TerritoryId": 957,
-          "InteractionType": "UseItem",
-          "ItemId": 2003401
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
@@ -55,15 +54,38 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 1042470,
+          "DataId": 2012851,
           "Position": {
-            "X": -579.553,
-            "Y": -0.058757372,
-            "Z": -31.23523
+            "X": 427.4204,
+            "Y": 18.44812,
+            "Z": -451.37714
           },
-          "StopDistance": 4,
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "SkipIf": [
+            "NotTargetable"
+          ]
+        },
+        {
+          "Position": {
+            "X": 436.76804,
+            "Y": 21.84539,
+            "Z": -466.46533
+          },
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true
+        },
+        {
+          "DataId": 1042367,
+          "Position": {
+            "X": 507.01135,
+            "Y": 12.589098,
+            "Z": -482.96332
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact",
+          "DisableNavmesh": true
         }
       ]
     },

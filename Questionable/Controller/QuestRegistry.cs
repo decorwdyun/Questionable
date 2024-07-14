@@ -57,15 +57,34 @@ internal sealed class QuestRegistry
                 new DirectoryInfo(Path.Combine(solutionDirectory.FullName, "QuestPaths"));
             if (pathProjectDirectory.Exists)
             {
-                LoadFromDirectory(new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "2.x - A Realm Reborn")));
-                LoadFromDirectory(new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "5.x - Shadowbringers")));
-                LoadFromDirectory(new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "6.x - Endwalker")));
-                LoadFromDirectory(new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "7.x - Dawntrail")));
+                try
+                {
+                    LoadFromDirectory(
+                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "2.x - A Realm Reborn")));
+                    LoadFromDirectory(
+                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "5.x - Shadowbringers")));
+                    LoadFromDirectory(
+                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "6.x - Endwalker")));
+                    LoadFromDirectory(
+                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "7.x - Dawntrail")));
+                }
+                catch (Exception e)
+                {
+                    _quests.Clear();
+                    _logger.LogError(e, "Failed to load quests from project directory");
+                }
             }
         }
 #endif
 
-        LoadFromDirectory(new DirectoryInfo(Path.Combine(_pluginInterface.ConfigDirectory.FullName, "Quests")));
+        try
+        {
+            LoadFromDirectory(new DirectoryInfo(Path.Combine(_pluginInterface.ConfigDirectory.FullName, "Quests")));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Failed to load all quests from user directory (some may have been successfully loaded)");
+        }
 
 #if !RELEASE
         foreach (var quest in _quests.Values)
@@ -83,14 +102,17 @@ internal sealed class QuestRegistry
     private void LoadQuestFromStream(string fileName, Stream stream)
     {
         _logger.LogTrace("Loading quest from '{FileName}'", fileName);
-        var questId = ExtractQuestIdFromName(fileName);
+        ushort? questId = ExtractQuestIdFromName(fileName);
+        if (questId == null)
+            return;
+
         Quest quest = new Quest
         {
-            QuestId = questId,
+            QuestId = questId.Value,
             Root = JsonSerializer.Deserialize<QuestRoot>(stream)!,
-            Info = _questData.GetQuestInfo(questId),
+            Info = _questData.GetQuestInfo(questId.Value),
         };
-        _quests[questId] = quest;
+        _quests[questId.Value] = quest;
     }
 
     private void LoadFromDirectory(DirectoryInfo directory)
@@ -119,10 +141,13 @@ internal sealed class QuestRegistry
             LoadFromDirectory(childDirectory);
     }
 
-    private static ushort ExtractQuestIdFromName(string resourceName)
+    private static ushort? ExtractQuestIdFromName(string resourceName)
     {
         string name = resourceName.Substring(0, resourceName.Length - ".json".Length);
         name = name.Substring(name.LastIndexOf('.') + 1);
+
+        if (!name.Contains('_', StringComparison.Ordinal))
+            return null;
 
         string[] parts = name.Split('_', 2);
         return ushort.Parse(parts[0], CultureInfo.InvariantCulture);

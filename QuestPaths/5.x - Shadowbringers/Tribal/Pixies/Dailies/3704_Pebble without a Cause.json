@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
   "QuestSequence": [
@@ -6,13 +6,13 @@
       "Sequence": 0,
       "Steps": [
         {
-          "DataId": 1042301,
+          "DataId": 1031809,
           "Position": {
-            "X": -66.02582,
-            "Y": 39.994705,
-            "Z": 321.06494
+            "X": -454.3069,
+            "Y": 71.43217,
+            "Z": 575.1278
           },
-          "TerritoryId": 957,
+          "TerritoryId": 816,
           "InteractionType": "AcceptQuest"
         }
       ]
@@ -21,19 +21,20 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 2012855,
+          "DataId": 2010901,
           "Position": {
-            "X": -255.23767,
-            "Y": 69.13855,
-            "Z": -527.8248
+            "X": -413.96204,
+            "Y": -0.10687256,
+            "Z": -55.77173
           },
-          "TerritoryId": 957,
+          "TerritoryId": 816,
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
-            14677
+            11451
           ],
-          "Fly": true
+          "Fly": true,
+          "Comment": "TODO Combat is optional, check where we should walk"
         }
       ]
     },
@@ -41,15 +42,15 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 1042301,
+          "DataId": 1031809,
           "Position": {
-            "X": -66.02582,
-            "Y": 39.994705,
-            "Z": 321.06494
+            "X": -454.3069,
+            "Y": 71.43217,
+            "Z": 575.1278
           },
-          "TerritoryId": 957,
+          "TerritoryId": 816,
           "InteractionType": "CompleteQuest",
-          "AetheryteShortcut": "Thavnair - Yedlihmad",
+          "AetheryteShortcut": "Il Mheg - Lydha Lran",
           "Fly": true
         }
       ]

@@ -55,6 +55,9 @@ public class QuestSourceGenerator : ISourceGenerator
                 continue;
 
             string name = Path.GetFileName(additionalFile.Path);
+            if (!name.Contains('_'))
+                continue;
+
             ushort id = ushort.Parse(name.Substring(0, name.IndexOf('_')));
 
             var text = additionalFile.GetText();

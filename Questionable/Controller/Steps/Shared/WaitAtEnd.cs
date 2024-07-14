@@ -9,6 +9,7 @@ using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using Microsoft.Extensions.DependencyInjection;
 using Questionable.Controller.Steps.Common;
+using Questionable.Controller.Utils;
 using Questionable.Data;
 using Questionable.Model;
 using Questionable.Model.V1;
@@ -17,7 +18,10 @@ namespace Questionable.Controller.Steps.Shared;
 
 internal static class WaitAtEnd
 {
-    internal sealed class Factory(IServiceProvider serviceProvider, IClientState clientState, ICondition condition,
+    internal sealed class Factory(
+        IServiceProvider serviceProvider,
+        IClientState clientState,
+        ICondition condition,
         TerritoryData territoryData)
         : ITaskFactory
     {
@@ -106,14 +110,16 @@ internal static class WaitAtEnd
                 case EInteractionType.AcceptQuest:
                     return
                     [
-                        serviceProvider.GetRequiredService<WaitQuestAccepted>().With(step.PickupQuestId ?? quest.QuestId),
+                        serviceProvider.GetRequiredService<WaitQuestAccepted>()
+                            .With(step.PickupQuestId ?? quest.QuestId),
                         serviceProvider.GetRequiredService<WaitDelay>()
                     ];
 
                 case EInteractionType.CompleteQuest:
                     return
                     [
-                        serviceProvider.GetRequiredService<WaitQuestCompleted>().With(step.TurnInQuestId ?? quest.QuestId),
+                        serviceProvider.GetRequiredService<WaitQuestCompleted>()
+                            .With(step.TurnInQuestId ?? quest.QuestId),
                         serviceProvider.GetRequiredService<WaitDelay>()
                     ];
 
@@ -167,7 +173,8 @@ internal static class WaitAtEnd
         public ETaskResult Update()
         {
             QuestWork? questWork = gameFunctions.GetQuestEx(Quest.QuestId);
-            return questWork != null && Step.MatchesQuestVariables(questWork.Value, false)
+            return questWork != null &&
+                   QuestWorkUtils.MatchesQuestWork(Step.CompletionQuestVariablesFlags, questWork.Value, false)
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
         }

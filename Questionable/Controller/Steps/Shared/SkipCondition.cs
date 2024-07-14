@@ -8,6 +8,7 @@ using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Questionable.Controller.Utils;
 using Questionable.Model;
 using Questionable.Model.V1;
 
@@ -112,7 +113,8 @@ internal static class SkipCondition
             }
 
             QuestWork? questWork = gameFunctions.GetQuestEx(QuestId);
-            if (questWork != null && Step.MatchesQuestVariables(questWork.Value, true))
+            if (questWork != null &&
+                QuestWorkUtils.MatchesQuestWork(Step.CompletionQuestVariablesFlags, questWork.Value, true))
             {
                 logger.LogInformation("Skipping step, as quest variables match");
                 return true;

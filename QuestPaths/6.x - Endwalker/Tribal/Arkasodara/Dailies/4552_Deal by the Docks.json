@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
   "QuestSequence": [
@@ -21,14 +21,15 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 2012892,
+          "DataId": 1037644,
           "Position": {
-            "X": -120.19531,
-            "Y": 41.000854,
-            "Z": 340.41345
+            "X": -293.72095,
+            "Y": 1.4600283,
+            "Z": 551.0491
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
@@ -36,15 +37,15 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 1042458,
+          "DataId": 1042366,
           "Position": {
-            "X": 416.5254,
-            "Y": 8.834262,
-            "Z": -344.38086
+            "X": 185.56494,
+            "Y": 1.8742322,
+            "Z": 760.4332
           },
           "TerritoryId": 957,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "Thavnair - Palaka's Stand",
+          "AetheryteShortcut": "Thavnair - Yedlihmad",
           "Fly": true
         }
       ]
@@ -61,7 +62,6 @@
           },
           "TerritoryId": 957,
           "InteractionType": "CompleteQuest",
-          "AetheryteShortcut": "Thavnair - Yedlihmad",
           "Fly": true
         }
       ]

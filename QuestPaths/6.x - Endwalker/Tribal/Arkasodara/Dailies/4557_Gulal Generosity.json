@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
   "QuestSequence": [
@@ -37,9 +37,9 @@
       "Steps": [
         {
           "Position": {
-            "X": 86.44138,
-            "Y": 38.836067,
-            "Z": 375.43958
+            "X": 436.3157,
+            "Y": 3.1168795,
+            "Z": -241.61731
           },
           "TerritoryId": 957,
           "InteractionType": "WalkTo",
@@ -51,15 +51,15 @@
             null,
             null,
             null,
-            -128
+            -32
           ]
         },
         {
-          "DataId": 2012887,
+          "DataId": 1042372,
           "Position": {
-            "X": 90.71484,
-            "Y": 38.70359,
-            "Z": 377.7981
+            "X": 441.062,
+            "Y": 3.5405273,
+            "Z": -238.78845
           },
           "StopDistance": 5,
           "TerritoryId": 957,
@@ -71,14 +71,14 @@
             null,
             null,
             null,
-            128
+            32
           ]
         },
         {
           "Position": {
-            "X": -73.42284,
-            "Y": 50.283375,
-            "Z": 165.20433
+            "X": 378.90213,
+            "Y": 3.1168797,
+            "Z": -226.82733
           },
           "TerritoryId": 957,
           "InteractionType": "WalkTo",
@@ -94,16 +94,16 @@
           ]
         },
         {
-          "DataId": 2012888,
+          "DataId": 1042371,
           "Position": {
-            "X": -74.2962,
-            "Y": 50.095337,
-            "Z": 160.41797
+            "X": 376.7605,
+            "Y": 3.3540652,
+            "Z": -225.33002
           },
           "StopDistance": 5,
           "TerritoryId": 957,
           "InteractionType": "Action",
-          "Action": "Yellow Gulal",
+          "Action": "Blue Gulal",
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -115,9 +115,9 @@
         },
         {
           "Position": {
-            "X": -195.75089,
-            "Y": 35.536575,
-            "Z": 98.20429
+            "X": 404.06558,
+            "Y": 13.027411,
+            "Z": -307.05457
           },
           "TerritoryId": 957,
           "InteractionType": "WalkTo",
@@ -129,27 +129,27 @@
             null,
             null,
             null,
-            32
+            -128
           ]
         },
         {
-          "DataId": 2012889,
+          "DataId": 1042373,
           "Position": {
-            "X": -197.9859,
-            "Y": 36.209595,
-            "Z": 94.102295
+            "X": 406.1189,
+            "Y": 13.0274105,
+            "Z": -311.0857
           },
           "StopDistance": 5,
           "TerritoryId": 957,
           "InteractionType": "Action",
-          "Action": "Yellow Gulal",
+          "Action": "Red Gulal",
           "CompletionQuestVariablesFlags": [
             null,
             null,
             null,
             null,
             null,
-            -32
+            128
           ]
         }
       ]
@@ -157,16 +157,6 @@
     {
       "Sequence": 255,
       "Steps": [
-        {
-          "Position": {
-            "X": -68.59158,
-            "Y": 39.9961,
-            "Z": 320.7581
-          },
-          "TerritoryId": 957,
-          "InteractionType": "WalkTo",
-          "Fly": true
-        },
         {
           "DataId": 1042301,
           "Position": {
@@ -176,8 +166,8 @@
           },
           "TerritoryId": 957,
           "InteractionType": "CompleteQuest",
-          "Mount": false,
-          "Comment": "TODO Verify this properly unmounts"
+          "AetheryteShortcut": "Thavnair - Yedlihmad",
+          "Fly": true
         }
       ]
     }
