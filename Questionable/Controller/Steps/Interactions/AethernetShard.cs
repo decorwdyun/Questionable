@@ -28,7 +28,7 @@ internal static class AethernetShard
     {
         public EAetheryteLocation AetheryteLocation { get; set; }
 
-        public ITask? With(EAetheryteLocation aetheryteLocation)
+        public ITask With(EAetheryteLocation aetheryteLocation)
         {
             AetheryteLocation = aetheryteLocation;
             return this;

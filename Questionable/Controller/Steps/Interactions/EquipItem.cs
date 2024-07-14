@@ -90,20 +90,20 @@ internal static class EquipItem
             return ETaskResult.StillRunning;
         }
 
-        private unsafe bool Equip()
+        private unsafe void Equip()
         {
             var inventoryManager = InventoryManager.Instance();
             if (inventoryManager == null)
-                return false;
+                return;
 
             var equippedContainer = inventoryManager->GetInventoryContainer(InventoryType.EquippedItems);
             if (equippedContainer == null)
-                return false;
+                return;
 
             if (_targetSlots.Any(slot => equippedContainer->GetInventorySlot(slot)->ItemId == _itemId))
             {
                 logger.LogInformation("Already equipped {Item}, skipping step", _item.Name?.ToString());
-                return false;
+                return;
             }
 
             foreach (InventoryType sourceInventoryType in SourceInventoryTypes)
@@ -134,11 +134,9 @@ internal static class EquipItem
                     int result = inventoryManager->MoveItemSlot(sourceInventoryType, sourceSlot,
                         InventoryType.EquippedItems, targetSlot, 1);
                     logger.LogInformation("MoveItemSlot result: {Result}", result);
-                    return result == 0;
+                    return;
                 }
             }
-
-            return false;
         }
 
         private static List<ushort>? GetEquipSlot(Item item)

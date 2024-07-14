@@ -2,7 +2,6 @@
 using System.Linq;
 using Dalamud.Plugin.Services;
 using Lumina.Excel.GeneratedSheets2;
-using Microsoft.Extensions.Logging;
 
 namespace Questionable.Data;
 
@@ -10,7 +9,7 @@ internal sealed class AetherCurrentData
 {
     private readonly ImmutableDictionary<ushort, ImmutableList<uint>> _overworldCurrents;
 
-    public AetherCurrentData(IDataManager dataManager, ILogger<AetherCurrentData> logger)
+    public AetherCurrentData(IDataManager dataManager)
     {
         _overworldCurrents = dataManager.GetExcelSheet<AetherCurrentCompFlgSet>()!
             .Where(x => x.RowId > 0)
