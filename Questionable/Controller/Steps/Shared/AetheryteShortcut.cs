@@ -45,7 +45,7 @@ internal static class AetheryteShortcut
     {
         private DateTime _continueAt;
 
-        public QuestStep Step { get; set; } = null!;
+        public QuestStep? Step { get; set; }
         public EAetheryteLocation TargetAetheryte { get; set; }
 
         /// <summary>
@@ -54,7 +54,7 @@ internal static class AetheryteShortcut
         /// </summary>
         public ushort ExpectedTerritoryId { get; set; }
 
-        public ITask With(QuestStep step, EAetheryteLocation targetAetheryte, ushort expectedTerritoryId)
+        public ITask With(QuestStep? step, EAetheryteLocation targetAetheryte, ushort expectedTerritoryId)
         {
             Step = step;
             TargetAetheryte = targetAetheryte;
@@ -66,7 +66,7 @@ internal static class AetheryteShortcut
         {
             _continueAt = DateTime.Now.AddSeconds(8);
             ushort territoryType = clientState.TerritoryType;
-            if (ExpectedTerritoryId == territoryType)
+            if (Step != null && ExpectedTerritoryId == territoryType)
             {
                 if (Step.SkipIf.Contains(ESkipCondition.AetheryteShortcutIfInSameTerritory))
                 {

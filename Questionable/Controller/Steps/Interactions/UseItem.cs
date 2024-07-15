@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Numerics;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Common;
+using Questionable.Controller.Steps.Shared;
 using Questionable.Model;
 using Questionable.Model.V1;
+using AethernetShortcut = Questionable.Controller.Steps.Shared.AethernetShortcut;
 
 namespace Questionable.Controller.Steps.Interactions;
 
@@ -13,7 +16,7 @@ internal static class UseItem
 {
     public const int VesperBayAetheryteTicket = 30362;
 
-    internal sealed class Factory(IServiceProvider serviceProvider) : ITaskFactory
+    internal sealed class Factory(IServiceProvider serviceProvider, ILogger<Factory> logger) : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -21,6 +24,16 @@ internal static class UseItem
                 return [];
 
             ArgumentNullException.ThrowIfNull(step.ItemId);
+
+            if (step.ItemId == VesperBayAetheryteTicket)
+            {
+                unsafe
+                {
+                    InventoryManager* inventoryManager = InventoryManager.Instance();
+                    if (inventoryManager->GetInventoryItemCount(step.ItemId.Value) == 0)
+                        return CreateVesperBayFallbackTask();
+                }
+            }
 
             var unmount = serviceProvider.GetRequiredService<UnmountTask>();
             if (step.GroundTarget == true)
@@ -47,6 +60,23 @@ internal static class UseItem
 
         public ITask CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
             => throw new InvalidOperationException();
+
+        private IEnumerable<ITask> CreateVesperBayFallbackTask()
+        {
+            logger.LogWarning("No vesper bay aetheryte tickets in inventory, navigating via ferry in Limsa instead");
+
+            uint npcId = 1003540;
+            ushort territoryId = 129;
+            Vector3 destination = new(-360.9217f, 8f, 38.92566f);
+            yield return serviceProvider.GetRequiredService<AetheryteShortcut.UseAetheryteShortcut>()
+                .With(null, EAetheryteLocation.Limsa, territoryId);
+            yield return serviceProvider.GetRequiredService<AethernetShortcut.UseAethernetShortcut>()
+                .With(EAetheryteLocation.Limsa, EAetheryteLocation.LimsaArcanist);
+            yield return serviceProvider.GetRequiredService<Move.MoveInternal>()
+                .With(territoryId, destination, dataId: npcId, sprint: false);
+            yield return serviceProvider.GetRequiredService<Interact.DoInteract>()
+                .With(npcId, true);
+        }
     }
 
     internal abstract class UseItemBase(ILogger logger) : ITask

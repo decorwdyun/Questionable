@@ -99,15 +99,7 @@ internal static class Move
                 if (actualDistance > distance)
                 {
                     yield return serviceProvider.GetRequiredService<MoveInternal>()
-                        .With(Destination, m =>
-                        {
-                            m.NavigateTo(EMovementType.Quest, Step.DataId, Destination,
-                                fly: Step.Fly == true && gameFunctions.IsFlyingUnlocked(Step.TerritoryId),
-                                sprint: Step.Sprint != false,
-                                stopDistance: distance,
-                                ignoreDistanceToObject: Step.IgnoreDistanceToObject == true,
-                                land: Step.Land == true);
-                        });
+                        .With(Step, Destination);
                 }
             }
             else
@@ -116,14 +108,7 @@ internal static class Move
                 if (actualDistance > distance)
                 {
                     yield return serviceProvider.GetRequiredService<MoveInternal>()
-                        .With(Destination, m =>
-                        {
-                            m.NavigateTo(EMovementType.Quest, Step.DataId, [Destination],
-                                fly: Step.Fly == true && gameFunctions.IsFlyingUnlockedInCurrentZone(),
-                                sprint: Step.Sprint != false,
-                                stopDistance: distance,
-                                land: Step.Land == true);
-                        });
+                        .With(Step, Destination);
                 }
             }
 
@@ -132,22 +117,68 @@ internal static class Move
         }
     }
 
-    internal sealed class MoveInternal(MovementController movementController, ILogger<MoveInternal> logger) : ITask
+    internal sealed class MoveInternal(
+        MovementController movementController,
+        GameFunctions gameFunctions,
+        ILogger<MoveInternal> logger) : ITask
     {
-        public Action<MovementController> StartAction { get; set; } = null!;
+        public Action StartAction { get; set; } = null!;
         public Vector3 Destination { get; set; }
 
-        public ITask With(Vector3 destination, Action<MovementController> startAction)
+        public ITask With(QuestStep step, Vector3 destination)
+        {
+            return With(
+                territoryId: step.TerritoryId,
+                destination: destination,
+                stopDistance: step.StopDistance,
+                dataId: step.DataId,
+                disableNavMesh: step.DisableNavmesh,
+                sprint: step.Sprint != false,
+                fly: step.Fly == true,
+                land: step.Land == true,
+                ignoreDistanceToObject: step.IgnoreDistanceToObject == true);
+        }
+
+        public ITask With(ushort territoryId, Vector3 destination, float? stopDistance = null, uint? dataId = null,
+            bool disableNavMesh = false, bool sprint = true, bool fly = false, bool land = false,
+            bool ignoreDistanceToObject = false)
         {
             Destination = destination;
-            StartAction = startAction;
+
+            if (!gameFunctions.IsFlyingUnlocked(territoryId))
+            {
+                fly = false;
+                land = false;
+            }
+
+            if (!disableNavMesh)
+            {
+                StartAction = () =>
+                    movementController.NavigateTo(EMovementType.Quest, dataId, Destination,
+                        fly: fly,
+                        sprint: sprint,
+                        stopDistance: stopDistance,
+                        ignoreDistanceToObject: ignoreDistanceToObject,
+                        land: land);
+            }
+            else
+            {
+                StartAction = () =>
+                    movementController.NavigateTo(EMovementType.Quest, dataId, [Destination],
+                        fly: fly,
+                        sprint: sprint,
+                        stopDistance: stopDistance,
+                        ignoreDistanceToObject: ignoreDistanceToObject,
+                        land: land);
+            }
+
             return this;
         }
 
         public bool Start()
         {
             logger.LogInformation("Moving to {Destination}", Destination.ToString("G", CultureInfo.InvariantCulture));
-            StartAction(movementController);
+            StartAction();
             return true;
         }
 
