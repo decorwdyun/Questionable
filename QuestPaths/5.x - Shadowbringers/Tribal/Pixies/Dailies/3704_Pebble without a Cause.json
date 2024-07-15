@@ -1,6 +1,7 @@
 {
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
+  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -28,19 +29,39 @@
             "Z": -55.77173
           },
           "TerritoryId": 816,
-          "InteractionType": "Combat",
-          "EnemySpawnType": "AfterInteraction",
-          "KillEnemyDataIds": [
-            11451
-          ],
+          "InteractionType": "Interact",
           "Fly": true,
-          "Comment": "TODO Combat is optional, check where we should walk"
+          "$": "Only if QW: 0 0 ??? 0 0 0",
+          "SkipIf": ["NotTargetable"]
+        },
+        {
+          "DataId": 2010902,
+          "Position": {
+            "X": -405.9358,
+            "Y": -0.07635498,
+            "Z": -28.397034
+          },
+          "TerritoryId": 816,
+          "InteractionType": "Interact",
+          "$": "Only if QW: 0 0 1 0 0 0 → if complete, 0 16 0 0 0 0",
+          "SkipIf": ["NotTargetable"]
         }
       ]
     },
     {
       "Sequence": 255,
       "Steps": [
+        {
+          "Position": {
+            "X": -398.9776,
+            "Y": 0.82966614,
+            "Z": 8.668919
+          },
+          "TerritoryId": 816,
+          "InteractionType": "WalkTo",
+          "Mount": false,
+          "DisableNavmesh": true
+        },
         {
           "DataId": 1031809,
           "Position": {

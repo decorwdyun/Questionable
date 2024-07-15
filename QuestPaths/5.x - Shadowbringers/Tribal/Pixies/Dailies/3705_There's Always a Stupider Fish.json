@@ -22,33 +22,26 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 1032169,
           "Position": {
-            "X": -423.33105,
-            "Y": 25.599815,
-            "Z": 265.94946
+            "X": -115.77283,
+            "Y": 7.1942587,
+            "Z": 130.61378
           },
           "TerritoryId": 816,
-          "InteractionType": "Interact",
-          "Fly": true,
-          "SkipIf": [
-            "NotTargetable"
-          ],
-          "$": "Only if QW: 0 48 0 0 0 0"
+          "InteractionType": "WalkTo",
+          "Fly": true
         },
         {
-          "DataId": 1032167,
+          "DataId": 2010911,
           "Position": {
-            "X": -416.52557,
-            "Y": 20.303928,
-            "Z": 221.75928
+            "X": -113.93915,
+            "Y": -36.087585,
+            "Z": 87.6936
           },
           "TerritoryId": 816,
           "InteractionType": "Interact",
-          "Fly": true,
-          "SkipIf": [
-            "NotTargetable"
-          ]
+          "DisableNavmesh": true,
+          "$": "QW: 0 2 0 0 0 0"
         }
       ]
     },
@@ -64,6 +57,7 @@
           },
           "TerritoryId": 816,
           "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Il Mheg - Lydha Lran",
           "Fly": true
         }
       ]

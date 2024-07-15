@@ -173,8 +173,8 @@ internal sealed class QuestRegistry
         return ushort.Parse(parts[0], CultureInfo.InvariantCulture);
     }
 
-    public bool IsKnownQuest(ushort questId) => TryGetQuest(questId, out _);
+    public bool IsKnownQuest(ushort questId) => _quests.ContainsKey(questId);
 
     public bool TryGetQuest(ushort questId, [NotNullWhen(true)] out Quest? quest)
-        => _quests.TryGetValue(questId, out quest) && !quest.Root.Disabled;
+        => _quests.TryGetValue(questId, out quest);
 }

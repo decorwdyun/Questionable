@@ -583,7 +583,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
             ImGui.SameLine();
 
             using var textColor = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudRed);
-            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.ExclamationTriangle,
+            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Flag,
                     $"{_questRegistry.ValidationIssueCount}"))
                 _questValidationWindow.IsOpen = true;
         }
