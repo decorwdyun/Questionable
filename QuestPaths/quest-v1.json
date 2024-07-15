@@ -19,6 +19,9 @@
         "type": "string"
       }
     },
+    "Disabled": {
+      "type": "boolean"
+    },
     "Comment": {
       "type": "string"
     },

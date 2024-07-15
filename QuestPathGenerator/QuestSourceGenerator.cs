@@ -79,6 +79,9 @@ public class QuestSourceGenerator : ISourceGenerator
             }
 
             var quest = questNode.Deserialize<QuestRoot>()!;
+            if (quest.Disabled)
+                continue;
+
             quests.Add((id, quest));
         }
 

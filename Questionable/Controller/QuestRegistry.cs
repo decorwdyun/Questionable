@@ -130,7 +130,8 @@ internal sealed class QuestRegistry
                     var distinctSequenceCount = quest.Root.QuestSequence.Select(x => x.Sequence).Distinct().Count();
                     if (totalSequenceCount != distinctSequenceCount)
                     {
-                        _logger.LogWarning("Quest has duplicate sequence numbers: {QuestId} / {QuestName}", quest.QuestId,
+                        _logger.LogWarning("Quest has duplicate sequence numbers: {QuestId} / {QuestName}",
+                            quest.QuestId,
                             quest.Info.Name);
                         ++foundProblems;
                     }
@@ -196,7 +197,8 @@ internal sealed class QuestRegistry
                         {
                             _logger.LogWarning(
                                 "Quest step has duplicate completion flags: {QuestId} / {QuestName} → {Sequence} → {Flags}",
-                                quest.QuestId, quest.Info.Name, sequence.Sequence, string.Join(", ", duplicate.First()));
+                                quest.QuestId, quest.Info.Name, sequence.Sequence,
+                                string.Join(", ", duplicate.First()));
                             ++foundProblems;
                         }
                     }
@@ -231,6 +233,13 @@ internal sealed class QuestRegistry
             Root = JsonSerializer.Deserialize<QuestRoot>(stream)!,
             Info = _questData.GetQuestInfo(questId.Value),
         };
+        if (quest.Root.Disabled)
+        {
+            _logger.LogWarning("Quest {QuestId} / {QuestName} is disabled and won't be loaded", questId,
+                quest.Info.Name);
+            return;
+        }
+
         _quests[questId.Value] = quest;
     }
 
