@@ -105,7 +105,7 @@ internal sealed class QuestSelectionWindow : LWindow
     public override void OnClose()
     {
         TargetId = default;
-        TargetName = default;
+        TargetName = string.Empty;
         _quests = [];
         _offeredQuests = [];
     }

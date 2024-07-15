@@ -16,6 +16,8 @@ using Questionable.Controller.Steps.Common;
 using Questionable.Controller.Steps.Interactions;
 using Questionable.Data;
 using Questionable.External;
+using Questionable.Validation;
+using Questionable.Validation.Validators;
 using Questionable.Windows;
 using Action = Questionable.Controller.Steps.Interactions.Action;
 
@@ -128,6 +130,13 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<ConfigWindow>();
         serviceCollection.AddSingleton<DebugOverlay>();
         serviceCollection.AddSingleton<QuestSelectionWindow>();
+        serviceCollection.AddSingleton<QuestValidationWindow>();
+
+        serviceCollection.AddSingleton<QuestValidator>();
+        serviceCollection.AddSingleton<IQuestValidator, QuestDisabledValidator>();
+        serviceCollection.AddSingleton<IQuestValidator, BasicSequenceValidator>();
+        serviceCollection.AddSingleton<IQuestValidator, UniqueStartStopValidator>();
+        serviceCollection.AddSingleton<IQuestValidator, CompletionFlagsValidator>();
 
         serviceCollection.AddSingleton<CommandHandler>();
         serviceCollection.AddSingleton<DalamudInitializer>();

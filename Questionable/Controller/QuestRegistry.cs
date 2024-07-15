@@ -15,6 +15,7 @@ using Questionable.Controller.Utils;
 using Questionable.Data;
 using Questionable.Model;
 using Questionable.Model.V1;
+using Questionable.Validation;
 
 namespace Questionable.Controller;
 
@@ -23,21 +24,24 @@ internal sealed class QuestRegistry
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly QuestData _questData;
     private readonly IChatGui _chatGui;
+    private readonly QuestValidator _questValidator;
     private readonly ILogger<QuestRegistry> _logger;
 
     private readonly Dictionary<ushort, Quest> _quests = new();
 
     public QuestRegistry(IDalamudPluginInterface pluginInterface, QuestData questData, IChatGui chatGui,
-        ILogger<QuestRegistry> logger)
+        QuestValidator questValidator, ILogger<QuestRegistry> logger)
     {
         _pluginInterface = pluginInterface;
         _questData = questData;
         _chatGui = chatGui;
+        _questValidator = questValidator;
         _logger = logger;
     }
 
     public IEnumerable<Quest> AllQuests => _quests.Values;
     public int Count => _quests.Count;
+    public int ValidationIssueCount => _questValidator.IssueCount;
 
     public void Reload()
     {
@@ -110,113 +114,8 @@ internal sealed class QuestRegistry
     [Conditional("DEBUG")]
     private void ValidateQuests()
     {
-        Task.Run(() =>
-        {
-            try
-            {
-                int foundProblems = 0;
-                foreach (var quest in _quests.Values)
-                {
-                    int missingSteps = quest.Root.QuestSequence.Where(x => x.Sequence < 255).Max(x => x.Sequence) -
-                        quest.Root.QuestSequence.Count(x => x.Sequence < 255) + 1;
-                    if (missingSteps != 0)
-                    {
-                        _logger.LogWarning("Quest has missing steps: {QuestId} / {QuestName} → {Count}", quest.QuestId,
-                            quest.Info.Name, missingSteps);
-                        ++foundProblems;
-                    }
-
-                    var totalSequenceCount = quest.Root.QuestSequence.Count;
-                    var distinctSequenceCount = quest.Root.QuestSequence.Select(x => x.Sequence).Distinct().Count();
-                    if (totalSequenceCount != distinctSequenceCount)
-                    {
-                        _logger.LogWarning("Quest has duplicate sequence numbers: {QuestId} / {QuestName}",
-                            quest.QuestId,
-                            quest.Info.Name);
-                        ++foundProblems;
-                    }
-
-                    foreach (var sequence in quest.Root.QuestSequence)
-                    {
-                        if (sequence.Sequence == 0 &&
-                            sequence.Steps.LastOrDefault()?.InteractionType != EInteractionType.AcceptQuest)
-                        {
-                            _logger.LogWarning(
-                                "Quest likely has AcceptQuest configured wrong: {QuestId} / {QuestName} → {Sequence} / {Step}",
-                                quest.QuestId, quest.Info.Name, sequence.Sequence, sequence.Steps.Count - 1);
-                            ++foundProblems;
-                        }
-                        else if (sequence.Sequence == 255 &&
-                                 sequence.Steps.LastOrDefault()?.InteractionType != EInteractionType.CompleteQuest)
-                        {
-                            _logger.LogWarning(
-                                "Quest likely has CompleteQuest configured wrong: {QuestId} / {QuestName} → {Sequence} / {Step}",
-                                quest.QuestId, quest.Info.Name, sequence.Sequence, sequence.Steps.Count - 1);
-                            ++foundProblems;
-                        }
-
-
-                        var acceptQuestSteps = sequence.Steps
-                            .Where(x => x is { InteractionType: EInteractionType.AcceptQuest, PickupQuestId: null })
-                            .Where(x => sequence.Sequence != 0 || x != sequence.Steps.Last());
-                        foreach (var step in acceptQuestSteps)
-                        {
-                            _logger.LogWarning(
-                                "Quest has unexpected AcceptQuest steps: {QuestId} / {QuestName} → {Sequence} / {Step}",
-                                quest.QuestId, quest.Info.Name, sequence.Sequence, sequence.Steps.IndexOf(step));
-                            ++foundProblems;
-                        }
-
-                        var completeQuestSteps = sequence.Steps
-                            .Where(x => x is { InteractionType: EInteractionType.CompleteQuest, TurnInQuestId: null })
-                            .Where(x => sequence.Sequence != 255 || x != sequence.Steps.Last());
-                        foreach (var step in completeQuestSteps)
-                        {
-                            _logger.LogWarning(
-                                "Quest has unexpected CompleteQuest steps: {QuestId} / {QuestName} → {Sequence} / {Step}",
-                                quest.QuestId, quest.Info.Name, sequence.Sequence, sequence.Steps.IndexOf(step));
-                            ++foundProblems;
-                        }
-
-                        var completionFlags = sequence.Steps.Select(x => x.CompletionQuestVariablesFlags)
-                            .Where(QuestWorkUtils.HasCompletionFlags)
-                            .GroupBy(x =>
-                            {
-                                return Enumerable.Range(0, 6).Select(y =>
-                                    {
-                                        short? value = x[y];
-                                        if (value == null || value.Value < 0)
-                                            return (long)0;
-                                        return (long)BitOperations.RotateLeft((ulong)value.Value, 8 * y);
-                                    })
-                                    .Sum();
-                            })
-                            .Where(x => x.Key != 0)
-                            .Where(x => x.Count() > 1);
-                        foreach (var duplicate in completionFlags)
-                        {
-                            _logger.LogWarning(
-                                "Quest step has duplicate completion flags: {QuestId} / {QuestName} → {Sequence} → {Flags}",
-                                quest.QuestId, quest.Info.Name, sequence.Sequence,
-                                string.Join(", ", duplicate.First()));
-                            ++foundProblems;
-                        }
-                    }
-                }
-
-                if (foundProblems > 0)
-                {
-                    _chatGui.Print(
-                        $"[Questionable] Quest validation has found {foundProblems} problems. Check the log for details.");
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Unable to validate quests");
-                _chatGui.PrintError(
-                    $"[Questionable] Unable to validate quests. Check the log for details.");
-            }
-        });
+        _questValidator.ClearIssues();
+        _questValidator.Validate(_quests.Values);
     }
 
 
@@ -233,13 +132,6 @@ internal sealed class QuestRegistry
             Root = JsonSerializer.Deserialize<QuestRoot>(stream)!,
             Info = _questData.GetQuestInfo(questId.Value),
         };
-        if (quest.Root.Disabled)
-        {
-            _logger.LogWarning("Quest {QuestId} / {QuestName} is disabled and won't be loaded", questId,
-                quest.Info.Name);
-            return;
-        }
-
         _quests[questId.Value] = quest;
     }
 
@@ -281,8 +173,8 @@ internal sealed class QuestRegistry
         return ushort.Parse(parts[0], CultureInfo.InvariantCulture);
     }
 
-    public bool IsKnownQuest(ushort questId) => _quests.ContainsKey(questId);
+    public bool IsKnownQuest(ushort questId) => TryGetQuest(questId, out _);
 
     public bool TryGetQuest(ushort questId, [NotNullWhen(true)] out Quest? quest)
-        => _quests.TryGetValue(questId, out quest);
+        => _quests.TryGetValue(questId, out quest) && !quest.Root.Disabled;
 }

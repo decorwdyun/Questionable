@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Game.ClientState.Conditions;
@@ -260,6 +261,7 @@ internal sealed unsafe class GameFunctions
         return questManager->IsQuestAccepted(questId);
     }
 
+    [SuppressMessage("Performance", "CA1822")]
     public bool IsQuestComplete(ushort questId)
     {
         return QuestManager.IsQuestComplete(questId);
