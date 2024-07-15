@@ -29,13 +29,15 @@ internal sealed class QuestSelectionWindow : LWindow
     private readonly QuestController _questController;
     private readonly QuestRegistry _questRegistry;
     private readonly IDalamudPluginInterface _pluginInterface;
+    private readonly TerritoryData _territoryData;
 
     private List<QuestInfo> _quests = [];
     private List<QuestInfo> _offeredQuests = [];
     private bool _onlyAvailableQuests = true;
 
     public QuestSelectionWindow(QuestData questData, IGameGui gameGui, IChatGui chatGui, GameFunctions gameFunctions,
-        QuestController questController, QuestRegistry questRegistry, IDalamudPluginInterface pluginInterface)
+        QuestController questController, QuestRegistry questRegistry, IDalamudPluginInterface pluginInterface,
+        TerritoryData territoryData)
         : base($"Quest Selection{WindowId}")
     {
         _questData = questData;
@@ -45,6 +47,7 @@ internal sealed class QuestSelectionWindow : LWindow
         _questController = questController;
         _questRegistry = questRegistry;
         _pluginInterface = pluginInterface;
+        _territoryData = territoryData;
 
         Size = new Vector2(500, 200);
         SizeCondition = ImGuiCond.Once;
@@ -57,7 +60,7 @@ internal sealed class QuestSelectionWindow : LWindow
     public uint TargetId { get; private set; }
     public string TargetName { get; private set; } = string.Empty;
 
-    public unsafe void Open(IGameObject? gameObject)
+    public unsafe void OpenForTarget(IGameObject? gameObject)
     {
         if (gameObject != null)
         {
@@ -83,6 +86,28 @@ internal sealed class QuestSelectionWindow : LWindow
         }
 
         IsOpen = _quests.Count > 0;
+    }
+
+    public void OpenForZone(ushort territoryId)
+    {
+        TargetId = territoryId;
+        TargetName = _territoryData.GetNameAndId(territoryId);
+        WindowName = $"Quests starting in {TargetName}{WindowId}";
+
+        _quests = _questRegistry.AllQuests
+            .Where(x => x.FindSequence(0)?.FindStep(0)?.TerritoryId == territoryId)
+            .Select(x => _questData.GetQuestInfo(x.QuestId))
+            .ToList();
+        _offeredQuests = [];
+        IsOpen = true;
+    }
+
+    public override void OnClose()
+    {
+        TargetId = default;
+        TargetName = default;
+        _quests = [];
+        _offeredQuests = [];
     }
 
     public override void Draw()
@@ -119,30 +144,40 @@ internal sealed class QuestSelectionWindow : LWindow
             if (ImGui.TableNextColumn())
             {
                 ImGui.AlignTextToFramePadding();
-                using var font = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push();
-
-                FontAwesomeIcon icon;
-                Vector4 color;
-                if (_gameFunctions.IsQuestAccepted(quest.QuestId))
+                var (color, icon, tooltipText) = GetQuestStyle(quest.QuestId);
+                using (var _ = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
                 {
-                    color = ImGuiColors.DalamudYellow;
-                    icon = FontAwesomeIcon.Running;
-                }
-                else if (_gameFunctions.IsQuestAcceptedOrComplete(quest.QuestId))
-                {
-                    color = ImGuiColors.ParsedGreen;
-                    icon = FontAwesomeIcon.Check;
-                }
-                else
-                {
-                    color = ImGuiColors.DalamudRed;
-                    icon = FontAwesomeIcon.Times;
+                    if (isKnownQuest)
+                        ImGui.TextColored(color, icon.ToIconString());
+                    else
+                        ImGui.TextColored(ImGuiColors.DalamudGrey, icon.ToIconString());
                 }
 
-                if (isKnownQuest)
-                    ImGui.TextColored(color, icon.ToIconString());
-                else
-                    ImGui.TextColored(ImGuiColors.DalamudGrey, icon.ToIconString());
+                if (ImGui.IsItemHovered())
+                {
+                    using var tooltip = ImRaii.Tooltip();
+                    if (tooltip)
+                    {
+                        ImGui.TextColored(color, tooltipText);
+                        if (quest.IsRepeatable)
+                        {
+                            ImGui.SameLine();
+                            ImGui.TextUnformatted("Repeatable");
+                        }
+
+                        if (!_questRegistry.IsKnownQuest(quest.QuestId))
+                        {
+                            ImGui.SameLine();
+                            ImGui.TextUnformatted("NoQuestPath");
+                        }
+
+                        if (quest.PreviousQuests.Count > 0)
+                        {
+                            ImGui.Separator();
+                            DrawQuestUnlocks(quest, 0);
+                        }
+                    }
+                }
             }
 
             if (ImGui.TableNextColumn())
@@ -165,7 +200,9 @@ internal sealed class QuestSelectionWindow : LWindow
 
                 ImGui.SameLine();
 
-                if (knownQuest != null && !_gameFunctions.IsQuestAccepted(quest.QuestId) &&
+                if (knownQuest != null &&
+                    !_gameFunctions.IsQuestAccepted(quest.QuestId) &&
+                    !_gameFunctions.IsQuestLocked(quest.QuestId) &&
                     (quest.IsRepeatable || !_gameFunctions.IsQuestAcceptedOrComplete(quest.QuestId)))
                 {
                     ImGui.BeginDisabled(_questController.NextQuest != null || _questController.SimulatedQuest != null);
@@ -198,5 +235,98 @@ internal sealed class QuestSelectionWindow : LWindow
         string fileName = $"{quest.QuestId}_{quest.SimplifiedName}{(suffix ? ".json" : "")}";
         ImGui.SetClipboardText(fileName);
         _chatGui.Print($"Copied '{fileName}' to clipboard");
+    }
+
+    private (Vector4 color, FontAwesomeIcon icon, string status) GetQuestStyle(ushort questId)
+    {
+        if (_gameFunctions.IsQuestAccepted(questId))
+            return (ImGuiColors.DalamudYellow, FontAwesomeIcon.Running, "Active");
+        else if (_gameFunctions.IsQuestAcceptedOrComplete(questId))
+            return (ImGuiColors.ParsedGreen, FontAwesomeIcon.Check, "Complete");
+        else if (_gameFunctions.IsQuestLocked(questId))
+            return (ImGuiColors.DalamudRed, FontAwesomeIcon.Times, "Locked");
+        else
+            return (ImGuiColors.DalamudYellow, FontAwesomeIcon.PersonWalkingArrowRight, "Available");
+    }
+
+    private void DrawQuestUnlocks(QuestInfo quest, int counter)
+    {
+        if (counter >= 10)
+            return;
+
+        if (counter != 0 && quest.IsMainScenarioQuest)
+            return;
+
+        if (counter > 0)
+            ImGui.Indent();
+
+        if (quest.PreviousQuests.Count > 0)
+        {
+            if (quest.PreviousQuests.Count > 1)
+            {
+                if (quest.PreviousQuestJoin == QuestInfo.QuestJoin.All)
+                    ImGui.Text("Requires all:");
+                else if (quest.PreviousQuestJoin == QuestInfo.QuestJoin.AtLeastOne)
+                    ImGui.Text("Requires one:");
+            }
+
+            foreach (var q in quest.PreviousQuests)
+            {
+                var qInfo = _questData.GetQuestInfo(q);
+                var (iconColor, icon, _) = GetQuestStyle(q);
+                using (var font = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
+                {
+                    if (_questRegistry.IsKnownQuest(qInfo.QuestId))
+                        ImGui.TextColored(iconColor, icon.ToIconString());
+                    else
+                        ImGui.TextColored(ImGuiColors.DalamudGrey, icon.ToIconString());
+                }
+
+                ImGui.SameLine();
+                ImGui.TextUnformatted(FormatQuestUnlockName(qInfo));
+
+                DrawQuestUnlocks(qInfo, counter + 1);
+            }
+        }
+
+        if (counter == 0 && quest.QuestLocks.Count > 0)
+        {
+            if (quest.QuestLocks.Count > 1)
+            {
+                if (quest.QuestLockJoin == QuestInfo.QuestJoin.All)
+                    ImGui.Text("Blocked if all completed:");
+                else if (quest.QuestLockJoin == QuestInfo.QuestJoin.AtLeastOne)
+                    ImGui.Text("Blocked if at least completed:");
+            }
+            else
+                ImGui.Text("Blocked by (if completed):");
+
+            foreach (var q in quest.QuestLocks)
+            {
+                var qInfo = _questData.GetQuestInfo(q);
+                var (iconColor, icon, _) = GetQuestStyle(q);
+                using (var font = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
+                {
+                    if (_questRegistry.IsKnownQuest(qInfo.QuestId))
+                        ImGui.TextColored(iconColor, icon.ToIconString());
+                    else
+                        ImGui.TextColored(ImGuiColors.DalamudGrey, icon.ToIconString());
+                }
+
+                ImGui.SameLine();
+                ImGui.TextUnformatted(FormatQuestUnlockName(qInfo));
+            }
+        }
+
+        if (counter > 0)
+            ImGui.Unindent();
+    }
+
+    private static string FormatQuestUnlockName(QuestInfo questInfo)
+    {
+        if (questInfo.IsMainScenarioQuest)
+            return $"{questInfo.Name} ({questInfo.QuestId}, MSQ)";
+        else
+            return $"{questInfo.Name} ({questInfo.QuestId})";
     }
 }

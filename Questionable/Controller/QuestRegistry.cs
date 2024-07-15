@@ -36,6 +36,7 @@ internal sealed class QuestRegistry
         _logger = logger;
     }
 
+    public IEnumerable<Quest> AllQuests => _quests.Values;
     public int Count => _quests.Count;
 
     public void Reload()

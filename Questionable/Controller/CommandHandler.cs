@@ -22,11 +22,14 @@ internal sealed class CommandHandler : IDisposable
     private readonly QuestWindow _questWindow;
     private readonly QuestSelectionWindow _questSelectionWindow;
     private readonly ITargetManager _targetManager;
+    private readonly GameFunctions _gameFunctions;
+    private readonly IClientState _clientState;
 
     public CommandHandler(ICommandManager commandManager, IChatGui chatGui, QuestController questController,
         MovementController movementController, QuestRegistry questRegistry,
         ConfigWindow configWindow, DebugOverlay debugOverlay, QuestWindow questWindow,
-        QuestSelectionWindow questSelectionWindow, ITargetManager targetManager)
+        QuestSelectionWindow questSelectionWindow, ITargetManager targetManager, GameFunctions gameFunctions,
+        IClientState clientState)
     {
         _commandManager = commandManager;
         _chatGui = chatGui;
@@ -38,6 +41,8 @@ internal sealed class CommandHandler : IDisposable
         _questWindow = questWindow;
         _questSelectionWindow = questSelectionWindow;
         _targetManager = targetManager;
+        _gameFunctions = gameFunctions;
+        _clientState = clientState;
 
         _commandManager.AddHandler("/qst", new CommandInfo(ProcessCommand)
         {
@@ -77,7 +82,12 @@ internal sealed class CommandHandler : IDisposable
                 break;
 
             case "which":
-                _questSelectionWindow.Open(_targetManager.Target);
+                _questSelectionWindow.OpenForTarget(_targetManager.Target);
+                break;
+
+            case "z":
+            case "zone":
+                _questSelectionWindow.OpenForZone(_clientState.TerritoryType);
                 break;
 
             default:
@@ -96,7 +106,9 @@ internal sealed class CommandHandler : IDisposable
 
         if (arguments.Length >= 1 && ushort.TryParse(arguments[0], out ushort questId))
         {
-            if (_questRegistry.TryGetQuest(questId, out Quest? quest))
+            if (_gameFunctions.IsQuestLocked(questId, 0))
+                _chatGui.PrintError($"[Questionable] Quest {questId} is locked.");
+            else if (_questRegistry.TryGetQuest(questId, out Quest? quest))
             {
                 _debugOverlay.HighlightedQuest = questId;
                 _chatGui.Print($"[Questionable] Set highlighted quest to {questId} ({quest.Info.Name}).");

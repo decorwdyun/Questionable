@@ -18,24 +18,33 @@ internal static class NextQuest
             if (step.NextQuestId == null)
                 return null;
 
+            if (step.NextQuestId.Value == quest.QuestId)
+                return null;
+
             return serviceProvider.GetRequiredService<SetQuest>()
-                .With(step.NextQuestId.Value);
+                .With(step.NextQuestId.Value, quest.QuestId);
         }
     }
 
-    internal sealed class SetQuest(QuestRegistry questRegistry, QuestController questController, ILogger<SetQuest> logger) : ITask
+    internal sealed class SetQuest(QuestRegistry questRegistry, QuestController questController, GameFunctions gameFunctions, ILogger<SetQuest> logger) : ITask
     {
         public ushort NextQuestId { get; set; }
+        public ushort CurrentQuestId { get; set; }
 
-        public ITask With(ushort nextQuestId)
+        public ITask With(ushort nextQuestId, ushort currentQuestId)
         {
             NextQuestId = nextQuestId;
+            CurrentQuestId = currentQuestId;
             return this;
         }
 
         public bool Start()
         {
-            if (questRegistry.TryGetQuest(NextQuestId, out Quest? quest))
+            if (gameFunctions.IsQuestLocked(NextQuestId, CurrentQuestId))
+            {
+                logger.LogInformation("Can't set next quest to {QuestId}, quest is locked", NextQuestId);
+            }
+            else if (questRegistry.TryGetQuest(NextQuestId, out Quest? quest))
             {
                 logger.LogInformation("Setting next quest to {QuestId}: '{QuestName}'", NextQuestId, quest.Info.Name);
                 questController.SetNextQuest(quest);

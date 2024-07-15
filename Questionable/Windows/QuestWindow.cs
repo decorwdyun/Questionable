@@ -452,7 +452,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
             if (ImGui.IsItemHovered())
                 ImGui.SetTooltip("Show all Quests starting with your current target.");
             if (showQuests)
-                _questSelectionWindow.Open(_targetManager.Target);
+                _questSelectionWindow.OpenForTarget(_targetManager.Target);
 
             ImGui.EndDisabled();
 
