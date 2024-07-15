@@ -65,16 +65,6 @@
           "TerritoryId": 1187,
           "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Urqopacha - Wachunpelo"
-        },
-        {
-          "DataId": 1050684,
-          "Position": {
-            "X": 391.37854,
-            "Y": -156.07434,
-            "Z": -388.50995
-          },
-          "TerritoryId": 1187,
-          "InteractionType": "CompleteQuest"
         }
       ]
     }
