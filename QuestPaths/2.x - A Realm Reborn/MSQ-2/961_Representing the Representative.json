@@ -1,0 +1,85 @@
+{
+    "$schema": "https://carvel.li/questionable/quest-1.0",
+    "Author": "JerryWester",
+    "QuestSequence": [
+        {
+            "Sequence": 0,
+            "Steps": [
+                {
+                    "DataId": 1006497,
+                    "Position": {
+                        "X": 321.1565,
+                        "Y": -18.197807,
+                        "Z": 276.5697
+                    },
+                    "TerritoryId": 138,
+                    "InteractionType": "AcceptQuest",
+                    "AetheryteShortcut": "Western La Noscea - Aleport",
+                    "SkipIf": [
+                        "AetheryteShortcutIfInSameTerritory"
+                    ]
+                }
+            ]
+        },
+        {
+            "Sequence": 1,
+            "Steps": [
+                {
+                    "DataId": 1006502,
+                    "Position": {
+                        "X": 182.39111,
+                        "Y": -41.0828,
+                        "Z": 260.151
+                    },
+                    "TerritoryId": 138,
+                    "InteractionType": "Interact"
+                }
+            ]
+        },
+        {
+            "Sequence": 2,
+            "Steps": [
+                {
+                    "DataId": 1006497,
+                    "Position": {
+                        "X": 321.1565,
+                        "Y": -18.197807,
+                        "Z": 276.5697
+                    },
+                    "TerritoryId": 138,
+                    "InteractionType": "Interact"
+                }
+            ]
+        },
+        {
+            "Sequence": 3,
+            "Steps": [
+                {
+                    "DataId": 1006501,
+                    "Position": {
+                        "X": 311.4214,
+                        "Y": -36.405907,
+                        "Z": 333.54688
+                    },
+                    "TerritoryId": 138,
+                    "InteractionType": "Interact"
+                }
+            ]
+        },
+        {
+            "Sequence": 255,
+            "Steps": [
+                {
+                    "DataId": 1006497,
+                    "Position": {
+                        "X": 321.1565,
+                        "Y": -18.197807,
+                        "Z": 276.5697
+                    },
+                    "TerritoryId": 138,
+                    "InteractionType": "CompleteQuest"
+                }
+            ]
+        }
+    ]
+}
