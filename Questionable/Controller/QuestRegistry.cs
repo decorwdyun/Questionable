@@ -3,15 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Linq;
 using System.IO;
-using System.Numerics;
+using System.Linq;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Dalamud.Plugin;
-using Dalamud.Plugin.Services;
 using Microsoft.Extensions.Logging;
-using Questionable.Controller.Utils;
 using Questionable.Data;
 using Questionable.Model;
 using Questionable.Model.V1;
@@ -23,18 +19,16 @@ internal sealed class QuestRegistry
 {
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly QuestData _questData;
-    private readonly IChatGui _chatGui;
     private readonly QuestValidator _questValidator;
     private readonly ILogger<QuestRegistry> _logger;
 
     private readonly Dictionary<ushort, Quest> _quests = new();
 
-    public QuestRegistry(IDalamudPluginInterface pluginInterface, QuestData questData, IChatGui chatGui,
+    public QuestRegistry(IDalamudPluginInterface pluginInterface, QuestData questData,
         QuestValidator questValidator, ILogger<QuestRegistry> logger)
     {
         _pluginInterface = pluginInterface;
         _questData = questData;
-        _chatGui = chatGui;
         _questValidator = questValidator;
         _logger = logger;
     }
@@ -76,6 +70,7 @@ internal sealed class QuestRegistry
                 QuestId = questId,
                 Root = questRoot,
                 Info = _questData.GetQuestInfo(questId),
+                ReadOnly = true,
             };
             _quests[questId] = quest;
         }
@@ -111,13 +106,11 @@ internal sealed class QuestRegistry
         }
     }
 
-    [Conditional("DEBUG")]
     private void ValidateQuests()
     {
         _questValidator.ClearIssues();
-        _questValidator.Validate(_quests.Values);
+        _questValidator.Validate(_quests.Values.Where(x => !x.ReadOnly));
     }
-
 
     private void LoadQuestFromStream(string fileName, Stream stream)
     {
@@ -131,6 +124,7 @@ internal sealed class QuestRegistry
             QuestId = questId.Value,
             Root = JsonSerializer.Deserialize<QuestRoot>(stream)!,
             Info = _questData.GetQuestInfo(questId.Value),
+            ReadOnly = false,
         };
         _quests[questId.Value] = quest;
     }

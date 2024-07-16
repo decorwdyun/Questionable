@@ -577,7 +577,6 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
                 TimeSpan.FromMilliseconds(200));
         }
 
-#if DEBUG
         if (_questRegistry.ValidationIssueCount > 0)
         {
             ImGui.SameLine();
@@ -587,7 +586,6 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
                     $"{_questRegistry.ValidationIssueCount}"))
                 _questValidationWindow.IsOpen = true;
         }
-#endif
     }
 
     private void DrawRemainingTasks()

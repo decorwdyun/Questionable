@@ -27,7 +27,7 @@ internal sealed class QuestValidator
 
     public void ClearIssues() => _validationIssues.Clear();
 
-    public void Validate(IReadOnlyCollection<Quest> quests)
+    public void Validate(IEnumerable<Quest> quests)
     {
         Task.Run(() =>
         {
