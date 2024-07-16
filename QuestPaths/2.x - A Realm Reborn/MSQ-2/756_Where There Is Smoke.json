@@ -1,0 +1,60 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "JerryWester",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1006196,
+          "Position": {
+            "X": -63.98114,
+            "Y": -20.296238,
+            "Z": -5.142395
+          },
+          "TerritoryId": 145,
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Eastern Thanalan - Camp Drybone",
+          "SkipIf": [
+            "AetheryteShortcutIfInSameTerritory"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 2001965,
+          "Position": {
+            "X": 313.46606,
+            "Y": 23.178406,
+            "Z": -253.58972
+          },
+          "TerritoryId": 145,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AfterItemUse",
+          "ItemId": 2000604,
+          "KillEnemyDataIds": [
+            363
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1006196,
+          "Position": {
+            "X": -63.98114,
+            "Y": -20.296238,
+            "Z": -5.142395
+          },
+          "TerritoryId": 145,
+          "InteractionType": "CompleteQuest"
+        }
+      ]
+    }
+  ]
+}

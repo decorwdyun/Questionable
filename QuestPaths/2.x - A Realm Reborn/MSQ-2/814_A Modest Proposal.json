@@ -1,0 +1,52 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "JerryWester",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1006266,
+          "Position": {
+            "X": 560.35706,
+            "Y": 20.721315,
+            "Z": 455.89368
+          },
+          "TerritoryId": 137,
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Eastern La Noscea - Costa Del Sol",
+          "SkipIf": [
+            "AetheryteShortcutIfInSameTerritory"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 6,
+          "Position": {
+            "X": -230.0603,
+            "Y": 22.62909,
+            "Z": 355.45886
+          },
+          "TerritoryId": 153,
+          "InteractionType": "AttuneAetheryte",
+          "StopDistance": 5,
+          "AetheryteShortcut": "South Shroud - Quarrymill"
+        },
+        {
+          "DataId": 1006279,
+          "Position": {
+            "X": -231.4336,
+            "Y": 21.512743,
+            "Z": 339.49792
+          },
+          "TerritoryId": 153,
+          "InteractionType": "CompleteQuest"
+        }
+      ]
+    }
+  ]
+}

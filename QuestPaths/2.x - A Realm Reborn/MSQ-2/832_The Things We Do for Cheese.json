@@ -1,0 +1,123 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "JerryWester",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1006266,
+          "Position": {
+            "X": 560.35706,
+            "Y": 20.721315,
+            "Z": 455.89368
+          },
+          "TerritoryId": 137,
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Eastern La Noscea - Costa Del Sol",
+          "SkipIf": [
+            "AetheryteShortcutIfInSameTerritory"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1006267,
+          "Position": {
+            "X": 340.81018,
+            "Y": 34.269722,
+            "Z": 110.27698
+          },
+          "TerritoryId": 137,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1003588,
+          "Position": {
+            "X": 344.6859,
+            "Y": 31.889465,
+            "Z": 89.37195
+          },
+          "TerritoryId": 137,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 12,
+          "Position": {
+            "X": -18.387146,
+            "Y": 72.67859,
+            "Z": 3.829956
+          },
+          "TerritoryId": 137,
+          "InteractionType": "AttuneAetheryte",
+          "StopDistance": 5
+        },
+        {
+          "DataId": 1006268,
+          "Position": {
+            "X": -334.6151,
+            "Y": 69.69995,
+            "Z": 153.79565
+          },
+          "TerritoryId": 137,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 2002702,
+          "Position": {
+            "X": -338.61298,
+            "Y": 69.01648,
+            "Z": 159.65515
+          },
+          "TerritoryId": 137,
+          "InteractionType": "Duty",
+          "ContentFinderConditionId": 8
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 1006268,
+          "Position": {
+            "X": -334.6151,
+            "Y": 69.69995,
+            "Z": 153.79565
+          },
+          "TerritoryId": 137,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1006266,
+          "Position": {
+            "X": 560.35706,
+            "Y": 20.721315,
+            "Z": 455.89368
+          },
+          "TerritoryId": 137,
+          "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Eastern La Noscea - Costa Del Sol"
+        }
+      ]
+    }
+  ]
+}
