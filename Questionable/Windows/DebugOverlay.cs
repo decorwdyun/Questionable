@@ -75,7 +75,14 @@ internal sealed class DebugOverlay : Window
         for (int i = currentQuest.Step; i <= sequence.Steps.Count; ++i)
         {
             QuestStep? step = sequence.FindStep(i);
-            DrawStep(i.ToString(CultureInfo.InvariantCulture), step);
+            if (step == null || step.Position == null)
+                continue;
+
+            DrawStep(i.ToString(CultureInfo.InvariantCulture), step,
+                Vector3.Distance(_clientState.LocalPlayer!.Position, step.Position.Value) <
+                step.CalculateActualStopDistance()
+                    ? 0xFF00FF00
+                    : 0xFF0000FF);
         }
     }
 
@@ -94,7 +101,7 @@ internal sealed class DebugOverlay : Window
         }
     }
 
-    private void DrawStep(string counter, QuestStep? step, uint color = 0xFF0000FF)
+    private void DrawStep(string counter, QuestStep? step, uint color)
     {
         if (step == null ||
             step.Position == null ||

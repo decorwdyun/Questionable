@@ -46,6 +46,13 @@ internal sealed class UnmountTask(ICondition condition, ILogger<UnmountTask> log
             return ETaskResult.StillRunning;
         }
 
+        if (condition[ConditionFlag.Mounted] && condition[ConditionFlag.InCombat])
+        {
+            _unmountTriggered = gameFunctions.Unmount();
+            _continueAt = DateTime.Now.AddSeconds(1);
+            return ETaskResult.StillRunning;
+        }
+
         return condition[ConditionFlag.Mounted]
             ? ETaskResult.StillRunning
             : ETaskResult.TaskComplete;

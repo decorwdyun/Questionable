@@ -130,7 +130,7 @@ internal static class Move
             return With(
                 territoryId: step.TerritoryId,
                 destination: destination,
-                stopDistance: step.StopDistance,
+                stopDistance: step.CalculateActualStopDistance(),
                 dataId: step.DataId,
                 disableNavMesh: step.DisableNavmesh,
                 sprint: step.Sprint != false,

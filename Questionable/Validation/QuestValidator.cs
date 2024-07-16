@@ -38,7 +38,8 @@ internal sealed class QuestValidator
                 {
                     foreach (var issue in validator.Validate(quest))
                     {
-                        _logger.LogWarning(
+                        var level = issue.Severity == EIssueSeverity.Error ? LogLevel.Warning : LogLevel.Information;
+                        _logger.Log(level,
                             "Validation failed: {QuestId} ({QuestName}) / {QuestSequence} / {QuestStep} - {Description}",
                             issue.QuestId, quest.Info.Name, issue.Sequence, issue.Step, issue.Description);
                         _validationIssues.Add(issue);
