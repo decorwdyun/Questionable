@@ -1,0 +1,60 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1049786,
+          "Position": {
+            "X": 340.13867,
+            "Y": 50.75,
+            "Z": 231.37244
+          },
+          "TerritoryId": 1186,
+          "InteractionType": "AcceptQuest"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1049787,
+          "Position": {
+            "X": 364.3396,
+            "Y": 60.125,
+            "Z": 357.1068
+          },
+          "TerritoryId": 1186,
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_KINGRA101_04960_SYSTEM_100_030",
+              "Yes": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1049788,
+          "Position": {
+            "X": 1.6021729,
+            "Y": 0,
+            "Z": -6.088379
+          },
+          "StopDistance": 5,
+          "TerritoryId": 1224,
+          "InteractionType": "CompleteQuest",
+          "NextQuestId": 4961
+        }
+      ]
+    }
+  ]
+}

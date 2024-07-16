@@ -36,6 +36,7 @@ internal sealed class QuestRegistry
     public IEnumerable<Quest> AllQuests => _quests.Values;
     public int Count => _quests.Count;
     public int ValidationIssueCount => _questValidator.IssueCount;
+    public int ValidationErrorCount => _questValidator.ErrorCount;
 
     public void Reload()
     {

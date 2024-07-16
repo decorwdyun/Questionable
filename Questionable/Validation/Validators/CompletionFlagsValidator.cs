@@ -10,7 +10,7 @@ internal sealed class CompletionFlagsValidator : IQuestValidator
 {
     public IEnumerable<ValidationIssue> Validate(Quest quest)
     {
-        foreach (var sequence in quest.Root.QuestSequence)
+        foreach (var sequence in quest.AllSequences())
         {
             var mappedCompletionFlags = sequence.Steps
                 .Select(x =>

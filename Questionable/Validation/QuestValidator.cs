@@ -24,6 +24,7 @@ internal sealed class QuestValidator
 
     public IReadOnlyList<ValidationIssue> Issues => _validationIssues;
     public int IssueCount => _validationIssues.Count;
+    public int ErrorCount => _validationIssues.Count(x => x.Severity == EIssueSeverity.Error);
 
     public void ClearIssues() => _validationIssues.Clear();
 

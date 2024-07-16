@@ -136,6 +136,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<IQuestValidator, QuestDisabledValidator>();
         serviceCollection.AddSingleton<IQuestValidator, BasicSequenceValidator>();
         serviceCollection.AddSingleton<IQuestValidator, UniqueStartStopValidator>();
+        serviceCollection.AddSingleton<IQuestValidator, NextQuestValidator>();
         serviceCollection.AddSingleton<IQuestValidator, CompletionFlagsValidator>();
 
         serviceCollection.AddSingleton<CommandHandler>();

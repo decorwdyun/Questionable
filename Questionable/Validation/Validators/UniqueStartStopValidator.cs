@@ -14,12 +14,12 @@ internal sealed class UniqueStartStopValidator : IQuestValidator
             .ToList();
         foreach (var accept in questAccepts)
         {
-            if (accept.SequenceId != 0 || accept.StepId != quest.FindSequence(0)!.Steps.Count - 1)
+            if (accept.Sequence.Sequence != 0 || accept.StepId != quest.FindSequence(0)!.Steps.Count - 1)
             {
                 yield return new ValidationIssue
                 {
                     QuestId = quest.QuestId,
-                    Sequence = (byte)accept.SequenceId,
+                    Sequence = (byte)accept.Sequence.Sequence,
                     Step = accept.StepId,
                     Severity = EIssueSeverity.Error,
                     Description = "Unexpected AcceptQuest step",
@@ -44,12 +44,12 @@ internal sealed class UniqueStartStopValidator : IQuestValidator
             .ToList();
         foreach (var complete in questCompletes)
         {
-            if (complete.SequenceId != 255 || complete.StepId != quest.FindSequence(255)!.Steps.Count - 1)
+            if (complete.Sequence.Sequence != 255 || complete.StepId != quest.FindSequence(255)!.Steps.Count - 1)
             {
                 yield return new ValidationIssue
                 {
                     QuestId = quest.QuestId,
-                    Sequence = (byte)complete.SequenceId,
+                    Sequence = (byte)complete.Sequence.Sequence,
                     Step = complete.StepId,
                     Severity = EIssueSeverity.Error,
                     Description = "Unexpected CompleteQuest step",
@@ -70,16 +70,7 @@ internal sealed class UniqueStartStopValidator : IQuestValidator
         }
     }
 
-    private static IEnumerable<(int SequenceId, int StepId, QuestStep Step)> FindQuestStepsWithInteractionType(Quest quest, EInteractionType interactionType)
-    {
-        foreach (var sequence in quest.Root.QuestSequence)
-        {
-            for (int i = 0; i < sequence.Steps.Count; ++i)
-            {
-                var step = sequence.Steps[i];
-                if (step.InteractionType == interactionType)
-                    yield return (sequence.Sequence, i, step);
-            }
-        }
-    }
+    private static IEnumerable<(QuestSequence Sequence, int StepId, QuestStep Step)> FindQuestStepsWithInteractionType(
+        Quest quest, EInteractionType interactionType)
+        => quest.AllSteps().Where(x => x.Step.InteractionType == interactionType);
 }

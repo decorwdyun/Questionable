@@ -581,10 +581,16 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         {
             ImGui.SameLine();
 
-            using var textColor = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudRed);
+            bool colored = _questRegistry.ValidationErrorCount > 0;
+            if (colored)
+                ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudRed);
+
             if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Flag,
                     $"{_questRegistry.ValidationIssueCount}"))
                 _questValidationWindow.IsOpen = true;
+
+            if (colored)
+                ImGui.PopStyleColor();
         }
     }
 
