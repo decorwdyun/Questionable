@@ -1,86 +1,86 @@
 {
-    "$schema": "https://carvel.li/questionable/quest-1.0",
-    "Author": "JerryWester",
-    "QuestSequence": [
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "JerryWester",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
         {
-            "Sequence": 0,
-            "Steps": [
-                {
-                    "DataId": 1006467,
-                    "Position": {
-                        "X": -437.94922,
-                        "Y": 211.17,
-                        "Z": -245.7771
-                    },
-                    "TerritoryId": 155,
-                    "InteractionType": "AcceptQuest",
-                    "AetheryteShortcut": "Coerthas Central Highlands - Camp Dragonhead",
-                    "SkipIf": [
-                        "AetheryteShortcutIfInSameTerritory"
-                    ]
-                }
-            ]
-        },
-        {
-            "Sequence": 1,
-            "Steps": [
-                {
-                    "DataId": 1006444,
-                    "Position": {
-                        "X": -432.9748,
-                        "Y": 233.47266,
-                        "Z": -199.6643
-                    },
-                    "TerritoryId": 155,
-                    "InteractionType": "Interact"
-                }
-            ]
-        },
-        {
-            "Sequence": 2,
-            "Steps": [
-                {
-                    "DataId": 1006490,
-                    "Position": {
-                        "X": -673.21277,
-                        "Y": 205.95982,
-                        "Z": -515.7702
-                    },
-                    "TerritoryId": 155,
-                    "InteractionType": "Interact"
-                }
-            ]
-        },
-        {
-            "Sequence": 3,
-            "Steps": [
-                {
-                    "DataId": 2002705,
-                    "Position": {
-                        "X": -684.90125,
-                        "Y": 208.97229,
-                        "Z": -522.57574
-                    },
-                    "TerritoryId": 155,
-                    "InteractionType": "Duty",
-                    "ContentFinderConditionId": 11
-                }
-            ]
-        },
-        {
-            "Sequence": 255,
-            "Steps": [
-                {
-                    "DataId": 1006491,
-                    "Position": {
-                        "X": 7.248047,
-                        "Y": -21.970922,
-                        "Z": 119.73743
-                    },
-                    "TerritoryId": 132,
-                    "InteractionType": "CompleteQuest"
-                }
-            ]
+          "DataId": 1006467,
+          "Position": {
+            "X": -437.94922,
+            "Y": 211.17,
+            "Z": -245.7771
+          },
+          "TerritoryId": 155,
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Coerthas Central Highlands - Camp Dragonhead",
+          "SkipIf": [
+            "AetheryteShortcutIfInSameTerritory"
+          ]
         }
-    ]
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1006444,
+          "Position": {
+            "X": -432.9748,
+            "Y": 233.47266,
+            "Z": -199.6643
+          },
+          "TerritoryId": 155,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1006490,
+          "Position": {
+            "X": -673.21277,
+            "Y": 205.95982,
+            "Z": -515.7702
+          },
+          "TerritoryId": 155,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 2002705,
+          "Position": {
+            "X": -684.90125,
+            "Y": 208.97229,
+            "Z": -522.57574
+          },
+          "TerritoryId": 155,
+          "InteractionType": "Duty",
+          "ContentFinderConditionId": 11
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1006491,
+          "Position": {
+            "X": 7.248047,
+            "Y": -21.970922,
+            "Z": 119.73743
+          },
+          "TerritoryId": 132,
+          "InteractionType": "CompleteQuest"
+        }
+      ]
+    }
+  ]
 }

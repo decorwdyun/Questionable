@@ -1,40 +1,40 @@
 {
-    "$schema": "https://carvel.li/questionable/quest-1.0",
-    "Author": "JerryWester",
-    "QuestSequence": [
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "JerryWester",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
         {
-            "Sequence": 0,
-            "Steps": [
-                {
-                    "DataId": 1006493,
-                    "Position": {
-                        "X": -437.67456,
-                        "Y": -55.694504,
-                        "Z": 100.87732
-                    },
-                    "TerritoryId": 145,
-                    "InteractionType": "AcceptQuest",
-                    "AetheryteShortcut": "Eastern Thanalan - Camp Drybone",
-                    "SkipIf": [
-                        "AetheryteShortcutIfInSameTerritory"
-                    ]
-                }
-            ]
-        },
-        {
-            "Sequence": 255,
-            "Steps": [
-                {
-                    "DataId": 1006495,
-                    "Position": {
-                        "X": -2.2736206,
-                        "Y": -17.544205,
-                        "Z": 24.734863
-                    },
-                    "TerritoryId": 145,
-                    "InteractionType": "CompleteQuest"
-                }
-            ]
+          "DataId": 1006493,
+          "Position": {
+            "X": -437.67456,
+            "Y": -55.694504,
+            "Z": 100.87732
+          },
+          "TerritoryId": 145,
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Eastern Thanalan - Camp Drybone",
+          "SkipIf": [
+            "AetheryteShortcutIfInSameTerritory"
+          ]
         }
-    ]
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1006495,
+          "Position": {
+            "X": -2.2736206,
+            "Y": -17.544205,
+            "Z": 24.734863
+          },
+          "TerritoryId": 145,
+          "InteractionType": "CompleteQuest"
+        }
+      ]
+    }
+  ]
 }
