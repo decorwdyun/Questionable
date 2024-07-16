@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.Command;
 using Dalamud.Plugin.Services;
-using Questionable.Data;
 using Questionable.Model;
 using Questionable.Windows;
 
@@ -23,13 +21,11 @@ internal sealed class CommandHandler : IDisposable
     private readonly QuestSelectionWindow _questSelectionWindow;
     private readonly ITargetManager _targetManager;
     private readonly GameFunctions _gameFunctions;
-    private readonly IClientState _clientState;
 
     public CommandHandler(ICommandManager commandManager, IChatGui chatGui, QuestController questController,
         MovementController movementController, QuestRegistry questRegistry,
         ConfigWindow configWindow, DebugOverlay debugOverlay, QuestWindow questWindow,
-        QuestSelectionWindow questSelectionWindow, ITargetManager targetManager, GameFunctions gameFunctions,
-        IClientState clientState)
+        QuestSelectionWindow questSelectionWindow, ITargetManager targetManager, GameFunctions gameFunctions)
     {
         _commandManager = commandManager;
         _chatGui = chatGui;
@@ -42,7 +38,6 @@ internal sealed class CommandHandler : IDisposable
         _questSelectionWindow = questSelectionWindow;
         _targetManager = targetManager;
         _gameFunctions = gameFunctions;
-        _clientState = clientState;
 
         _commandManager.AddHandler("/qst", new CommandInfo(ProcessCommand)
         {
@@ -87,7 +82,7 @@ internal sealed class CommandHandler : IDisposable
 
             case "z":
             case "zone":
-                _questSelectionWindow.OpenForZone(_clientState.TerritoryType);
+                _questSelectionWindow.OpenForCurrentZone();
                 break;
 
             default:

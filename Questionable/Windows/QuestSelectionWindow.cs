@@ -9,6 +9,7 @@ using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using ImGuiNET;
 using LLib.GameUI;
@@ -30,6 +31,7 @@ internal sealed class QuestSelectionWindow : LWindow
     private readonly QuestRegistry _questRegistry;
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly TerritoryData _territoryData;
+    private readonly IClientState _clientState;
 
     private List<QuestInfo> _quests = [];
     private List<QuestInfo> _offeredQuests = [];
@@ -37,7 +39,7 @@ internal sealed class QuestSelectionWindow : LWindow
 
     public QuestSelectionWindow(QuestData questData, IGameGui gameGui, IChatGui chatGui, GameFunctions gameFunctions,
         QuestController questController, QuestRegistry questRegistry, IDalamudPluginInterface pluginInterface,
-        TerritoryData territoryData)
+        TerritoryData territoryData, IClientState clientState)
         : base($"Quest Selection{WindowId}")
     {
         _questData = questData;
@@ -48,6 +50,7 @@ internal sealed class QuestSelectionWindow : LWindow
         _questRegistry = questRegistry;
         _pluginInterface = pluginInterface;
         _territoryData = territoryData;
+        _clientState = clientState;
 
         Size = new Vector2(500, 200);
         SizeCondition = ImGuiCond.Once;
@@ -57,18 +60,15 @@ internal sealed class QuestSelectionWindow : LWindow
         };
     }
 
-    public uint TargetId { get; private set; }
-    public string TargetName { get; private set; } = string.Empty;
-
     public unsafe void OpenForTarget(IGameObject? gameObject)
     {
         if (gameObject != null)
         {
-            TargetId = gameObject.DataId;
-            TargetName = gameObject.Name.ToString();
-            WindowName = $"Quests starting with {TargetName} [{TargetId}]{WindowId}";
+            var targetId = gameObject.DataId;
+            var targetName = gameObject.Name.ToString();
+            WindowName = $"Quests starting with {targetName} [{targetId}]{WindowId}";
 
-            _quests = _questData.GetAllByIssuerDataId(TargetId);
+            _quests = _questData.GetAllByIssuerDataId(targetId);
             if (_gameGui.TryGetAddonByName<AddonSelectIconString>("SelectIconString", out var addonSelectIconString))
             {
                 var answers = GameUiController.GetChoices(addonSelectIconString);
@@ -88,24 +88,30 @@ internal sealed class QuestSelectionWindow : LWindow
         IsOpen = _quests.Count > 0;
     }
 
-    public void OpenForZone(ushort territoryId)
+    public unsafe void OpenForCurrentZone()
     {
-        TargetId = territoryId;
-        TargetName = _territoryData.GetNameAndId(territoryId);
-        WindowName = $"Quests starting in {TargetName}{WindowId}";
+        var territoryId = _clientState.TerritoryType;
+        var territoryName = _territoryData.GetNameAndId(territoryId);
+        WindowName = $"Quests starting in {territoryName}{WindowId}";
 
         _quests = _questRegistry.AllQuests
             .Where(x => x.FindSequence(0)?.FindStep(0)?.TerritoryId == territoryId)
             .Select(x => _questData.GetQuestInfo(x.QuestId))
             .ToList();
+
+        foreach (var unacceptedQuest in Map.Instance()->UnacceptedQuestMarkers)
+        {
+            ushort questId = (ushort)(unacceptedQuest.ObjectiveId & 0xFFFF);
+            if (_quests.All(q => q.QuestId != questId))
+                _quests.Add(_questData.GetQuestInfo(questId));
+        }
+
         _offeredQuests = [];
         IsOpen = true;
     }
 
     public override void OnClose()
     {
-        TargetId = default;
-        TargetName = string.Empty;
         _quests = [];
         _offeredQuests = [];
     }
