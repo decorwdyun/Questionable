@@ -13,7 +13,7 @@
             "Z": -38.132385
           },
           "TerritoryId": 1186,
-          "InteractionType": "Interact",
+          "InteractionType": "AcceptQuest",
           "Comment": "Quest is completed instantly"
         }
       ]

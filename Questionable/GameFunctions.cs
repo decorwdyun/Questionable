@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Game.ClientState.Conditions;
@@ -21,6 +22,8 @@ using Lumina.Excel.CustomSheets;
 using Lumina.Excel.GeneratedSheets2;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller;
+using Questionable.Data;
+using Questionable.Model;
 using Questionable.Model.V1;
 using Action = Lumina.Excel.GeneratedSheets2.Action;
 using BattleChara = FFXIVClientStructs.FFXIV.Client.Game.Character.BattleChara;
@@ -45,6 +48,7 @@ internal sealed unsafe class GameFunctions
     private readonly ICondition _condition;
     private readonly IClientState _clientState;
     private readonly QuestRegistry _questRegistry;
+    private readonly QuestData _questData;
     private readonly IGameGui _gameGui;
     private readonly Configuration _configuration;
     private readonly ILogger<GameFunctions> _logger;
@@ -55,6 +59,7 @@ internal sealed unsafe class GameFunctions
         ICondition condition,
         IClientState clientState,
         QuestRegistry questRegistry,
+        QuestData questData,
         IGameGui gameGui,
         Configuration configuration,
         ILogger<GameFunctions> logger)
@@ -65,6 +70,7 @@ internal sealed unsafe class GameFunctions
         _condition = condition;
         _clientState = clientState;
         _questRegistry = questRegistry;
+        _questData = questData;
         _gameGui = gameGui;
         _configuration = configuration;
         _logger = logger;
@@ -246,13 +252,46 @@ internal sealed unsafe class GameFunctions
 
     public bool IsQuestAcceptedOrComplete(ushort questId)
     {
-        return QuestManager.IsQuestComplete(questId) || IsQuestAccepted(questId);
+        return IsQuestComplete(questId) || IsQuestAccepted(questId);
     }
 
     public bool IsQuestAccepted(ushort questId)
     {
         QuestManager* questManager = QuestManager.Instance();
         return questManager->IsQuestAccepted(questId);
+    }
+
+    [SuppressMessage("Performance", "CA1822")]
+    public bool IsQuestComplete(ushort questId)
+    {
+        return QuestManager.IsQuestComplete(questId);
+    }
+
+    public bool IsQuestLocked(ushort questId, ushort? extraCompletedQuest = null)
+    {
+        var questInfo = _questData.GetQuestInfo(questId);
+        if (questInfo.QuestLocks.Count > 0)
+        {
+            var completedQuests = questInfo.QuestLocks.Count(x => IsQuestComplete(x) || x == extraCompletedQuest);
+            if (questInfo.QuestLockJoin == QuestInfo.QuestJoin.All && questInfo.QuestLocks.Count == completedQuests)
+                return true;
+            else if (questInfo.QuestLockJoin == QuestInfo.QuestJoin.AtLeastOne && completedQuests > 0)
+                return true;
+        }
+
+        if (questInfo.PreviousQuests.Count > 0)
+        {
+            var completedQuests = questInfo.PreviousQuests.Count(x => IsQuestComplete(x) || x == extraCompletedQuest);
+            if (questInfo.PreviousQuestJoin == QuestInfo.QuestJoin.All &&
+                questInfo.PreviousQuests.Count == completedQuests)
+                return false;
+            else if (questInfo.PreviousQuestJoin == QuestInfo.QuestJoin.AtLeastOne && completedQuests > 0)
+                return false;
+            else
+                return true;
+        }
+
+        return false;
     }
 
     public bool IsAetheryteUnlocked(uint aetheryteId, out byte subIndex)

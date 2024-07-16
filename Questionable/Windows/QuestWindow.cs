@@ -48,6 +48,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
     private readonly ICondition _condition;
     private readonly IGameGui _gameGui;
     private readonly QuestSelectionWindow _questSelectionWindow;
+    private readonly QuestValidationWindow _questValidationWindow;
     private readonly ILogger<QuestWindow> _logger;
 
     public QuestWindow(IDalamudPluginInterface pluginInterface,
@@ -68,6 +69,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         ICondition condition,
         IGameGui gameGui,
         QuestSelectionWindow questSelectionWindow,
+        QuestValidationWindow questValidationWindow,
         ILogger<QuestWindow> logger)
         : base("Questionable###Questionable", ImGuiWindowFlags.AlwaysAutoResize)
     {
@@ -89,6 +91,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         _condition = condition;
         _gameGui = gameGui;
         _questSelectionWindow = questSelectionWindow;
+        _questValidationWindow = questValidationWindow;
         _logger = logger;
 
 #if DEBUG
@@ -414,7 +417,8 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
                 $"Target: {_targetManager.Target.Name}  ({_targetManager.Target.ObjectKind}; {_targetManager.Target.DataId})"));
 
             GameObject* gameObject = (GameObject*)_targetManager.Target.Address;
-            ImGui.Text(string.Create(CultureInfo.InvariantCulture, $"Distance: {(_targetManager.Target.Position - _clientState.LocalPlayer.Position).Length():F2}"));
+            ImGui.Text(string.Create(CultureInfo.InvariantCulture,
+                $"Distance: {(_targetManager.Target.Position - _clientState.LocalPlayer.Position).Length():F2}"));
             ImGui.SameLine();
 
             float verticalDistance = _targetManager.Target.Position.Y - _clientState.LocalPlayer.Position.Y;
@@ -452,7 +456,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
             if (ImGui.IsItemHovered())
                 ImGui.SetTooltip("Show all Quests starting with your current target.");
             if (showQuests)
-                _questSelectionWindow.Open(_targetManager.Target);
+                _questSelectionWindow.OpenForTarget(_targetManager.Target);
 
             ImGui.EndDisabled();
 
@@ -471,7 +475,8 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
 
             bool copy = ImGuiComponents.IconButton(FontAwesomeIcon.Copy);
             if (ImGui.IsItemHovered())
-                ImGui.SetTooltip("Left click: Copy target position as JSON.\nRight click: Copy target position as C# code.");
+                ImGui.SetTooltip(
+                    "Left click: Copy target position as JSON.\nRight click: Copy target position as C# code.");
             if (copy)
             {
                 string interactionType = gameObject->NamePlateIconId switch
@@ -509,7 +514,8 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         {
             bool copy = ImGuiComponents.IconButton(FontAwesomeIcon.Copy);
             if (ImGui.IsItemHovered())
-                ImGui.SetTooltip("Left click: Copy your position as JSON.\nRight click: Copy your position as C# code.");
+                ImGui.SetTooltip(
+                    "Left click: Copy your position as JSON.\nRight click: Copy your position as C# code.");
             if (copy)
             {
                 ImGui.SetClipboardText($$"""
@@ -569,6 +575,22 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
             _questController.Reload();
             _framework.RunOnTick(() => _gameUiController.HandleCurrentDialogueChoices(),
                 TimeSpan.FromMilliseconds(200));
+        }
+
+        if (_questRegistry.ValidationIssueCount > 0)
+        {
+            ImGui.SameLine();
+
+            bool colored = _questRegistry.ValidationErrorCount > 0;
+            if (colored)
+                ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudRed);
+
+            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Flag,
+                    $"{_questRegistry.ValidationIssueCount}"))
+                _questValidationWindow.IsOpen = true;
+
+            if (colored)
+                ImGui.PopStyleColor();
         }
     }
 

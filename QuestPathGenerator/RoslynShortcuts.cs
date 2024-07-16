@@ -173,6 +173,8 @@ public static class RoslynShortcuts
                             SyntaxNodeList(
                                 Assignment(nameof(ComplexCombatData.DataId), complexCombatData.DataId, default(uint))
                                     .AsSyntaxNodeOrToken(),
+                                Assignment(nameof(ComplexCombatData.MinimumKillCount), complexCombatData.MinimumKillCount, null)
+                                    .AsSyntaxNodeOrToken(),
                                 Assignment(nameof(ComplexCombatData.RewardItemId), complexCombatData.RewardItemId, null)
                                     .AsSyntaxNodeOrToken(),
                                 Assignment(nameof(ComplexCombatData.RewardItemCount), complexCombatData.RewardItemCount, null)

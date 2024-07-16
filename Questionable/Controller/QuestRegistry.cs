@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Linq;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using Dalamud.Plugin;
-using Dalamud.Plugin.Services;
 using Microsoft.Extensions.Logging;
 using Questionable.Data;
 using Questionable.Model;
 using Questionable.Model.V1;
+using Questionable.Validation;
 
 namespace Questionable.Controller;
 
@@ -18,25 +19,49 @@ internal sealed class QuestRegistry
 {
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly QuestData _questData;
+    private readonly QuestValidator _questValidator;
     private readonly ILogger<QuestRegistry> _logger;
 
     private readonly Dictionary<ushort, Quest> _quests = new();
 
     public QuestRegistry(IDalamudPluginInterface pluginInterface, QuestData questData,
-        ILogger<QuestRegistry> logger)
+        QuestValidator questValidator, ILogger<QuestRegistry> logger)
     {
         _pluginInterface = pluginInterface;
         _questData = questData;
+        _questValidator = questValidator;
         _logger = logger;
     }
 
+    public IEnumerable<Quest> AllQuests => _quests.Values;
     public int Count => _quests.Count;
+    public int ValidationIssueCount => _questValidator.IssueCount;
+    public int ValidationErrorCount => _questValidator.ErrorCount;
 
     public void Reload()
     {
         _quests.Clear();
 
-#if RELEASE
+        LoadQuestsFromAssembly();
+        LoadQuestsFromProjectDirectory();
+
+        try
+        {
+            LoadFromDirectory(new DirectoryInfo(Path.Combine(_pluginInterface.ConfigDirectory.FullName, "Quests")));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e,
+                "Failed to load all quests from user directory (some may have been successfully loaded)");
+        }
+
+        ValidateQuests();
+        _logger.LogInformation("Loaded {Count} quests", _quests.Count);
+    }
+
+    [Conditional("RELEASE")]
+    private void LoadQuestsFromAssembly()
+    {
         _logger.LogInformation("Loading quests from assembly");
 
         foreach ((ushort questId, QuestRoot questRoot) in QuestPaths.AssemblyQuestLoader.GetQuests())
@@ -46,10 +71,15 @@ internal sealed class QuestRegistry
                 QuestId = questId,
                 Root = questRoot,
                 Info = _questData.GetQuestInfo(questId),
+                ReadOnly = true,
             };
             _quests[questId] = quest;
         }
-#else
+    }
+
+    [Conditional("DEBUG")]
+    private void LoadQuestsFromProjectDirectory()
+    {
         DirectoryInfo? solutionDirectory = _pluginInterface.AssemblyLocation.Directory?.Parent?.Parent;
         if (solutionDirectory != null)
         {
@@ -75,29 +105,13 @@ internal sealed class QuestRegistry
                 }
             }
         }
-#endif
-
-        try
-        {
-            LoadFromDirectory(new DirectoryInfo(Path.Combine(_pluginInterface.ConfigDirectory.FullName, "Quests")));
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Failed to load all quests from user directory (some may have been successfully loaded)");
-        }
-
-#if !RELEASE
-        foreach (var quest in _quests.Values)
-        {
-            int missingSteps = quest.Root.QuestSequence.Where(x => x.Sequence < 255).Max(x => x.Sequence) - quest.Root.QuestSequence.Count(x => x.Sequence < 255) + 1;
-            if (missingSteps != 0)
-                _logger.LogWarning("Quest has missing steps: {QuestId} / {QuestName} → {Count}", quest.QuestId, quest.Info.Name, missingSteps);
-        }
-#endif
-
-        _logger.LogInformation("Loaded {Count} quests", _quests.Count);
     }
 
+    private void ValidateQuests()
+    {
+        _questValidator.ClearIssues();
+        _questValidator.Validate(_quests.Values.Where(x => !x.ReadOnly));
+    }
 
     private void LoadQuestFromStream(string fileName, Stream stream)
     {
@@ -111,6 +125,7 @@ internal sealed class QuestRegistry
             QuestId = questId.Value,
             Root = JsonSerializer.Deserialize<QuestRoot>(stream)!,
             Info = _questData.GetQuestInfo(questId.Value),
+            ReadOnly = false,
         };
         _quests[questId.Value] = quest;
     }

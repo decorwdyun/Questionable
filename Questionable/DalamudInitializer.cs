@@ -29,7 +29,8 @@ internal sealed class DalamudInitializer : IDisposable
         QuestWindow questWindow,
         DebugOverlay debugOverlay,
         ConfigWindow configWindow,
-        QuestSelectionWindow questSelectionWindow)
+        QuestSelectionWindow questSelectionWindow,
+        QuestValidationWindow questValidationWindow)
     {
         _pluginInterface = pluginInterface;
         _framework = framework;
@@ -44,6 +45,7 @@ internal sealed class DalamudInitializer : IDisposable
         _windowSystem.AddWindow(configWindow);
         _windowSystem.AddWindow(debugOverlay);
         _windowSystem.AddWindow(questSelectionWindow);
+        _windowSystem.AddWindow(questValidationWindow);
 
         _pluginInterface.UiBuilder.Draw += _windowSystem.Draw;
         _pluginInterface.UiBuilder.OpenMainUi += _questWindow.Toggle;

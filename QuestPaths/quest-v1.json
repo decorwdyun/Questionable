@@ -19,6 +19,9 @@
         "type": "string"
       }
     },
+    "Disabled": {
+      "type": "boolean"
+    },
     "Comment": {
       "type": "string"
     },
@@ -548,6 +551,10 @@
                           "properties": {
                             "DataId": {
                               "description": "The enemy data id which is supposed to be killed",
+                              "type": "integer"
+                            },
+                            "MinimumKillCount": {
+                              "description": "Overworld mobs: If this number of mobs has been killed, will wait a bit before attempting to pull another mob to see if the quest progresses",
                               "type": "integer"
                             },
                             "RewardItemId": {

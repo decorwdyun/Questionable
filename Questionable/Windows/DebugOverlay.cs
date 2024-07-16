@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
+using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin.Services;
@@ -18,10 +19,11 @@ internal sealed class DebugOverlay : Window
     private readonly QuestRegistry _questRegistry;
     private readonly IGameGui _gameGui;
     private readonly IClientState _clientState;
+    private readonly ICondition _condition;
     private readonly Configuration _configuration;
 
     public DebugOverlay(QuestController questController, QuestRegistry questRegistry, IGameGui gameGui,
-        IClientState clientState, Configuration configuration)
+        IClientState clientState, ICondition condition, Configuration configuration)
         : base("Questionable Debug Overlay###QuestionableDebugOverlay",
             ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoBackground |
             ImGuiWindowFlags.NoInputs | ImGuiWindowFlags.NoSavedSettings, true)
@@ -30,6 +32,7 @@ internal sealed class DebugOverlay : Window
         _questRegistry = questRegistry;
         _gameGui = gameGui;
         _clientState = clientState;
+        _condition = condition;
         _configuration = configuration;
 
         Position = Vector2.Zero;
@@ -44,7 +47,8 @@ internal sealed class DebugOverlay : Window
     public override bool DrawConditions()
     {
         return _configuration.Advanced.DebugOverlay && _clientState is
-            { IsLoggedIn: true, LocalPlayer: not null, IsPvPExcludingDen: false };
+                   { IsLoggedIn: true, LocalPlayer: not null, IsPvPExcludingDen: false } &&
+               !_condition[ConditionFlag.OccupiedInCutSceneEvent];
     }
 
     public override void PreDraw()

@@ -21,20 +21,16 @@ public class ExcelRef
         Type = EType.RowId;
     }
 
-    /// <summary>
-    /// Only used internally (not serialized) with specific values that have been read from the sheets already.
-    /// </summary>
-    private ExcelRef(string value, bool v)
+    private ExcelRef(string? stringValue, uint? rowIdValue, EType type)
     {
-        if (!v)
-            throw new ArgumentException(nameof(v));
-
-        _stringValue = value;
-        _rowIdValue = null;
-        Type = EType.RawString;
+        _stringValue = stringValue;
+        _rowIdValue = rowIdValue;
+        Type = type;
     }
 
-    public static ExcelRef FromSheetValue(string value) => new(value, true);
+    public static ExcelRef FromKey(string value) => new(value, null, EType.Key);
+    public static ExcelRef FromRowId(uint rowId) => new(null, rowId, EType.RowId);
+    public static ExcelRef FromSheetValue(string value) => new(value, null, EType.RawString);
 
     public EType Type { get; }
 
