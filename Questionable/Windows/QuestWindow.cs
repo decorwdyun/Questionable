@@ -49,6 +49,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
     private readonly IGameGui _gameGui;
     private readonly QuestSelectionWindow _questSelectionWindow;
     private readonly QuestValidationWindow _questValidationWindow;
+    private readonly ICommandManager _commandManager;
     private readonly ILogger<QuestWindow> _logger;
 
     public QuestWindow(IDalamudPluginInterface pluginInterface,
@@ -70,6 +71,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         IGameGui gameGui,
         QuestSelectionWindow questSelectionWindow,
         QuestValidationWindow questValidationWindow,
+        ICommandManager commandManager,
         ILogger<QuestWindow> logger)
         : base("Questionable###Questionable", ImGuiWindowFlags.AlwaysAutoResize)
     {
@@ -92,6 +94,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         _gameGui = gameGui;
         _questSelectionWindow = questSelectionWindow;
         _questValidationWindow = questValidationWindow;
+        _commandManager = commandManager;
         _logger = logger;
 
 #if DEBUG
@@ -263,6 +266,13 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
             if (colored)
                 ImGui.PopStyleColor();
             ImGui.EndDisabled();
+
+            if (_commandManager.Commands.TryGetValue("/questinfo", out var commandInfo))
+            {
+                ImGui.SameLine();
+                if (ImGuiComponents.IconButton(FontAwesomeIcon.Atlas))
+                    _commandManager.DispatchCommand("/questinfo", currentQuest.Quest.QuestId.ToString(CultureInfo.InvariantCulture), commandInfo);
+            }
 
             bool autoAcceptNextQuest = _configuration.General.AutoAcceptNextQuest;
             if (ImGui.Checkbox("Automatically accept next quest", ref autoAcceptNextQuest))
