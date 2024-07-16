@@ -25,14 +25,58 @@
       "Sequence": 1,
       "Steps": [
         {
+          "Position": {
+            "X": 326.6569,
+            "Y": -11.008737,
+            "Z": 254.36206
+          },
+          "TerritoryId": 138,
+          "InteractionType": "WalkTo",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            -32
+          ]
+        },
+        {
+          "Position": {
+            "X": 318.4823,
+            "Y": -15.19004,
+            "Z": 253.61394
+          },
+          "TerritoryId": 138,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            -32
+          ]
+        },
+        {
           "DataId": 1006500,
           "Position": {
             "X": 321.1565,
             "Y": -15.187395,
             "Z": 253.52856
           },
+          "StopDistance": 5,
           "TerritoryId": 138,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 1006499,
@@ -42,7 +86,16 @@
             "Z": 249.04248
           },
           "TerritoryId": 138,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Western La Noscea - Aleport",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 1006498,
@@ -52,13 +105,31 @@
             "Z": 257.16016
           },
           "TerritoryId": 138,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         }
       ]
     },
     {
       "Sequence": 255,
       "Steps": [
+        {
+          "Position": {
+            "X": 293.98203,
+            "Y": -24.988865,
+            "Z": 240.63774
+          },
+          "TerritoryId": 138,
+          "InteractionType": "WalkTo",
+          "$": "Aleport Crates"
+        },
         {
           "DataId": 1006497,
           "Position": {

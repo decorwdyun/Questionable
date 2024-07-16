@@ -59,7 +59,15 @@
           },
           "TerritoryId": 147,
           "InteractionType": "Emote",
-          "Emote": "psych"
+          "Emote": "psych",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 1006650,
@@ -70,7 +78,15 @@
           },
           "TerritoryId": 147,
           "InteractionType": "Emote",
-          "Emote": "psych"
+          "Emote": "psych",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 1006649,
@@ -81,7 +97,15 @@
           },
           "TerritoryId": 147,
           "InteractionType": "Emote",
-          "Emote": "psych"
+          "Emote": "psych",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         }
       ]
     },
@@ -95,8 +119,9 @@
             "Y": 46.99734,
             "Z": 32.547485
           },
+          "StopDistance": 7,
           "TerritoryId": 147,
-          "InteractionType": "Emote",
+          "InteractionType": "CompleteQuest",
           "Emote": "psych"
         }
       ]

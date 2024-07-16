@@ -23,12 +23,14 @@
         {
           "TerritoryId": 156,
           "InteractionType": "EquipItem",
-          "ItemId": 6223
+          "ItemId": 6223,
+          "Comment": "Can be re-bought from Glaumunt in Mor Dhona"
         },
         {
           "TerritoryId": 156,
           "InteractionType": "EquipItem",
-          "ItemId": 6224
+          "ItemId": 6224,
+          "Comment": "Can be re-bought from Glaumunt in Mor Dhona"
         },
         {
           "DataId": 2002502,
@@ -38,7 +40,8 @@
             "Z": 16.281311
           },
           "TerritoryId": 156,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 156
         },
         {
           "DataId": 1007537,
@@ -94,12 +97,22 @@
       "Sequence": 3,
       "Steps": [
         {
+          "Position": {
+            "X": -530.1089,
+            "Y": -3.3262053,
+            "Z": -308.2147
+          },
+          "TerritoryId": 335,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 1007611,
           "Position": {
             "X": -536.4004,
             "Y": -1.9197441,
             "Z": -308.00336
           },
+          "StopDistance": 7,
           "TerritoryId": 335,
           "InteractionType": "Emote",
           "Emote": "imperialsalute"

@@ -25,7 +25,15 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 132,
+          "Position": {
+            "X": -491.4813,
+            "Y": 205.20322,
+            "Z": -185.17868
+          },
+          "TerritoryId": 155,
+          "InteractionType": "WalkTo"
+        },
+        {
           "Position": {
             "X": -321.0041,
             "Y": 255.60681,
@@ -34,8 +42,13 @@
           "TerritoryId": 155,
           "InteractionType": "Combat",
           "EnemySpawnType": "OverworldEnemies",
-          "KillEnemyDataIds": [
-            132
+          "ComplexCombatData": [
+            {
+              "DataId": 132,
+              "MinimumKillCount": 3,
+              "RewardItemId": 2003018,
+              "RewardItemCount": 3
+            }
           ]
         }
       ]

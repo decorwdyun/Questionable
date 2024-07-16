@@ -25,6 +25,16 @@
       "Sequence": 1,
       "Steps": [
         {
+          "Position": {
+            "X": 293.98203,
+            "Y": -24.988865,
+            "Z": 240.63774
+          },
+          "TerritoryId": 138,
+          "InteractionType": "WalkTo",
+          "$": "Aleport Crates"
+        },
+        {
           "DataId": 1006502,
           "Position": {
             "X": 182.39111,
@@ -39,6 +49,16 @@
     {
       "Sequence": 2,
       "Steps": [
+        {
+          "Position": {
+            "X": 293.98203,
+            "Y": -24.988865,
+            "Z": 240.63774
+          },
+          "TerritoryId": 138,
+          "InteractionType": "WalkTo",
+          "$": "Aleport Crates"
+        },
         {
           "DataId": 1006497,
           "Position": {
@@ -69,6 +89,15 @@
     {
       "Sequence": 255,
       "Steps": [
+        {
+          "Position": {
+            "X": 305.6621,
+            "Y": -36.405907,
+            "Z": 320.81702
+          },
+          "TerritoryId": 138,
+          "InteractionType": "WalkTo"
+        },
         {
           "DataId": 1006497,
           "Position": {

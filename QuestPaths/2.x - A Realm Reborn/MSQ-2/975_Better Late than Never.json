@@ -36,6 +36,13 @@
           "AethernetShortcut": [
             "[Gridania] Mih Khetto's Amphitheatre",
             "[Gridania] Airship Landing"
+          ],
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_GAIUSC308_00975_Q1_000_040",
+              "Yes": true
+            }
           ]
         },
         {

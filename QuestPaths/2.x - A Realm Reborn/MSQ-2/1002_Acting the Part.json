@@ -56,7 +56,8 @@
             "Z": -697.0779
           },
           "TerritoryId": 156,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Mor Dhona"
         }
       ]
     }

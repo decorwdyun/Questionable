@@ -12,6 +12,7 @@
             "Y": 88,
             "Z": -225.17743
           },
+          "StopDistance": 7,
           "TerritoryId": 147,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Northern Thanalan - Ceruleum Processing Plant",
@@ -41,15 +42,24 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 2002711,
-          "Position": {
-            "X": -113.206726,
-            "Y": 47.348755,
-            "Z": 29.587158
-          },
           "TerritoryId": 147,
           "InteractionType": "Duty",
-          "ContentFinderConditionId": 86
+          "ContentFinderConditionId": 16
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "Position": {
+            "X": 0,
+            "Y": 0,
+            "Z": 0
+          },
+          "TerritoryId": 1,
+          "InteractionType": "WalkTo",
+          "Comment": "Filler"
         }
       ]
     },
@@ -57,15 +67,24 @@
       "Sequence": 4,
       "Steps": [
         {
-          "DataId": 2012614,
-          "Position": {
-            "X": -821,
-            "Y": -344.1316,
-            "Z": 0
-          },
           "TerritoryId": 1053,
           "InteractionType": "Duty",
-          "ContentFinderConditionId": 20082
+          "ContentFinderConditionId": 830
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "Position": {
+            "X": 0,
+            "Y": 0,
+            "Z": 0
+          },
+          "TerritoryId": 1,
+          "InteractionType": "WalkTo",
+          "Comment": "Filler"
         }
       ]
     },
@@ -95,7 +114,8 @@
             "Z": 0
           },
           "TerritoryId": 212,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 212
         },
         {
           "DataId": 1006692,

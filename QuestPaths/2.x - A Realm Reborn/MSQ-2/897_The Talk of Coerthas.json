@@ -32,7 +32,44 @@
             "Z": -296.2539
           },
           "TerritoryId": 155,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
+        },
+        {
+          "Position": {
+            "X": 205.61038,
+            "Y": 256.0028,
+            "Z": 83.6889
+          },
+          "TerritoryId": 155,
+          "InteractionType": "WalkTo",
+          "$": "NW Skyfire Locks door (outside)"
+        },
+        {
+          "Position": {
+            "X": 198.30511,
+            "Y": 256.99997,
+            "Z": 76.41981
+          },
+          "TerritoryId": 155,
+          "InteractionType": "WalkTo",
+          "$": "NW Skyfire Locks door (inside)",
+          "DisableNavmesh": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            -64
+          ]
         },
         {
           "DataId": 1006396,
@@ -42,7 +79,36 @@
             "Z": 57.87744
           },
           "TerritoryId": 155,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
+        },
+        {
+          "Position": {
+            "X": 198.30511,
+            "Y": 256.99997,
+            "Z": 76.41981
+          },
+          "TerritoryId": 155,
+          "InteractionType": "WalkTo",
+          "$": "NW Skyfire Locks door (inside)"
+        },
+        {
+          "Position": {
+            "X": 205.61038,
+            "Y": 256.0028,
+            "Z": 83.6889
+          },
+          "TerritoryId": 155,
+          "InteractionType": "WalkTo",
+          "$": "NW Skyfire Locks door (outside)",
+          "DisableNavmesh": true
         },
         {
           "DataId": 1006377,
@@ -52,7 +118,15 @@
             "Z": 420.37073
           },
           "TerritoryId": 155,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         }
       ]
     },

@@ -12,6 +12,7 @@
             "Y": 242.18399,
             "Z": 375.17358
           },
+          "StopDistance": 5,
           "TerritoryId": 155,
           "InteractionType": "AcceptQuest"
         }
@@ -20,6 +21,27 @@
     {
       "Sequence": 1,
       "Steps": [
+        {
+          "Position": {
+            "X": -692.2779,
+            "Y": 242.18399,
+            "Z": 366.4715
+          },
+          "TerritoryId": 155,
+          "InteractionType": "WalkTo",
+          "$": "Monument Tower (inside)"
+        },
+        {
+          "Position": {
+            "X": -688.1699,
+            "Y": 241.99994,
+            "Z": 355.80283
+          },
+          "TerritoryId": 155,
+          "InteractionType": "WalkTo",
+          "$": "Monument Tower (outside)",
+          "DisableNavmesh": true
+        },
         {
           "Position": {
             "X": -217.57614,

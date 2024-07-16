@@ -64,7 +64,8 @@
             "Z": 24.734863
           },
           "TerritoryId": 145,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Eastern Thanalan - Camp Drybone"
         }
       ]
     },

@@ -60,8 +60,10 @@
           ],
           "AethernetShortcut": [
             "[Gridania] Mih Khetto's Amphitheatre",
-            "[Gridania] Blue Badger Gate (Central Shroud)"
-          ]
+            "[Gridania] White Wolf Gate (Central Shroud)"
+          ],
+          "StopDistance": 4,
+          "IgnoreDistanceToObject": true
         }
       ]
     },

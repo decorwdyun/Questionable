@@ -12,6 +12,7 @@
             "Y": 25.009521,
             "Z": -697.0779
           },
+          "StopDistance": 5,
           "TerritoryId": 156,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Mor Dhona",
@@ -41,6 +42,27 @@
       "Sequence": 2,
       "Steps": [
         {
+          "Position": {
+            "X": -159.67096,
+            "Y": 2.7818115,
+            "Z": -634.4776
+          },
+          "TerritoryId": 156,
+          "InteractionType": "WalkTo",
+          "$": "Camp Revenant's Toll (bottom)"
+        },
+        {
+          "Position": {
+            "X": -169.94295,
+            "Y": 13.794385,
+            "Z": -610.4647
+          },
+          "TerritoryId": 156,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true,
+          "$": "Camp Revenant's Toll (top)"
+        },
+        {
           "DataId": 2002329,
           "Position": {
             "X": -169.8482,
@@ -64,7 +86,14 @@
             "Z": -682.06305
           },
           "TerritoryId": 156,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_GAIUSC604_01004_EVENTAREA_WARP_YESNO_TITLE",
+              "Yes": true
+            }
+          ]
         },
         {
           "DataId": 1006555,

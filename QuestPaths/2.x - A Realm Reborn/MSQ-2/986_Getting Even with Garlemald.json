@@ -62,7 +62,8 @@
             "Z": -688.4413
           },
           "TerritoryId": 156,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Mor Dhona"
         }
       ]
     },

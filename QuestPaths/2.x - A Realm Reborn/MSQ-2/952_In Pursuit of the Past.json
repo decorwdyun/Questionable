@@ -55,12 +55,6 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 2002705,
-          "Position": {
-            "X": -684.90125,
-            "Y": 208.97229,
-            "Z": -522.57574
-          },
           "TerritoryId": 155,
           "InteractionType": "Duty",
           "ContentFinderConditionId": 11

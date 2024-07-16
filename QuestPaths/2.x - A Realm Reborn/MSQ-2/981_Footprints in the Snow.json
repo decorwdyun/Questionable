@@ -96,6 +96,15 @@
       "Sequence": 6,
       "Steps": [
         {
+          "Position": {
+            "X": -399.05286,
+            "Y": 228.68446,
+            "Z": 445.9758
+          },
+          "TerritoryId": 155,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 1006519,
           "Position": {
             "X": -397.54333,
@@ -110,6 +119,27 @@
     {
       "Sequence": 255,
       "Steps": [
+        {
+          "Position": {
+            "X": -688.1699,
+            "Y": 241.99994,
+            "Z": 355.80283
+          },
+          "TerritoryId": 155,
+          "InteractionType": "WalkTo",
+          "$": "Monument Tower (outside)"
+        },
+        {
+          "Position": {
+            "X": -692.2779,
+            "Y": 242.18399,
+            "Z": 366.4715
+          },
+          "TerritoryId": 155,
+          "InteractionType": "WalkTo",
+          "$": "Monument Tower (inside)",
+          "DisableNavmesh": true
+        },
         {
           "DataId": 1006521,
           "Position": {
