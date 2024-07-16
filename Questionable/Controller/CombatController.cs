@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects;
@@ -104,6 +105,7 @@ internal sealed class CombatController
         return _condition[ConditionFlag.InCombat];
     }
 
+    [SuppressMessage("ReSharper", "RedundantJumpStatement")]
     private IGameObject? FindNextTarget()
     {
         if (_currentFight == null)

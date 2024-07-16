@@ -8,12 +8,12 @@ public sealed class ExcelRefConverter : JsonConverter<ExcelRef>
 {
     public override ExcelRef? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        if (reader.TokenType == JsonTokenType.String)
-            return new ExcelRef(reader.GetString()!);
-        else if (reader.TokenType == JsonTokenType.Number)
-            return new ExcelRef(reader.GetUInt32());
-        else
-            return null;
+        return reader.TokenType switch
+        {
+            JsonTokenType.String => ExcelRef.FromKey(reader.GetString()!),
+            JsonTokenType.Number => ExcelRef.FromRowId(reader.GetUInt32()),
+            _ => null
+        };
     }
 
     public override void Write(Utf8JsonWriter writer, ExcelRef? value, JsonSerializerOptions options)

@@ -146,6 +146,7 @@ internal sealed class GameUiController : IDisposable
         SelectIconStringPostSetup(addonSelectIconString, false);
     }
 
+    [SuppressMessage("ReSharper", "RedundantJumpStatement")]
     private unsafe void SelectIconStringPostSetup(AddonSelectIconString* addonSelectIconString, bool checkAllSteps)
     {
         string? actualPrompt = addonSelectIconString->AtkUnitBase.AtkValues[3].ReadAtkString();

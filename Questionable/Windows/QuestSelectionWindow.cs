@@ -274,6 +274,7 @@ internal sealed class QuestSelectionWindow : LWindow
             {
                 var qInfo = _questData.GetQuestInfo(q);
                 var (iconColor, icon, _) = GetQuestStyle(q);
+                // ReSharper disable once UnusedVariable
                 using (var font = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
                 {
                     if (_questRegistry.IsKnownQuest(qInfo.QuestId))
@@ -305,6 +306,7 @@ internal sealed class QuestSelectionWindow : LWindow
             {
                 var qInfo = _questData.GetQuestInfo(q);
                 var (iconColor, icon, _) = GetQuestStyle(q);
+                // ReSharper disable once UnusedVariable
                 using (var font = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
                 {
                     if (_questRegistry.IsKnownQuest(qInfo.QuestId))
