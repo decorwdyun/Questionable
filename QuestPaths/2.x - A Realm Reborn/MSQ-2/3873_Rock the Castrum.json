@@ -1,0 +1,67 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "JerryWester",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1006646,
+          "Position": {
+            "X": -29.953552,
+            "Y": 46.99734,
+            "Z": 32.547485
+          },
+          "StopDistance": 7,
+          "TerritoryId": 147,
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Northern Thanalan - Ceruleum Processing Plant",
+          "SkipIf": [
+            "AetheryteShortcutIfInSameTerritory"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1006657,
+          "Position": {
+            "X": -294.81964,
+            "Y": 88,
+            "Z": -225.17743
+          },
+          "TerritoryId": 147,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "TerritoryId": 147,
+          "InteractionType": "Duty",
+          "ContentFinderConditionId": 15
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1006657,
+          "Position": {
+            "X": -294.81964,
+            "Y": 88,
+            "Z": -225.17743
+          },
+          "StopDistance": 7,
+          "TerritoryId": 147,
+          "InteractionType": "CompleteQuest"
+        }
+      ]
+    }
+  ]
+}

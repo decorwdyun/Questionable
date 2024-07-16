@@ -1,0 +1,71 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "JerryWester",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1006497,
+          "Position": {
+            "X": 321.1565,
+            "Y": -18.197807,
+            "Z": 276.5697
+          },
+          "TerritoryId": 138,
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Western La Noscea - Aleport",
+          "SkipIf": [
+            "AetheryteShortcutIfInSameTerritory"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1007640,
+          "Position": {
+            "X": 317.95215,
+            "Y": -40.425003,
+            "Z": 374.10547
+          },
+          "TerritoryId": 138,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1007540,
+          "Position": {
+            "X": -285.96942,
+            "Y": -40.868286,
+            "Z": 410.39136
+          },
+          "StopDistance": 7,
+          "TerritoryId": 138,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1006503,
+          "Position": {
+            "X": -266.5904,
+            "Y": -40.040386,
+            "Z": 461.72266
+          },
+          "TerritoryId": 138,
+          "InteractionType": "CompleteQuest"
+        }
+      ]
+    }
+  ]
+}

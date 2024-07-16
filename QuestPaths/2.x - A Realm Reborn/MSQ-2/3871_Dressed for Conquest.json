@@ -1,0 +1,105 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "JerryWester",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1006552,
+          "Position": {
+            "X": 54.795166,
+            "Y": 25.548265,
+            "Z": -698.05444
+          },
+          "StopDistance": 5,
+          "TerritoryId": 156,
+          "InteractionType": "AcceptQuest",
+          "IgnoreDistanceToObject": true
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "Position": {
+            "X": -429.60284,
+            "Y": -15.201682,
+            "Z": -477.29346
+          },
+          "TerritoryId": 156,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "OverworldEnemies",
+          "ComplexCombatData": [
+            {
+              "DataId": 55,
+              "MinimumKillCount": 3,
+              "RewardItemId": 2003022,
+              "RewardItemCount": 3,
+              "$": "QW goes 6x0 → 0 0 16 0 0 0 → 0 0 32 0 0 0 → 16 0 48 0 0 0"
+            },
+            {
+              "DataId": 62,
+              "MinimumKillCount": 0,
+              "RewardItemId": 2003021,
+              "RewardItemCount": 3,
+              "$": "QW goes [..] → 16 1 48 0 0 0 → 16 2 48 0 0 0 → 0 51 0 0 0 0"
+            },
+            {
+              "DataId": 63,
+              "MinimumKillCount": 0,
+              "RewardItemId": 2003021,
+              "RewardItemCount": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1006552,
+          "Position": {
+            "X": 54.795166,
+            "Y": 25.548265,
+            "Z": -698.05444
+          },
+          "TerritoryId": 156,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1006988,
+          "Position": {
+            "X": 41.33667,
+            "Y": 28.999998,
+            "Z": -795.4681
+          },
+          "TerritoryId": 156,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1006552,
+          "Position": {
+            "X": 54.795166,
+            "Y": 25.548265,
+            "Z": -698.05444
+          },
+          "TerritoryId": 156,
+          "InteractionType": "CompleteQuest"
+        }
+      ]
+    }
+  ]
+}
