@@ -157,6 +157,12 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
                 {
                     ImGui.TextUnformatted(
                         $"Quest: {startedQuest.Quest.Info.Name} / {startedQuest.Sequence} / {startedQuest.Step}");
+
+                    if (startedQuest.Quest.Root.Disabled)
+                    {
+                        ImGui.SameLine();
+                        ImGui.TextColored(ImGuiColors.DalamudRed, "Disabled");
+                    }
                 }
 
                 using var _ = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
@@ -413,7 +419,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
                         _questRegistry.TryGetQuest(questManager->NormalQuests[trackedQuest.Index].QuestId,
                             out var quest);
                         ImGui.Text(
-                            $"Tracked quest: {questManager->NormalQuests[trackedQuest.Index].QuestId}, {trackedQuest.Index}: {quest?.Name}");
+                            $"Tracked quest: {questManager->NormalQuests[trackedQuest.Index].QuestId}, {trackedQuest.Index}: {quest?.Info.Name}");
                         break;
                 }
             }

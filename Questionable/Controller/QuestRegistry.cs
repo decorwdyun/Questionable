@@ -92,6 +92,10 @@ internal sealed class QuestRegistry
                     LoadFromDirectory(
                         new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "2.x - A Realm Reborn")));
                     LoadFromDirectory(
+                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "3.x - Heavensward")));
+                    LoadFromDirectory(
+                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "4.x - Stormblood")));
+                    LoadFromDirectory(
                         new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "5.x - Shadowbringers")));
                     LoadFromDirectory(
                         new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "6.x - Endwalker")));

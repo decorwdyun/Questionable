@@ -24,4 +24,5 @@ public enum EEmote
     Me = 23,
     Welcome = 41,
     ImperialSalute = 59,
+    Pet = 105,
 }
