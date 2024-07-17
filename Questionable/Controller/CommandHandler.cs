@@ -101,9 +101,7 @@ internal sealed class CommandHandler : IDisposable
 
         if (arguments.Length >= 1 && ushort.TryParse(arguments[0], out ushort questId))
         {
-            if (_gameFunctions.IsQuestLocked(questId, 0))
-                _chatGui.PrintError($"[Questionable] Quest {questId} is locked.");
-            else if (_questRegistry.TryGetQuest(questId, out Quest? quest))
+            if (_questRegistry.TryGetQuest(questId, out Quest? quest))
             {
                 _debugOverlay.HighlightedQuest = questId;
                 _chatGui.Print($"[Questionable] Set highlighted quest to {questId} ({quest.Info.Name}).");
@@ -122,7 +120,9 @@ internal sealed class CommandHandler : IDisposable
     {
         if (arguments.Length >= 1 && ushort.TryParse(arguments[0], out ushort questId))
         {
-            if (_questRegistry.TryGetQuest(questId, out Quest? quest))
+            if (_gameFunctions.IsQuestLocked(questId, 0))
+                _chatGui.PrintError($"[Questionable] Quest {questId} is locked.");
+            else if (_questRegistry.TryGetQuest(questId, out Quest? quest))
             {
                 _questController.SetNextQuest(quest);
                 _chatGui.Print($"[Questionable] Set next quest to {questId} ({quest.Info.Name}).");

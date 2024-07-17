@@ -66,6 +66,11 @@
           ]
         },
         {
+          "TerritoryId": 152,
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "East Shroud - Hawthorne Hut"
+        },
+        {
           "DataId": 1004886,
           "Position": {
             "X": 30.319702,
