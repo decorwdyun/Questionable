@@ -21,12 +21,12 @@ internal sealed class QuestController
     private readonly ILogger<QuestController> _logger;
     private readonly QuestRegistry _questRegistry;
     private readonly IKeyState _keyState;
+    private readonly IChatGui _chatGui;
     private readonly Configuration _configuration;
     private readonly YesAlreadyIpc _yesAlreadyIpc;
     private readonly IReadOnlyList<ITaskFactory> _taskFactories;
 
     private readonly object _lock = new();
-
 
     private QuestProgress? _startedQuest;
     private QuestProgress? _nextQuest;
@@ -43,6 +43,7 @@ internal sealed class QuestController
         ILogger<QuestController> logger,
         QuestRegistry questRegistry,
         IKeyState keyState,
+        IChatGui chatGui,
         Configuration configuration,
         YesAlreadyIpc yesAlreadyIpc,
         IEnumerable<ITaskFactory> taskFactories)
@@ -54,6 +55,7 @@ internal sealed class QuestController
         _logger = logger;
         _questRegistry = questRegistry;
         _keyState = keyState;
+        _chatGui = chatGui;
         _configuration = configuration;
         _yesAlreadyIpc = yesAlreadyIpc;
         _taskFactories = taskFactories.ToList().AsReadOnly();
@@ -221,12 +223,7 @@ internal sealed class QuestController
                 return;
             }
 
-            if (!_movementController.IsNavmeshReady)
-            {
-                DebugState = "Navmesh not ready";
-                return;
-            }
-            else if (_movementController.IsPathfinding || _movementController.IsPathRunning)
+            if (_movementController.IsPathfinding || _movementController.IsPathRunning)
             {
                 DebugState = "Path is running";
                 return;
@@ -401,6 +398,7 @@ internal sealed class QuestController
                 catch (Exception e)
                 {
                     _logger.LogError(e, "Failed to start task {TaskName}", upcomingTask.ToString());
+                    _chatGui.PrintError($"[Questionable] Failed to start task '{upcomingTask}', please check /xllog for details");
                     Stop("Task failed to start");
                     return;
                 }

@@ -349,6 +349,13 @@ internal sealed unsafe class GameFunctions
         if (_configuration.Advanced.NeverFly)
             return false;
 
+        if (IsQuestAccepted(3304) && _condition[ConditionFlag.Mounted])
+        {
+            BattleChara* battleChara = (BattleChara*)(_clientState.LocalPlayer?.Address ?? 0);
+            if (battleChara != null && battleChara->Mount.MountId == 198) // special quest amaro, not the normal one
+                return true;
+        }
+
         var playerState = PlayerState.Instance();
         return playerState != null &&
                _territoryToAetherCurrentCompFlgSet.TryGetValue(territoryId, out byte aetherCurrentCompFlgSet) &&

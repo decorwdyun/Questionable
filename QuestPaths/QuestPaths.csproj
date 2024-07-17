@@ -42,10 +42,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="5.x - Shadowbringers\MSQ\A2-Kholusia1\" />
-      <Folder Include="5.x - Shadowbringers\MSQ\A3-AmhAreng1\" />
       <Folder Include="5.x - Shadowbringers\MSQ\A4 - Crystarium 2\" />
-      <Folder Include="5.x - Shadowbringers\MSQ\B-Il Mheg\" />
       <Folder Include="5.x - Shadowbringers\MSQ\C-Rak'tika\" />
     </ItemGroup>
 </Project>

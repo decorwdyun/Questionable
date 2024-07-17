@@ -264,6 +264,13 @@
                     "required": [
                       "Aetheryte"
                     ]
+                  },
+                  "else": {
+                    "properties": {
+                      "Aetheryte": {
+                        "type": "null"
+                      }
+                    }
                   }
                 },
                 {
@@ -289,6 +296,13 @@
                     "required": [
                       "AethernetShard"
                     ]
+                  },
+                  "else": {
+                    "properties": {
+                      "AethernetShard": {
+                        "type": "null"
+                      }
+                    }
                   }
                 },
                 {
@@ -485,7 +499,8 @@
                           "me",
                           "welcome",
                           "imperialsalute",
-                          "pet"
+                          "pet",
+                          "dance"
                         ]
                       }
                     }
@@ -641,6 +656,9 @@
                           },
                           {
                             "const": "CompleteQuest"
+                          },
+                          {
+                            "const": "Instruction"
                           }
                         ]
                       }
