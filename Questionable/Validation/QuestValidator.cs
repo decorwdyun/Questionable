@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Questionable.Model;
@@ -26,11 +27,16 @@ internal sealed class QuestValidator
     public int IssueCount => _validationIssues.Count;
     public int ErrorCount => _validationIssues.Count(x => x.Severity == EIssueSeverity.Error);
 
-    public void ClearIssues() => _validationIssues.Clear();
+    public void Reset()
+    {
+        foreach (var validator in _validators)
+            validator.Reset();
+        _validationIssues.Clear();
+    }
 
     public void Validate(IEnumerable<Quest> quests)
     {
-        Task.Run(() =>
+        Task.Factory.StartNew(() =>
         {
             foreach (var quest in quests)
             {
@@ -52,8 +58,6 @@ internal sealed class QuestValidator
                 .ThenBy(x => x.Step)
                 .ThenBy(x => x.Description)
                 .ToList();
-        });
+        }, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
     }
-
-    public void AddIssue(ValidationIssue issue) => _validationIssues.Add(issue);
 }

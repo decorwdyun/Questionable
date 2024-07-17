@@ -67,6 +67,23 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton(new WindowSystem(nameof(Questionable)));
         serviceCollection.AddSingleton((Configuration?)pluginInterface.GetPluginConfig() ?? new Configuration());
 
+        AddBasicFunctionsAndData(serviceCollection);
+        AddTaskFactories(serviceCollection);
+        AddControllers(serviceCollection);
+        AddWindows(serviceCollection);
+        AddQuestValidators(serviceCollection);
+
+        serviceCollection.AddSingleton<CommandHandler>();
+        serviceCollection.AddSingleton<DalamudInitializer>();
+
+        _serviceProvider = serviceCollection.BuildServiceProvider();
+        _serviceProvider.GetRequiredService<QuestRegistry>().Reload();
+        _serviceProvider.GetRequiredService<CommandHandler>();
+        _serviceProvider.GetRequiredService<DalamudInitializer>();
+    }
+
+    private static void AddBasicFunctionsAndData(ServiceCollection serviceCollection)
+    {
         serviceCollection.AddSingleton<GameFunctions>();
         serviceCollection.AddSingleton<ChatFunctions>();
         serviceCollection.AddSingleton<AetherCurrentData>();
@@ -76,12 +93,15 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<NavmeshIpc>();
         serviceCollection.AddSingleton<LifestreamIpc>();
         serviceCollection.AddSingleton<YesAlreadyIpc>();
+    }
 
+    private static void AddTaskFactories(ServiceCollection serviceCollection)
+    {
         // individual tasks
         serviceCollection.AddTransient<MountTask>();
         serviceCollection.AddTransient<UnmountTask>();
 
-        // tasks with factories
+        // task factories
         serviceCollection.AddTaskWithFactory<StepDisabled.Factory, StepDisabled.Task>();
         serviceCollection.AddTaskWithFactory<AetheryteShortcut.Factory, AetheryteShortcut.UseAetheryteShortcut>();
         serviceCollection.AddTaskWithFactory<SkipCondition.Factory, SkipCondition.CheckTask>();
@@ -115,7 +135,10 @@ public sealed class QuestionablePlugin : IDalamudPlugin
                 WaitAtEnd.WaitObjectAtPosition>();
         serviceCollection.AddTransient<WaitAtEnd.WaitQuestAccepted>();
         serviceCollection.AddTransient<WaitAtEnd.WaitQuestCompleted>();
+    }
 
+    private static void AddControllers(ServiceCollection serviceCollection)
+    {
         serviceCollection.AddSingleton<MovementController>();
         serviceCollection.AddSingleton<MovementOverrideController>();
         serviceCollection.AddSingleton<QuestRegistry>();
@@ -125,27 +148,27 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<CombatController>();
 
         serviceCollection.AddSingleton<ICombatModule, RotationSolverRebornModule>();
+    }
 
+    private static void AddWindows(ServiceCollection serviceCollection)
+    {
         serviceCollection.AddSingleton<QuestWindow>();
         serviceCollection.AddSingleton<ConfigWindow>();
         serviceCollection.AddSingleton<DebugOverlay>();
         serviceCollection.AddSingleton<QuestSelectionWindow>();
         serviceCollection.AddSingleton<QuestValidationWindow>();
+    }
 
+    private static void AddQuestValidators(ServiceCollection serviceCollection)
+    {
         serviceCollection.AddSingleton<QuestValidator>();
         serviceCollection.AddSingleton<IQuestValidator, QuestDisabledValidator>();
         serviceCollection.AddSingleton<IQuestValidator, BasicSequenceValidator>();
         serviceCollection.AddSingleton<IQuestValidator, UniqueStartStopValidator>();
         serviceCollection.AddSingleton<IQuestValidator, NextQuestValidator>();
         serviceCollection.AddSingleton<IQuestValidator, CompletionFlagsValidator>();
-
-        serviceCollection.AddSingleton<CommandHandler>();
-        serviceCollection.AddSingleton<DalamudInitializer>();
-
-        _serviceProvider = serviceCollection.BuildServiceProvider();
-        _serviceProvider.GetRequiredService<QuestRegistry>().Reload();
-        _serviceProvider.GetRequiredService<CommandHandler>();
-        _serviceProvider.GetRequiredService<DalamudInitializer>();
+        serviceCollection.AddSingleton<JsonSchemaValidator>();
+        serviceCollection.AddSingleton<IQuestValidator>(sp => sp.GetRequiredService<JsonSchemaValidator>());
     }
 
     public void Dispose()

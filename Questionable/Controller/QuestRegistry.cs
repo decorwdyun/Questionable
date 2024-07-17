@@ -7,15 +7,14 @@ using System.IO;
 using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using System.Threading.Tasks;
 using Dalamud.Plugin;
-using Json.Schema;
 using Microsoft.Extensions.Logging;
 using Questionable.Data;
 using Questionable.Model;
 using Questionable.Model.V1;
 using Questionable.QuestPaths;
 using Questionable.Validation;
+using Questionable.Validation.Validators;
 
 namespace Questionable.Controller;
 
@@ -25,18 +24,19 @@ internal sealed class QuestRegistry
     private readonly QuestData _questData;
     private readonly QuestValidator _questValidator;
     private readonly ILogger<QuestRegistry> _logger;
-    private readonly JsonSchema _questSchema;
+    private readonly JsonSchemaValidator _jsonSchemaValidator;
 
     private readonly Dictionary<ushort, Quest> _quests = new();
 
     public QuestRegistry(IDalamudPluginInterface pluginInterface, QuestData questData,
-        QuestValidator questValidator, ILogger<QuestRegistry> logger)
+        QuestValidator questValidator, JsonSchemaValidator jsonSchemaValidator,
+        ILogger<QuestRegistry> logger)
     {
         _pluginInterface = pluginInterface;
         _questData = questData;
         _questValidator = questValidator;
+        _jsonSchemaValidator = jsonSchemaValidator;
         _logger = logger;
-        _questSchema = JsonSchema.FromStream(AssemblyQuestLoader.QuestSchema).AsTask().Result;
     }
 
     public IEnumerable<Quest> AllQuests => _quests.Values;
@@ -46,7 +46,7 @@ internal sealed class QuestRegistry
 
     public void Reload()
     {
-        _questValidator.ClearIssues();
+        _questValidator.Reset();
         _quests.Clear();
 
         LoadQuestsFromAssembly();
@@ -130,26 +130,8 @@ internal sealed class QuestRegistry
         if (questId == null)
             return;
 
-        var questNode = JsonNode.Parse(stream);
-        Task.Run(() =>
-        {
-            var evaluationResult = _questSchema.Evaluate(questNode, new EvaluationOptions
-            {
-                Culture = CultureInfo.InvariantCulture,
-                OutputFormat = OutputFormat.List
-            });
-            if (!evaluationResult.IsValid)
-            {
-                _questValidator.AddIssue(new ValidationIssue
-                {
-                    QuestId = questId.Value,
-                    Sequence = null,
-                    Step = null,
-                    Severity = EIssueSeverity.Error,
-                    Description = "JSON Validation failed"
-                });
-            }
-        });
+        var questNode = JsonNode.Parse(stream)!;
+        _jsonSchemaValidator.Enqueue(questId.Value, questNode);
 
         Quest quest = new Quest
         {
