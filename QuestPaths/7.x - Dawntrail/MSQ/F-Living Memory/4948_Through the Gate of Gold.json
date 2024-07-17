@@ -152,15 +152,9 @@
       "Sequence": 7,
       "Steps": [
         {
-          "DataId": 213,
-          "Position": {
-            "X": -0.2035947,
-            "Y": 57.20005,
-            "Z": 796.9656
-          },
-          "StopDistance": 10,
           "TerritoryId": 1192,
-          "InteractionType": "Interact",
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Living Memory - Leynode Mnemo",
           "DisableNavmesh": true
         },
         {
