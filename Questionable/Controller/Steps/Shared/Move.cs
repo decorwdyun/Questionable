@@ -91,6 +91,10 @@ internal static class Move
             var position = clientState.LocalPlayer?.Position ?? new Vector3();
             float actualDistance = (position - Destination).Length();
 
+            // this may otherwise sometimes skip a move step
+            if (Step.AethernetShortcut != null || Step.AetheryteShortcut != null)
+                actualDistance = float.MaxValue;
+
             if (Step.Mount == true)
                 yield return serviceProvider.GetRequiredService<MountTask>()
                     .With(Step.TerritoryId, MountTask.EMountIf.Always);
