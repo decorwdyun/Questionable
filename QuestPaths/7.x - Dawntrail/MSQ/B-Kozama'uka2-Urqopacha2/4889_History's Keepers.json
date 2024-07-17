@@ -62,15 +62,9 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 201,
-          "Position": {
-            "X": 465.62903,
-            "Y": 114.94617,
-            "Z": 634.9126
-          },
-          "StopDistance": 10,
           "TerritoryId": 1187,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Urqopacha - Worlar's Echo"
         },
         {
           "DataId": 1046819,

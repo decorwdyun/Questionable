@@ -162,26 +162,14 @@
       "Sequence": 5,
       "Steps": [
         {
-          "DataId": 2,
-          "Position": {
-            "X": 32.913696,
-            "Y": 2.670288,
-            "Z": 30.014404
-          },
-          "StopDistance": 10,
           "TerritoryId": 132,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Gridania"
         },
         {
-          "DataId": 25,
-          "Position": {
-            "X": 166.58276,
-            "Y": -1.7243042,
-            "Z": 86.13721
-          },
           "TerritoryId": 132,
           "InteractionType": "AttuneAethernetShard",
-          "Comment": "Archers' Guild"
+          "AethernetShard": "[Gridania] Archers' Guild"
         },
         {
           "Position": {
@@ -198,41 +186,23 @@
           ]
         },
         {
-          "DataId": 26,
-          "Position": {
-            "X": 101.27405,
-            "Y": 9.018005,
-            "Z": -111.31464
-          },
           "TerritoryId": 133,
           "InteractionType": "AttuneAethernetShard",
-          "Comment": "Leatherworkers' Guild"
+          "AethernetShard": "[Gridania] Leatherworkers' Guild & Shaded Bower"
         },
         {
-          "DataId": 27,
-          "Position": {
-            "X": 121.23291,
-            "Y": 12.649658,
-            "Z": -229.63306
-          },
           "TerritoryId": 133,
           "InteractionType": "AttuneAethernetShard",
-          "Comment": "Lancers' Guild"
+          "AethernetShard": "[Gridania] Lancers' Guild"
         },
         {
-          "DataId": 30,
-          "Position": {
-            "X": -73.92999,
-            "Y": 7.9804688,
-            "Z": -140.15417
-          },
           "TerritoryId": 133,
           "InteractionType": "AttuneAethernetShard",
+          "AethernetShard": "[Gridania] Mih Khetto's Amphitheatre",
           "AethernetShortcut": [
             "[Gridania] Lancers' Guild",
             "[Gridania] Leatherworkers' Guild & Shaded Bower"
-          ],
-          "Comment": "Mih Khetto's Amphitheatre"
+          ]
         },
         {
           "Position": {
@@ -244,30 +214,18 @@
           "InteractionType": "WalkTo"
         },
         {
-          "DataId": 29,
-          "Position": {
-            "X": -311.0857,
-            "Y": 7.94989,
-            "Z": -177.05048
-          },
           "TerritoryId": 133,
           "InteractionType": "AttuneAethernetShard",
-          "Comment": "Botanists' Guild"
+          "AethernetShard": "[Gridania] Botanists' Guild"
         },
         {
-          "DataId": 28,
-          "Position": {
-            "X": -145.15906,
-            "Y": 4.9591064,
-            "Z": -11.7647705
-          },
           "TerritoryId": 133,
           "InteractionType": "AttuneAethernetShard",
+          "AethernetShard": "[Gridania] Conjurers' Guild",
           "AethernetShortcut": [
             "[Gridania] Botanists' Guild",
             "[Gridania] Mih Khetto's Amphitheatre"
-          ],
-          "Comment": "Conjurers' Guild"
+          ]
         },
         {
           "DataId": 1000460,
@@ -385,14 +343,9 @@
           ]
         },
         {
-          "DataId": 51,
-          "Position": {
-            "X": 6.6376343,
-            "Y": 30.655273,
-            "Z": -24.826477
-          },
           "TerritoryId": 131,
-          "InteractionType": "AttuneAethernetShard"
+          "InteractionType": "AttuneAethernetShard",
+          "AethernetShard": "[Ul'dah] The Chamber of Rule"
         },
         {
           "DataId": 1001821,

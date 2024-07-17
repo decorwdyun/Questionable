@@ -53,15 +53,10 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 210,
-          "Position": {
-            "X": 514.6105,
-            "Y": 145.86096,
-            "Z": 207.56836
-          },
           "StopDistance": 8,
           "TerritoryId": 1191,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Heritage Found - Yyasulani Station"
         },
         {
           "DataId": 2013817,

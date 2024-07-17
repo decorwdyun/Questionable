@@ -33,6 +33,17 @@ public sealed class QuestStep
     public bool? IgnoreDistanceToObject { get; set; }
     public string? Comment { get; set; }
 
+    /// <summary>
+    /// Only used when attuning to an aetheryte.
+    /// </summary>
+    public EAetheryteLocation? Aetheryte { get; set; }
+
+    /// <summary>
+    /// Only used when attuning to an aethernet shard.
+    /// </summary>
+    [JsonConverter(typeof(AethernetShardConverter))]
+    public EAetheryteLocation? AethernetShard { get; set; }
+
     public EAetheryteLocation? AetheryteShortcut { get; set; }
 
     public AethernetShortcut? AethernetShortcut { get; set; }
@@ -80,6 +91,8 @@ public sealed class QuestStep
     {
         if (InteractionType == EInteractionType.WalkTo)
             return StopDistance ?? 0.25f;
+        if (InteractionType == EInteractionType.AttuneAetheryte)
+            return StopDistance ?? 10f;
         else
             return StopDistance ?? DefaultStopDistance;
     }

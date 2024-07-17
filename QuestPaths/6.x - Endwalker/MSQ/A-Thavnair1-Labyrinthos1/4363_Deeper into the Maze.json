@@ -21,14 +21,9 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 166,
-          "Position": {
-            "X": 443.5338,
-            "Y": 170.6416,
-            "Z": -476.18835
-          },
           "TerritoryId": 956,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Labyrinthos - Archeion"
         },
         {
           "DataId": 1037475,

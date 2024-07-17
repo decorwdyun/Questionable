@@ -22,15 +22,9 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 37,
-          "Position": {
-            "X": -98.22869,
-            "Y": 42.37336,
-            "Z": 88.46719
-          },
           "TerritoryId": 131,
           "InteractionType": "AttuneAethernetShard",
-          "Comment": "Alchemists' Guild"
+          "AethernetShard": "[Ul'dah] Alchemists' Guild"
         },
         {
           "Position": {
@@ -54,59 +48,29 @@
           ]
         },
         {
-          "DataId": 35,
-          "Position": {
-            "X": -53.8269,
-            "Y": 10.72502,
-            "Z": 12.24082
-          },
           "TerritoryId": 131,
           "InteractionType": "AttuneAethernetShard",
-          "Comment": "Gladiators' Guild"
+          "AethernetShard": "[Ul'dah] Gladiators' Guild"
         },
         {
-          "DataId": 50,
-          "Position": {
-            "X": -19.31449,
-            "Y": 14.63075,
-            "Z": 72.0533
-          },
           "TerritoryId": 131,
           "InteractionType": "AttuneAethernetShard",
-          "Comment": "Goldsmiths' Guild"
+          "AethernetShard": "[Ul'dah] Goldsmiths' Guild"
         },
         {
-          "DataId": 36,
-          "Position": {
-            "X": 33.52188,
-            "Y": 13.23228,
-            "Z": 113.2191
-          },
           "TerritoryId": 131,
           "InteractionType": "AttuneAethernetShard",
-          "Comment": "Miners' Guild"
+          "AethernetShard": "[Ul'dah] Miners' Guild"
         },
         {
-          "DataId": 47,
-          "Position": {
-            "X": 89.67633,
-            "Y": 12.93493,
-            "Z": 58.2767
-          },
           "TerritoryId": 131,
           "InteractionType": "AttuneAethernetShard",
-          "Comment": "Weavers' Guild"
+          "AethernetShard": "[Ul'dah] Weavers' Guild"
         },
         {
-          "DataId": 125,
-          "Position": {
-            "X": 131.9447,
-            "Y": 4.714966,
-            "Z": -29.800903
-          },
           "TerritoryId": 131,
           "InteractionType": "AttuneAethernetShard",
-          "Comment": "Sapphire Avenue Exchange"
+          "AethernetShard": "[Ul'dah] Sapphire Avenue Exchange"
         },
         {
           "Position": {
@@ -119,36 +83,19 @@
           "TargetTerritoryId": 130
         },
         {
-          "DataId": 33,
-          "Position": {
-            "X": 64.22522,
-            "Y": 4.5318604,
-            "Z": -115.31244
-          },
           "TerritoryId": 130,
           "InteractionType": "AttuneAethernetShard",
-          "Comment": "Adventurers' Guild"
+          "AethernetShard": "[Ul'dah] Adventurers' Guild"
         },
         {
-          "DataId": 9,
-          "Position": {
-            "X": -144.51825,
-            "Y": -1.3580933,
-            "Z": -169.6651
-          },
-          "StopDistance": 10,
           "TerritoryId": 130,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Ul'dah"
         },
         {
-          "DataId": 34,
-          "Position": {
-            "X": -154.83331,
-            "Y": 14.633362,
-            "Z": 73.07532
-          },
           "TerritoryId": 130,
-          "InteractionType": "AttuneAethernetShard"
+          "InteractionType": "AttuneAethernetShard",
+          "AethernetShard": "[Ul'dah] Thaumaturges' Guild"
         },
         {
           "DataId": 1000972,

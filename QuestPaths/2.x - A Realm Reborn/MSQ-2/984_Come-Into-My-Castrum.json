@@ -52,15 +52,10 @@
           "InteractionType": "WalkTo"
         },
         {
-          "DataId": 24,
-          "Position": {
-            "X": 40.024292,
-            "Y": 24.002441,
-            "Z": -668.0247
-          },
           "TerritoryId": 156,
           "StopDistance": 5,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Mor Dhona"
         },
         {
           "DataId": 1006530,

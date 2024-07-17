@@ -69,15 +69,9 @@
       "Sequence": 4,
       "Steps": [
         {
-          "DataId": 230,
-          "Position": {
-            "X": -30.41562,
-            "Y": -6.050003,
-            "Z": 209.3459
-          },
           "TerritoryId": 1186,
           "InteractionType": "AttuneAethernetShard",
-          "Comment": "Information Center"
+          "AethernetShard": "[Solution Nine] Information Center"
         },
         {
           "DataId": 1048060,
@@ -104,15 +98,10 @@
           "InteractionType": "WalkTo"
         },
         {
-          "DataId": 217,
-          "Position": {
-            "X": -0.015319824,
-            "Y": 8.987488,
-            "Z": -0.015319824
-          },
           "StopDistance": 11,
           "TerritoryId": 1186,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Solution Nine"
         },
         {
           "DataId": 1048061,

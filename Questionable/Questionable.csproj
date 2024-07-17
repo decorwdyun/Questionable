@@ -10,9 +10,10 @@
 
     <ItemGroup>
         <PackageReference Include="Dalamud.Extensions.MicrosoftLogging" Version="4.0.1"/>
-        <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" ExcludeAssets="runtime"/>
+        <PackageReference Include="JetBrains.Annotations" Version="2024.2.0" ExcludeAssets="runtime" />
+        <PackageReference Include="JsonSchema.Net" Version="7.1.2" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0"/>
-        <PackageReference Include="System.Text.Json" Version="8.0.3"/>
+        <PackageReference Include="System.Text.Json" Version="8.0.4" />
     </ItemGroup>
 
     <ItemGroup>

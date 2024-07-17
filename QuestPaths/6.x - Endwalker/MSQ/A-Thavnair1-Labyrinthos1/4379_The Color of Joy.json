@@ -36,14 +36,9 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 192,
-          "Position": {
-            "X": -156.14563,
-            "Y": 35.99597,
-            "Z": 27.725586
-          },
           "TerritoryId": 963,
-          "InteractionType": "AttuneAethernetShard"
+          "InteractionType": "AttuneAethernetShard",
+          "AethernetShard": "[Radz-at-Han] Ruveydah Fibers"
         },
         {
           "DataId": 1040264,

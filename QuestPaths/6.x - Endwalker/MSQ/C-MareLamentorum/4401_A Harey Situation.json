@@ -47,15 +47,9 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 175,
-          "Position": {
-            "X": -0.01531982,
-            "Y": -128.8109,
-            "Z": -512.0165
-          },
-          "StopDistance": 10,
           "TerritoryId": 959,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Mare Lamentorum - Bestways Burrow"
         },
         {
           "Position": {

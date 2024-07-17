@@ -20,6 +20,10 @@ Generally, the folder name is derived from SE's classification of quests.
 
 ### Stormblood
 
+- `MSQ`: `StmBd@@` with `@@` being the letter/number used as part of the folder name
+  - `StmBdA1`: `A1 - xxx`
+  - `StmBdB`: `B - 4.1` (and so on for later patches)
+
 ### Shadowbringers
 
 - `MSQ`: `LucKm@` with `@` being the letter used as part of the folder name

@@ -52,14 +52,9 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 194,
-          "Position": {
-            "X": 6.6071167,
-            "Y": -2.02948,
-            "Z": 110.55151
-          },
           "TerritoryId": 963,
-          "InteractionType": "AttuneAethernetShard"
+          "InteractionType": "AttuneAethernetShard",
+          "AethernetShard": "[Radz-at-Han] Alzadaal's Peace"
         },
         {
           "DataId": 1040256,
@@ -107,24 +102,14 @@
       "Sequence": 6,
       "Steps": [
         {
-          "DataId": 193,
-          "Position": {
-            "X": -144.33508,
-            "Y": 27.969727,
-            "Z": 202.2583
-          },
           "TerritoryId": 963,
-          "InteractionType": "AttuneAethernetShard"
+          "InteractionType": "AttuneAethernetShard",
+          "AethernetShard": "[Radz-at-Han] Airship Landing"
         },
         {
-          "DataId": 191,
-          "Position": {
-            "X": -365.95715,
-            "Y": 44.99878,
-            "Z": -31.815125
-          },
           "TerritoryId": 963,
-          "InteractionType": "AttuneAethernetShard"
+          "InteractionType": "AttuneAethernetShard",
+          "AethernetShard": "[Radz-at-Han] Meghaduta"
         },
         {
           "DataId": 1040259,

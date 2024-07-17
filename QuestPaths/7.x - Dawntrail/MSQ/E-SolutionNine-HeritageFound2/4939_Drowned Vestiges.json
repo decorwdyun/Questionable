@@ -206,15 +206,9 @@
       "Sequence": 5,
       "Steps": [
         {
-          "DataId": 212,
-          "Position": {
-            "X": -219.53156,
-            "Y": 32.913696,
-            "Z": 120.77515
-          },
-          "StopDistance": 10,
           "TerritoryId": 1191,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Heritage Found - Electrope Strike"
         },
         {
           "DataId": 2013972,

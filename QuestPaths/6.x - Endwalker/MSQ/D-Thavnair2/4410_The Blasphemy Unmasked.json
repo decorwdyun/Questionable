@@ -149,14 +149,9 @@
       "Sequence": 5,
       "Steps": [
         {
-          "DataId": 196,
-          "Position": {
-            "X": -42.61847,
-            "Y": -0.015319824,
-            "Z": -197.61963
-          },
           "TerritoryId": 963,
-          "InteractionType": "AttuneAethernetShard"
+          "InteractionType": "AttuneAethernetShard",
+          "AethernetShard": "[Radz-at-Han] Mehryde's Meyhane"
         },
         {
           "DataId": 1039001,

@@ -25,15 +25,10 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 22,
-          "Position": {
-            "X": -26.596497,
-            "Y": 49.881714,
-            "Z": -30.838562
-          },
           "TerritoryId": 147,
           "StopDistance": 5,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Northern Thanalan - Ceruleum Processing Plant"
         },
         {
           "DataId": 1006647,

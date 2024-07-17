@@ -51,15 +51,9 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 223,
-          "Position": {
-            "X": 166.27747,
-            "Y": -17.990417,
-            "Z": 38.742676
-          },
           "TerritoryId": 1185,
           "InteractionType": "AttuneAethernetShard",
-          "Comment": "Wachumeqimeqi"
+          "AethernetShard": "[Tuliyollal] Wachumeqimeqi"
         },
         {
           "Position": {

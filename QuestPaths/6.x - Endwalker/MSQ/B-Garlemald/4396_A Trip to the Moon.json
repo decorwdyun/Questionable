@@ -58,15 +58,9 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 174,
-          "Position": {
-            "X": -566.2438,
-            "Y": 134.6656,
-            "Z": 650.6459
-          },
-          "StopDistance": 10,
           "TerritoryId": 959,
           "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Mare Lamentorum - Sinus Lacrimarum",
           "Mount": true,
           "DisableNavmesh": true
         },

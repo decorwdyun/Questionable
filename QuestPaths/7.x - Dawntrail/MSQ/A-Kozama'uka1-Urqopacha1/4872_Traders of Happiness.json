@@ -40,15 +40,9 @@
           ]
         },
         {
-          "DataId": 200,
-          "Position": {
-            "X": 332.9855,
-            "Y": -160.0985,
-            "Z": -416.1924
-          },
-          "StopDistance": 10,
           "TerritoryId": 1187,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Urqopacha - Wachunpelo"
         },
         {
           "DataId": 1046559,

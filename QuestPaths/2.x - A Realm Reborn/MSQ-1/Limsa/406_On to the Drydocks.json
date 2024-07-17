@@ -31,15 +31,9 @@
           "TargetTerritoryId": 135
         },
         {
-          "DataId": 10,
-          "Position": {
-            "X": 156.11499,
-            "Y": 15.518433,
-            "Z": 673.21277
-          },
-          "StopDistance": 10,
           "TerritoryId": 135,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Lower La Noscea - Moraby Drydocks"
         },
         {
           "DataId": 1002238,

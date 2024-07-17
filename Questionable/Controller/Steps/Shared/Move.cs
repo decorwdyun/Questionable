@@ -19,7 +19,7 @@ namespace Questionable.Controller.Steps.Shared;
 
 internal static class Move
 {
-    internal sealed class Factory(IServiceProvider serviceProvider) : ITaskFactory
+    internal sealed class Factory(IServiceProvider serviceProvider, AetheryteData aetheryteData) : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -36,6 +36,20 @@ internal static class Move
                 task.DataId = step.DataId.Value;
                 task.StopDistance = step.StopDistance.Value;
                 return [task];
+            }
+            else if (step is { InteractionType: EInteractionType.AttuneAetheryte, Aetheryte: not null })
+            {
+                var builder = serviceProvider.GetRequiredService<MoveBuilder>();
+                builder.Step = step;
+                builder.Destination = aetheryteData.Locations[step.Aetheryte.Value];
+                return builder.Build();
+            }
+            else if (step is { InteractionType: EInteractionType.AttuneAethernetShard, AethernetShard: not null })
+            {
+                var builder = serviceProvider.GetRequiredService<MoveBuilder>();
+                builder.Step = step;
+                builder.Destination = aetheryteData.Locations[step.AethernetShard.Value];
+                return builder.Build();
             }
 
             return [];

@@ -64,15 +64,10 @@
           "$.1": "QuestVariables if done after [1]: 2 0 0 0 0 96"
         },
         {
-          "DataId": 179,
-          "Position": {
-            "X": -544.1215,
-            "Y": 74.34187,
-            "Z": 269.6726
-          },
           "StopDistance": 10,
           "TerritoryId": 960,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Ultima Thule - Reah Tahra"
         },
         {
           "DataId": 1038006,

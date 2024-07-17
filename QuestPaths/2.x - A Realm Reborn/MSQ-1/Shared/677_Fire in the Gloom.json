@@ -34,15 +34,9 @@
           "$": "New Gridania Navmesh workaround"
         },
         {
-          "DataId": 3,
-          "Position": {
-            "X": 13.076904,
-            "Y": 0.56451416,
-            "Z": 35.90442
-          },
-          "StopDistance": 10,
           "TerritoryId": 148,
           "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Central Shroud - Bentbranch Meadows",
           "AethernetShortcut": [
             "[Gridania] Aetheryte Plaza",
             "[Gridania] Blue Badger Gate (Central Shroud)"

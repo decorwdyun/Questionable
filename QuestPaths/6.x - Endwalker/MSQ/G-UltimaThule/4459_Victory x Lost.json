@@ -224,15 +224,10 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 181,
-          "Position": {
-            "X": 489.2804,
-            "Y": 437.5829,
-            "Z": 333.63843
-          },
           "StopDistance": 5,
           "TerritoryId": 960,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Ultima Thule - Base Omicron"
         },
         {
           "DataId": 1039791,

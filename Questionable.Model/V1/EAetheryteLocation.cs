@@ -139,7 +139,7 @@ public enum EAetheryteLocation
 
     Crystarium = 133,
     CrystariumMarkets = 149,
-    CrystariumThemenosRookery = 150,
+    CrystariumTemenosRookery = 150,
     CrystariumDossalGate = 151,
     CrystariumPendants = 152,
     CrystariumAmaroLaunch = 153,

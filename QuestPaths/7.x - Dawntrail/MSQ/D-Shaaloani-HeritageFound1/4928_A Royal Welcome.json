@@ -62,15 +62,9 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 211,
-          "Position": {
-            "X": -223.0173,
-            "Y": 31.94039,
-            "Z": -584.0194
-          },
-          "StopDistance": 10,
           "TerritoryId": 1191,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Heritage Found - The Outskirts"
         },
         {
           "DataId": 1047403,

@@ -84,15 +84,9 @@
       "Sequence": 4,
       "Steps": [
         {
-          "DataId": 235,
-          "Position": {
-            "X": -160.0287,
-            "Y": 0,
-            "Z": 21.5968
-          },
           "TerritoryId": 1186,
           "InteractionType": "AttuneAethernetShard",
-          "Comment": "Nexus Arcade"
+          "AethernetShard": "[Solution Nine] Nexus Arcade"
         },
         {
           "DataId": 1048065,
@@ -127,15 +121,9 @@
       "Sequence": 6,
       "Steps": [
         {
-          "DataId": 236,
-          "Position": {
-            "X": -378.13385,
-            "Y": 13.992493,
-            "Z": 136.49194
-          },
           "TerritoryId": 1186,
           "InteractionType": "AttuneAethernetShard",
-          "Comment": "Residential Sector"
+          "AethernetShard": "[Solution Nine] Residential Sector"
         },
         {
           "DataId": 1048065,

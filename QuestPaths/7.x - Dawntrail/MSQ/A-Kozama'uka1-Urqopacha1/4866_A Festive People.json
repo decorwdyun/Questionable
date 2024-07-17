@@ -30,15 +30,9 @@
           "InteractionType": "WalkTo"
         },
         {
-          "DataId": 202,
-          "Position": {
-            "X": -169.51251,
-            "Y": 6.576599,
-            "Z": -479.42322
-          },
-          "StopDistance": 11,
           "TerritoryId": 1188,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Kozama'uka - Ok'hanu"
         },
         {
           "DataId": 1046699,

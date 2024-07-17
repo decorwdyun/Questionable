@@ -51,14 +51,9 @@
           "InteractionType": "Interact"
         },
         {
-          "DataId": 198,
-          "Position": {
-            "X": 129.59485,
-            "Y": 26.993164,
-            "Z": 13.473633
-          },
           "TerritoryId": 963,
-          "InteractionType": "AttuneAethernetShard"
+          "InteractionType": "AttuneAethernetShard",
+          "AethernetShard": "[Radz-at-Han] Kama"
         },
         {
           "DataId": 1039540,

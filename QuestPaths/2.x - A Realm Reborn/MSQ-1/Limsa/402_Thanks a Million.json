@@ -47,15 +47,9 @@
           "TargetTerritoryId": 138
         },
         {
-          "DataId": 13,
-          "Position": {
-            "X": 651.5449,
-            "Y": 11.734131,
-            "Z": 513.35913
-          },
-          "StopDistance": 10,
           "TerritoryId": 138,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Western La Noscea - Swiftperch"
         },
         {
           "Position": {

@@ -64,14 +64,9 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 220,
-          "Position": {
-            "X": -149.73682,
-            "Y": -15.030151,
-            "Z": 198.90125
-          },
           "TerritoryId": 1185,
-          "InteractionType": "AttuneAethernetShard"
+          "InteractionType": "AttuneAethernetShard",
+          "AethernetShard": "[Tuliyollal] The For'ard Cabins"
         },
         {
           "DataId": 1046512,
@@ -120,14 +115,9 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 221,
-          "Position": {
-            "X": -14.98317,
-            "Y": -10.00001,
-            "Z": 135.5848
-          },
           "TerritoryId": 1185,
-          "InteractionType": "AttuneAethernetShard"
+          "InteractionType": "AttuneAethernetShard",
+          "AethernetShard": "[Tuliyollal] Bayside Bevy Marketplace"
         },
         {
           "Position": {
@@ -144,14 +134,9 @@
           "Comment": "Resplentend Quarter Lamp nav"
         },
         {
-          "DataId": 222,
-          "Position": {
-            "X": -99.13794,
-            "Y": 100.72473,
-            "Z": -222.03406
-          },
           "TerritoryId": 1185,
-          "InteractionType": "AttuneAethernetShard"
+          "InteractionType": "AttuneAethernetShard",
+          "AethernetShard": "[Tuliyollal] Vollok Shoonsa"
         },
         {
           "DataId": 1046517,

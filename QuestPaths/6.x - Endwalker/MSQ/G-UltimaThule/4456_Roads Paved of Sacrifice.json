@@ -162,15 +162,10 @@
           "$.1": "QuestVariables if done after [1]: 2 0 0 0 0 192"
         },
         {
-          "DataId": 180,
-          "Position": {
-            "X": 64.286255,
-            "Y": 272.48022,
-            "Z": -657.49603
-          },
           "StopDistance": 8,
           "TerritoryId": 960,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Ultima Thule - Abode of the Ea"
         },
         {
           "DataId": 2012356,

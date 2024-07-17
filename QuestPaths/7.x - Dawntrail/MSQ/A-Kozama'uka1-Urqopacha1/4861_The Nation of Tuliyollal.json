@@ -70,16 +70,10 @@
       "Sequence": 4,
       "Steps": [
         {
-          "DataId": 216,
-          "Position": {
-            "X": -24.06776,
-            "Y": 0.8,
-            "Z": 7.599182
-          },
           "StopDistance": 7,
           "TerritoryId": 1185,
           "InteractionType": "AttuneAetheryte",
-          "DisableNavmesh": true
+          "Aetheryte": "Tuliyollal"
         },
         {
           "Position": {
@@ -91,15 +85,9 @@
           "InteractionType": "WalkTo"
         },
         {
-          "DataId": 224,
-          "Position": {
-            "X": 71.7937,
-            "Y": 47.074097,
-            "Z": -333.21124
-          },
           "TerritoryId": 1185,
           "InteractionType": "AttuneAethernetShard",
-          "Comment": "Brightploom Post"
+          "AethernetShard": "[Tuliyollal] Brightploom Post"
         },
         {
           "DataId": 1046504,

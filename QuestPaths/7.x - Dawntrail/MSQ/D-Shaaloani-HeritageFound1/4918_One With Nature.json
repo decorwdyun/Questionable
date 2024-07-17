@@ -51,15 +51,10 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 209,
-          "Position": {
-            "X": 311.36023,
-            "Y": -14.175659,
-            "Z": -567.74243
-          },
           "StopDistance": 8,
           "TerritoryId": 1190,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Shaaloani - Mehwahhetsoan"
         },
         {
           "DataId": 2013960,

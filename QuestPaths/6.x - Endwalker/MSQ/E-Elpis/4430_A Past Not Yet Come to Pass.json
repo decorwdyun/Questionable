@@ -21,15 +21,10 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 178,
-          "Position": {
-            "X": -529.9001,
-            "Y": 161.24207,
-            "Z": -222.2782
-          },
           "StopDistance": 7,
           "TerritoryId": 961,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Elpis - Poieten Oikos"
         },
         {
           "DataId": 1040112,

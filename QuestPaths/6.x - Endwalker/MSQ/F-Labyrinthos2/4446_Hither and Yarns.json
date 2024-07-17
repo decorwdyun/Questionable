@@ -67,15 +67,10 @@
       "Sequence": 4,
       "Steps": [
         {
-          "DataId": 168,
-          "Position": {
-            "X": -729.18286,
-            "Y": -27.634155,
-            "Z": 302.1438
-          },
           "StopDistance": 6,
           "TerritoryId": 956,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Labyrinthos - Aporia"
         },
         {
           "DataId": 1040447,

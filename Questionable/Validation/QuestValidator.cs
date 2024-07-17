@@ -54,4 +54,6 @@ internal sealed class QuestValidator
                 .ToList();
         });
     }
+
+    public void AddIssue(ValidationIssue issue) => _validationIssues.Add(issue);
 }

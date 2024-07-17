@@ -95,15 +95,9 @@
           ]
         },
         {
-          "DataId": 215,
-          "Position": {
-            "X": -255.26825,
-            "Y": 59.433838,
-            "Z": -397.6654
-          },
-          "StopDistance": 10,
           "TerritoryId": 1192,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Living Memory - Leynode Aero"
         },
         {
           "DataId": 1047993,

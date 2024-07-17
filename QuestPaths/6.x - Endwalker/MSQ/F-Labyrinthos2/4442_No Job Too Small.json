@@ -100,15 +100,10 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 167,
-          "Position": {
-            "X": 8.377136,
-            "Y": -27.542603,
-            "Z": -46.67737
-          },
           "StopDistance": 7,
           "TerritoryId": 956,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Labyrinthos - Sharlayan Hamlet"
         },
         {
           "DataId": 1039761,

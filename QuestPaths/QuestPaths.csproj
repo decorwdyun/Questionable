@@ -18,6 +18,13 @@
                           ReferenceOutputAssembly="false"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <None Remove="quest-v1.json"/>
+        <EmbeddedResource Include="quest-v1.json">
+            <LogicalName>Questionable.QuestPaths.QuestSchema</LogicalName>
+        </EmbeddedResource>
+    </ItemGroup>
+
     <ItemGroup Condition="'$(Configuration)' == 'Release'">
         <None Remove="2.x - A Realm Reborn"/>
         <None Remove="3.x - Heavensward"/>
@@ -25,7 +32,6 @@
         <None Remove="5.x - Shadowbringers"/>
         <None Remove="6.x - Endwalker"/>
         <None Remove="7.x - Dawntrail"/>
-        <None Remove="quest-v1.json"/>
         <AdditionalFiles Include="2.x - A Realm Reborn\**\*.json"/>
         <AdditionalFiles Include="3.x - Heavensward\**\*.json"/>
         <AdditionalFiles Include="4.x - Stormblood\**\*.json"/>
@@ -33,5 +39,13 @@
         <AdditionalFiles Include="6.x - Endwalker\**\*.json" />
         <AdditionalFiles Include="7.x - Dawntrail\**\*.json"/>
         <AdditionalFiles Include="quest-v1.json"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="5.x - Shadowbringers\MSQ\A2-Kholusia1\" />
+      <Folder Include="5.x - Shadowbringers\MSQ\A3-AmhAreng1\" />
+      <Folder Include="5.x - Shadowbringers\MSQ\A4 - Crystarium 2\" />
+      <Folder Include="5.x - Shadowbringers\MSQ\B-Il Mheg\" />
+      <Folder Include="5.x - Shadowbringers\MSQ\C-Rak'tika\" />
     </ItemGroup>
 </Project>

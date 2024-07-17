@@ -21,15 +21,9 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 206,
-          "Position": {
-            "X": 721.40076,
-            "Y": -132.31104,
-            "Z": 526.1769
-          },
-          "StopDistance": 10,
           "TerritoryId": 1189,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Yak T'el - Mamook"
         },
         {
           "DataId": 2013953,

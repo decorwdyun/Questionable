@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Reflection;
 using Questionable.Model.V1;
 
 namespace Questionable.QuestPaths;
@@ -13,4 +15,7 @@ public static partial class AssemblyQuestLoader
 #else
         new Dictionary<ushort, QuestRoot>();
 #endif
+
+    public static Stream QuestSchema =>
+        typeof(AssemblyQuestLoader).Assembly.GetManifestResourceStream("Questionable.QuestPaths.QuestSchema")!;
 }

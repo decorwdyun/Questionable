@@ -52,14 +52,9 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 177,
-          "Position": {
-            "X": -633.7225,
-            "Y": -19.821533,
-            "Z": 542.56494
-          },
           "TerritoryId": 961,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Elpis - Twelve Wonders"
         },
         {
           "DataId": 1040081,

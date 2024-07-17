@@ -32,15 +32,10 @@
           "AetheryteShortcut": "Central Thanalan - Black Brush Station"
         },
         {
-          "DataId": 21,
-          "Position": {
-            "X": 20.98108,
-            "Y": 8.8349,
-            "Z": 454.0321
-          },
           "TerritoryId": 147,
           "StopDistance": 5,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Northern Thanalan - Camp Bluefog"
         },
         {
           "DataId": 1006638,

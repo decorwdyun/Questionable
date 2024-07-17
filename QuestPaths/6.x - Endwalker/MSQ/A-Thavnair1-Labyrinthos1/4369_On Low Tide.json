@@ -21,15 +21,10 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 169,
-          "Position": {
-            "X": 193.529,
-            "Y": 6.991216,
-            "Z": 629.2394
-          },
           "StopDistance": 5,
           "TerritoryId": 957,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Thavnair - Yedlihmad"
         },
         {
           "DataId": 2011948,

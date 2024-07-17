@@ -36,26 +36,15 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 183,
-          "Position": {
-            "X": 25.986084,
-            "Y": 3.250122,
-            "Z": -27.023743
-          },
           "TerritoryId": 963,
           "InteractionType": "AttuneAetheryte",
-          "StopDistance": 10,
+          "Aetheryte": "Radz-at-Han",
           "DisableNavmesh": true
         },
         {
-          "DataId": 195,
-          "Position": {
-            "X": -141.3616,
-            "Y": 3.999954,
-            "Z": -98.43509
-          },
           "TerritoryId": 963,
-          "InteractionType": "AttuneAethernetShard"
+          "InteractionType": "AttuneAethernetShard",
+          "AethernetShard": "[Radz-at-Han] Hall of the Radiant Host"
         },
         {
           "DataId": 1040374,

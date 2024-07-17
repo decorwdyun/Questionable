@@ -44,15 +44,10 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 23,
-          "Position": {
-            "X": 223.98718,
-            "Y": 315.7854,
-            "Z": -234.85168
-          },
           "TerritoryId": 155,
           "StopDistance": 5,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Coerthas Central Highlands - Camp Dragonhead"
         },
         {
           "DataId": 1006384,

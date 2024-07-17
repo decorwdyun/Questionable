@@ -22,15 +22,10 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 207,
-          "Position": {
-            "X": 386.4091,
-            "Y": -0.1697721,
-            "Z": 467.6294
-          },
           "StopDistance": 8,
           "TerritoryId": 1190,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Shaaloani - Hhusatahwi"
         },
         {
           "DataId": 1046953,
@@ -70,15 +65,10 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 208,
-          "Position": {
-            "X": -291.70673,
-            "Y": 19.08899,
-            "Z": -114.54956
-          },
           "StopDistance": 8,
           "TerritoryId": 1190,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Shaaloani - Sheshenewezi Springs"
         },
         {
           "Position": {

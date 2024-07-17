@@ -15,10 +15,10 @@ internal static class Aetheryte
             if (step.InteractionType != EInteractionType.AttuneAetheryte)
                 return null;
 
-            ArgumentNullException.ThrowIfNull(step.DataId);
+            ArgumentNullException.ThrowIfNull(step.Aetheryte);
 
             return serviceProvider.GetRequiredService<DoAttune>()
-                .With((EAetheryteLocation)step.DataId.Value);
+                .With(step.Aetheryte.Value);
         }
     }
 

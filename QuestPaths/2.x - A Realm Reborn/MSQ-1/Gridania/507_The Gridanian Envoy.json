@@ -162,48 +162,24 @@
       "Sequence": 6,
       "Steps": [
         {
-          "DataId": 8,
-          "Position": {
-            "X": -84.00108,
-            "Y": 20.77683,
-            "Z": 0.03414845
-          },
-          "StopDistance": 10,
           "TerritoryId": 129,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Limsa Lominsa"
         },
         {
-          "DataId": 49,
-          "Position": {
-            "X": -213.61108,
-            "Y": 16.739136,
-            "Z": 51.80432
-          },
           "TerritoryId": 129,
           "InteractionType": "AttuneAethernetShard",
-          "Comment": "Hawkers' Alley"
+          "AethernetShard": "[Limsa Lominsa] Hawkers' Alley"
         },
         {
-          "DataId": 43,
-          "Position": {
-            "X": -335.1645,
-            "Y": 12.619202,
-            "Z": 56.381958
-          },
           "TerritoryId": 129,
           "InteractionType": "AttuneAethernetShard",
-          "Comment": "Arcanists' Guild"
+          "AethernetShard": "[Limsa Lominsa] Arcanists' Guild"
         },
         {
-          "DataId": 44,
-          "Position": {
-            "X": -179.40033,
-            "Y": 4.8065186,
-            "Z": 182.97095
-          },
           "TerritoryId": 129,
           "InteractionType": "AttuneAethernetShard",
-          "Comment": "Fishermens' Guild",
+          "AethernetShard": "[Limsa Lominsa] Fishermens' Guild",
           "AethernetShortcut": [
             "[Limsa Lominsa] Arcanists' Guild",
             "[Limsa Lominsa] Hawkers' Alley"
@@ -225,37 +201,19 @@
           ]
         },
         {
-          "DataId": 42,
-          "Position": {
-            "X": -56.50421,
-            "Y": 44.47998,
-            "Z": -131.45648
-          },
           "TerritoryId": 128,
           "InteractionType": "AttuneAethernetShard",
-          "Comment": "Culinarians' Guild"
+          "AethernetShard": "[Limsa Lominsa] Culinarians' Guild"
         },
         {
-          "DataId": 48,
-          "Position": {
-            "X": -5.1728516,
-            "Y": 44.63257,
-            "Z": -218.06671
-          },
           "TerritoryId": 128,
           "InteractionType": "AttuneAethernetShard",
-          "Comment": "Marauders' Guild"
+          "AethernetShard": "[Limsa Lominsa] Marauders' Guild"
         },
         {
-          "DataId": 41,
-          "Position": {
-            "X": 16.067688,
-            "Y": 40.787354,
-            "Z": 68.80286
-          },
           "TerritoryId": 128,
           "InteractionType": "AttuneAethernetShard",
-          "Comment": "Aftcastle"
+          "AethernetShard": "[Limsa Lominsa] The Aftcastle"
         },
         {
           "DataId": 1002695,
@@ -358,14 +316,9 @@
           ]
         },
         {
-          "DataId": 51,
-          "Position": {
-            "X": 6.6376343,
-            "Y": 30.655273,
-            "Z": -24.826477
-          },
           "TerritoryId": 131,
-          "InteractionType": "AttuneAethernetShard"
+          "InteractionType": "AttuneAethernetShard",
+          "AethernetShard": "[Ul'dah] The Chamber of Rule"
         },
         {
           "DataId": 1001821,

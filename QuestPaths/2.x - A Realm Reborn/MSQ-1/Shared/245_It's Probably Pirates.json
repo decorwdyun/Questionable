@@ -88,15 +88,9 @@
           "TargetTerritoryId": 138
         },
         {
-          "DataId": 14,
-          "Position": {
-            "X": 260.94446,
-            "Y": -19.60791,
-            "Z": 218.52441
-          },
-          "StopDistance": 10,
           "TerritoryId": 138,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Western La Noscea - Aleport"
         },
         {
           "DataId": 1017075,

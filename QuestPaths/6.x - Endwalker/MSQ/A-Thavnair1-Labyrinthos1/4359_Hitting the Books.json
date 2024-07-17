@@ -33,24 +33,14 @@
           "TargetTerritoryId": 962
         },
         {
-          "DataId": 185,
-          "Position": {
-            "X": -92.21033,
-            "Y": 2.304016,
-            "Z": 29.709229
-          },
           "TerritoryId": 962,
-          "InteractionType": "AttuneAethernetShard"
+          "InteractionType": "AttuneAethernetShard",
+          "AethernetShard": "[Old Sharlayan] The Baldesion Annex"
         },
         {
-          "DataId": 184,
-          "Position": {
-            "X": -291.1574,
-            "Y": 20.004517,
-            "Z": -74.143616
-          },
           "TerritoryId": 962,
-          "InteractionType": "AttuneAethernetShard"
+          "InteractionType": "AttuneAethernetShard",
+          "AethernetShard": "[Old Sharlayan] The Studium"
         },
         {
           "DataId": 1038675,

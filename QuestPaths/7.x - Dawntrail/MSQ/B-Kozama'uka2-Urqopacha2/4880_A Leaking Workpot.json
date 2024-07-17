@@ -22,15 +22,9 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 203,
-          "Position": {
-            "X": 541.1674,
-            "Y": 117.4462,
-            "Z": 203.6108
-          },
-          "StopDistance": 10,
           "TerritoryId": 1188,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Kozama'uka - Many Fires"
         },
         {
           "Position": {
@@ -110,15 +104,9 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 204,
-          "Position": {
-            "X": -477.53113,
-            "Y": 124.04053,
-            "Z": 311.32983
-          },
-          "StopDistance": 10,
           "TerritoryId": 1188,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Kozama'uka - Earthenshire"
         },
         {
           "DataId": 1046613,

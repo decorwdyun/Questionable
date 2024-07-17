@@ -6,11 +6,15 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Threading.Tasks;
 using Dalamud.Plugin;
+using Json.Schema;
 using Microsoft.Extensions.Logging;
 using Questionable.Data;
 using Questionable.Model;
 using Questionable.Model.V1;
+using Questionable.QuestPaths;
 using Questionable.Validation;
 
 namespace Questionable.Controller;
@@ -21,6 +25,7 @@ internal sealed class QuestRegistry
     private readonly QuestData _questData;
     private readonly QuestValidator _questValidator;
     private readonly ILogger<QuestRegistry> _logger;
+    private readonly JsonSchema _questSchema;
 
     private readonly Dictionary<ushort, Quest> _quests = new();
 
@@ -31,6 +36,7 @@ internal sealed class QuestRegistry
         _questData = questData;
         _questValidator = questValidator;
         _logger = logger;
+        _questSchema = JsonSchema.FromStream(AssemblyQuestLoader.QuestSchema).AsTask().Result;
     }
 
     public IEnumerable<Quest> AllQuests => _quests.Values;
@@ -40,6 +46,7 @@ internal sealed class QuestRegistry
 
     public void Reload()
     {
+        _questValidator.ClearIssues();
         _quests.Clear();
 
         LoadQuestsFromAssembly();
@@ -64,7 +71,7 @@ internal sealed class QuestRegistry
     {
         _logger.LogInformation("Loading quests from assembly");
 
-        foreach ((ushort questId, QuestRoot questRoot) in QuestPaths.AssemblyQuestLoader.GetQuests())
+        foreach ((ushort questId, QuestRoot questRoot) in AssemblyQuestLoader.GetQuests())
         {
             Quest quest = new()
             {
@@ -113,7 +120,6 @@ internal sealed class QuestRegistry
 
     private void ValidateQuests()
     {
-        _questValidator.ClearIssues();
         _questValidator.Validate(_quests.Values.Where(x => !x.ReadOnly));
     }
 
@@ -124,10 +130,31 @@ internal sealed class QuestRegistry
         if (questId == null)
             return;
 
+        var questNode = JsonNode.Parse(stream);
+        Task.Run(() =>
+        {
+            var evaluationResult = _questSchema.Evaluate(questNode, new EvaluationOptions
+            {
+                Culture = CultureInfo.InvariantCulture,
+                OutputFormat = OutputFormat.List
+            });
+            if (!evaluationResult.IsValid)
+            {
+                _questValidator.AddIssue(new ValidationIssue
+                {
+                    QuestId = questId.Value,
+                    Sequence = null,
+                    Step = null,
+                    Severity = EIssueSeverity.Error,
+                    Description = "JSON Validation failed"
+                });
+            }
+        });
+
         Quest quest = new Quest
         {
             QuestId = questId.Value,
-            Root = JsonSerializer.Deserialize<QuestRoot>(stream)!,
+            Root = questNode.Deserialize<QuestRoot>()!,
             Info = _questData.GetQuestInfo(questId.Value),
             ReadOnly = false,
         };

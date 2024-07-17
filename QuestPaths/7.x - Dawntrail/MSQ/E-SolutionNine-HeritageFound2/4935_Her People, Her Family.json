@@ -47,15 +47,9 @@
           "InteractionType": "WalkTo"
         },
         {
-          "DataId": 234,
-          "Position": {
-            "X": -32.059265,
-            "Y": 38.04065,
-            "Z": -345.2354
-          },
           "TerritoryId": 1186,
           "InteractionType": "AttuneAethernetShard",
-          "Comment": "Resolution"
+          "AethernetShard": "[Solution Nine] Resolution"
         },
         {
           "DataId": 1048073,

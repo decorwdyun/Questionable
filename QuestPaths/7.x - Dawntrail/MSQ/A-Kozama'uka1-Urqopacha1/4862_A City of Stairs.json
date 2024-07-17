@@ -70,15 +70,9 @@
       "Sequence": 4,
       "Steps": [
         {
-          "DataId": 219,
-          "Position": {
-            "X": -187.1214,
-            "Y": 39.93274,
-            "Z": 6.088318
-          },
           "TerritoryId": 1185,
           "InteractionType": "AttuneAethernetShard",
-          "Comment": "The Resplendent Quarter"
+          "AethernetShard": "[Tuliyollal] The Resplendent Quarter"
         },
         {
           "DataId": 1046509,
@@ -97,15 +91,10 @@
       "Sequence": 5,
       "Steps": [
         {
-          "DataId": 218,
-          "Position": {
-            "X": -413.68738,
-            "Y": 2.9754639,
-            "Z": -45.975464
-          },
           "TerritoryId": 1185,
           "InteractionType": "AttuneAethernetShard",
-          "Comment": "Dirigible Landing"
+          "Comment": "Dirigible Landing",
+          "AethernetShard": "[Tuliyollal] Dirigible Landing"
         },
         {
           "DataId": 1046509,

@@ -67,15 +67,10 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 172,
-          "Position": {
-            "X": -408.0791,
-            "Y": 24.18463,
-            "Z": 479.9764
-          },
           "StopDistance": 7,
           "TerritoryId": 958,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Garlemald - Camp Broken Glass"
         },
         {
           "DataId": 1038826,

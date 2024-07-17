@@ -137,15 +137,9 @@
           "InteractionType": "Interact"
         },
         {
-          "DataId": 171,
-          "Position": {
-            "X": 405.1422,
-            "Y": 5.2643433,
-            "Z": -244.4953
-          },
-          "StopDistance": 10,
           "TerritoryId": 957,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Thavnair - Palaka's Stand"
         },
         {
           "DataId": 1039016,

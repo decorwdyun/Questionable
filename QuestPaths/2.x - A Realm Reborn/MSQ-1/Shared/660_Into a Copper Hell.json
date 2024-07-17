@@ -40,15 +40,9 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 17,
-          "Position": {
-            "X": 68.0094,
-            "Y": 48.203125,
-            "Z": -227.039
-          },
-          "StopDistance": 10,
           "TerritoryId": 140,
           "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Western Thanalan - Horizon",
           "AethernetShortcut": [
             "[Ul'dah] Adventurers' Guild",
             "[Ul'dah] Gate of the Sultana (Western Thanalan)"

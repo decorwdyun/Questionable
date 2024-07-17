@@ -151,7 +151,7 @@ internal sealed class AetheryteData
 
                 { EAetheryteLocation.Crystarium, new(-65.0188f, 4.5318604f, 0.015197754f) },
                 { EAetheryteLocation.CrystariumMarkets, new(-6.149414f, -7.736328f, 148.72961f) },
-                { EAetheryteLocation.CrystariumThemenosRookery, new(-107.37775f, -0.015319824f, -58.762512f) },
+                { EAetheryteLocation.CrystariumTemenosRookery, new(-107.37775f, -0.015319824f, -58.762512f) },
                 { EAetheryteLocation.CrystariumDossalGate, new(64.86609f, -0.015319824f, -18.173523f) },
                 { EAetheryteLocation.CrystariumPendants, new(35.477173f, -0.015319824f, 222.58337f) },
                 { EAetheryteLocation.CrystariumAmaroLaunch, new(66.60559f, 35.99597f, -131.09033f) },

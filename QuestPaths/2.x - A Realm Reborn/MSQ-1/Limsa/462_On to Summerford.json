@@ -21,25 +21,14 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 41,
-          "Position": {
-            "X": 16.067688,
-            "Y": 40.787354,
-            "Z": 68.80286
-          },
           "TerritoryId": 128,
-          "InteractionType": "AttuneAethernetShard"
+          "InteractionType": "AttuneAethernetShard",
+          "AethernetShard": "[Limsa Lominsa] The Aftcastle"
         },
         {
-          "DataId": 52,
-          "Position": {
-            "X": 227.98499,
-            "Y": 115.526,
-            "Z": -257.0382
-          },
-          "StopDistance": 10,
           "TerritoryId": 134,
           "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Middle La Noscea - Summerford Farms",
           "AethernetShortcut": [
             "[Limsa Lominsa] The Aftcastle",
             "[Limsa Lominsa] Zephyr Gate (Middle La Noscea)"

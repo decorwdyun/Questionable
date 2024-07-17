@@ -17,10 +17,10 @@ internal static class AethernetShard
             if (step.InteractionType != EInteractionType.AttuneAethernetShard)
                 return null;
 
-            ArgumentNullException.ThrowIfNull(step.DataId);
+            ArgumentNullException.ThrowIfNull(step.AethernetShard);
 
             return serviceProvider.GetRequiredService<DoAttune>()
-                .With((EAetheryteLocation)step.DataId);
+                .With(step.AethernetShard.Value);
         }
     }
 

@@ -44,15 +44,9 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 53,
-          "Position": {
-            "X": -16.159302,
-            "Y": 0.32037354,
-            "Z": -166.58276
-          },
-          "StopDistance": 10,
           "TerritoryId": 141,
           "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Central Thanalan - Black Brush Station",
           "AetheryteShortcut": "Ul'dah",
           "AethernetShortcut": [
             "[Ul'dah] Aetheryte Plaza",
@@ -80,15 +74,9 @@
           "$": "Camp Drybone Lantern"
         },
         {
-          "DataId": 18,
-          "Position": {
-            "X": -386.3432,
-            "Y": -57.1756,
-            "Z": 142.59558
-          },
-          "StopDistance": 10,
           "TerritoryId": 145,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Eastern Thanalan - Camp Drybone"
         },
         {
           "DataId": 1003929,

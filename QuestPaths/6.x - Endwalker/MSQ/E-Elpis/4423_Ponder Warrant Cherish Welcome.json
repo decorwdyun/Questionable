@@ -37,15 +37,10 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 176,
-          "Position": {
-            "X": 159.96033,
-            "Y": 11.703674,
-            "Z": 126.878784
-          },
           "StopDistance": 6,
           "TerritoryId": 961,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Elpis - Anagnorisis"
         },
         {
           "DataId": 1040018,

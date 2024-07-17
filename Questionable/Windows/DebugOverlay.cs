@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
@@ -8,6 +9,7 @@ using Dalamud.Interface.Windowing;
 using Dalamud.Plugin.Services;
 using ImGuiNET;
 using Questionable.Controller;
+using Questionable.Data;
 using Questionable.Model;
 using Questionable.Model.V1;
 
@@ -20,10 +22,11 @@ internal sealed class DebugOverlay : Window
     private readonly IGameGui _gameGui;
     private readonly IClientState _clientState;
     private readonly ICondition _condition;
+    private readonly AetheryteData _aetheryteData;
     private readonly Configuration _configuration;
 
     public DebugOverlay(QuestController questController, QuestRegistry questRegistry, IGameGui gameGui,
-        IClientState clientState, ICondition condition, Configuration configuration)
+        IClientState clientState, ICondition condition, AetheryteData aetheryteData, Configuration configuration)
         : base("Questionable Debug Overlay###QuestionableDebugOverlay",
             ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoBackground |
             ImGuiWindowFlags.NoInputs | ImGuiWindowFlags.NoSavedSettings, true)
@@ -33,6 +36,7 @@ internal sealed class DebugOverlay : Window
         _gameGui = gameGui;
         _clientState = clientState;
         _condition = condition;
+        _aetheryteData = aetheryteData;
         _configuration = configuration;
 
         Position = Vector2.Zero;
@@ -75,14 +79,14 @@ internal sealed class DebugOverlay : Window
         for (int i = currentQuest.Step; i <= sequence.Steps.Count; ++i)
         {
             QuestStep? step = sequence.FindStep(i);
-            if (step == null || step.Position == null)
-                continue;
-
-            DrawStep(i.ToString(CultureInfo.InvariantCulture), step,
-                Vector3.Distance(_clientState.LocalPlayer!.Position, step.Position.Value) <
-                step.CalculateActualStopDistance()
-                    ? 0xFF00FF00
-                    : 0xFF0000FF);
+            if (step != null && TryGetPosition(step, out Vector3? position))
+            {
+                DrawStep(i.ToString(CultureInfo.InvariantCulture), step, position.Value,
+                    Vector3.Distance(_clientState.LocalPlayer!.Position, position.Value) <
+                    step.CalculateActualStopDistance()
+                        ? 0xFF00FF00
+                        : 0xFF0000FF);
+            }
         }
     }
 
@@ -96,25 +100,49 @@ internal sealed class DebugOverlay : Window
             for (int i = 0; i < sequence.Steps.Count; ++i)
             {
                 QuestStep? step = sequence.FindStep(i);
-                DrawStep($"{quest.QuestId} / {sequence.Sequence} / {i}", step, 0xFFFFFFFF);
+                if (step != null && TryGetPosition(step, out Vector3? position))
+                {
+                    DrawStep($"{quest.QuestId} / {sequence.Sequence} / {i}", step, position.Value, 0xFFFFFFFF);
+                }
             }
         }
     }
 
-    private void DrawStep(string counter, QuestStep? step, uint color)
+    private void DrawStep(string counter, QuestStep step, Vector3 position, uint color)
     {
-        if (step == null ||
-            step.Position == null ||
-            step.Disabled ||
-            step.TerritoryId != _clientState.TerritoryType)
+        if (step.Disabled || step.TerritoryId != _clientState.TerritoryType)
             return;
 
-        bool visible = _gameGui.WorldToScreen(step.Position.Value, out Vector2 screenPos);
+        bool visible = _gameGui.WorldToScreen(position, out Vector2 screenPos);
         if (!visible)
             return;
 
         ImGui.GetWindowDrawList().AddCircleFilled(screenPos, 3f, color);
         ImGui.GetWindowDrawList().AddText(screenPos + new Vector2(10, -8), color,
-            $"{counter}: {step.InteractionType}\n{step.Position.Value.ToString("G", CultureInfo.InvariantCulture)} [{(step.Position.Value - _clientState.LocalPlayer!.Position).Length():N2}]\n{step.Comment}");
+            $"{counter}: {step.InteractionType}\n{position.ToString("G", CultureInfo.InvariantCulture)} [{(position - _clientState.LocalPlayer!.Position).Length():N2}]\n{step.Comment}");
+    }
+
+    private bool TryGetPosition(QuestStep step, [NotNullWhen(true)] out Vector3? position)
+    {
+        if (step.Position != null)
+        {
+            position = step.Position;
+            return true;
+        }
+        else if (step.InteractionType == EInteractionType.AttuneAetheryte && step.Aetheryte != null)
+        {
+            position = _aetheryteData.Locations[step.Aetheryte.Value];
+            return true;
+        }
+        else if (step.InteractionType == EInteractionType.AttuneAethernetShard && step.AethernetShard != null)
+        {
+            position = _aetheryteData.Locations[step.AethernetShard.Value];
+            return true;
+        }
+        else
+        {
+            position = null;
+            return false;
+        }
     }
 }

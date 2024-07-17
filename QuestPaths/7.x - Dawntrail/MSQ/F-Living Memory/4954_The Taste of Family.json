@@ -70,15 +70,9 @@
           ]
         },
         {
-          "DataId": 214,
-          "Position": {
-            "X": 657.98413,
-            "Y": 28.976807,
-            "Z": -284.01617
-          },
-          "StopDistance": 10,
           "TerritoryId": 1192,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Living Memory - Leynode Pyro"
         },
         {
           "DataId": 1047943,

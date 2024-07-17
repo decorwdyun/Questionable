@@ -36,15 +36,10 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 170,
-          "Position": {
-            "X": -527.4888,
-            "Y": 4.785123,
-            "Z": 36.76496
-          },
           "StopDistance": 5,
           "TerritoryId": 957,
-          "InteractionType": "AttuneAetheryte"
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Thavnair - Great Work"
         },
         {
           "DataId": 1038631,

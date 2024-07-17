@@ -65,7 +65,7 @@ public class QuestSourceGenerator : ISourceGenerator
                 continue;
 
             var questNode = JsonNode.Parse(text.ToString());
-            var evaluationResult = questSchema.Evaluate(questNode, new EvaluationOptions()
+            var evaluationResult = questSchema.Evaluate(questNode, new EvaluationOptions
             {
                 Culture = CultureInfo.InvariantCulture,
                 OutputFormat = OutputFormat.List
@@ -322,6 +322,10 @@ public class QuestSourceGenerator : ISourceGenerator
                                             Assignment(nameof(QuestStep.IgnoreDistanceToObject), step.IgnoreDistanceToObject, emptyStep.IgnoreDistanceToObject)
                                                 .AsSyntaxNodeOrToken(),
                                             Assignment(nameof(QuestStep.Comment), step.Comment, emptyStep.Comment)
+                                                .AsSyntaxNodeOrToken(),
+                                            Assignment(nameof(QuestStep.Aetheryte), step.Aetheryte, emptyStep.Aetheryte)
+                                                .AsSyntaxNodeOrToken(),
+                                            Assignment(nameof(QuestStep.AethernetShard), step.AethernetShard, emptyStep.AethernetShard)
                                                 .AsSyntaxNodeOrToken(),
                                             Assignment(nameof(QuestStep.AetheryteShortcut), step.AetheryteShortcut,
                                                     emptyStep.AetheryteShortcut)

@@ -51,15 +51,10 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 173,
-          "Position": {
-            "X": 518.9136,
-            "Y": -35.324707,
-            "Z": -178.36273
-          },
           "StopDistance": 7,
           "TerritoryId": 958,
           "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Garlemald - Tertium",
           "DisableNavmesh": true
         },
         {
