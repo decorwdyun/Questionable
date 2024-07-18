@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Questionable.Model.V1;
 
@@ -15,4 +16,6 @@ public sealed class QuestSequence
 
         return Steps[step];
     }
+
+    public QuestStep? LastStep() => Steps.LastOrDefault();
 }

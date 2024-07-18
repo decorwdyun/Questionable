@@ -34,7 +34,6 @@
     },
     {
       "Sequence": 2,
-      "Comment": "TODO: Verify; Swimming in the lake avoids combat",
       "Steps": [
         {
           "Position": {

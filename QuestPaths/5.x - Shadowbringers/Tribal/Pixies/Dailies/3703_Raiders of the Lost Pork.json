@@ -37,6 +37,21 @@
           "$": "Only if QW: 0 48 0 0 0 0"
         },
         {
+          "DataId": 1032168,
+          "Position": {
+            "X": -431.3573,
+            "Y": 24.720499,
+            "Z": 251.60596
+          },
+          "TerritoryId": 816,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "SkipIf": [
+            "NotTargetable"
+          ],
+          "$": "Only if QW: 0 32 0 0 0 0"
+        },
+        {
           "DataId": 1032167,
           "Position": {
             "X": -416.52557,

@@ -42,7 +42,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="5.x - Shadowbringers\MSQ\A4 - Crystarium 2\" />
       <Folder Include="5.x - Shadowbringers\MSQ\C-Rak'tika\" />
     </ItemGroup>
 </Project>

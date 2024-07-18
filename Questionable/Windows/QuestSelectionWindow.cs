@@ -17,6 +17,7 @@ using LLib.ImGui;
 using Questionable.Controller;
 using Questionable.Data;
 using Questionable.Model;
+using Questionable.Model.V1;
 
 namespace Questionable.Windows;
 
@@ -207,6 +208,7 @@ internal sealed class QuestSelectionWindow : LWindow
                 ImGui.SameLine();
 
                 if (knownQuest != null &&
+                    knownQuest.FindSequence(0)?.LastStep()?.InteractionType == EInteractionType.AcceptQuest &&
                     !_gameFunctions.IsQuestAccepted(quest.QuestId) &&
                     !_gameFunctions.IsQuestLocked(quest.QuestId) &&
                     (quest.IsRepeatable || !_gameFunctions.IsQuestAcceptedOrComplete(quest.QuestId)))

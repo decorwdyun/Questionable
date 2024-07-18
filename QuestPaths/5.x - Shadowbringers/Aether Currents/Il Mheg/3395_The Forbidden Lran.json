@@ -1,19 +1,16 @@
 ﻿{
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
-  "TerritoryBlacklist": [
-    821
-  ],
   "QuestSequence": [
     {
       "Sequence": 0,
       "Steps": [
         {
-          "DataId": 1030535,
+          "DataId": 1030266,
           "Position": {
-            "X": -355.30634,
-            "Y": 46.684208,
-            "Z": 482.0172
+            "X": -367.66614,
+            "Y": 66.863594,
+            "Z": 557.1526
           },
           "TerritoryId": 816,
           "InteractionType": "AcceptQuest"
@@ -24,11 +21,11 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 2009828,
+          "DataId": 1030267,
           "Position": {
-            "X": 133.40955,
-            "Y": -0.015319824,
-            "Z": 455.9242
+            "X": -161.30316,
+            "Y": 34.21811,
+            "Z": 607.38525
           },
           "TerritoryId": 816,
           "InteractionType": "Interact"
@@ -39,9 +36,17 @@
       "Sequence": 2,
       "Steps": [
         {
+          "DataId": 2009997,
+          "Position": {
+            "X": -40.116028,
+            "Y": 24.063354,
+            "Z": 739.25366
+          },
           "TerritoryId": 816,
-          "InteractionType": "Duty",
-          "ContentFinderConditionId": 649
+          "InteractionType": "Say",
+          "ChatMessage": {
+            "Key": "TEXT_LUCKZC012_03395_SYSTEM_000_013"
+          }
         }
       ]
     },
@@ -49,26 +54,15 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 2010056,
+          "DataId": 1030266,
           "Position": {
-            "X": -231.4141,
-            "Y": 4.701926,
-            "Z": 160.8437
-          },
-          "TerritoryId": 816,
-          "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818270
-        },
-        {
-          "DataId": 1031669,
-          "Position": {
-            "X": -300.0077,
-            "Y": 1.4994799,
-            "Z": 182.8794
+            "X": -367.66614,
+            "Y": 66.863594,
+            "Z": 557.1526
           },
           "TerritoryId": 816,
           "InteractionType": "CompleteQuest",
-          "Mount": false
+          "AetheryteShortcut": "Il Mheg - Lydha Lran"
         }
       ]
     }

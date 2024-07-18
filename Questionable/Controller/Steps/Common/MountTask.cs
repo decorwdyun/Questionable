@@ -2,6 +2,7 @@
 using System.Numerics;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using Microsoft.Extensions.Logging;
 using Questionable.Data;
 
@@ -53,7 +54,7 @@ internal sealed class MountTask(
         {
             Vector3 playerPosition = clientState.LocalPlayer?.Position ?? Vector3.Zero;
             float distance = (playerPosition - _position.GetValueOrDefault()).Length();
-            if (_territoryId == clientState.TerritoryType && distance < 30f)
+            if (_territoryId == clientState.TerritoryType && distance < 30f && !Conditions.IsDiving)
             {
                 logger.LogInformation("Not using mount, as we're close to the target");
                 return false;

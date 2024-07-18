@@ -507,6 +507,15 @@ internal sealed unsafe class GameFunctions
         if (playerState != null && !playerState->IsMountUnlocked(1))
             return true;
 
+        var localPlayer = _clientState.LocalPlayer;
+        if (localPlayer == null)
+            return false;
+
+        var battleChara = (BattleChara*)localPlayer.Address;
+        StatusManager* statusManager = battleChara->GetStatusManager();
+        if (statusManager->HasStatus(1151))
+            return true;
+
         return HasCharacterStatusPreventingMountOrSprint();
     }
 

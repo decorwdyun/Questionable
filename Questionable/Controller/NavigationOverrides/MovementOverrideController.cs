@@ -8,9 +8,15 @@ namespace Questionable.Controller.NavigationOverrides;
 
 internal sealed class MovementOverrideController
 {
-    private static readonly List<IBlacklistedLocation> BlacklistedLocations = [
+    private static readonly List<IBlacklistedLocation> BlacklistedLocations =
+    [
         new BlacklistedArea(1191, new(-223.0412f, 31.937134f, -584.03906f), 5f, 7.75f),
-        new BlacklistedPoint(128, new Vector3(2f, 40.25f, 36.5f), new Vector3(0.25f, 40.25f, 36.5f))
+
+        // New Gridania Navmesh workaround
+        new BlacklistedPoint(128, new(2f, 40.25f, 36.5f), new(0.25f, 40.25f, 36.5f)),
+
+        new BlacklistedPoint(132, new(45.5f, -8f, 101f), new(50.53978f, -8.046954f, 101.06045f)),
+        new BlacklistedPoint(1189, new(574f, -142.25f, 504.25f), new(574.44183f, -142.12766f, 507.60065f)),
     ];
 
     private readonly IClientState _clientState;

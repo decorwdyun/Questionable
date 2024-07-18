@@ -26,16 +26,6 @@
           "ItemId": 2651
         },
         {
-          "Position": {
-            "X": 49.65071,
-            "Y": -8.046952,
-            "Z": 102.32186
-          },
-          "TerritoryId": 132,
-          "InteractionType": "WalkTo",
-          "$": "New Gridania Navmesh workaround"
-        },
-        {
           "DataId": 1000286,
           "Position": {
             "X": -53.574463,

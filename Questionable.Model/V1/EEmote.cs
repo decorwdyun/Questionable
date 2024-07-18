@@ -26,4 +26,5 @@ public enum EEmote
     ImperialSalute = 59,
     Pet = 105,
     Dance = 11,
+    Respect = 140,
 }

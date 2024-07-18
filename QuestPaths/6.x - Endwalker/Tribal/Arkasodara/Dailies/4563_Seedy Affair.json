@@ -33,6 +33,19 @@
           "ItemId": 2003420,
           "Fly": true,
           "AetheryteShortcut": "Thavnair - Palaka's Stand"
+        },
+        {
+          "DataId": 2012886,
+          "Position": {
+            "X": 135.91211,
+            "Y": 6.4850464,
+            "Z": -327.5349
+          },
+          "TerritoryId": 957,
+          "InteractionType": "UseItem",
+          "ItemId": 2003420,
+          "Fly": true,
+          "AetheryteShortcut": "Thavnair - Palaka's Stand"
         }
       ]
     },
@@ -45,6 +58,16 @@
             "X": 111.46704,
             "Y": 5.935669,
             "Z": -294.36182
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 2012886,
+          "Position": {
+            "X": 135.91211,
+            "Y": 6.4850464,
+            "Z": -327.5349
           },
           "TerritoryId": 957,
           "InteractionType": "Interact"

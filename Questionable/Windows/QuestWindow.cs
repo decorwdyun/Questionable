@@ -174,6 +174,12 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
             {
                 ImGui.TextUnformatted(
                     $"Quest: {currentQuest.Quest.Info.Name} / {currentQuest.Sequence} / {currentQuest.Step}");
+
+                if (currentQuest.Quest.Root.Disabled)
+                {
+                    ImGui.SameLine();
+                    ImGui.TextColored(ImGuiColors.DalamudRed, "Disabled");
+                }
             }
 
 

@@ -24,5 +24,6 @@ public sealed class EmoteConverter() : EnumConverter<EEmote>(Values)
         { EEmote.ImperialSalute, "imperialsalute" },
         { EEmote.Pet, "pet" },
         { EEmote.Dance, "dance" },
+        { EEmote.Respect, "respect" },
     };
 }
