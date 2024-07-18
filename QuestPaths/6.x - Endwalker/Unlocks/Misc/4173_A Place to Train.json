@@ -1,0 +1,42 @@
+﻿{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1041747,
+          "Position": {
+            "X": 56.65674,
+            "Y": -0.0004196167,
+            "Z": -24.765442
+          },
+          "TerritoryId": 963,
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Radz-at-Han",
+          "SkipIf": [
+            "AetheryteShortcutIfInSameTerritory"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1040741,
+          "Position": {
+            "X": 418.265,
+            "Y": 3.43257,
+            "Z": -210.4372
+          },
+          "TerritoryId": 957,
+          "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Thavnair - Palaka's Stand",
+          "NextQuestId": 5005
+        }
+      ]
+    }
+  ]
+}

@@ -57,8 +57,8 @@ public sealed class AethernetShardConverter() : EnumConverter<EAetheryteLocation
 
         { EAetheryteLocation.Idyllshire, "[Idyllshire] Aetheryte Plaza" },
         { EAetheryteLocation.IdyllshireWest, "[Idyllshire] West Idyllshire" },
-        { EAetheryteLocation.IdyllshirePrologueGate, "[Idyllshire] Prologue Gate" },
-        { EAetheryteLocation.IdyllshireEpilogueGate, "[Idyllshire] Epilogue Gate" },
+        { EAetheryteLocation.IdyllshirePrologueGate, "[Idyllshire] Prologue Gate (Western Hinterlands)" },
+        { EAetheryteLocation.IdyllshireEpilogueGate, "[Idyllshire] Epilogue Gate (Eastern Hinterlands)" },
 
         { EAetheryteLocation.RhalgrsReach, "[Rhalgr's Reach] Aetheryte Plaza" },
         { EAetheryteLocation.RhalgrsReachWest, "[Rhalgr's Reach] Western Rhalgr's Reach" },

@@ -1,0 +1,45 @@
+﻿{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1017083,
+          "Position": {
+            "X": 63.797974,
+            "Y": 207.28995,
+            "Z": -1.5107422
+          },
+          "TerritoryId": 478,
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Idyllshire",
+          "SkipIf": [
+            "AetheryteShortcutIfInSameTerritory"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1015599,
+          "Position": {
+            "X": -205.79846,
+            "Y": 102.81167,
+            "Z": -580.0717
+          },
+          "TerritoryId": 399,
+          "InteractionType": "CompleteQuest",
+          "AethernetShortcut": [
+            "[Idyllshire] Aetheryte Plaza",
+            "[Idyllshire] Epilogue Gate (Eastern Hinterlands)"
+          ],
+          "NextQuestId": 2940
+        }
+      ]
+    }
+  ]
+}
