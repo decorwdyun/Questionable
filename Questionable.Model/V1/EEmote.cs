@@ -27,4 +27,5 @@ public enum EEmote
     Pet = 105,
     Dance = 11,
     Respect = 140,
+    Lookout = 22,
 }
