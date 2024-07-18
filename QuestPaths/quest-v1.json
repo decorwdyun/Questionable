@@ -183,7 +183,8 @@
                       "DifferentTerritory",
                       "ChocoboUnlocked",
                       "AetheryteShortcutIfInSameTerritory",
-                      "NotTargetable"
+                      "NotTargetable",
+                      "ItemNotInInventory"
                     ]
                   }
                 },

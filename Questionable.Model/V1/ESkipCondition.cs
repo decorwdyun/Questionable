@@ -13,4 +13,5 @@ public enum ESkipCondition
     ChocoboUnlocked,
     AetheryteShortcutIfInSameTerritory,
     NotTargetable,
+    ItemNotInInventory,
 }

@@ -12,5 +12,6 @@ public sealed class SkipConditionConverter() : EnumConverter<ESkipCondition>(Val
         { ESkipCondition.ChocoboUnlocked, "ChocoboUnlocked" },
         { ESkipCondition.AetheryteShortcutIfInSameTerritory, "AetheryteShortcutIfInSameTerritory" },
         { ESkipCondition.NotTargetable, "NotTargetable" },
+        { ESkipCondition.ItemNotInInventory, "ItemNotInInventory" },
     };
 }

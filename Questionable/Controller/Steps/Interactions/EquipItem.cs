@@ -145,6 +145,7 @@ internal static class EquipItem
             {
                 >= 1 and <= 11 => [(ushort)(item.EquipSlotCategory.Row - 1)],
                 12 => [11, 12], // rings
+                13 => [0],
                 17 => [14], // soul crystal
                 _ => null
             };

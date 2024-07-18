@@ -4,6 +4,7 @@ using System.Linq;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using Microsoft.Extensions.DependencyInjection;
@@ -90,6 +91,16 @@ internal static class SkipCondition
                 else if (!gameObject.IsTargetable)
                 {
                     logger.LogInformation("Skipping step, object is not targetable");
+                    return true;
+                }
+            }
+
+            if (SkipConditions.Contains(ESkipCondition.ItemNotInInventory) && Step is { ItemId: not null })
+            {
+                InventoryManager* inventoryManager = InventoryManager.Instance();
+                if (inventoryManager->GetInventoryItemCount(Step.ItemId.Value) == 0)
+                {
+                    logger.LogInformation("Skipping step, no item with itemId {ItemId} in inventory", Step.ItemId.Value);
                     return true;
                 }
             }

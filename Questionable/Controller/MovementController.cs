@@ -89,10 +89,7 @@ internal sealed class MovementController : IDisposable
         {
             if (_pathfindTask.IsCompletedSuccessfully)
             {
-                _logger.LogInformation("Pathfinding complete, route: [{Route}]",
-                    string.Join(" → ",
-                        _pathfindTask.Result.Select(x => x.ToString("G", CultureInfo.InvariantCulture))));
-
+                _logger.LogInformation("Pathfinding complete, got {Count} points", _pathfindTask.Result.Count);
                 if (_pathfindTask.Result.Count == 0)
                 {
                     ResetPathfinding();
@@ -114,6 +111,10 @@ internal sealed class MovementController : IDisposable
 
                 if (!Destination.IsFlying)
                     _movementOverrideController.AdjustPath(navPoints);
+
+                _logger.LogInformation("Navigating via route: [{Route}]",
+                    string.Join(" → ",
+                        _pathfindTask.Result.Select(x => x.ToString("G", CultureInfo.InvariantCulture))));
 
                 _navmeshIpc.MoveTo(navPoints, Destination.IsFlying);
                 MovementStartedAt = DateTime.Now;
