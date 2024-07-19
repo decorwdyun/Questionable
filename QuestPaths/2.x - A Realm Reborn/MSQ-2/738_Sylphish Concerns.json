@@ -1,0 +1,125 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "JerryWester",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1000590,
+          "Position": {
+            "X": -165.9419,
+            "Y": 9.869227,
+            "Z": -81.34589
+          },
+          "TerritoryId": 153,
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "South Shroud - Quarrymill",
+          "SkipIf": [
+            "AetheryteShortcutIfInSameTerritory"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 2001949,
+          "Position": {
+            "X": -142.77869,
+            "Y": 14.450195,
+            "Z": -130.11371
+          },
+          "TerritoryId": 153,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
+          "KillEnemyDataIds": [
+            55
+          ],
+          "$": "0 0  0 0  0 0 -> 16 0  16 0  0 128",
+          "CompletionQuestVariablesFlags": [
+            16,
+            null,
+            16,
+            null,
+            null,
+            128
+          ]
+        },
+        {
+          "DataId": 2001953,
+          "Position": {
+            "X": -116.41113,
+            "Y": 11.032227,
+            "Z": -84.97754
+          },
+          "TerritoryId": 153,
+          "InteractionType": "Interact",
+          "$": "16 0  16 0  0 128 -> 32 1  16 0  0 136",
+          "CompletionQuestVariablesFlags": [
+            16,
+            1,
+            null,
+            null,
+            null,
+            8
+          ]
+        },
+        {
+          "DataId": 2001951,
+          "Position": {
+            "X": -83.32953,
+            "Y": 7.1259155,
+            "Z": -21.561035
+          },
+          "TerritoryId": 153,
+          "InteractionType": "Interact",
+          "$": "32 1  16 0  0 136 -> 49 1  16 0  0 168"
+        },
+        {
+          "DataId": 2001952,
+          "Position": {
+            "X": 18.722778,
+            "Y": 7.614197,
+            "Z": -43.137268
+          },
+          "TerritoryId": 153,
+          "InteractionType": "Interact",
+          "$": "49 1  16 0  0 168 -> 65 17  16 0  0 184"
+        },
+        {
+          "DataId": 2001950,
+          "Position": {
+            "X": 63.553833,
+            "Y": 13.473633,
+            "Z": -32.333923
+          },
+          "TerritoryId": 153,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
+          "KillEnemyDataIds": [
+            64,
+            61
+          ],
+          "$": "65 17  16 0  0 184 -> "
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1000590,
+          "Position": {
+            "X": -165.9419,
+            "Y": 9.869227,
+            "Z": -81.34589
+          },
+          "TerritoryId": 153,
+          "InteractionType": "CompleteQuest"
+        }
+      ]
+    }
+  ]
+}
