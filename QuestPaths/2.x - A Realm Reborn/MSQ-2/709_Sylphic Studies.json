@@ -12,6 +12,7 @@
             "Y": 3.543561,
             "Z": 283.71094
           },
+          "StopDistance": 5,
           "TerritoryId": 152,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "East Shroud - Hawthorne Hut",
@@ -32,7 +33,15 @@
             "Z": 279.92664
           },
           "TerritoryId": 152,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 1000557,
@@ -43,7 +52,14 @@
           },
           "TerritoryId": 152,
           "InteractionType": "Interact",
-          "$": "0 0  0 0  0 0 -> 17 0  0 0  0 128"
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 1000553,
@@ -54,7 +70,14 @@
           },
           "TerritoryId": 152,
           "InteractionType": "Interact",
-          "$": "17 0  0 0  0 128 -> 33 16  0 0  0 192"
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         }
       ]
     },

@@ -1,6 +1,6 @@
 ﻿{
   "$schema": "https://carvel.li/questionable/quest-1.0",
-  "Author": "liza, JerryWester",
+  "Author": ["liza", "JerryWester"],
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -58,7 +58,6 @@
       "Sequence": 255,
       "Steps": [
         {
-          "$": "TODO: Questionable doesn't seem to interact with this ferry skipper",
           "DataId": 1001263,
           "Position": {
             "X": 181.41443,
@@ -67,20 +66,7 @@
           },
           "TerritoryId": 133,
           "InteractionType": "Interact",
-          "DialogueChoices": [
-            {
-              "Type": "List",
-              "ExcelSheet": "Warp",
-              "Prompt": "Null",
-              "Answer": "131077"
-            },
-            {
-              "Type": "YesNo",
-              "ExcelSheet": "Warp",
-              "Prompt": "Board the ferry to Sweetbloom Pier?",
-              "Yes": true
-            }
-          ]
+          "TargetTerritoryId": 152
         },
         {
           "TerritoryId": 152,

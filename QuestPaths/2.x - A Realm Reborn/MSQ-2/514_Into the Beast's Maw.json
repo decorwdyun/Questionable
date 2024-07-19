@@ -1,6 +1,9 @@
 {
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "JerryWester",
+  "TerritoryBlacklist": [
+    1039
+  ],
   "QuestSequence": [
     {
       "Sequence": 0,

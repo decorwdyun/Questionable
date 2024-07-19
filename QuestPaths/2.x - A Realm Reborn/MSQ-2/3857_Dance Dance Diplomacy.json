@@ -35,7 +35,7 @@
           "InteractionType": "Emote",
           "Emote": "dance",
           "CompletionQuestVariablesFlags": [
-            1,
+            null,
             null,
             null,
             null,
@@ -54,7 +54,7 @@
           "InteractionType": "Emote",
           "Emote": "dance",
           "CompletionQuestVariablesFlags": [
-            1,
+            null,
             null,
             null,
             null,
@@ -71,7 +71,15 @@
           },
           "TerritoryId": 152,
           "InteractionType": "Emote",
-          "Emote": "dance"
+          "Emote": "dance",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         }
       ]
     },

@@ -25,6 +25,11 @@
       "Sequence": 255,
       "Steps": [
         {
+          "TerritoryId": 153,
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "South Shroud - Camp Tranquil"
+        },
+        {
           "DataId": 1000576,
           "Position": {
             "X": 21.469421,

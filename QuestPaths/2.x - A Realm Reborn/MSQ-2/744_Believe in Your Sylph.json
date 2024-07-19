@@ -30,6 +30,7 @@
             "Y": 8.673417,
             "Z": 187.67012
           },
+          "StopDistance": 0.5,
           "TerritoryId": 152,
           "InteractionType": "Emote",
           "Emote": "lookout"

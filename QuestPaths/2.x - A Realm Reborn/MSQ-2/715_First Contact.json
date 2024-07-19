@@ -17,14 +17,6 @@
           "AetheryteShortcut": "East Shroud - Hawthorne Hut",
           "SkipIf": [
             "AetheryteShortcutIfInSameTerritory"
-          ],
-          "CompletionQuestVariablesFlags": [
-            null,
-            16,
-            null,
-            null,
-            null,
-            null
           ]
         }
       ]
@@ -40,15 +32,7 @@
             "Z": 283.4973
           },
           "TerritoryId": 152,
-          "InteractionType": "Interact",
-          "CompletionQuestVariablesFlags": [
-            null,
-            1,
-            null,
-            null,
-            null,
-            null
-          ]
+          "InteractionType": "Interact"
         }
       ]
     },

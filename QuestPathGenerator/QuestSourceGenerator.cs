@@ -222,9 +222,7 @@ public class QuestSourceGenerator : ISourceGenerator
                                     SyntaxKind.ObjectInitializerExpression,
                                     SeparatedList<ExpressionSyntax>(
                                         SyntaxNodeList(
-                                            Assignment(nameof(QuestRoot.Author), quest.Author, null)
-                                                .AsSyntaxNodeOrToken(),
-                                            AssignmentList(nameof(QuestRoot.Contributors), quest.Contributors)
+                                            AssignmentList(nameof(QuestRoot.Author), quest.Author)
                                                 .AsSyntaxNodeOrToken(),
                                             Assignment(nameof(QuestRoot.Comment), quest.Comment, null)
                                                 .AsSyntaxNodeOrToken(),

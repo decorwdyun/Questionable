@@ -35,7 +35,7 @@
           "InteractionType": "Interact",
           "$": "0 0  0 0  0 0 -> 1 0  0 0  0 128",
           "CompletionQuestVariablesFlags": [
-            1,
+            null,
             null,
             null,
             null,
@@ -54,7 +54,7 @@
           "InteractionType": "Interact",
           "$": "1 0  0 0  0 128 -> 2 0  0 0  0 192",
           "CompletionQuestVariablesFlags": [
-            1,
+            null,
             null,
             null,
             null,
@@ -74,7 +74,7 @@
           "AetheryteShortcut": "East Shroud - Hawthorne Hut",
           "$": "2 0  0 0  0 192 -> 3 0  0 0  0 224",
           "CompletionQuestVariablesFlags": [
-            1,
+            null,
             null,
             null,
             null,
@@ -90,7 +90,15 @@
             "Z": 286.9154
           },
           "TerritoryId": 152,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            16
+          ]
         }
       ]
     },

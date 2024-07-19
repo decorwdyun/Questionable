@@ -32,19 +32,42 @@
             "Z": -130.11371
           },
           "TerritoryId": 153,
-          "InteractionType": "Combat",
-          "EnemySpawnType": "AfterInteraction",
-          "KillEnemyDataIds": [
-            55
-          ],
+          "InteractionType": "Interact",
           "$": "0 0  0 0  0 0 -> 16 0  16 0  0 128",
           "CompletionQuestVariablesFlags": [
-            16,
             null,
-            16,
+            null,
+            null,
             null,
             null,
             128
+          ],
+          "Comment": "Enemy loses aggro by the next waypoint"
+        },
+        {
+          "Position": {
+            "X": -108.2742,
+            "Y": 5.6416674,
+            "Z": -80.21974
+          },
+          "StopDistance": 0.25,
+          "TerritoryId": 153,
+          "InteractionType": "Jump",
+          "JumpDestination": {
+            "Position": {
+              "X": -111.25065,
+              "Y": 8.312978,
+              "Z": -82.8167
+            },
+            "DelaySeconds": 0.25
+          },
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            -8
           ]
         },
         {
@@ -57,13 +80,40 @@
           "TerritoryId": 153,
           "InteractionType": "Interact",
           "$": "16 0  16 0  0 128 -> 32 1  16 0  0 136",
+          "DisableNavmesh": true,
           "CompletionQuestVariablesFlags": [
-            16,
-            1,
+            null,
+            null,
             null,
             null,
             null,
             8
+          ]
+        },
+        {
+          "Position": {
+            "X": -90.467575,
+            "Y": 3.3634722,
+            "Z": -27.515985
+          },
+          "StopDistance": 0.25,
+          "TerritoryId": 153,
+          "InteractionType": "Jump",
+          "JumpDestination": {
+            "Position": {
+              "X": -84.96217,
+              "Y": 6.1436205,
+              "Z": -23.793756
+            },
+            "DelaySeconds": 0.25
+          },
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            -32
           ]
         },
         {
@@ -75,7 +125,50 @@
           },
           "TerritoryId": 153,
           "InteractionType": "Interact",
-          "$": "32 1  16 0  0 136 -> 49 1  16 0  0 168"
+          "$": "32 1  16 0  0 136 -> 49 1  16 0  0 168",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
+        },
+        {
+          "Position": {
+            "X": -77.875786,
+            "Y": 3.9296143,
+            "Z": -27.107864
+          },
+          "TerritoryId": 153,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            -16
+          ]
+        },
+        {
+          "Position": {
+            "X": 15.053005,
+            "Y": 3.8386261,
+            "Z": -40.758984
+          },
+          "TerritoryId": 153,
+          "InteractionType": "WalkTo",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            -16
+          ]
         },
         {
           "DataId": 2001952,
@@ -84,9 +177,18 @@
             "Y": 7.614197,
             "Z": -43.137268
           },
+          "StopDistance": 6,
           "TerritoryId": 153,
           "InteractionType": "Interact",
-          "$": "49 1  16 0  0 168 -> 65 17  16 0  0 184"
+          "$": "49 1  16 0  0 168 -> 65 17  16 0  0 184",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            16
+          ]
         },
         {
           "DataId": 2001950,
@@ -96,19 +198,33 @@
             "Z": -32.333923
           },
           "TerritoryId": 153,
-          "InteractionType": "Combat",
-          "EnemySpawnType": "AfterInteraction",
-          "KillEnemyDataIds": [
-            64,
-            61
-          ],
-          "$": "65 17  16 0  0 184 -> "
+          "InteractionType": "Interact",
+          "$": "65 17  16 0  0 184 -> ",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         }
       ]
     },
     {
       "Sequence": 255,
       "Steps": [
+        {
+          "Position": {
+            "X": 51.85704,
+            "Y": 2.712612,
+            "Z": -42.67677
+          },
+          "TerritoryId": 153,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true,
+          "Mount": false
+        },
         {
           "DataId": 1000590,
           "Position": {
@@ -117,7 +233,8 @@
             "Z": -81.34589
           },
           "TerritoryId": 153,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "Mount": false
         }
       ]
     }

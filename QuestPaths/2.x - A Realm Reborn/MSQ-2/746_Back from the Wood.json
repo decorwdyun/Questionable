@@ -54,14 +54,7 @@
           },
           "TerritoryId": 140,
           "InteractionType": "Interact",
-          "DialogueChoices": [
-            {
-              "ExcelSheet": "Warp",
-              "Type": "YesNo",
-              "Yes": true,
-              "Prompt": 131088
-            }
-          ]
+          "TargetTerritoryId": 212
         }
       ]
     },
@@ -77,14 +70,7 @@
           },
           "TerritoryId": 212,
           "InteractionType": "Interact",
-          "DialogueChoices": [
-            {
-              "ExcelSheet": "Warp",
-              "Type": "YesNo",
-              "Yes": true,
-              "Prompt": 131090
-            }
-          ]
+          "TargetTerritoryId": 212
         },
         {
           "DataId": 1006688,

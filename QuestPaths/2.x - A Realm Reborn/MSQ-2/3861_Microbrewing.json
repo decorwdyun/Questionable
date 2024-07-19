@@ -22,6 +22,17 @@
       "Steps": [
         {
           "Position": {
+            "X": -422.68066,
+            "Y": -2.5542965,
+            "Z": 150.50304
+          },
+          "TerritoryId": 139,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true,
+          "Comment": "Avoids swimming"
+        },
+        {
+          "Position": {
             "X": -585.1562,
             "Y": -1.1847447,
             "Z": -2.186262
@@ -43,6 +54,16 @@
     {
       "Sequence": 255,
       "Steps": [
+        {
+          "Position": {
+            "X": -422.68066,
+            "Y": -2.5542965,
+            "Z": 150.50304
+          },
+          "TerritoryId": 139,
+          "InteractionType": "WalkTo",
+          "Comment": "Avoids swimming"
+        },
         {
           "DataId": 1006193,
           "Position": {

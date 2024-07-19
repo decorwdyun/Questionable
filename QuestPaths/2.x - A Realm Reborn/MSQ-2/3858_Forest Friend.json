@@ -12,6 +12,7 @@
             "Y": -3.7126513,
             "Z": 209.76575
           },
+          "StopDistance": 5,
           "TerritoryId": 152,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "East Shroud - Hawthorne Hut",
@@ -48,11 +49,22 @@
           "TerritoryId": 152,
           "InteractionType": "Combat",
           "EnemySpawnType": "OverworldEnemies",
-          "KillEnemyDataIds": [
-            179
+          "ComplexCombatData": [
+            {
+              "DataId": 179,
+              "CompletionQuestVariablesFlags": [
+                16,
+                1,
+                null,
+                null,
+                null,
+                null
+              ],
+              "MinimumKillCount": 1
+            }
           ],
           "CompletionQuestVariablesFlags": [
-            16,
+            null,
             1,
             null,
             null,
@@ -71,9 +83,9 @@
           "TerritoryId": 152,
           "InteractionType": "Interact",
           "CompletionQuestVariablesFlags": [
-            1,
             null,
-            16,
+            null,
+            null,
             null,
             null,
             32
@@ -90,9 +102,9 @@
           "TerritoryId": 152,
           "InteractionType": "Interact",
           "CompletionQuestVariablesFlags": [
-            1,
             null,
-            16,
+            null,
+            null,
             null,
             null,
             64
@@ -108,6 +120,14 @@
           },
           "TerritoryId": 152,
           "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ],
           "$": "18 1  32 0  0 96 -> 35 1  48 0  0 224"
         },
         {
@@ -119,9 +139,29 @@
           "TerritoryId": 152,
           "InteractionType": "Combat",
           "EnemySpawnType": "OverworldEnemies",
-          "KillEnemyDataIds": [
-            7
-          ]
+          "ComplexCombatData": [
+            {
+              "DataId": 7,
+              "CompletionQuestVariablesFlags": [
+                null,
+                16,
+                null,
+                null,
+                null,
+                null
+              ],
+              "MinimumKillCount": 1
+            }
+          ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            16,
+            null,
+            null,
+            null,
+            null
+          ],
+          "$": "If skipping the previous step: 34 17 32 0 0 96"
         }
       ]
     },

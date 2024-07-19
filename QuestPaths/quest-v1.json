@@ -11,10 +11,7 @@
     },
     "Author": {
       "description": "Author of the quest sequence",
-      "type": "string"
-    },
-    "Contributors": {
-      "type": "array",
+      "type": ["string", "array"],
       "items": {
         "type": "string"
       }

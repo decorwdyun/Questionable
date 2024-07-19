@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using Questionable.Model.V1.Converter;
 
 namespace Questionable.Model.V1;
 
 public sealed class QuestRoot
 {
-    public string Author { get; set; } = null!;
-    public List<string> Contributors { get; set; } = new();
+    [JsonConverter(typeof(StringListOrValueConverter))]
+    public List<string> Author { get; set; } = new();
 
     /// <summary>
     /// This is only relevant for release builds.
