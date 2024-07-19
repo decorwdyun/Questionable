@@ -12,6 +12,7 @@
             "Y": 9.773315,
             "Z": -533.135
           },
+          "StopDistance": 5,
           "TerritoryId": 1188,
           "InteractionType": "AcceptQuest"
         }
@@ -30,7 +31,7 @@
           "TerritoryId": 1188,
           "InteractionType": "Say",
           "ChatMessage": {
-            "Key": "TEXT_KINGMA111_04870_HANUHANUSAD04870_000_062"
+            "Key": "TEXT_KINGMA111_04870_SAYTODO_000_046"
           },
           "CompletionQuestVariablesFlags": [
             null,
@@ -51,7 +52,7 @@
           "TerritoryId": 1188,
           "InteractionType": "Say",
           "ChatMessage": {
-            "Key": "TEXT_KINGMA111_04870_HANUHANUNOTFEELING04866_000_052"
+            "Key": "TEXT_KINGMA111_04870_SAYTODO_000_046"
           },
           "CompletionQuestVariablesFlags": [
             null,
@@ -72,7 +73,7 @@
           "TerritoryId": 1188,
           "InteractionType": "Say",
           "ChatMessage": {
-            "Key": "TEXT_KINGMA111_04870_HANUHANUMELANCHOLY04870_000_058"
+            "Key": "TEXT_KINGMA111_04870_SAYTODO_000_046"
           },
           "CompletionQuestVariablesFlags": [
             null,

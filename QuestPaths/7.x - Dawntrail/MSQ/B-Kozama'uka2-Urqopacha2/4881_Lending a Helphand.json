@@ -29,7 +29,7 @@
           },
           "TerritoryId": 1188,
           "InteractionType": "WaitForManualProgress",
-          "Comment": "Click Workshop things"
+          "Comment": "Click (from left to right) worn tools, Kaahe, crafting materials, untouched meal"
         }
       ]
     },
