@@ -27,21 +27,37 @@ internal sealed class BasicSequenceValidator : IQuestValidator
             yield break;
         }
 
-        int maxSequence = sequences.Select(x => x.Sequence)
-            .Where(x => x != 255)
-            .Max();
-
-        for (int i = 0; i < maxSequence; i++)
+        if (quest.Info.CompletesInstantly)
         {
-            var foundSequences = sequences.Where(x => x.Sequence == i).ToList();
-            var issue = ValidateSequences(quest, i, foundSequences);
-            if (issue != null)
-                yield return issue;
+            foreach (var sequence in sequences)
+            {
+                if (sequence == foundStart)
+                    continue;
+
+                yield return new ValidationIssue
+                {
+                    QuestId = quest.QuestId,
+                    Sequence = (byte)sequence.Sequence,
+                    Step = null,
+                    Severity = EIssueSeverity.Error,
+                    Description = "Instant quest should not have any sequences after the start",
+                };
+            }
         }
-
-        // some quests finish instantly
-        if (maxSequence > 0 || foundStart.Steps.Count > 1)
+        else
         {
+            int maxSequence = sequences.Select(x => x.Sequence)
+                .Where(x => x != 255)
+                .Max();
+
+            for (int i = 0; i < maxSequence; i++)
+            {
+                var foundSequences = sequences.Where(x => x.Sequence == i).ToList();
+                var issue = ValidateSequences(quest, i, foundSequences);
+                if (issue != null)
+                    yield return issue;
+            }
+
             var foundEnding = sequences.Where(x => x.Sequence == 255).ToList();
             var endingIssue = ValidateSequences(quest, 255, foundEnding);
             if (endingIssue != null)

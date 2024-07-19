@@ -172,7 +172,13 @@ internal sealed class QuestSelectionWindow : LWindow
                             ImGui.TextUnformatted("Repeatable");
                         }
 
-                        if (!_questRegistry.IsKnownQuest(quest.QuestId))
+                        if (quest.CompletesInstantly)
+                        {
+                            ImGui.SameLine();
+                            ImGui.TextUnformatted("Instant");
+                        }
+
+                        if (!isKnownQuest)
                         {
                             ImGui.SameLine();
                             ImGui.TextUnformatted("NoQuestPath");

@@ -220,11 +220,19 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
             else
             {
                 ImGui.BeginDisabled();
-                ImGui.TextUnformatted(_questController.DebugState ?? "--");
+                ImGui.TextUnformatted(_questController.DebugState ?? string.Empty);
                 ImGui.EndDisabled();
             }
 
-            ImGui.TextUnformatted(_questController.Comment ?? "--");
+            QuestSequence? currentSequence = currentQuest.Quest.FindSequence(currentQuest.Sequence);
+            QuestStep? currentStep = currentSequence?.FindStep(currentQuest.Step);
+            bool colored = currentStep is
+                { InteractionType: EInteractionType.Instruction or EInteractionType.WaitForManualProgress };
+            if (colored)
+                ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudOrange);
+            ImGui.TextUnformatted(currentStep?.Comment ?? currentSequence?.Comment ?? currentQuest.Quest.Root.Comment ?? string.Empty);
+            if (colored)
+                ImGui.PopStyleColor();
 
             //var nextStep = _questController.GetNextStep();
             //ImGui.BeginDisabled(nextStep.Step == null);
@@ -257,15 +265,12 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
                 _questController.Stop("Manual");
             }
 
-            QuestStep? currentStep = currentQuest.Quest
-                .FindSequence(currentQuest.Sequence)
-                ?.FindStep(currentQuest.Step);
             bool lastStep = currentStep ==
                             currentQuest.Quest.FindSequence(currentQuest.Sequence)?.Steps.LastOrDefault();
-            bool colored = currentStep != null
-                           && !lastStep
-                           && currentStep.InteractionType == EInteractionType.Instruction
-                           && _questController.HasCurrentTaskMatching<WaitAtEnd.WaitNextStepOrSequence>();
+            colored = currentStep != null
+                      && !lastStep
+                      && currentStep.InteractionType == EInteractionType.Instruction
+                      && _questController.HasCurrentTaskMatching<WaitAtEnd.WaitNextStepOrSequence>();
 
             ImGui.BeginDisabled(lastStep);
             if (colored)

@@ -22,6 +22,7 @@ internal sealed class QuestInfo
         QuestLocks = quest.QuestLock.Select(x => (ushort)(x.Row & 0xFFFFF)).Where(x => x != 0).ToImmutableList();
         QuestLockJoin = (QuestJoin)quest.QuestLockJoin;
         IsMainScenarioQuest = quest.JournalGenre?.Value?.JournalCategory?.Value?.JournalSection?.Row is 0 or 1;
+        CompletesInstantly = quest.ToDoCompleteSeq[0] == 0;
     }
 
     public ushort QuestId { get; }
@@ -31,9 +32,10 @@ internal sealed class QuestInfo
     public bool IsRepeatable { get; }
     public ImmutableList<ushort> PreviousQuests { get; }
     public QuestJoin PreviousQuestJoin { get; }
-    public bool IsMainScenarioQuest { get; }
     public ImmutableList<ushort> QuestLocks { get; set; }
     public QuestJoin QuestLockJoin { get; set; }
+    public bool IsMainScenarioQuest { get; }
+    public bool CompletesInstantly { get; set; }
 
     public string SimplifiedName => Name
         .TrimStart(SeIconChar.QuestSync.ToIconChar(), SeIconChar.QuestRepeatable.ToIconChar(), ' ');

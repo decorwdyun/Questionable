@@ -83,7 +83,6 @@ internal sealed class QuestController
     public QuestProgress? NextQuest => _nextQuest;
 
     public string? DebugState { get; private set; }
-    public string? Comment { get; private set; }
 
     public void Reload()
     {
@@ -212,7 +211,6 @@ internal sealed class QuestController
             if (questToRun == null)
             {
                 DebugState = "No quest active";
-                Comment = null;
                 Stop("No quest active");
                 return;
             }
@@ -240,7 +238,6 @@ internal sealed class QuestController
             if (sequence == null)
             {
                 DebugState = "Sequence not found";
-                Comment = null;
                 Stop("Unknown sequence");
                 return;
             }
@@ -248,7 +245,6 @@ internal sealed class QuestController
             if (questToRun.Step == 255)
             {
                 DebugState = "Step completed";
-                Comment = null;
                 if (_currentTask != null || _taskQueue.Count > 0)
                     Stop("Step complete", continueIfAutomatic: true);
                 return;
@@ -257,14 +253,11 @@ internal sealed class QuestController
             if (questToRun.Step >= sequence.Steps.Count)
             {
                 DebugState = "Step not found";
-                Comment = null;
                 Stop("Unknown step");
                 return;
             }
 
-            var step = sequence.Steps[questToRun.Step];
             DebugState = null;
-            Comment = step.Comment ?? sequence.Comment ?? q.Root.Comment;
         }
     }
 
