@@ -149,7 +149,8 @@
             "Z": -380.82272
           },
           "TerritoryId": 140,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "$": "Avoid walking around Waking Sands table"
         },
         {
           "DataId": 2001711,

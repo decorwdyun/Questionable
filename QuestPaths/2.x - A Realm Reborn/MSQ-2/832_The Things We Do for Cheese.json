@@ -1,6 +1,9 @@
 {
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "JerryWester",
+  "TerritoryBlacklist": [
+    1041
+  ],
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -47,18 +50,23 @@
             "Z": 89.37195
           },
           "TerritoryId": 137,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 137
         },
         {
-          "DataId": 12,
-          "Position": {
-            "X": -18.387146,
-            "Y": 72.67859,
-            "Z": 3.829956
-          },
           "TerritoryId": 137,
           "InteractionType": "AttuneAetheryte",
-          "StopDistance": 5
+          "StopDistance": 5,
+          "Aetheryte": "Eastern La Noscea - Wineport"
+        },
+        {
+          "Position": {
+            "X": -272.5533,
+            "Y": 59.7689,
+            "Z": 176.81541
+          },
+          "TerritoryId": 137,
+          "InteractionType": "WalkTo"
         },
         {
           "DataId": 1006268,
@@ -76,12 +84,6 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 2002702,
-          "Position": {
-            "X": -338.61298,
-            "Y": 69.01648,
-            "Z": 159.65515
-          },
           "TerritoryId": 137,
           "InteractionType": "Duty",
           "ContentFinderConditionId": 8

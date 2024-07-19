@@ -62,7 +62,15 @@
             "Z": 454.5509
           },
           "TerritoryId": 137,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            8,
+            null
+          ]
         },
         {
           "DataId": 1006318,
@@ -72,7 +80,15 @@
             "Z": 451.0719
           },
           "TerritoryId": 137,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            16,
+            null
+          ]
         },
         {
           "DataId": 1006317,
@@ -82,7 +98,15 @@
             "Z": 450.43103
           },
           "TerritoryId": 137,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            64,
+            null
+          ]
         },
         {
           "DataId": 1006316,
@@ -92,7 +116,15 @@
             "Z": 457.02295
           },
           "TerritoryId": 137,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            32,
+            null
+          ]
         },
         {
           "DataId": 1006266,
@@ -102,7 +134,15 @@
             "Z": 455.89368
           },
           "TerritoryId": 137,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            128,
+            null
+          ]
         }
       ]
     },
@@ -116,6 +156,7 @@
             "Y": 20.706482,
             "Z": 451.13293
           },
+          "StopDistance": 7,
           "TerritoryId": 137,
           "InteractionType": "CompleteQuest"
         }

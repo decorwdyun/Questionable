@@ -35,15 +35,10 @@
           "TargetTerritoryId": 146
         },
         {
-          "DataId": 19,
-          "Position": {
-            "X": -159.3805,
-            "Y": 30.105957,
-            "Z": -415.45746
-          },
           "TerritoryId": 146,
           "InteractionType": "AttuneAetheryte",
-          "StopDistance": 7
+          "StopDistance": 7,
+          "Aetheryte": "Southern Thanalan - Little Ala Mhigo"
         },
         {
           "DataId": 1006211,

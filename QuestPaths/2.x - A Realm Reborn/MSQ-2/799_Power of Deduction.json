@@ -12,6 +12,7 @@
             "Y": -44.86571,
             "Z": 262.65344
           },
+          "StopDistance": 7,
           "TerritoryId": 154,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "North Shroud - Fallgourd Float",

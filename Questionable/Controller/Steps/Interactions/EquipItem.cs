@@ -44,6 +44,8 @@ internal static class EquipItem
             InventoryType.ArmoryWrist,
             InventoryType.ArmoryRings,
 
+            InventoryType.ArmorySoulCrystal,
+
             InventoryType.Inventory1,
             InventoryType.Inventory2,
             InventoryType.Inventory3,
@@ -81,9 +83,12 @@ internal static class EquipItem
             if (inventoryManager == null)
                 return ETaskResult.StillRunning;
 
-            if (_targetSlots.Any(x =>
-                    inventoryManager->GetInventorySlot(InventoryType.EquippedItems, x)->ItemId == _itemId))
-                return ETaskResult.TaskComplete;
+            foreach (ushort x in _targetSlots)
+            {
+                var itemSlot = inventoryManager->GetInventorySlot(InventoryType.EquippedItems, x);
+                if (itemSlot != null && itemSlot->ItemId == _itemId)
+                    return ETaskResult.TaskComplete;
+            }
 
             Equip();
             _continueAt = DateTime.Now.AddSeconds(1);
@@ -100,10 +105,14 @@ internal static class EquipItem
             if (equippedContainer == null)
                 return;
 
-            if (_targetSlots.Any(slot => equippedContainer->GetInventorySlot(slot)->ItemId == _itemId))
+            foreach (ushort slot in _targetSlots)
             {
-                logger.LogInformation("Already equipped {Item}, skipping step", _item.Name?.ToString());
-                return;
+                var itemSlot = equippedContainer->GetInventorySlot(slot);
+                if (itemSlot != null && itemSlot->ItemId == _itemId)
+                {
+                    logger.LogInformation("Already equipped {Item}, skipping step", _item.Name?.ToString());
+                    return;
+                }
             }
 
             foreach (InventoryType sourceInventoryType in SourceInventoryTypes)
@@ -124,7 +133,11 @@ internal static class EquipItem
 
                     // Move the item to the first available slot
                     ushort targetSlot = _targetSlots
-                        .Where(x => inventoryManager->GetInventorySlot(InventoryType.EquippedItems, x)->ItemId == 0)
+                        .Where(x =>
+                        {
+                            var itemSlot = inventoryManager->GetInventorySlot(InventoryType.EquippedItems, x);
+                            return itemSlot == null || itemSlot->ItemId == 0;
+                        })
                         .Concat(_targetSlots).First();
 
                     logger.LogInformation(
@@ -146,7 +159,7 @@ internal static class EquipItem
                 >= 1 and <= 11 => [(ushort)(item.EquipSlotCategory.Row - 1)],
                 12 => [11, 12], // rings
                 13 => [0],
-                17 => [14], // soul crystal
+                17 => [13], // soul crystal
                 _ => null
             };
         }

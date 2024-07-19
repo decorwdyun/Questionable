@@ -21,6 +21,29 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1006259,
+          "Position": {
+            "X": 43.808594,
+            "Y": 2.5499606,
+            "Z": 21.683044
+          },
+          "TerritoryId": 132,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 802,
+          "AetheryteShortcut": "Gridania"
+        },
+        {
+          "DataId": 1000171,
+          "Position": {
+            "X": -114.366455,
+            "Y": -7.351947,
+            "Z": 94.52954
+          },
+          "TerritoryId": 132,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 148
+        },
+        {
           "DataId": 2001999,
           "Position": {
             "X": -576.1349,
@@ -28,8 +51,7 @@
             "Z": 69.41321
           },
           "TerritoryId": 148,
-          "InteractionType": "Interact",
-          "AetheryteShortcut": "Central Shroud - Bentbranch Meadows"
+          "InteractionType": "Interact"
         }
       ]
     },
@@ -37,15 +59,24 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 2002701,
-          "Position": {
-            "X": -574.4259,
-            "Y": 67.00232,
-            "Z": 71.39697
-          },
           "TerritoryId": 148,
           "InteractionType": "Duty",
           "ContentFinderConditionId": 6
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "Position": {
+            "X": 0,
+            "Y": 0,
+            "Z": 0
+          },
+          "TerritoryId": 1,
+          "InteractionType": "WalkTo",
+          "Comment": "Filler"
         }
       ]
     },
@@ -78,6 +109,16 @@
           "ItemId": 30362
         },
         {
+          "Position": {
+            "X": -492.96475,
+            "Y": 20.999884,
+            "Z": -380.82272
+          },
+          "TerritoryId": 140,
+          "InteractionType": "WalkTo",
+          "$": "Avoid walking around Waking Sands table"
+        },
+        {
           "DataId": 2001711,
           "Position": {
             "X": -480.91858,
@@ -85,7 +126,8 @@
             "Z": -386.862
           },
           "TerritoryId": 140,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 212
         },
         {
           "DataId": 2001715,
@@ -95,7 +137,8 @@
             "Z": -0.015319824
           },
           "TerritoryId": 212,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 212
         },
         {
           "DataId": 1006688,

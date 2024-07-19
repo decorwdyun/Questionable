@@ -69,7 +69,7 @@ public sealed class QuestStep
     public IList<uint> PointMenuChoices { get; set; } = new List<uint>();
 
     // TODO: Not implemented
-    public ushort? PickupQuestId { get; set; }
+    public ushort? PickUpQuestId { get; set; }
 
     public ushort? TurnInQuestId { get; set; }
     public ushort? NextQuestId { get; set; }

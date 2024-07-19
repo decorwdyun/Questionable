@@ -26,15 +26,26 @@
       "Steps": [
         {
           "Position": {
-            "X": 260.3064,
-            "Y": 3.8526046,
-            "Z": 15.633602
+            "X": 262.89966,
+            "Y": 11.363011,
+            "Z": -143.02156
           },
           "TerritoryId": 153,
           "InteractionType": "Combat",
           "EnemySpawnType": "OverworldEnemies",
-          "KillEnemyDataIds": [
-            4
+          "ComplexCombatData": [
+            {
+              "DataId": 4,
+              "MinimumKillCount": 4,
+              "CompletionQuestVariablesFlags": [
+                null,
+                64,
+                null,
+                null,
+                null,
+                null
+              ]
+            }
           ]
         }
       ]
@@ -80,7 +91,8 @@
             "Z": -39.932922
           },
           "TerritoryId": 153,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "South Shroud - Quarrymill"
         }
       ]
     }

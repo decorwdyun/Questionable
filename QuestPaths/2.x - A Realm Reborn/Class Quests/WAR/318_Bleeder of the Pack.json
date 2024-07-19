@@ -48,6 +48,7 @@
           },
           "TerritoryId": 135,
           "InteractionType": "SinglePlayerDuty",
+          "AetheryteShortcut": "Lower La Noscea - Moraby Drydocks",
           "Fly": true
         }
       ]
@@ -68,7 +69,8 @@
           "AethernetShortcut": [
             "[Limsa Lominsa] Aetheryte Plaza",
             "[Limsa Lominsa] Marauders' Guild"
-          ]
+          ],
+          "NextQuestId": 319
         }
       ]
     }

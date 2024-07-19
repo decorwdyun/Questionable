@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Numerics;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,10 +39,17 @@ internal static class UseItem
             var unmount = serviceProvider.GetRequiredService<UnmountTask>();
             if (step.GroundTarget == true)
             {
-                ArgumentNullException.ThrowIfNull(step.DataId);
+                ITask task;
+                if (step.DataId != null)
+                    task = serviceProvider.GetRequiredService<UseOnGround>()
+                        .With(step.DataId.Value, step.ItemId.Value);
+                else
+                {
+                    ArgumentNullException.ThrowIfNull(step.Position);
+                    task = serviceProvider.GetRequiredService<UseOnPosition>()
+                        .With(step.Position.Value, step.ItemId.Value);
+                }
 
-                var task = serviceProvider.GetRequiredService<UseOnGround>()
-                    .With(step.DataId.Value, step.ItemId.Value);
                 return [unmount, task];
             }
             else if (step.DataId != null)
@@ -159,6 +167,24 @@ internal static class UseItem
         protected override bool UseItem() => gameFunctions.UseItemOnGround(DataId, ItemId);
 
         public override string ToString() => $"UseItem({ItemId} on ground at {DataId})";
+    }
+
+    internal sealed class UseOnPosition(GameFunctions gameFunctions, ILogger<UseOnPosition> logger)
+        : UseItemBase(logger)
+    {
+        public Vector3 Position { get; set; }
+
+        public ITask With(Vector3 position, uint itemId)
+        {
+            Position = position;
+            ItemId = itemId;
+            return this;
+        }
+
+        protected override bool UseItem() => gameFunctions.UseItemOnPosition(Position, ItemId);
+
+        public override string ToString() =>
+            $"UseItem({ItemId} on ground at {Position.ToString("G", CultureInfo.InvariantCulture)})";
     }
 
     internal sealed class UseOnObject(GameFunctions gameFunctions, ILogger<UseOnObject> logger) : UseItemBase(logger)

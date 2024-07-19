@@ -32,7 +32,15 @@
             "Z": -247.82184
           },
           "TerritoryId": 146,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 1006704,
@@ -42,7 +50,15 @@
             "Z": -165.45361
           },
           "TerritoryId": 146,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 1006703,
@@ -52,7 +68,15 @@
             "Z": -133.22656
           },
           "TerritoryId": 146,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         }
       ]
     },
@@ -67,7 +91,8 @@
             "Z": -402.02948
           },
           "TerritoryId": 146,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Southern Thanalan - Little Ala Mhigo"
         }
       ]
     }

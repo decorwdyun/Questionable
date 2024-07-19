@@ -21,21 +21,25 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 7,
-          "Position": {
-            "X": -41.58087,
-            "Y": -38.55963,
-            "Z": 233.7528
-          },
           "TerritoryId": 154,
           "InteractionType": "AttuneAetheryte",
-          "StopDistance": 5
+          "StopDistance": 5,
+          "Aetheryte": "North Shroud - Fallgourd Float"
         },
         {
           "Position": {
-            "X": -220.29037,
-            "Y": -28.43536,
-            "Z": 283.79355
+            "X": -214.10292,
+            "Y": -56.837837,
+            "Z": 295.99493
+          },
+          "TerritoryId": 154,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "Position": {
+            "X": -276.81464,
+            "Y": -56.335888,
+            "Z": 302.93182
           },
           "TerritoryId": 154,
           "InteractionType": "Combat",

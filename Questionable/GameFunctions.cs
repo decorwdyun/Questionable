@@ -128,6 +128,13 @@ internal sealed unsafe class GameFunctions
             if (chocoboQuest != 0 && !QuestManager.IsQuestComplete(chocoboQuest))
                 return (chocoboQuest, QuestManager.GetQuestSequence(chocoboQuest));
         }
+        else if (currentQuest == 801)
+        {
+            // skeletons in her closet, finish 'broadening horizons' to unlock the white wolf gate
+            ushort broadeningHorizons = 802;
+            if (questManager->IsQuestAccepted(broadeningHorizons))
+                return (broadeningHorizons, QuestManager.GetQuestSequence(broadeningHorizons));
+        }
 
         return (currentQuest, sequence);
     }
@@ -441,6 +448,11 @@ internal sealed unsafe class GameFunctions
         }
 
         return false;
+    }
+
+    public bool UseItemOnPosition(Vector3 position, uint itemId)
+    {
+        return ActionManager.Instance()->UseActionLocation(ActionType.KeyItem, itemId, location: &position);
     }
 
     public bool UseAction(EAction action)

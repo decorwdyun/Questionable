@@ -1,6 +1,9 @@
 {
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "JerryWester",
+  "TerritoryBlacklist": [
+    1046
+  ],
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -12,6 +15,7 @@
             "Y": 16.258692,
             "Z": 128.37415
           },
+          "StopDistance": 7,
           "TerritoryId": 139,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Upper La Noscea - Camp Bronze Lake",
@@ -40,15 +44,9 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 2002690,
-          "Position": {
-            "X": 381.39917,
-            "Y": 23.727722,
-            "Z": -140.79504
-          },
           "TerritoryId": 139,
           "InteractionType": "Duty",
-          "ContentFinderConditionId": 20002
+          "ContentFinderConditionId": 57
         }
       ]
     },

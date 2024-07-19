@@ -46,15 +46,20 @@
           "TargetTerritoryId": 137
         },
         {
-          "DataId": 11,
           "Position": {
-            "X": 489.15845,
-            "Y": 20.828491,
-            "Z": 468.80298
+            "X": 378.54834,
+            "Y": 21.81276,
+            "Z": 478.4722
           },
           "TerritoryId": 137,
+          "InteractionType": "WalkTo",
+          "$": "Avoids the beach due to rocks, doesn't even look like a faster path"
+        },
+        {
+          "TerritoryId": 137,
           "InteractionType": "AttuneAetheryte",
-          "StopDistance": 5
+          "StopDistance": 5,
+          "Aetheryte": "Eastern La Noscea - Costa Del Sol"
         },
         {
           "DataId": 1006266,

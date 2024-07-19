@@ -74,16 +74,22 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 20,
+          "DataId": 1004596,
           "Position": {
-            "X": -326.6194,
-            "Y": 10.696533,
-            "Z": 406.63757
+            "X": -471.27496,
+            "Y": -2.650424,
+            "Z": 95.628296
           },
+          "TerritoryId": 146,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 146,
+          "AetheryteShortcut": "Southern Thanalan - Little Ala Mhigo"
+        },
+        {
           "TerritoryId": 146,
           "InteractionType": "AttuneAetheryte",
           "StopDistance": 5,
-          "AetheryteShortcut": "Southern Thanalan - Little Ala Mhigo"
+          "Aetheryte": "Southern Thanalan - Forgotten Springs"
         },
         {
           "DataId": 1004917,

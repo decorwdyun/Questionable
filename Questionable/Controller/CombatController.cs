@@ -157,21 +157,21 @@ internal sealed class CombatController
 
     private unsafe bool IsEnemyToKill(IGameObject gameObject)
     {
-        if (gameObject is IBattleChara battleChara)
+        if (gameObject is IBattleNpc battleNpc)
         {
             // TODO this works as somewhat of a delay between killing enemies if certain items/flags are checked
             // but also delays killing the next enemy a little
             if (_currentFight == null || _currentFight.Data.SpawnType != EEnemySpawnType.OverworldEnemies ||
                 _currentFight.Data.ComplexCombatDatas.Count == 0)
             {
-                if (battleChara.IsDead)
+                if (battleNpc.IsDead)
                     return false;
             }
 
-            if (!battleChara.IsTargetable)
+            if (!battleNpc.IsTargetable)
                 return false;
 
-            if (battleChara.TargetObjectId == _clientState.LocalPlayer?.GameObjectId)
+            if (battleNpc.TargetObjectId == _clientState.LocalPlayer?.GameObjectId)
                 return true;
 
             if (_currentFight != null)
@@ -184,18 +184,18 @@ internal sealed class CombatController
                         if (_currentFight.Data.CompletedComplexDatas.Contains(i))
                             continue;
 
-                        if (complexCombatData[i].DataId == battleChara.DataId)
+                        if (complexCombatData[i].DataId == battleNpc.DataId)
                             return true;
                     }
                 }
                 else
                 {
-                    if (_currentFight.Data.KillEnemyDataIds.Contains(battleChara.DataId))
+                    if (_currentFight.Data.KillEnemyDataIds.Contains(battleNpc.DataId))
                         return true;
                 }
             }
 
-            if (battleChara.StatusFlags.HasFlag(StatusFlags.Hostile))
+            if (battleNpc.BattleNpcKind is BattleNpcSubKind.BattleNpcPart or BattleNpcSubKind.Enemy)
             {
                 var gameObjectStruct = (GameObject*)gameObject.Address;
                 return gameObjectStruct->NamePlateIconId != 0;

@@ -21,12 +21,12 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 1006731,
           "Position": {
-            "X": 52.231567,
-            "Y": 235.30933,
-            "Z": 347.85986
+            "X": 48.65701,
+            "Y": 234.78163,
+            "Z": 348.13953
           },
+          "StopDistance": 1,
           "TerritoryId": 155,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",

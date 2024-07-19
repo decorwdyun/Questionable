@@ -25,18 +25,6 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 6,
-          "Position": {
-            "X": -230.0603,
-            "Y": 22.62909,
-            "Z": 355.45886
-          },
-          "TerritoryId": 153,
-          "InteractionType": "AttuneAetheryte",
-          "StopDistance": 5,
-          "AetheryteShortcut": "South Shroud - Quarrymill"
-        },
-        {
           "DataId": 1006279,
           "Position": {
             "X": -231.4336,
@@ -44,7 +32,8 @@
             "Z": 339.49792
           },
           "TerritoryId": 153,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "South Shroud - Camp Tranquil"
         }
       ]
     }

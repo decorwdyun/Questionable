@@ -368,7 +368,7 @@ public class QuestSourceGenerator : ISourceGenerator
                                                 .AsSyntaxNodeOrToken(),
                                             AssignmentList(nameof(QuestStep.PointMenuChoices), step.PointMenuChoices)
                                                 .AsSyntaxNodeOrToken(),
-                                            Assignment(nameof(QuestStep.PickupQuestId), step.PickupQuestId, emptyStep.PickupQuestId)
+                                            Assignment(nameof(QuestStep.PickUpQuestId), step.PickUpQuestId, emptyStep.PickUpQuestId)
                                                 .AsSyntaxNodeOrToken(),
                                             Assignment(nameof(QuestStep.TurnInQuestId), step.TurnInQuestId, emptyStep.TurnInQuestId)
                                                 .AsSyntaxNodeOrToken(),

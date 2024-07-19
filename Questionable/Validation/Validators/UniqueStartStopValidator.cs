@@ -10,7 +10,7 @@ internal sealed class UniqueStartStopValidator : IQuestValidator
     public IEnumerable<ValidationIssue> Validate(Quest quest)
     {
         var questAccepts = FindQuestStepsWithInteractionType(quest, EInteractionType.AcceptQuest)
-            .Where(x => x.Step.PickupQuestId == null)
+            .Where(x => x.Step.PickUpQuestId == null)
             .ToList();
         foreach (var accept in questAccepts)
         {

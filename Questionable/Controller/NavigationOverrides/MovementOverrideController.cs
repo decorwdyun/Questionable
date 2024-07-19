@@ -16,6 +16,13 @@ internal sealed class MovementOverrideController
         new BlacklistedPoint(128, new(2f, 40.25f, 36.5f), new(0.25f, 40.25f, 36.5f)),
 
         new BlacklistedPoint(132, new(45.5f, -8f, 101f), new(50.53978f, -8.046954f, 101.06045f)),
+
+        // eastern thanalan
+        new BlacklistedPoint(145, new(-139.75f, -32.25f, 75.25f), new(-139.57748f, -33.785175f, 77.87906f)),
+
+        // southern thanalan
+        new BlacklistedPoint(146, new(-201.75f, 10.5f, -265.5f), new(-203.75235f, 10.130764f, -265.15314f)),
+
         new BlacklistedPoint(1189, new(574f, -142.25f, 504.25f), new(574.44183f, -142.12766f, 507.60065f)),
 
         // heritage found: yyupye's halo (farm, npc: Mahuwsa)

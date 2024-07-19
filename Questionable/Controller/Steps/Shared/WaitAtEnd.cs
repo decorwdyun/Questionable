@@ -111,7 +111,7 @@ internal static class WaitAtEnd
                     return
                     [
                         serviceProvider.GetRequiredService<WaitQuestAccepted>()
-                            .With(step.PickupQuestId ?? quest.QuestId),
+                            .With(step.PickUpQuestId ?? quest.QuestId),
                         serviceProvider.GetRequiredService<WaitDelay>()
                     ];
 
