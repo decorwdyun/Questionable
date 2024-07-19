@@ -74,7 +74,7 @@
             "Z": 262.65344
           },
           "TerritoryId": 154,
-          "InteractionType": "Emote",
+          "InteractionType": "CompleteQuest",
           "Emote": "soothe"
         }
       ]
