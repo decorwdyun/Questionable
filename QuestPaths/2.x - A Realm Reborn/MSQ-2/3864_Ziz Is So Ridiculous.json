@@ -1,0 +1,66 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "JerryWester",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1006241,
+          "Position": {
+            "X": 17.349426,
+            "Y": -44.86564,
+            "Z": 262.745
+          },
+          "TerritoryId": 154,
+          "InteractionType": "AcceptQuest"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 7,
+          "Position": {
+            "X": -41.58087,
+            "Y": -38.55963,
+            "Z": 233.7528
+          },
+          "TerritoryId": 154,
+          "InteractionType": "AttuneAetheryte",
+          "StopDistance": 5
+        },
+        {
+          "Position": {
+            "X": -220.29037,
+            "Y": -28.43536,
+            "Z": 283.79355
+          },
+          "TerritoryId": 154,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "OverworldEnemies",
+          "KillEnemyDataIds": [
+            179
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1006241,
+          "Position": {
+            "X": 17.349426,
+            "Y": -44.86564,
+            "Z": 262.745
+          },
+          "TerritoryId": 154,
+          "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "North Shroud - Fallgourd Float"
+        }
+      ]
+    }
+  ]
+}
