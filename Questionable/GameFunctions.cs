@@ -147,7 +147,9 @@ internal sealed unsafe class GameFunctions
             // always prioritize accepting MSQ quests, to make sure we don't turn in one MSQ quest and then go off to do
             // side quests until the end of time.
             var msqQuest = GetMainScenarioQuest(questManager);
-            if (msqQuest.CurrentQuest != 0 && !questManager->IsQuestAccepted(msqQuest.CurrentQuest))
+            if (msqQuest.CurrentQuest != 0 &&
+                _questRegistry.IsKnownQuest(msqQuest.CurrentQuest) &&
+                !questManager->IsQuestAccepted(msqQuest.CurrentQuest))
                 return msqQuest;
 
             // Use the quests in the same order as they're shown in the to-do list, e.g. if the MSQ is the first item,
