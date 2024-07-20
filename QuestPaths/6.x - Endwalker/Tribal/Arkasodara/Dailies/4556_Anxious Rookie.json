@@ -19,8 +19,64 @@
     },
     {
       "Sequence": 1,
-      "Comment": "There are more NPC/dialogue choices",
       "Steps": [
+        {
+          "DataId": 1042368,
+          "Position": {
+            "X": -485.771,
+            "Y": 39.62969,
+            "Z": 114.213745
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Thavnair - Great Work",
+          "Fly": true,
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_BANARK106_04556_Q1_000_000",
+              "Answer": "TEXT_BANARK106_04556_A1_000_001"
+            }
+          ],
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [
+              48
+            ],
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "DataId": 1042369,
+          "Position": {
+            "X": -561.2726,
+            "Y": 11.802609,
+            "Z": 128.95398
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_BANARK106_04556_Q2_000_000",
+              "Answer": "TEXT_BANARK106_04556_A2_000_001"
+            }
+          ],
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [
+              16
+            ],
+            null,
+            null,
+            null
+          ]
+        },
         {
           "DataId": 1042370,
           "Position": {
@@ -37,8 +93,15 @@
               "Answer": "TEXT_BANARK106_04556_A3_000_001"
             }
           ],
-          "SkipIf": [
-            "NotTargetable"
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [
+              32
+            ],
+            null,
+            null,
+            null
           ]
         }
       ]

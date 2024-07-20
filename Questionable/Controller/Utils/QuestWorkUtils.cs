@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
+using Microsoft.Extensions.Logging;
+using Questionable.Controller.Steps.Shared;
+using Questionable.Model.V1;
 
 namespace Questionable.Controller.Utils;
 
@@ -44,5 +47,43 @@ internal static class QuestWorkUtils
         }
 
         return true;
+    }
+
+    public static bool MatchesRequiredQuestWorkConfig(List<List<QuestWorkValue>?> requiredQuestVariables,
+        QuestWork questWork, ILogger<SkipCondition.CheckTask> logger)
+    {
+        if (requiredQuestVariables.Count != 6 || requiredQuestVariables.All(x => x == null || x.Count == 0))
+        {
+            logger.LogInformation("No RQW defined");
+            return true;
+        }
+
+        for (int i = 0; i < 6; ++i)
+        {
+            if (requiredQuestVariables[i] == null)
+            {
+                logger.LogInformation("No RQW {Index} defined", i);
+                continue;
+            }
+
+            byte high = (byte)(questWork.Variables[i] >> 4);
+            byte low = (byte)(questWork.Variables[i] & 0xF);
+
+            foreach (QuestWorkValue expectedValue in requiredQuestVariables[i]!)
+            {
+                logger.LogInformation("H: {ExpectedHigh} - {ActualHigh}, L: {ExpectedLow} - {ActualLow}",
+                    expectedValue.High, high, expectedValue.Low, low);
+                if (expectedValue.High != null && expectedValue.High != high)
+                    continue;
+
+                if (expectedValue.Low != null && expectedValue.Low != low)
+                    continue;
+
+                return true;
+            }
+        }
+
+        logger.LogInformation("Should execute step");
+        return false;
     }
 }

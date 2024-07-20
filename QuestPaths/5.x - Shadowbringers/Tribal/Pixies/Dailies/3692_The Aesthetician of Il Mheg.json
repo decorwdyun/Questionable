@@ -1,7 +1,6 @@
 {
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -20,17 +19,19 @@
     },
     {
       "Sequence": 1,
-      "Comment": "TODO Has multiple possible targets, unsure if QW works",
       "Steps": [
         {
           "Position": {
-            "X": -342.05676,
-            "Y": 37.5036,
-            "Z": 434.53723
+            "X": -344.05838,
+            "Y": 45.450672,
+            "Z": 456.10266
           },
           "TerritoryId": 816,
           "InteractionType": "WalkTo",
-          "Fly": true
+          "Fly": true,
+          "SkipIf": [
+            "FlyingLocked"
+          ]
         },
         {
           "DataId": 2010860,
@@ -41,8 +42,23 @@
           },
           "TerritoryId": 816,
           "InteractionType": "Interact",
-          "SkipIf": [
-            "NotTargetable"
+          "RequiredQuestVariables": [
+            null,
+            [
+              {
+                "Low": 1
+              },
+              {
+                "Low": 2
+              },
+              {
+                "Low": 3
+              }
+            ],
+            null,
+            null,
+            null,
+            null
           ]
         },
         {
@@ -54,8 +70,23 @@
           },
           "TerritoryId": 816,
           "InteractionType": "Interact",
-          "SkipIf": [
-            "NotTargetable"
+          "RequiredQuestVariables": [
+            null,
+            [
+              {
+                "Low": 3
+              },
+              {
+                "Low": 4
+              },
+              {
+                "Low": 5
+              }
+            ],
+            null,
+            null,
+            null,
+            null
           ]
         },
         {
@@ -67,8 +98,23 @@
           },
           "TerritoryId": 816,
           "InteractionType": "Interact",
-          "SkipIf": [
-            "NotTargetable"
+          "RequiredQuestVariables": [
+            null,
+            [
+              {
+                "Low": 1
+              },
+              {
+                "Low": 4
+              },
+              {
+                "Low": 6
+              }
+            ],
+            null,
+            null,
+            null,
+            null
           ],
           "IgnoreDistanceToObject": true
         },
@@ -81,8 +127,23 @@
           },
           "TerritoryId": 816,
           "InteractionType": "Interact",
-          "SkipIf": [
-            "NotTargetable"
+          "RequiredQuestVariables": [
+            null,
+            [
+              {
+                "Low": 2
+              },
+              {
+                "Low": 5
+              },
+              {
+                "Low": 6
+              }
+            ],
+            null,
+            null,
+            null,
+            null
           ],
           "IgnoreDistanceToObject": true
         }

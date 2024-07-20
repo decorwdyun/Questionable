@@ -64,6 +64,7 @@ public sealed class QuestStep
     public uint? ContentFinderConditionId { get; set; }
 
     public IList<ESkipCondition> SkipIf { get; set; } = new List<ESkipCondition>();
+    public List<List<QuestWorkValue>?> RequiredQuestVariables { get; set; } = new();
     public IList<short?> CompletionQuestVariablesFlags { get; set; } = new List<short?>();
     public IList<DialogueChoice> DialogueChoices { get; set; } = new List<DialogueChoice>();
     public IList<uint> PointMenuChoices { get; set; } = new List<uint>();

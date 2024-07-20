@@ -32,7 +32,9 @@
           "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
             14676
-          ]
+          ],
+          "Fly": true,
+          "AetheryteShortcut": "Thavnair - Great Work"
         }
       ]
     },

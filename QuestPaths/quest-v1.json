@@ -188,6 +188,41 @@
                 "CompletionQuestVariablesFlags": {
                   "$ref": "#/$defs/CompletionFlags"
                 },
+                "RequiredQuestVariables": {
+                  "type": "array",
+                  "description": "Certain quests (primarily beast tribes/allied societies) have a RNG element to spawning targets, and the step should be skipped in its entirety if none of the sets below match",
+                  "minItems": 6,
+                  "maxItems": 6,
+                  "items": {
+                    "type": ["array", "null"],
+                    "items": {
+                      "type": [
+                        "number",
+                        "object"
+                      ],
+                      "properties": {
+                        "High": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0,
+                          "maximum": 15
+                        },
+                        "Low": {
+                          "type": [
+                            "number",
+                            "null"
+                          ],
+                          "minimum": 0,
+                          "maximum": 15
+                        }
+                      },
+                      "minimum": 0,
+                      "maximum": 255
+                    }
+                  }
+                },
                 "DelaySecondsAtStart": {
                   "description": "Time to wait before starting",
                   "type": [
@@ -567,6 +602,7 @@
                         "description": "The action to use",
                         "enum": [
                           "Esuna",
+                          "Siphon Snout",
                           "Red Gulal",
                           "Yellow Gulal",
                           "Blue Gulal"

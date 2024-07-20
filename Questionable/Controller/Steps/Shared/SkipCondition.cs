@@ -26,7 +26,9 @@ internal static class SkipCondition
 
             var relevantConditions =
                 step.SkipIf.Where(x => x != ESkipCondition.AetheryteShortcutIfInSameTerritory).ToList();
-            if (relevantConditions.Count == 0 && step.CompletionQuestVariablesFlags.Count == 0)
+            if (relevantConditions.Count == 0 &&
+                step.CompletionQuestVariablesFlags.Count == 0 &&
+                step.RequiredQuestVariables.Count == 0)
                 return null;
 
             return serviceProvider.GetRequiredService<CheckTask>()
@@ -100,7 +102,8 @@ internal static class SkipCondition
                 InventoryManager* inventoryManager = InventoryManager.Instance();
                 if (inventoryManager->GetInventoryItemCount(Step.ItemId.Value) == 0)
                 {
-                    logger.LogInformation("Skipping step, no item with itemId {ItemId} in inventory", Step.ItemId.Value);
+                    logger.LogInformation("Skipping step, no item with itemId {ItemId} in inventory",
+                        Step.ItemId.Value);
                     return true;
                 }
             }
@@ -124,11 +127,20 @@ internal static class SkipCondition
             }
 
             QuestWork? questWork = gameFunctions.GetQuestEx(QuestId);
-            if (questWork != null &&
-                QuestWorkUtils.MatchesQuestWork(Step.CompletionQuestVariablesFlags, questWork.Value, true))
+            if (questWork != null)
             {
-                logger.LogInformation("Skipping step, as quest variables match");
-                return true;
+                if (QuestWorkUtils.MatchesQuestWork(Step.CompletionQuestVariablesFlags, questWork.Value, true))
+                {
+                    logger.LogInformation("Skipping step, as quest variables match");
+                    return true;
+                }
+
+                if (!QuestWorkUtils.MatchesRequiredQuestWorkConfig(Step.RequiredQuestVariables, questWork.Value,
+                        logger))
+                {
+                    logger.LogInformation("Skipping step, as required variables do not match");
+                    return true;
+                }
             }
 
             return false;

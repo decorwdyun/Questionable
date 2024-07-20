@@ -1,7 +1,6 @@
 {
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -22,16 +21,6 @@
       "Sequence": 1,
       "Steps": [
         {
-          "Position": {
-            "X": -466.72015,
-            "Y": 44.63006,
-            "Z": -310.0618
-          },
-          "TerritoryId": 816,
-          "InteractionType": "WalkTo",
-          "Fly": true
-        },
-        {
           "DataId": 1032140,
           "Position": {
             "X": -459.89166,
@@ -43,8 +32,17 @@
           "ChatMessage": {
             "Key": "TEXT_BANPIX103_03691_SAYTODO_000_030"
           },
-          "SkipIf": [
-            "NotTargetable"
+          "$": "QW: 0 0 0 1 0 0",
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            null,
+            [
+              1
+            ],
+            null,
+            null
           ]
         },
         {
@@ -59,8 +57,17 @@
           "ChatMessage": {
             "Key": "TEXT_BANPIX103_03691_SAYTODO_000_030"
           },
-          "SkipIf": [
-            "NotTargetable"
+          "$": "QW: 0 0 0 3 0 0",
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            null,
+            [
+              3
+            ],
+            null,
+            null
           ]
         },
         {
@@ -70,13 +77,22 @@
             "Y": 50.10258,
             "Z": -328.26733
           },
+          "$": "QW: 0 0 0 2 0 0",
           "TerritoryId": 816,
           "InteractionType": "Say",
           "ChatMessage": {
             "Key": "TEXT_BANPIX103_03691_SAYTODO_000_030"
           },
-          "SkipIf": [
-            "NotTargetable"
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            null,
+            [
+              2
+            ],
+            null,
+            null
           ]
         }
       ]

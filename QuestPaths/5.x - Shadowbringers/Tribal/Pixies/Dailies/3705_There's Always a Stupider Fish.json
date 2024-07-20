@@ -41,7 +41,39 @@
           "TerritoryId": 816,
           "InteractionType": "Interact",
           "DisableNavmesh": true,
-          "$": "QW: 0 2 0 0 0 0"
+          "$": "QW: 0 2 0 0 0 0",
+          "SkipIf": [
+            "NotTargetable"
+          ]
+        },
+        {
+          "DataId": 2010904,
+          "Position": {
+            "X": -164.93481,
+            "Y": -50.919373,
+            "Z": 71.15283
+          },
+          "TerritoryId": 816,
+          "InteractionType": "Interact",
+          "$": "QW: 0 3 0 0 0 0",
+          "SkipIf": [
+            "NotTargetable"
+          ]
+        },
+        {
+          "DataId": 2010910,
+          "Position": {
+            "X": -189.86804,
+            "Y": -66.941345,
+            "Z": 13.046387
+          },
+          "TerritoryId": 816,
+          "InteractionType": "Interact",
+          "DisableNavmesh": true,
+          "$": "QW: 0 1 0 0 0 0",
+          "SkipIf": [
+            "NotTargetable"
+          ]
         }
       ]
     },

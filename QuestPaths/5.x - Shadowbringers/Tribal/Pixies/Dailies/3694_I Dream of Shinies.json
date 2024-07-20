@@ -42,6 +42,25 @@
           "DisableNavmesh": true
         },
         {
+          "DataId": 2010865,
+          "Position": {
+            "X": -335.59174,
+            "Y": -53.75763,
+            "Z": -277.9126
+          },
+          "TerritoryId": 816,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            null,
+            [1],
+            null,
+            null
+          ]
+        },
+        {
           "DataId": 2010866,
           "Position": {
             "X": -335.59174,
@@ -50,7 +69,34 @@
           },
           "TerritoryId": 816,
           "InteractionType": "Interact",
-          "Fly": true
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            null,
+            [2],
+            null,
+            null
+          ]
+        },
+        {
+          "DataId": 2010867,
+          "Position": {
+            "X": -351.64417,
+            "Y": -53.635498,
+            "Z": -295.73517
+          },
+          "TerritoryId": 816,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            null,
+            [3],
+            null,
+            null
+          ]
         }
       ]
     },

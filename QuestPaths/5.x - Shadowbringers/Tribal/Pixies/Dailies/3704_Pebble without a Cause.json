@@ -31,7 +31,7 @@
           "TerritoryId": 816,
           "InteractionType": "Interact",
           "Fly": true,
-          "$": "Only if QW: 0 0 ??? 0 0 0",
+          "$": "Only if QW: 0 0 3 0 0 0",
           "SkipIf": ["NotTargetable"]
         },
         {
@@ -43,7 +43,7 @@
           },
           "TerritoryId": 816,
           "InteractionType": "Interact",
-          "$": "Only if QW: 0 0 1 0 0 0 → if complete, 0 16 0 0 0 0",
+          "$": "Only if QW: 0 0 1 0 0 0",
           "SkipIf": ["NotTargetable"]
         }
       ]

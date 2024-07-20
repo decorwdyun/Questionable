@@ -3,7 +3,7 @@
 QuestWork:
 ```
 0 x  0 0 0 0
-  32         → 1032168
+  16         → Tall Fuath (1032167)
+  32         → Trembling Scavenger (1032168)
   48         → Elegant Eulmoran (1032169)
-  ??         → 1032167
 ```
