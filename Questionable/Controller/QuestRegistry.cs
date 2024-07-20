@@ -40,7 +40,7 @@ internal sealed class QuestRegistry
     }
 
     public IEnumerable<Quest> AllQuests => _quests.Values;
-    public int Count => _quests.Count;
+    public int Count => _quests.Count(x => !x.Value.Root.Disabled);
     public int ValidationIssueCount => _questValidator.IssueCount;
     public int ValidationErrorCount => _questValidator.ErrorCount;
 

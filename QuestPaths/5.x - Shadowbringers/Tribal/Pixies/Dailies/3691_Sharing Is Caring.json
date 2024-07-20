@@ -48,6 +48,22 @@
           ]
         },
         {
+          "DataId": 1032141,
+          "Position": {
+            "X": -473.47223,
+            "Y": 45.390854,
+            "Z": -311.6656
+          },
+          "TerritoryId": 816,
+          "InteractionType": "Say",
+          "ChatMessage": {
+            "Key": "TEXT_BANPIX103_03691_SAYTODO_000_030"
+          },
+          "SkipIf": [
+            "NotTargetable"
+          ]
+        },
+        {
           "DataId": 1032142,
           "Position": {
             "X": -472.7398,

@@ -1,6 +1,7 @@
 {
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
+  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
