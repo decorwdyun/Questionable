@@ -39,6 +39,8 @@ public static class RoslynShortcuts
             return LiteralExpression(SyntaxKind.NumericLiteralExpression, Literal(i16));
         else if (value is int i32)
             return LiteralExpression(SyntaxKind.NumericLiteralExpression, Literal(i32));
+        else if (value is byte u8)
+            return LiteralExpression(SyntaxKind.NumericLiteralExpression, Literal(u8));
         else if (value is ushort u16)
             return LiteralExpression(SyntaxKind.NumericLiteralExpression, Literal(u16));
         else if (value is uint u32)
@@ -173,15 +175,40 @@ public static class RoslynShortcuts
                             SyntaxNodeList(
                                 Assignment(nameof(ComplexCombatData.DataId), complexCombatData.DataId, default(uint))
                                     .AsSyntaxNodeOrToken(),
-                                Assignment(nameof(ComplexCombatData.MinimumKillCount), complexCombatData.MinimumKillCount, null)
+                                Assignment(nameof(ComplexCombatData.MinimumKillCount),
+                                        complexCombatData.MinimumKillCount, null)
                                     .AsSyntaxNodeOrToken(),
                                 Assignment(nameof(ComplexCombatData.RewardItemId), complexCombatData.RewardItemId, null)
                                     .AsSyntaxNodeOrToken(),
-                                Assignment(nameof(ComplexCombatData.RewardItemCount), complexCombatData.RewardItemCount, null)
+                                Assignment(nameof(ComplexCombatData.RewardItemCount), complexCombatData.RewardItemCount,
+                                        null)
                                     .AsSyntaxNodeOrToken(),
-                                AssignmentList(nameof(ComplexCombatData.CompletionQuestVariablesFlags), complexCombatData.CompletionQuestVariablesFlags)
+                                AssignmentList(nameof(ComplexCombatData.CompletionQuestVariablesFlags),
+                                        complexCombatData.CompletionQuestVariablesFlags)
                                     .AsSyntaxNodeOrToken()))));
-        }else if (value is null)
+        }
+        else if (value is QuestWorkValue qwv)
+        {
+            return ObjectCreationExpression(
+                    IdentifierName(nameof(QuestWorkValue)))
+                .WithArgumentList(
+                    ArgumentList(
+                        SeparatedList<ArgumentSyntax>(
+                            new SyntaxNodeOrToken[]
+                            {
+                                Argument(LiteralValue(qwv.High)),
+                                Token(SyntaxKind.CommaToken),
+                                Argument(LiteralValue(qwv.Low))
+                            })));
+        }
+        else if (value is List<QuestWorkValue> list)
+        {
+            return CollectionExpression(
+                SeparatedList<CollectionElementSyntax>(
+                    SyntaxNodeList(list.Select(x => ExpressionElement(
+                        LiteralValue(x)).AsSyntaxNodeOrToken()).ToArray())));
+        }
+        else if (value is null)
             return LiteralExpression(SyntaxKind.NullLiteralExpression);
         else
             throw new Exception($"Unsupported data type {value.GetType()} = {value}");

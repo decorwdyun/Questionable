@@ -365,6 +365,9 @@ public class QuestSourceGenerator : ISourceGenerator
                                                 .AsSyntaxNodeOrToken(),
                                             AssignmentList(nameof(QuestStep.SkipIf), step.SkipIf)
                                                 .AsSyntaxNodeOrToken(),
+                                            AssignmentList(nameof(QuestStep.RequiredQuestVariables),
+                                                    step.RequiredQuestVariables)
+                                                .AsSyntaxNodeOrToken(),
                                             AssignmentList(nameof(QuestStep.CompletionQuestVariablesFlags),
                                                     step.CompletionQuestVariablesFlags)
                                                 .AsSyntaxNodeOrToken(),
