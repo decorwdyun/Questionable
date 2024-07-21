@@ -23,6 +23,9 @@ internal sealed class MovementOverrideController
         // southern thanalan
         new BlacklistedPoint(146, new(-201.75f, 10.5f, -265.5f), new(-203.75235f, 10.130764f, -265.15314f)),
 
+        // coerthas central highlands
+        new BlacklistedPoint(155, new(-478.75f, 149.25f, -305.75f), new(-476.1802f, 149.06573f, -304.7811f)),
+
         new BlacklistedPoint(1189, new(574f, -142.25f, 504.25f), new(574.44183f, -142.12766f, 507.60065f)),
 
         // heritage found: yyupye's halo (farm, npc: Mahuwsa)

@@ -80,7 +80,8 @@
           },
           "TerritoryId": 155,
           "InteractionType": "WalkTo",
-          "Comment": "Enemies lose aggro around here"
+          "Comment": "Enemies lose aggro around here",
+          "Mount": false
         },
         {
           "Position": {

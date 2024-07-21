@@ -31,6 +31,7 @@
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterItemUse",
           "ItemId": 2000766,
+          "GroundTarget": true,
           "KillEnemyDataIds": [
             46
           ],
@@ -131,6 +132,7 @@
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterItemUse",
           "ItemId": 2000766,
+          "GroundTarget": true,
           "KillEnemyDataIds": [
             46
           ],

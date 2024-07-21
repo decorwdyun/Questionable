@@ -11,7 +11,10 @@
     },
     "Author": {
       "description": "Author of the quest sequence",
-      "type": ["string", "array"],
+      "type": [
+        "string",
+        "array"
+      ],
       "items": {
         "type": "string"
       }
@@ -194,7 +197,10 @@
                   "minItems": 6,
                   "maxItems": 6,
                   "items": {
-                    "type": ["array", "null"],
+                    "type": [
+                      "array",
+                      "null"
+                    ],
                     "items": {
                       "type": [
                         "number",
@@ -457,11 +463,25 @@
                 },
                 {
                   "if": {
-                    "properties": {
-                      "InteractionType": {
-                        "const": "UseItem"
+                    "anyOf": [
+                      {
+                        "properties": {
+                          "InteractionType": {
+                            "const": "UseItem"
+                          }
+                        }
+                      },
+                      {
+                        "properties": {
+                          "InteractionType": {
+                            "const": "Combat"
+                          },
+                          "EnemySpawnType": {
+                            "const": "AfterItemUse"
+                          }
+                        }
                       }
-                    }
+                    ]
                   },
                   "then": {
                     "properties": {

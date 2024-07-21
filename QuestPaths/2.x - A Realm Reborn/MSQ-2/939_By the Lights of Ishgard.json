@@ -43,16 +43,6 @@
           "InteractionType": "WalkTo"
         },
         {
-          "Position": {
-            "X": -476.1802,
-            "Y": 149.06573,
-            "Z": -304.7811
-          },
-          "TerritoryId": 155,
-          "InteractionType": "WalkTo",
-          "Comment": "Avoids part of the tail that is non-walkable"
-        },
-        {
           "DataId": 2002170,
           "Position": {
             "X": -488.6702,
@@ -96,16 +86,6 @@
     {
       "Sequence": 255,
       "Steps": [
-        {
-          "Position": {
-            "X": -476.1802,
-            "Y": 149.06573,
-            "Z": -304.7811
-          },
-          "TerritoryId": 155,
-          "InteractionType": "WalkTo",
-          "Comment": "Avoids part of the tail that is non-walkable"
-        },
         {
           "DataId": 1006467,
           "Position": {
