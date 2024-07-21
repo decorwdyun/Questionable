@@ -1,10 +1,8 @@
 ﻿using System.Linq;
 using Dalamud.Interface;
-using Dalamud.Interface.Colors;
 using Dalamud.Interface.Utility.Raii;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Common.Math;
-using ImGuiNET;
 using Questionable.Data;
 
 namespace Questionable.Windows.QuestComponents;
@@ -13,6 +11,7 @@ internal sealed class ARealmRebornComponent
 {
     private const ushort ATimeForEveryPurpose = 425;
     private const ushort TheUltimateWeapon = 524;
+    private const ushort GoodIntentions = 363;
     private static readonly ushort[] RequiredPrimalInstances = [20004, 20006, 20005];
     private static readonly ushort[] RequiredAllianceRaidQuests = [1709, 1200, 1201, 1202, 1203, 1474, 494, 495];
 
@@ -30,12 +29,14 @@ internal sealed class ARealmRebornComponent
         _uiUtils = uiUtils;
     }
 
-    public bool ShouldDraw => !_gameFunctions.IsQuestComplete(ATimeForEveryPurpose) &&
+    public bool ShouldDraw => !_gameFunctions.IsQuestAcceptedOrComplete(ATimeForEveryPurpose) &&
                               _gameFunctions.IsQuestComplete(TheUltimateWeapon);
 
     public void Draw()
     {
-        DrawPrimals();
+        if (!_gameFunctions.IsQuestAcceptedOrComplete(GoodIntentions))
+            DrawPrimals();
+
         DrawAllianceRaids();
     }
 

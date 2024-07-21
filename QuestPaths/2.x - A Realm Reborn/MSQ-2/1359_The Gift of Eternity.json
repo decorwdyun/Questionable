@@ -22,27 +22,19 @@
       "Steps": [
         {
           "Position": {
-            "X": -214.06451,
-            "Y": -41.955135,
-            "Z": -249.15605
-          },
-          "TerritoryId": 138,
-          "InteractionType": "WalkTo",
-          "Fly": true
-        },
-        {
-          "Position": {
             "X": -209.9414,
             "Y": -42.109043,
             "Z": -248.07559
           },
+          "StopDistance": 0.25,
           "TerritoryId": 138,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
             2890,
             2891
-          ]
+          ],
+          "Fly": true
         }
       ]
     },
@@ -51,20 +43,11 @@
       "Steps": [
         {
           "Position": {
-            "X": -187.2772,
-            "Y": -41.886265,
-            "Z": -318.27036
+            "X": -194.26031,
+            "Y": -40.771305,
+            "Z": -323.02054
           },
-          "TerritoryId": 138,
-          "InteractionType": "WalkTo",
-          "Fly": true
-        },
-        {
-          "Position": {
-            "X": -188.59572,
-            "Y": -41.69931,
-            "Z": -318.9667
-          },
+          "StopDistance": 0.25,
           "TerritoryId": 138,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
@@ -73,7 +56,8 @@
             2893,
             2894,
             2895
-          ]
+          ],
+          "Fly": true
         }
       ]
     },
@@ -82,20 +66,11 @@
       "Steps": [
         {
           "Position": {
-            "X": -299.29233,
-            "Y": -41.884323,
-            "Z": -336.04984
+            "X": -301.09625,
+            "Y": -41.52895,
+            "Z": -327.2867
           },
-          "TerritoryId": 138,
-          "InteractionType": "WalkTo",
-          "Fly": true
-        },
-        {
-          "Position": {
-            "X": -297.88797,
-            "Y": -41.872128,
-            "Z": -334.79858
-          },
+          "StopDistance": 0.25,
           "TerritoryId": 138,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
@@ -103,7 +78,8 @@
             2896,
             2897,
             2898
-          ]
+          ],
+          "Fly": true
         }
       ]
     },
@@ -142,6 +118,7 @@
             "Y": -35.708496,
             "Z": -400.50354
           },
+          "StopDistance": 5,
           "TerritoryId": 138,
           "InteractionType": "CompleteQuest"
         }

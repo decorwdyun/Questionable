@@ -12,6 +12,7 @@
             "Y": -35.708496,
             "Z": -400.50354
           },
+          "StopDistance": 5,
           "TerritoryId": 138,
           "InteractionType": "AcceptQuest"
         }
@@ -115,7 +116,8 @@
             "Z": -286.78662
           },
           "TerritoryId": 135,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "Mount": true
         },
         {
           "Position": {
@@ -130,8 +132,7 @@
         {
           "TerritoryId": 135,
           "InteractionType": "AttuneAetheryte",
-          "Aetheryte": "Lower La Noscea - Moraby Drydocks",
-          "StopDistance": 5
+          "Aetheryte": "Lower La Noscea - Moraby Drydocks"
         },
         {
           "Position": {

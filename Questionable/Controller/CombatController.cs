@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Dalamud.Game.ClientState.Conditions;
@@ -16,7 +16,7 @@ using Questionable.Model.V1;
 
 namespace Questionable.Controller;
 
-internal sealed class CombatController
+internal sealed class CombatController : IDisposable
 {
     private readonly List<ICombatModule> _combatModules;
     private readonly ITargetManager _targetManager;
@@ -39,6 +39,8 @@ internal sealed class CombatController
         _clientState = clientState;
         _gameFunctions = gameFunctions;
         _logger = logger;
+
+        _clientState.TerritoryChanged += TerritoryChanged;
     }
 
     public bool IsRunning => _currentFight != null;
@@ -198,7 +200,14 @@ internal sealed class CombatController
             if (battleNpc.BattleNpcKind is BattleNpcSubKind.BattleNpcPart or BattleNpcSubKind.Enemy)
             {
                 var gameObjectStruct = (GameObject*)gameObject.Address;
-                return gameObjectStruct->NamePlateIconId != 0;
+                if (gameObjectStruct->NamePlateIconId is 60093 or 60732) // npc that starts a fate or does turn-ins
+                    return false;
+
+                var enemyData = _currentFight?.Data.ComplexCombatDatas.FirstOrDefault(x => x.DataId == battleNpc.DataId);
+                if (enemyData is { IgnoreQuestMarker: true })
+                    return battleNpc.StatusFlags.HasFlag(StatusFlags.InCombat);
+                else
+                    return gameObjectStruct->NamePlateIconId != 0;
             }
             else
                 return false;
@@ -216,6 +225,14 @@ internal sealed class CombatController
         }
 
         _currentFight = null;
+    }
+
+    private void TerritoryChanged(ushort territoryId) => Stop();
+
+    public void Dispose()
+    {
+        _clientState.TerritoryChanged -= TerritoryChanged;
+        Stop();
     }
 
     private sealed class CurrentFight

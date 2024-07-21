@@ -6,13 +6,13 @@
       "Sequence": 0,
       "Steps": [
         {
-          "DataId": 1003281,
+          "DataId": 1004576,
           "Position": {
-            "X": 97.520386,
-            "Y": 40.248554,
-            "Z": 81.1322
+            "X": -141.64954,
+            "Y": 4.1,
+            "Z": -114.67157
           },
-          "TerritoryId": 128,
+          "TerritoryId": 130,
           "InteractionType": "AcceptQuest"
         }
       ]
@@ -29,8 +29,9 @@
           "TerritoryId": 135,
           "InteractionType": "WalkTo",
           "Fly": true,
+          "AetheryteShortcut": "Limsa Lominsa",
           "AethernetShortcut": [
-            "[Limsa Lominsa] The Aftcastle",
+            "[Limsa Lominsa] Aetheryte Plaza",
             "[Limsa Lominsa] Tempest Gate (Lower La Noscea)"
           ]
         },

@@ -40,7 +40,8 @@
           },
           "TerritoryId": 156,
           "InteractionType": "WalkTo",
-          "Mount": true
+          "Mount": true,
+          "$": "Rising Stones Door"
         },
         {
           "DataId": 1029791,

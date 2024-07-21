@@ -417,12 +417,18 @@
                             },
                             "CompletionQuestVariablesFlags": {
                               "$ref": "#/$defs/CompletionFlags"
+                            },
+                            "IgnoreQuestMarker": {
+                              "type": "boolean"
                             }
                           },
                           "required": [
                             "DataId"
                           ]
                         }
+                      },
+                      "CombatDelaySecondsAtStart": {
+                        "type": "number"
                       }
                     },
                     "required": [

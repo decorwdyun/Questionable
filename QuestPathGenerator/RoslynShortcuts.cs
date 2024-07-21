@@ -166,6 +166,7 @@ public static class RoslynShortcuts
         }
         else if (value is ComplexCombatData complexCombatData)
         {
+            var emptyData = new ComplexCombatData();
             return ObjectCreationExpression(
                     IdentifierName(nameof(ComplexCombatData)))
                 .WithInitializer(
@@ -173,18 +174,22 @@ public static class RoslynShortcuts
                         SyntaxKind.ObjectInitializerExpression,
                         SeparatedList<ExpressionSyntax>(
                             SyntaxNodeList(
-                                Assignment(nameof(ComplexCombatData.DataId), complexCombatData.DataId, default(uint))
+                                Assignment(nameof(ComplexCombatData.DataId), complexCombatData.DataId, emptyData.DataId)
                                     .AsSyntaxNodeOrToken(),
                                 Assignment(nameof(ComplexCombatData.MinimumKillCount),
-                                        complexCombatData.MinimumKillCount, null)
+                                        complexCombatData.MinimumKillCount, emptyData.MinimumKillCount)
                                     .AsSyntaxNodeOrToken(),
-                                Assignment(nameof(ComplexCombatData.RewardItemId), complexCombatData.RewardItemId, null)
+                                Assignment(nameof(ComplexCombatData.RewardItemId), complexCombatData.RewardItemId,
+                                        emptyData.RewardItemId)
                                     .AsSyntaxNodeOrToken(),
                                 Assignment(nameof(ComplexCombatData.RewardItemCount), complexCombatData.RewardItemCount,
-                                        null)
+                                        emptyData.RewardItemCount)
                                     .AsSyntaxNodeOrToken(),
                                 AssignmentList(nameof(ComplexCombatData.CompletionQuestVariablesFlags),
-                                        complexCombatData.CompletionQuestVariablesFlags)
+                                    complexCombatData.CompletionQuestVariablesFlags),
+                                Assignment(nameof(ComplexCombatData.IgnoreQuestMarker),
+                                        complexCombatData.IgnoreQuestMarker,
+                                        emptyData.IgnoreQuestMarker)
                                     .AsSyntaxNodeOrToken()))));
         }
         else if (value is QuestWorkValue qwv)

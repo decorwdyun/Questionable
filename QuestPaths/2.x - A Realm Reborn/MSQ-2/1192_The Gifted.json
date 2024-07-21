@@ -84,26 +84,18 @@
       "Steps": [
         {
           "Position": {
-            "X": -467.98248,
-            "Y": 23.0508,
-            "Z": -430.49655
+            "X": -470.87872,
+            "Y": 22.698383,
+            "Z": -439.40274
           },
-          "TerritoryId": 140,
-          "InteractionType": "WalkTo",
-          "Fly": true
-        },
-        {
-          "Position": {
-            "X": -469.5506,
-            "Y": 22.867796,
-            "Z": -435.02985
-          },
+          "StopDistance": 0.25,
           "TerritoryId": 140,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
             2477
-          ]
+          ],
+          "Fly": true
         }
       ]
     },
@@ -112,26 +104,18 @@
       "Steps": [
         {
           "Position": {
-            "X": -394.05176,
-            "Y": 25.249037,
-            "Z": -491.6281
+            "X": -386.44818,
+            "Y": 24.74541,
+            "Z": -501.20456
           },
-          "TerritoryId": 140,
-          "InteractionType": "WalkTo",
-          "Fly": true
-        },
-        {
-          "Position": {
-            "X": -388.88654,
-            "Y": 24.894493,
-            "Z": -498.07654
-          },
+          "StopDistance": 0.25,
           "TerritoryId": 140,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
             2478
-          ]
+          ],
+          "Fly": true
         }
       ]
     },
@@ -140,26 +124,18 @@
       "Steps": [
         {
           "Position": {
-            "X": -376.08395,
-            "Y": 19.192884,
-            "Z": -619.2925
+            "X": -366.75403,
+            "Y": 16.426182,
+            "Z": -628.9341
           },
-          "TerritoryId": 140,
-          "InteractionType": "WalkTo",
-          "Fly": true
-        },
-        {
-          "Position": {
-            "X": -370.34174,
-            "Y": 17.37921,
-            "Z": -625.1368
-          },
+          "StopDistance": 0.25,
           "TerritoryId": 140,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
             2479
-          ]
+          ],
+          "Fly": true
         }
       ]
     },
@@ -168,27 +144,19 @@
       "Steps": [
         {
           "Position": {
-            "X": -326.49905,
-            "Y": 14.853391,
-            "Z": -775.70575
-          },
-          "TerritoryId": 140,
-          "InteractionType": "WalkTo",
-          "Fly": true
-        },
-        {
-          "Position": {
             "X": -327.01913,
             "Y": 14.785374,
             "Z": -780.03625
           },
+          "StopDistance": 0.25,
           "TerritoryId": 140,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
             2480,
             2481
-          ]
+          ],
+          "Fly": true
         }
       ]
     },

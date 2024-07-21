@@ -50,46 +50,27 @@
       "Sequence": 2,
       "Steps": [
         {
-          "Position": {
-            "X": 182.90273,
-            "Y": 52.023964,
-            "Z": 29.854843
-          },
-          "TerritoryId": 140,
-          "InteractionType": "WalkTo",
-          "Fly": true,
-          "AetheryteShortcut": "Western Thanalan - Horizon"
-        },
-        {
           "DataId": 2003573,
           "Position": {
             "X": 184.64929,
             "Y": 52.140015,
             "Z": 29.06836
           },
+          "StopDistance": 0.25,
           "TerritoryId": 140,
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
             2848
-          ]
+          ],
+          "Fly": true,
+          "AetheryteShortcut": "Western Thanalan - Horizon"
         }
       ]
     },
     {
       "Sequence": 3,
       "Steps": [
-        {
-          "Position": {
-            "X": 125.38452,
-            "Y": 49.281586,
-            "Z": -172.1297
-          },
-          "TerritoryId": 140,
-          "InteractionType": "WalkTo",
-          "Fly": true,
-          "AetheryteShortcut": "Western Thanalan - Horizon"
-        },
         {
           "DataId": 1008640,
           "Position": {
@@ -98,7 +79,9 @@
             "Z": -173.23572
           },
           "TerritoryId": 140,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true,
+          "AetheryteShortcut": "Western Thanalan - Horizon"
         }
       ]
     },

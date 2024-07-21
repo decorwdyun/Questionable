@@ -20,6 +20,9 @@ internal sealed class MovementOverrideController
 
         new BlacklistedPoint(132, new(45.5f, -8f, 101f), new(50.53978f, -8.046954f, 101.06045f)),
 
+        // ul'dah lamp near adventuer's guild
+        new BlacklistedPoint(130, new(59.5f, 4.25f, -118f), new(60.551353f, 4f, -119.76446f)),
+
         // eastern thanalan
         new BlacklistedPoint(145, new(-139.75f, -32.25f, 75.25f), new(-139.57748f, -33.785175f, 77.87906f)),
 
@@ -31,6 +34,9 @@ internal sealed class MovementOverrideController
 
         // coerthas central highlands
         new BlacklistedPoint(155, new(-478.75f, 149.25f, -305.75f), new(-476.1802f, 149.06573f, -304.7811f)),
+
+        // rising stones, plant boxes
+        new BlacklistedPoint(351, new(3.25f, 0.75f, 8.5f),new(4f, 0f, 9.5f)),
 
         new BlacklistedPoint(1189, new(574f, -142.25f, 504.25f), new(574.44183f, -142.12766f, 507.60065f)),
 

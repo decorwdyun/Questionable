@@ -62,7 +62,6 @@
           "TerritoryId": 137,
           "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Eastern La Noscea - Costa Del Sol",
-          "NextQuestId": 1054,
           "Fly": true
         }
       ]

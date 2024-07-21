@@ -73,7 +73,15 @@
           "TerritoryId": 139,
           "InteractionType": "WalkTo",
           "Fly": true,
-          "AetheryteShortcut": "Upper La Noscea - Camp Bronze Lake"
+          "AetheryteShortcut": "Upper La Noscea - Camp Bronze Lake",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            -128
+          ]
         },
         {
           "Position": {
@@ -83,7 +91,15 @@
           },
           "TerritoryId": 139,
           "InteractionType": "WalkTo",
-          "TargetTerritoryId": 180
+          "TargetTerritoryId": 180,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            -128
+          ]
         },
         {
           "Position": {
@@ -93,13 +109,28 @@
           },
           "TerritoryId": 180,
           "InteractionType": "WalkTo",
-          "Fly": true
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            -128
+          ]
         },
         {
           "TerritoryId": 180,
           "InteractionType": "AttuneAetheryte",
           "Aetheryte": "Outer La Noscea - Camp Overlook",
-          "StopDistance": 5
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            -128
+          ]
         },
         {
           "Position": {
@@ -109,7 +140,15 @@
           },
           "TerritoryId": 180,
           "InteractionType": "WalkTo",
-          "Fly": true
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            -128
+          ]
         },
         {
           "Position": {
@@ -119,7 +158,15 @@
           },
           "TerritoryId": 180,
           "InteractionType": "WalkTo",
-          "Fly": true
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            -128
+          ]
         },
         {
           "Position": {
@@ -129,7 +176,15 @@
           },
           "TerritoryId": 180,
           "InteractionType": "WalkTo",
-          "Fly": true
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            -128
+          ]
         },
         {
           "DataId": 2000075,
@@ -144,7 +199,15 @@
           "KillEnemyDataIds": [
             9487
           ],
-          "$": "0 0  0 0  0 0 -> 16 17  0 0  0 128"
+          "$": "0 0  0 0  0 0 -> 16 17  0 0  0 128",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "Position": {
@@ -155,7 +218,15 @@
           "TerritoryId": 138,
           "InteractionType": "WalkTo",
           "Fly": true,
-          "AetheryteShortcut": "Western La Noscea - Aleport"
+          "AetheryteShortcut": "Western La Noscea - Aleport",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            -64
+          ]
         },
         {
           "DataId": 2000076,
@@ -170,7 +241,15 @@
           "KillEnemyDataIds": [
             9488
           ],
-          "$": "16 17  0 0  0 128 -> 0 17  0 0  0 0"
+          "$": "16 17  0 0  0 128 -> 0 17  0 0  0 0",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         }
       ]
     },
@@ -299,7 +378,8 @@
             "Z": -465.72064
           },
           "TerritoryId": 156,
-          "InteractionType": "CompleteQuest","NextQuestId": 1200
+          "InteractionType": "CompleteQuest",
+          "NextQuestId": 1200
         }
       ]
     }

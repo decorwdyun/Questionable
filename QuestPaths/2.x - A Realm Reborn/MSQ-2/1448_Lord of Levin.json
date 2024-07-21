@@ -73,17 +73,6 @@
       "Sequence": 255,
       "Steps": [
         {
-          "Position": {
-            "X": 21.35542,
-            "Y": -3.9001584,
-            "Z": 211.87386
-          },
-          "TerritoryId": 152,
-          "InteractionType": "WalkTo",
-          "Fly": true,
-          "AetheryteShortcut": "East Shroud - Hawthorne Hut"
-        },
-        {
           "DataId": 1009097,
           "Position": {
             "X": 22.87323,
@@ -91,7 +80,9 @@
             "Z": 211.16956
           },
           "TerritoryId": 152,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "Fly": true,
+          "AetheryteShortcut": "East Shroud - Hawthorne Hut"
         }
       ]
     }

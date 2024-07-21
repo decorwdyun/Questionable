@@ -87,8 +87,7 @@
           "TerritoryId": 146,
           "Mount": false,
           "InteractionType": "CompleteQuest",
-          "StopDistance": 5,
-          "NextQuestId": 1157
+          "StopDistance": 5
         }
       ]
     }

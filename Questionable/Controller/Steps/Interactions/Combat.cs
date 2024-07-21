@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 using Questionable.Controller.Steps.Common;
+using Questionable.Controller.Steps.Shared;
 using Questionable.Controller.Utils;
 using Questionable.Model;
 using Questionable.Model.V1;
@@ -16,20 +17,28 @@ internal static class Combat
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
             if (step.InteractionType != EInteractionType.Combat)
-                return [];
+                yield break;
 
             ArgumentNullException.ThrowIfNull(step.EnemySpawnType);
 
-            var unmount = serviceProvider.GetRequiredService<UnmountTask>();
+            yield return serviceProvider.GetRequiredService<UnmountTask>();
+
+            if (step.CombatDelaySecondsAtStart != null)
+            {
+                yield return serviceProvider.GetRequiredService<WaitAtStart.WaitDelay>()
+                    .With(TimeSpan.FromSeconds(step.CombatDelaySecondsAtStart.Value));
+            }
+
             switch (step.EnemySpawnType)
             {
                 case EEnemySpawnType.AfterInteraction:
                 {
                     ArgumentNullException.ThrowIfNull(step.DataId);
 
-                    var interaction = serviceProvider.GetRequiredService<Interact.DoInteract>()
+                    yield return serviceProvider.GetRequiredService<Interact.DoInteract>()
                         .With(step.DataId.Value, true);
-                    return [unmount, interaction, CreateTask(quest, sequence, step)];
+                    yield return CreateTask(quest, sequence, step);
+                    break;
                 }
 
                 case EEnemySpawnType.AfterItemUse:
@@ -37,17 +46,20 @@ internal static class Combat
                     ArgumentNullException.ThrowIfNull(step.DataId);
                     ArgumentNullException.ThrowIfNull(step.ItemId);
 
-                    var useItem = serviceProvider.GetRequiredService<UseItem.UseOnObject>()
+                    yield return serviceProvider.GetRequiredService<UseItem.UseOnObject>()
                         .With(step.DataId.Value, step.ItemId.Value);
-                    return [unmount, useItem, CreateTask(quest, sequence, step)];
+                    yield return CreateTask(quest, sequence, step);
+                    break;
                 }
 
                 case EEnemySpawnType.AutoOnEnterArea:
                     // automatically triggered when entering area, i.e. only unmount
-                    return [unmount, CreateTask(quest, sequence, step)];
+                    yield return CreateTask(quest, sequence, step);
+                    break;
 
                 case EEnemySpawnType.OverworldEnemies:
-                    return [unmount, CreateTask(quest, sequence, step)];
+                    yield return CreateTask(quest, sequence, step);
+                    break;
 
                 default:
                     throw new ArgumentOutOfRangeException(nameof(step), $"Unknown spawn type {step.EnemySpawnType}");

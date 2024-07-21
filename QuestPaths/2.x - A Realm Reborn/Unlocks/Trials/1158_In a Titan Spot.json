@@ -100,8 +100,7 @@
         {
           "TerritoryId": 180,
           "InteractionType": "AttuneAetheryte",
-          "Aetheryte": "Outer La Noscea - Camp Overlook",
-          "StopDistance": 5
+          "Aetheryte": "Outer La Noscea - Camp Overlook"
         },
         {
           "Position": {

@@ -48,19 +48,9 @@
       "Steps": [
         {
           "Position": {
-            "X": -444.11835,
-            "Y": -40.95807,
-            "Z": -242.13676
-          },
-          "TerritoryId": 138,
-          "InteractionType": "WalkTo",
-          "Fly": true
-        },
-        {
-          "Position": {
-            "X": -448.5728,
-            "Y": -41.56529,
-            "Z": -240.29225
+            "X": -450.67154,
+            "Y": -41.88713,
+            "Z": -238.96031
           },
           "TerritoryId": 138,
           "InteractionType": "Combat",
@@ -69,7 +59,8 @@
             2861,
             2862,
             2863
-          ]
+          ],
+          "Fly": true
         }
       ]
     },
@@ -83,9 +74,18 @@
             "Y": -41.985073,
             "Z": -237.72034
           },
+          "StopDistance": 0.25,
           "TerritoryId": 138,
           "InteractionType": "Interact",
-          "$": "0 0  0 0  0 0 -> 1 16  0 0  0 128"
+          "$": "0 0  0 0  0 0 -> 1 16  0 0  0 128",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 1008685,
@@ -95,7 +95,15 @@
             "Z": -240.13129
           },
           "TerritoryId": 138,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         }
       ]
     },

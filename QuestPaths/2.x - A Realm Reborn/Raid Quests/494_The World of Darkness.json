@@ -1,6 +1,9 @@
 {
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "JerryWester",
+  "TerritoryBlacklist": [
+    151
+  ],
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -67,6 +70,7 @@
             "Y": 15.33271,
             "Z": -68.65039
           },
+          "StopDistance": 7,
           "TerritoryId": 156,
           "InteractionType": "Interact"
         }

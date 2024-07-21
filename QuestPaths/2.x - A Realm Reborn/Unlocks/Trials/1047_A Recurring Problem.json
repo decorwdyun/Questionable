@@ -40,7 +40,7 @@
           },
           "TerritoryId": 212,
           "InteractionType": "CompleteQuest",
-          "NextQuestId": 1048
+          "Comment": "Next quest is picked up as part of 'Moving On'"
         }
       ]
     }

@@ -21,6 +21,17 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1006693,
+          "Position": {
+            "X": 39.29187,
+            "Y": 1.2148079,
+            "Z": 0.8086548
+          },
+          "TerritoryId": 212,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 1047
+        },
+        {
           "DataId": 2001717,
           "Position": {
             "X": 25.50043,
@@ -29,7 +40,10 @@
           },
           "TerritoryId": 212,
           "InteractionType": "Interact",
-          "TargetTerritoryId": 212
+          "TargetTerritoryId": 212,
+          "SkipIf": [
+            "WakingSandsMainArea"
+          ]
         },
         {
           "DataId": 1007533,
@@ -40,7 +54,15 @@
           },
           "TerritoryId": 212,
           "InteractionType": "Interact",
-          "$": "0 0  0 0  0 0 -> 17 0  0 0  0 128"
+          "$": "0 0  0 0  0 0 -> 17 0  0 0  0 128",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 1007534,
@@ -51,7 +73,15 @@
           },
           "TerritoryId": 212,
           "InteractionType": "Interact",
-          "$": "17 0  0 0  0 128 -> 33 16  0 0  0 192"
+          "$": "17 0  0 0  0 128 -> 33 16  0 0  0 192",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 1007531,
@@ -60,9 +90,18 @@
             "Y": -3.0000012,
             "Z": -52.71997
           },
+          "StopDistance": 7,
           "TerritoryId": 212,
           "InteractionType": "Interact",
-          "$": "33 16  0 0  0 192 -> 49 17  0 0  0 224"
+          "$": "33 16  0 0  0 192 -> 49 17  0 0  0 224",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 1007530,
@@ -71,9 +110,18 @@
             "Y": -3.0000012,
             "Z": -52.262207
           },
+          "StopDistance": 7,
           "TerritoryId": 212,
           "InteractionType": "Interact",
-          "$": "49 17  0 0  0 224 -> 65 17  16 0  0 240"
+          "$": "49 17  0 0  0 224 -> 65 17  16 0  0 240",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            16
+          ]
         },
         {
           "DataId": 1007478,
@@ -83,7 +131,15 @@
             "Z": -56.229553
           },
           "TerritoryId": 212,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            8
+          ]
         }
       ]
     },

@@ -59,15 +59,24 @@
       "Sequence": 3,
       "Steps": [
         {
+          "DataId": 1001484,
           "Position": {
-            "X": 94.5531,
-            "Y": 0.3407526,
-            "Z": -270.22217
+            "X": 93.247925,
+            "Y": 0.34075317,
+            "Z": -272.60242
           },
           "TerritoryId": 141,
-          "InteractionType": "WalkTo",
+          "InteractionType": "Interact",
           "AetheryteShortcut": "Central Thanalan - Black Brush Station",
-          "Fly": true
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 1001605,
@@ -85,18 +94,7 @@
             null,
             null,
             64
-          ],
-          "$": "0 0  0 0  0 0 -> 1 0  0 0  0 64"
-        },
-        {
-          "DataId": 1001484,
-          "Position": {
-            "X": 93.247925,
-            "Y": 0.34075317,
-            "Z": -272.60242
-          },
-          "TerritoryId": 141,
-          "InteractionType": "Interact"
+          ]
         }
       ]
     },

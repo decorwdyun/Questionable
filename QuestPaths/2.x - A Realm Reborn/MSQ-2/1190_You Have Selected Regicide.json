@@ -1,6 +1,6 @@
 {
   "$schema": "https://carvel.li/questionable/quest-1.0",
-  "Author": "JerryWester",
+  "Author": ["JerryWester", "liza"],
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -46,6 +46,7 @@
             "Y": -2.3519497,
             "Z": -240.40594
           },
+          "StopDistance": 7,
           "TerritoryId": 133,
           "InteractionType": "Interact",
           "TargetTerritoryId": 152
@@ -80,9 +81,149 @@
       "Sequence": 4,
       "Steps": [
         {
+          "Position": {
+            "X": -496.3975,
+            "Y": 7.8566074,
+            "Z": 71.93724
+          },
+          "StopDistance": 0.5,
           "TerritoryId": 152,
-          "InteractionType": "WaitForManualProgress",
-          "Comment": "Yeah, no idea how to automate this, sorry :/"
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AutoOnEnterArea",
+          "ComplexCombatData": [
+            {
+              "DataId": 47,
+              "IgnoreQuestMarker": true,
+              "MinimumKillCount": 1
+            }
+          ],
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "Position": {
+            "X": -393.63492,
+            "Y": -0.28167063,
+            "Z": 72.2678
+          },
+          "StopDistance": 0.5,
+          "TerritoryId": 152,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AutoOnEnterArea",
+          "ComplexCombatData": [
+            {
+              "DataId": 2483,
+              "IgnoreQuestMarker": true,
+              "MinimumKillCount": 3
+            }
+          ],
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "Position": {
+            "X": -359.14633,
+            "Y": 4.4168873,
+            "Z": 63.1877
+          },
+          "StopDistance": 0.5,
+          "TerritoryId": 152,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AutoOnEnterArea",
+          "ComplexCombatData": [
+            {
+              "DataId": 2484,
+              "IgnoreQuestMarker": true,
+              "MinimumKillCount": 1
+            }
+          ],
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "Position": {
+            "X": -324.51694,
+            "Y": 8.511529,
+            "Z": 69.76721
+          },
+          "StopDistance": 0.5,
+          "TerritoryId": 152,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AutoOnEnterArea",
+          "ComplexCombatData": [
+            {
+              "DataId": 2485,
+              "IgnoreQuestMarker": true,
+              "MinimumKillCount": 2
+            }
+          ],
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "DataId": 2482,
+          "Position": {
+            "X": -238.72742,
+            "Y": 7.8999486,
+            "Z": 64.43884
+          },
+          "StopDistance": 0.25,
+          "TerritoryId": 152,
+          "InteractionType": "WaitForNpcAtPosition",
+          "NpcWaitDistance": 5,
+          "Mount": false,
+          "Sprint": false
+        },
+        {
+          "Position": {
+            "X": -242.57193,
+            "Y": 11.837363,
+            "Z": 19.533478
+          },
+          "StopDistance": 0.5,
+          "TerritoryId": 152,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AutoOnEnterArea",
+          "ComplexCombatData": [
+            {
+              "DataId": 2487,
+              "IgnoreQuestMarker": true,
+              "MinimumKillCount": 2
+            },
+            {
+              "DataId": 2488,
+              "IgnoreQuestMarker": true,
+              "MinimumKillCount": 1
+            }
+          ],
+          "Mount": false,
+          "Sprint": false,
+          "CombatDelaySecondsAtStart": 3
+        },
+        {
+          "DataId": 2482,
+          "Position": {
+            "X": -315.8217,
+            "Y": 11.905772,
+            "Z": -34.105675
+          },
+          "StopDistance": 0.25,
+          "TerritoryId": 152,
+          "InteractionType": "WaitForNpcAtPosition",
+          "Mount": false,
+          "Sprint": false,
+          "NpcWaitDistance": 5
+        },
+        {
+          "DataId": 2003347,
+          "Position": {
+            "X": -318.62366,
+            "Y": 12.25293,
+            "Z": -35.05005
+          },
+          "StopDistance": 4,
+          "TerritoryId": 152,
+          "InteractionType": "Interact"
         }
       ]
     },
@@ -96,6 +237,7 @@
             "Y": 12.293127,
             "Z": -37.30841
           },
+          "StopDistance": 4,
           "TerritoryId": 152,
           "InteractionType": "Interact"
         }
@@ -111,8 +253,10 @@
             "Y": 12.25293,
             "Z": -35.080566
           },
+          "StopDistance": 4,
           "TerritoryId": 152,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DelaySecondsAtStart": 3
         }
       ]
     },

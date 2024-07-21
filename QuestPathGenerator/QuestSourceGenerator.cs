@@ -357,6 +357,9 @@ public class QuestSourceGenerator : ISourceGenerator
                                                 .AsSyntaxNodeOrToken(),
                                             AssignmentList(nameof(QuestStep.ComplexCombatData), step.ComplexCombatData)
                                                 .AsSyntaxNodeOrToken(),
+                                            Assignment(nameof(QuestStep.CombatDelaySecondsAtStart), step.CombatDelaySecondsAtStart,
+                                                    emptyStep.CombatDelaySecondsAtStart)
+                                                .AsSyntaxNodeOrToken(),
                                             Assignment(nameof(QuestStep.JumpDestination), step.JumpDestination,
                                                     emptyStep.JumpDestination)
                                                 .AsSyntaxNodeOrToken(),

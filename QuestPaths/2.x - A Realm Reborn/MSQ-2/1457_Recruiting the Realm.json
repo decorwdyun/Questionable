@@ -128,7 +128,15 @@
             "Z": 179.40027
           },
           "TerritoryId": 128,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         }
       ]
     },
@@ -144,8 +152,9 @@
           },
           "TerritoryId": 128,
           "InteractionType": "Interact",
+          "AetheryteShortcut": "Limsa Lominsa",
           "AethernetShortcut": [
-            "[Limsa Lominsa] The Aftcastle",
+            "[Limsa Lominsa] Aetheryte Plaza",
             "[Limsa Lominsa] Airship Landing"
           ]
         }
@@ -174,6 +183,7 @@
           },
           "TerritoryId": 133,
           "InteractionType": "Interact",
+          "AetheryteShortcut": "Gridania",
           "AethernetShortcut": [
             "[Gridania] Aetheryte Plaza",
             "[Gridania] Conjurers' Guild"
@@ -264,7 +274,15 @@
             "Z": -262.68408
           },
           "TerritoryId": 133,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         }
       ]
     },
