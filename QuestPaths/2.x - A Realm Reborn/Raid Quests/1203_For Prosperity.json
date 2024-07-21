@@ -1,0 +1,41 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "JerryWester",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1007763,
+          "Position": {
+            "X": 447.4403,
+            "Y": -5.3500423,
+            "Z": -467.7959
+          },
+          "TerritoryId": 156,
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Mor Dhona",
+          "SkipIf": [
+            "AetheryteShortcutIfInSameTerritory"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1006725,
+          "Position": {
+            "X": 446.82983,
+            "Y": -5.306207,
+            "Z": -465.72064
+          },
+          "TerritoryId": 156,
+          "InteractionType": "CompleteQuest",
+          "NextQuestId": 1474
+        }
+      ]
+    }
+  ]
+}
