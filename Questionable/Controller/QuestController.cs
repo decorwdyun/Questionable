@@ -141,12 +141,7 @@ internal sealed class QuestController
         {
             DebugState = null;
 
-            byte currentSequence = 0;
-            if (_simulatedQuest != null)
-            {
-                currentSequence = _simulatedQuest.Sequence;
-            }
-            else if (_nextQuest != null)
+            if (_simulatedQuest == null && _nextQuest != null)
             {
                 // if the quest is accepted, we no longer track it
                 bool canUseNextQuest;
@@ -158,19 +153,25 @@ internal sealed class QuestController
                 if (!canUseNextQuest)
                 {
                     _logger.LogInformation("Next quest {QuestId} accepted or completed", _nextQuest.Quest.QuestId);
-
                     _nextQuest = null;
-                    currentSequence = 0;
-                }
-                else
-                {
-                    currentSequence = _nextQuest.Sequence; // by definition, this should always be 0
-                    if (_nextQuest.Step == 0 && _currentTask == null && _taskQueue.Count == 0 && _automatic)
-                        ExecuteNextStep(true);
                 }
             }
 
-            if (_simulatedQuest == null && _nextQuest == null)
+            QuestProgress? questToRun;
+            byte currentSequence;
+            if (_simulatedQuest != null)
+            {
+                currentSequence = _simulatedQuest.Sequence;
+                questToRun = _simulatedQuest;
+            }
+            else if (_nextQuest != null && _gameFunctions.IsReadyToAcceptQuest(_nextQuest.Quest.QuestId))
+            {
+                questToRun = _nextQuest;
+                currentSequence = _nextQuest.Sequence; // by definition, this should always be 0
+                if (_nextQuest.Step == 0 && _currentTask == null && _taskQueue.Count == 0 && _automatic)
+                    ExecuteNextStep(true);
+            }
+            else
             {
                 (ushort currentQuestId, currentSequence) = _gameFunctions.GetCurrentQuest();
                 if (currentQuestId == 0)
@@ -181,6 +182,8 @@ internal sealed class QuestController
                         _startedQuest = null;
                         Stop("Resetting current quest");
                     }
+
+                    questToRun = null;
                 }
                 else if (_startedQuest == null || _startedQuest.Quest.QuestId != currentQuestId)
                 {
@@ -205,9 +208,10 @@ internal sealed class QuestController
 
                     return;
                 }
+                else
+                    questToRun = _startedQuest;
             }
 
-            var questToRun = CurrentQuest;
             if (questToRun == null)
             {
                 DebugState = "No quest active";
@@ -230,7 +234,8 @@ internal sealed class QuestController
             if (questToRun.Sequence != currentSequence)
             {
                 questToRun.SetSequence(currentSequence);
-                Stop("New sequence", continueIfAutomatic: true);
+                Stop($"New sequence {questToRun == _startedQuest}/{_gameFunctions.GetCurrentQuestInternal()}",
+                    continueIfAutomatic: true);
             }
 
             var q = questToRun.Quest;
@@ -316,6 +321,7 @@ internal sealed class QuestController
 
     private void ClearTasksInternal()
     {
+        _logger.LogDebug("Clearing task (internally)");
         _currentTask = null;
 
         if (_taskQueue.Count > 0)
@@ -626,8 +632,7 @@ internal sealed class QuestController
             {
                 SetNextQuest(quest);
                 _chatGui.Print(
-                    "[Questionable] Picking up quest '{Name}' as a priority over current main story/side quests",
-                    quest.Info.Name);
+                    $"[Questionable] Picking up quest '{quest.Info.Name}' as a priority over current main story/side quests.");
                 return true;
             }
         }

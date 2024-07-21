@@ -54,4 +54,11 @@ internal sealed class UiUtils
         ImGui.TextUnformatted(text);
         return hover;
     }
+
+    public bool ChecklistItem(string text, bool complete)
+    {
+        return ChecklistItem(text,
+            complete ? ImGuiColors.ParsedGreen : ImGuiColors.DalamudRed,
+            complete ? FontAwesomeIcon.Check : FontAwesomeIcon.Times);
+    }
 }

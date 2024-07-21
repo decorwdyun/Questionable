@@ -383,8 +383,12 @@ internal sealed class GameUiController : IDisposable
         }
 
         var simulatedQuest = _questController.SimulatedQuest;
-        if (simulatedQuest != null)
-            HandleTravelYesNo(addonSelectYesno, simulatedQuest, actualPrompt);
+        if (simulatedQuest != null && HandleTravelYesNo(addonSelectYesno, simulatedQuest, actualPrompt))
+            return;
+
+        var nextQuest = _questController.NextQuest;
+        if (nextQuest != null)
+            HandleTravelYesNo(addonSelectYesno, nextQuest, actualPrompt);
     }
 
     private unsafe bool HandleDefaultYesNo(AddonSelectYesno* addonSelectYesno, Quest quest,

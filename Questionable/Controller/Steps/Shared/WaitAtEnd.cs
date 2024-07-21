@@ -123,7 +123,7 @@ internal static class WaitAtEnd
                     var complete = serviceProvider.GetRequiredService<WaitQuestCompleted>()
                         .With(step.TurnInQuestId ?? quest.QuestId);
                     var delay = serviceProvider.GetRequiredService<WaitDelay>();
-                    if (step.NextQuestId != null)
+                    if (step.TurnInQuestId != null)
                         return [complete, delay, Next(quest, sequence)];
                     else
                         return [complete, delay];

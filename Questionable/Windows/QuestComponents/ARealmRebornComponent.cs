@@ -35,12 +35,14 @@ internal sealed class ARealmRebornComponent
 
     public void Draw()
     {
-        var completedPrimals = UIState.IsInstanceContentCompleted(RequiredPrimalInstances.Last());
-        bool completedRaids = _gameFunctions.IsQuestComplete(RequiredAllianceRaidQuests.Last());
-        bool complete = completedPrimals && completedRaids;
-        bool hover = _uiUtils.ChecklistItem("ARR Primals & Raids",
-            complete ? ImGuiColors.ParsedGreen : ImGuiColors.DalamudRed,
-            complete ? FontAwesomeIcon.Check : FontAwesomeIcon.Times);
+        DrawPrimals();
+        DrawAllianceRaids();
+    }
+
+    private void DrawPrimals()
+    {
+        bool complete = UIState.IsInstanceContentCompleted(RequiredPrimalInstances.Last());
+        bool hover = _uiUtils.ChecklistItem("Hard Mode Primals", complete);
         if (complete || !hover)
             return;
 
@@ -48,14 +50,24 @@ internal sealed class ARealmRebornComponent
         if (!tooltip)
             return;
 
-        ImGui.Text("Primals:");
         foreach (var instanceId in RequiredPrimalInstances)
         {
             (Vector4 color, FontAwesomeIcon icon) = UiUtils.GetInstanceStyle(instanceId);
             _uiUtils.ChecklistItem(_territoryData.GetInstanceName(instanceId) ?? "?", color, icon);
         }
+    }
 
-        ImGui.Text("Alliance Raids:");
+    private void DrawAllianceRaids()
+    {
+        bool complete = _gameFunctions.IsQuestComplete(RequiredAllianceRaidQuests.Last());
+        bool hover = _uiUtils.ChecklistItem("Crystal Tower Raids", complete);
+        if (complete || !hover)
+            return;
+
+        using var tooltip = ImRaii.Tooltip();
+        if (!tooltip)
+            return;
+
         foreach (var questId in RequiredAllianceRaidQuests)
         {
             (Vector4 color, FontAwesomeIcon icon, _) = _uiUtils.GetQuestStyle(questId);

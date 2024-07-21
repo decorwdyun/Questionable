@@ -91,40 +91,38 @@ internal sealed class ActiveQuestComponent
     {
         if (currentQuestType == QuestController.CurrentQuestType.Simulated)
         {
-            var simulatedQuest = _questController.SimulatedQuest ?? currentQuest;
             using var _ = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudRed);
             ImGui.TextUnformatted(
-                $"Simulated Quest: {simulatedQuest.Quest.Info.Name} / {simulatedQuest.Sequence} / {simulatedQuest.Step}");
+                $"Simulated Quest: {currentQuest.Quest.Info.Name} / {currentQuest.Sequence} / {currentQuest.Step}");
         }
-        else if (currentQuestType == QuestController.CurrentQuestType.Next)
+        else
         {
             var startedQuest = _questController.StartedQuest;
             if (startedQuest != null)
-                DrawCurrentQuest(startedQuest);
+            {
+                ImGui.TextUnformatted(
+                    $"Quest: {startedQuest.Quest.Info.Name} / {startedQuest.Sequence} / {startedQuest.Step}");
 
-            using var _ = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
-            ImGui.TextUnformatted(
-                $"Next Quest: {currentQuest.Quest.Info.Name} / {currentQuest.Sequence} / {currentQuest.Step}");
-        }
-        else
-            DrawCurrentQuest(currentQuest);
-    }
+                if (startedQuest.Quest.Root.Disabled)
+                {
+                    ImGui.SameLine();
+                    ImGui.TextColored(ImGuiColors.DalamudRed, "Disabled");
+                }
 
-    private void DrawCurrentQuest(QuestController.QuestProgress currentQuest)
-    {
-        ImGui.TextUnformatted(
-            $"Quest: {currentQuest.Quest.Info.Name} / {currentQuest.Sequence} / {currentQuest.Step}");
+                if (_configuration.Advanced.AdditionalStatusInformation && _questController.IsInterruptible())
+                {
+                    ImGui.SameLine();
+                    ImGui.TextColored(ImGuiColors.DalamudYellow, "Interruptible");
+                }
+            }
 
-        if (currentQuest.Quest.Root.Disabled)
-        {
-            ImGui.SameLine();
-            ImGui.TextColored(ImGuiColors.DalamudRed, "Disabled");
-        }
-
-        if (_configuration.Advanced.AdditionalStatusInformation && _questController.IsInterruptible())
-        {
-            ImGui.SameLine();
-            ImGui.TextColored(ImGuiColors.DalamudYellow, "Interruptible");
+            var nextQuest = _questController.NextQuest;
+            if (nextQuest != null)
+            {
+                using var _ = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
+                ImGui.TextUnformatted(
+                    $"Next Quest: {currentQuest.Quest.Info.Name} / {currentQuest.Sequence} / {currentQuest.Step}");
+            }
         }
     }
 
