@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using System.Numerics;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
@@ -25,10 +26,12 @@ internal sealed class ActiveQuestComponent
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly Configuration _configuration;
     private readonly QuestRegistry _questRegistry;
+    private readonly IChatGui _chatGui;
 
     public ActiveQuestComponent(QuestController questController, MovementController movementController,
         CombatController combatController, GameFunctions gameFunctions, ICommandManager commandManager,
-        IDalamudPluginInterface pluginInterface, Configuration configuration, QuestRegistry questRegistry)
+        IDalamudPluginInterface pluginInterface, Configuration configuration, QuestRegistry questRegistry,
+        IChatGui chatGui)
     {
         _questController = questController;
         _movementController = movementController;
@@ -38,6 +41,7 @@ internal sealed class ActiveQuestComponent
         _pluginInterface = pluginInterface;
         _configuration = configuration;
         _questRegistry = questRegistry;
+        _chatGui = chatGui;
     }
 
     public void Draw()
@@ -128,10 +132,21 @@ internal sealed class ActiveQuestComponent
 
     private QuestWork? DrawQuestWork(QuestController.QuestProgress currentQuest)
     {
-        ImGui.BeginDisabled();
         var questWork = _gameFunctions.GetQuestEx(currentQuest.Quest.QuestId);
         if (questWork != null)
         {
+            Vector4 color;
+            unsafe
+            {
+                var ptr =ImGui.GetStyleColorVec4(ImGuiCol.TextDisabled);
+                if (ptr != null)
+                    color = *ptr;
+                else
+                    color = ImGuiColors.ParsedOrange;
+            }
+
+            using var styleColor = ImRaii.PushColor(ImGuiCol.Text, color);
+
             var qw = questWork.Value;
             string vars = "";
             for (int i = 0; i < 6; ++i)
@@ -149,16 +164,36 @@ internal sealed class ActiveQuestComponent
             // The order in which enemies are killed doesn't seem to matter.
             // If multiple waves spawn, this continues to count up (e.g. 1 enemy from wave 1, 2 enemies from wave 2, 1 from wave 3) would count to 3 then 0
             ImGui.Text($"QW: {vars.Trim()}");
+
+            if (ImGui.IsItemClicked())
+            {
+                string copy = "";
+                for (int i = 0; i < 6; ++i)
+                    copy += qw.Variables[i] + " ";
+
+                copy = copy.Trim();
+                ImGui.SetClipboardText(copy);
+                _chatGui.Print($"Copied '{copy}' to clipboard");
+            }
+
+            if (ImGui.IsItemHovered())
+            {
+                ImGui.SameLine();
+                ImGui.PushFont(UiBuilder.IconFont);
+                ImGui.Text(FontAwesomeIcon.Copy.ToIconString());
+                ImGui.PopFont();
+            }
         }
         else
         {
+            using var disabled = ImRaii.Disabled();
+
             if (currentQuest.Quest.QuestId == _questController.NextQuest?.Quest.QuestId)
                 ImGui.TextUnformatted("(Next quest in story line not accepted)");
             else
                 ImGui.TextUnformatted("(Not accepted)");
         }
 
-        ImGui.EndDisabled();
         return questWork;
     }
 
