@@ -12,5 +12,5 @@ public sealed class ComplexCombatData
     public uint? RewardItemId { get; set; }
     public int? RewardItemCount { get; set; }
     public IList<short?> CompletionQuestVariablesFlags { get; set; } = new List<short?>();
-    public bool IgnoreQuestMarker { get; }
+    public bool IgnoreQuestMarker { get; set; }
 }

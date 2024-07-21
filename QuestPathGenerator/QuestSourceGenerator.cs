@@ -208,38 +208,45 @@ public class QuestSourceGenerator : ISourceGenerator
 
     private static IEnumerable<SyntaxNodeOrToken> CreateQuestInitializer(ushort questId, QuestRoot quest)
     {
-        return new SyntaxNodeOrToken[]
+        try
         {
-            InitializerExpression(
-                SyntaxKind.ComplexElementInitializerExpression,
-                SeparatedList<ExpressionSyntax>(
-                    new SyntaxNodeOrToken[]
-                    {
-                        LiteralExpression(
-                            SyntaxKind.NumericLiteralExpression,
-                            Literal(questId)),
-                        Token(SyntaxKind.CommaToken),
-                        ObjectCreationExpression(
-                                IdentifierName(nameof(QuestRoot)))
-                            .WithInitializer(
-                                InitializerExpression(
-                                    SyntaxKind.ObjectInitializerExpression,
-                                    SeparatedList<ExpressionSyntax>(
-                                        SyntaxNodeList(
-                                            AssignmentList(nameof(QuestRoot.Author), quest.Author)
-                                                .AsSyntaxNodeOrToken(),
-                                            Assignment(nameof(QuestRoot.Comment), quest.Comment, null)
-                                                .AsSyntaxNodeOrToken(),
-                                            AssignmentList(nameof(QuestRoot.TerritoryBlacklist),
-                                                quest.TerritoryBlacklist).AsSyntaxNodeOrToken(),
-                                            AssignmentExpression(
-                                                SyntaxKind.SimpleAssignmentExpression,
-                                                IdentifierName(nameof(QuestRoot.QuestSequence)),
-                                                CreateQuestSequence(quest.QuestSequence))
-                                        ))))
-                    })),
-            Token(SyntaxKind.CommaToken)
-        };
+            return new SyntaxNodeOrToken[]
+            {
+                InitializerExpression(
+                    SyntaxKind.ComplexElementInitializerExpression,
+                    SeparatedList<ExpressionSyntax>(
+                        new SyntaxNodeOrToken[]
+                        {
+                            LiteralExpression(
+                                SyntaxKind.NumericLiteralExpression,
+                                Literal(questId)),
+                            Token(SyntaxKind.CommaToken),
+                            ObjectCreationExpression(
+                                    IdentifierName(nameof(QuestRoot)))
+                                .WithInitializer(
+                                    InitializerExpression(
+                                        SyntaxKind.ObjectInitializerExpression,
+                                        SeparatedList<ExpressionSyntax>(
+                                            SyntaxNodeList(
+                                                AssignmentList(nameof(QuestRoot.Author), quest.Author)
+                                                    .AsSyntaxNodeOrToken(),
+                                                Assignment(nameof(QuestRoot.Comment), quest.Comment, null)
+                                                    .AsSyntaxNodeOrToken(),
+                                                AssignmentList(nameof(QuestRoot.TerritoryBlacklist),
+                                                    quest.TerritoryBlacklist).AsSyntaxNodeOrToken(),
+                                                AssignmentExpression(
+                                                    SyntaxKind.SimpleAssignmentExpression,
+                                                    IdentifierName(nameof(QuestRoot.QuestSequence)),
+                                                    CreateQuestSequence(quest.QuestSequence))
+                                            ))))
+                        })),
+                Token(SyntaxKind.CommaToken)
+            };
+        }
+        catch (Exception e)
+        {
+            throw new Exception($"QuestGen[{questId}]: {e.Message}", e);
+        }
     }
 
     private static ExpressionSyntax CreateQuestSequence(List<QuestSequence> sequences)
@@ -321,13 +328,15 @@ public class QuestSourceGenerator : ISourceGenerator
                                                 .AsSyntaxNodeOrToken(),
                                             Assignment(nameof(QuestStep.Sprint), step.Sprint, emptyStep.Sprint)
                                                 .AsSyntaxNodeOrToken(),
-                                            Assignment(nameof(QuestStep.IgnoreDistanceToObject), step.IgnoreDistanceToObject, emptyStep.IgnoreDistanceToObject)
+                                            Assignment(nameof(QuestStep.IgnoreDistanceToObject),
+                                                    step.IgnoreDistanceToObject, emptyStep.IgnoreDistanceToObject)
                                                 .AsSyntaxNodeOrToken(),
                                             Assignment(nameof(QuestStep.Comment), step.Comment, emptyStep.Comment)
                                                 .AsSyntaxNodeOrToken(),
                                             Assignment(nameof(QuestStep.Aetheryte), step.Aetheryte, emptyStep.Aetheryte)
                                                 .AsSyntaxNodeOrToken(),
-                                            Assignment(nameof(QuestStep.AethernetShard), step.AethernetShard, emptyStep.AethernetShard)
+                                            Assignment(nameof(QuestStep.AethernetShard), step.AethernetShard,
+                                                    emptyStep.AethernetShard)
                                                 .AsSyntaxNodeOrToken(),
                                             Assignment(nameof(QuestStep.AetheryteShortcut), step.AetheryteShortcut,
                                                     emptyStep.AetheryteShortcut)
@@ -357,7 +366,8 @@ public class QuestSourceGenerator : ISourceGenerator
                                                 .AsSyntaxNodeOrToken(),
                                             AssignmentList(nameof(QuestStep.ComplexCombatData), step.ComplexCombatData)
                                                 .AsSyntaxNodeOrToken(),
-                                            Assignment(nameof(QuestStep.CombatDelaySecondsAtStart), step.CombatDelaySecondsAtStart,
+                                            Assignment(nameof(QuestStep.CombatDelaySecondsAtStart),
+                                                    step.CombatDelaySecondsAtStart,
                                                     emptyStep.CombatDelaySecondsAtStart)
                                                 .AsSyntaxNodeOrToken(),
                                             Assignment(nameof(QuestStep.JumpDestination), step.JumpDestination,
@@ -378,11 +388,14 @@ public class QuestSourceGenerator : ISourceGenerator
                                                 .AsSyntaxNodeOrToken(),
                                             AssignmentList(nameof(QuestStep.PointMenuChoices), step.PointMenuChoices)
                                                 .AsSyntaxNodeOrToken(),
-                                            Assignment(nameof(QuestStep.PickUpQuestId), step.PickUpQuestId, emptyStep.PickUpQuestId)
+                                            Assignment(nameof(QuestStep.PickUpQuestId), step.PickUpQuestId,
+                                                    emptyStep.PickUpQuestId)
                                                 .AsSyntaxNodeOrToken(),
-                                            Assignment(nameof(QuestStep.TurnInQuestId), step.TurnInQuestId, emptyStep.TurnInQuestId)
+                                            Assignment(nameof(QuestStep.TurnInQuestId), step.TurnInQuestId,
+                                                    emptyStep.TurnInQuestId)
                                                 .AsSyntaxNodeOrToken(),
-                                            Assignment(nameof(QuestStep.NextQuestId), step.NextQuestId, emptyStep.NextQuestId)
+                                            Assignment(nameof(QuestStep.NextQuestId), step.NextQuestId,
+                                                    emptyStep.NextQuestId)
                                                 .AsSyntaxNodeOrToken()))))),
                     Token(SyntaxKind.CommaToken),
                 }.ToArray())));
