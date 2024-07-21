@@ -1,0 +1,70 @@
+﻿{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "TerritoryBlacklist": [
+    171
+  ],
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1003281,
+          "Position": {
+            "X": 97.520386,
+            "Y": 40.248554,
+            "Z": 81.1322
+          },
+          "TerritoryId": 128,
+          "InteractionType": "AcceptQuest"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1006516,
+          "Position": {
+            "X": -82.68872,
+            "Y": 233.23743,
+            "Z": 317.1892
+          },
+          "TerritoryId": 155,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Coerthas Central Highlands - Camp Dragonhead"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "TerritoryId": 155,
+          "InteractionType": "Duty",
+          "ContentFinderConditionId": 13
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1003281,
+          "Position": {
+            "X": 97.520386,
+            "Y": 40.248554,
+            "Z": 81.1322
+          },
+          "TerritoryId": 128,
+          "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Limsa Lominsa",
+          "AethernetShortcut": [
+            "[Limsa Lominsa] Aetheryte Plaza",
+            "[Limsa Lominsa] The Aftcastle"
+          ]
+        }
+      ]
+    }
+  ]
+}

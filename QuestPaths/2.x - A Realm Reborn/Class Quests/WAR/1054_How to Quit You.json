@@ -16,6 +16,56 @@
           "InteractionType": "AcceptQuest"
         }
       ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1006771,
+          "Position": {
+            "X": 89.829834,
+            "Y": 66.04188,
+            "Z": 18.753235
+          },
+          "TerritoryId": 137,
+          "InteractionType": "SinglePlayerDuty",
+          "AetheryteShortcut": "Eastern La Noscea - Wineport",
+          "Fly": true
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1006774,
+          "Position": {
+            "X": -11.367981,
+            "Y": 69.20081,
+            "Z": 30.258545
+          },
+          "TerritoryId": 137,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1006746,
+          "Position": {
+            "X": 460.65454,
+            "Y": 8.309061,
+            "Z": 74.47925
+          },
+          "TerritoryId": 137,
+          "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Eastern La Noscea - Costa Del Sol",
+          "NextQuestId": 1054,
+          "Fly": true
+        }
+      ]
     }
   ]
 }

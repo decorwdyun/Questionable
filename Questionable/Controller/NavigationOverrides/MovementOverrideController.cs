@@ -23,6 +23,9 @@ internal sealed class MovementOverrideController
         // southern thanalan
         new BlacklistedPoint(146, new(-201.75f, 10.5f, -265.5f), new(-203.75235f, 10.130764f, -265.15314f)),
 
+        // lower la noscea - moraby drydocks aetheryte
+        new BlacklistedArea(135, new(156.11499f, 15.518433f, 673.21277f), 0.5f, 5f),
+
         // coerthas central highlands
         new BlacklistedPoint(155, new(-478.75f, 149.25f, -305.75f), new(-476.1802f, 149.06573f, -304.7811f)),
 

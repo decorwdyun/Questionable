@@ -26,7 +26,6 @@
       "Steps": [
         {
           "TerritoryId": 147,
-          "StopDistance": 5,
           "InteractionType": "AttuneAetheryte",
           "Aetheryte": "Northern Thanalan - Ceruleum Processing Plant"
         },
