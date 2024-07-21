@@ -1,0 +1,89 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "JerryWester",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1006454,
+          "Position": {
+            "X": -168.84113,
+            "Y": 304.1538,
+            "Z": -328.66406
+          },
+          "TerritoryId": 155,
+          "InteractionType": "AcceptQuest"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1006454,
+          "Position": {
+            "X": -168.84113,
+            "Y": 304.1538,
+            "Z": -328.66406
+          },
+          "TerritoryId": 155,
+          "InteractionType": "SinglePlayerDuty"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1010978,
+          "Position": {
+            "X": -157.57996,
+            "Y": 304.1538,
+            "Z": -314.53424
+          },
+          "TerritoryId": 155,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "TerritoryId": 156,
+          "DataId": 2002881,
+          "Position": {
+            "X": 21.133728,
+            "Y": 22.323914,
+            "Z": -631.281
+          },
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 351,
+          "AetheryteShortcut": "Mor Dhona"
+        },
+        {
+          "DataId": 2002878,
+          "Position": {
+            "X": -0.015319824,
+            "Y": -1.0223389,
+            "Z": -26.779602
+          },
+          "TerritoryId": 351,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 351
+        },
+        {
+          "DataId": 1010897,
+          "Position": {
+            "X": 0.9613037,
+            "Y": -1.9957249,
+            "Z": -45.609253
+          },
+          "TerritoryId": 351,
+          "InteractionType": "CompleteQuest"
+        }
+      ]
+    }
+  ]
+}

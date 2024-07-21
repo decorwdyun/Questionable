@@ -1,0 +1,104 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "JerryWester",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1008969,
+          "Position": {
+            "X": 0.99176025,
+            "Y": -1.9957249,
+            "Z": -45.700806
+          },
+          "TerritoryId": 351,
+          "InteractionType": "AcceptQuest"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 2002880,
+          "Position": {
+            "X": 0,
+            "Y": -1,
+            "Z": -29.25
+          },
+          "TerritoryId": 351,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 351
+        },
+        {
+          "DataId": 1010045,
+          "Position": {
+            "X": -1.9990234,
+            "Y": 0,
+            "Z": -7.1260376
+          },
+          "TerritoryId": 351,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1010533,
+          "Position": {
+            "X": 47.287598,
+            "Y": 4,
+            "Z": 453.97107
+          },
+          "TerritoryId": 147,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Northern Thanalan - Camp Bluefog"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "Position": {
+            "X": -140.17616,
+            "Y": 58.384903,
+            "Z": -82.89941
+          },
+          "TerritoryId": 147,
+          "InteractionType": "WalkTo",
+          "Fly": true,
+          "AetheryteShortcut": "Northern Thanalan - Ceruleum Processing Plant"
+        },
+        {
+          "DataId": 1010046,
+          "Position": {
+            "X": -140.1236,
+            "Y": 58.32732,
+            "Z": -82.07831
+          },
+          "TerritoryId": 147,
+          "InteractionType": "SinglePlayerDuty"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1010063,
+          "Position": {
+            "X": -207.56854,
+            "Y": 71.617355,
+            "Z": -132.52466
+          },
+          "TerritoryId": 147,
+          "InteractionType": "CompleteQuest"
+        }
+      ]
+    }
+  ]
+}
