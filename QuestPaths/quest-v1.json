@@ -184,7 +184,8 @@
                       "ChocoboUnlocked",
                       "AetheryteShortcutIfInSameTerritory",
                       "NotTargetable",
-                      "ItemNotInInventory"
+                      "ItemNotInInventory",
+                      "WakingSandsMainArea"
                     ]
                   }
                 },

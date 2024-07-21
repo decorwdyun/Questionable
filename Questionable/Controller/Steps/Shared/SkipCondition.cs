@@ -28,7 +28,9 @@ internal static class SkipCondition
                 step.SkipIf.Where(x => x != ESkipCondition.AetheryteShortcutIfInSameTerritory).ToList();
             if (relevantConditions.Count == 0 &&
                 step.CompletionQuestVariablesFlags.Count == 0 &&
-                step.RequiredQuestVariables.Count == 0)
+                step.RequiredQuestVariables.Count == 0 &&
+                step.PickUpQuestId == null &&
+                step.NextQuestId == null)
                 return null;
 
             return serviceProvider.GetRequiredService<CheckTask>()
@@ -141,6 +143,28 @@ internal static class SkipCondition
                     logger.LogInformation("Skipping step, as required variables do not match");
                     return true;
                 }
+            }
+
+            if (Step.SkipIf.Contains(ESkipCondition.WakingSandsMainArea))
+            {
+                var position = clientState.LocalPlayer!.Position;
+                if (position.X < 24)
+                {
+                    logger.LogInformation("Skipping step, as we're not in the Solar");
+                    return true;
+                }
+            }
+
+            if (Step.PickUpQuestId != null && gameFunctions.IsQuestAcceptedOrComplete(Step.PickUpQuestId.Value))
+            {
+                logger.LogInformation("Skipping step, as we have already picked up the relevant quest");
+                return true;
+            }
+
+            if (Step.TurnInQuestId != null && gameFunctions.IsQuestComplete(Step.TurnInQuestId.Value))
+            {
+                logger.LogInformation("Skipping step, as we have already completed the relevant quest");
+                return true;
             }
 
             return false;

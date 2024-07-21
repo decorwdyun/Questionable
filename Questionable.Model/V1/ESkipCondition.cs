@@ -14,4 +14,7 @@ public enum ESkipCondition
     AetheryteShortcutIfInSameTerritory,
     NotTargetable,
     ItemNotInInventory,
+
+    // TODO: This is an indication the whole skip bit should be optimized/parameterized to some extent
+    WakingSandsMainArea,
 }

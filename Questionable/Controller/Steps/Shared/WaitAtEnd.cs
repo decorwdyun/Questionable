@@ -108,20 +108,26 @@ internal static class WaitAtEnd
                     ];
 
                 case EInteractionType.AcceptQuest:
-                    return
-                    [
-                        serviceProvider.GetRequiredService<WaitQuestAccepted>()
-                            .With(step.PickUpQuestId ?? quest.QuestId),
-                        serviceProvider.GetRequiredService<WaitDelay>()
-                    ];
+                {
+                    var accept = serviceProvider.GetRequiredService<WaitQuestAccepted>()
+                        .With(step.PickUpQuestId ?? quest.QuestId);
+                    var delay = serviceProvider.GetRequiredService<WaitDelay>();
+                    if (step.PickUpQuestId != null)
+                        return [accept, delay, Next(quest, sequence)];
+                    else
+                        return [accept, delay];
+                }
 
                 case EInteractionType.CompleteQuest:
-                    return
-                    [
-                        serviceProvider.GetRequiredService<WaitQuestCompleted>()
-                            .With(step.TurnInQuestId ?? quest.QuestId),
-                        serviceProvider.GetRequiredService<WaitDelay>()
-                    ];
+                {
+                    var complete = serviceProvider.GetRequiredService<WaitQuestCompleted>()
+                        .With(step.TurnInQuestId ?? quest.QuestId);
+                    var delay = serviceProvider.GetRequiredService<WaitDelay>();
+                    if (step.NextQuestId != null)
+                        return [complete, delay, Next(quest, sequence)];
+                    else
+                        return [complete, delay];
+                }
 
                 case EInteractionType.Interact:
                 default:
