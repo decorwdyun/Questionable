@@ -15,6 +15,9 @@ internal sealed class MovementOverrideController
         // New Gridania Navmesh workaround
         new BlacklistedPoint(128, new(2f, 40.25f, 36.5f), new(0.25f, 40.25f, 36.5f)),
 
+        // lotus stand
+        new BlacklistedPoint(205, new(26.75f, 0.5f, 20.75f), new(27.179117f, 0.26728272f, 19.714373f)),
+
         new BlacklistedPoint(132, new(45.5f, -8f, 101f), new(50.53978f, -8.046954f, 101.06045f)),
 
         // eastern thanalan

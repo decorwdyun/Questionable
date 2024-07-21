@@ -251,6 +251,9 @@ internal sealed unsafe class GameFunctions
                 return false;
         }
 
+        if (IsQuestLocked(questId))
+            return false;
+
         // if we're not at a high enough level to continue, we also ignore it
         var currentLevel = _clientState.LocalPlayer?.Level ?? 0;
         if (currentLevel != 0 && quest != null && quest.Info.Level > currentLevel)
@@ -288,19 +291,37 @@ internal sealed unsafe class GameFunctions
                 return true;
         }
 
-        if (questInfo.PreviousQuests.Count > 0)
-        {
-            var completedQuests = questInfo.PreviousQuests.Count(x => IsQuestComplete(x) || x == extraCompletedQuest);
-            if (questInfo.PreviousQuestJoin == QuestInfo.QuestJoin.All &&
-                questInfo.PreviousQuests.Count == completedQuests)
-                return false;
-            else if (questInfo.PreviousQuestJoin == QuestInfo.QuestJoin.AtLeastOne && completedQuests > 0)
-                return false;
-            else
-                return true;
-        }
+        return !HasCompletedPreviousQuests(questInfo, extraCompletedQuest) || !HasCompletedPreviousInstances(questInfo);
+    }
 
-        return false;
+    private bool HasCompletedPreviousQuests(QuestInfo questInfo, ushort? extraCompletedQuest)
+    {
+        if (questInfo.PreviousQuests.Count == 0)
+            return true;
+
+        var completedQuests = questInfo.PreviousQuests.Count(x => IsQuestComplete(x) || x == extraCompletedQuest);
+        if (questInfo.PreviousQuestJoin == QuestInfo.QuestJoin.All &&
+            questInfo.PreviousQuests.Count == completedQuests)
+            return true;
+        else if (questInfo.PreviousQuestJoin == QuestInfo.QuestJoin.AtLeastOne && completedQuests > 0)
+            return true;
+        else
+            return false;
+    }
+
+    private static bool HasCompletedPreviousInstances(QuestInfo questInfo)
+    {
+        if (questInfo.PreviousInstanceContent.Count == 0)
+            return true;
+
+        var completedInstances = questInfo.PreviousInstanceContent.Count(x => UIState.IsInstanceContentCompleted(x));
+        if (questInfo.PreviousInstanceContentJoin == QuestInfo.QuestJoin.All &&
+            questInfo.PreviousInstanceContent.Count == completedInstances)
+            return true;
+        else if (questInfo.PreviousInstanceContentJoin == QuestInfo.QuestJoin.AtLeastOne && completedInstances > 0)
+            return true;
+        else
+            return false;
     }
 
     public bool IsAetheryteUnlocked(uint aetheryteId, out byte subIndex)

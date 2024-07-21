@@ -19,6 +19,7 @@ using Questionable.External;
 using Questionable.Validation;
 using Questionable.Validation.Validators;
 using Questionable.Windows;
+using Questionable.Windows.QuestComponents;
 using Action = Questionable.Controller.Steps.Interactions.Action;
 
 namespace Questionable;
@@ -152,6 +153,14 @@ public sealed class QuestionablePlugin : IDalamudPlugin
 
     private static void AddWindows(ServiceCollection serviceCollection)
     {
+        serviceCollection.AddSingleton<UiUtils>();
+
+        serviceCollection.AddSingleton<ActiveQuestComponent>();
+        serviceCollection.AddSingleton<ARealmRebornComponent>();
+        serviceCollection.AddSingleton<CreationUtilsComponent>();
+        serviceCollection.AddSingleton<QuickAccessButtonsComponent>();
+        serviceCollection.AddSingleton<RemainingTasksComponent>();
+
         serviceCollection.AddSingleton<QuestWindow>();
         serviceCollection.AddSingleton<ConfigWindow>();
         serviceCollection.AddSingleton<DebugOverlay>();

@@ -1,4 +1,5 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
 using Dalamud.Plugin.Services;
@@ -12,6 +13,7 @@ internal sealed class TerritoryData
     private readonly ImmutableDictionary<uint, string> _territoryNames;
     private readonly ImmutableHashSet<ushort> _territoriesWithMount;
     private readonly ImmutableHashSet<ushort> _dutyTerritories;
+    private readonly ImmutableDictionary<ushort, string> _instanceNames;
 
     public TerritoryData(IDataManager dataManager)
     {
@@ -35,6 +37,10 @@ internal sealed class TerritoryData
             .Where(x => x.RowId > 0 && x.ContentFinderCondition.Row != 0)
             .Select(x => (ushort)x.RowId)
             .ToImmutableHashSet();
+
+        _instanceNames = dataManager.GetExcelSheet<ContentFinderCondition>()!
+            .Where(x => x.RowId > 0 && x.Content != 0 && x.ContentLinkType == 1 && x.ContentType.Row != 6)
+            .ToImmutableDictionary(x => x.Content, x => x.Name.ToString());
     }
 
     public string? GetName(ushort territoryId) => _territoryNames.GetValueOrDefault(territoryId);
@@ -51,4 +57,6 @@ internal sealed class TerritoryData
     public bool CanUseMount(ushort territoryId) => _territoriesWithMount.Contains(territoryId);
 
     public bool IsDutyInstance(ushort territoryId) => _dutyTerritories.Contains(territoryId);
+
+    public string? GetInstanceName(ushort instanceId) => _instanceNames.GetValueOrDefault(instanceId);
 }

@@ -33,6 +33,7 @@ internal sealed class QuestSelectionWindow : LWindow
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly TerritoryData _territoryData;
     private readonly IClientState _clientState;
+    private readonly UiUtils _uiUtils;
 
     private List<QuestInfo> _quests = [];
     private List<QuestInfo> _offeredQuests = [];
@@ -40,7 +41,7 @@ internal sealed class QuestSelectionWindow : LWindow
 
     public QuestSelectionWindow(QuestData questData, IGameGui gameGui, IChatGui chatGui, GameFunctions gameFunctions,
         QuestController questController, QuestRegistry questRegistry, IDalamudPluginInterface pluginInterface,
-        TerritoryData territoryData, IClientState clientState)
+        TerritoryData territoryData, IClientState clientState, UiUtils uiUtils)
         : base($"Quest Selection{WindowId}")
     {
         _questData = questData;
@@ -52,6 +53,7 @@ internal sealed class QuestSelectionWindow : LWindow
         _pluginInterface = pluginInterface;
         _territoryData = territoryData;
         _clientState = clientState;
+        _uiUtils = uiUtils;
 
         Size = new Vector2(500, 200);
         SizeCondition = ImGuiCond.Once;
@@ -151,7 +153,7 @@ internal sealed class QuestSelectionWindow : LWindow
             if (ImGui.TableNextColumn())
             {
                 ImGui.AlignTextToFramePadding();
-                var (color, icon, tooltipText) = GetQuestStyle(quest.QuestId);
+                var (color, icon, tooltipText) = _uiUtils.GetQuestStyle(quest.QuestId);
                 using (var _ = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
                 {
                     if (isKnownQuest)
@@ -251,18 +253,6 @@ internal sealed class QuestSelectionWindow : LWindow
         _chatGui.Print($"Copied '{fileName}' to clipboard");
     }
 
-    private (Vector4 color, FontAwesomeIcon icon, string status) GetQuestStyle(ushort questId)
-    {
-        if (_gameFunctions.IsQuestAccepted(questId))
-            return (ImGuiColors.DalamudYellow, FontAwesomeIcon.Running, "Active");
-        else if (_gameFunctions.IsQuestAcceptedOrComplete(questId))
-            return (ImGuiColors.ParsedGreen, FontAwesomeIcon.Check, "Complete");
-        else if (_gameFunctions.IsQuestLocked(questId))
-            return (ImGuiColors.DalamudRed, FontAwesomeIcon.Times, "Locked");
-        else
-            return (ImGuiColors.DalamudYellow, FontAwesomeIcon.PersonWalkingArrowRight, "Available");
-    }
-
     private void DrawQuestUnlocks(QuestInfo quest, int counter)
     {
         if (counter >= 10)
@@ -287,7 +277,7 @@ internal sealed class QuestSelectionWindow : LWindow
             foreach (var q in quest.PreviousQuests)
             {
                 var qInfo = _questData.GetQuestInfo(q);
-                var (iconColor, icon, _) = GetQuestStyle(q);
+                var (iconColor, icon, _) = _uiUtils.GetQuestStyle(q);
                 // ReSharper disable once UnusedVariable
                 using (var font = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
                 {
@@ -319,7 +309,7 @@ internal sealed class QuestSelectionWindow : LWindow
             foreach (var q in quest.QuestLocks)
             {
                 var qInfo = _questData.GetQuestInfo(q);
-                var (iconColor, icon, _) = GetQuestStyle(q);
+                var (iconColor, icon, _) = _uiUtils.GetQuestStyle(q);
                 // ReSharper disable once UnusedVariable
                 using (var font = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
                 {
@@ -331,6 +321,34 @@ internal sealed class QuestSelectionWindow : LWindow
 
                 ImGui.SameLine();
                 ImGui.TextUnformatted(FormatQuestUnlockName(qInfo));
+            }
+        }
+
+        if (counter == 0 && quest.PreviousInstanceContent.Count > 0)
+        {
+            if (quest.PreviousInstanceContent.Count > 1)
+            {
+                if (quest.PreviousQuestJoin == QuestInfo.QuestJoin.All)
+                    ImGui.Text("Requires all:");
+                else if (quest.PreviousQuestJoin == QuestInfo.QuestJoin.AtLeastOne)
+                    ImGui.Text("Requires one:");
+            }
+            else
+                ImGui.Text("Requires:");
+
+            foreach (var instanceId in quest.PreviousInstanceContent)
+            {
+                string instanceName = _territoryData.GetInstanceName(instanceId) ?? "?";
+                var (iconColor, icon) = UiUtils.GetInstanceStyle(instanceId);
+
+                // ReSharper disable once UnusedVariable
+                using (var font = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
+                {
+                    ImGui.TextColored(iconColor, icon.ToIconString());
+                }
+
+                ImGui.SameLine();
+                ImGui.TextUnformatted(instanceName);
             }
         }
 

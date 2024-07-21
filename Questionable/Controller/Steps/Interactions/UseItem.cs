@@ -121,7 +121,7 @@ internal static class UseItem
             if (DateTime.Now <= _continueAt)
                 return ETaskResult.StillRunning;
 
-            if (ItemId == VesperBayAetheryteTicket)
+            if (ItemId == VesperBayAetheryteTicket && _usedItem)
             {
                 InventoryManager* inventoryManager = InventoryManager.Instance();
                 if (inventoryManager == null)
@@ -131,7 +131,7 @@ internal static class UseItem
                 }
 
                 int itemCount = inventoryManager->GetInventoryItemCount(ItemId);
-                if (!_usedItem && itemCount == _itemCount)
+                if (itemCount == _itemCount)
                 {
                     // TODO Better handling for game-provided errors, i.e. reacting to the 'Could not use' messages. UseItem() is successful in this case (and returns 0)
                     logger.LogInformation(

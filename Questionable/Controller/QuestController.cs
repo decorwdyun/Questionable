@@ -391,7 +391,8 @@ internal sealed class QuestController
                 catch (Exception e)
                 {
                     _logger.LogError(e, "Failed to start task {TaskName}", upcomingTask.ToString());
-                    _chatGui.PrintError($"[Questionable] Failed to start task '{upcomingTask}', please check /xllog for details");
+                    _chatGui.PrintError(
+                        $"[Questionable] Failed to start task '{upcomingTask}', please check /xllog for details");
                     Stop("Task failed to start");
                     return;
                 }
@@ -465,6 +466,9 @@ internal sealed class QuestController
     {
         ClearTasksInternal();
         _automatic = automatic;
+
+        if (TryPickPriorityQuest())
+            _logger.LogInformation("Using priority quest over current quest");
 
         (QuestSequence? seq, QuestStep? step) = GetNextStep();
         if (CurrentQuest == null || seq == null || step == null)
@@ -588,6 +592,47 @@ internal sealed class QuestController
     public void SkipSimulatedTask()
     {
         _currentTask = null;
+    }
+
+    public bool IsInterruptible()
+    {
+        var details = CurrentQuestDetails;
+        if (details == null)
+            return false;
+
+        var (currentQuest, type) = details.Value;
+        if (type != CurrentQuestType.Normal)
+            return false;
+
+        QuestSequence? currentSequence = currentQuest.Quest.FindSequence(currentQuest.Sequence);
+        QuestStep? currentStep = currentSequence?.FindStep(currentQuest.Step);
+        return currentStep?.AetheryteShortcut != null;
+    }
+
+    public bool TryPickPriorityQuest()
+    {
+        if (!IsInterruptible())
+            return false;
+
+        ushort[] priorityQuests =
+        [
+            1157, // Garuda (Hard)
+            1158, // Titan (Hard)
+        ];
+
+        foreach (var questId in priorityQuests)
+        {
+            if (_gameFunctions.IsReadyToAcceptQuest(questId) && _questRegistry.TryGetQuest(questId, out var quest))
+            {
+                SetNextQuest(quest);
+                _chatGui.Print(
+                    "[Questionable] Picking up quest '{Name}' as a priority over current main story/side quests",
+                    quest.Info.Name);
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public sealed record StepProgress(

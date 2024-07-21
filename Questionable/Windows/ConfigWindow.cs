@@ -100,6 +100,13 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
                     Save();
                 }
 
+                bool additionalStatusInformation = _configuration.Advanced.AdditionalStatusInformation;
+                if (ImGui.Checkbox("Draw additional status information", ref additionalStatusInformation))
+                {
+                    _configuration.Advanced.AdditionalStatusInformation = additionalStatusInformation;
+                    Save();
+                }
+
                 ImGui.EndTabItem();
             }
 
