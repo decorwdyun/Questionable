@@ -1,0 +1,132 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "JerryWester",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1010845,
+          "Position": {
+            "X": -17.227417,
+            "Y": -10.015114,
+            "Z": -18.509216
+          },
+          "TerritoryId": 145,
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Eastern Thanalan - Camp Drybone",
+          "SkipIf": [
+            "AetheryteShortcutIfInSameTerritory"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "Position": {
+            "X": 299.38834,
+            "Y": 13.878833,
+            "Z": -9.394985
+          },
+          "TerritoryId": 145,
+          "InteractionType": "WalkTo",
+          "Fly": true
+        },
+        {
+          "Position": {
+            "X": 349.9322,
+            "Y": 22.936062,
+            "Z": 103.77085
+          },
+          "TerritoryId": 145,
+          "InteractionType": "WalkTo",
+          "Fly": true
+        },
+        {
+          "DataId": 1010846,
+          "Position": {
+            "X": 349.08057,
+            "Y": 23.131361,
+            "Z": 103.80713
+          },
+          "TerritoryId": 145,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "Position": {
+            "X": 334.6644,
+            "Y": -10.912087,
+            "Z": 141.75177
+          },
+          "TerritoryId": 145,
+          "InteractionType": "WalkTo",
+          "Fly": true
+        },
+        {
+          "DataId": 1010847,
+          "Position": {
+            "X": 333.6079,
+            "Y": -11.123097,
+            "Z": 141.55786
+          },
+          "TerritoryId": 145,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
+          "KillEnemyDataIds": [
+            363,
+            372,
+            364,
+            2844
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "Position": {
+            "X": 199.16823,
+            "Y": -15.101431,
+            "Z": 161.6615
+          },
+          "TerritoryId": 145,
+          "InteractionType": "WalkTo",
+          "Fly": true
+        },
+        {
+          "DataId": 2005112,
+          "Position": {
+            "X": 199.6947,
+            "Y": -14.725037,
+            "Z": 162.46277
+          },
+          "TerritoryId": 145,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1010849,
+          "Position": {
+            "X": 192.401,
+            "Y": -27.487204,
+            "Z": 199.32861
+          },
+          "TerritoryId": 145,
+          "InteractionType": "CompleteQuest"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,303 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "JerryWester",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1009961,
+          "Position": {
+            "X": -131.88379,
+            "Y": 4.1,
+            "Z": -109.63611
+          },
+          "TerritoryId": 130,
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Ul'dah",
+          "SkipIf": [
+            "AetheryteShortcutIfInSameTerritory"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "TerritoryId": 156,
+          "DataId": 2002881,
+          "Position": {
+            "X": 21.133728,
+            "Y": 22.323914,
+            "Z": -631.281
+          },
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 351,
+          "AetheryteShortcut": "Mor Dhona"
+        },
+        {
+          "Position": {
+            "X": 2.0206594,
+            "Y": 0,
+            "Z": -5.7291903
+          },
+          "TerritoryId": 351,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "DataId": 1010078,
+          "Position": {
+            "X": 31.540405,
+            "Y": -1,
+            "Z": -0.80877686
+          },
+          "TerritoryId": 351,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "Position": {
+            "X": 2.0206594,
+            "Y": 0,
+            "Z": -5.7291903
+          },
+          "TerritoryId": 351,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "DataId": 2002879,
+          "Position": {
+            "X": -0.015319824,
+            "Y": 2.9754639,
+            "Z": 27.481445
+          },
+          "TerritoryId": 351,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 156
+        },
+        {
+          "Position": {
+            "X": 30.625135,
+            "Y": 22.244692,
+            "Z": -655.8638
+          },
+          "TerritoryId": 156,
+          "InteractionType": "WalkTo",
+          "Fly": true
+        },
+        {
+          "Position": {
+            "X": -354.9214,
+            "Y": -16.059055,
+            "Z": -476.1546
+          },
+          "TerritoryId": 156,
+          "InteractionType": "WalkTo",
+          "Fly": true
+        },
+        {
+          "DataId": 1009962,
+          "Position": {
+            "X": -354.60443,
+            "Y": -15.981883,
+            "Z": -477.4395
+          },
+          "TerritoryId": 156,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "Position": {
+            "X": -451.95154,
+            "Y": -4.1647916,
+            "Z": -308.94186
+          },
+          "TerritoryId": 156,
+          "InteractionType": "WalkTo",
+          "Fly": true
+        },
+        {
+          "Position": {
+            "X": -453.1463,
+            "Y": -4.127837,
+            "Z": -304.86533
+          },
+          "TerritoryId": 156,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AutoOnEnterArea",
+          "KillEnemyDataIds": [
+            61,
+            62,
+            63
+          ],
+          "Mount": false,
+          "$": "0 0  0 0  0 0 -> 3 0  0 0  0 0"
+        },
+        {
+          "DataId": 1009966,
+          "Position": {
+            "X": -455.89386,
+            "Y": -4.098249,
+            "Z": -302.72375
+          },
+          "TerritoryId": 156,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "Position": {
+            "X": -471.18558,
+            "Y": -3.3262053,
+            "Z": -233.86926
+          },
+          "TerritoryId": 156,
+          "InteractionType": "WalkTo",
+          "Fly": true
+        },
+        {
+          "Position": {
+            "X": -467.04343,
+            "Y": -3.2168,
+            "Z": -233.30014
+          },
+          "TerritoryId": 156,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AutoOnEnterArea",
+          "KillEnemyDataIds": [
+            63,
+            64,
+            3566
+          ],
+          "Mount": false,
+          "$": "0 0  0 0  0 0 -> 16 3  0 0  0 128"
+        },
+        {
+          "Position": {
+            "X": -541.4635,
+            "Y": -1.9197675,
+            "Z": -286.6551
+          },
+          "TerritoryId": 156,
+          "InteractionType": "WalkTo",
+          "Fly": true
+        },
+        {
+          "Position": {
+            "X": -542.5233,
+            "Y": -1.7329574,
+            "Z": -291.1239
+          },
+          "TerritoryId": 156,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AutoOnEnterArea",
+          "KillEnemyDataIds": [
+            55,
+            3566
+          ],
+          "Mount": false
+        },
+        {
+          "Position": {
+            "X": -593.8261,
+            "Y": -3.046606,
+            "Z": -400.62363
+          },
+          "TerritoryId": 156,
+          "InteractionType": "WalkTo",
+          "Fly": true
+        },
+        {
+          "Position": {
+            "X": -598.8258,
+            "Y": -3.216822,
+            "Z": -398.18915
+          },
+          "TerritoryId": 156,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AutoOnEnterArea",
+          "KillEnemyDataIds": [
+            61,
+            62,
+            55,
+            64
+          ],
+          "Mount": false
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "Position": {
+            "X": -354.04703,
+            "Y": -15.940774,
+            "Z": -476.86594
+          },
+          "TerritoryId": 156,
+          "InteractionType": "WalkTo",
+          "Fly": true
+        },
+        {
+          "DataId": 1009112,
+          "Position": {
+            "X": -355.45898,
+            "Y": -16.030567,
+            "Z": -477.04285
+          },
+          "TerritoryId": 156,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "TerritoryId": 156,
+          "DataId": 2002881,
+          "Position": {
+            "X": 21.133728,
+            "Y": 22.323914,
+            "Z": -631.281
+          },
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 351,
+          "AetheryteShortcut": "Mor Dhona"
+        },
+        {
+          "Position": {
+            "X": 2.0206594,
+            "Y": 0,
+            "Z": -5.7291903
+          },
+          "TerritoryId": 351,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "DataId": 1010078,
+          "Position": {
+            "X": 31.540405,
+            "Y": -1,
+            "Z": -0.80877686
+          },
+          "TerritoryId": 351,
+          "InteractionType": "CompleteQuest"
+        }
+      ]
+    }
+  ]
+}
