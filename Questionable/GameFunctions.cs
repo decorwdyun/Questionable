@@ -291,6 +291,9 @@ internal sealed unsafe class GameFunctions
                 return true;
         }
 
+        if (questInfo.GrandCompany != GrandCompany.None && questInfo.GrandCompany != GetGrandCompany())
+            return true;
+
         return !HasCompletedPreviousQuests(questInfo, extraCompletedQuest) || !HasCompletedPreviousInstances(questInfo);
     }
 
@@ -727,5 +730,10 @@ internal sealed unsafe class GameFunctions
         return _gameGui.TryGetAddonByName("FadeMiddle", out AtkUnitBase* fade) &&
                LAddon.IsAddonReady(fade) &&
                fade->IsVisible;
+    }
+
+    public GrandCompany GetGrandCompany()
+    {
+        return (GrandCompany)PlayerState.Instance()->GrandCompany;
     }
 }

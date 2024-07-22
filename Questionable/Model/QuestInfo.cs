@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Dalamud.Game.Text;
+using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using JetBrains.Annotations;
 using ExcelQuest = Lumina.Excel.GeneratedSheets.Quest;
 
@@ -25,6 +26,7 @@ internal sealed class QuestInfo
         CompletesInstantly = quest.ToDoCompleteSeq[0] == 0;
         PreviousInstanceContent = quest.InstanceContent.Select(x => (ushort)x.Row).Where(x => x != 0).ToList();
         PreviousInstanceContentJoin = (QuestJoin)quest.InstanceContentJoin;
+        GrandCompany = (GrandCompany)quest.GrandCompany.Row;
     }
 
 
@@ -35,12 +37,13 @@ internal sealed class QuestInfo
     public bool IsRepeatable { get; }
     public ImmutableList<ushort> PreviousQuests { get; }
     public QuestJoin PreviousQuestJoin { get; }
-    public ImmutableList<ushort> QuestLocks { get; set; }
-    public QuestJoin QuestLockJoin { get; set; }
-    public List<ushort> PreviousInstanceContent { get; set; }
-    public QuestJoin PreviousInstanceContentJoin { get; set; }
+    public ImmutableList<ushort> QuestLocks { get; }
+    public QuestJoin QuestLockJoin { get; }
+    public List<ushort> PreviousInstanceContent { get; }
+    public QuestJoin PreviousInstanceContentJoin { get; }
     public bool IsMainScenarioQuest { get; }
-    public bool CompletesInstantly { get; set; }
+    public bool CompletesInstantly { get; }
+    public GrandCompany GrandCompany { get; }
 
     public string SimplifiedName => Name
         .TrimStart(SeIconChar.QuestSync.ToIconChar(), SeIconChar.QuestRepeatable.ToIconChar(), ' ');

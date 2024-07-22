@@ -116,7 +116,9 @@ internal sealed class ActiveQuestComponent
                 if (_configuration.Advanced.AdditionalStatusInformation && _questController.IsInterruptible())
                 {
                     ImGui.SameLine();
-                    ImGui.TextColored(ImGuiColors.DalamudYellow, "Interruptible");
+                    ImGui.PushFont(UiBuilder.IconFont);
+                    ImGui.TextColored(ImGuiColors.DalamudYellow, FontAwesomeIcon.CodeBranch.ToIconString());
+                    ImGui.PopFont();
                 }
             }
 

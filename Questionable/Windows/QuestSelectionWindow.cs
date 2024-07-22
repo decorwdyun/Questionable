@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
@@ -11,6 +12,7 @@ using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.UI;
+using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using ImGuiNET;
 using LLib.GameUI;
 using LLib.ImGui;
@@ -187,10 +189,7 @@ internal sealed class QuestSelectionWindow : LWindow
                         }
 
                         if (quest.PreviousQuests.Count > 0)
-                        {
-                            ImGui.Separator();
                             DrawQuestUnlocks(quest, 0);
-                        }
                     }
                 }
             }
@@ -266,6 +265,9 @@ internal sealed class QuestSelectionWindow : LWindow
 
         if (quest.PreviousQuests.Count > 0)
         {
+            if (counter == 0)
+                ImGui.Separator();
+
             if (quest.PreviousQuests.Count > 1)
             {
                 if (quest.PreviousQuestJoin == QuestInfo.QuestJoin.All)
@@ -278,17 +280,10 @@ internal sealed class QuestSelectionWindow : LWindow
             {
                 var qInfo = _questData.GetQuestInfo(q);
                 var (iconColor, icon, _) = _uiUtils.GetQuestStyle(q);
-                // ReSharper disable once UnusedVariable
-                using (var font = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
-                {
-                    if (_questRegistry.IsKnownQuest(qInfo.QuestId))
-                        ImGui.TextColored(iconColor, icon.ToIconString());
-                    else
-                        ImGui.TextColored(ImGuiColors.DalamudGrey, icon.ToIconString());
-                }
+                if (!_questRegistry.IsKnownQuest(qInfo.QuestId))
+                    iconColor = ImGuiColors.DalamudGrey;
 
-                ImGui.SameLine();
-                ImGui.TextUnformatted(FormatQuestUnlockName(qInfo));
+                _uiUtils.ChecklistItem(FormatQuestUnlockName(qInfo), iconColor, icon);
 
                 DrawQuestUnlocks(qInfo, counter + 1);
             }
@@ -296,12 +291,13 @@ internal sealed class QuestSelectionWindow : LWindow
 
         if (counter == 0 && quest.QuestLocks.Count > 0)
         {
+            ImGui.Separator();
             if (quest.QuestLocks.Count > 1)
             {
                 if (quest.QuestLockJoin == QuestInfo.QuestJoin.All)
-                    ImGui.Text("Blocked if all completed:");
+                    ImGui.Text("Blocked by (if all completed):");
                 else if (quest.QuestLockJoin == QuestInfo.QuestJoin.AtLeastOne)
-                    ImGui.Text("Blocked if at least completed:");
+                    ImGui.Text("Blocked by (if at least completed):");
             }
             else
                 ImGui.Text("Blocked by (if completed):");
@@ -310,22 +306,16 @@ internal sealed class QuestSelectionWindow : LWindow
             {
                 var qInfo = _questData.GetQuestInfo(q);
                 var (iconColor, icon, _) = _uiUtils.GetQuestStyle(q);
-                // ReSharper disable once UnusedVariable
-                using (var font = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
-                {
-                    if (_questRegistry.IsKnownQuest(qInfo.QuestId))
-                        ImGui.TextColored(iconColor, icon.ToIconString());
-                    else
-                        ImGui.TextColored(ImGuiColors.DalamudGrey, icon.ToIconString());
-                }
+                if (!_questRegistry.IsKnownQuest(qInfo.QuestId))
+                    iconColor = ImGuiColors.DalamudGrey;
 
-                ImGui.SameLine();
-                ImGui.TextUnformatted(FormatQuestUnlockName(qInfo));
+                _uiUtils.ChecklistItem(FormatQuestUnlockName(qInfo), iconColor, icon);
             }
         }
 
         if (counter == 0 && quest.PreviousInstanceContent.Count > 0)
         {
+            ImGui.Separator();
             if (quest.PreviousInstanceContent.Count > 1)
             {
                 if (quest.PreviousQuestJoin == QuestInfo.QuestJoin.All)
@@ -340,16 +330,23 @@ internal sealed class QuestSelectionWindow : LWindow
             {
                 string instanceName = _territoryData.GetInstanceName(instanceId) ?? "?";
                 var (iconColor, icon) = UiUtils.GetInstanceStyle(instanceId);
-
-                // ReSharper disable once UnusedVariable
-                using (var font = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
-                {
-                    ImGui.TextColored(iconColor, icon.ToIconString());
-                }
-
-                ImGui.SameLine();
-                ImGui.TextUnformatted(instanceName);
+                _uiUtils.ChecklistItem(instanceName, iconColor, icon);
             }
+        }
+
+        if (counter == 0 && quest.GrandCompany != GrandCompany.None)
+        {
+            ImGui.Separator();
+            string gcName = quest.GrandCompany switch
+            {
+                GrandCompany.Maelstrom => "Maelstrom",
+                GrandCompany.TwinAdder => "Twin Adder",
+                GrandCompany.ImmortalFlames => "Immortal Flames",
+                _ => "None",
+            };
+
+            GrandCompany currentGrandCompany = _gameFunctions.GetGrandCompany();
+            _uiUtils.ChecklistItem($"Grand Company: {gcName}", quest.GrandCompany == currentGrandCompany);
         }
 
         if (counter > 0)
