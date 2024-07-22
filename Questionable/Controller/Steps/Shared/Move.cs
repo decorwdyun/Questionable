@@ -65,7 +65,8 @@ internal static class Move
         GameFunctions gameFunctions,
         IClientState clientState,
         MovementController movementController,
-        TerritoryData territoryData)
+        TerritoryData territoryData,
+        AetheryteData aetheryteData)
     {
         public QuestStep Step { get; set; } = null!;
         public Vector3 Destination { get; set; }
@@ -91,8 +92,14 @@ internal static class Move
             var position = clientState.LocalPlayer?.Position ?? new Vector3();
             float actualDistance = (position - Destination).Length();
 
-            // this may otherwise sometimes skip a move step
-            if (Step.AethernetShortcut != null || Step.AetheryteShortcut != null)
+            // if we teleport to a different zone, assume we always need to move; this is primarily relevant for cases
+            // where you're e.g. in Lakeland, and the step navigates via Crystarium → Tesselation back into the same
+            // zone.
+            //
+            // Side effects of this check being broken include:
+            //   - mounting when near the target npc (if you spawn close enough for the next step)
+            //   - trying to fly when near the target npc (if close enough where no movement is required)
+            if (Step.AetheryteShortcut != null && aetheryteData.TerritoryIds[Step.AetheryteShortcut.Value] != Step.TerritoryId)
                 actualDistance = float.MaxValue;
 
             if (Step.Mount == true)

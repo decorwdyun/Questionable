@@ -12,12 +12,18 @@ internal sealed class MovementOverrideController
     [
         new BlacklistedArea(1191, new(-223.0412f, 31.937134f, -584.03906f), 5f, 7.75f),
 
-        // New Gridania Navmesh workaround
+        // limsa, aftcastle to baderon
         new BlacklistedPoint(128, new(2f, 40.25f, 36.5f), new(0.25f, 40.25f, 36.5f)),
+
+        // New Gridania, Carline Canopy stairs
+        new BlacklistedPoint(132, new(29, -8, 120.5f), new(28.265165f, -8.000001f, 120.149734f)),
+        new BlacklistedPoint(132, new(28.25f, -8, 125), new(27.372725f, -8.200001f, 125.55859f)),
+        new BlacklistedPoint(132, new(32.25f, -8, 126.5f), new(32.022232f, -8.200011f, 126.86095f)),
 
         // lotus stand
         new BlacklistedPoint(205, new(26.75f, 0.5f, 20.75f), new(27.179117f, 0.26728272f, 19.714373f)),
 
+        // New Gridania Navmesh workaround - planter box outside the Carline Canopy
         new BlacklistedPoint(132, new(45.5f, -8f, 101f), new(50.53978f, -8.046954f, 101.06045f)),
 
         // ul'dah lamp near adventuer's guild
