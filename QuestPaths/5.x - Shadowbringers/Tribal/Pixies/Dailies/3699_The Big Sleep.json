@@ -1,7 +1,6 @@
 {
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -21,7 +20,64 @@
     {
       "Sequence": 1,
       "Steps": [
-
+        {
+          "DataId": 1032183,
+          "Position": {
+            "X": -105.60773,
+            "Y": 110.29838,
+            "Z": -196.97876
+          },
+          "StopDistance": 1,
+          "TerritoryId": 816,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [16],
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "DataId": 1032185,
+          "Position": {
+            "X": -185.29034,
+            "Y": 154.79187,
+            "Z": -262.89777
+          },
+          "TerritoryId": 816,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [32],
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "DataId": 1032184,
+          "Position": {
+            "X": -226.27612,
+            "Y": 114.61068,
+            "Z": -305.6535
+          },
+          "TerritoryId": 816,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [48],
+            null,
+            null,
+            null
+          ]
+        }
       ]
     },
     {
@@ -36,6 +92,7 @@
           },
           "TerritoryId": 816,
           "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Il Mheg - Lydha Lran",
           "Fly": true
         }
       ]

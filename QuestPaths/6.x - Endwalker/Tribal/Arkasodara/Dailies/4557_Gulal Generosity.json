@@ -158,6 +158,18 @@
       "Sequence": 255,
       "Steps": [
         {
+          "Position": {
+            "X": 404.065,
+            "Y": 13.027411,
+            "Z": -306.9749
+          },
+          "StopDistance": 10000,
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo",
+          "Mount": false,
+          "Comment": "Unmount from Quest Mount"
+        },
+        {
           "DataId": 1042301,
           "Position": {
             "X": -66.02582,

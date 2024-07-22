@@ -128,10 +128,22 @@
             "Y": 71.43217,
             "Z": 575.1278
           },
+          "StopDistance": 3,
           "TerritoryId": 816,
-          "InteractionType": "CompleteQuest",
+          "InteractionType": "WalkTo",
           "AetheryteShortcut": "Il Mheg - Lydha Lran",
           "Fly": true
+        },
+        {
+          "DataId": 1031809,
+          "Position": {
+            "X": -454.3069,
+            "Y": 71.43217,
+            "Z": 575.1278
+          },
+          "TerritoryId": 816,
+          "InteractionType": "CompleteQuest",
+          "Mount": false
         }
       ]
     }

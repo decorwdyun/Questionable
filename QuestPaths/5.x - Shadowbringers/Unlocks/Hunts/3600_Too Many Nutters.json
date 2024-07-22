@@ -6,16 +6,16 @@
       "Sequence": 0,
       "Steps": [
         {
-          "DataId": 1037060,
+          "DataId": 1027990,
           "Position": {
-            "X": 25.894531,
-            "Y": -15.646991,
-            "Z": 99.68713
+            "X": -85.31323,
+            "Y": -2.7974376E-11,
+            "Z": -93.247925
           },
           "StopDistance": 5,
-          "TerritoryId": 962,
+          "TerritoryId": 819,
           "InteractionType": "AcceptQuest",
-          "AetheryteShortcut": "Old Sharlayan",
+          "AetheryteShortcut": "Crystarium",
           "SkipIf": [
             "AetheryteShortcutIfInSameTerritory"
           ]
@@ -26,16 +26,16 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 1037059,
+          "DataId": 1027988,
           "Position": {
-            "X": 35.202515,
-            "Y": -15.646992,
-            "Z": 102.4032
+            "X": -88.578674,
+            "Y": 0.07107824,
+            "Z": -83.66528
           },
           "StopDistance": 7,
-          "TerritoryId": 962,
+          "TerritoryId": 819,
           "InteractionType": "CompleteQuest",
-          "NextQuestId": 5009
+          "NextQuestId": 4176
         }
       ]
     }

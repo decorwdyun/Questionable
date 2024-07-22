@@ -6,16 +6,16 @@
       "Sequence": 0,
       "Steps": [
         {
-          "DataId": 1037060,
+          "DataId": 1019007,
           "Position": {
-            "X": 25.894531,
-            "Y": -15.646991,
-            "Z": 99.68713
+            "X": -42.526978,
+            "Y": -2.9,
+            "Z": -47.959167
           },
           "StopDistance": 5,
-          "TerritoryId": 962,
+          "TerritoryId": 628,
           "InteractionType": "AcceptQuest",
-          "AetheryteShortcut": "Old Sharlayan",
+          "AetheryteShortcut": "Kugane",
           "SkipIf": [
             "AetheryteShortcutIfInSameTerritory"
           ]
@@ -26,16 +26,15 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 1037059,
+          "DataId": 1019009,
           "Position": {
-            "X": 35.202515,
-            "Y": -15.646992,
-            "Z": 102.4032
+            "X": -29.160034,
+            "Y": 0.09999966,
+            "Z": -46.189087
           },
-          "StopDistance": 7,
-          "TerritoryId": 962,
+          "TerritoryId": 628,
           "InteractionType": "CompleteQuest",
-          "NextQuestId": 5009
+          "NextQuestId": 2938
         }
       ]
     }

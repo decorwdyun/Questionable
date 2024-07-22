@@ -30,7 +30,8 @@
           "TerritoryId": 957,
           "InteractionType": "UseItem",
           "ItemId": 2003403,
-          "AetheryteShortcut": "Thavnair - Palaka's Stand"
+          "AetheryteShortcut": "Thavnair - Palaka's Stand",
+          "Fly": true
         }
       ]
     },

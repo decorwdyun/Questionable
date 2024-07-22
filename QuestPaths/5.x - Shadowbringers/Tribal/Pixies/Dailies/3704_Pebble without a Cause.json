@@ -31,8 +31,14 @@
           "TerritoryId": 816,
           "InteractionType": "Interact",
           "Fly": true,
-          "$": "Only if QW: 0 0 3 0 0 0",
-          "SkipIf": ["NotTargetable"]
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [3],
+            null,
+            null,
+            null
+          ]
         },
         {
           "DataId": 2010902,
@@ -43,8 +49,34 @@
           },
           "TerritoryId": 816,
           "InteractionType": "Interact",
-          "$": "Only if QW: 0 0 1 0 0 0",
-          "SkipIf": ["NotTargetable"]
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [1],
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "DataId": 2010903,
+          "Position": {
+            "X": -395.46808,
+            "Y": -0.07635498,
+            "Z": -0.16790771
+          },
+          "TerritoryId": 816,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [2],
+            null,
+            null,
+            null
+          ]
         }
       ]
     },
@@ -53,9 +85,9 @@
       "Steps": [
         {
           "Position": {
-            "X": -398.9776,
-            "Y": 0.82966614,
-            "Z": 8.668919
+            "X": -427.47775,
+            "Y": 5.0289116,
+            "Z": 18.171812
           },
           "TerritoryId": 816,
           "InteractionType": "WalkTo",

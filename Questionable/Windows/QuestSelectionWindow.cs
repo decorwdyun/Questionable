@@ -188,8 +188,7 @@ internal sealed class QuestSelectionWindow : LWindow
                             ImGui.TextUnformatted("NoQuestPath");
                         }
 
-                        if (quest.PreviousQuests.Count > 0)
-                            DrawQuestUnlocks(quest, 0);
+                        DrawQuestUnlocks(quest, 0);
                     }
                 }
             }

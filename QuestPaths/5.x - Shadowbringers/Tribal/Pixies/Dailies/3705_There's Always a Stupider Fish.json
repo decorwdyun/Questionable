@@ -1,7 +1,6 @@
 {
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -41,9 +40,13 @@
           "TerritoryId": 816,
           "InteractionType": "Interact",
           "DisableNavmesh": true,
-          "$": "QW: 0 2 0 0 0 0",
-          "SkipIf": [
-            "NotTargetable"
+          "RequiredQuestVariables": [
+            null,
+            [2],
+            null,
+            null,
+            null,
+            null
           ]
         },
         {
@@ -55,9 +58,13 @@
           },
           "TerritoryId": 816,
           "InteractionType": "Interact",
-          "$": "QW: 0 3 0 0 0 0",
-          "SkipIf": [
-            "NotTargetable"
+          "RequiredQuestVariables": [
+            null,
+            [3],
+            null,
+            null,
+            null,
+            null
           ]
         },
         {
@@ -70,9 +77,13 @@
           "TerritoryId": 816,
           "InteractionType": "Interact",
           "DisableNavmesh": true,
-          "$": "QW: 0 1 0 0 0 0",
-          "SkipIf": [
-            "NotTargetable"
+          "RequiredQuestVariables": [
+            null,
+            [1],
+            null,
+            null,
+            null,
+            null
           ]
         }
       ]

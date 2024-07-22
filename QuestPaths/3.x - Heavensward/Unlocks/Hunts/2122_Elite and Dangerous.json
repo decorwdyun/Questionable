@@ -6,16 +6,16 @@
       "Sequence": 0,
       "Steps": [
         {
-          "DataId": 1037060,
+          "DataId": 1012225,
           "Position": {
-            "X": 25.894531,
-            "Y": -15.646991,
-            "Z": 99.68713
+            "X": 90.10449,
+            "Y": 15.094684,
+            "Z": 30.044922
           },
           "StopDistance": 5,
-          "TerritoryId": 962,
+          "TerritoryId": 418,
           "InteractionType": "AcceptQuest",
-          "AetheryteShortcut": "Old Sharlayan",
+          "AetheryteShortcut": "Ishgard",
           "SkipIf": [
             "AetheryteShortcutIfInSameTerritory"
           ]
@@ -26,16 +26,15 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 1037059,
+          "DataId": 2005909,
           "Position": {
-            "X": 35.202515,
-            "Y": -15.646992,
-            "Z": 102.4032
+            "X": 73.899414,
+            "Y": 24.307495,
+            "Z": 22.049255
           },
-          "StopDistance": 7,
-          "TerritoryId": 962,
+          "TerritoryId": 418,
           "InteractionType": "CompleteQuest",
-          "NextQuestId": 5009
+          "NextQuestId": 2936
         }
       ]
     }

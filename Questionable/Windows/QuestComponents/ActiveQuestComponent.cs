@@ -117,7 +117,7 @@ internal sealed class ActiveQuestComponent
                 {
                     ImGui.SameLine();
                     ImGui.PushFont(UiBuilder.IconFont);
-                    ImGui.TextColored(ImGuiColors.DalamudYellow, FontAwesomeIcon.CodeBranch.ToIconString());
+                    ImGui.TextColored(ImGuiColors.DalamudYellow, FontAwesomeIcon.Pause.ToIconString());
                     ImGui.PopFont();
                 }
             }
