@@ -73,11 +73,7 @@ internal sealed class QuickAccessButtonsComponent
         ImGui.EndDisabled();
 
         if (ImGui.Button("Reload Data"))
-        {
-            _questController.Reload();
-            _framework.RunOnTick(() => _gameUiController.HandleCurrentDialogueChoices(),
-                TimeSpan.FromMilliseconds(200));
-        }
+            Reload();
 
         if (_questRegistry.ValidationIssueCount > 0)
         {
@@ -85,6 +81,13 @@ internal sealed class QuickAccessButtonsComponent
             if (DrawValidationIssuesButton())
                 _questValidationWindow.IsOpen = true;
         }
+    }
+
+    public void Reload()
+    {
+        _questController.Reload();
+        _framework.RunOnTick(() => _gameUiController.HandleCurrentDialogueChoices(),
+            TimeSpan.FromMilliseconds(200));
     }
 
     private bool DrawValidationIssuesButton()

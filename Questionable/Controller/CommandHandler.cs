@@ -5,6 +5,7 @@ using Dalamud.Game.Command;
 using Dalamud.Plugin.Services;
 using Questionable.Model;
 using Questionable.Windows;
+using Questionable.Windows.QuestComponents;
 
 namespace Questionable.Controller;
 
@@ -14,6 +15,7 @@ internal sealed class CommandHandler : IDisposable
     private readonly IChatGui _chatGui;
     private readonly QuestController _questController;
     private readonly MovementController _movementController;
+    private readonly QuickAccessButtonsComponent _quickAccessButtonsComponent;
     private readonly QuestRegistry _questRegistry;
     private readonly ConfigWindow _configWindow;
     private readonly DebugOverlay _debugOverlay;
@@ -22,15 +24,25 @@ internal sealed class CommandHandler : IDisposable
     private readonly ITargetManager _targetManager;
     private readonly GameFunctions _gameFunctions;
 
-    public CommandHandler(ICommandManager commandManager, IChatGui chatGui, QuestController questController,
-        MovementController movementController, QuestRegistry questRegistry,
-        ConfigWindow configWindow, DebugOverlay debugOverlay, QuestWindow questWindow,
-        QuestSelectionWindow questSelectionWindow, ITargetManager targetManager, GameFunctions gameFunctions)
+    public CommandHandler(
+        ICommandManager commandManager,
+        IChatGui chatGui,
+        QuestController questController,
+        MovementController movementController,
+        QuickAccessButtonsComponent quickAccessButtonsComponent,
+        QuestRegistry questRegistry,
+        ConfigWindow configWindow,
+        DebugOverlay debugOverlay,
+        QuestWindow questWindow,
+        QuestSelectionWindow questSelectionWindow,
+        ITargetManager targetManager,
+        GameFunctions gameFunctions)
     {
         _commandManager = commandManager;
         _chatGui = chatGui;
         _questController = questController;
         _movementController = movementController;
+        _quickAccessButtonsComponent = quickAccessButtonsComponent;
         _questRegistry = questRegistry;
         _configWindow = configWindow;
         _debugOverlay = debugOverlay;
@@ -41,7 +53,14 @@ internal sealed class CommandHandler : IDisposable
 
         _commandManager.AddHandler("/qst", new CommandInfo(ProcessCommand)
         {
-            HelpMessage = "Opens the Questing window"
+            HelpMessage = string.Join($"{Environment.NewLine}\t",
+                "Opens the Questing window",
+                "/qst config - opens the configuration window",
+                "/qst start - starts doing quests",
+                "/qst stop - stops doing quests",
+                "/qst reload - reload all quest data",
+                "/qst which - shows all quests starting with your selected target",
+                "/qst zone - shows all quests starting in the current zone (only includes quests with a known quest path, and currently visible unaccepted quests)")
         });
     }
 
@@ -56,12 +75,17 @@ internal sealed class CommandHandler : IDisposable
                 break;
 
             case "start":
+                _questWindow.IsOpen = true;
                 _questController.ExecuteNextStep(true);
                 break;
 
             case "stop":
                 _movementController.Stop();
                 _questController.Stop("Stop command");
+                break;
+
+            case "reload":
+                _quickAccessButtonsComponent.Reload();
                 break;
 
             case "do":
@@ -85,8 +109,12 @@ internal sealed class CommandHandler : IDisposable
                 _questSelectionWindow.OpenForCurrentZone();
                 break;
 
-            default:
+            case "":
                 _questWindow.Toggle();
+                break;
+
+            default:
+                _chatGui.PrintError($"Unknown subcommand {parts[0]}", "Questionable");
                 break;
         }
     }

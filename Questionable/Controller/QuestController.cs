@@ -321,7 +321,7 @@ internal sealed class QuestController
 
     private void ClearTasksInternal()
     {
-        _logger.LogDebug("Clearing task (internally)");
+        //_logger.LogDebug("Clearing task (internally)");
         _currentTask = null;
 
         if (_taskQueue.Count > 0)
