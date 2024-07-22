@@ -63,17 +63,6 @@
       "Sequence": 3,
       "Steps": [
         {
-          "Position": {
-            "X": -140.17616,
-            "Y": 58.384903,
-            "Z": -82.89941
-          },
-          "TerritoryId": 147,
-          "InteractionType": "WalkTo",
-          "Fly": true,
-          "AetheryteShortcut": "Northern Thanalan - Ceruleum Processing Plant"
-        },
-        {
           "DataId": 1010046,
           "Position": {
             "X": -140.1236,
@@ -81,7 +70,9 @@
             "Z": -82.07831
           },
           "TerritoryId": 147,
-          "InteractionType": "SinglePlayerDuty"
+          "InteractionType": "SinglePlayerDuty",
+          "Fly": true,
+          "AetheryteShortcut": "Northern Thanalan - Ceruleum Processing Plant"
         }
       ]
     },

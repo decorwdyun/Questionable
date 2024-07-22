@@ -40,16 +40,6 @@
           "InteractionType": "WalkTo"
         },
         {
-          "Position": {
-            "X": -439.56784,
-            "Y": 211,
-            "Z": -263.56824
-          },
-          "TerritoryId": 155,
-          "InteractionType": "WalkTo",
-          "Fly": true
-        },
-        {
           "DataId": 2004652,
           "Position": {
             "X": -440.6301,
@@ -57,23 +47,14 @@
             "Z": -263.6248
           },
           "TerritoryId": 155,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
     {
       "Sequence": 2,
       "Steps": [
-        {
-          "Position": {
-            "X": -453.06644,
-            "Y": 221.53008,
-            "Z": -149.43501
-          },
-          "TerritoryId": 155,
-          "InteractionType": "WalkTo",
-          "Fly": true
-        },
         {
           "DataId": 2004653,
           "Position": {
@@ -82,23 +63,14 @@
             "Z": -149.27905
           },
           "TerritoryId": 155,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
     {
       "Sequence": 3,
       "Steps": [
-        {
-          "Position": {
-            "X": -346.34058,
-            "Y": 254.51897,
-            "Z": -94.777374
-          },
-          "TerritoryId": 155,
-          "InteractionType": "WalkTo",
-          "Fly": true
-        },
         {
           "DataId": 2004654,
           "Position": {
@@ -107,23 +79,14 @@
             "Z": -95.384155
           },
           "TerritoryId": 155,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
     {
       "Sequence": 4,
       "Steps": [
-        {
-          "Position": {
-            "X": -347.6656,
-            "Y": 257.33466,
-            "Z": 61.37328
-          },
-          "TerritoryId": 155,
-          "InteractionType": "WalkTo",
-          "Fly": true
-        },
         {
           "DataId": 2004655,
           "Position": {
@@ -132,7 +95,8 @@
             "Z": 77.62268
           },
           "TerritoryId": 155,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },

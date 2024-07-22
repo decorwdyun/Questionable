@@ -44,12 +44,14 @@
         },
         {
           "Position": {
-            "X": 29.70399,
-            "Y": 21.232033,
-            "Z": -653.5042
+            "X": 30.917934,
+            "Y": 20.495003,
+            "Z": -656.1909
           },
           "TerritoryId": 156,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "Mount": true,
+          "$": "Rising Stones Door"
         },
         {
           "Position": {
@@ -83,6 +85,7 @@
             "Y": 31.216015,
             "Z": -744.6555
           },
+          "StopDistance": 7,
           "TerritoryId": 156,
           "InteractionType": "Interact"
         }
@@ -93,13 +96,14 @@
       "Steps": [
         {
           "Position": {
-            "X": 29.43335,
-            "Y": 21.232033,
-            "Z": -652.5205
+            "X": 30.917934,
+            "Y": 20.495003,
+            "Z": -656.1909
           },
           "TerritoryId": 156,
           "InteractionType": "WalkTo",
-          "Fly": true
+          "Fly": true,
+          "$": "Rising Stones Door"
         },
         {
           "TerritoryId": 156,

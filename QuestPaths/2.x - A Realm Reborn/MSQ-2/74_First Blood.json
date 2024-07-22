@@ -61,20 +61,11 @@
         },
         {
           "Position": {
-            "X": -387.78098,
-            "Y": 231.12491,
-            "Z": 304.6916
-          },
-          "TerritoryId": 155,
-          "InteractionType": "WalkTo",
-          "Fly": true
-        },
-        {
-          "Position": {
             "X": -383.5987,
             "Y": 231.30257,
             "Z": 306.35776
           },
+          "StopDistance": 0.5,
           "TerritoryId": 155,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
@@ -83,7 +74,7 @@
             725,
             726
           ],
-          "Mount": false
+          "Fly": true
         }
       ]
     },

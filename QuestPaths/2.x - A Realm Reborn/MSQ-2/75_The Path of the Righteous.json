@@ -40,16 +40,6 @@
           "InteractionType": "WalkTo"
         },
         {
-          "Position": {
-            "X": -915.1495,
-            "Y": 229.29955,
-            "Z": -4.1425385
-          },
-          "TerritoryId": 155,
-          "InteractionType": "WalkTo",
-          "Fly": true
-        },
-        {
           "DataId": 1010001,
           "Position": {
             "X": -915.2514,
@@ -57,7 +47,8 @@
             "Z": -3.1586914
           },
           "TerritoryId": 155,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },

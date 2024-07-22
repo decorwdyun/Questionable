@@ -70,12 +70,14 @@
         },
         {
           "Position": {
-            "X": 29.656324,
-            "Y": 21.232033,
-            "Z": -653.0589
+            "X": 30.917934,
+            "Y": 20.495003,
+            "Z": -656.1909
           },
           "TerritoryId": 156,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "Mount": true,
+          "$": "Rising Stones Door"
         },
         {
           "Position": {
@@ -119,6 +121,7 @@
             "Y": -27.808832,
             "Z": -369.7414
           },
+          "StopDistance": 7,
           "TerritoryId": 156,
           "InteractionType": "Interact"
         }
@@ -172,6 +175,7 @@
             "Y": 0,
             "Z": -3.1281738
           },
+          "StopDistance": 7,
           "TerritoryId": 351,
           "InteractionType": "CompleteQuest"
         }

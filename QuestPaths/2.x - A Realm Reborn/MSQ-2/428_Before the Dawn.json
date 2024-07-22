@@ -14,7 +14,7 @@
           },
           "TerritoryId": 155,
           "InteractionType": "AcceptQuest",
-          "AetheryteShortcut": "Ul'dah",
+          "AetheryteShortcut": "Coerthas Central Highlands - Camp Dragonhead",
           "SkipIf": [
             "AetheryteShortcutIfInSameTerritory"
           ]

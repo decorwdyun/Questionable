@@ -44,22 +44,14 @@
         },
         {
           "Position": {
-            "X": 29.70399,
-            "Y": 21.232033,
-            "Z": -653.5042
-          },
-          "TerritoryId": 156,
-          "InteractionType": "WalkTo"
-        },
-        {
-          "Position": {
-            "X": -145.66704,
-            "Y": 43.906273,
-            "Z": -189.70813
+            "X": 30.917934,
+            "Y": 20.495003,
+            "Z": -656.1909
           },
           "TerritoryId": 156,
           "InteractionType": "WalkTo",
-          "Fly": true
+          "Mount": true,
+          "$": "Rising Stones Door"
         },
         {
           "DataId": 2005045,
@@ -69,7 +61,8 @@
             "Z": -188.61682
           },
           "TerritoryId": 156,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
