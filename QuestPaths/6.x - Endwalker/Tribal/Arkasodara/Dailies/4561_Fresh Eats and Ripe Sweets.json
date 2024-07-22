@@ -1,7 +1,6 @@
 {
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -21,7 +20,72 @@
     {
       "Sequence": 1,
       "Steps": [
-
+        {
+          "DataId": 1042384,
+          "Position": {
+            "X": 562.7068,
+            "Y": 12.048153,
+            "Z": 157.85449
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [
+              16,
+              48
+            ],
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "DataId": 1042385,
+          "Position": {
+            "X": 614.43494,
+            "Y": 38.455334,
+            "Z": 193.77429
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [
+              16,
+              32
+            ],
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "DataId": 1042386,
+          "Position": {
+            "X": 607.35486,
+            "Y": 18.607574,
+            "Z": 212.14612
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [
+              32,
+              48
+            ],
+            null,
+            null,
+            null
+          ]
+        }
       ]
     },
     {

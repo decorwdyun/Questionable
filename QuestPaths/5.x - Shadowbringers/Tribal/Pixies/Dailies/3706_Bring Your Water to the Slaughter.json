@@ -1,7 +1,6 @@
 {
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -21,7 +20,21 @@
     {
       "Sequence": 1,
       "Steps": [
-
+        {
+          "DataId": 2010905,
+          "Position": {
+            "X": 164.01917,
+            "Y": 0.289917,
+            "Z": 640.2228
+          },
+          "TerritoryId": 816,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
+          "KillEnemyDataIds": [
+            11449
+          ],
+          "Fly": true
+        }
       ]
     },
     {

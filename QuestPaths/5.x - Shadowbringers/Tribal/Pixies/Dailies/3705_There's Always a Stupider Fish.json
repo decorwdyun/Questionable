@@ -58,6 +58,7 @@
           },
           "TerritoryId": 816,
           "InteractionType": "Interact",
+          "DisableNavmesh": true,
           "RequiredQuestVariables": [
             null,
             [3],
