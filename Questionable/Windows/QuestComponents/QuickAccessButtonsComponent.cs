@@ -4,6 +4,7 @@ using System.Numerics;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
+using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin.Services;
@@ -27,11 +28,12 @@ internal sealed class QuickAccessButtonsComponent
     private readonly IClientState _clientState;
     private readonly ICondition _condition;
     private readonly IFramework _framework;
+    private readonly ICommandManager _commandManager;
 
     public QuickAccessButtonsComponent(QuestController questController, MovementController movementController,
         GameUiController gameUiController, GameFunctions gameFunctions, ChatFunctions chatFunctions,
         QuestRegistry questRegistry, NavmeshIpc navmeshIpc, QuestValidationWindow questValidationWindow,
-        IClientState clientState, ICondition condition, IFramework framework)
+        IClientState clientState, ICondition condition, IFramework framework, ICommandManager commandManager)
     {
         _questController = questController;
         _movementController = movementController;
@@ -44,35 +46,49 @@ internal sealed class QuickAccessButtonsComponent
         _clientState = clientState;
         _condition = condition;
         _framework = framework;
+        _commandManager = commandManager;
     }
 
     public unsafe void Draw()
     {
         var map = AgentMap.Instance();
-        ImGui.BeginDisabled(map == null || map->IsFlagMarkerSet == 0 ||
-                            map->FlagMapMarker.TerritoryId != _clientState.TerritoryType ||
-                            !_navmeshIpc.IsReady);
-        if (ImGui.Button("Move to Flag"))
+        using (var unused = ImRaii.Disabled(map == null || map->IsFlagMarkerSet == 0 ||
+                                            map->FlagMapMarker.TerritoryId != _clientState.TerritoryType ||
+                                            !_navmeshIpc.IsReady))
         {
-            _movementController.Destination = null;
-            _chatFunctions.ExecuteCommand(
-                $"/vnav {(_condition[ConditionFlag.Mounted] && _gameFunctions.IsFlyingUnlockedInCurrentZone() ? "flyflag" : "moveflag")}");
+            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Flag, "To Flag"))
+            {
+                _movementController.Destination = null;
+                _chatFunctions.ExecuteCommand(
+                    $"/vnav {(_condition[ConditionFlag.Mounted] && _gameFunctions.IsFlyingUnlockedInCurrentZone() ? "flyflag" : "moveflag")}");
+            }
         }
-
-        ImGui.EndDisabled();
 
         ImGui.SameLine();
 
-        ImGui.BeginDisabled(!_movementController.IsPathRunning);
-        if (ImGui.Button("Stop Nav"))
+        using (var unused = ImRaii.Disabled(!_movementController.IsPathRunning))
         {
-            _movementController.Stop();
-            _questController.Stop("Manual");
+            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.StopCircle, "Stop"))
+            {
+                _movementController.Stop();
+                _questController.Stop("Manual");
+            }
         }
 
-        ImGui.EndDisabled();
+        if (_commandManager.Commands.ContainsKey("/vnav"))
+        {
+            ImGui.SameLine();
+            using (var unused = ImRaii.Disabled(!ImGui.IsKeyDown(ImGuiKey.ModCtrl)))
+            {
+                if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.GlobeEurope, "Rebuild Navmesh"))
+                    _commandManager.ProcessCommand("/vnav rebuild");
+            }
 
-        if (ImGui.Button("Reload Data"))
+            if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
+                ImGui.SetTooltip("Hold CTRL to enable this button.\nRebuilding the navmesh will take some time.");
+        }
+
+        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.RedoAlt,"Reload Data"))
             Reload();
 
         if (_questRegistry.ValidationIssueCount > 0)
