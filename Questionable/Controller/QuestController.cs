@@ -225,7 +225,13 @@ internal sealed class QuestController
                 return;
             }
 
-            if (_movementController.IsPathfinding || _movementController.IsPathRunning)
+            if (_movementController.IsPathfinding)
+            {
+                DebugState = "Pathfinding is running";
+                return;
+            }
+
+            if (_movementController.IsPathRunning)
             {
                 DebugState = "Path is running";
                 return;
