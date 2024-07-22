@@ -54,6 +54,7 @@ internal sealed class GameUiController : IDisposable
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "SelectIconString", SelectIconStringPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "SelectYesno", SelectYesnoPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "PointMenu", PointMenuPostSetup);
+        _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "CreditScroll", CreditScrollPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "Credit", CreditPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "AkatsukiNote", UnendingCodexPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "ContentsTutorial", ContentsTutorialPostSetup);
@@ -560,6 +561,19 @@ internal sealed class GameUiController : IDisposable
         currentQuest.IncreasePointMenuCounter();
     }
 
+    /// <summary>
+    /// ARR Credits.
+    /// </summary>
+    private unsafe void CreditScrollPostSetup(AddonEvent type, AddonArgs args)
+    {
+        _logger.LogInformation("Closing Credits sequence");
+        AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
+        addon->FireCallbackInt(-2);
+    }
+
+    /// <summary>
+    /// Credits for (possibly all?) expansions, not used for ARR.
+    /// </summary>
     private unsafe void CreditPostSetup(AddonEvent type, AddonArgs args)
     {
         _logger.LogInformation("Closing Credits sequence");
@@ -633,6 +647,7 @@ internal sealed class GameUiController : IDisposable
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "ContentsTutorial", ContentsTutorialPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "AkatsukiNote", UnendingCodexPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "Credit", CreditPostSetup);
+        _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "CreditScroll", CreditScrollPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "PointMenu", PointMenuPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "SelectYesno", SelectYesnoPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "SelectIconString", SelectIconStringPostSetup);
