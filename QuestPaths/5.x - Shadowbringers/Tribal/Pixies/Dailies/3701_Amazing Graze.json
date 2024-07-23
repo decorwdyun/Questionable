@@ -1,7 +1,6 @@
 {
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -38,16 +37,6 @@
       "Sequence": 2,
       "Steps": [
         {
-          "Position": {
-            "X": 718.28796,
-            "Y": 188.06738,
-            "Z": 296.77258
-          },
-          "TerritoryId": 816,
-          "InteractionType": "WalkTo",
-          "Fly": true
-        },
-        {
           "DataId": 2010895,
           "Position": {
             "X": 718.28796,
@@ -56,8 +45,21 @@
           },
           "TerritoryId": 816,
           "InteractionType": "Interact",
-          "SkipIf": [
-            "NotTargetable"
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            [
+              {
+                "Low": 2
+              },
+              {
+                "Low": 3
+              }
+            ],
+            null,
+            null,
+            null,
+            null
           ]
         },
         {
@@ -69,8 +71,21 @@
           },
           "TerritoryId": 816,
           "InteractionType": "Interact",
-          "SkipIf": [
-            "NotTargetable"
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            [
+              {
+                "Low": 1
+              },
+              {
+                "Low": 2
+              }
+            ],
+            null,
+            null,
+            null,
+            null
           ]
         },
         {
@@ -82,8 +97,21 @@
           },
           "TerritoryId": 816,
           "InteractionType": "Interact",
-          "SkipIf": [
-            "NotTargetable"
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            [
+              {
+                "Low": 1
+              },
+              {
+                "Low": 3
+              }
+            ],
+            null,
+            null,
+            null,
+            null
           ]
         }
       ]

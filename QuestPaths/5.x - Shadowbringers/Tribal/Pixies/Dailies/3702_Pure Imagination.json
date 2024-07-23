@@ -1,7 +1,6 @@
 {
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -31,8 +30,13 @@
           "TerritoryId": 816,
           "InteractionType": "Interact",
           "Fly": true,
-          "SkipIf": [
-            "NotTargetable"
+          "RequiredQuestVariables": [
+            null,
+            null,
+            null,
+            [2],
+            null,
+            null
           ]
         },
         {
@@ -44,8 +48,33 @@
           },
           "TerritoryId": 816,
           "InteractionType": "Interact",
-          "SkipIf": [
-            "NotTargetable"
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            null,
+            [1],
+            null,
+            null
+          ]
+        },
+        {
+          "DataId": 2010898,
+          "Position": {
+            "X": 765.8655,
+            "Y": 187.30444,
+            "Z": 163.53088
+          },
+          "TerritoryId": 816,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            null,
+            [3],
+            null,
+            null
           ]
         }
       ]
@@ -61,7 +90,6 @@
           },
           "TerritoryId": 816,
           "InteractionType": "WalkTo",
-          "Comment": "TODO it probably isn't necessary to walk that far",
           "Mount": false
         },
         {
