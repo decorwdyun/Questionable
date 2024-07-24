@@ -28,8 +28,8 @@
             "Z": -431.17603
           },
           "TerritoryId": 816,
-          "InteractionType": "Instruction",
-          "Comment": "Dive (manually)"
+          "InteractionType": "Dive",
+          "Comment": "TODO: Verify diving works here"
         },
         {
           "DataId": 2009837,

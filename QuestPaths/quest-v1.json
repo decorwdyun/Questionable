@@ -117,6 +117,7 @@
                     "Duty",
                     "SinglePlayerDuty",
                     "Jump",
+                    "Dive",
                     "Instruction",
                     "AcceptQuest",
                     "CompleteQuest"
@@ -689,6 +690,14 @@
                               "number",
                               "null"
                             ]
+                          },
+                          "Type": {
+                            "type": "string",
+                            "enum": [
+                              "SingleJump",
+                              "RepeatedJumps"
+                            ],
+                            "default": "SingleJump"
                           }
                         },
                         "required": [
@@ -724,6 +733,12 @@
                           },
                           {
                             "const": "Instruction"
+                          },
+                          {
+                            "const": "Emote"
+                          },
+                          {
+                            "const": "UseItem"
                           }
                         ]
                       }

@@ -27,8 +27,8 @@
             "Z": -194.937
           },
           "TerritoryId": 816,
-          "InteractionType": "WaitForManualProgress",
-          "Comment": "Dive (manually)"
+          "InteractionType": "Dive",
+          "Comment": "TODO: Verify diving works here"
         },
         {
           "DataId": 2010160,

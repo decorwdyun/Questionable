@@ -6,12 +6,13 @@
       "Sequence": 0,
       "Steps": [
         {
-          "DataId": 1029197,
+          "DataId": 1029247,
           "Position": {
-            "X": -87.87671,
-            "Y": -19.022131,
-            "Z": 298.20703
+            "X": 166.91846,
+            "Y": -19.856256,
+            "Z": -535.1797
           },
+          "StopDistance": 5,
           "TerritoryId": 817,
           "InteractionType": "AcceptQuest"
         }
@@ -21,12 +22,13 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 1029209,
+          "DataId": 1029249,
           "Position": {
-            "X": -92.484924,
-            "Y": -19.11198,
-            "Z": 307.1183
+            "X": 449.8817,
+            "Y": 6.955061,
+            "Z": -208.75867
           },
+          "StopDistance": 2,
           "TerritoryId": 817,
           "InteractionType": "Interact"
         }
@@ -36,14 +38,15 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 1028989,
+          "DataId": 1029250,
           "Position": {
-            "X": -77.86682,
-            "Y": -28.632244,
-            "Z": 423.6056
+            "X": 448.2948,
+            "Y": 7.479239,
+            "Z": -208.14838
           },
           "TerritoryId": 817,
-          "InteractionType": "Interact"
+          "InteractionType": "UseItem",
+          "ItemId": 2002553
         }
       ]
     },
@@ -51,15 +54,14 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 2009871,
+          "DataId": 1029250,
           "Position": {
-            "X": -89.49426,
-            "Y": -28.641174,
-            "Z": 416.06763
+            "X": 448.2948,
+            "Y": 7.479239,
+            "Z": -208.14838
           },
           "TerritoryId": 817,
-          "InteractionType": "UseItem",
-          "ItemId": 2002546
+          "InteractionType": "Interact"
         }
       ]
     },
@@ -67,11 +69,11 @@
       "Sequence": 4,
       "Steps": [
         {
-          "DataId": 2009872,
+          "DataId": 1029250,
           "Position": {
-            "X": -69.65747,
-            "Y": -28.641174,
-            "Z": 409.4757
+            "X": 448.2948,
+            "Y": 7.479239,
+            "Z": -208.14838
           },
           "TerritoryId": 817,
           "InteractionType": "Interact"
@@ -82,13 +84,12 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 1029194,
+          "DataId": 1029249,
           "Position": {
-            "X": -37.216797,
-            "Y": -18.920458,
-            "Z": 336.62915
+            "X": 449.8817,
+            "Y": 6.955061,
+            "Z": -208.75867
           },
-          "StopDistance": 5,
           "TerritoryId": 817,
           "InteractionType": "CompleteQuest"
         }

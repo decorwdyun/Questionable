@@ -115,7 +115,7 @@ internal sealed class CreationUtilsComponent
             ImGui.BeginDisabled(!_movementController.IsNavmeshReady);
             if (!_movementController.IsPathfinding)
             {
-                if (ImGui.Button("Move to Target"))
+                if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Bullseye, "To Target"))
                 {
                     _movementController.NavigateTo(EMovementType.DebugWindow, _targetManager.Target.DataId,
                         _targetManager.Target.Position,

@@ -26,7 +26,7 @@ internal abstract class AbstractDelayedTask : ITask
 
     protected abstract bool StartInternal();
 
-    public ETaskResult Update()
+    public virtual ETaskResult Update()
     {
         if (_continueAt >= DateTime.Now)
             return ETaskResult.StillRunning;

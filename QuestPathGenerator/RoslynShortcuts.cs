@@ -145,6 +145,8 @@ public static class RoslynShortcuts
                                     Assignment(nameof(JumpDestination.StopDistance), jumpDestination.StopDistance, null)
                                         .AsSyntaxNodeOrToken(),
                                     Assignment(nameof(JumpDestination.DelaySeconds), jumpDestination.DelaySeconds, null)
+                                        .AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(JumpDestination.Type), jumpDestination.Type, default)
                                         .AsSyntaxNodeOrToken()))));
             }
             else if (value is ExcelRef excelRef)

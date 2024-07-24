@@ -120,7 +120,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTaskWithFactory<Emote.Factory, Emote.UseOnObject, Emote.Use>();
         serviceCollection.AddTaskWithFactory<Action.Factory, Action.UseOnObject>();
         serviceCollection.AddTaskWithFactory<Interact.Factory, Interact.DoInteract>();
-        serviceCollection.AddTaskWithFactory<Jump.Factory, Jump.DoJump>();
+        serviceCollection.AddTaskWithFactory<Jump.Factory, Jump.SingleJump, Jump.RepeatedJumps>();
+        serviceCollection.AddTaskWithFactory<Dive.Factory, Dive.DoDive>();
         serviceCollection.AddTaskWithFactory<Say.Factory, Say.UseChat>();
         serviceCollection.AddTaskWithFactory<UseItem.Factory, UseItem.UseOnGround, UseItem.UseOnObject, UseItem.Use, UseItem.UseOnPosition>();
         serviceCollection.AddTaskWithFactory<EquipItem.Factory, EquipItem.DoEquip>();

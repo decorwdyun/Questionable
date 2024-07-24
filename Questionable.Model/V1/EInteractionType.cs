@@ -22,6 +22,7 @@ public enum EInteractionType
     Duty,
     SinglePlayerDuty,
     Jump,
+    Dive,
 
     /// <summary>
     /// Needs to be manually continued.

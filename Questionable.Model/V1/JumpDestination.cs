@@ -11,4 +11,7 @@ public sealed class JumpDestination
 
     public float? StopDistance { get; set; }
     public float? DelaySeconds { get; set; }
+    public EJumpType Type { get; set; } = EJumpType.SingleJump;
+
+    public float CalculateStopDistance() => StopDistance ?? 1f;
 }

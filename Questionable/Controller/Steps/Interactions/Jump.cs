@@ -2,6 +2,7 @@
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Common;
 using Questionable.Model;
 using Questionable.Model.V1;
@@ -19,12 +20,20 @@ internal static class Jump
 
             ArgumentNullException.ThrowIfNull(step.JumpDestination);
 
-            return serviceProvider.GetRequiredService<DoJump>()
-                .With(step.DataId, step.JumpDestination, step.Comment);
+            if (step.JumpDestination.Type == EJumpType.SingleJump)
+            {
+                return serviceProvider.GetRequiredService<SingleJump>()
+                    .With(step.DataId, step.JumpDestination, step.Comment);
+            }
+            else
+            {
+                return serviceProvider.GetRequiredService<RepeatedJumps>()
+                    .With(step.DataId, step.JumpDestination, step.Comment);
+            }
         }
     }
 
-    internal sealed class DoJump(
+    internal class SingleJump(
         MovementController movementController,
         IClientState clientState,
         IFramework framework) : ITask
@@ -41,9 +50,9 @@ internal static class Jump
             return this;
         }
 
-        public bool Start()
+        public virtual bool Start()
         {
-            float stopDistance = JumpDestination.StopDistance ?? 1f;
+            float stopDistance = JumpDestination.CalculateStopDistance();
             if ((clientState.LocalPlayer!.Position - JumpDestination.Position).Length() <= stopDistance)
                 return false;
 
@@ -60,7 +69,7 @@ internal static class Jump
             return true;
         }
 
-        public ETaskResult Update()
+        public virtual ETaskResult Update()
         {
             if (movementController.IsPathfinding || movementController.IsPathRunning)
                 return ETaskResult.StillRunning;
@@ -73,5 +82,49 @@ internal static class Jump
         }
 
         public override string ToString() => $"Jump({Comment})";
+    }
+
+    internal sealed class RepeatedJumps(
+        MovementController movementController,
+        IClientState clientState,
+        IFramework framework,
+        ILogger<RepeatedJumps> logger) : SingleJump(movementController, clientState, framework)
+    {
+        private readonly IClientState _clientState = clientState;
+        private DateTime _continueAt = DateTime.MinValue;
+        private int _attempts;
+
+        public override bool Start()
+        {
+            _continueAt = DateTime.Now + TimeSpan.FromSeconds(2 * (JumpDestination.DelaySeconds ?? 0.5f));
+            return base.Start();
+        }
+
+        public override ETaskResult Update()
+        {
+            if (DateTime.Now < _continueAt)
+                return ETaskResult.StillRunning;
+
+            float stopDistance = JumpDestination.CalculateStopDistance();
+            if ((_clientState.LocalPlayer!.Position - JumpDestination.Position).Length() <= stopDistance ||
+                _clientState.LocalPlayer.Position.Y >= JumpDestination.Position.Y - 0.5f)
+                return ETaskResult.TaskComplete;
+
+            logger.LogTrace("Y-Heights for jumps: player={A}, target={B}", _clientState.LocalPlayer.Position.Y,
+                JumpDestination.Position.Y - 0.5f);
+            unsafe
+            {
+                ActionManager.Instance()->UseAction(ActionType.GeneralAction, 2);
+            }
+
+            ++_attempts;
+            if (_attempts >= 50)
+                throw new TaskException("Tried to jump too many times, didn't reach the target");
+
+            _continueAt = DateTime.Now + TimeSpan.FromSeconds(JumpDestination.DelaySeconds ?? 0.5f);
+            return ETaskResult.StillRunning;
+        }
+
+        public override string ToString() => $"RepeatedJump({Comment})";
     }
 }
