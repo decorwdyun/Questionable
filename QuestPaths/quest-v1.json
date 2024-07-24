@@ -630,6 +630,7 @@
                         "description": "The action to use",
                         "enum": [
                           "Esuna",
+                          "Physick",
                           "Siphon Snout",
                           "Red Gulal",
                           "Yellow Gulal",

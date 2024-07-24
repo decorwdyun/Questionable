@@ -7,6 +7,7 @@ namespace Questionable.Model.V1;
 public enum EAction
 {
     Esuna = 7568,
+    Physick = 190,
     SiphonSnout = 18187,
     RedGulal = 29382,
     YellowGulal = 29383,

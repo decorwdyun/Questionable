@@ -6,7 +6,6 @@ using FFXIVClientStructs.FFXIV.Client.Game;
 using Lumina.Excel.GeneratedSheets;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Questionable.Controller.Steps.Common;
 using Questionable.Model.V1;
 using Quest = Questionable.Model.Quest;
 
@@ -55,7 +54,7 @@ internal static class EquipItem
         private uint _itemId;
         private Item _item = null!;
         private List<ushort> _targetSlots = [];
-        private int _attempts = 0;
+        private int _attempts;
 
         private DateTime _continueAt = DateTime.MaxValue;
 

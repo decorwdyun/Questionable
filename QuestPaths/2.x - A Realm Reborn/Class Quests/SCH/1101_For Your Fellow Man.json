@@ -6,11 +6,6 @@
       "Sequence": 0,
       "Steps": [
         {
-          "TerritoryId": 128,
-          "InteractionType": "EquipItem",
-          "ItemId": 4550
-        },
-        {
           "DataId": 1006757,
           "Position": {
             "X": -4.4709473,
@@ -26,36 +21,32 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1006332,
           "Position": {
-            "X": -337.73785,
-            "Y": 59.519302,
-            "Z": -120.80934
+            "X": 426.96265,
+            "Y": 8.373348,
+            "Z": 20.004517
           },
-          "TerritoryId": 180,
-          "InteractionType": "WalkTo",
-          "AetheryteShortcut": "Outer La Noscea - Camp Overlook",
-          "SkipIf": [
-            "AetheryteShortcutIfInSameTerritory"
-          ],
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -64
-          ]
-        },
-        {
-          "DataId": 2002380,
-          "Position": {
-            "X": -338.8877,
-            "Y": 61.722656,
-            "Z": -120.25641
-          },
-          "TerritoryId": 180,
+          "TerritoryId": 139,
           "InteractionType": "Interact",
-          "IgnoreDistanceToObject": true,
+          "AetheryteShortcut": "Upper La Noscea - Camp Bronze Lake",
+          "Fly": true
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1007843,
+          "Position": {
+            "X": 388.08264,
+            "Y": 7.8583374,
+            "Z": 40.512573
+          },
+          "TerritoryId": 139,
+          "InteractionType": "Action",
+          "Action": "Esuna",
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -67,13 +58,13 @@
         },
         {
           "Position": {
-            "X": -275.93335,
-            "Y": 64.09534,
-            "Z": -197.701
+            "X": 423.76727,
+            "Y": 4.109605,
+            "Z": 74.008965
           },
-          "TerritoryId": 180,
+          "TerritoryId": 139,
           "InteractionType": "WalkTo",
-          "Fly": true,
+          "Mount": true,
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -84,14 +75,15 @@
           ]
         },
         {
-          "DataId": 2002379,
+          "DataId": 1007844,
           "Position": {
-            "X": -274.28094,
-            "Y": 65.81213,
-            "Z": -196.97876
+            "X": 417.16638,
+            "Y": 3.6468506,
+            "Z": 59.64746
           },
-          "TerritoryId": 180,
-          "InteractionType": "Interact",
+          "TerritoryId": 139,
+          "InteractionType": "Action",
+          "Action": "Esuna",
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -102,50 +94,32 @@
           ]
         },
         {
+          "DataId": 1007840,
           "Position": {
-            "X": -326.9142,
-            "Y": 64.60336,
-            "Z": -267.98495
+            "X": 427.2068,
+            "Y": 7.6130996,
+            "Z": 141.34424
           },
-          "TerritoryId": 180,
-          "InteractionType": "WalkTo",
-          "Fly": true,
+          "TerritoryId": 139,
+          "InteractionType": "Action",
+          "Action": "Esuna",
           "CompletionQuestVariablesFlags": [
             null,
             null,
             null,
             null,
             null,
-            -16
-          ]
-        },
-        {
-          "DataId": 2002382,
-          "Position": {
-            "X": -327.87067,
-            "Y": 65.87317,
-            "Z": -267.59753
-          },
-          "TerritoryId": 180,
-          "InteractionType": "Interact",
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            16
+            8
           ]
         },
         {
           "Position": {
-            "X": -360.0172,
-            "Y": 65.166664,
-            "Z": -312.24045
+            "X": 477.80576,
+            "Y": 10.397504,
+            "Z": 104.84231
           },
-          "TerritoryId": 180,
+          "TerritoryId": 139,
           "InteractionType": "WalkTo",
-          "Fly": true,
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -153,17 +127,23 @@
             null,
             null,
             -32
+          ],
+          "SkipIf": [
+            "FlyingUnlocked"
           ]
         },
         {
-          "DataId": 2002381,
+          "DataId": 1007842,
           "Position": {
-            "X": -360.55542,
-            "Y": 66.33093,
-            "Z": -310.87207
+            "X": 477.25635,
+            "Y": 8.499207,
+            "Z": 108.07959
           },
-          "TerritoryId": 180,
-          "InteractionType": "Interact",
+          "StopDistance": 0.5,
+          "TerritoryId": 139,
+          "InteractionType": "Action",
+          "Action": "Esuna",
+          "Fly": true,
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -172,22 +152,41 @@
             null,
             32
           ]
+        },
+        {
+          "DataId": 1007841,
+          "Position": {
+            "X": 503.04407,
+            "Y": 16.468494,
+            "Z": 72.46509
+          },
+          "TerritoryId": 139,
+          "InteractionType": "Action",
+          "Action": "Esuna",
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            16
+          ]
         }
       ]
     },
     {
-      "Sequence": 2,
+      "Sequence": 3,
       "Steps": [
         {
-          "DataId": 2002383,
+          "DataId": 1006332,
           "Position": {
-            "X": -437.94922,
-            "Y": 51.377075,
-            "Z": -321.24823
+            "X": 426.96265,
+            "Y": 8.373348,
+            "Z": 20.004517
           },
-          "TerritoryId": 180,
-          "InteractionType": "Interact",
-          "Fly": true
+          "TerritoryId": 139,
+          "InteractionType": "Interact"
         }
       ]
     },
@@ -208,7 +207,7 @@
             "[Limsa Lominsa] Aetheryte Plaza",
             "[Limsa Lominsa] Marauders' Guild"
           ],
-          "NextQuestId": 1099
+          "NextQuestId": 1102
         }
       ]
     }
