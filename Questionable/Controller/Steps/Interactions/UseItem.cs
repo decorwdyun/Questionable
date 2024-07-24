@@ -109,10 +109,7 @@ internal static class UseItem
                 throw new TaskException($"Don't have any {ItemId} in inventory (NQ only)");
 
             _usedItem = UseItem();
-            if (ItemId == VesperBayAetheryteTicket)
-                _continueAt = DateTime.Now.AddSeconds(11);
-            else
-                _continueAt = DateTime.Now.AddSeconds(2);
+            _continueAt = DateTime.Now.AddSeconds(11);
             return true;
         }
 
@@ -144,7 +141,7 @@ internal static class UseItem
             if (!_usedItem)
             {
                 _usedItem = UseItem();
-                _continueAt = DateTime.Now.AddSeconds(2);
+                _continueAt = DateTime.Now.AddSeconds(11);
                 return ETaskResult.StillRunning;
             }
 
