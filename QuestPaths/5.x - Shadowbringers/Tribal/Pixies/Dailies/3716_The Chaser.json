@@ -1,7 +1,6 @@
 {
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -21,7 +20,19 @@
     {
       "Sequence": 1,
       "Steps": [
-
+        {
+          "DataId": 1032203,
+          "Position": {
+            "X": 10.849121,
+            "Y": 100.161,
+            "Z": -886.22876
+          },
+          "TerritoryId": 816,
+          "InteractionType": "UseItem",
+          "ItemId": 2002943,
+          "AetheryteShortcut": "Il Mheg - Pia Enni",
+          "Fly": true
+        }
       ]
     },
     {
@@ -36,6 +47,7 @@
           },
           "TerritoryId": 816,
           "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Il Mheg - Lydha Lran",
           "Fly": true
         }
       ]
