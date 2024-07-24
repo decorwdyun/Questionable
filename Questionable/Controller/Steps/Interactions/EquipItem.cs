@@ -55,6 +55,7 @@ internal static class EquipItem
         private uint _itemId;
         private Item _item = null!;
         private List<ushort> _targetSlots = [];
+        private int _attempts = 0;
 
         private DateTime _continueAt = DateTime.MaxValue;
 
@@ -97,6 +98,10 @@ internal static class EquipItem
 
         private unsafe void Equip()
         {
+            ++_attempts;
+            if (_attempts > 3)
+                throw new TaskException("Unable to equip gear.");
+
             var inventoryManager = InventoryManager.Instance();
             if (inventoryManager == null)
                 return;

@@ -25,6 +25,49 @@
           "TerritoryId": 816,
           "InteractionType": "AttuneAetheryte",
           "Aetheryte": "Il Mheg - Pia Enni"
+        },
+        {
+          "DataId": 1029572,
+          "Position": {
+            "X": -44.022278,
+            "Y": 104.915054,
+            "Z": -856.53467
+          },
+          "TerritoryId": 816,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "Position": {
+            "X": -121.60927,
+            "Y": 57.405594,
+            "Z": -669.88385
+          },
+          "TerritoryId": 816,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "OverworldEnemies",
+          "KillEnemyDataIds": [
+            10255
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1029572,
+          "Position": {
+            "X": -44.022278,
+            "Y": 104.915054,
+            "Z": -856.53467
+          },
+          "TerritoryId": 816,
+          "InteractionType": "CompleteQuest"
         }
       ]
     }

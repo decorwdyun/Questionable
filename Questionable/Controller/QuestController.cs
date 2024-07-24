@@ -404,7 +404,7 @@ internal sealed class QuestController
                 {
                     _logger.LogError(e, "Failed to start task {TaskName}", upcomingTask.ToString());
                     _chatGui.PrintError(
-                        $"[Questionable] Failed to start task '{upcomingTask}', please check /xllog for details");
+                        $"[Questionable] Failed to start task '{upcomingTask}', please check /xllog for details.");
                     Stop("Task failed to start");
                     return;
                 }
@@ -421,6 +421,9 @@ internal sealed class QuestController
         catch (Exception e)
         {
             _logger.LogError(e, "Failed to update task {TaskName}", _currentTask.ToString());
+            _chatGui.PrintError(
+                $"[Questionable] Failed to update task '{_currentTask}', please check /xllog for details.");
+            Stop("Task failed to start");
             Stop("Task failed to update");
             return;
         }
