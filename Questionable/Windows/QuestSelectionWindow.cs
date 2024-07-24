@@ -133,10 +133,25 @@ internal sealed class QuestSelectionWindow : LWindow
             return;
         }
 
-        ImGui.TableSetupColumn("Id", ImGuiTableColumnFlags.WidthFixed, 50);
-        ImGui.TableSetupColumn("", ImGuiTableColumnFlags.WidthFixed, 18);
+        float statusIconSize;
+        using (var _ = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
+        {
+            statusIconSize = ImGui.CalcTextSize(FontAwesomeIcon.Copy.ToIconString()).X +
+                             1 * ImGui.GetStyle().FramePadding.X;
+        }
+
+        ImGui.PushFont(UiBuilder.IconFont);
+        var actionIconSize = ImGui.CalcTextSize(FontAwesomeIcon.Copy.ToIconString()).X +
+                             ImGui.CalcTextSize(FontAwesomeIcon.Copy.ToIconString()).X +
+                             ImGui.CalcTextSize(FontAwesomeIcon.Copy.ToIconString()).X +
+                             5 * ImGui.GetStyle().FramePadding.X +
+                             2 * ImGui.GetStyle().ItemSpacing.X;
+        ImGui.PopFont();
+
+        ImGui.TableSetupColumn("Id", ImGuiTableColumnFlags.WidthFixed, 50 * ImGui.GetIO().FontGlobalScale);
+        ImGui.TableSetupColumn("", ImGuiTableColumnFlags.WidthFixed, statusIconSize);
         ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.None, 200);
-        ImGui.TableSetupColumn("Actions", ImGuiTableColumnFlags.WidthFixed, 100);
+        ImGui.TableSetupColumn("Actions", ImGuiTableColumnFlags.WidthFixed, actionIconSize);
         ImGui.TableHeadersRow();
 
         foreach (QuestInfo quest in (_offeredQuests.Count != 0 && _onlyAvailableQuests) ? _offeredQuests : _quests)
