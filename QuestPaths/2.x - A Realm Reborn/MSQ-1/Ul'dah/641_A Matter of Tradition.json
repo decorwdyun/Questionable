@@ -77,7 +77,7 @@
             "Z": -78.78235
           },
           "TerritoryId": 130,
-          "InteractionType": "Interact",
+          "InteractionType": "CompleteQuest",
           "AethernetShortcut": [
             "[Ul'dah] Goldsmiths' Guild",
             "[Ul'dah] Adventurers' Guild"

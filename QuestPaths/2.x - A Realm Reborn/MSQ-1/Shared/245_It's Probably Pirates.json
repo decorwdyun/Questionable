@@ -32,7 +32,7 @@
           },
           "TerritoryId": 128,
           "InteractionType": "AcceptQuest",
-          "Comment": "Accepting 'Rising to the Challenge'"
+          "PickUpQuestId": 1211
         },
         {
           "DataId": 1003621,

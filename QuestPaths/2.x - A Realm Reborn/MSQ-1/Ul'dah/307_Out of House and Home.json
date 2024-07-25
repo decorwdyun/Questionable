@@ -28,9 +28,18 @@
             "Z": 47.80652
           },
           "TerritoryId": 141,
+          "InteractionType": "UseItem",
+          "ItemId": 2000212
+        },
+        {
+          "Position": {
+            "X": 25.680908,
+            "Y": 13.076904,
+            "Z": 47.80652
+          },
+          "TerritoryId": 141,
           "InteractionType": "Combat",
-          "EnemySpawnType": "AfterItemUse",
-          "ItemId": 2000212,
+          "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
             187
           ]
