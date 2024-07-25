@@ -210,6 +210,14 @@ internal sealed class QuestSelectionWindow : LWindow
             if (ImGui.TableNextColumn())
             {
                 ImGui.AlignTextToFramePadding();
+
+                if (knownQuest != null && knownQuest.Root.Disabled)
+                {
+                    using var _ = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push();
+                    ImGui.TextColored(ImGuiColors.DalamudOrange, FontAwesomeIcon.Ban.ToIconString());
+                    ImGui.SameLine();
+                }
+
                 ImGui.TextUnformatted(quest.Name);
             }
 

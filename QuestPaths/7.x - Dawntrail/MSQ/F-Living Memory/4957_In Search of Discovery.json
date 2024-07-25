@@ -173,15 +173,6 @@
           "AetherCurrentId": 2818488
         },
         {
-          "Position": {
-            "X": -297.6204,
-            "Y": 30.000608,
-            "Z": -346.82278
-          },
-          "TerritoryId": 1192,
-          "InteractionType": "WalkTo"
-        },
-        {
           "DataId": 1047999,
           "Position": {
             "X": -521.0803,
@@ -189,7 +180,8 @@
             "Z": -445.76184
           },
           "TerritoryId": 1192,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Living Memory - Leynode Aero"
         }
       ]
     }

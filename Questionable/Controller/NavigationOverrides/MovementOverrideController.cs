@@ -46,6 +46,9 @@ internal sealed class MovementOverrideController
 
         new BlacklistedPoint(1189, new(574f, -142.25f, 504.25f), new(574.44183f, -142.12766f, 507.60065f)),
 
+        // sheshenewezi springs aetheryte: couple of barrel rings that get in the way if you go north
+        new BlacklistedPoint(1190, new(-292.29004f, 18.598045f, -133.83907f), new(-288.20895f, 18.652182f, -132.67445f), 4),
+
         // heritage found: yyupye's halo (farm, npc: Mahuwsa)
         new BlacklistedPoint(1191, new(-108f, 29.25f, -350.75f), new(-107.56289f, 29.008266f, -348.80087f)),
         new BlacklistedPoint(1191, new(-105.75f, 29.75f, -351f), new(-105.335304f, 29.017048f, -348.85077f)),

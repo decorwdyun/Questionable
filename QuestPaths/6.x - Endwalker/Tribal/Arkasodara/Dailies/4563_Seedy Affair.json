@@ -1,7 +1,6 @@
 {
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -32,7 +31,35 @@
           "InteractionType": "UseItem",
           "ItemId": 2003420,
           "Fly": true,
-          "AetheryteShortcut": "Thavnair - Palaka's Stand"
+          "AetheryteShortcut": "Thavnair - Palaka's Stand",
+          "RequiredQuestVariables": [
+            null,
+            [19],
+            null,
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "DataId": 2012885,
+          "Position": {
+            "X": 108.17114,
+            "Y": 8.224609,
+            "Z": -373.22046
+          },
+          "TerritoryId": 957,
+          "InteractionType": "UseItem",
+          "ItemId": 2003420,
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            [18],
+            null,
+            null,
+            null,
+            null
+          ]
         },
         {
           "DataId": 2012886,
@@ -45,7 +72,14 @@
           "InteractionType": "UseItem",
           "ItemId": 2003420,
           "Fly": true,
-          "AetheryteShortcut": "Thavnair - Palaka's Stand"
+          "RequiredQuestVariables": [
+            null,
+            [17],
+            null,
+            null,
+            null,
+            null
+          ]
         }
       ]
     },
@@ -60,7 +94,33 @@
             "Z": -294.36182
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [0],
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "DataId": 2012885,
+          "Position": {
+            "X": 108.17114,
+            "Y": 8.224609,
+            "Z": -373.22046
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact",
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [64],
+            null,
+            null,
+            null
+          ]
         },
         {
           "DataId": 2012886,
@@ -70,7 +130,15 @@
             "Z": -327.5349
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [128],
+            null,
+            null,
+            null
+          ]
         }
       ]
     },

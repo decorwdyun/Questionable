@@ -21,17 +21,6 @@
       "Sequence": 1,
       "Steps": [
         {
-          "Position": {
-            "X": -288.2827,
-            "Y": 18.558346,
-            "Z": -133.59453
-          },
-          "TerritoryId": 1190,
-          "InteractionType": "WalkTo",
-          "$": "Sheshenewezi Springs Navmesh workaround",
-          "AetheryteShortcut": "Shaaloani - Sheshenewezi Springs"
-        },
-        {
           "DataId": 1048057,
           "Position": {
             "X": -313.74078,
@@ -39,7 +28,8 @@
             "Z": -178.8205
           },
           "TerritoryId": 1190,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Shaaloani - Sheshenewezi Springs"
         }
       ]
     },

@@ -90,8 +90,7 @@
           },
           "TerritoryId": 1186,
           "InteractionType": "CompleteQuest",
-          "AetheryteShortcut": "Solution Nine",
-          "Comment": "TODO Check if there is a missing sequence #4 now, or if this works correctly"
+          "AetheryteShortcut": "Solution Nine"
         }
       ]
     }
