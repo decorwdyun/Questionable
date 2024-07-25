@@ -92,7 +92,43 @@ public class QuestSourceGenerator : ISourceGenerator
         if (quests.Count == 0)
             return;
 
-        quests = quests.OrderBy(x => x.Item1).ToList();
+        var partitionedQuests = quests
+            .OrderBy(x => x.Item1)
+            .GroupBy(x => $"LoadQuests{x.Item1 / 50}")
+            .ToList();
+
+        List<MethodDeclarationSyntax> methods =
+        [
+            MethodDeclaration(
+                    PredefinedType(
+                        Token(SyntaxKind.VoidKeyword)),
+                    Identifier("LoadQuests"))
+                .WithModifiers(
+                    TokenList(
+                        Token(SyntaxKind.PrivateKeyword),
+                        Token(SyntaxKind.StaticKeyword)))
+                .WithBody(
+                    Block(
+                        partitionedQuests
+                            .Select(x =>
+                                ExpressionStatement(
+                                    InvocationExpression(
+                                        IdentifierName(x.Key))))))
+        ];
+
+        foreach (var partition in partitionedQuests)
+        {
+            methods.Add(MethodDeclaration(
+                    PredefinedType(
+                        Token(SyntaxKind.VoidKeyword)),
+                    Identifier(partition.Key))
+                .WithModifiers(
+                    TokenList(
+                        Token(SyntaxKind.PrivateKeyword),
+                        Token(SyntaxKind.StaticKeyword)))
+                .WithBody(
+                    Block(CreateInitializer(partition.ToList()))));
+        }
 
         var code =
             CompilationUnit()
@@ -132,116 +168,61 @@ public class QuestSourceGenerator : ISourceGenerator
                                 SingletonList<MemberDeclarationSyntax>(
                                     ClassDeclaration("AssemblyQuestLoader")
                                         .WithModifiers(
-                                            TokenList(
-                                            [
-                                                Token(SyntaxKind.PartialKeyword)
-                                            ]))
-                                        .WithMembers(
-                                            SingletonList<MemberDeclarationSyntax>(
-                                                FieldDeclaration(
-                                                        VariableDeclaration(
-                                                                GenericName(
-                                                                        Identifier("IReadOnlyDictionary"))
-                                                                    .WithTypeArgumentList(
-                                                                        TypeArgumentList(
-                                                                            SeparatedList<TypeSyntax>(
-                                                                                new SyntaxNodeOrToken[]
-                                                                                {
-                                                                                    PredefinedType(
-                                                                                        Token(SyntaxKind
-                                                                                            .UShortKeyword)),
-                                                                                    Token(SyntaxKind.CommaToken),
-                                                                                    IdentifierName("QuestRoot")
-                                                                                }))))
-                                                            .WithVariables(
-                                                                SingletonSeparatedList(
-                                                                    VariableDeclarator(
-                                                                            Identifier("Quests"))
-                                                                        .WithInitializer(
-                                                                            EqualsValueClause(
-                                                                                ObjectCreationExpression(
-                                                                                        GenericName(
-                                                                                                Identifier(
-                                                                                                    "Dictionary"))
-                                                                                            .WithTypeArgumentList(
-                                                                                                TypeArgumentList(
-                                                                                                    SeparatedList<
-                                                                                                        TypeSyntax>(
-                                                                                                        new
-                                                                                                            SyntaxNodeOrToken
-                                                                                                            []
-                                                                                                            {
-                                                                                                                PredefinedType(
-                                                                                                                    Token(
-                                                                                                                        SyntaxKind
-                                                                                                                            .UShortKeyword)),
-                                                                                                                Token(
-                                                                                                                    SyntaxKind
-                                                                                                                        .CommaToken),
-                                                                                                                IdentifierName(
-                                                                                                                    "QuestRoot")
-                                                                                                            }))))
-                                                                                    .WithArgumentList(
-                                                                                        ArgumentList())
-                                                                                    .WithInitializer(
-                                                                                        InitializerExpression(
-                                                                                            SyntaxKind
-                                                                                                .CollectionInitializerExpression,
-                                                                                            SeparatedList<
-                                                                                                ExpressionSyntax>(
-                                                                                                quests.SelectMany(x =>
-                                                                                                    CreateQuestInitializer(
-                                                                                                            x.Item1,
-                                                                                                            x.Item2)
-                                                                                                        .ToArray())))))))))
-                                                    .WithModifiers(
-                                                        TokenList(
-                                                        [
-                                                            Token(SyntaxKind.InternalKeyword),
-                                                            Token(SyntaxKind.StaticKeyword)
-                                                        ]))))))))
+                                            TokenList(Token(SyntaxKind.PartialKeyword)))
+                                        .WithMembers(List<MemberDeclarationSyntax>(methods))))))
                 .NormalizeWhitespace();
 
         // Add the source code to the compilation.
         context.AddSource("AssemblyQuestLoader.g.cs", code.ToFullString());
     }
 
-    private static IEnumerable<SyntaxNodeOrToken> CreateQuestInitializer(ushort questId, QuestRoot quest)
+    private static StatementSyntax[] CreateInitializer(List<(ushort QuestId, QuestRoot Root)> quests)
+    {
+        List<StatementSyntax> statements = [];
+
+        foreach (var quest in quests)
+        {
+            statements.Add(
+                ExpressionStatement(
+                    InvocationExpression(
+                            IdentifierName("AddQuest"))
+                        .WithArgumentList(
+                            ArgumentList(
+                                SeparatedList<ArgumentSyntax>(
+                                    new SyntaxNodeOrToken[]
+                                    {
+                                        Argument(
+                                            LiteralExpression(SyntaxKind.NumericLiteralExpression,
+                                                Literal(quest.QuestId))),
+                                        Token(SyntaxKind.CommaToken),
+                                        Argument(CreateQuestRootExpression(quest.QuestId, quest.Root))
+                                    })))));
+        }
+
+        return statements.ToArray();
+    }
+
+    private static ObjectCreationExpressionSyntax CreateQuestRootExpression(ushort questId, QuestRoot quest)
     {
         try
         {
-            return new SyntaxNodeOrToken[]
-            {
-                InitializerExpression(
-                    SyntaxKind.ComplexElementInitializerExpression,
-                    SeparatedList<ExpressionSyntax>(
-                        new SyntaxNodeOrToken[]
-                        {
-                            LiteralExpression(
-                                SyntaxKind.NumericLiteralExpression,
-                                Literal(questId)),
-                            Token(SyntaxKind.CommaToken),
-                            ObjectCreationExpression(
-                                    IdentifierName(nameof(QuestRoot)))
-                                .WithInitializer(
-                                    InitializerExpression(
-                                        SyntaxKind.ObjectInitializerExpression,
-                                        SeparatedList<ExpressionSyntax>(
-                                            SyntaxNodeList(
-                                                AssignmentList(nameof(QuestRoot.Author), quest.Author)
-                                                    .AsSyntaxNodeOrToken(),
-                                                Assignment(nameof(QuestRoot.Comment), quest.Comment, null)
-                                                    .AsSyntaxNodeOrToken(),
-                                                AssignmentList(nameof(QuestRoot.TerritoryBlacklist),
-                                                    quest.TerritoryBlacklist).AsSyntaxNodeOrToken(),
-                                                AssignmentExpression(
-                                                    SyntaxKind.SimpleAssignmentExpression,
-                                                    IdentifierName(nameof(QuestRoot.QuestSequence)),
-                                                    CreateQuestSequence(quest.QuestSequence))
-                                            ))))
-                        })),
-                Token(SyntaxKind.CommaToken)
-            };
+            return ObjectCreationExpression(
+                    IdentifierName(nameof(QuestRoot)))
+                .WithInitializer(
+                    InitializerExpression(
+                        SyntaxKind.ObjectInitializerExpression,
+                        SeparatedList<ExpressionSyntax>(
+                            SyntaxNodeList(
+                                AssignmentList(nameof(QuestRoot.Author), quest.Author)
+                                    .AsSyntaxNodeOrToken(),
+                                Assignment(nameof(QuestRoot.Comment), quest.Comment, null)
+                                    .AsSyntaxNodeOrToken(),
+                                AssignmentList(nameof(QuestRoot.TerritoryBlacklist),
+                                    quest.TerritoryBlacklist).AsSyntaxNodeOrToken(),
+                                AssignmentExpression(
+                                    SyntaxKind.SimpleAssignmentExpression,
+                                    IdentifierName(nameof(QuestRoot.QuestSequence)),
+                                    CreateQuestSequence(quest.QuestSequence))))));
         }
         catch (Exception e)
         {

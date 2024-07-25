@@ -63,7 +63,7 @@ internal sealed class QuestRegistry
         }
 
         ValidateQuests();
-        _logger.LogInformation("Loaded {Count} quests", _quests.Count);
+        _logger.LogInformation("Loaded {Count} quests in total", _quests.Count);
     }
 
     [Conditional("RELEASE")]
@@ -82,6 +82,8 @@ internal sealed class QuestRegistry
             };
             _quests[questId] = quest;
         }
+
+        _logger.LogInformation("Loaded {Count} quests from assembly", _quests.Count);
     }
 
     [Conditional("DEBUG")]

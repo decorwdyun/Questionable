@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,26 +39,35 @@ internal sealed class QuestValidator
     {
         Task.Factory.StartNew(() =>
         {
-            foreach (var quest in quests)
+            try
             {
-                foreach (var validator in _validators)
+                foreach (var quest in quests)
                 {
-                    foreach (var issue in validator.Validate(quest))
+                    foreach (var validator in _validators)
                     {
-                        var level = issue.Severity == EIssueSeverity.Error ? LogLevel.Warning : LogLevel.Information;
-                        _logger.Log(level,
-                            "Validation failed: {QuestId} ({QuestName}) / {QuestSequence} / {QuestStep} - {Description}",
-                            issue.QuestId, quest.Info.Name, issue.Sequence, issue.Step, issue.Description);
-                        _validationIssues.Add(issue);
+                        foreach (var issue in validator.Validate(quest))
+                        {
+                            var level = issue.Severity == EIssueSeverity.Error
+                                ? LogLevel.Warning
+                                : LogLevel.Information;
+                            _logger.Log(level,
+                                "Validation failed: {QuestId} ({QuestName}) / {QuestSequence} / {QuestStep} - {Description}",
+                                issue.QuestId, quest.Info.Name, issue.Sequence, issue.Step, issue.Description);
+                            _validationIssues.Add(issue);
+                        }
                     }
                 }
-            }
 
-            _validationIssues = _validationIssues.OrderBy(x => x.QuestId)
-                .ThenBy(x => x.Sequence)
-                .ThenBy(x => x.Step)
-                .ThenBy(x => x.Description)
-                .ToList();
+                _validationIssues = _validationIssues.OrderBy(x => x.QuestId)
+                    .ThenBy(x => x.Sequence)
+                    .ThenBy(x => x.Step)
+                    .ThenBy(x => x.Description)
+                    .ToList();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Unable to validate quests");
+            }
         }, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
     }
 }

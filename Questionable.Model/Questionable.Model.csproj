@@ -7,6 +7,7 @@
         <PathMap Condition="$(SolutionDir) != ''">$(SolutionDir)=X:\</PathMap>
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
         <DebugType>portable</DebugType>
+        <Platforms>x64</Platforms>
     </PropertyGroup>
 
     <ItemGroup>

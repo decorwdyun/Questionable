@@ -423,7 +423,6 @@ internal sealed class QuestController
             _logger.LogError(e, "Failed to update task {TaskName}", _currentTask.ToString());
             _chatGui.PrintError(
                 $"[Questionable] Failed to update task '{_currentTask}', please check /xllog for details.");
-            Stop("Task failed to start");
             Stop("Task failed to update");
             return;
         }
