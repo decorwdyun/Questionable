@@ -1,0 +1,56 @@
+﻿{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1005411,
+          "Position": {
+            "X": 13.412659,
+            "Y": 40.2,
+            "Z": -13.260071
+          },
+          "TerritoryId": 128,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1003598,
+          "Position": {
+            "X": -12.069946,
+            "Y": 40.00053,
+            "Z": 11.459534
+          },
+          "TerritoryId": 128,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1005410,
+          "Position": {
+            "X": -182.45215,
+            "Y": 1.9999955,
+            "Z": 208.75867
+          },
+          "TerritoryId": 129,
+          "InteractionType": "CompleteQuest",
+          "Comment": "'Rising to the Challenge'",
+          "AethernetShortcut": [
+            "[Limsa Lominsa] The Aftcastle",
+            "[Limsa Lominsa] Fishermens' Guild"
+          ]
+        }
+      ]
+    }
+  ]
+}

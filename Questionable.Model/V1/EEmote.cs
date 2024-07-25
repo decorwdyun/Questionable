@@ -29,4 +29,5 @@ public enum EEmote
     Respect = 140,
     Lookout = 22,
     Kneel = 19,
+    Bow = 5,
 }

@@ -136,15 +136,14 @@ internal sealed class QuestSelectionWindow : LWindow
         float statusIconSize;
         using (var _ = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
         {
-            statusIconSize = ImGui.CalcTextSize(FontAwesomeIcon.Copy.ToIconString()).X +
-                             1 * ImGui.GetStyle().FramePadding.X;
+            statusIconSize = ImGui.CalcTextSize(FontAwesomeIcon.Copy.ToIconString()).X;
         }
 
         ImGui.PushFont(UiBuilder.IconFont);
         var actionIconSize = ImGui.CalcTextSize(FontAwesomeIcon.Copy.ToIconString()).X +
                              ImGui.CalcTextSize(FontAwesomeIcon.Copy.ToIconString()).X +
                              ImGui.CalcTextSize(FontAwesomeIcon.Copy.ToIconString()).X +
-                             5 * ImGui.GetStyle().FramePadding.X +
+                             6 * ImGui.GetStyle().FramePadding.X +
                              2 * ImGui.GetStyle().ItemSpacing.X;
         ImGui.PopFont();
 
@@ -229,10 +228,10 @@ internal sealed class QuestSelectionWindow : LWindow
                 ImGui.SameLine();
 
                 if (knownQuest != null &&
-                    knownQuest.FindSequence(0)?.LastStep()?.InteractionType == EInteractionType.AcceptQuest &&
+                    knownQuest.FindSequence(0)?.LastStep()?.InteractionType == EInteractionType.AcceptQuest /* &&
                     !_gameFunctions.IsQuestAccepted(quest.QuestId) &&
                     !_gameFunctions.IsQuestLocked(quest.QuestId) &&
-                    (quest.IsRepeatable || !_gameFunctions.IsQuestAcceptedOrComplete(quest.QuestId)))
+                    (quest.IsRepeatable || !_gameFunctions.IsQuestAcceptedOrComplete(quest.QuestId))*/)
                 {
                     ImGui.BeginDisabled(_questController.NextQuest != null || _questController.SimulatedQuest != null);
 

@@ -31,34 +31,8 @@
             "Z": -13.260071
           },
           "TerritoryId": 128,
-          "InteractionType": "Interact",
+          "InteractionType": "AcceptQuest",
           "Comment": "Accepting 'Rising to the Challenge'"
-        },
-        {
-          "DataId": 1003598,
-          "Position": {
-            "X": -12.069946,
-            "Y": 40.00053,
-            "Z": 11.459534
-          },
-          "TerritoryId": 128,
-          "InteractionType": "Interact",
-          "Comment": "'Rising to the Challenge'"
-        },
-        {
-          "DataId": 1005410,
-          "Position": {
-            "X": -182.45215,
-            "Y": 1.9999955,
-            "Z": 208.75867
-          },
-          "TerritoryId": 129,
-          "InteractionType": "Interact",
-          "Comment": "'Rising to the Challenge'",
-          "AethernetShortcut": [
-            "[Limsa Lominsa] The Aftcastle",
-            "[Limsa Lominsa] Fishermens' Guild"
-          ]
         },
         {
           "DataId": 1003621,
@@ -68,7 +42,8 @@
             "Z": 208.66711
           },
           "TerritoryId": 129,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Comment": "NG+: Requires manual teleport to Lower Decks"
         }
       ]
     },

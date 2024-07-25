@@ -105,7 +105,8 @@
           },
           "TerritoryId": 133,
           "InteractionType": "Interact",
-          "Comment": "Pick up Class Quest"
+          "Comment": "Pick up Class Quest",
+          "Disabled": true
         },
         {
           "TerritoryId": 133,

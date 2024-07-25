@@ -98,6 +98,8 @@ internal sealed unsafe class GameFunctions
         {
             if (_clientState.TerritoryType == 181) // Starting in Limsa
                 return (107, 0);
+            if (_clientState.TerritoryType == 182) // Starting in Ul'dah
+                return (594, 0);
             if (_clientState.TerritoryType == 183) // Starting in Gridania
                 return (39, 0);
             return default;
