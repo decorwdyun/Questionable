@@ -19,6 +19,8 @@ internal sealed class RotationSolverRebornModule : ICombatModule, IDisposable
     private readonly ICallGateSubscriber<string, object> _test;
     private readonly ICallGateSubscriber<StateCommandType, object> _changeOperationMode;
 
+    private DateTime _lastDistanceCheck = DateTime.MinValue;
+
     public RotationSolverRebornModule(ILogger<RotationSolverRebornModule> logger, MovementController movementController,
         IClientState clientState, IDalamudPluginInterface pluginInterface)
     {
@@ -51,6 +53,7 @@ internal sealed class RotationSolverRebornModule : ICombatModule, IDisposable
         try
         {
             _changeOperationMode.InvokeAction(StateCommandType.Manual);
+            _lastDistanceCheck = DateTime.Now;
             return true;
         }
         catch (IpcError e)
@@ -82,10 +85,38 @@ internal sealed class RotationSolverRebornModule : ICombatModule, IDisposable
 
         float hitboxOffset = player.HitboxRadius + gameObject.HitboxRadius;
         float actualDistance = Vector3.Distance(player.Position, gameObject.Position);
-        float maxDistance = player.ClassJob.GameData?.Role is 3 or 4 ? 25f : 3f;
-        if (actualDistance - hitboxOffset > maxDistance)
-            _movementController.NavigateTo(EMovementType.Combat, null, [gameObject.Position], false, false,
-                maxDistance + hitboxOffset - 0.25f, true);
+        float maxDistance = player.ClassJob.GameData?.Role is 3 or 4 ? 20f : 3f;
+        if (actualDistance - hitboxOffset >= maxDistance)
+        {
+            if (actualDistance - hitboxOffset <= 5)
+            {
+                _logger.LogInformation("Moving to {TargetName} ({DataId}) to attack", gameObject.Name,
+                    gameObject.DataId);
+                _movementController.NavigateTo(EMovementType.Combat, null, [gameObject.Position], false, false,
+                    maxDistance + hitboxOffset - 0.25f, true);
+            }
+            else
+            {
+                _logger.LogInformation("Moving to {TargetName} ({DataId}) to attack (with navmesh)", gameObject.Name,
+                    gameObject.DataId);
+                _movementController.NavigateTo(EMovementType.Combat, null, gameObject.Position, false, false,
+                    maxDistance + hitboxOffset - 0.25f, true);
+            }
+        }
+
+        _lastDistanceCheck = DateTime.Now;
+    }
+
+    public void Update(IGameObject gameObject)
+    {
+        if (_movementController.IsPathfinding || _movementController.IsPathRunning)
+            return;
+
+        if (DateTime.Now > _lastDistanceCheck.AddSeconds(10))
+        {
+            SetTarget(gameObject);
+            _lastDistanceCheck = DateTime.Now;
+        }
     }
 
     public void Dispose() => Stop();

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Keys;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.Logging;
@@ -22,6 +23,7 @@ internal sealed class QuestController
     private readonly QuestRegistry _questRegistry;
     private readonly IKeyState _keyState;
     private readonly IChatGui _chatGui;
+    private readonly ICondition _condition;
     private readonly Configuration _configuration;
     private readonly YesAlreadyIpc _yesAlreadyIpc;
     private readonly IReadOnlyList<ITaskFactory> _taskFactories;
@@ -44,6 +46,7 @@ internal sealed class QuestController
         QuestRegistry questRegistry,
         IKeyState keyState,
         IChatGui chatGui,
+        ICondition condition,
         Configuration configuration,
         YesAlreadyIpc yesAlreadyIpc,
         IEnumerable<ITaskFactory> taskFactories)
@@ -56,6 +59,7 @@ internal sealed class QuestController
         _questRegistry = questRegistry;
         _keyState = keyState;
         _chatGui = chatGui;
+        _condition = condition;
         _configuration = configuration;
         _yesAlreadyIpc = yesAlreadyIpc;
         _taskFactories = taskFactories.ToList().AsReadOnly();
@@ -104,7 +108,15 @@ internal sealed class QuestController
     {
         UpdateCurrentQuest();
 
-        if (_keyState[VirtualKey.ESCAPE])
+        if (!_clientState.IsLoggedIn || _condition[ConditionFlag.Unconscious])
+        {
+            if (_currentTask != null || _taskQueue.Count > 0)
+            {
+                Stop("HP = 0");
+                _movementController.Stop();
+                _combatController.Stop();
+            }
+        } else if (_keyState[VirtualKey.ESCAPE])
         {
             if (_currentTask != null || _taskQueue.Count > 0)
             {

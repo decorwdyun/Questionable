@@ -9,6 +9,7 @@ using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
+using FFXIVClientStructs.FFXIV.Common.Math;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.CombatModules;
 using Questionable.Controller.Utils;
@@ -75,11 +76,15 @@ internal sealed class CombatController : IDisposable
         var target = _targetManager.Target;
         if (target != null)
         {
-            if (IsEnemyToKill(target))
+            if (GetKillPriority(target) is >= 50)
                 return true;
 
             var nextTarget = FindNextTarget();
-            if (nextTarget != null)
+            if (nextTarget != null && nextTarget.Equals(target))
+            {
+                _currentFight.Module.Update(target);
+            }
+            else if (nextTarget != null)
             {
                 _logger.LogInformation("Changing next target to {TargetName} ({TargetId:X8})",
                     nextTarget.Name.ToString(), nextTarget.GameObjectId);
@@ -154,10 +159,15 @@ internal sealed class CombatController : IDisposable
             }
         }
 
-        return _objectTable.Where(IsEnemyToKill).MinBy(x => (x.Position - _clientState.LocalPlayer!.Position).Length());
+        return _objectTable.Select(x => (GameObject: x, Priority: GetKillPriority(x)))
+            .Where(x => x.Priority != null)
+            .OrderByDescending(x => x.Priority!.Value)
+            .ThenByDescending(x => Vector3.Distance(x.GameObject.Position, _clientState.LocalPlayer!.Position))
+            .Select(x => x.GameObject)
+            .FirstOrDefault();
     }
 
-    private unsafe bool IsEnemyToKill(IGameObject gameObject)
+    private unsafe int? GetKillPriority(IGameObject gameObject)
     {
         if (gameObject is IBattleNpc battleNpc)
         {
@@ -167,14 +177,11 @@ internal sealed class CombatController : IDisposable
                 _currentFight.Data.ComplexCombatDatas.Count == 0)
             {
                 if (battleNpc.IsDead)
-                    return false;
+                    return null;
             }
 
             if (!battleNpc.IsTargetable)
-                return false;
-
-            if (battleNpc.TargetObjectId == _clientState.LocalPlayer?.GameObjectId)
-                return true;
+                return null;
 
             if (_currentFight != null)
             {
@@ -187,33 +194,37 @@ internal sealed class CombatController : IDisposable
                             continue;
 
                         if (complexCombatData[i].DataId == battleNpc.DataId)
-                            return true;
+                            return 100;
                     }
                 }
                 else
                 {
                     if (_currentFight.Data.KillEnemyDataIds.Contains(battleNpc.DataId))
-                        return true;
+                        return 90;
                 }
             }
 
+            // enemies that we have aggro on
             if (battleNpc.BattleNpcKind is BattleNpcSubKind.BattleNpcPart or BattleNpcSubKind.Enemy)
             {
                 var gameObjectStruct = (GameObject*)gameObject.Address;
                 if (gameObjectStruct->NamePlateIconId is 60093 or 60732) // npc that starts a fate or does turn-ins
-                    return false;
+                    return null;
 
                 var enemyData = _currentFight?.Data.ComplexCombatDatas.FirstOrDefault(x => x.DataId == battleNpc.DataId);
                 if (enemyData is { IgnoreQuestMarker: true })
-                    return battleNpc.StatusFlags.HasFlag(StatusFlags.InCombat);
+                    return battleNpc.StatusFlags.HasFlag(StatusFlags.InCombat) ? 20 : null;
                 else
-                    return gameObjectStruct->NamePlateIconId != 0;
+                    return gameObjectStruct->NamePlateIconId != 0 ? 30 : null;
             }
-            else
-                return false;
+
+            // stuff trying to kill us
+            if (battleNpc.TargetObjectId == _clientState.LocalPlayer?.GameObjectId)
+                return 0;
+
         }
-        else
-            return false;
+
+        return null;
     }
 
     public void Stop()

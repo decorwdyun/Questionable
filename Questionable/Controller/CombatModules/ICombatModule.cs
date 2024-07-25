@@ -10,5 +10,7 @@ internal interface ICombatModule
 
     bool Stop();
 
+    void Update(IGameObject nextTarget);
+
     void SetTarget(IGameObject nextTarget);
 }
