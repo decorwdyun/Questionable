@@ -1,0 +1,68 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "JerryWester",
+  "TerritoryBlacklist": [
+    1039
+  ],
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1000590,
+          "Position": {
+            "X": -165.9419,
+            "Y": 9.869227,
+            "Z": -81.34589
+          },
+          "TerritoryId": 153,
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "South Shroud - Quarrymill",
+          "SkipIf": [
+            "AetheryteShortcutIfInSameTerritory"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1000393,
+          "Position": {
+            "X": -89.463684,
+            "Y": 3.318795,
+            "Z": -168.9021
+          },
+          "TerritoryId": 153,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "TerritoryId": 153,
+          "InteractionType": "Duty",
+          "ContentFinderConditionId": 1
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1000590,
+          "Position": {
+            "X": -165.9419,
+            "Y": 9.869227,
+            "Z": -81.34589
+          },
+          "TerritoryId": 153,
+          "InteractionType": "CompleteQuest"
+        }
+      ]
+    }
+  ]
+}
