@@ -1,7 +1,6 @@
 {
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -21,12 +20,32 @@
     {
       "Sequence": 1,
       "Steps": [
-
+        {
+          "DataId": 2010786,
+          "Position": {
+            "X": 514.94617,
+            "Y": 97.61194,
+            "Z": -256.70258
+          },
+          "TerritoryId": 816,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Il Mheg - Wolekdorf",
+          "Fly": true
+        }
       ]
     },
     {
       "Sequence": 255,
       "Steps": [
+        {
+          "Position": {
+            "X": 486.33374,
+            "Y": 90.93466,
+            "Z": -316.85287
+          },
+          "TerritoryId": 816,
+          "InteractionType": "WalkTo"
+        },
         {
           "DataId": 1031809,
           "Position": {
@@ -36,6 +55,7 @@
           },
           "TerritoryId": 816,
           "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Il Mheg - Lydha Lran",
           "Fly": true
         }
       ]
