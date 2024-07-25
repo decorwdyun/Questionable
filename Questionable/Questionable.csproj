@@ -3,6 +3,7 @@
         <Version>1.17</Version>
         <OutputPath>dist</OutputPath>
         <PathMap Condition="$(SolutionDir) != ''">$(SolutionDir)=X:\</PathMap>
+        <Platforms>x64</Platforms>
     </PropertyGroup>
 
     <Import Project="..\LLib\LLib.targets"/>
