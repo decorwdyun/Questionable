@@ -55,8 +55,7 @@
           },
           "TerritoryId": 401,
           "InteractionType": "Emote",
-          "Emote": "lookout",
-          "Comment": "Replace with /bow"
+          "Emote": "bow"
         }
       ]
     },
