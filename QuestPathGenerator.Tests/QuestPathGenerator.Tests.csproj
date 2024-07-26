@@ -8,6 +8,7 @@
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
         <Platforms>x64</Platforms>
+        <MSBuildWarningsAsMessages>MSB3243</MSBuildWarningsAsMessages>
     </PropertyGroup>
 
     <ItemGroup>
