@@ -1,6 +1,6 @@
 ﻿
 {
-  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
   "TerritoryBlacklist": [
     861

@@ -1,13 +1,13 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://carvel.li/questionable/quest-1.0",
+  "$id": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "title": "Questionable V1",
   "description": "A series of quest sequences",
   "type": "object",
   "properties": {
     "$schema": {
       "type": "string",
-      "const": "https://carvel.li/questionable/quest-1.0"
+      "const": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json"
     },
     "Author": {
       "description": "Author of the quest sequence",
