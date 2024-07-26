@@ -47,7 +47,8 @@ internal static class Combat
                     ArgumentNullException.ThrowIfNull(step.ItemId);
 
                     yield return serviceProvider.GetRequiredService<UseItem.UseOnObject>()
-                        .With(step.DataId.Value, step.ItemId.Value, true);
+                        .With(quest.QuestId, step.DataId.Value, step.ItemId.Value, step.CompletionQuestVariablesFlags,
+                            true);
                     yield return CreateTask(quest, sequence, step);
                     break;
                 }

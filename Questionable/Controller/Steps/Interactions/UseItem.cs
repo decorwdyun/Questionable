@@ -4,11 +4,13 @@ using System.Globalization;
 using System.Numerics;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Common;
 using Questionable.Controller.Steps.Shared;
+using Questionable.Controller.Utils;
 using Questionable.Model;
 using Questionable.Model.V1;
 using AethernetShortcut = Questionable.Controller.Steps.Shared.AethernetShortcut;
@@ -44,12 +46,13 @@ internal static class UseItem
                 ITask task;
                 if (step.DataId != null)
                     task = serviceProvider.GetRequiredService<UseOnGround>()
-                        .With(step.DataId.Value, step.ItemId.Value);
+                        .With(quest.QuestId, step.DataId.Value, step.ItemId.Value, step.CompletionQuestVariablesFlags);
                 else
                 {
                     ArgumentNullException.ThrowIfNull(step.Position);
                     task = serviceProvider.GetRequiredService<UseOnPosition>()
-                        .With(step.Position.Value, step.ItemId.Value);
+                        .With(quest.QuestId, step.Position.Value, step.ItemId.Value,
+                            step.CompletionQuestVariablesFlags);
                 }
 
                 return [unmount, task];
@@ -57,13 +60,13 @@ internal static class UseItem
             else if (step.DataId != null)
             {
                 var task = serviceProvider.GetRequiredService<UseOnObject>()
-                    .With(step.DataId.Value, step.ItemId.Value);
+                    .With(quest.QuestId, step.DataId.Value, step.ItemId.Value, step.CompletionQuestVariablesFlags);
                 return [unmount, task];
             }
             else
             {
                 var task = serviceProvider.GetRequiredService<Use>()
-                    .With(step.ItemId.Value);
+                    .With(quest.QuestId, step.ItemId.Value, step.CompletionQuestVariablesFlags);
                 return [unmount, task];
             }
         }
@@ -90,13 +93,15 @@ internal static class UseItem
         }
     }
 
-    internal abstract class UseItemBase(ICondition condition, ILogger logger) : ITask
+    internal abstract class UseItemBase(GameFunctions gameFunctions, ICondition condition, ILogger logger) : ITask
     {
         private bool _usedItem;
         private DateTime _continueAt;
         private int _itemCount;
 
+        public ushort? QuestId { get; set; }
         public uint ItemId { get; set; }
+        public IList<short?> CompletionQuestVariablesFlags { get; set; } = new List<short?>();
         public bool StartingCombat { get; set; }
 
         protected abstract bool UseItem();
@@ -109,15 +114,23 @@ internal static class UseItem
 
             _itemCount = inventoryManager->GetInventoryItemCount(ItemId);
             if (_itemCount == 0)
-                throw new TaskException($"Don't have any {ItemId} in inventory (NQ only)");
+                throw new TaskException($"Don't have any {ItemId} in inventory (checks NQ only)");
 
             _usedItem = UseItem();
-            _continueAt = DateTime.Now.AddSeconds(11);
+            _continueAt = DateTime.Now.Add(GetRetryDelay());
             return true;
         }
 
         public unsafe ETaskResult Update()
         {
+            if (QuestId.HasValue && QuestWorkUtils.HasCompletionFlags(CompletionQuestVariablesFlags))
+            {
+                QuestWork? questWork = gameFunctions.GetQuestEx(QuestId.Value);
+                if (questWork != null &&
+                    QuestWorkUtils.MatchesQuestWork(CompletionQuestVariablesFlags, questWork.Value, false))
+                    return ETaskResult.TaskComplete;
+            }
+
             if (DateTime.Now <= _continueAt)
                 return ETaskResult.StillRunning;
 
@@ -147,28 +160,40 @@ internal static class UseItem
             if (!_usedItem)
             {
                 _usedItem = UseItem();
-                _continueAt = DateTime.Now.AddSeconds(11);
+                _continueAt = DateTime.Now.Add(GetRetryDelay());
                 return ETaskResult.StillRunning;
             }
 
             return ETaskResult.TaskComplete;
         }
+
+        private TimeSpan GetRetryDelay()
+        {
+            if (ItemId == VesperBayAetheryteTicket)
+                return TimeSpan.FromSeconds(11);
+            else
+                return TimeSpan.FromSeconds(5);
+        }
     }
 
 
     internal sealed class UseOnGround(GameFunctions gameFunctions, ICondition condition, ILogger<UseOnGround> logger)
-        : UseItemBase(condition, logger)
+        : UseItemBase(gameFunctions, condition, logger)
     {
+        private readonly GameFunctions _gameFunctions = gameFunctions;
+
         public uint DataId { get; set; }
 
-        public ITask With(uint dataId, uint itemId)
+        public ITask With(ushort? questId, uint dataId, uint itemId, IList<short?> completionQuestVariablesFlags)
         {
+            QuestId = questId;
             DataId = dataId;
             ItemId = itemId;
+            CompletionQuestVariablesFlags = completionQuestVariablesFlags;
             return this;
         }
 
-        protected override bool UseItem() => gameFunctions.UseItemOnGround(DataId, ItemId);
+        protected override bool UseItem() => _gameFunctions.UseItemOnGround(DataId, ItemId);
 
         public override string ToString() => $"UseItem({ItemId} on ground at {DataId})";
     }
@@ -177,51 +202,64 @@ internal static class UseItem
         GameFunctions gameFunctions,
         ICondition condition,
         ILogger<UseOnPosition> logger)
-        : UseItemBase(condition, logger)
+        : UseItemBase(gameFunctions, condition, logger)
     {
+        private readonly GameFunctions _gameFunctions = gameFunctions;
+
         public Vector3 Position { get; set; }
 
-        public ITask With(Vector3 position, uint itemId)
+        public ITask With(ushort? questId, Vector3 position, uint itemId, IList<short?> completionQuestVariablesFlags)
         {
+            QuestId = questId;
             Position = position;
             ItemId = itemId;
+            CompletionQuestVariablesFlags = completionQuestVariablesFlags;
             return this;
         }
 
-        protected override bool UseItem() => gameFunctions.UseItemOnPosition(Position, ItemId);
+        protected override bool UseItem() => _gameFunctions.UseItemOnPosition(Position, ItemId);
 
         public override string ToString() =>
             $"UseItem({ItemId} on ground at {Position.ToString("G", CultureInfo.InvariantCulture)})";
     }
 
     internal sealed class UseOnObject(GameFunctions gameFunctions, ICondition condition, ILogger<UseOnObject> logger)
-        : UseItemBase(condition, logger)
+        : UseItemBase(gameFunctions, condition, logger)
     {
+        private readonly GameFunctions _gameFunctions = gameFunctions;
+
         public uint DataId { get; set; }
 
-        public ITask With(uint dataId, uint itemId, bool startingCombat = false)
+        public ITask With(ushort? questId, uint dataId, uint itemId, IList<short?> completionQuestVariablesFlags,
+            bool startingCombat = false)
         {
+            QuestId = questId;
             DataId = dataId;
             ItemId = itemId;
             StartingCombat = startingCombat;
+            CompletionQuestVariablesFlags = completionQuestVariablesFlags;
             return this;
         }
 
-        protected override bool UseItem() => gameFunctions.UseItem(DataId, ItemId);
+        protected override bool UseItem() => _gameFunctions.UseItem(DataId, ItemId);
 
         public override string ToString() => $"UseItem({ItemId} on {DataId})";
     }
 
     internal sealed class Use(GameFunctions gameFunctions, ICondition condition, ILogger<Use> logger)
-        : UseItemBase(condition, logger)
+        : UseItemBase(gameFunctions, condition, logger)
     {
-        public ITask With(uint itemId)
+        private readonly GameFunctions _gameFunctions = gameFunctions;
+
+        public ITask With(ushort? questId, uint itemId, IList<short?> completionQuestVariablesFlags)
         {
+            QuestId = questId;
             ItemId = itemId;
+            CompletionQuestVariablesFlags = completionQuestVariablesFlags;
             return this;
         }
 
-        protected override bool UseItem() => gameFunctions.UseItem(ItemId);
+        protected override bool UseItem() => _gameFunctions.UseItem(ItemId);
 
         public override string ToString() => $"UseItem({ItemId})";
     }
