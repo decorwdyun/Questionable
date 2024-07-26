@@ -1,4 +1,5 @@
-﻿using System.Numerics;
+﻿using System;
+using System.Numerics;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using ImGuiNET;
@@ -11,6 +12,7 @@ namespace Questionable.Windows;
 
 internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
 {
+    private static readonly Version PluginVersion = typeof(QuestionablePlugin).Assembly.GetName().Version!;
 
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly QuestController _questController;
@@ -33,7 +35,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         CreationUtilsComponent creationUtilsComponent,
         QuickAccessButtonsComponent quickAccessButtonsComponent,
         RemainingTasksComponent remainingTasksComponent)
-        : base("Questionable###Questionable", ImGuiWindowFlags.AlwaysAutoResize)
+        : base($"Questionable v{PluginVersion.ToString(2)}###Questionable", ImGuiWindowFlags.AlwaysAutoResize)
     {
         _pluginInterface = pluginInterface;
         _questController = questController;
