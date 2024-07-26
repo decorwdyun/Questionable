@@ -1,7 +1,6 @@
 {
   "$schema": "https://carvel.li/questionable/quest-1.0",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -21,7 +20,48 @@
     {
       "Sequence": 1,
       "Steps": [
-
+        {
+          "DataId": 1042466,
+          "Position": {
+            "X": -525.2003,
+            "Y": 6.158311,
+            "Z": -574.5785
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Thavnair - Great Work",
+          "Fly": true
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 2012977,
+          "Position": {
+            "X": -526.66516,
+            "Y": 6.1188354,
+            "Z": -579.52246
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1042467,
+          "Position": {
+            "X": -582.5437,
+            "Y": 9.775031,
+            "Z": -553.64307
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact"
+        }
       ]
     },
     {
@@ -36,6 +76,7 @@
           },
           "TerritoryId": 957,
           "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Thavnair - Yedlihmad",
           "Fly": true
         }
       ]
