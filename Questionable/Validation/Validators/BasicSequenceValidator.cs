@@ -21,6 +21,7 @@ internal sealed class BasicSequenceValidator : IQuestValidator
                 QuestId = quest.QuestId,
                 Sequence = 0,
                 Step = null,
+                Type = EIssueType.MissingSequence0,
                 Severity = EIssueSeverity.Error,
                 Description = "Missing quest start",
             };
@@ -39,6 +40,7 @@ internal sealed class BasicSequenceValidator : IQuestValidator
                     QuestId = quest.QuestId,
                     Sequence = (byte)sequence.Sequence,
                     Step = null,
+                    Type = EIssueType.InstantQuestWithMultipleSteps,
                     Severity = EIssueSeverity.Error,
                     Description = "Instant quest should not have any sequences after the start",
                 };
@@ -74,6 +76,7 @@ internal sealed class BasicSequenceValidator : IQuestValidator
                 QuestId = quest.QuestId,
                 Sequence = (byte)sequenceNo,
                 Step = null,
+                Type = EIssueType.MissingSequence,
                 Severity = EIssueSeverity.Error,
                 Description = "Missing sequence",
             };
@@ -85,6 +88,7 @@ internal sealed class BasicSequenceValidator : IQuestValidator
                 QuestId = quest.QuestId,
                 Sequence = (byte)sequenceNo,
                 Step = null,
+                Type = EIssueType.DuplicateSequence,
                 Severity = EIssueSeverity.Error,
                 Description = "Duplicate sequence",
             };

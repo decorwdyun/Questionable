@@ -21,6 +21,7 @@ internal sealed class UniqueStartStopValidator : IQuestValidator
                     QuestId = quest.QuestId,
                     Sequence = (byte)accept.Sequence.Sequence,
                     Step = accept.StepId,
+                    Type = EIssueType.UnexpectedAcceptQuestStep,
                     Severity = EIssueSeverity.Error,
                     Description = "Unexpected AcceptQuest step",
                 };
@@ -34,6 +35,7 @@ internal sealed class UniqueStartStopValidator : IQuestValidator
                 QuestId = quest.QuestId,
                 Sequence = 0,
                 Step = null,
+                Type = EIssueType.MissingQuestAccept,
                 Severity = EIssueSeverity.Error,
                 Description = "No AcceptQuest step",
             };
@@ -51,6 +53,7 @@ internal sealed class UniqueStartStopValidator : IQuestValidator
                     QuestId = quest.QuestId,
                     Sequence = (byte)complete.Sequence.Sequence,
                     Step = complete.StepId,
+                    Type = EIssueType.UnexpectedCompleteQuestStep,
                     Severity = EIssueSeverity.Error,
                     Description = "Unexpected CompleteQuest step",
                 };
@@ -64,6 +67,7 @@ internal sealed class UniqueStartStopValidator : IQuestValidator
                 QuestId = quest.QuestId,
                 Sequence = 255,
                 Step = null,
+                Type = EIssueType.MissingQuestComplete,
                 Severity = EIssueSeverity.Error,
                 Description = "No CompleteQuest step",
             };

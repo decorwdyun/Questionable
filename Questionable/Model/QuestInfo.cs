@@ -27,6 +27,7 @@ internal sealed class QuestInfo
         PreviousInstanceContent = quest.InstanceContent.Select(x => (ushort)x.Row).Where(x => x != 0).ToList();
         PreviousInstanceContentJoin = (QuestJoin)quest.InstanceContentJoin;
         GrandCompany = (GrandCompany)quest.GrandCompany.Row;
+        BeastTribe = (EBeastTribe)quest.BeastTribe.Row;
     }
 
 
@@ -44,6 +45,7 @@ internal sealed class QuestInfo
     public bool IsMainScenarioQuest { get; }
     public bool CompletesInstantly { get; }
     public GrandCompany GrandCompany { get; }
+    public EBeastTribe BeastTribe { get; }
 
     public string SimplifiedName => Name
         .TrimStart(SeIconChar.QuestSync.ToIconChar(), SeIconChar.QuestRepeatable.ToIconChar(), ' ');

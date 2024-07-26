@@ -41,6 +41,7 @@ internal sealed class QuestValidator
         {
             try
             {
+                Dictionary<EBeastTribe, int> disabledTribeQuests = new();
                 foreach (var quest in quests)
                 {
                     foreach (var validator in _validators)
@@ -53,7 +54,13 @@ internal sealed class QuestValidator
                             _logger.Log(level,
                                 "Validation failed: {QuestId} ({QuestName}) / {QuestSequence} / {QuestStep} - {Description}",
                                 issue.QuestId, quest.Info.Name, issue.Sequence, issue.Step, issue.Description);
-                            _validationIssues.Add(issue);
+                            if (issue.Type == EIssueType.QuestDisabled && quest.Info.BeastTribe != EBeastTribe.None)
+                            {
+                                disabledTribeQuests.TryAdd(quest.Info.BeastTribe, 0);
+                                disabledTribeQuests[quest.Info.BeastTribe]++;
+                            }
+                            else
+                                _validationIssues.Add(issue);
                         }
                     }
                 }
@@ -62,6 +69,7 @@ internal sealed class QuestValidator
                     .ThenBy(x => x.Sequence)
                     .ThenBy(x => x.Step)
                     .ThenBy(x => x.Description)
+                    .Concat(DisabledTribesAsIssues(disabledTribeQuests))
                     .ToList();
             }
             catch (Exception e)
@@ -69,5 +77,21 @@ internal sealed class QuestValidator
                 _logger.LogError(e, "Unable to validate quests");
             }
         }, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
+    }
+
+    private static IEnumerable<ValidationIssue> DisabledTribesAsIssues(Dictionary<EBeastTribe, int> disabledTribeQuests)
+    {
+        return disabledTribeQuests
+            .OrderBy(x => x.Key)
+            .Select(x => new ValidationIssue
+            {
+                QuestId = null,
+                Sequence = null,
+                Step = null,
+                BeastTribe = x.Key,
+                Type = EIssueType.QuestDisabled,
+                Severity = EIssueSeverity.None,
+                Description = $"{x.Value} disabled quest(s)",
+            });
     }
 }

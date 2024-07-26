@@ -14,6 +14,7 @@ internal sealed class QuestDisabledValidator : IQuestValidator
                 QuestId = quest.QuestId,
                 Sequence = null,
                 Step = null,
+                Type = EIssueType.QuestDisabled,
                 Severity = EIssueSeverity.None,
                 Description = "Quest is disabled",
             };

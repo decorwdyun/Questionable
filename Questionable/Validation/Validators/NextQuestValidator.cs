@@ -15,6 +15,7 @@ internal sealed class NextQuestValidator : IQuestValidator
                 QuestId = quest.QuestId,
                 Sequence = (byte)invalidNextQuest.Sequence.Sequence,
                 Step = invalidNextQuest.StepId,
+                Type = EIssueType.InvalidNextQuestId,
                 Severity = EIssueSeverity.Error,
                 Description = "Next quest should not reference itself",
             };

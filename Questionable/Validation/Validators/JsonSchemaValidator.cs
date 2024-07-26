@@ -30,6 +30,7 @@ internal sealed class JsonSchemaValidator : IQuestValidator
                     QuestId = quest.QuestId,
                     Sequence = null,
                     Step = null,
+                    Type = EIssueType.InvalidJsonSchema,
                     Severity = EIssueSeverity.Error,
                     Description = "JSON Validation failed"
                 };

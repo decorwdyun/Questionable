@@ -19,7 +19,9 @@ internal sealed class QuestValidationWindow : LWindow
     private readonly QuestData _questData;
     private readonly IDalamudPluginInterface _pluginInterface;
 
-    public QuestValidationWindow(QuestValidator questValidator, QuestData questData, IDalamudPluginInterface pluginInterface) : base("Quest Validation###QuestionableValidator")
+    public QuestValidationWindow(QuestValidator questValidator, QuestData questData,
+        IDalamudPluginInterface pluginInterface)
+        : base("Quest Validation###QuestionableValidator")
     {
         _questValidator = questValidator;
         _questData = questData;
@@ -54,10 +56,12 @@ internal sealed class QuestValidationWindow : LWindow
             ImGui.TableNextRow();
 
             if (ImGui.TableNextColumn())
-                ImGui.TextUnformatted(validationIssue.QuestId.ToString(CultureInfo.InvariantCulture));
+                ImGui.TextUnformatted(validationIssue.QuestId?.ToString(CultureInfo.InvariantCulture) ?? string.Empty);
 
             if (ImGui.TableNextColumn())
-                ImGui.TextUnformatted(_questData.GetQuestInfo(validationIssue.QuestId).Name);
+                ImGui.TextUnformatted(validationIssue.QuestId != null
+                    ? _questData.GetQuestInfo(validationIssue.QuestId.Value).Name
+                    : validationIssue.BeastTribe.ToString());
 
             if (ImGui.TableNextColumn())
                 ImGui.TextUnformatted(validationIssue.Sequence?.ToString(CultureInfo.InvariantCulture) ?? string.Empty);
@@ -81,6 +85,7 @@ internal sealed class QuestValidationWindow : LWindow
                         ImGui.TextUnformatted(FontAwesomeIcon.InfoCircle.ToIconString());
                     }
                 }
+
                 ImGui.SameLine();
                 ImGui.TextUnformatted(validationIssue.Description);
             }

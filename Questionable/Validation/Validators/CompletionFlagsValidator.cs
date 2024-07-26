@@ -44,6 +44,7 @@ internal sealed class CompletionFlagsValidator : IQuestValidator
                         QuestId = quest.QuestId,
                         Sequence = (byte)sequence.Sequence,
                         Step = i,
+                        Type = EIssueType.DuplicateCompletionFlags,
                         Severity = EIssueSeverity.Error,
                         Description = $"Duplicate completion flags: {string.Join(", ", sequence.Steps[i].CompletionQuestVariablesFlags)}",
                     };
