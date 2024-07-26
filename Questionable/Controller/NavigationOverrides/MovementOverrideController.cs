@@ -42,7 +42,16 @@ internal sealed class MovementOverrideController
         new BlacklistedPoint(155, new(-478.75f, 149.25f, -305.75f), new(-476.1802f, 149.06573f, -304.7811f)),
 
         // rising stones, plant boxes
-        new BlacklistedPoint(351, new(3.25f, 0.75f, 8.5f),new(4f, 0f, 9.5f)),
+        new BlacklistedPoint(351, new(3.25f, 0.75f, 8.5f), new(4f, 0f, 9.5f)),
+
+        // southern sea of clouds, random rock
+        new BlacklistedPoint(401, new(-14.75f, -136.75f, 515.75f), new(-17.631899f, -137.39148f, 512.6676f), 2),
+
+        // coerthas western highland, right before dusk vigil
+        new BlacklistedPoint(397, new(-93.75f, 87.75f, -715.5f), new(-87.78183f, 87.188995f, -713.3343f), 2),
+
+        // moghome, mogmug's trial
+        new BlacklistedPoint(400, new(384, -74, 648.75f), new(386.0543f, -72.409454f, 652.0184f), 3),
 
         new BlacklistedPoint(1189, new(574f, -142.25f, 504.25f), new(574.44183f, -142.12766f, 507.60065f)),
 

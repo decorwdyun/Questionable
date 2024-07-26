@@ -45,6 +45,17 @@
       "Sequence": 255,
       "Steps": [
         {
+          "Position": {
+            "X": 70.535545,
+            "Y": -49.45454,
+            "Z": -149.54617
+          },
+          "TerritoryId": 398,
+          "InteractionType": "WalkTo",
+          "Mount": true,
+          "$": "Loth ast Vath navmesh workaround"
+        },
+        {
           "DataId": 1011929,
           "Position": {
             "X": 70.81714,

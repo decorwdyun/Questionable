@@ -37,3 +37,30 @@ that can sometimes be found as valid paths.
           "AetheryteShortcut": "Coerthas Central Highlands - Camp Dragonhead"
         }
 ```
+
+## Coerthas Western Highlands
+
+```json
+        {
+          "Position": {
+            "X": 454.75964,
+            "Y": 164.27075,
+            "Z": -535.00354
+          },
+          "TerritoryId": 397,
+          "InteractionType": "WalkTo",
+          "$": "Gorgagne Mills (outside)",
+          "Mount": true
+        },
+        {
+          "Position": {
+            "X": 454.9128,
+            "Y": 164.30827,
+            "Z": -542.1735
+          },
+          "TerritoryId": 397,
+          "InteractionType": "WalkTo",
+          "$": "Gorgagne Mills (inside)",
+          "DisableNavmesh": true
+        },
+```

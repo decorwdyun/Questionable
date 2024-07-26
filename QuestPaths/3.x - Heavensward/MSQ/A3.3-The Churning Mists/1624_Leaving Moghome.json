@@ -6,12 +6,13 @@
       "Sequence": 0,
       "Steps": [
         {
-          "DataId": 1012285,
+          "DataId": 1012078,
           "Position": {
-            "X": 247.11987,
-            "Y": -42.33362,
-            "Z": 565.3314
+            "X": 375.3567,
+            "Y": -69.42934,
+            "Z": 693.5072
           },
+          "StopDistance": 5,
           "TerritoryId": 400,
           "InteractionType": "AcceptQuest"
         }
@@ -21,20 +22,29 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1012664,
           "Position": {
-            "X": 456.25598,
-            "Y": -27.669996,
-            "Z": 157.59406
+            "X": 364.30908,
+            "Y": -74.10719,
+            "Z": 654.322
           },
           "TerritoryId": 400,
-          "InteractionType": "Combat",
-          "EnemySpawnType": "OverworldEnemies",
-          "ComplexCombatData": [
-            {
-              "DataId": 3999,
-              "MinimumKillCount": 3
-            }
-          ]
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1013589,
+          "Position": {
+            "X": 368.52063,
+            "Y": -74.14886,
+            "Z": 647.9437
+          },
+          "TerritoryId": 400,
+          "InteractionType": "Interact"
         }
       ]
     },
@@ -42,20 +52,11 @@
       "Sequence": 255,
       "Steps": [
         {
+          "DataId": 1012682,
           "Position": {
-            "X": 83.82025,
-            "Y": -24.433022,
-            "Z": 150.46234
-          },
-          "TerritoryId": 400,
-          "InteractionType": "WalkTo"
-        },
-        {
-          "DataId": 1012288,
-          "Position": {
-            "X": -47.04364,
-            "Y": -8.866012,
-            "Z": 165.94177
+            "X": 241.19922,
+            "Y": -42.249466,
+            "Z": 609.27747
           },
           "TerritoryId": 400,
           "InteractionType": "CompleteQuest"

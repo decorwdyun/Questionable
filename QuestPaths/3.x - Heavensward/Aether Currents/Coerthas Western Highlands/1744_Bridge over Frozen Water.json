@@ -6,13 +6,13 @@
       "Sequence": 0,
       "Steps": [
         {
-          "DataId": 1012285,
+          "DataId": 1011240,
           "Position": {
-            "X": 247.11987,
-            "Y": -42.33362,
-            "Z": 565.3314
+            "X": 493.15625,
+            "Y": 200.2377,
+            "Z": 663.01965
           },
-          "TerritoryId": 400,
+          "TerritoryId": 397,
           "InteractionType": "AcceptQuest"
         }
       ]
@@ -22,16 +22,16 @@
       "Steps": [
         {
           "Position": {
-            "X": 456.25598,
-            "Y": -27.669996,
-            "Z": 157.59406
+            "X": 419.65634,
+            "Y": 162.0455,
+            "Z": -176.55469
           },
-          "TerritoryId": 400,
+          "TerritoryId": 397,
           "InteractionType": "Combat",
           "EnemySpawnType": "OverworldEnemies",
           "ComplexCombatData": [
             {
-              "DataId": 3999,
+              "DataId": 4802,
               "MinimumKillCount": 3
             }
           ]
@@ -43,21 +43,22 @@
       "Steps": [
         {
           "Position": {
-            "X": 83.82025,
-            "Y": -24.433022,
-            "Z": 150.46234
+            "X": 524.6143,
+            "Y": 212.77472,
+            "Z": 703.436
           },
-          "TerritoryId": 400,
-          "InteractionType": "WalkTo"
+          "TerritoryId": 397,
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Coerthas Western Highlands - Falcon's Nest"
         },
         {
-          "DataId": 1012288,
+          "DataId": 1011240,
           "Position": {
-            "X": -47.04364,
-            "Y": -8.866012,
-            "Z": 165.94177
+            "X": 493.15625,
+            "Y": 200.2377,
+            "Z": 663.01965
           },
-          "TerritoryId": 400,
+          "TerritoryId": 397,
           "InteractionType": "CompleteQuest"
         }
       ]
