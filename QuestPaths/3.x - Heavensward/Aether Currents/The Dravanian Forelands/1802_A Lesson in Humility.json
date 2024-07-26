@@ -1,0 +1,139 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "JerryWester",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1011937,
+          "Position": {
+            "X": -305.56195,
+            "Y": 39.04307,
+            "Z": 22.9953
+          },
+          "TerritoryId": 398,
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "The Dravanian Forelands - Anyx Trine",
+          "SkipIf": [
+            "AetheryteShortcutIfInSameTerritory"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1013406,
+          "Position": {
+            "X": -411.52057,
+            "Y": -35.095,
+            "Z": 231.46399
+          },
+          "TerritoryId": 398,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "Position": {
+            "X": -431.6009,
+            "Y": -34.79498,
+            "Z": 250.46066
+          },
+          "TerritoryId": 398,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AutoOnEnterArea",
+          "KillEnemyDataIds": [
+            4494
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1013407,
+          "Position": {
+            "X": -408.40778,
+            "Y": -34.191658,
+            "Z": 238.48315
+          },
+          "TerritoryId": 398,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "Position": {
+            "X": -431.6009,
+            "Y": -34.79498,
+            "Z": 250.46066
+          },
+          "TerritoryId": 398,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AutoOnEnterArea",
+          "KillEnemyDataIds": [
+            4495
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "DataId": 1013408,
+          "Position": {
+            "X": -409.87262,
+            "Y": -34.650936,
+            "Z": 234.88208
+          },
+          "TerritoryId": 398,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 6,
+      "Steps": [
+        {
+          "Position": {
+            "X": -431.6009,
+            "Y": -34.79498,
+            "Z": 250.46066
+          },
+          "TerritoryId": 398,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AutoOnEnterArea",
+          "KillEnemyDataIds": [
+            4496
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1011937,
+          "Position": {
+            "X": -305.56195,
+            "Y": 39.04307,
+            "Z": 22.9953
+          },
+          "TerritoryId": 398,
+          "InteractionType": "CompleteQuest"
+        }
+      ]
+    }
+  ]
+}

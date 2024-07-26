@@ -1,0 +1,61 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "JerryWester",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1011911,
+          "Position": {
+            "X": -279.56055,
+            "Y": 127.08131,
+            "Z": 13.595764
+          },
+          "TerritoryId": 397,
+          "InteractionType": "AcceptQuest"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1013746,
+          "Position": {
+            "X": -87.815735,
+            "Y": 87.188995,
+            "Z": -735.04236
+          },
+          "TerritoryId": 397,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "TerritoryId": 397,
+          "InteractionType": "Duty",
+          "ContentFinderConditionId": 36
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1011911,
+          "Position": {
+            "X": -279.56055,
+            "Y": 127.08131,
+            "Z": 13.595764
+          },
+          "TerritoryId": 397,
+          "InteractionType": "CompleteQuest"
+        }
+      ]
+    }
+  ]
+}

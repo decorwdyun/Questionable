@@ -1,0 +1,77 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "JerryWester",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1012600,
+          "Position": {
+            "X": 451.65173,
+            "Y": 157.40831,
+            "Z": -544.6708
+          },
+          "TerritoryId": 397,
+          "InteractionType": "AcceptQuest"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1011905,
+          "Position": {
+            "X": 617.4868,
+            "Y": 78.429,
+            "Z": 217.30359
+          },
+          "TerritoryId": 397,
+          "InteractionType": "SinglePlayerDuty"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1012604,
+          "Position": {
+            "X": 620.9657,
+            "Y": 78.42899,
+            "Z": 213.88562
+          },
+          "TerritoryId": 397,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 2006189,
+          "Position": {
+            "X": -332.90613,
+            "Y": 126.81775,
+            "Z": -29.953552
+          },
+          "TerritoryId": 397,
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818057
+        },
+        {
+          "DataId": 1011907,
+          "Position": {
+            "X": -288.8686,
+            "Y": 127.06639,
+            "Z": 13.199036
+          },
+          "TerritoryId": 397,
+          "InteractionType": "CompleteQuest"
+        }
+      ]
+    }
+  ]
+}

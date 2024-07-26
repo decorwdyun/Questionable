@@ -1,0 +1,28 @@
+{
+  "$schema": "https://carvel.li/questionable/quest-1.0",
+  "Author": "JerryWester",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1013715,
+          "Position": {
+            "X": 503.37976,
+            "Y": -48.989826,
+            "Z": 33.066284
+          },
+          "TerritoryId": 398,
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "The Dravanian Forelands - Tailfeather",
+          "SkipIf": [
+            "AetheryteShortcutIfInSameTerritory"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 255
+    }
+  ]
+}
