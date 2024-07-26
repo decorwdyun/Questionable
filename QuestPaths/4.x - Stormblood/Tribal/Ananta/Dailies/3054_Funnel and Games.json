@@ -13,6 +13,7 @@
             "Y": 56.113926,
             "Z": 236.25537
           },
+          "StopDistance": 7,
           "TerritoryId": 612,
           "InteractionType": "AcceptQuest"
         }
@@ -28,12 +29,23 @@
       "Sequence": 255,
       "Steps": [
         {
+          "Position": {
+            "X": -25.868523,
+            "Y": 56.02146,
+            "Z": 231.54045
+          },
+          "TerritoryId": 612,
+          "InteractionType": "WalkTo",
+          "Fly": true
+        },
+        {
           "DataId": 1024773,
           "Position": {
             "X": -28.33606,
             "Y": 56.113926,
             "Z": 236.25537
           },
+          "StopDistance": 7,
           "TerritoryId": 612,
           "InteractionType": "CompleteQuest",
           "Fly": true

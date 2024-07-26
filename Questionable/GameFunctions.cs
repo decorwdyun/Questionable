@@ -460,7 +460,9 @@ internal sealed unsafe class GameFunctions
             long result = AgentInventoryContext.Instance()->UseItem(itemId);
 
             _logger.LogInformation("UseItem result on {DataId}: {Result}", dataId, result);
-            return result == 0;
+
+            // TODO is 1 a generally accepted result?
+            return result == 0 || (itemId == 2002450 && result == 1);
         }
 
         return false;
