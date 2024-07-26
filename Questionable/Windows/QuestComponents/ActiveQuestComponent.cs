@@ -79,7 +79,7 @@ internal sealed class ActiveQuestComponent
             ImGui.Text(_questController.ToStatString());
             //ImGui.EndDisabled();
 
-            DrawQuestIcons(currentQuest, currentStep, questWork);
+            DrawQuestButtons(currentQuest, currentStep, questWork);
 
             DrawSimulationControls();
         }
@@ -87,6 +87,12 @@ internal sealed class ActiveQuestComponent
         {
             ImGui.Text("No active quest");
             ImGui.TextColored(ImGuiColors.DalamudGrey, $"{_questRegistry.Count} quests loaded");
+
+            if (ImGuiComponents.IconButton(FontAwesomeIcon.Stop))
+            {
+                _movementController.Stop();
+                _questController.Stop("Manual (no active quest)");
+            }
         }
     }
 
@@ -199,7 +205,7 @@ internal sealed class ActiveQuestComponent
         return questWork;
     }
 
-    private void DrawQuestIcons(QuestController.QuestProgress currentQuest, QuestStep? currentStep,
+    private void DrawQuestButtons(QuestController.QuestProgress currentQuest, QuestStep? currentStep,
         QuestWork? questWork)
     {
         ImGui.BeginDisabled(_questController.IsRunning);

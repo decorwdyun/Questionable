@@ -64,17 +64,6 @@ internal sealed class QuickAccessButtonsComponent
             }
         }
 
-        ImGui.SameLine();
-
-        using (var unused = ImRaii.Disabled(!_movementController.IsPathRunning))
-        {
-            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.StopCircle, "Stop"))
-            {
-                _movementController.Stop();
-                _questController.Stop("Manual");
-            }
-        }
-
         if (_commandManager.Commands.ContainsKey("/vnav"))
         {
             ImGui.SameLine();
