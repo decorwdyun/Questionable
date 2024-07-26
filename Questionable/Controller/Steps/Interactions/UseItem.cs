@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Numerics;
+using Dalamud.Game.ClientState.Conditions;
+using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -88,13 +90,14 @@ internal static class UseItem
         }
     }
 
-    internal abstract class UseItemBase(ILogger logger) : ITask
+    internal abstract class UseItemBase(ICondition condition, ILogger logger) : ITask
     {
         private bool _usedItem;
         private DateTime _continueAt;
         private int _itemCount;
 
         public uint ItemId { get; set; }
+        public bool StartingCombat { get; set; }
 
         protected abstract bool UseItem();
 
@@ -117,6 +120,9 @@ internal static class UseItem
         {
             if (DateTime.Now <= _continueAt)
                 return ETaskResult.StillRunning;
+
+            if (StartingCombat && condition[ConditionFlag.InCombat])
+                return ETaskResult.TaskComplete;
 
             if (ItemId == VesperBayAetheryteTicket && _usedItem)
             {
@@ -150,7 +156,8 @@ internal static class UseItem
     }
 
 
-    internal sealed class UseOnGround(GameFunctions gameFunctions, ILogger<UseOnGround> logger) : UseItemBase(logger)
+    internal sealed class UseOnGround(GameFunctions gameFunctions, ICondition condition, ILogger<UseOnGround> logger)
+        : UseItemBase(condition, logger)
     {
         public uint DataId { get; set; }
 
@@ -166,8 +173,11 @@ internal static class UseItem
         public override string ToString() => $"UseItem({ItemId} on ground at {DataId})";
     }
 
-    internal sealed class UseOnPosition(GameFunctions gameFunctions, ILogger<UseOnPosition> logger)
-        : UseItemBase(logger)
+    internal sealed class UseOnPosition(
+        GameFunctions gameFunctions,
+        ICondition condition,
+        ILogger<UseOnPosition> logger)
+        : UseItemBase(condition, logger)
     {
         public Vector3 Position { get; set; }
 
@@ -184,14 +194,16 @@ internal static class UseItem
             $"UseItem({ItemId} on ground at {Position.ToString("G", CultureInfo.InvariantCulture)})";
     }
 
-    internal sealed class UseOnObject(GameFunctions gameFunctions, ILogger<UseOnObject> logger) : UseItemBase(logger)
+    internal sealed class UseOnObject(GameFunctions gameFunctions, ICondition condition, ILogger<UseOnObject> logger)
+        : UseItemBase(condition, logger)
     {
         public uint DataId { get; set; }
 
-        public ITask With(uint dataId, uint itemId)
+        public ITask With(uint dataId, uint itemId, bool startingCombat = false)
         {
             DataId = dataId;
             ItemId = itemId;
+            StartingCombat = startingCombat;
             return this;
         }
 
@@ -200,7 +212,8 @@ internal static class UseItem
         public override string ToString() => $"UseItem({ItemId} on {DataId})";
     }
 
-    internal sealed class Use(GameFunctions gameFunctions, ILogger<Use> logger) : UseItemBase(logger)
+    internal sealed class Use(GameFunctions gameFunctions, ICondition condition, ILogger<Use> logger)
+        : UseItemBase(condition, logger)
     {
         public ITask With(uint itemId)
         {
