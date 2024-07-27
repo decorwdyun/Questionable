@@ -313,6 +313,7 @@ internal sealed class MovementController : IDisposable
     {
         _navmeshIpc.Stop();
         ResetPathfinding();
+        Destination = null;
 
         if (InputManager.IsAutoRunning())
         {

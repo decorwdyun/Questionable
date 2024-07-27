@@ -21,6 +21,7 @@ namespace Questionable.Controller;
 internal sealed class CombatController : IDisposable
 {
     private readonly List<ICombatModule> _combatModules;
+    private readonly MovementController _movementController;
     private readonly ITargetManager _targetManager;
     private readonly IObjectTable _objectTable;
     private readonly ICondition _condition;
@@ -30,11 +31,18 @@ internal sealed class CombatController : IDisposable
 
     private CurrentFight? _currentFight;
 
-    public CombatController(IEnumerable<ICombatModule> combatModules, ITargetManager targetManager,
-        IObjectTable objectTable, ICondition condition, IClientState clientState, GameFunctions gameFunctions,
+    public CombatController(
+        IEnumerable<ICombatModule> combatModules,
+        MovementController movementController,
+        ITargetManager targetManager,
+        IObjectTable objectTable,
+        ICondition condition,
+        IClientState clientState,
+        GameFunctions gameFunctions,
         ILogger<CombatController> logger)
     {
         _combatModules = combatModules.ToList();
+        _movementController = movementController;
         _targetManager = targetManager;
         _objectTable = objectTable;
         _condition = condition;
@@ -71,7 +79,7 @@ internal sealed class CombatController : IDisposable
     /// <returns>true if still in combat, false otherwise</returns>
     public bool Update()
     {
-        if (_currentFight == null)
+        if (_currentFight == null || _movementController.IsPathfinding || _movementController.IsPathRunning)
             return false;
 
         var target = _targetManager.Target;
@@ -104,7 +112,7 @@ internal sealed class CombatController : IDisposable
         else
         {
             var nextTarget = FindNextTarget();
-            if (nextTarget != null)
+            if (nextTarget is { IsDead: false })
             {
                 _logger.LogInformation("Setting next target to {TargetName} ({TargetId:X8})",
                     nextTarget.Name.ToString(), nextTarget.GameObjectId);
@@ -163,10 +171,15 @@ internal sealed class CombatController : IDisposable
             }
         }
 
-        return _objectTable.Select(x => (GameObject: x, Priority: GetKillPriority(x)))
+        return _objectTable.Select(x => new
+            {
+                GameObject = x,
+                Priority = GetKillPriority(x),
+                Distance = Vector3.Distance(x.Position, _clientState.LocalPlayer!.Position),
+            })
             .Where(x => x.Priority > 0)
             .OrderByDescending(x => x.Priority)
-            .ThenByDescending(x => Vector3.Distance(x.GameObject.Position, _clientState.LocalPlayer!.Position))
+            .ThenBy(x => x.Distance)
             .Select(x => x.GameObject)
             .FirstOrDefault();
     }
