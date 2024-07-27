@@ -76,20 +76,23 @@ internal sealed class CombatController : IDisposable
         var target = _targetManager.Target;
         if (target != null)
         {
-            if (GetKillPriority(target) is >= 50)
-                return true;
-
+            int currentTargetPriority = GetKillPriority(target);
             var nextTarget = FindNextTarget();
+            int nextTargetPriority = GetKillPriority(target);
+
             if (nextTarget != null && nextTarget.Equals(target))
             {
                 _currentFight.Module.Update(target);
             }
             else if (nextTarget != null)
             {
-                _logger.LogInformation("Changing next target to {TargetName} ({TargetId:X8})",
-                    nextTarget.Name.ToString(), nextTarget.GameObjectId);
-                _targetManager.Target = nextTarget;
-                _currentFight.Module.SetTarget(nextTarget);
+                if (nextTargetPriority > currentTargetPriority)
+                {
+                    _logger.LogInformation("Changing next target to {TargetName} ({TargetId:X8})",
+                        nextTarget.Name.ToString(), nextTarget.GameObjectId);
+                    _targetManager.Target = nextTarget;
+                    _currentFight.Module.SetTarget(nextTarget);
+                }
             }
             else
             {
@@ -160,14 +163,14 @@ internal sealed class CombatController : IDisposable
         }
 
         return _objectTable.Select(x => (GameObject: x, Priority: GetKillPriority(x)))
-            .Where(x => x.Priority != null)
-            .OrderByDescending(x => x.Priority!.Value)
+            .Where(x => x.Priority > 0)
+            .OrderByDescending(x => x.Priority)
             .ThenByDescending(x => Vector3.Distance(x.GameObject.Position, _clientState.LocalPlayer!.Position))
             .Select(x => x.GameObject)
             .FirstOrDefault();
     }
 
-    private unsafe int? GetKillPriority(IGameObject gameObject)
+    private unsafe int GetKillPriority(IGameObject gameObject)
     {
         if (gameObject is IBattleNpc battleNpc)
         {
@@ -177,11 +180,11 @@ internal sealed class CombatController : IDisposable
                 _currentFight.Data.ComplexCombatDatas.Count == 0)
             {
                 if (battleNpc.IsDead)
-                    return null;
+                    return 0;
             }
 
             if (!battleNpc.IsTargetable)
-                return null;
+                return 0;
 
             if (_currentFight != null)
             {
@@ -208,23 +211,23 @@ internal sealed class CombatController : IDisposable
             if (battleNpc.BattleNpcKind is BattleNpcSubKind.BattleNpcPart or BattleNpcSubKind.Enemy)
             {
                 var gameObjectStruct = (GameObject*)gameObject.Address;
-                if (gameObjectStruct->NamePlateIconId is 60093 or 60732) // npc that starts a fate or does turn-ins
-                    return null;
+                if (gameObjectStruct->NamePlateIconId is 60093 or 60732) // npc that starts a fate or does turn-ins; not sure why they're marked as hostile
+                    return 0;
 
                 var enemyData = _currentFight?.Data.ComplexCombatDatas.FirstOrDefault(x => x.DataId == battleNpc.DataId);
                 if (enemyData is { IgnoreQuestMarker: true })
-                    return battleNpc.StatusFlags.HasFlag(StatusFlags.InCombat) ? 20 : null;
+                    return battleNpc.StatusFlags.HasFlag(StatusFlags.InCombat) ? 20 : 0;
                 else
-                    return gameObjectStruct->NamePlateIconId != 0 ? 30 : null;
+                    return gameObjectStruct->NamePlateIconId != 0 ? 30 : 0;
             }
 
             // stuff trying to kill us
             if (battleNpc.TargetObjectId == _clientState.LocalPlayer?.GameObjectId)
-                return 0;
+                return 10;
 
         }
 
-        return null;
+        return 0;
     }
 
     public void Stop()
