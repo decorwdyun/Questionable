@@ -21,6 +21,8 @@ public sealed class SkipStepConditions
 
     public bool HasSkipConditions()
     {
-        return Never || Flying != null || Chocobo != null || InTerritory.Count > 0 || NotInTerritory.Count > 0 || Item != null;
+        if (Never)
+            return false;
+        return Flying != null || Chocobo != null || InTerritory.Count > 0 || NotInTerritory.Count > 0 || Item != null;
     }
 }

@@ -9,6 +9,7 @@ using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
+using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Common.Math;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.CombatModules;
@@ -211,23 +212,42 @@ internal sealed class CombatController : IDisposable
             if (battleNpc.BattleNpcKind is BattleNpcSubKind.BattleNpcPart or BattleNpcSubKind.Enemy)
             {
                 var gameObjectStruct = (GameObject*)gameObject.Address;
-                if (gameObjectStruct->NamePlateIconId is 60093 or 60732) // npc that starts a fate or does turn-ins; not sure why they're marked as hostile
+
+                // npc that starts a fate or does turn-ins; not sure why they're marked as hostile
+                if (gameObjectStruct->NamePlateIconId is 60093 or 60732)
                     return 0;
 
-                var enemyData = _currentFight?.Data.ComplexCombatDatas.FirstOrDefault(x => x.DataId == battleNpc.DataId);
+                var enemyData =
+                    _currentFight?.Data.ComplexCombatDatas.FirstOrDefault(x => x.DataId == battleNpc.DataId);
                 if (enemyData is { IgnoreQuestMarker: true })
-                    return battleNpc.StatusFlags.HasFlag(StatusFlags.InCombat) ? 20 : 0;
+                {
+                    if (battleNpc.StatusFlags.HasFlag(StatusFlags.InCombat))
+                        return 20;
+                }
                 else
-                    return gameObjectStruct->NamePlateIconId != 0 ? 30 : 0;
+                {
+                    if (gameObjectStruct->NamePlateIconId != 0)
+                        return 30;
+                }
             }
 
             // stuff trying to kill us
             if (battleNpc.TargetObjectId == _clientState.LocalPlayer?.GameObjectId)
                 return 10;
 
-        }
+            // stuff on our enmity list that's not necessarily targeting us
+            var haters = UIState.Instance()->Hater;
+            for (int i = 0; i < haters.HaterCount; ++i)
+            {
+                var hater = haters.Haters[i];
+                if (hater.EntityId == battleNpc.GameObjectId)
+                    return 5;
+            }
 
-        return 0;
+            return 0;
+        }
+        else
+            return 0;
     }
 
     public void Stop()

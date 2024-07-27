@@ -22,23 +22,23 @@ internal static class SkipCondition
         public ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
             var skipConditions = step.SkipConditions?.StepIf;
-            if (skipConditions == null || skipConditions.Never)
+            if (skipConditions is { Never: true })
                 return null;
 
-            if (skipConditions.HasSkipConditions() &&
-                step.CompletionQuestVariablesFlags.Count == 0 &&
+            if ((skipConditions == null || !skipConditions.HasSkipConditions()) &&
+                !QuestWorkUtils.HasCompletionFlags(step.CompletionQuestVariablesFlags) &&
                 step.RequiredQuestVariables.Count == 0 &&
                 step.PickUpQuestId == null &&
                 step.NextQuestId == null)
                 return null;
 
-            return serviceProvider.GetRequiredService<CheckTask>()
-                .With(step, skipConditions, quest.QuestId);
+            return serviceProvider.GetRequiredService<CheckSkip>()
+                .With(step, skipConditions ?? new(), quest.QuestId);
         }
     }
 
-    internal sealed class CheckTask(
-        ILogger<CheckTask> logger,
+    internal sealed class CheckSkip(
+        ILogger<CheckSkip> logger,
         GameFunctions gameFunctions,
         IClientState clientState) : ITask
     {

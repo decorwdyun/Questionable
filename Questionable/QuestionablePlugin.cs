@@ -105,7 +105,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         // task factories
         serviceCollection.AddTaskWithFactory<StepDisabled.Factory, StepDisabled.Task>();
         serviceCollection.AddTaskWithFactory<AetheryteShortcut.Factory, AetheryteShortcut.UseAetheryteShortcut>();
-        serviceCollection.AddTaskWithFactory<SkipCondition.Factory, SkipCondition.CheckTask>();
+        serviceCollection.AddTaskWithFactory<SkipCondition.Factory, SkipCondition.CheckSkip>();
         serviceCollection.AddTaskWithFactory<AethernetShortcut.Factory, AethernetShortcut.UseAethernetShortcut>();
         serviceCollection.AddTaskWithFactory<WaitAtStart.Factory, WaitAtStart.WaitDelay>();
         serviceCollection.AddTaskWithFactory<Move.Factory, Move.MoveInternal, Move.ExpectToBeNearDataId, Move.Land>();

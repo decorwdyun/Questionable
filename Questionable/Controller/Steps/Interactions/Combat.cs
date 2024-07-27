@@ -113,7 +113,9 @@ internal static class Combat
                 if (questWork == null)
                     return ETaskResult.StillRunning;
 
-                if (!QuestWorkUtils.MatchesQuestWork(_completionQuestVariableFlags, questWork.Value, false))
+                if (QuestWorkUtils.MatchesQuestWork(_completionQuestVariableFlags, questWork.Value, false))
+                    return ETaskResult.TaskComplete;
+                else
                     return ETaskResult.StillRunning;
             }
 

@@ -50,7 +50,7 @@ internal static class QuestWorkUtils
     }
 
     public static bool MatchesRequiredQuestWorkConfig(List<List<QuestWorkValue>?> requiredQuestVariables,
-        QuestWork questWork, ILogger<SkipCondition.CheckTask> logger)
+        QuestWork questWork, ILogger<SkipCondition.CheckSkip> logger)
     {
         if (requiredQuestVariables.Count != 6 || requiredQuestVariables.All(x => x == null || x.Count == 0))
         {
