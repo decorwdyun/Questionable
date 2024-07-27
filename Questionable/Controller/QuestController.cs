@@ -632,6 +632,9 @@ internal sealed class QuestController
 
         QuestSequence? currentSequence = currentQuest.Quest.FindSequence(currentQuest.Sequence);
         QuestStep? currentStep = currentSequence?.FindStep(currentQuest.Step);
+
+        // TODO Should this check that all previous steps have CompletionFlags so that we avoid running to places
+        // no longer relevant for the non-priority quest (after we're done with the priority quest)?
         return currentStep?.AetheryteShortcut != null;
     }
 

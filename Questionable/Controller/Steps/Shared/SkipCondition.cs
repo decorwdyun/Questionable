@@ -79,6 +79,20 @@ internal static class SkipCondition
                 return true;
             }
 
+            if (SkipConditions.QuestsCompleted.Count > 0 &&
+                SkipConditions.QuestsCompleted.All(gameFunctions.IsQuestComplete))
+            {
+                logger.LogInformation("Skipping step, all prequisite quests are complete");
+                return true;
+            }
+
+            if (SkipConditions.QuestsAccepted.Count > 0 &&
+                SkipConditions.QuestsAccepted.All(gameFunctions.IsQuestAccepted))
+            {
+                logger.LogInformation("Skipping step, all prequisite quests are accepted");
+                return true;
+            }
+
             if (SkipConditions.NotTargetable &&
                 Step is { DataId: not null })
             {
@@ -171,6 +185,6 @@ internal static class SkipCondition
 
         public ETaskResult Update() => ETaskResult.SkipRemainingTasksForStep;
 
-        public override string ToString() => $"CheckSkip({string.Join(", ", SkipConditions)})";
+        public override string ToString() => "CheckSkip";
     }
 }

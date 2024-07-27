@@ -23,7 +23,7 @@ internal static class AethernetShortcut
                 return null;
 
             return serviceProvider.GetRequiredService<UseAethernetShortcut>()
-                .With(step.AethernetShortcut.From, step.AethernetShortcut.To);
+                .With(step.AethernetShortcut.From, step.AethernetShortcut.To, step.SkipConditions?.AethernetShortcutIf);
         }
     }
 
@@ -40,16 +40,28 @@ internal static class AethernetShortcut
 
         public EAetheryteLocation From { get; set; }
         public EAetheryteLocation To { get; set; }
+        public SkipAetheryteCondition SkipConditions { get; set; } = null!;
 
-        public ITask With(EAetheryteLocation from, EAetheryteLocation to)
+        public ITask With(EAetheryteLocation from, EAetheryteLocation to,
+            SkipAetheryteCondition? skipConditions)
         {
             From = from;
             To = to;
+            SkipConditions = skipConditions ?? new();
             return this;
         }
 
         public bool Start()
         {
+            if (!SkipConditions.Never)
+            {
+                if (SkipConditions.InSameTerritory && clientState.TerritoryType == aetheryteData.TerritoryIds[To])
+                {
+                    logger.LogInformation("Skipping aethernet shortcut because the target is in the same territory");
+                    return false;
+                }
+            }
+
             if (gameFunctions.IsAetheryteUnlocked(From) &&
                 gameFunctions.IsAetheryteUnlocked(To))
             {

@@ -55,6 +55,9 @@ internal sealed class MovementOverrideController
 
         new BlacklistedPoint(1189, new(574f, -142.25f, 504.25f), new(574.44183f, -142.12766f, 507.60065f)),
 
+        // kholusia, random rocks
+        new BlacklistedPoint(814, new(-324, 348.75f, -181.75f), new(-322.75076f, 347.0529f, -177.69328f), 3),
+
         // sheshenewezi springs aetheryte: couple of barrel rings that get in the way if you go north
         new BlacklistedPoint(1190, new(-292.29004f, 18.598045f, -133.83907f), new(-288.20895f, 18.652182f, -132.67445f), 4),
 

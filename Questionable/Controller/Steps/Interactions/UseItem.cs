@@ -84,7 +84,7 @@ internal static class UseItem
             yield return serviceProvider.GetRequiredService<AetheryteShortcut.UseAetheryteShortcut>()
                 .With(null, EAetheryteLocation.Limsa, territoryId);
             yield return serviceProvider.GetRequiredService<AethernetShortcut.UseAethernetShortcut>()
-                .With(EAetheryteLocation.Limsa, EAetheryteLocation.LimsaArcanist);
+                .With(EAetheryteLocation.Limsa, EAetheryteLocation.LimsaArcanist, null);
             yield return serviceProvider.GetRequiredService<WaitAtEnd.WaitDelay>();
             yield return serviceProvider.GetRequiredService<Move.MoveInternal>()
                 .With(territoryId, destination, dataId: npcId, sprint: false);

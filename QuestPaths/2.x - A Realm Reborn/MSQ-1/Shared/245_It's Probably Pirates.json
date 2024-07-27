@@ -32,7 +32,14 @@
           },
           "TerritoryId": 128,
           "InteractionType": "AcceptQuest",
-          "PickUpQuestId": 1211
+          "PickUpQuestId": 1431,
+          "SkipConditions": {
+            "StepIf": {
+              "InTerritory": [
+                129
+              ]
+            }
+          }
         },
         {
           "DataId": 1003621,
@@ -43,7 +50,15 @@
           },
           "TerritoryId": 129,
           "InteractionType": "Interact",
-          "Comment": "NG+: Requires manual teleport to Lower Decks"
+          "AethernetShortcut": [
+            "[Limsa Lominsa] The Aftcastle",
+            "[Limsa Lominsa] Fishermens' Guild"
+          ],
+          "SkipConditions": {
+            "AethernetShortcutIf": {
+              "InSameTerritory": true
+            }
+          }
         }
       ]
     },

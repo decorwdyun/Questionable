@@ -48,6 +48,7 @@ internal sealed class QuestInfo
     public EBeastTribe BeastTribe { get; }
 
     public string SimplifiedName => Name
+        .Replace(".", "", StringComparison.Ordinal)
         .TrimStart(SeIconChar.QuestSync.ToIconChar(), SeIconChar.QuestRepeatable.ToIconChar(), ' ');
 
     [UsedImplicitly(ImplicitUseKindFlags.Assign, ImplicitUseTargetFlags.Members)]

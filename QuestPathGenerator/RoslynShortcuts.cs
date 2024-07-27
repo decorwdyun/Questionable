@@ -237,6 +237,9 @@ public static class RoslynShortcuts
                                         .AsSyntaxNodeOrToken(),
                                     Assignment(nameof(SkipConditions.AetheryteShortcutIf),
                                             skipConditions.AetheryteShortcutIf, emptySkip.AetheryteShortcutIf)
+                                        .AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(skipConditions.AethernetShortcutIf),
+                                            skipConditions.AethernetShortcutIf, emptySkip.AethernetShortcutIf)
                                         .AsSyntaxNodeOrToken()))));
             }
             else if (value is SkipStepConditions skipStepConditions)

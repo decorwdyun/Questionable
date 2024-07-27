@@ -11,11 +11,7 @@ public sealed class SkipStepConditions
     public List<ushort> InTerritory { get; set; } = new();
     public List<ushort> NotInTerritory { get; set; } = new();
     public SkipItemConditions? Item { get; set; }
-
-    // TODO not implemented
     public List<ushort> QuestsAccepted { get; set; } = new();
-
-    // TODO not implemented
     public List<ushort> QuestsCompleted { get; set; } = new();
     public EExtraSkipCondition? ExtraCondition { get; set; }
 

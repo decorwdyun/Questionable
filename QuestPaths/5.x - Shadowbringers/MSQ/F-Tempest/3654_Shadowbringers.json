@@ -1,12 +1,123 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "Comment": "TODO Missing Quest Start",
   "TerritoryBlacklist": [
     838,
     847
   ],
   "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1030557,
+          "Position": {
+            "X": -244.70898,
+            "Y": -266.0001,
+            "Z": 448.3557
+          },
+          "StopDistance": 5,
+          "TerritoryId": 818,
+          "InteractionType": "AcceptQuest"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1030556,
+          "Position": {
+            "X": -246.2959,
+            "Y": -266.0001,
+            "Z": 446.1891
+          },
+          "StopDistance": 5,
+          "TerritoryId": 818,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1030561,
+          "Position": {
+            "X": -243.39667,
+            "Y": -266.0001,
+            "Z": 442.4657
+          },
+          "StopDistance": 5,
+          "TerritoryId": 818,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1030560,
+          "Position": {
+            "X": -246.02124,
+            "Y": -266.0001,
+            "Z": 443.4729
+          },
+          "StopDistance": 5,
+          "TerritoryId": 818,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 1030558,
+          "Position": {
+            "X": -241.32147,
+            "Y": -266.0001,
+            "Z": 444.08325
+          },
+          "StopDistance": 5,
+          "TerritoryId": 818,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "DataId": 1030559,
+          "Position": {
+            "X": -242.66425,
+            "Y": -266.0001,
+            "Z": 447.83704
+          },
+          "StopDistance": 5,
+          "TerritoryId": 818,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 6,
+      "Steps": [
+        {
+          "DataId": 1030562,
+          "Position": {
+            "X": -356.8628,
+            "Y": -229.0648,
+            "Z": 700.34326
+          },
+          "TerritoryId": 818,
+          "InteractionType": "Interact",
+          "Fly": true
+        }
+      ]
+    },
     {
       "Sequence": 7,
       "Steps": [

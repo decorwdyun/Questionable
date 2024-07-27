@@ -573,6 +573,7 @@ internal sealed unsafe class GameFunctions
         StatusManager* statusManager = battleChara->GetStatusManager();
         return statusManager->HasStatus(565) ||
                statusManager->HasStatus(404) ||
+               statusManager->HasStatus(416) ||
                statusManager->HasStatus(2729) ||
                statusManager->HasStatus(2730);
     }

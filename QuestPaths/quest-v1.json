@@ -152,7 +152,7 @@
                     "null"
                   ]
                 },
-                "AetheryteShortcutIf": {
+                "AetheryteShortcut": {
                   "description": "The Aetheryte to teleport to (before moving)",
                   "$ref": "#/$defs/Aetheryte"
                 },
@@ -172,10 +172,6 @@
                   ],
                   "description": "The Item to use",
                   "exclusiveMinimum": 0
-                },
-                "SkipIf": {
-                  "type": "null",
-                  "deprecationMessage": "Please use SkipConditions instead"
                 },
                 "SkipConditions": {
                   "type": "object",
@@ -244,6 +240,17 @@
                       }
                     },
                     "AetheryteShortcutIf": {
+                      "type": "object",
+                      "properties": {
+                        "Never": {
+                          "type": "boolean"
+                        },
+                        "InSameTerritory": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "AethernetShortcutIf": {
                       "type": "object",
                       "properties": {
                         "Never": {
@@ -998,7 +1005,14 @@
                     }
                   }
                 }
-              ]
+              ],
+              "not": {
+                "anyOf": [
+                  {
+                    "required": ["SkipIf"]
+                  }
+                ]
+              }
             }
           },
           "Comment": {

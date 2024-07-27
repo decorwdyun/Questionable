@@ -41,6 +41,9 @@ internal sealed class QuestValidator
         {
             try
             {
+                _validationIssues.Clear();
+
+                List<ValidationIssue> issues = [];
                 Dictionary<EBeastTribe, int> disabledTribeQuests = new();
                 foreach (var quest in quests)
                 {
@@ -60,12 +63,19 @@ internal sealed class QuestValidator
                                 disabledTribeQuests[quest.Info.BeastTribe]++;
                             }
                             else
-                                _validationIssues.Add(issue);
+                                issues.Add(issue);
                         }
                     }
                 }
 
-                _validationIssues = _validationIssues.OrderBy(x => x.QuestId)
+                var disabledQuests = issues
+                    .Where(x => x.Type == EIssueType.QuestDisabled)
+                    .Select(x => x.QuestId)
+                    .ToList();
+
+                _validationIssues = issues
+                    .Where(x => !disabledQuests.Contains(x.QuestId) || x.Type == EIssueType.QuestDisabled)
+                    .OrderBy(x => x.QuestId)
                     .ThenBy(x => x.Sequence)
                     .ThenBy(x => x.Step)
                     .ThenBy(x => x.Description)

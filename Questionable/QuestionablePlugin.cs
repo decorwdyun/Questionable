@@ -177,6 +177,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<IQuestValidator, UniqueStartStopValidator>();
         serviceCollection.AddSingleton<IQuestValidator, NextQuestValidator>();
         serviceCollection.AddSingleton<IQuestValidator, CompletionFlagsValidator>();
+        serviceCollection.AddSingleton<IQuestValidator, AethernetShortcutValidator>();
         serviceCollection.AddSingleton<JsonSchemaValidator>();
         serviceCollection.AddSingleton<IQuestValidator>(sp => sp.GetRequiredService<JsonSchemaValidator>());
     }

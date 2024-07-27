@@ -3,7 +3,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Plugin.Services;
-using Lumina.Excel.GeneratedSheets2;
+using Lumina.Excel.GeneratedSheets;
+using Microsoft.Extensions.Logging;
 using Questionable.Model.V1;
 
 namespace Questionable.Data;
@@ -14,6 +15,7 @@ internal sealed class AetheryteData
     {
         Dictionary<EAetheryteLocation, string> aethernetNames = new();
         Dictionary<EAetheryteLocation, ushort> territoryIds = new();
+        Dictionary<EAetheryteLocation, byte> aethernetGroups = new();
         foreach (var aetheryte in dataManager.GetExcelSheet<Aetheryte>()!.Where(x => x.RowId > 0))
         {
             string? aethernetName = aetheryte.AethernetName?.Value?.Name.ToString();
@@ -22,13 +24,17 @@ internal sealed class AetheryteData
 
             if (aetheryte.Territory != null && aetheryte.Territory.Row > 0)
                 territoryIds[(EAetheryteLocation)aetheryte.RowId] = (ushort)aetheryte.Territory.Row;
+
+            if (aetheryte.AethernetGroup > 0)
+                aethernetGroups[(EAetheryteLocation)aetheryte.RowId] = aetheryte.AethernetGroup;
         }
 
         AethernetNames = aethernetNames.AsReadOnly();
         TerritoryIds = territoryIds.AsReadOnly();
+        AethernetGroups = aethernetGroups.AsReadOnly();
 
         TownTerritoryIds = dataManager.GetExcelSheet<TerritoryType>()!
-            .Where(x => x.RowId > 0 && !string.IsNullOrEmpty(x.Name) && x.TerritoryIntendedUse.Row == 0)
+            .Where(x => x.RowId > 0 && !string.IsNullOrEmpty(x.Name) && x.TerritoryIntendedUse == 0)
             .Select(x => (ushort)x.RowId)
             .ToList();
     }
@@ -266,6 +272,7 @@ internal sealed class AetheryteData
 
     public ReadOnlyDictionary<EAetheryteLocation, string> AethernetNames { get; }
     public ReadOnlyDictionary<EAetheryteLocation, ushort> TerritoryIds { get; }
+    public ReadOnlyDictionary<EAetheryteLocation, byte> AethernetGroups { get; }
     public IReadOnlyList<ushort> TownTerritoryIds { get; set; }
 
     public float CalculateDistance(Vector3 fromPosition, ushort fromTerritoryType, EAetheryteLocation to)

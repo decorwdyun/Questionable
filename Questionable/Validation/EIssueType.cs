@@ -15,4 +15,5 @@ public enum EIssueType
     QuestDisabled,
     UnexpectedAcceptQuestStep,
     UnexpectedCompleteQuestStep,
+    InvalidAethernetShortcut,
 }
