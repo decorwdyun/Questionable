@@ -37,9 +37,11 @@
             -128
           ],
           "AetheryteShortcut": "Coerthas Central Highlands - Camp Dragonhead",
-          "SkipIf": [
-            "AetheryteShortcutIfInSameTerritory"
-          ],
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NotInSameTerritory": true
+            }
+          },
           "Fly": true
         },
         {
@@ -95,9 +97,11 @@
           ],
           "AetheryteShortcut": "South Shroud - Camp Tranquil",
           "Fly": true,
-          "SkipIf": [
-            "AetheryteShortcutIfInSameTerritory"
-          ],
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NotInSameTerritory": true
+            }
+          },
           "Comment": "TODO Verify enemy id"
         },
         {

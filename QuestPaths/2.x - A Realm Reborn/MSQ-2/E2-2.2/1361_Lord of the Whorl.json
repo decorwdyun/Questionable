@@ -18,9 +18,11 @@
           "TerritoryId": 135,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Lower La Noscea - Moraby Drydocks",
-          "SkipIf": [
-            "AetheryteShortcutIfInSameTerritory"
-          ]
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NotInSameTerritory": true
+            }
+          }
         }
       ]
     },

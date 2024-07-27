@@ -16,9 +16,11 @@
           "TerritoryId": 819,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Crystarium",
-          "SkipIf": [
-            "AetheryteShortcutIfInSameTerritory"
-          ]
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NotInSameTerritory": true
+            }
+          }
         }
       ]
     },

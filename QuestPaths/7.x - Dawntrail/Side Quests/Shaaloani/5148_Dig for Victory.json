@@ -134,9 +134,11 @@
             null,
             -128
           ],
-          "SkipIf": [
-            "FlyingLocked"
-          ],
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Locked"
+            }
+          },
           "$": "Shaaloani Saloon Balcony"
         },
         {

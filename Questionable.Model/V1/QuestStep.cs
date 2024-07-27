@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
 using System.Numerics;
 using System.Text.Json.Serialization;
 using Questionable.Model.V1.Converter;
@@ -63,8 +61,8 @@ public sealed class QuestStep
 
     public JumpDestination? JumpDestination { get; set; }
     public uint? ContentFinderConditionId { get; set; }
+    public SkipConditions? SkipConditions { get; set; }
 
-    public IList<ESkipCondition> SkipIf { get; set; } = new List<ESkipCondition>();
     public List<List<QuestWorkValue>?> RequiredQuestVariables { get; set; } = new();
     public IList<short?> CompletionQuestVariablesFlags { get; set; } = new List<short?>();
     public IList<DialogueChoice> DialogueChoices { get; set; } = new List<DialogueChoice>();

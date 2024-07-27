@@ -15,9 +15,11 @@
           "TerritoryId": 963,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Radz-at-Han",
-          "SkipIf": [
-            "AetheryteShortcutIfInSameTerritory"
-          ]
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NotInSameTerritory": true
+            }
+          }
         }
       ]
     },

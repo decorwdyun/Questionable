@@ -19,9 +19,11 @@
             "[Eulmore] Aetheryte Plaza",
             "[Eulmore] Nightsoil Pots"
           ],
-          "SkipIf": [
-            "AetheryteShortcutIfInSameTerritory"
-          ]
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NotInSameTerritory": true
+            }
+          }
         }
       ]
     },

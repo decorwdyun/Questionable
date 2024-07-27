@@ -19,9 +19,11 @@
             "[Solution Nine] Aetheryte Plaza",
             "[Solution Nine] True Vue"
           ],
-          "SkipIf": [
-            "AetheryteShortcutIfInSameTerritory"
-          ]
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NotInSameTerritory": true
+            }
+          }
         }
       ]
     },

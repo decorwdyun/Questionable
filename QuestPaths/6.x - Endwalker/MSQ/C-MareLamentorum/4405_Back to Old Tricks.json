@@ -62,9 +62,11 @@
           },
           "TerritoryId": 959,
           "InteractionType": "Interact",
-          "SkipIf": [
-            "NotTargetable"
-          ],
+          "SkipConditions": {
+            "StepIf": {
+              "NotTargetable": true
+            }
+          },
           "DialogueChoices": [
             {
               "Type": "YesNo",

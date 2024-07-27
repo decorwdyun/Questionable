@@ -29,9 +29,11 @@
           "TerritoryId": 1188,
           "InteractionType": "WalkTo",
           "Fly": true,
-          "SkipIf": [
-            "FlyingLocked"
-          ],
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Locked"
+            }
+          },
           "CompletionQuestVariablesFlags": [
             null,
             null,

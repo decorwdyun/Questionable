@@ -48,9 +48,11 @@
           "TerritoryId": 1192,
           "InteractionType": "Interact",
           "TargetTerritoryId": 1192,
-          "SkipIf": [
-            "FlyingUnlocked"
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
         },
         {
           "DataId": 1051443,

@@ -15,9 +15,11 @@
           "TerritoryId": 478,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Idyllshire",
-          "SkipIf": [
-            "AetheryteShortcutIfInSameTerritory"
-          ]
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NotInSameTerritory": true
+            }
+          }
         }
       ]
     },

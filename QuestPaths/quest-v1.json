@@ -152,7 +152,7 @@
                     "null"
                   ]
                 },
-                "AetheryteShortcut": {
+                "AetheryteShortcutIf": {
                   "description": "The Aetheryte to teleport to (before moving)",
                   "$ref": "#/$defs/Aetheryte"
                 },
@@ -174,21 +174,88 @@
                   "exclusiveMinimum": 0
                 },
                 "SkipIf": {
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "enum": [
-                      "Never",
-                      "FlyingLocked",
-                      "FlyingUnlocked",
-                      "DifferentTerritory",
-                      "ChocoboUnlocked",
-                      "AetheryteShortcutIfInSameTerritory",
-                      "NotTargetable",
-                      "ItemNotInInventory",
-                      "WakingSandsMainArea"
-                    ]
-                  }
+                  "type": "null",
+                  "deprecationMessage": "Please use SkipConditions instead"
+                },
+                "SkipConditions": {
+                  "type": "object",
+                  "properties": {
+                    "StepIf": {
+                      "type": "object",
+                      "properties": {
+                        "Never": {
+                          "type": "boolean"
+                        },
+                        "Flying": {
+                          "type": "string",
+                          "enum": [
+                            "Locked",
+                            "Unlocked"
+                          ]
+                        },
+                        "Chocobo": {
+                          "type": "string",
+                          "enum": [
+                            "Locked",
+                            "Unlocked"
+                          ]
+                        },
+                        "NotTargetable": {
+                          "type": "boolean"
+                        },
+                        "InTerritory": {
+                          "type": "array",
+                          "items": {
+                            "type": "integer"
+                          }
+                        },
+                        "NotInTerritory": {
+                          "type": "array",
+                          "items": {
+                            "type": "integer"
+                          }
+                        },
+                        "Item": {
+                          "type": "object",
+                          "properties": {
+                            "NotInInventory": {
+                              "type": "boolean"
+                            }
+                          }
+                        },
+                        "QuestsAccepted": {
+                          "type": "array",
+                          "items": {
+                            "type": "number"
+                          }
+                        },
+                        "QuestsCompleted": {
+                          "type": "array",
+                          "items": {
+                            "type": "number"
+                          }
+                        },
+                        "ExtraCondition": {
+                          "type": "string",
+                          "enum": [
+                            "WakingSandsMainArea"
+                          ]
+                        }
+                      }
+                    },
+                    "AetheryteShortcutIf": {
+                      "type": "object",
+                      "properties": {
+                        "Never": {
+                          "type": "boolean"
+                        },
+                        "InSameTerritory": {
+                          "type": "boolean"
+                        }
+                      }
+                    }
+                  },
+                  "additionalProperties": false
                 },
                 "CompletionQuestVariablesFlags": {
                   "$ref": "#/$defs/CompletionFlags"

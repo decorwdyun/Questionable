@@ -17,9 +17,13 @@
           "TerritoryId": 131,
           "InteractionType": "UseItem",
           "ItemId": 43537,
-          "SkipIf": [
-            "ItemNotInInventory"
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
         },
         {
           "Position": {
@@ -30,9 +34,13 @@
           "TerritoryId": 131,
           "InteractionType": "EquipItem",
           "ItemId": 41808,
-          "SkipIf": [
-            "ItemNotInInventory"
-          ],
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          },
           "$": "This should probably call /equiprecommended if it exists"
         },
         {
@@ -44,9 +52,13 @@
           "TerritoryId": 131,
           "InteractionType": "EquipItem",
           "ItemId": 43178,
-          "SkipIf": [
-            "ItemNotInInventory"
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
         },
         {
           "Position": {
@@ -57,9 +69,13 @@
           "TerritoryId": 131,
           "InteractionType": "EquipItem",
           "ItemId": 43179,
-          "SkipIf": [
-            "ItemNotInInventory"
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
         },
         {
           "Position": {
@@ -70,9 +86,13 @@
           "TerritoryId": 131,
           "InteractionType": "EquipItem",
           "ItemId": 43180,
-          "SkipIf": [
-            "ItemNotInInventory"
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
         },
         {
           "Position": {
@@ -83,9 +103,13 @@
           "TerritoryId": 131,
           "InteractionType": "EquipItem",
           "ItemId": 43181,
-          "SkipIf": [
-            "ItemNotInInventory"
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
         },
         {
           "Position": {
@@ -96,9 +120,13 @@
           "TerritoryId": 131,
           "InteractionType": "EquipItem",
           "ItemId": 43182,
-          "SkipIf": [
-            "ItemNotInInventory"
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
         },
         {
           "DataId": 1046337,

@@ -19,9 +19,11 @@
             "[Ishgard] Aetheryte Plaza",
             "[Ishgard] The Forgotten Knight"
           ],
-          "SkipIf": [
-            "AetheryteShortcutIfInSameTerritory"
-          ]
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NotInSameTerritory": true
+            }
+          }
         }
       ]
     },

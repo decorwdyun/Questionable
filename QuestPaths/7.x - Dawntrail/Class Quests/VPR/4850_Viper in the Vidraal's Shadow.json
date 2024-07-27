@@ -22,9 +22,11 @@
               "Answer": "TEXT_KINGBB111_04850_A2_000_100"
             }
           ],
-          "SkipIf": [
-            "AetheryteShortcutIfInSameTerritory"
-          ]
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NotInSameTerritory": true
+            }
+          }
         }
       ]
     },

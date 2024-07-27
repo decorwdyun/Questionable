@@ -19,9 +19,11 @@
           "TerritoryId": 139,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Upper La Noscea - Camp Bronze Lake",
-          "SkipIf": [
-            "AetheryteShortcutIfInSameTerritory"
-          ]
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NotInSameTerritory": true
+            }
+          }
         }
       ]
     },

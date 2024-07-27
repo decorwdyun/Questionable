@@ -16,9 +16,11 @@
           "TerritoryId": 152,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "East Shroud - Hawthorne Hut",
-          "SkipIf": [
-            "AetheryteShortcutIfInSameTerritory"
-          ]
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NotInSameTerritory": true
+            }
+          }
         }
       ]
     },

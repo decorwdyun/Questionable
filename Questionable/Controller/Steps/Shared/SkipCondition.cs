@@ -21,12 +21,11 @@ internal static class SkipCondition
     {
         public ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
-            if (step.SkipIf.Contains(ESkipCondition.Never))
+            var skipConditions = step.SkipConditions?.StepIf;
+            if (skipConditions == null || skipConditions.Never)
                 return null;
 
-            var relevantConditions =
-                step.SkipIf.Where(x => x != ESkipCondition.AetheryteShortcutIfInSameTerritory).ToList();
-            if (relevantConditions.Count == 0 &&
+            if (skipConditions.HasSkipConditions() &&
                 step.CompletionQuestVariablesFlags.Count == 0 &&
                 step.RequiredQuestVariables.Count == 0 &&
                 step.PickUpQuestId == null &&
@@ -34,7 +33,7 @@ internal static class SkipCondition
                 return null;
 
             return serviceProvider.GetRequiredService<CheckTask>()
-                .With(step, relevantConditions, quest.QuestId);
+                .With(step, skipConditions, quest.QuestId);
         }
     }
 
@@ -44,10 +43,10 @@ internal static class SkipCondition
         IClientState clientState) : ITask
     {
         public QuestStep Step { get; set; } = null!;
-        public List<ESkipCondition> SkipConditions { get; set; } = null!;
+        public SkipStepConditions SkipConditions { get; set; } = null!;
         public ushort QuestId { get; set; }
 
-        public ITask With(QuestStep step, List<ESkipCondition> skipConditions, ushort questId)
+        public ITask With(QuestStep step, SkipStepConditions skipConditions, ushort questId)
         {
             Step = step;
             SkipConditions = skipConditions;
@@ -59,28 +58,28 @@ internal static class SkipCondition
         {
             logger.LogInformation("Checking skip conditions; {ConfiguredConditions}", string.Join(",", SkipConditions));
 
-            if (SkipConditions.Contains(ESkipCondition.FlyingUnlocked) &&
+            if (SkipConditions.Flying == ELockedSkipCondition.Unlocked &&
                 gameFunctions.IsFlyingUnlocked(Step.TerritoryId))
             {
                 logger.LogInformation("Skipping step, as flying is unlocked");
                 return true;
             }
 
-            if (SkipConditions.Contains(ESkipCondition.FlyingLocked) &&
+            if (SkipConditions.Flying == ELockedSkipCondition.Locked &&
                 !gameFunctions.IsFlyingUnlocked(Step.TerritoryId))
             {
                 logger.LogInformation("Skipping step, as flying is locked");
                 return true;
             }
 
-            if (SkipConditions.Contains(ESkipCondition.ChocoboUnlocked) &&
+            if (SkipConditions.Chocobo == ELockedSkipCondition.Unlocked &&
                 PlayerState.Instance()->IsMountUnlocked(1))
             {
                 logger.LogInformation("Skipping step, as chocobo is unlocked");
                 return true;
             }
 
-            if (SkipConditions.Contains(ESkipCondition.NotTargetable) &&
+            if (SkipConditions.NotTargetable &&
                 Step is { DataId: not null })
             {
                 IGameObject? gameObject = gameFunctions.FindObjectByDataId(Step.DataId.Value);
@@ -99,7 +98,7 @@ internal static class SkipCondition
                 }
             }
 
-            if (SkipConditions.Contains(ESkipCondition.ItemNotInInventory) && Step is { ItemId: not null })
+            if (SkipConditions.Item is { NotInInventory: true } && Step is { ItemId: not null })
             {
                 InventoryManager* inventoryManager = InventoryManager.Instance();
                 if (inventoryManager->GetInventoryItemCount(Step.ItemId.Value) == 0)
@@ -145,7 +144,7 @@ internal static class SkipCondition
                 }
             }
 
-            if (Step.SkipIf.Contains(ESkipCondition.WakingSandsMainArea))
+            if (SkipConditions.ExtraCondition == EExtraSkipCondition.WakingSandsMainArea)
             {
                 var position = clientState.LocalPlayer!.Position;
                 if (position.X < 24)

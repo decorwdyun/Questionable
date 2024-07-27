@@ -128,9 +128,11 @@
             null,
             -32
           ],
-          "SkipIf": [
-            "FlyingUnlocked"
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
         },
         {
           "DataId": 1007842,

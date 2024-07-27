@@ -15,9 +15,11 @@
           "TerritoryId": 628,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Kugane",
-          "SkipIf": [
-            "AetheryteShortcutIfInSameTerritory"
-          ]
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NotInSameTerritory": true
+            }
+          }
         }
       ]
     },
@@ -118,9 +120,11 @@
             "[Kugane] Aetheryte Plaza",
             "[Kugane] Kogane Dori Markets"
           ],
-          "SkipIf": [
-            "AetheryteShortcutIfInSameTerritory"
-          ]
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NotInSameTerritory": true
+            }
+          }
         }
       ]
     },

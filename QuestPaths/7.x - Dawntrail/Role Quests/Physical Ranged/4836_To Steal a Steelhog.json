@@ -15,9 +15,11 @@
           "TerritoryId": 1185,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Tuliyollal",
-          "SkipIf": [
-            "AetheryteShortcutIfInSameTerritory"
-          ]
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NotInSameTerritory": true
+            }
+          }
         }
       ]
     },

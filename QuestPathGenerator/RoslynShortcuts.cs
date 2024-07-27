@@ -223,6 +223,83 @@ public static class RoslynShortcuts
                         SyntaxNodeList(list.Select(x => ExpressionElement(
                             LiteralValue(x)).AsSyntaxNodeOrToken()).ToArray())));
             }
+            else if (value is SkipConditions skipConditions)
+            {
+                var emptySkip = new SkipConditions();
+                return ObjectCreationExpression(
+                        IdentifierName(nameof(SkipConditions)))
+                    .WithInitializer(
+                        InitializerExpression(
+                            SyntaxKind.ObjectInitializerExpression,
+                            SeparatedList<ExpressionSyntax>(
+                                SyntaxNodeList(
+                                    Assignment(nameof(SkipConditions.StepIf), skipConditions.StepIf, emptySkip.StepIf)
+                                        .AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(SkipConditions.AetheryteShortcutIf),
+                                            skipConditions.AetheryteShortcutIf, emptySkip.AetheryteShortcutIf)
+                                        .AsSyntaxNodeOrToken()))));
+            }
+            else if (value is SkipStepConditions skipStepConditions)
+            {
+                var emptyStep = new SkipStepConditions();
+                return ObjectCreationExpression(
+                        IdentifierName(nameof(SkipStepConditions)))
+                    .WithInitializer(
+                        InitializerExpression(
+                            SyntaxKind.ObjectInitializerExpression,
+                            SeparatedList<ExpressionSyntax>(
+                                SyntaxNodeList(
+                                    Assignment(nameof(SkipStepConditions.Never), skipStepConditions.Never,
+                                            emptyStep.Never)
+                                        .AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(SkipStepConditions.Flying), skipStepConditions.Flying,
+                                            emptyStep.Flying)
+                                        .AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(SkipStepConditions.Chocobo), skipStepConditions.Chocobo,
+                                            emptyStep.Chocobo)
+                                        .AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(SkipStepConditions.NotTargetable),
+                                            skipStepConditions.NotTargetable, emptyStep.NotTargetable)
+                                        .AsSyntaxNodeOrToken(),
+                                    AssignmentList(nameof(SkipStepConditions.InTerritory),
+                                        skipStepConditions.InTerritory).AsSyntaxNodeOrToken(),
+                                    AssignmentList(nameof(SkipStepConditions.NotInTerritory),
+                                        skipStepConditions.NotInTerritory).AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(SkipStepConditions.Item), skipStepConditions.Item, emptyStep.Item)
+                                        .AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(SkipStepConditions.ExtraCondition),
+                                            skipStepConditions.ExtraCondition, emptyStep.ExtraCondition)
+                                        .AsSyntaxNodeOrToken()))));
+            }
+            else if (value is SkipItemConditions skipItemCondition)
+            {
+                var emptyItem = new SkipItemConditions();
+                return ObjectCreationExpression(
+                        IdentifierName(nameof(SkipItemConditions)))
+                    .WithInitializer(
+                        InitializerExpression(
+                            SyntaxKind.ObjectInitializerExpression,
+                            SeparatedList<ExpressionSyntax>(
+                                SyntaxNodeList(
+                                    Assignment(nameof(SkipItemConditions.NotInInventory),
+                                        skipItemCondition.NotInInventory,
+                                        emptyItem.NotInInventory)))));
+            }
+            else if (value is SkipAetheryteCondition skipAetheryteCondition)
+            {
+                var emptyAetheryte = new SkipAetheryteCondition();
+                return ObjectCreationExpression(
+                        IdentifierName(nameof(SkipAetheryteCondition)))
+                    .WithInitializer(
+                        InitializerExpression(
+                            SyntaxKind.ObjectInitializerExpression,
+                            SeparatedList<ExpressionSyntax>(
+                                SyntaxNodeList(
+                                    Assignment(nameof(SkipAetheryteCondition.Never), skipAetheryteCondition.Never,
+                                        emptyAetheryte.Never),
+                                    Assignment(nameof(SkipAetheryteCondition.InSameTerritory),
+                                        skipAetheryteCondition.InSameTerritory, emptyAetheryte.InSameTerritory)))));
+            }
             else if (value is null)
                 return LiteralExpression(SyntaxKind.NullLiteralExpression);
         }

@@ -15,9 +15,11 @@
           "TerritoryId": 155,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Coerthas Central Highlands - Camp Dragonhead",
-          "SkipIf": [
-            "AetheryteShortcutIfInSameTerritory"
-          ]
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NotInSameTerritory": true
+            }
+          }
         }
       ]
     },

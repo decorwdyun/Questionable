@@ -57,9 +57,11 @@
           "TerritoryId": 1190,
           "InteractionType": "Interact",
           "AetheryteShortcut": "Shaaloani - Mehwahhetsoan",
-          "SkipIf": [
-            "AetheryteShortcutIfInSameTerritory"
-          ]
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NotInSameTerritory": true
+            }
+          }
         }
       ]
     },

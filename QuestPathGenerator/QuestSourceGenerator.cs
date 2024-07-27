@@ -357,7 +357,7 @@ public class QuestSourceGenerator : ISourceGenerator
                                             Assignment(nameof(QuestStep.ContentFinderConditionId),
                                                     step.ContentFinderConditionId, emptyStep.ContentFinderConditionId)
                                                 .AsSyntaxNodeOrToken(),
-                                            AssignmentList(nameof(QuestStep.SkipIf), step.SkipIf)
+                                            Assignment(nameof(QuestStep.SkipConditions), step.SkipConditions, emptyStep.SkipConditions)
                                                 .AsSyntaxNodeOrToken(),
                                             AssignmentList(nameof(QuestStep.RequiredQuestVariables),
                                                     step.RequiredQuestVariables)

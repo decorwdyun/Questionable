@@ -29,9 +29,11 @@
           },
           "TerritoryId": 958,
           "InteractionType": "WalkTo",
-          "SkipIf": [
-            "FlyingUnlocked"
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
         },
         {
           "Position": {

@@ -65,9 +65,11 @@
           "InteractionType": "Interact",
           "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow",
           "TargetTerritoryId": 959,
-          "SkipIf": [
-            "FlyingUnlocked"
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
         },
         {
           "Position": {
@@ -78,9 +80,11 @@
           "StopDistance": 1,
           "TerritoryId": 959,
           "InteractionType": "WalkTo",
-          "SkipIf": [
-            "FlyingLocked"
-          ],
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Locked"
+            }
+          },
           "Fly": true
         },
         {

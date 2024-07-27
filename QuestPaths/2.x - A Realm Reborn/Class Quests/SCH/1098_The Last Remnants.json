@@ -34,9 +34,11 @@
           "TerritoryId": 180,
           "InteractionType": "WalkTo",
           "AetheryteShortcut": "Outer La Noscea - Camp Overlook",
-          "SkipIf": [
-            "AetheryteShortcutIfInSameTerritory"
-          ],
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NotInSameTerritory": true
+            }
+          },
           "CompletionQuestVariablesFlags": [
             null,
             null,

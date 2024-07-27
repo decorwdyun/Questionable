@@ -105,9 +105,11 @@
           "TerritoryId": 956,
           "InteractionType": "WalkTo",
           "AetheryteShortcut": "Labyrinthos - Sharlayan Hamlet",
-          "SkipIf": [
-            "FlyingUnlocked"
-          ],
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          },
           "Mount": true
         },
         {

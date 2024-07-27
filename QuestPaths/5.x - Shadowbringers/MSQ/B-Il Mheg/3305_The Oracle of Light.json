@@ -169,9 +169,11 @@
           },
           "TerritoryId": 813,
           "InteractionType": "WalkTo",
-          "SkipIf": [
-            "FlyingUnlocked"
-          ],
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          },
           "Comment": "Tower Bottom"
         },
         {
@@ -182,9 +184,11 @@
           },
           "TerritoryId": 813,
           "InteractionType": "WalkTo",
-          "SkipIf": [
-            "FlyingUnlocked"
-          ],
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          },
           "DisableNavmesh": true,
           "Comment": "Tower Bottom Platform 1"
         },
@@ -196,9 +200,11 @@
           },
           "TerritoryId": 813,
           "InteractionType": "WalkTo",
-          "SkipIf": [
-            "FlyingUnlocked"
-          ],
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          },
           "Comment": "Wooden Skywalk Bottom"
         },
         {
@@ -209,9 +215,11 @@
           },
           "TerritoryId": 813,
           "InteractionType": "WalkTo",
-          "SkipIf": [
-            "FlyingUnlocked"
-          ],
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          },
           "DisableNavmesh": true,
           "Comment": "Wooden Skywalk Platform 1"
         },
@@ -223,9 +231,11 @@
           },
           "TerritoryId": 813,
           "InteractionType": "WalkTo",
-          "SkipIf": [
-            "FlyingUnlocked"
-          ],
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          },
           "DisableNavmesh": true,
           "Comment": "Wooden Skywalk Platform 2"
         },
@@ -237,9 +247,11 @@
           },
           "TerritoryId": 813,
           "InteractionType": "WalkTo",
-          "SkipIf": [
-            "FlyingUnlocked"
-          ],
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          },
           "DisableNavmesh": true,
           "Comment": "Wooden Skywalk Platform 3"
         },
@@ -251,9 +263,11 @@
           },
           "TerritoryId": 813,
           "InteractionType": "WalkTo",
-          "SkipIf": [
-            "FlyingUnlocked"
-          ],
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          },
           "DisableNavmesh": true,
           "Comment": "Wooden Skywalk Platform 4"
         },
@@ -265,9 +279,11 @@
           },
           "TerritoryId": 813,
           "InteractionType": "WalkTo",
-          "SkipIf": [
-            "FlyingUnlocked"
-          ],
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          },
           "DisableNavmesh": true,
           "Comment": "Wooden Skywalk Top"
         },
@@ -279,9 +295,11 @@
           },
           "TerritoryId": 813,
           "InteractionType": "WalkTo",
-          "SkipIf": [
-            "FlyingUnlocked"
-          ],
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          },
           "DisableNavmesh": true
         },
         {
@@ -292,9 +310,11 @@
           },
           "TerritoryId": 813,
           "InteractionType": "WalkTo",
-          "SkipIf": [
-            "FlyingUnlocked"
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
         },
         {
           "Position": {
@@ -304,9 +324,11 @@
           },
           "TerritoryId": 813,
           "InteractionType": "WalkTo",
-          "SkipIf": [
-            "FlyingUnlocked"
-          ],
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          },
           "DisableNavmesh": true
         },
         {
@@ -317,9 +339,11 @@
           },
           "TerritoryId": 813,
           "InteractionType": "WalkTo",
-          "SkipIf": [
-            "FlyingLocked"
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Locked"
+            }
+          }
         },
         {
           "DataId": 1028955,

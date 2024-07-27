@@ -35,9 +35,11 @@
           "TerritoryId": 146,
           "InteractionType": "Interact",
           "AetheryteShortcut": "Southern Thanalan - Forgotten Springs",
-          "SkipIf": [
-            "AetheryteShortcutIfInSameTerritory"
-          ],
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NotInSameTerritory": true
+            }
+          },
           "CompletionQuestVariablesFlags": [
             null,
             null,

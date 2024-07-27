@@ -29,9 +29,11 @@
           },
           "TerritoryId": 957,
           "InteractionType": "Interact",
-          "SkipIf": [
-            "FlyingUnlocked"
-          ],
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          },
           "DialogueChoices": [
             {
               "Type": "YesNo",
@@ -116,9 +118,11 @@
               "Yes": true
             }
           ],
-          "SkipIf": [
-            "FlyingUnlocked"
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
         },
         {
           "Position": {
@@ -128,9 +132,11 @@
           },
           "TerritoryId": 957,
           "InteractionType": "WalkTo",
-          "SkipIf": [
-            "FlyingUnlocked"
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
         },
         {
           "DataId": 1042301,

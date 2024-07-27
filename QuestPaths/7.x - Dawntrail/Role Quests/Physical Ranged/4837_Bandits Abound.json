@@ -15,9 +15,11 @@
           "TerritoryId": 635,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Rhalgr's Reach",
-          "SkipIf": [
-            "AetheryteShortcutIfInSameTerritory"
-          ]
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NotInSameTerritory": true
+            }
+          }
         }
       ]
     },

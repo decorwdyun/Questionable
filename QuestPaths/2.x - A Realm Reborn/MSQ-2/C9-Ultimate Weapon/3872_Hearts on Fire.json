@@ -15,9 +15,11 @@
           "TerritoryId": 147,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Northern Thanalan - Camp Bluefog",
-          "SkipIf": [
-            "AetheryteShortcutIfInSameTerritory"
-          ]
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NotInSameTerritory": true
+            }
+          }
         }
       ]
     },

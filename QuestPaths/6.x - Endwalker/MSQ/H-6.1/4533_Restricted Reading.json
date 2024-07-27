@@ -112,9 +112,11 @@
           "InteractionType": "WalkTo",
           "AetheryteShortcut": "Thavnair - Palaka's Stand",
           "Fly": true,
-          "SkipIf": [
-            "FlyingLocked"
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Locked"
+            }
+          }
         },
         {
           "DataId": 2012847,
@@ -126,9 +128,11 @@
           "TerritoryId": 957,
           "InteractionType": "Interact",
           "Mount": false,
-          "SkipIf": [
-            "FlyingLocked"
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Locked"
+            }
+          }
         },
         {
           "DataId": 2012847,
@@ -139,9 +143,11 @@
           },
           "TerritoryId": 957,
           "InteractionType": "Interact",
-          "SkipIf": [
-            "FlyingUnlocked"
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
         }
       ]
     },

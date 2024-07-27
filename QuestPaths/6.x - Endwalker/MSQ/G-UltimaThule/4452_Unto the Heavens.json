@@ -31,9 +31,11 @@
           "TerritoryId": 956,
           "InteractionType": "Interact",
           "AetheryteShortcut": "Labyrinthos - Aporia",
-          "SkipIf": [
-            "FlyingUnlocked"
-          ],
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          },
           "TargetTerritoryId": 956
         },
         {

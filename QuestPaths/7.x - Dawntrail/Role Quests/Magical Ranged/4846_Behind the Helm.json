@@ -49,9 +49,11 @@
           "TerritoryId": 1190,
           "InteractionType": "WalkTo",
           "AetheryteShortcut": "Shaaloani - Mehwahhetsoan",
-          "SkipIf": [
-            "FlyingUnlocked"
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
         },
         {
           "Position": {

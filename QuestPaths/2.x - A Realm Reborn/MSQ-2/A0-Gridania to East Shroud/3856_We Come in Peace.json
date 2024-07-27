@@ -15,9 +15,11 @@
           "TerritoryId": 132,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Gridania",
-          "SkipIf": [
-            "AetheryteShortcutIfInSameTerritory"
-          ]
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NotInSameTerritory": true
+            }
+          }
         }
       ]
     },
@@ -33,9 +35,11 @@
           "TerritoryId": 132,
           "InteractionType": "UseItem",
           "ItemId": 6001,
-          "SkipIf": [
-            "ChocoboUnlocked"
-          ],
+          "SkipConditions": {
+            "StepIf": {
+              "Chocobo": "Unlocked"
+            }
+          },
           "Comment": "Use Chocobo whistle (if not yet unlocked)"
         },
         {

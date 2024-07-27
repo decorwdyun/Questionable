@@ -15,9 +15,11 @@
           "TerritoryId": 138,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Western La Noscea - Aleport",
-          "SkipIf": [
-            "AetheryteShortcutIfInSameTerritory"
-          ]
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NotInSameTerritory": true
+            }
+          }
         }
       ]
     },

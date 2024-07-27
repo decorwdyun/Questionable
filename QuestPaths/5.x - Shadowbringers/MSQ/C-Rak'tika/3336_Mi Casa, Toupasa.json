@@ -98,9 +98,11 @@
           "TerritoryId": 817,
           "InteractionType": "Interact",
           "Comment": "Retry point",
-          "SkipIf": [
-            "NotTargetable"
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "NotTargetable": true
+            }
+          }
         },
         {
           "Position": {

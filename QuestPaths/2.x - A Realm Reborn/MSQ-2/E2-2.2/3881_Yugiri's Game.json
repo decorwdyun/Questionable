@@ -15,9 +15,11 @@
           "TerritoryId": 130,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Ul'dah",
-          "SkipIf": [
-            "AetheryteShortcutIfInSameTerritory"
-          ]
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NotInSameTerritory": true
+            }
+          }
         }
       ]
     },

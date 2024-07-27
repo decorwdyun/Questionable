@@ -41,9 +41,11 @@
           "TerritoryId": 212,
           "InteractionType": "Interact",
           "TargetTerritoryId": 212,
-          "SkipIf": [
-            "WakingSandsMainArea"
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "ExtraCondition": "WakingSandsMainArea"
+            }
+          }
         },
         {
           "DataId": 1007533,

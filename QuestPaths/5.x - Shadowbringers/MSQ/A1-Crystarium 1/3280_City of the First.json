@@ -25,9 +25,11 @@
           "TerritoryId": 819,
           "InteractionType": "AttuneAetheryte",
           "Aetheryte": "Crystarium",
-          "SkipIf": [
-            "Never"
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "Never": true
+            }
+          }
         }
       ]
     },
