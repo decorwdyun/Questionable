@@ -99,17 +99,23 @@ internal sealed class QuestRegistry
                 try
                 {
                     LoadFromDirectory(
-                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "2.x - A Realm Reborn")));
+                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "2.x - A Realm Reborn")),
+                        LogLevel.Trace);
                     LoadFromDirectory(
-                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "3.x - Heavensward")));
+                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "3.x - Heavensward")),
+                        LogLevel.Trace);
                     LoadFromDirectory(
-                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "4.x - Stormblood")));
+                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "4.x - Stormblood")),
+                        LogLevel.Trace);
                     LoadFromDirectory(
-                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "5.x - Shadowbringers")));
+                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "5.x - Shadowbringers")),
+                        LogLevel.Trace);
                     LoadFromDirectory(
-                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "6.x - Endwalker")));
+                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "6.x - Endwalker")),
+                        LogLevel.Trace);
                     LoadFromDirectory(
-                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "7.x - Dawntrail")));
+                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "7.x - Dawntrail")),
+                        LogLevel.Trace);
                 }
                 catch (Exception e)
                 {
@@ -145,7 +151,7 @@ internal sealed class QuestRegistry
         _quests[questId.Value] = quest;
     }
 
-    private void LoadFromDirectory(DirectoryInfo directory)
+    private void LoadFromDirectory(DirectoryInfo directory, LogLevel logLevel = LogLevel.Information)
     {
         if (!directory.Exists)
         {
@@ -153,7 +159,7 @@ internal sealed class QuestRegistry
             return;
         }
 
-        _logger.LogInformation("Loading quests from {DirectoryName}", directory);
+        _logger.Log(logLevel, "Loading quests from {DirectoryName}", directory);
         foreach (FileInfo fileInfo in directory.GetFiles("*.json"))
         {
             try
@@ -168,7 +174,7 @@ internal sealed class QuestRegistry
         }
 
         foreach (DirectoryInfo childDirectory in directory.GetDirectories())
-            LoadFromDirectory(childDirectory);
+            LoadFromDirectory(childDirectory, logLevel);
     }
 
     private static ushort? ExtractQuestIdFromName(string resourceName)
