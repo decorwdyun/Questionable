@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
@@ -110,8 +111,24 @@ internal sealed class MovementController : IDisposable
                 }
 
                 if (!Destination.IsFlying)
-                    _movementOverrideController.AdjustPath(navPoints);
+                {
+                    (navPoints, bool recalculateNavmesh) = _movementOverrideController.AdjustPath(navPoints);
+                    if (recalculateNavmesh && Destination.NavmeshCalculations < 10)
+                    {
+                        Destination.NavmeshCalculations++;
+                        Destination.PartialRoute.AddRange(navPoints);
+                        _logger.LogInformation("Running navmesh recalculation with fudged point ({From} to {To})", navPoints.Last(), Destination.Position);
 
+                        _cancellationTokenSource = new();
+                        _cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(30));
+                        _pathfindTask =
+                            _navmeshIpc.Pathfind(navPoints.Last(), Destination.Position, Destination.IsFlying,
+                                _cancellationTokenSource.Token);
+                        return;
+                    }
+                }
+
+                navPoints = Destination.PartialRoute.Concat(navPoints).ToList();
                 _logger.LogInformation("Navigating via route: [{Route}]",
                     string.Join(" → ",
                         _pathfindTask.Result.Select(x => x.ToString("G", CultureInfo.InvariantCulture))));
@@ -245,6 +262,7 @@ internal sealed class MovementController : IDisposable
         return pointOnFloor != null && Math.Abs(pointOnFloor.Value.Y - p.Y) > 0.5f;
     }
 
+    [MemberNotNull(nameof(Destination))]
     private void PrepareNavigation(EMovementType type, uint? dataId, Vector3 to, bool fly, bool sprint,
         float? stopDistance, bool ignoreDistanceToObject, bool land, bool useNavmesh)
     {
@@ -271,6 +289,7 @@ internal sealed class MovementController : IDisposable
         PrepareNavigation(type, dataId, to, fly, sprint, stopDistance, ignoreDistanceToObject, land, true);
         _logger.LogInformation("Pathfinding to {Destination}", Destination);
 
+        Destination.NavmeshCalculations++;
         _cancellationTokenSource = new();
         _cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(30));
         _pathfindTask =
@@ -336,7 +355,11 @@ internal sealed class MovementController : IDisposable
         bool CanSprint,
         bool IgnoreDistanceToObject,
         bool Land,
-        bool UseNavmesh);
+        bool UseNavmesh)
+    {
+        public int NavmeshCalculations { get; set; }
+        public List<Vector3> PartialRoute { get; } = [];
+    }
 
     public sealed class PathfindingFailedException : Exception
     {

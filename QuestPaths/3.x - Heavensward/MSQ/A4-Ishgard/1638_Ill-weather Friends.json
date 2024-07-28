@@ -6,13 +6,14 @@
       "Sequence": 0,
       "Steps": [
         {
-          "DataId": 1012102,
+          "DataId": 1012751,
           "Position": {
-            "X": 72.40405,
-            "Y": 205.6815,
-            "Z": 31.631958
+            "X": -2.02948,
+            "Y": -9.313226E-10,
+            "Z": 6.362976
           },
-          "TerritoryId": 478,
+          "StopDistance": 7,
+          "TerritoryId": 433,
           "InteractionType": "AcceptQuest"
         }
       ]
@@ -21,44 +22,34 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1013381,
           "Position": {
-            "X": 148.52824,
-            "Y": 207,
-            "Z": 117.84323
+            "X": 92.36279,
+            "Y": 15.094684,
+            "Z": 33.188354
           },
-          "TerritoryId": 478,
-          "InteractionType": "WalkTo",
-          "TargetTerritoryId": 399
-        },
-        {
-          "DataId": 2005878,
-          "Position": {
-            "X": 490.77588,
-            "Y": 83.7262,
-            "Z": -14.847046
-          },
-          "TerritoryId": 399,
+          "TerritoryId": 418,
           "InteractionType": "Interact",
-          "$": "0 0 0 0 0 0 -> 16 16 16 0 0 64",
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            64
+          "AethernetShortcut": [
+            "[Ishgard] The Last Vigil",
+            "[Ishgard] The Forgotten Knight"
           ]
-        },
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
         {
-          "DataId": 2005879,
+          "DataId": 1013342,
           "Position": {
-            "X": 496.42163,
-            "Y": 83.7262,
-            "Z": 18.631226
+            "X": 36.331665,
+            "Y": -12.020876,
+            "Z": 76.58496
           },
-          "TerritoryId": 399,
+          "TerritoryId": 418,
           "InteractionType": "Interact",
-          "$": "16 16 16 0 0 64 -> 32 17 32 0 0 96",
+          "$": "0 0 0 0 0 0 -> 1 0 0 0 0 32",
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -69,13 +60,32 @@
           ]
         },
         {
-          "DataId": 2005877,
+          "DataId": 1013341,
           "Position": {
-            "X": 458.70142,
-            "Y": 83.7262,
-            "Z": 34.74475
+            "X": 65.72058,
+            "Y": -12.008911,
+            "Z": 78.3551
           },
-          "TerritoryId": 399,
+          "TerritoryId": 418,
+          "InteractionType": "Interact",
+          "$": "1 0 0 0 0 32 -> 2 0 0 0 0 96",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
+        },
+        {
+          "DataId": 1013340,
+          "Position": {
+            "X": 144.57922,
+            "Y": -20.020874,
+            "Z": 54.276245
+          },
+          "TerritoryId": 418,
           "InteractionType": "Interact",
           "CompletionQuestVariablesFlags": [
             null,
@@ -92,15 +102,14 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 1012102,
+          "DataId": 1013332,
           "Position": {
-            "X": 72.40405,
-            "Y": 205.6815,
-            "Z": 31.631958
+            "X": 94.95691,
+            "Y": -22.000006,
+            "Z": 50.94983
           },
-          "TerritoryId": 478,
-          "InteractionType": "CompleteQuest",
-          "AetheryteShortcut": "Idyllshire"
+          "TerritoryId": 418,
+          "InteractionType": "CompleteQuest"
         }
       ]
     }

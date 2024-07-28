@@ -325,14 +325,24 @@
                   "if": {
                     "properties": {
                       "InteractionType": {
-                        "anyOf": [
-                          {
-                            "const": "Interact"
-                          },
-                          {
-                            "const": "SinglePlayerDuty"
-                          }
-                        ]
+                        "const": "Interact"
+                      }
+                    }
+                  },
+                  "then": {
+                    "required": [
+                      "DataId"
+                    ]
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "InteractionType": {
+                        "const": "SinglePlayerDuty"
+                      },
+                      "Emote":  {
+                        "not": true
                       }
                     }
                   },
@@ -607,6 +617,9 @@
                           },
                           {
                             "const": "CompleteQuest"
+                          },
+                          {
+                            "const": "SinglePlayerDuty"
                           }
                         ]
                       }
@@ -1009,7 +1022,9 @@
               "not": {
                 "anyOf": [
                   {
-                    "required": ["SkipIf"]
+                    "required": [
+                      "SkipIf"
+                    ]
                   }
                 ]
               }

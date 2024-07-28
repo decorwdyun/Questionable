@@ -29,7 +29,14 @@
           },
           "TerritoryId": 463,
           "InteractionType": "Interact",
-          "TargetTerritoryId": 399
+          "TargetTerritoryId": 399,
+          "SkipConditions": {
+            "StepIf": {
+              "NotInTerritory": [
+                463
+              ]
+            }
+          }
         },
         {
           "DataId": 2006061,
@@ -44,7 +51,15 @@
           "KillEnemyDataIds": [
             44
           ],
-          "$": "0 0 0 0 0 0 -> 16 1 0 0 0 128"
+          "$": "0 0 0 0 0 0 -> 16 1 0 0 0 128",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 2006062,
@@ -59,7 +74,15 @@
           "KillEnemyDataIds": [
             44
           ],
-          "$": "16 1 0 0 0 128 -> 33 1 0 0 0 192"
+          "$": "16 1 0 0 0 128 -> 33 1 0 0 0 192",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 2006063,
@@ -73,6 +96,14 @@
           "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
             44
+          ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
           ]
         }
       ]

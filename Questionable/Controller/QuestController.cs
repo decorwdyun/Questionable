@@ -4,6 +4,7 @@ using System.Linq;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Keys;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps;
 using Questionable.Controller.Steps.Shared;
@@ -28,7 +29,7 @@ internal sealed class QuestController
     private readonly YesAlreadyIpc _yesAlreadyIpc;
     private readonly IReadOnlyList<ITaskFactory> _taskFactories;
 
-    private readonly object _lock = new();
+    private readonly object _progressLock = new();
 
     private QuestProgress? _startedQuest;
     private QuestProgress? _nextQuest;
@@ -36,6 +37,13 @@ internal sealed class QuestController
     private readonly Queue<ITask> _taskQueue = new();
     private ITask? _currentTask;
     private bool _automatic;
+
+    /// <summary>
+    /// Some combat encounters finish relatively early (i.e. they're done as part of progressing the quest, but not
+    /// technically necessary to progress the quest if we'd just run away and back). We add some slight delay, as
+    /// talking to NPCs, teleporting etc. won't successfully execute.
+    /// </summary>
+    private DateTime _safeAnimationEnd = DateTime.MinValue;
 
     public QuestController(
         IClientState clientState,
@@ -90,13 +98,14 @@ internal sealed class QuestController
 
     public void Reload()
     {
-        lock (_lock)
+        lock (_progressLock)
         {
             _logger.LogInformation("Reload, resetting curent quest progress");
 
             _startedQuest = null;
             _nextQuest = null;
             _simulatedQuest = null;
+            _safeAnimationEnd = DateTime.MinValue;
 
             DebugState = null;
 
@@ -106,6 +115,20 @@ internal sealed class QuestController
 
     public void Update()
     {
+        unsafe
+        {
+            ActionManager* actionManager = ActionManager.Instance();
+            if (actionManager != null)
+            {
+                float animationLock = Math.Max(actionManager->AnimationLock,
+                    actionManager->CastTimeElapsed > 0
+                        ? actionManager->CastTimeTotal - actionManager->CastTimeElapsed
+                        : 0);
+                if (animationLock > 0)
+                    _safeAnimationEnd = DateTime.Now.AddSeconds(1 + animationLock);
+            }
+        }
+
         UpdateCurrentQuest();
 
         if (!_clientState.IsLoggedIn || _condition[ConditionFlag.Unconscious])
@@ -116,7 +139,8 @@ internal sealed class QuestController
                 _movementController.Stop();
                 _combatController.Stop();
             }
-        } else if (_keyState[VirtualKey.ESCAPE])
+        }
+        else if (_keyState[VirtualKey.ESCAPE])
         {
             if (_currentTask != null || _taskQueue.Count > 0)
             {
@@ -134,7 +158,7 @@ internal sealed class QuestController
                        && CurrentQuest is { Sequence: 0, Step: 0 } or { Sequence: 0, Step: 255 }
                        && DateTime.Now >= CurrentQuest.StepProgress.StartedAt.AddSeconds(15))
         {
-            lock (_lock)
+            lock (_progressLock)
             {
                 _logger.LogWarning("Quest accept apparently didn't work out, resetting progress");
                 CurrentQuest.SetStep(0);
@@ -149,7 +173,7 @@ internal sealed class QuestController
 
     private void UpdateCurrentQuest()
     {
-        lock (_lock)
+        lock (_progressLock)
         {
             DebugState = null;
 
@@ -249,6 +273,12 @@ internal sealed class QuestController
                 return;
             }
 
+            if (DateTime.Now < _safeAnimationEnd)
+            {
+                DebugState = "Waiting for Animation";
+                return;
+            }
+
             if (questToRun.Sequence != currentSequence)
             {
                 questToRun.SetSequence(currentSequence);
@@ -302,7 +332,7 @@ internal sealed class QuestController
 
     public void IncreaseStepCount(ushort? questId, int? sequence, bool shouldContinue = false)
     {
-        lock (_lock)
+        lock (_progressLock)
         {
             (QuestSequence? seq, QuestStep? step) = GetNextStep();
             if (CurrentQuest == null || seq == null || step == null)
@@ -587,7 +617,7 @@ internal sealed class QuestController
 
     public void Skip(ushort questQuestId, byte currentQuestSequence)
     {
-        lock (_lock)
+        lock (_progressLock)
         {
             if (_currentTask is ISkippableTask)
                 _currentTask = null;

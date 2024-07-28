@@ -19,7 +19,8 @@
             "AetheryteShortcutIf": {
               "InSameTerritory": true
             }
-          }
+          },
+          "Fly": true
         }
       ]
     },

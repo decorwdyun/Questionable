@@ -270,6 +270,10 @@ public static class RoslynShortcuts
                                         skipStepConditions.NotInTerritory).AsSyntaxNodeOrToken(),
                                     Assignment(nameof(SkipStepConditions.Item), skipStepConditions.Item, emptyStep.Item)
                                         .AsSyntaxNodeOrToken(),
+                                    AssignmentList(nameof(SkipStepConditions.QuestsAccepted),
+                                        skipStepConditions.QuestsAccepted).AsSyntaxNodeOrToken(),
+                                    AssignmentList(nameof(SkipStepConditions.QuestsCompleted),
+                                        skipStepConditions.QuestsCompleted).AsSyntaxNodeOrToken(),
                                     Assignment(nameof(SkipStepConditions.ExtraCondition),
                                             skipStepConditions.ExtraCondition, emptyStep.ExtraCondition)
                                         .AsSyntaxNodeOrToken()))));

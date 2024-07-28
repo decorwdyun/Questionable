@@ -19,6 +19,12 @@ public sealed class SkipStepConditions
     {
         if (Never)
             return false;
-        return Flying != null || Chocobo != null || InTerritory.Count > 0 || NotInTerritory.Count > 0 || Item != null;
+        return Flying != null ||
+               Chocobo != null ||
+               InTerritory.Count > 0 ||
+               NotInTerritory.Count > 0 ||
+               Item != null ||
+               QuestsAccepted.Count > 0 ||
+               QuestsCompleted.Count > 0;
     }
 }

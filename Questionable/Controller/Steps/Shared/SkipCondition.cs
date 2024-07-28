@@ -79,6 +79,20 @@ internal static class SkipCondition
                 return true;
             }
 
+            if (SkipConditions.InTerritory.Count > 0 &&
+                SkipConditions.InTerritory.Contains(clientState.TerritoryType))
+            {
+                logger.LogInformation("Skipping step, as in a skip.InTerritory");
+                return true;
+            }
+
+            if (SkipConditions.NotInTerritory.Count > 0 &&
+                !SkipConditions.NotInTerritory.Contains(clientState.TerritoryType))
+            {
+                logger.LogInformation("Skipping step, as not in a skip.NotInTerritory");
+                return true;
+            }
+
             if (SkipConditions.QuestsCompleted.Count > 0 &&
                 SkipConditions.QuestsCompleted.All(gameFunctions.IsQuestComplete))
             {

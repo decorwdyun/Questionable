@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Numerics;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.Logging;
@@ -25,6 +26,7 @@ internal sealed class MovementOverrideController
 
         // New Gridania Navmesh workaround - planter box outside the Carline Canopy
         new BlacklistedPoint(132, new(45.5f, -8f, 101f), new(50.53978f, -8.046954f, 101.06045f)),
+        new BlacklistedPoint(132, new(48.5f, -8f, 98.25f), new(50.53978f, -8.046954f, 101.06045f)),
 
         // ul'dah lamp near adventuer's guild
         new BlacklistedPoint(130, new(59.5f, 4.25f, -118f), new(60.551353f, 4f, -119.76446f)),
@@ -52,6 +54,9 @@ internal sealed class MovementOverrideController
 
         // moghome, mogmug's trial
         new BlacklistedPoint(400, new(384, -74, 648.75f), new(386.0543f, -72.409454f, 652.0184f), 3),
+
+        // leaving idyllshiret through the west gate attempts to run into this wall
+        new BlacklistedPoint(399, new(-514.4851f, 149.63762f, -480.58087f), new(-528.78656f, 151.17374f, -473.07077f), 5, true),
 
         new BlacklistedPoint(1189, new(574f, -142.25f, 504.25f), new(574.44183f, -142.12766f, 507.60065f)),
 
@@ -84,7 +89,7 @@ internal sealed class MovementOverrideController
     /// walked on without jumping, but if you teleport to the wrong side you're fucked otherwise.
     /// </summary>
     /// <param name="navPoints">list of points to check</param>
-    public void AdjustPath(List<Vector3> navPoints)
+    public (List<Vector3>, bool) AdjustPath(List<Vector3> navPoints)
     {
         foreach (var blacklistedArea in BlacklistedLocations)
         {
@@ -93,17 +98,21 @@ internal sealed class MovementOverrideController
 
             for (int i = 0; i < navPoints.Count; ++i)
             {
-                Vector3? updatedPoint = blacklistedArea.AdjustPoint(navPoints[i]);
+                AlternateLocation? alternateLocation = blacklistedArea.AdjustPoint(navPoints[i]);
 
-                if (updatedPoint != null)
+                if (alternateLocation != null)
                 {
                     _logger.LogInformation("Fudging navmesh point from {Original} to {Replacement} in blacklisted area",
                         navPoints[i].ToString("G", CultureInfo.InvariantCulture),
-                        updatedPoint.Value.ToString("G", CultureInfo.InvariantCulture));
+                        alternateLocation);
 
-                    navPoints[i] = updatedPoint.Value;
+                    navPoints[i] = alternateLocation.Point;
+                    if (alternateLocation.RecalculateNavmesh)
+                        return (navPoints.Take(i + 1).ToList(), true);
                 }
             }
         }
+
+        return (navPoints, false);
     }
 }

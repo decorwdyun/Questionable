@@ -6,5 +6,5 @@ internal interface IBlacklistedLocation
 {
     ushort TerritoryId { get; }
 
-    Vector3? AdjustPoint(Vector3 point);
+    AlternateLocation? AdjustPoint(Vector3 point);
 }
