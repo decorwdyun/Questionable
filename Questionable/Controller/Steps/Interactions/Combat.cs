@@ -103,7 +103,7 @@ internal static class Combat
 
         public ETaskResult Update()
         {
-            if (combatController.Update())
+            if (combatController.Update() != CombatController.EStatus.Complete)
                 return ETaskResult.StillRunning;
 
             // if our quest step has any completion flags, we need to check if they are set
@@ -125,7 +125,7 @@ internal static class Combat
                 return ETaskResult.StillRunning;
             else
             {
-                combatController.Stop();
+                combatController.Stop("Combat task complete");
                 return ETaskResult.TaskComplete;
             }
         }

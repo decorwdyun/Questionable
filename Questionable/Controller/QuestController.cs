@@ -137,7 +137,7 @@ internal sealed class QuestController
             {
                 Stop("HP = 0");
                 _movementController.Stop();
-                _combatController.Stop();
+                _combatController.Stop("HP = 0");
             }
         }
         else if (_keyState[VirtualKey.ESCAPE])
@@ -146,7 +146,7 @@ internal sealed class QuestController
             {
                 Stop("ESC pressed");
                 _movementController.Stop();
-                _combatController.Stop();
+                _combatController.Stop("ESC pressed");
             }
         }
 
@@ -376,7 +376,7 @@ internal sealed class QuestController
             _taskQueue.Clear();
 
         _yesAlreadyIpc.RestoreYesAlready();
-        _combatController.Stop();
+        _combatController.Stop("ClearTasksInternal");
     }
 
     public void Stop(string label, bool continueIfAutomatic = false)
@@ -535,7 +535,7 @@ internal sealed class QuestController
         }
 
         _movementController.Stop();
-        _combatController.Stop();
+        _combatController.Stop("Execute next step");
 
         var newTasks = _taskFactories
             .SelectMany(x =>

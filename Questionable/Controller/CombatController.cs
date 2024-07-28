@@ -30,6 +30,7 @@ internal sealed class CombatController : IDisposable
     private readonly ILogger<CombatController> _logger;
 
     private CurrentFight? _currentFight;
+    private bool _wasInCombat;
 
     public CombatController(
         IEnumerable<ICombatModule> combatModules,
@@ -57,7 +58,7 @@ internal sealed class CombatController : IDisposable
 
     public bool Start(CombatData combatData)
     {
-        Stop();
+        Stop("Starting combat");
 
         var combatModule = _combatModules.FirstOrDefault(x => x.IsLoaded);
         if (combatModule == null)
@@ -76,11 +77,13 @@ internal sealed class CombatController : IDisposable
             return false;
     }
 
-    /// <returns>true if still in combat, false otherwise</returns>
-    public bool Update()
+    public EStatus Update()
     {
-        if (_currentFight == null || _movementController.IsPathfinding || _movementController.IsPathRunning)
-            return false;
+        if (_currentFight == null)
+            return EStatus.Complete;
+
+        if (_movementController.IsPathfinding || _movementController.IsPathRunning)
+            return EStatus.Moving;
 
         var target = _targetManager.Target;
         if (target != null)
@@ -121,7 +124,15 @@ internal sealed class CombatController : IDisposable
             }
         }
 
-        return _condition[ConditionFlag.InCombat];
+        if (_condition[ConditionFlag.InCombat])
+        {
+            _wasInCombat = true;
+            return EStatus.InCombat;
+        }
+        else if (_wasInCombat)
+            return EStatus.Complete;
+        else
+            return EStatus.InCombat;
     }
 
     [SuppressMessage("ReSharper", "RedundantJumpStatement")]
@@ -263,8 +274,9 @@ internal sealed class CombatController : IDisposable
             return 0;
     }
 
-    public void Stop()
+    public void Stop(string label)
     {
+        using var scope = _logger.BeginScope(label);
         if (_currentFight != null)
         {
             _logger.LogInformation("Stopping current fight");
@@ -272,14 +284,15 @@ internal sealed class CombatController : IDisposable
         }
 
         _currentFight = null;
+        _wasInCombat = false;
     }
 
-    private void TerritoryChanged(ushort territoryId) => Stop();
+    private void TerritoryChanged(ushort territoryId) => Stop("TerritoryChanged");
 
     public void Dispose()
     {
         _clientState.TerritoryChanged -= TerritoryChanged;
-        Stop();
+        Stop("Dispose");
     }
 
     private sealed class CurrentFight
@@ -296,5 +309,12 @@ internal sealed class CombatController : IDisposable
         public required List<ComplexCombatData> ComplexCombatDatas { get; init; }
 
         public HashSet<int> CompletedComplexDatas { get; } = new();
+    }
+
+    public enum EStatus
+    {
+        InCombat,
+        Moving,
+        Complete,
     }
 }
