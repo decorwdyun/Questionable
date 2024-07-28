@@ -58,8 +58,12 @@ internal sealed class MovementOverrideController
         // kholusia, random rocks
         new BlacklistedPoint(814, new(-324, 348.75f, -181.75f), new(-322.75076f, 347.0529f, -177.69328f), 3),
 
+        // yak t'el, rock near cenote jayunja
+        new BlacklistedPoint(1189, new(-115.75f, -213.75f, 336.5f), new(-112.40265f, -215.01514f, 339.0067f), 2),
+
         // sheshenewezi springs aetheryte: couple of barrel rings that get in the way if you go north
-        new BlacklistedPoint(1190, new(-292.29004f, 18.598045f, -133.83907f), new(-288.20895f, 18.652182f, -132.67445f), 4),
+        new BlacklistedPoint(1190, new(-292.29004f, 18.598045f, -133.83907f), new(-288.20895f, 18.652182f, -132.67445f),
+            4),
 
         // heritage found: yyupye's halo (farm, npc: Mahuwsa)
         new BlacklistedPoint(1191, new(-108f, 29.25f, -350.75f), new(-107.56289f, 29.008266f, -348.80087f)),
