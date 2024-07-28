@@ -81,6 +81,19 @@
       "Sequence": 255,
       "Steps": [
         {
+          "Position": {
+            "X": -53.025208,
+            "Y": 55.954834,
+            "Z": -671.29016
+          },
+          "StopDistance": 100,
+          "TerritoryId": 816,
+          "InteractionType": "WalkTo",
+          "DelaySecondsAtStart": 2,
+          "Fly": true,
+          "$": "Teleport won't work without a delay"
+        },
+        {
           "DataId": 1031809,
           "Position": {
             "X": -454.3069,

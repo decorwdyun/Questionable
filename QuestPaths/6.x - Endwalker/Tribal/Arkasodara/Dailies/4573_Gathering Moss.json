@@ -21,12 +21,98 @@
     {
       "Sequence": 1,
       "Steps": [
-
+        {
+          "Position": {
+            "X": 96.680695,
+            "Y": 38.981216,
+            "Z": 249.31558
+          },
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo",
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            -32
+          ]
+        },
+        {
+          "DataId": 2012907,
+          "Position": {
+            "X": 95.140015,
+            "Y": -29.404175,
+            "Z": 183.94751
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact",
+          "DisableNavmesh": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
+        },
+        {
+          "DataId": 2012906,
+          "Position": {
+            "X": 74.84546,
+            "Y": -35.41626,
+            "Z": 212.05457
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
+        },
+        {
+          "DataId": 2012905,
+          "Position": {
+            "X": 132.7992,
+            "Y": -25.558899,
+            "Z": 206.74438
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
+        }
       ]
     },
     {
       "Sequence": 255,
       "Steps": [
+        {
+          "Position": {
+            "X": 110.10968,
+            "Y": 5.2216215,
+            "Z": 201.52365
+          },
+          "TerritoryId": 957,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true,
+          "Mount": true,
+          "Fly": true
+        },
         {
           "DataId": 1042301,
           "Position": {
