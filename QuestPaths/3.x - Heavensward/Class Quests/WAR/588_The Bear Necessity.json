@@ -15,9 +15,11 @@
           "TerritoryId": 139,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Upper La Noscea - Camp Bronze Lake",
-          "SkipIf": [
-            "AetheryteShortcutIfInSameTerritory"
-          ]
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
+          }
         }
       ]
     },
@@ -72,9 +74,11 @@
           "InteractionType": "Interact",
           "Fly": true,
           "StopDistance": 0.25,
-          "SkipIf": [
-            "FlyingLocked"
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Locked"
+            }
+          }
         },
         {
           "DataId": 2005574,
@@ -86,9 +90,11 @@
           "TerritoryId": 398,
           "InteractionType": "Interact",
           "Fly": false,
-          "SkipIf": [
-            "FlyingUnlocked"
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
         }
       ]
     },
@@ -111,9 +117,11 @@
           ],
           "Fly": true,
           "StopDistance": 0.25,
-          "SkipIf": [
-            "FlyingLocked"
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Locked"
+            }
+          }
         },
         {
           "DataId": 2005573,
@@ -131,9 +139,11 @@
           ],
           "Fly": false,
           "StopDistance": 0.25,
-          "SkipIf": [
-            "FlyingUnlocked"
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
         }
       ]
     },
