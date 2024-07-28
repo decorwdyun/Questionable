@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Common;
 using Questionable.Controller.Steps.Shared;
 using Questionable.Controller.Utils;
+using Questionable.Data;
 using Questionable.Model;
 using Questionable.Model.V1;
 using AethernetShortcut = Questionable.Controller.Steps.Shared.AethernetShortcut;
@@ -21,7 +22,12 @@ internal static class UseItem
 {
     public const int VesperBayAetheryteTicket = 30362;
 
-    internal sealed class Factory(IServiceProvider serviceProvider, ILogger<Factory> logger) : ITaskFactory
+    internal sealed class Factory(
+        IServiceProvider serviceProvider,
+        IClientState clientState,
+        TerritoryData territoryData,
+        ILogger<Factory> logger)
+        : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -30,6 +36,7 @@ internal static class UseItem
 
             ArgumentNullException.ThrowIfNull(step.ItemId);
 
+            var unmount = serviceProvider.GetRequiredService<UnmountTask>();
             if (step.ItemId == VesperBayAetheryteTicket)
             {
                 unsafe
@@ -38,9 +45,20 @@ internal static class UseItem
                     if (inventoryManager->GetInventoryItemCount(step.ItemId.Value) == 0)
                         return CreateVesperBayFallbackTask();
                 }
+
+                var task = serviceProvider.GetRequiredService<Use>()
+                    .With(quest.QuestId, step.ItemId.Value, step.CompletionQuestVariablesFlags);
+                return
+                [
+                    unmount, task,
+                    new WaitConditionTask(() => clientState.TerritoryType == 140,
+                        $"Wait(territory: {territoryData.GetNameAndId(140)})"),
+                    serviceProvider.GetRequiredService<Move.MoveInternal>()
+                        .With(140, new(-408.92343f, 23.167036f, -351.16223f), 0.25f, dataId: null, disableNavMesh: true,
+                            sprint: false, fly: false)
+                ];
             }
 
-            var unmount = serviceProvider.GetRequiredService<UnmountTask>();
             if (step.GroundTarget == true)
             {
                 ITask task;
