@@ -50,13 +50,13 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 1003281,
+          "DataId": 1000168,
           "Position": {
-            "X": 97.520386,
-            "Y": 40.248554,
-            "Z": 81.1322
+            "X": -75.48645,
+            "Y": -0.5013741,
+            "Z": -5.081299
           },
-          "TerritoryId": 128,
+          "TerritoryId": 132,
           "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Limsa Lominsa",
           "AethernetShortcut": [
