@@ -1,4 +1,5 @@
-﻿using Dalamud.Interface.Colors;
+﻿using Dalamud.Interface;
+using Dalamud.Interface.Colors;
 using Dalamud.Interface.Utility.Raii;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using ImGuiNET;
@@ -92,7 +93,8 @@ internal sealed class QuestTooltipComponent
 
                 _uiUtils.ChecklistItem(FormatQuestUnlockName(qInfo), iconColor, icon);
 
-                DrawQuestUnlocks(qInfo, counter + 1);
+                if (counter <= 2 || icon != FontAwesomeIcon.Check)
+                    DrawQuestUnlocks(qInfo, counter + 1);
             }
         }
 
