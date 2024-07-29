@@ -17,14 +17,14 @@ internal sealed class QuestInfo
 
         string suffix = QuestId switch
         {
-            85 => " (LNC)",
-            108 => " (MRD)",
-            109 => " (ACN)",
-            123 => " (ARC)",
-            124 => " (CNJ)",
-            568 => " (GLA)",
-            569 => " (PGL)",
-            570 => " (THM)",
+            85 => " (Lancer)",
+            108 => " (Marauder)",
+            109 => " (Arcanist)",
+            123 => " (Archer)",
+            124 => " (Conjurer)",
+            568 => " (Gladiator)",
+            569 => " (Pugilist)",
+            570 => " (Thaumaturge)",
             673 => " (Ul'dah)",
             674 => " (Limsa/Gridania)",
             _ => "",
