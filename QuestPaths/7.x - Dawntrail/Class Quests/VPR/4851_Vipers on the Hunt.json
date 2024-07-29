@@ -260,7 +260,8 @@
           },
           "TerritoryId": 153,
           "InteractionType": "CompleteQuest",
-          "AetheryteShortcut": "South Shroud - Quarrymill"
+          "AetheryteShortcut": "South Shroud - Quarrymill",
+          "NextQuestId": 4852
         }
       ]
     }
