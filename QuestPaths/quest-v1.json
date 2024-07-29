@@ -720,6 +720,8 @@
                         "enum": [
                           "Esuna",
                           "Physick",
+                          "Buffet",
+                          "Fumigate",
                           "Siphon Snout",
                           "Red Gulal",
                           "Yellow Gulal",

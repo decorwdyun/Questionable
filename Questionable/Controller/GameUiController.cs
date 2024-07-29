@@ -59,6 +59,7 @@ internal sealed class GameUiController : IDisposable
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "AkatsukiNote", UnendingCodexPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "ContentsTutorial", ContentsTutorialPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "MultipleHelpWindow", MultipleHelpWindowPostSetup);
+        _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "HousingSelectBlock", HousingSelectBlockPostSetup);
     }
 
     internal unsafe void HandleCurrentDialogueChoices()
@@ -353,6 +354,7 @@ internal sealed class GameUiController : IDisposable
         SelectYesnoPostSetup(addonSelectYesno, false);
     }
 
+    [SuppressMessage("ReSharper", "RedundantJumpStatement")]
     private unsafe void SelectYesnoPostSetup(AddonSelectYesno* addonSelectYesno, bool checkAllSteps)
     {
         string? actualPrompt = addonSelectYesno->AtkUnitBase.AtkValues[0].ReadAtkString();
@@ -362,34 +364,42 @@ internal sealed class GameUiController : IDisposable
         _logger.LogTrace("Prompt: '{Prompt}'", actualPrompt);
 
         var currentQuest = _questController.StartedQuest;
-        if (currentQuest != null)
-        {
-            var quest = currentQuest.Quest;
-            if (checkAllSteps)
-            {
-                var sequence = quest.FindSequence(currentQuest.Sequence);
-                if (sequence != null && HandleDefaultYesNo(addonSelectYesno, quest,
-                        sequence.Steps.SelectMany(x => x.DialogueChoices).ToList(), actualPrompt))
-                    return;
-            }
-            else
-            {
-                var step = quest.FindSequence(currentQuest.Sequence)?.FindStep(currentQuest.Step);
-                if (step != null && HandleDefaultYesNo(addonSelectYesno, quest, step.DialogueChoices, actualPrompt))
-                    return;
-            }
-
-            if (HandleTravelYesNo(addonSelectYesno, currentQuest, actualPrompt))
-                return;
-        }
+        if (currentQuest != null && CheckQuestYesNo(addonSelectYesno, currentQuest, actualPrompt, checkAllSteps))
+            return;
 
         var simulatedQuest = _questController.SimulatedQuest;
         if (simulatedQuest != null && HandleTravelYesNo(addonSelectYesno, simulatedQuest, actualPrompt))
             return;
 
         var nextQuest = _questController.NextQuest;
-        if (nextQuest != null)
-            HandleTravelYesNo(addonSelectYesno, nextQuest, actualPrompt);
+        if (nextQuest != null && CheckQuestYesNo(addonSelectYesno, nextQuest, actualPrompt, checkAllSteps))
+            return;
+
+        return;
+    }
+
+    private unsafe bool CheckQuestYesNo(AddonSelectYesno* addonSelectYesno, QuestController.QuestProgress currentQuest,
+        string actualPrompt, bool checkAllSteps)
+    {
+        var quest = currentQuest.Quest;
+        if (checkAllSteps)
+        {
+            var sequence = quest.FindSequence(currentQuest.Sequence);
+            if (sequence != null && HandleDefaultYesNo(addonSelectYesno, quest,
+                    sequence.Steps.SelectMany(x => x.DialogueChoices).ToList(), actualPrompt))
+                return true;
+        }
+        else
+        {
+            var step = quest.FindSequence(currentQuest.Sequence)?.FindStep(currentQuest.Step);
+            if (step != null && HandleDefaultYesNo(addonSelectYesno, quest, step.DialogueChoices, actualPrompt))
+                return true;
+        }
+
+        if (HandleTravelYesNo(addonSelectYesno, currentQuest, actualPrompt))
+            return true;
+
+        return false;
     }
 
     private unsafe bool HandleDefaultYesNo(AddonSelectYesno* addonSelectYesno, Quest quest,
@@ -430,6 +440,13 @@ internal sealed class GameUiController : IDisposable
         if (_gameFunctions.ReturnRequestedAt >= DateTime.Now.AddSeconds(-2) && _returnRegex.IsMatch(actualPrompt))
         {
             _logger.LogInformation("Automatically confirming return...");
+            addonSelectYesno->AtkUnitBase.FireCallbackInt(0);
+            return true;
+        }
+
+        if (_questController.IsRunning && _gameGui.TryGetAddonByName("HousingSelectBlock", out AtkUnitBase* _))
+        {
+            _logger.LogInformation("Automatically confirming ward selection");
             addonSelectYesno->AtkUnitBase.FireCallbackInt(0);
             return true;
         }
@@ -601,6 +618,9 @@ internal sealed class GameUiController : IDisposable
         }
     }
 
+    /// <summary>
+    /// Opened e.g. the first time you open the duty finder window during Sastasha.
+    /// </summary>
     private unsafe void MultipleHelpWindowPostSetup(AddonEvent type, AddonArgs args)
     {
         if (_questController.StartedQuest?.Quest.QuestId == 245)
@@ -609,6 +629,16 @@ internal sealed class GameUiController : IDisposable
             AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
             addon->FireCallbackInt(-2);
             addon->FireCallbackInt(-1);
+        }
+    }
+
+    private unsafe void HousingSelectBlockPostSetup(AddonEvent type, AddonArgs args)
+    {
+        if (_questController.IsRunning)
+        {
+            _logger.LogInformation("Confirming selected housing ward");
+            AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
+            addon->FireCallbackInt(0);
         }
     }
 
@@ -643,6 +673,7 @@ internal sealed class GameUiController : IDisposable
 
     public void Dispose()
     {
+        _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "HousingSelectBlock", HousingSelectBlockPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "MultipleHelpWindow", MultipleHelpWindowPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "ContentsTutorial", ContentsTutorialPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "AkatsukiNote", UnendingCodexPostSetup);

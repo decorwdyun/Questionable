@@ -26,12 +26,7 @@
           }
         },
         {
-          "Position": {
-            "X": 89.036255,
-            "Y": 12,
-            "Z": 47.287598
-          },
-          "TerritoryId": 131,
+         "TerritoryId": 131,
           "InteractionType": "EquipItem",
           "ItemId": 41808,
           "SkipConditions": {
@@ -44,11 +39,6 @@
           "$": "This should probably call /equiprecommended if it exists"
         },
         {
-          "Position": {
-            "X": 89.036255,
-            "Y": 12,
-            "Z": 47.287598
-          },
           "TerritoryId": 131,
           "InteractionType": "EquipItem",
           "ItemId": 43178,
@@ -61,11 +51,6 @@
           }
         },
         {
-          "Position": {
-            "X": 89.036255,
-            "Y": 12,
-            "Z": 47.287598
-          },
           "TerritoryId": 131,
           "InteractionType": "EquipItem",
           "ItemId": 43179,
@@ -78,12 +63,7 @@
           }
         },
         {
-          "Position": {
-            "X": 89.036255,
-            "Y": 12,
-            "Z": 47.287598
-          },
-          "TerritoryId": 131,
+         "TerritoryId": 131,
           "InteractionType": "EquipItem",
           "ItemId": 43180,
           "SkipConditions": {

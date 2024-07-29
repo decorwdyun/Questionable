@@ -1,0 +1,149 @@
+{
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "Position": {
+            "X": 54.306763,
+            "Y": -8.321841,
+            "Z": 94.13281
+          },
+          "TerritoryId": 132,
+          "InteractionType": "UseItem",
+          "ItemId": 43538,
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
+        },
+        {
+          "TerritoryId": 132,
+          "InteractionType": "EquipItem",
+          "ItemId": 41809,
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          },
+          "$": "This should probably call /equiprecommended if it exists"
+        },
+        {
+          "TerritoryId": 132,
+          "InteractionType": "EquipItem",
+          "ItemId": 43183,
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
+        },
+        {
+          "TerritoryId": 132,
+          "InteractionType": "EquipItem",
+          "ItemId": 43184,
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
+        },
+        {
+          "TerritoryId": 132,
+          "InteractionType": "EquipItem",
+          "ItemId": 43185,
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
+        },
+        {
+          "TerritoryId": 132,
+          "InteractionType": "EquipItem",
+          "ItemId": 43186,
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
+        },
+        {
+          "TerritoryId": 132,
+          "InteractionType": "EquipItem",
+          "ItemId": 43187,
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
+        },
+        {
+          "DataId": 1049795,
+          "Position": {
+            "X": 54.306763,
+            "Y": -8.321841,
+            "Z": 94.13281
+          },
+          "TerritoryId": 132,
+          "InteractionType": "AcceptQuest"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1049794,
+          "Position": {
+            "X": -158.98376,
+            "Y": 4.51273,
+            "Z": -45.63977
+          },
+          "TerritoryId": 133,
+          "InteractionType": "Interact",
+          "AethernetShortcut": [
+            "[Gridania] Aetheryte Plaza",
+            "[Gridania] Conjurers' Guild"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1049796,
+          "Position": {
+            "X": 27.695068,
+            "Y": 16.16987,
+            "Z": -339.13184
+          },
+          "TerritoryId": 133,
+          "InteractionType": "SinglePlayerDuty",
+          "AethernetShortcut": [
+            "[Gridania] Conjurers' Guild",
+            "[Gridania] Lancers' Guild"
+          ]
+        }
+      ]
+    }
+  ]
+}
