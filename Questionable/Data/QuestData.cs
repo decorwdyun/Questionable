@@ -17,6 +17,7 @@ internal sealed class QuestData
         _quests = dataManager.GetExcelSheet<Quest>()!
             .Where(x => x.RowId > 0)
             .Where(x => x.IssuerLocation.Row > 0)
+            .Where(x => x.Festival.Row == 0)
             .Select(x => new QuestInfo(x))
             .ToImmutableDictionary(x => x.QuestId, x => x);
     }
@@ -34,4 +35,13 @@ internal sealed class QuestData
     }
 
     public bool IsIssuerOfAnyQuest(uint targetId) => _quests.Values.Any(x => x.IssuerDataId == targetId);
+
+    public List<QuestInfo> GetAllByJournalGenre(uint journalGenre)
+    {
+        return _quests.Values
+            .Where(x => x.JournalGenre == journalGenre)
+            .OrderBy(x => x.SortKey)
+            .ThenBy(x => x.QuestId)
+            .ToList();
+    }
 }

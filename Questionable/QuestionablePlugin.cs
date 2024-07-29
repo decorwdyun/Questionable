@@ -89,6 +89,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<ChatFunctions>();
         serviceCollection.AddSingleton<AetherCurrentData>();
         serviceCollection.AddSingleton<AetheryteData>();
+        serviceCollection.AddSingleton<JournalData>();
         serviceCollection.AddSingleton<QuestData>();
         serviceCollection.AddSingleton<TerritoryData>();
         serviceCollection.AddSingleton<NavmeshIpc>();
@@ -159,6 +160,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<ActiveQuestComponent>();
         serviceCollection.AddSingleton<ARealmRebornComponent>();
         serviceCollection.AddSingleton<CreationUtilsComponent>();
+        serviceCollection.AddSingleton<QuestTooltipComponent>();
         serviceCollection.AddSingleton<QuickAccessButtonsComponent>();
         serviceCollection.AddSingleton<RemainingTasksComponent>();
 
@@ -167,6 +169,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<DebugOverlay>();
         serviceCollection.AddSingleton<QuestSelectionWindow>();
         serviceCollection.AddSingleton<QuestValidationWindow>();
+        serviceCollection.AddSingleton<JournalProgressWindow>();
     }
 
     private static void AddQuestValidators(ServiceCollection serviceCollection)

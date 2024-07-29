@@ -44,6 +44,8 @@ internal sealed class QuestRegistry
     public int ValidationIssueCount => _questValidator.IssueCount;
     public int ValidationErrorCount => _questValidator.ErrorCount;
 
+    public event EventHandler? Reloaded;
+
     public void Reload()
     {
         _questValidator.Reset();
@@ -63,6 +65,7 @@ internal sealed class QuestRegistry
         }
 
         ValidateQuests();
+        Reloaded?.Invoke(this, EventArgs.Empty);
         _logger.LogInformation("Loaded {Count} quests in total", _quests.Count);
     }
 

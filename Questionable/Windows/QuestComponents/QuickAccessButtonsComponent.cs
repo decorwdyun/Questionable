@@ -25,15 +25,25 @@ internal sealed class QuickAccessButtonsComponent
     private readonly QuestRegistry _questRegistry;
     private readonly NavmeshIpc _navmeshIpc;
     private readonly QuestValidationWindow _questValidationWindow;
+    private readonly JournalProgressWindow _journalProgressWindow;
     private readonly IClientState _clientState;
     private readonly ICondition _condition;
     private readonly IFramework _framework;
     private readonly ICommandManager _commandManager;
 
-    public QuickAccessButtonsComponent(QuestController questController, MovementController movementController,
-        GameUiController gameUiController, GameFunctions gameFunctions, ChatFunctions chatFunctions,
-        QuestRegistry questRegistry, NavmeshIpc navmeshIpc, QuestValidationWindow questValidationWindow,
-        IClientState clientState, ICondition condition, IFramework framework, ICommandManager commandManager)
+    public QuickAccessButtonsComponent(QuestController questController,
+        MovementController movementController,
+        GameUiController gameUiController,
+        GameFunctions gameFunctions,
+        ChatFunctions chatFunctions,
+        QuestRegistry questRegistry,
+        NavmeshIpc navmeshIpc,
+        QuestValidationWindow questValidationWindow,
+        JournalProgressWindow journalProgressWindow,
+        IClientState clientState,
+        ICondition condition,
+        IFramework framework,
+        ICommandManager commandManager)
     {
         _questController = questController;
         _movementController = movementController;
@@ -43,6 +53,7 @@ internal sealed class QuickAccessButtonsComponent
         _questRegistry = questRegistry;
         _navmeshIpc = navmeshIpc;
         _questValidationWindow = questValidationWindow;
+        _journalProgressWindow = journalProgressWindow;
         _clientState = clientState;
         _condition = condition;
         _framework = framework;
@@ -79,6 +90,11 @@ internal sealed class QuickAccessButtonsComponent
 
         if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.RedoAlt,"Reload Data"))
             Reload();
+
+        ImGui.SameLine();
+        if (ImGuiComponents.IconButton(FontAwesomeIcon.ChartColumn))
+            _journalProgressWindow.IsOpen = true;
+
 
         if (_questRegistry.ValidationIssueCount > 0)
         {

@@ -14,7 +14,23 @@ internal sealed class QuestInfo
     public QuestInfo(ExcelQuest quest)
     {
         QuestId = (ushort)(quest.RowId & 0xFFFF);
-        Name = quest.Name.ToString();
+
+        string suffix = QuestId switch
+        {
+            85 => " (LNC)",
+            108 => " (MRD)",
+            109 => " (ACN)",
+            123 => " (ARC)",
+            124 => " (CNJ)",
+            568 => " (GLA)",
+            569 => " (PGL)",
+            570 => " (THM)",
+            673 => " (Ul'dah)",
+            674 => " (Limsa/Gridania)",
+            _ => "",
+        };
+
+        Name = $"{quest.Name}{suffix}";
         Level = quest.ClassJobLevel0;
         IssuerDataId = quest.IssuerStart;
         IsRepeatable = quest.IsRepeatable;
@@ -22,6 +38,8 @@ internal sealed class QuestInfo
         PreviousQuestJoin = (QuestJoin)quest.PreviousQuestJoin;
         QuestLocks = quest.QuestLock.Select(x => (ushort)(x.Row & 0xFFFFF)).Where(x => x != 0).ToImmutableList();
         QuestLockJoin = (QuestJoin)quest.QuestLockJoin;
+        JournalGenre = quest.JournalGenre?.Row;
+        SortKey = quest.SortKey;
         IsMainScenarioQuest = quest.JournalGenre?.Value?.JournalCategory?.Value?.JournalSection?.Row is 0 or 1;
         CompletesInstantly = quest.ToDoCompleteSeq[0] == 0;
         PreviousInstanceContent = quest.InstanceContent.Select(x => (ushort)x.Row).Where(x => x != 0).ToList();
@@ -42,6 +60,8 @@ internal sealed class QuestInfo
     public QuestJoin QuestLockJoin { get; }
     public List<ushort> PreviousInstanceContent { get; }
     public QuestJoin PreviousInstanceContentJoin { get; }
+    public uint? JournalGenre { get; }
+    public ushort SortKey { get; set; }
     public bool IsMainScenarioQuest { get; }
     public bool CompletesInstantly { get; }
     public GrandCompany GrandCompany { get; }
