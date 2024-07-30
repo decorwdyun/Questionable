@@ -48,12 +48,7 @@ internal sealed class DebugOverlay : Window
 
     public ushort? HighlightedQuest { get; set; }
 
-    public override bool DrawConditions()
-    {
-        return _configuration.Advanced.DebugOverlay && _clientState is
-                   { IsLoggedIn: true, LocalPlayer: not null, IsPvPExcludingDen: false } &&
-               !_condition[ConditionFlag.OccupiedInCutSceneEvent];
-    }
+    public override bool DrawConditions() => _configuration.Advanced.DebugOverlay;
 
     public override void PreDraw()
     {
@@ -62,6 +57,12 @@ internal sealed class DebugOverlay : Window
 
     public override void Draw()
     {
+        if (_condition[ConditionFlag.OccupiedInCutSceneEvent])
+            return;
+
+        if (_clientState is not { IsLoggedIn: true, LocalPlayer: not null, IsPvPExcludingDen: false })
+            return;
+
         DrawCurrentQuest();
         DrawHighlightedQuest();
     }
