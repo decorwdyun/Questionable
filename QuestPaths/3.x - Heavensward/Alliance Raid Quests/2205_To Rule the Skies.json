@@ -27,6 +27,38 @@
           "ContentFinderConditionId": 120
         }
       ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "Position": {
+            "X": 0,
+            "Y": 0,
+            "Z": 0
+          },
+          "TerritoryId": 1,
+          "InteractionType": "WalkTo",
+          "Comment": "Filler"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1016137,
+          "Position": {
+            "X": 145.61682,
+            "Y": -13.626623,
+            "Z": -868.2536
+          },
+          "StopDistance": 7,
+          "TerritoryId": 401,
+          "InteractionType": "CompleteQuest",
+          "NextQuestId": 2285
+        }
+      ]
     }
   ]
 }

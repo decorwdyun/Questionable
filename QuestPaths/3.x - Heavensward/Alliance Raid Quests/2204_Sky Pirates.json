@@ -95,7 +95,8 @@
           },
           "StopDistance": 7,
           "TerritoryId": 401,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "NextQuestId": 2205
         }
       ]
     }
