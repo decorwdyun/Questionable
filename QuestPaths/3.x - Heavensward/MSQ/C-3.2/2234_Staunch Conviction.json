@@ -6,14 +6,20 @@
       "Sequence": 0,
       "Steps": [
         {
-          "DataId": 1012068,
+          "DataId": 1016564,
           "Position": {
-            "X": -597.0398,
-            "Y": -51.05185,
-            "Z": -387.0451
+            "X": 481.40686,
+            "Y": 225.00232,
+            "Z": 793.08765
           },
-          "TerritoryId": 401,
-          "InteractionType": "AcceptQuest"
+          "TerritoryId": 397,
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Coerthas Western Highlands - Falcon's Nest",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
+          }
         }
       ]
     },
@@ -21,34 +27,36 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 1012072,
+          "DataId": 1011231,
           "Position": {
-            "X": -568.5969,
-            "Y": -50.649483,
-            "Z": -452.10956
+            "X": 503.1051,
+            "Y": 217.95148,
+            "Z": 790.2189
           },
-          "TerritoryId": 401,
+          "TerritoryId": 397,
           "InteractionType": "Interact",
-          "$": "0 0 0 0 0 0 -> 16 16 0 0 0 64",
+          "Fly": true,
+          "$": "0 0 0 0 0 0 -> 16 1 0 0 0 128",
           "CompletionQuestVariablesFlags": [
             null,
             null,
             null,
             null,
             null,
-            64
+            128
           ]
         },
         {
-          "DataId": 1012071,
+          "DataId": 1016568,
           "Position": {
-            "X": -568.3833,
-            "Y": -50.605247,
-            "Z": -449.11877
+            "X": 465.5984,
+            "Y": 217.95128,
+            "Z": 752.7428
           },
-          "TerritoryId": 401,
+          "TerritoryId": 397,
           "InteractionType": "Interact",
-          "$": "16 16 0 0 0 64 -> 32 17 0 0 0 96",
+          "Fly": true,
+          "$": "16 1 0 0 0 128 -> 32 17 0 0 0 160",
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -59,13 +67,13 @@
           ]
         },
         {
-          "DataId": 1012069,
+          "DataId": 1011236,
           "Position": {
-            "X": -647.0283,
-            "Y": -51.05719,
-            "Z": -417.74628
+            "X": 446.00586,
+            "Y": 217.95142,
+            "Z": 764.06494
           },
-          "TerritoryId": 401,
+          "TerritoryId": 397,
           "InteractionType": "Interact",
           "CompletionQuestVariablesFlags": [
             null,
@@ -73,7 +81,7 @@
             null,
             null,
             null,
-            128
+            64
           ]
         }
       ]
@@ -82,17 +90,15 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 1014171,
+          "DataId": 1016565,
           "Position": {
-            "X": -373.43408,
-            "Y": -55.21164,
-            "Z": -630.0908
+            "X": 503.34937,
+            "Y": 217.95154,
+            "Z": 760.46387
           },
-          "TerritoryId": 401,
+          "TerritoryId": 397,
           "InteractionType": "CompleteQuest",
-          "ChatMessage": {
-            "Key": "TEXT_HEAVNZ706_01910_SAY_000_000"
-          }
+          "Fly": true
         }
       ]
     }

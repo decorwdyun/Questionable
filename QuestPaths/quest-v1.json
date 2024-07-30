@@ -341,7 +341,7 @@
                       "InteractionType": {
                         "const": "SinglePlayerDuty"
                       },
-                      "Emote":  {
+                      "Emote": {
                         "not": true
                       }
                     }
@@ -677,7 +677,14 @@
                   "if": {
                     "properties": {
                       "InteractionType": {
-                        "const": "Say"
+                        "anyOf": [
+                          {
+                            "const": "Say"
+                          },
+                          {
+                            "const": "CompleteQuest"
+                          }
+                        ]
                       }
                     }
                   },
@@ -698,7 +705,18 @@
                           "Key"
                         ]
                       }
-                    },
+                    }
+                  }
+                },
+                {
+                  "if": {
+                    "properties": {
+                      "InteractionType": {
+                        "const": "Say"
+                      }
+                    }
+                  },
+                  "then": {
                     "required": [
                       "ChatMessage"
                     ]
