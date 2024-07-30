@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
+using Dalamud.Game.Text;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
@@ -103,7 +104,7 @@ internal sealed class ActiveQuestComponent
         {
             using var _ = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudRed);
             ImGui.TextUnformatted(
-                $"Simulated Quest: {currentQuest.Quest.Info.Name} / {currentQuest.Sequence} / {currentQuest.Step}");
+                $"Simulated Quest: {Shorten(currentQuest.Quest.Info.Name)} / {currentQuest.Sequence} / {currentQuest.Step}");
         }
         else
         {
@@ -111,7 +112,7 @@ internal sealed class ActiveQuestComponent
             if (startedQuest != null)
             {
                 ImGui.TextUnformatted(
-                    $"Quest: {startedQuest.Quest.Info.Name} / {startedQuest.Sequence} / {startedQuest.Step}");
+                    $"Quest: {Shorten(startedQuest.Quest.Info.Name)} / {startedQuest.Sequence} / {startedQuest.Step}");
 
                 if (startedQuest.Quest.Root.Disabled)
                 {
@@ -133,7 +134,7 @@ internal sealed class ActiveQuestComponent
             {
                 using var _ = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
                 ImGui.TextUnformatted(
-                    $"Next Quest: {currentQuest.Quest.Info.Name} / {currentQuest.Sequence} / {currentQuest.Step}");
+                    $"Next Quest: {Shorten(currentQuest.Quest.Info.Name)} / {currentQuest.Sequence} / {currentQuest.Step}");
             }
         }
     }
@@ -362,5 +363,13 @@ internal sealed class ActiveQuestComponent
                 _questController.Stop("ClearSim");
             }
         }
+    }
+
+    private static string Shorten(string text)
+    {
+        if (text.Length > 35)
+            return string.Concat(text.AsSpan(0, 35).Trim(), ((SeIconChar)57434).ToIconString());
+
+        return text;
     }
 }
