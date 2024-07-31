@@ -6,6 +6,7 @@ namespace Questionable.Model.V1;
 [JsonConverter(typeof(ActionConverter))]
 public enum EAction
 {
+    Cure = 120,
     Esuna = 7568,
     Physick = 190,
     Buffet = 4931,

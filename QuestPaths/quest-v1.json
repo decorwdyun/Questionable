@@ -736,6 +736,7 @@
                         "type": "string",
                         "description": "The action to use",
                         "enum": [
+                          "Cure",
                           "Esuna",
                           "Physick",
                           "Buffet",
