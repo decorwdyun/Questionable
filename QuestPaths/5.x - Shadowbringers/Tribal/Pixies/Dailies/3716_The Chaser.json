@@ -31,7 +31,35 @@
           "InteractionType": "UseItem",
           "ItemId": 2002943,
           "AetheryteShortcut": "Il Mheg - Pia Enni",
-          "Fly": true
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [1],
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "DataId": 1032202,
+          "Position": {
+            "X": 10.849121,
+            "Y": 100.161,
+            "Z": -886.22876
+          },
+          "TerritoryId": 816,
+          "InteractionType": "UseItem",
+          "ItemId": 2002943,
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [2],
+            null,
+            null,
+            null
+          ]
         }
       ]
     },

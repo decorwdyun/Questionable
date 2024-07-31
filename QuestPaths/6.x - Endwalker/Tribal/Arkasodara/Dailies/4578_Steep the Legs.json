@@ -1,7 +1,6 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -21,7 +20,71 @@
     {
       "Sequence": 1,
       "Steps": [
-
+        {
+          "DataId": 2012915,
+          "Position": {
+            "X": -383.505,
+            "Y": 1.0527954,
+            "Z": 362.99683
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
+          "KillEnemyDataIds": [
+            14680
+          ],
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
+        },
+        {
+          "DataId": 2012914,
+          "Position": {
+            "X": -399.83215,
+            "Y": 1.6326294,
+            "Z": 291.73718
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
+        },
+        {
+          "DataId": 2012913,
+          "Position": {
+            "X": -444.0528,
+            "Y": 0.38146973,
+            "Z": 249.53076
+          },
+          "TerritoryId": 957,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
+          "KillEnemyDataIds": [
+            14680
+          ],
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
+        }
       ]
     },
     {
