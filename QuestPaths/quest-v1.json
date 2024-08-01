@@ -182,6 +182,9 @@
                         "Never": {
                           "type": "boolean"
                         },
+                        "CompletionQuestVariablesFlags": {
+                          "$ref": "#/$defs/CompletionFlags"
+                        },
                         "Flying": {
                           "type": "string",
                           "enum": [
@@ -237,7 +240,8 @@
                             "WakingSandsMainArea"
                           ]
                         }
-                      }
+                      },
+                      "additionalProperties": false
                     },
                     "AetheryteShortcutIf": {
                       "type": "object",
@@ -248,7 +252,8 @@
                         "InSameTerritory": {
                           "type": "boolean"
                         }
-                      }
+                      },
+                      "additionalProperties": false
                     },
                     "AethernetShortcutIf": {
                       "type": "object",
@@ -259,7 +264,8 @@
                         "InSameTerritory": {
                           "type": "boolean"
                         }
-                      }
+                      },
+                      "additionalProperties": false
                     }
                   },
                   "additionalProperties": false
@@ -1309,28 +1315,54 @@
       "type": "array",
       "description": "Quest Variables that dictate whether or not this step is skipped: null is don't check, positive values need to be set, negative values need to be unset",
       "items": {
-        "type": [
-          "integer",
-          "null"
-        ],
-        "enum": [
-          null,
-          1,
-          2,
-          4,
-          8,
-          16,
-          32,
-          64,
-          128,
-          -1,
-          -2,
-          -4,
-          -8,
-          -16,
-          -32,
-          -64,
-          -128
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "High": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "minimum": 0,
+                "maximum": 15
+              },
+              "Low": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "minimum": 0,
+                "maximum": 15
+              },
+              "Negative": {
+                "type": "boolean"
+              },
+              "Mode": {
+                "type": "string",
+                "enum": [
+                  "Bitwise",
+                  "Exact"
+                ]
+              }
+            }
+          },
+          {
+            "type": "number",
+            "enum": [
+              1,
+              2,
+              4,
+              8,
+              16,
+              32,
+              64,
+              128
+            ]
+          },
+          {
+            "type": "null"
+          }
         ]
       },
       "minItems": 6,

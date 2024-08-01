@@ -109,14 +109,18 @@
           },
           "TerritoryId": 960,
           "InteractionType": "WalkTo",
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -128
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                128
+              ]
+            }
+          }
         },
         {
           "DataId": 2012354,

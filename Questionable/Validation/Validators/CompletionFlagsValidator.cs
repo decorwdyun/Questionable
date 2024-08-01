@@ -3,6 +3,7 @@ using System.Linq;
 using System.Numerics;
 using Questionable.Controller.Utils;
 using Questionable.Model;
+using Questionable.Model.V1;
 
 namespace Questionable.Validation.Validators;
 
@@ -19,10 +20,13 @@ internal sealed class CompletionFlagsValidator : IQuestValidator
                     {
                         return Enumerable.Range(0, 6).Select(y =>
                             {
-                                short? value = x.CompletionQuestVariablesFlags[y];
-                                if (value == null || value.Value < 0)
+                                QuestWorkValue? value = x.CompletionQuestVariablesFlags[y];
+                                if (value == null)
                                     return 0;
-                                return (long)BitOperations.RotateLeft((ulong)value.Value, 8 * y);
+
+                                // this isn't perfect, as it assumes {High: 1, Low: null} == {High: 1, Low: 0}
+                                return (long)BitOperations.RotateLeft(
+                                    (ulong)(value.High.GetValueOrDefault() * 16 + value.Low.GetValueOrDefault()), 8 * y);
                             })
                             .Sum();
                     }
@@ -46,7 +50,8 @@ internal sealed class CompletionFlagsValidator : IQuestValidator
                         Step = i,
                         Type = EIssueType.DuplicateCompletionFlags,
                         Severity = EIssueSeverity.Error,
-                        Description = $"Duplicate completion flags: {string.Join(", ", sequence.Steps[i].CompletionQuestVariablesFlags)}",
+                        Description =
+                            $"Duplicate completion flags: {string.Join(", ", sequence.Steps[i].CompletionQuestVariablesFlags)}",
                     };
                 }
             }

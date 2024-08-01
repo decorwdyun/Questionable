@@ -15,6 +15,7 @@ public sealed class QuestWorkConfigConverter : JsonConverter<QuestWorkValue>
             throw new JsonException();
 
         byte? high = null, low = null;
+        EQuestWorkMode mode = EQuestWorkMode.Bitwise;
         while (reader.Read())
         {
             switch (reader.TokenType)
@@ -34,6 +35,10 @@ public sealed class QuestWorkConfigConverter : JsonConverter<QuestWorkValue>
                             low = reader.GetByte();
                             break;
 
+                        case nameof(QuestWorkValue.Mode):
+                            mode = new QuestWorkModeConverter().Read(ref reader, typeof(EQuestWorkMode), options);
+                            break;
+
                         default:
                             throw new JsonException();
                     }
@@ -41,7 +46,7 @@ public sealed class QuestWorkConfigConverter : JsonConverter<QuestWorkValue>
                     break;
 
                 case JsonTokenType.EndObject:
-                    return new QuestWorkValue(high, low);
+                    return new QuestWorkValue(high, low, mode);
 
                 default:
                     throw new JsonException();

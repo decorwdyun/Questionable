@@ -213,7 +213,9 @@ public static class RoslynShortcuts
                                 {
                                     Argument(LiteralValue(qwv.High)),
                                     Token(SyntaxKind.CommaToken),
-                                    Argument(LiteralValue(qwv.Low))
+                                    Argument(LiteralValue(qwv.Low)),
+                                    Token(SyntaxKind.CommaToken),
+                                    Argument(LiteralValue(qwv.Mode))
                                 })));
             }
             else if (value is List<QuestWorkValue> list)
@@ -254,6 +256,9 @@ public static class RoslynShortcuts
                                 SyntaxNodeList(
                                     Assignment(nameof(SkipStepConditions.Never), skipStepConditions.Never,
                                             emptyStep.Never)
+                                        .AsSyntaxNodeOrToken(),
+                                    AssignmentList(nameof(SkipStepConditions.CompletionQuestVariablesFlags),
+                                            skipStepConditions.CompletionQuestVariablesFlags)
                                         .AsSyntaxNodeOrToken(),
                                     Assignment(nameof(SkipStepConditions.Flying), skipStepConditions.Flying,
                                             emptyStep.Flying)

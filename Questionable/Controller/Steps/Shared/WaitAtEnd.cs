@@ -27,7 +27,7 @@ internal static class WaitAtEnd
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
-            if (step.CompletionQuestVariablesFlags.Count == 6 && step.CompletionQuestVariablesFlags.Any(x => x is > 0))
+            if (step.CompletionQuestVariablesFlags.Count == 6 && QuestWorkUtils.HasCompletionFlags(step.CompletionQuestVariablesFlags))
             {
                 var task = serviceProvider.GetRequiredService<WaitForCompletionFlags>()
                     .With(quest, step);
@@ -164,7 +164,7 @@ internal static class WaitAtEnd
     {
         public Quest Quest { get; set; } = null!;
         public QuestStep Step { get; set; } = null!;
-        public IList<short?> Flags { get; set; } = null!;
+        public IList<QuestWorkValue?> Flags { get; set; } = null!;
 
         public ITask With(Quest quest, QuestStep step)
         {
@@ -180,13 +180,13 @@ internal static class WaitAtEnd
         {
             QuestWork? questWork = gameFunctions.GetQuestEx(Quest.QuestId);
             return questWork != null &&
-                   QuestWorkUtils.MatchesQuestWork(Step.CompletionQuestVariablesFlags, questWork.Value, false)
+                   QuestWorkUtils.MatchesQuestWork(Step.CompletionQuestVariablesFlags, questWork.Value)
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
         }
 
         public override string ToString() =>
-            $"Wait(QW: {string.Join(", ", Flags.Select(x => x?.ToString(CultureInfo.InvariantCulture) ?? "-"))})";
+            $"Wait(QW: {string.Join(", ", Flags.Select(x => x?.ToString() ?? "-"))})";
     }
 
     internal sealed class WaitObjectAtPosition(GameFunctions gameFunctions) : ITask

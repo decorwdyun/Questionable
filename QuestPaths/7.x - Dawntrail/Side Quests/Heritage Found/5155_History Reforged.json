@@ -29,14 +29,18 @@
           "TerritoryId": 1191,
           "InteractionType": "WalkTo",
           "Fly": true,
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -128
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                128
+              ]
+            }
+          }
         },
         {
           "DataId": 2014091,
@@ -85,14 +89,18 @@
           "TerritoryId": 1191,
           "InteractionType": "WalkTo",
           "Fly": true,
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -32
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                32
+              ]
+            }
+          }
         },
         {
           "DataId": 2014093,

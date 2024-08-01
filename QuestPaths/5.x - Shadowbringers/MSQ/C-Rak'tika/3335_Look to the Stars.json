@@ -79,14 +79,18 @@
             "StopDistance": 2,
             "Type": "RepeatedJumps"
           },
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -16
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                16
+              ]
+            }
+          }
         },
         {
           "DataId": 2009890,
@@ -128,14 +132,18 @@
             "StopDistance": 2,
             "Type": "RepeatedJumps"
           },
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -128
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                128
+              ]
+            }
+          }
         },
         {
           "DataId": 2009887,
@@ -166,14 +174,18 @@
           "InteractionType": "WalkTo",
           "DisableNavmesh": true,
           "Mount": true,
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -64
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                64
+              ]
+            }
+          }
         },
         {
           "Position": {
@@ -196,14 +208,18 @@
             "StopDistance": 2,
             "Type": "RepeatedJumps"
           },
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -64
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                64
+              ]
+            }
+          }
         },
         {
           "DataId": 2009888,
@@ -245,14 +261,18 @@
             "StopDistance": 2,
             "Type": "RepeatedJumps"
           },
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -32
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                32
+              ]
+            }
+          }
         },
         {
           "DataId": 2009889,

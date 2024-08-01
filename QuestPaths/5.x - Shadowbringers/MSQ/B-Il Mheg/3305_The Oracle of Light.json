@@ -74,14 +74,18 @@
           },
           "TerritoryId": 813,
           "InteractionType": "WalkTo",
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -64
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                64
+              ]
+            }
+          }
         },
         {
           "DataId": 1028952,

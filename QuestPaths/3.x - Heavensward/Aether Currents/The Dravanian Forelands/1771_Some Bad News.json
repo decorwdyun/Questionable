@@ -28,14 +28,18 @@
           },
           "TerritoryId": 398,
           "InteractionType": "WalkTo",
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -32
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                32
+              ]
+            }
+          }
         },
         {
           "Position": {
@@ -46,14 +50,18 @@
           "TerritoryId": 398,
           "InteractionType": "WalkTo",
           "DisableNavmesh": true,
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -32
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                32
+              ]
+            }
+          }
         },
         {
           "Position": {
@@ -64,14 +72,18 @@
           "TerritoryId": 398,
           "InteractionType": "WalkTo",
           "DisableNavmesh": true,
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -32
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                32
+              ]
+            }
+          }
         },
         {
           "DataId": 1011932,
@@ -99,14 +111,18 @@
           },
           "TerritoryId": 398,
           "InteractionType": "WalkTo",
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -64
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                64
+              ]
+            }
+          }
         },
         {
           "Position": {
@@ -117,14 +133,18 @@
           "TerritoryId": 398,
           "InteractionType": "WalkTo",
           "DisableNavmesh": true,
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -64
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                64
+              ]
+            }
+          }
         },
         {
           "DataId": 1011924,

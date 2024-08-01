@@ -28,5 +28,6 @@ public static partial class AssemblyQuestLoader
     public static Stream QuestSchema =>
         typeof(AssemblyQuestLoader).Assembly.GetManifestResourceStream("Questionable.QuestPaths.QuestSchema")!;
 
+    [SuppressMessage("ReSharper", "UnusedMember.Local")]
     private static void AddQuest(ushort questId, QuestRoot root) => _quests![questId] = root;
 }

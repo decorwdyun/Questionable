@@ -28,18 +28,20 @@
           },
           "TerritoryId": 155,
           "InteractionType": "WalkTo",
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -128
-          ],
           "AetheryteShortcut": "Coerthas Central Highlands - Camp Dragonhead",
           "SkipConditions": {
             "AetheryteShortcutIf": {
               "NotInSameTerritory": true
+            },
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                128
+              ]
             }
           },
           "Fly": true
@@ -56,14 +58,18 @@
           "KillEnemyDataIds": [
             1918
           ],
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -128
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                128
+              ]
+            }
+          }
         },
         {
           "DataId": 2002308,
@@ -127,14 +133,18 @@
           "InteractionType": "UseItem",
           "ItemId": 30362,
           "TargetTerritoryId": 140,
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -32
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                32
+              ]
+            }
+          }
         },
         {
           "Position": {
@@ -148,14 +158,18 @@
           "KillEnemyDataIds": [
             1920
           ],
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -32
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                32
+              ]
+            }
+          }
         },
         {
           "DataId": 2002310,

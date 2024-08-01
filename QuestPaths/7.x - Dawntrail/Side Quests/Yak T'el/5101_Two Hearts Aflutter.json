@@ -29,14 +29,18 @@
           "TerritoryId": 1189,
           "InteractionType": "WalkTo",
           "Fly": true,
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -128
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                128
+              ]
+            }
+          }
         },
         {
           "DataId": 1051049,
@@ -48,14 +52,18 @@
           "StopDistance": 4,
           "TerritoryId": 1189,
           "InteractionType": "Interact",
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -128
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                128
+              ]
+            }
+          }
         },
         {
           "Position": {
@@ -66,14 +74,18 @@
           "TerritoryId": 1189,
           "InteractionType": "WalkTo",
           "Fly": true,
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -32
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                32
+              ]
+            }
+          }
         },
         {
           "DataId": 1051051,
@@ -102,14 +114,18 @@
           "TerritoryId": 1189,
           "InteractionType": "WalkTo",
           "Fly": true,
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -64
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                64
+              ]
+            }
+          }
         },
         {
           "DataId": 1051050,

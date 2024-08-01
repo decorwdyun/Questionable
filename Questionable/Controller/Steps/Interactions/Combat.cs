@@ -82,10 +82,10 @@ internal static class Combat
     {
         private bool _isLastStep;
         private CombatController.CombatData _combatData = null!;
-        private IList<short?> _completionQuestVariableFlags = null!;
+        private IList<QuestWorkValue?> _completionQuestVariableFlags = null!;
 
         public ITask With(ushort questId, bool isLastStep, EEnemySpawnType enemySpawnType, IList<uint> killEnemyDataIds,
-            IList<short?> completionQuestVariablesFlags, IList<ComplexCombatData> complexCombatData)
+            IList<QuestWorkValue?> completionQuestVariablesFlags, IList<ComplexCombatData> complexCombatData)
         {
             _isLastStep = isLastStep;
             _combatData = new CombatController.CombatData
@@ -113,7 +113,7 @@ internal static class Combat
                 if (questWork == null)
                     return ETaskResult.StillRunning;
 
-                if (QuestWorkUtils.MatchesQuestWork(_completionQuestVariableFlags, questWork.Value, false))
+                if (QuestWorkUtils.MatchesQuestWork(_completionQuestVariableFlags, questWork.Value))
                     return ETaskResult.TaskComplete;
                 else
                     return ETaskResult.StillRunning;

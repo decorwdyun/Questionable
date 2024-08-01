@@ -119,7 +119,7 @@ internal static class UseItem
 
         public ushort? QuestId { get; set; }
         public uint ItemId { get; set; }
-        public IList<short?> CompletionQuestVariablesFlags { get; set; } = new List<short?>();
+        public IList<QuestWorkValue?> CompletionQuestVariablesFlags { get; set; } = new List<QuestWorkValue?>();
         public bool StartingCombat { get; set; }
 
         protected abstract bool UseItem();
@@ -145,7 +145,7 @@ internal static class UseItem
             {
                 QuestWork? questWork = gameFunctions.GetQuestEx(QuestId.Value);
                 if (questWork != null &&
-                    QuestWorkUtils.MatchesQuestWork(CompletionQuestVariablesFlags, questWork.Value, false))
+                    QuestWorkUtils.MatchesQuestWork(CompletionQuestVariablesFlags, questWork.Value))
                     return ETaskResult.TaskComplete;
             }
 
@@ -202,7 +202,7 @@ internal static class UseItem
 
         public uint DataId { get; set; }
 
-        public ITask With(ushort? questId, uint dataId, uint itemId, IList<short?> completionQuestVariablesFlags)
+        public ITask With(ushort? questId, uint dataId, uint itemId, IList<QuestWorkValue?> completionQuestVariablesFlags)
         {
             QuestId = questId;
             DataId = dataId;
@@ -226,7 +226,7 @@ internal static class UseItem
 
         public Vector3 Position { get; set; }
 
-        public ITask With(ushort? questId, Vector3 position, uint itemId, IList<short?> completionQuestVariablesFlags)
+        public ITask With(ushort? questId, Vector3 position, uint itemId, IList<QuestWorkValue?> completionQuestVariablesFlags)
         {
             QuestId = questId;
             Position = position;
@@ -248,7 +248,7 @@ internal static class UseItem
 
         public uint DataId { get; set; }
 
-        public ITask With(ushort? questId, uint dataId, uint itemId, IList<short?> completionQuestVariablesFlags,
+        public ITask With(ushort? questId, uint dataId, uint itemId, IList<QuestWorkValue?> completionQuestVariablesFlags,
             bool startingCombat = false)
         {
             QuestId = questId;
@@ -269,7 +269,7 @@ internal static class UseItem
     {
         private readonly GameFunctions _gameFunctions = gameFunctions;
 
-        public ITask With(ushort? questId, uint itemId, IList<short?> completionQuestVariablesFlags)
+        public ITask With(ushort? questId, uint itemId, IList<QuestWorkValue?> completionQuestVariablesFlags)
         {
             QuestId = questId;
             ItemId = itemId;

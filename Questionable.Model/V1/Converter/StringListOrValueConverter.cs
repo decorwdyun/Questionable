@@ -7,7 +7,7 @@ namespace Questionable.Model.V1.Converter;
 
 public sealed class StringListOrValueConverter : JsonConverter<List<string>>
 {
-    public override List<string>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override List<string> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.TokenType == JsonTokenType.String)
             return [reader.GetString()!];

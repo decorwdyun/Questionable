@@ -37,16 +37,18 @@
           "SkipConditions": {
             "AetheryteShortcutIf": {
               "NotInSameTerritory": true
+            },
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                64
+              ]
             }
-          },
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -64
-          ]
+          }
         },
         {
           "DataId": 2002380,
@@ -76,14 +78,18 @@
           "TerritoryId": 180,
           "InteractionType": "WalkTo",
           "Fly": true,
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -128
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                128
+              ]
+            }
+          }
         },
         {
           "DataId": 2002379,
@@ -112,14 +118,18 @@
           "TerritoryId": 180,
           "InteractionType": "WalkTo",
           "Fly": true,
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -16
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                16
+              ]
+            }
+          }
         },
         {
           "DataId": 2002382,
@@ -148,14 +158,18 @@
           "TerritoryId": 180,
           "InteractionType": "WalkTo",
           "Fly": true,
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -32
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                32
+              ]
+            }
+          }
         },
         {
           "DataId": 2002381,
