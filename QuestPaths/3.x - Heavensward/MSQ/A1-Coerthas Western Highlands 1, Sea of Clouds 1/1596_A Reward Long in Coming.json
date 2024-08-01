@@ -17,7 +17,7 @@
           "AetheryteShortcut": "The Sea of Clouds - Camp Cloudtop",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }

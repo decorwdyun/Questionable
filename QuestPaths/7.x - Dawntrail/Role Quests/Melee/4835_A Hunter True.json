@@ -17,7 +17,7 @@
           "AetheryteShortcut": "Kugane",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }
@@ -38,7 +38,7 @@
           "AetheryteShortcut": "Azim Steppe - Reunion",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           },
           "CompletionQuestVariablesFlags": [

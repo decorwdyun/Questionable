@@ -17,7 +17,7 @@
           "AetheryteShortcut": "Idyllshire",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }

@@ -17,7 +17,7 @@
           "AetheryteShortcut": "Mor Dhona",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           },
           "$": "0 0  0 0  0 0 -> 0 1  0 0  0 0"

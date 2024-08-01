@@ -17,7 +17,7 @@
           "AetheryteShortcut": "Western La Noscea - Aleport",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }

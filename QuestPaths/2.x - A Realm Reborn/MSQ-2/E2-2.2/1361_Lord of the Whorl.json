@@ -20,7 +20,7 @@
           "AetheryteShortcut": "Lower La Noscea - Moraby Drydocks",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }

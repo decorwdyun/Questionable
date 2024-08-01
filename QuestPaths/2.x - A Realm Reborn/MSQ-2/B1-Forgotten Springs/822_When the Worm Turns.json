@@ -17,7 +17,7 @@
           "AetheryteShortcut": "Southern Thanalan - Forgotten Springs",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }

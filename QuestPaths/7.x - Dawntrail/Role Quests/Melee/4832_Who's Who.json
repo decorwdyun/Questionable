@@ -17,7 +17,7 @@
           "AetheryteShortcut": "Kugane",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }
@@ -38,7 +38,7 @@
           "AetheryteShortcut": "Yanxia - Namai",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           },
           "CompletionQuestVariablesFlags": [

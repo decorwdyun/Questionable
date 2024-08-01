@@ -17,7 +17,7 @@
           "AetheryteShortcut": "Eastern La Noscea - Wineport",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }

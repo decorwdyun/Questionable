@@ -21,7 +21,7 @@
           "AetheryteShortcut": "Northern Thanalan - Ceruleum Processing Plant",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }

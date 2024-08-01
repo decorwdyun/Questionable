@@ -17,7 +17,7 @@
           "AetheryteShortcut": "Central Thanalan - Black Brush Station",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }

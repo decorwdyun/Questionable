@@ -17,7 +17,7 @@
           "AetheryteShortcut": "Rhalgr's Reach",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }

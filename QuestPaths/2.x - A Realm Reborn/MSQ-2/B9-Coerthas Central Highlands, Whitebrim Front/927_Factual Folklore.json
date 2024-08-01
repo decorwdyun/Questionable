@@ -17,7 +17,7 @@
           "AetheryteShortcut": "Coerthas Central Highlands - Camp Dragonhead",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           },
           "Mount": true

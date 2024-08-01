@@ -17,7 +17,7 @@
           "AetheryteShortcut": "Eastern La Noscea - Costa Del Sol",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }

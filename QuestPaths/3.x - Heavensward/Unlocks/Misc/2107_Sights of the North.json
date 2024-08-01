@@ -17,7 +17,7 @@
           "AetheryteShortcut": "The Dravanian Forelands - Tailfeather",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }

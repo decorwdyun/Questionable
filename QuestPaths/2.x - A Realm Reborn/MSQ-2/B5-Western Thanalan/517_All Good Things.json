@@ -17,7 +17,7 @@
           "AetheryteShortcut": "Upper La Noscea - Camp Bronze Lake",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }
