@@ -59,7 +59,7 @@
           "AetheryteShortcut": "Shaaloani - Mehwahhetsoan",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }

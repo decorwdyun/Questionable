@@ -17,7 +17,7 @@
           "AetheryteShortcut": "Gridania",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }

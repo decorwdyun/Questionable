@@ -20,7 +20,7 @@
           "AetheryteShortcut": "South Shroud - Quarrymill",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }

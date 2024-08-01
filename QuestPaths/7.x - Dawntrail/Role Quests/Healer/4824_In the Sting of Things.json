@@ -17,7 +17,7 @@
           "AetheryteShortcut": "Tuliyollal",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }

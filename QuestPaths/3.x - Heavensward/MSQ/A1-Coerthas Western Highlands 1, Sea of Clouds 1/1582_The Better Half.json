@@ -17,7 +17,7 @@
           "AetheryteShortcut": "Ishgard",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }

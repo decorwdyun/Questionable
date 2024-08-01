@@ -18,7 +18,7 @@
           "AetheryteShortcut": "Eastern Thanalan - Camp Drybone",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }

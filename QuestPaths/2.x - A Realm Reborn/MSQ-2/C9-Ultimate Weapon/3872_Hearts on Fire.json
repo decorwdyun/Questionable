@@ -17,7 +17,7 @@
           "AetheryteShortcut": "Northern Thanalan - Camp Bluefog",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }

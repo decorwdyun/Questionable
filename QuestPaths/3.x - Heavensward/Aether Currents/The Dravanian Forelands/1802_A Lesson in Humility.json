@@ -17,7 +17,7 @@
           "AetheryteShortcut": "The Dravanian Forelands - Anyx Trine",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }

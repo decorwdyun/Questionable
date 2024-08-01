@@ -17,7 +17,7 @@
           "AetheryteShortcut": "South Shroud - Camp Tranquil",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }

@@ -17,7 +17,7 @@
           "AetheryteShortcut": "Ul'dah",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }

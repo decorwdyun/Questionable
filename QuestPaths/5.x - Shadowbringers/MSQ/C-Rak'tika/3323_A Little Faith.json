@@ -17,7 +17,7 @@
           "AetheryteShortcut": "Lakeland - Fort Jobb",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }

@@ -17,7 +17,7 @@
           "AetheryteShortcut": "Radz-at-Han",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }

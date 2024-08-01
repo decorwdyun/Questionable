@@ -31,7 +31,7 @@
           "AetheryteShortcut": "Coerthas Central Highlands - Camp Dragonhead",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             },
             "StepIf": {
               "CompletionQuestVariablesFlags": [
@@ -105,7 +105,7 @@
           "Fly": true,
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           },
           "Comment": "TODO Verify enemy id"

@@ -17,7 +17,7 @@
           "AetheryteShortcut": "Coerthas Western Highlands - Falcon's Nest",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true
             }
           }
         }
