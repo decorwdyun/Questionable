@@ -140,7 +140,7 @@ internal sealed class QuestController
                 _combatController.Stop("HP = 0");
             }
         }
-        else if (_keyState[VirtualKey.ESCAPE])
+        else if (_configuration.General.UseEscToCancelQuesting && _keyState[VirtualKey.ESCAPE])
         {
             if (_currentTask != null || _taskQueue.Count > 0)
             {
