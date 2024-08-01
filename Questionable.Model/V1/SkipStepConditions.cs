@@ -24,11 +24,13 @@ public sealed class SkipStepConditions
         return (CompletionQuestVariablesFlags.Count > 6 && CompletionQuestVariablesFlags.Any(x => x != null)) ||
                Flying != null ||
                Chocobo != null ||
+               NotTargetable ||
                InTerritory.Count > 0 ||
                NotInTerritory.Count > 0 ||
                Item != null ||
                QuestsAccepted.Count > 0 ||
-               QuestsCompleted.Count > 0;
+               QuestsCompleted.Count > 0 ||
+               ExtraCondition != null;
     }
 
     public override string ToString()
