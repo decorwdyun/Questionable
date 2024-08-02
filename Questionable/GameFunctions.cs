@@ -149,10 +149,7 @@ internal sealed unsafe class GameFunctions
             // always prioritize accepting MSQ quests, to make sure we don't turn in one MSQ quest and then go off to do
             // side quests until the end of time.
             var msqQuest = GetMainScenarioQuest(questManager);
-            if (msqQuest.CurrentQuest != 0 &&
-                _questRegistry.IsKnownQuest(msqQuest.CurrentQuest) &&
-                IsReadyToAcceptQuest(msqQuest.CurrentQuest) &&
-                !questManager->IsQuestAccepted(msqQuest.CurrentQuest))
+            if (msqQuest.CurrentQuest != 0 && _questRegistry.IsKnownQuest(msqQuest.CurrentQuest))
                 return msqQuest;
 
             // Use the quests in the same order as they're shown in the to-do list, e.g. if the MSQ is the first item,
@@ -222,6 +219,11 @@ internal sealed unsafe class GameFunctions
 
         // if the MSQ is hidden, we generally ignore it
         if (questManager->IsQuestAccepted(currentQuest) && questManager->GetQuestById(currentQuest)->IsHidden)
+            return default;
+
+        // it can sometimes happen (although this isn't reliably reproducible) that the quest returned here
+        // is one you've just completed.
+        if (!IsReadyToAcceptQuest(currentQuest))
             return default;
 
         // if we're not at a high enough level to continue, we also ignore it
