@@ -151,6 +151,7 @@ internal sealed unsafe class GameFunctions
             var msqQuest = GetMainScenarioQuest(questManager);
             if (msqQuest.CurrentQuest != 0 &&
                 _questRegistry.IsKnownQuest(msqQuest.CurrentQuest) &&
+                IsReadyToAcceptQuest(msqQuest.CurrentQuest) &&
                 !questManager->IsQuestAccepted(msqQuest.CurrentQuest))
                 return msqQuest;
 
