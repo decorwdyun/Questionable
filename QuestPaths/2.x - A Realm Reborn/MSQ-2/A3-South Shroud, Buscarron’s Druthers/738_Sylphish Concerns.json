@@ -98,6 +98,27 @@
         },
         {
           "Position": {
+            "X": -103.87269,
+            "Y": 5.116502,
+            "Z": -73.9041
+          },
+          "TerritoryId": 153,
+          "InteractionType": "WalkTo",
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                32
+              ]
+            }
+          }
+        },
+        {
+          "Position": {
             "X": -90.467575,
             "Y": 3.3634722,
             "Z": -27.515985

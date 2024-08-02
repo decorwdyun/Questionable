@@ -21,7 +21,7 @@ public sealed class SkipStepConditions
     {
         if (Never)
             return false;
-        return (CompletionQuestVariablesFlags.Count > 6 && CompletionQuestVariablesFlags.Any(x => x != null)) ||
+        return (CompletionQuestVariablesFlags.Count > 0 && CompletionQuestVariablesFlags.Any(x => x != null)) ||
                Flying != null ||
                Chocobo != null ||
                NotTargetable ||
