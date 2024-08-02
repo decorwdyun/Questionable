@@ -11,7 +11,7 @@ using ImGuiNET;
 using Questionable.Controller;
 using Questionable.Data;
 using Questionable.Model;
-using Questionable.Model.V1;
+using Questionable.Model.Questing;
 
 namespace Questionable.Windows;
 

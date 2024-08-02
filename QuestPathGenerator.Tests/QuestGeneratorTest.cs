@@ -1,4 +1,4 @@
-using Questionable.Model.V1;
+using Questionable.Model.Questing;
 using Questionable.QuestPathGenerator;
 using Xunit;
 

@@ -11,7 +11,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Utils;
 using Questionable.Model;
-using Questionable.Model.V1;
+using Questionable.Model.Common;
+using Questionable.Model.Questing;
 
 namespace Questionable.Controller.Steps.Shared;
 

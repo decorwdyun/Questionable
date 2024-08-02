@@ -1,9 +1,9 @@
 ﻿using System;
-using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Model;
-using Questionable.Model.V1;
+using Questionable.Model.Common;
+using Questionable.Model.Questing;
 using ObjectKind = Dalamud.Game.ClientState.Objects.Enums.ObjectKind;
 
 namespace Questionable.Controller.Steps.Interactions;

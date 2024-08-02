@@ -1,7 +1,7 @@
 ﻿using Dalamud.Plugin;
 using Dalamud.Plugin.Ipc;
 using Questionable.Data;
-using Questionable.Model.V1;
+using Questionable.Model.Common;
 
 namespace Questionable.External;
 

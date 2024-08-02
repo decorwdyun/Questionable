@@ -13,7 +13,8 @@ using Questionable.Controller.Steps.Shared;
 using Questionable.Controller.Utils;
 using Questionable.Data;
 using Questionable.Model;
-using Questionable.Model.V1;
+using Questionable.Model.Common;
+using Questionable.Model.Questing;
 using AethernetShortcut = Questionable.Controller.Steps.Shared.AethernetShortcut;
 
 namespace Questionable.Controller.Steps.Interactions;

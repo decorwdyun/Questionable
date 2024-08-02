@@ -11,7 +11,7 @@ using Dalamud.Plugin;
 using Microsoft.Extensions.Logging;
 using Questionable.Data;
 using Questionable.Model;
-using Questionable.Model.V1;
+using Questionable.Model.Questing;
 using Questionable.QuestPaths;
 using Questionable.Validation;
 using Questionable.Validation.Validators;

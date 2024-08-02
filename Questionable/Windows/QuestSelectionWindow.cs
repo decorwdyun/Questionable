@@ -19,7 +19,7 @@ using LLib.ImGui;
 using Questionable.Controller;
 using Questionable.Data;
 using Questionable.Model;
-using Questionable.Model.V1;
+using Questionable.Model.Questing;
 using Questionable.Windows.QuestComponents;
 
 namespace Questionable.Windows;

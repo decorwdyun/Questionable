@@ -1,0 +1,56 @@
+{
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
+  "Author": "liza",
+  "TerritoryId": 957,
+  "AetheryteShortcut": "Thavnair - Great Work",
+  "Nodes": [
+    {
+      "DataId": 33918,
+      "Position": {
+        "X": -582.5132,
+        "Y": 40.54578,
+        "Z": -426.0171
+      }
+    },
+    {
+      "DataId": 33919,
+      "Position": {
+        "X": -578.2101,
+        "Y": 41.27147,
+        "Z": -447.6376
+      }
+    },
+    {
+      "DataId": 33920,
+      "Position": {
+        "X": -488.2276,
+        "Y": 34.71221,
+        "Z": -359.6945
+      }
+    },
+    {
+      "DataId": 33921,
+      "Position": {
+        "X": -498.8687,
+        "Y": 31.08014,
+        "Z": -351.9397
+      }
+    },
+    {
+      "DataId": 33922,
+      "Position": {
+        "X": -304.0609,
+        "Y": 68.76999,
+        "Z": -479.1875
+      }
+    },
+    {
+      "DataId": 33923,
+      "Position": {
+        "X": -293.6989,
+        "Y": 68.77935,
+        "Z": -484.2256
+      }
+    }
+  ]
+}

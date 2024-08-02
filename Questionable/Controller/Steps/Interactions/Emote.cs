@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Questionable.Controller.Steps.Common;
 using Questionable.Model;
-using Questionable.Model.V1;
+using Questionable.Model.Questing;
 
 namespace Questionable.Controller.Steps.Interactions;
 

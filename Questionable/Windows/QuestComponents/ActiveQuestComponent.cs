@@ -13,7 +13,7 @@ using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using ImGuiNET;
 using Questionable.Controller;
 using Questionable.Controller.Steps.Shared;
-using Questionable.Model.V1;
+using Questionable.Model.Questing;
 
 namespace Questionable.Windows.QuestComponents;
 

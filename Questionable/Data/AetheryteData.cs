@@ -4,8 +4,7 @@ using System.Linq;
 using System.Numerics;
 using Dalamud.Plugin.Services;
 using Lumina.Excel.GeneratedSheets;
-using Microsoft.Extensions.Logging;
-using Questionable.Model.V1;
+using Questionable.Model.Common;
 
 namespace Questionable.Data;
 

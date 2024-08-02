@@ -4,7 +4,7 @@ using System.Linq;
 using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Shared;
-using Questionable.Model.V1;
+using Questionable.Model.Questing;
 
 namespace Questionable.Controller.Utils;
 

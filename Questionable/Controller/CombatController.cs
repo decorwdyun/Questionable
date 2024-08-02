@@ -14,7 +14,7 @@ using FFXIVClientStructs.FFXIV.Common.Math;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.CombatModules;
 using Questionable.Controller.Utils;
-using Questionable.Model.V1;
+using Questionable.Model.Questing;
 
 namespace Questionable.Controller;
 

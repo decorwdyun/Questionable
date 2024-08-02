@@ -8,8 +8,10 @@ using Microsoft.Extensions.Logging;
 using Questionable.Data;
 using Questionable.External;
 using Questionable.Model;
-using Questionable.Model.V1;
-using Questionable.Model.V1.Converter;
+using Questionable.Model.Common;
+using Questionable.Model.Common.Converter;
+using Questionable.Model.Questing;
+using Questionable.Model.Questing.Converter;
 
 namespace Questionable.Controller.Steps.Shared;
 

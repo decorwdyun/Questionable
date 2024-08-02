@@ -10,7 +10,7 @@ using Questionable.Controller.Steps;
 using Questionable.Controller.Steps.Shared;
 using Questionable.External;
 using Questionable.Model;
-using Questionable.Model.V1;
+using Questionable.Model.Questing;
 
 namespace Questionable.Controller;
 

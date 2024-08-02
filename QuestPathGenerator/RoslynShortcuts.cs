@@ -6,7 +6,9 @@ using System.Numerics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Questionable.Model.V1;
+using Questionable.Model.Common;
+using Questionable.Model.Gathering;
+using Questionable.Model.Questing;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace Questionable.QuestPathGenerator;
@@ -311,6 +313,32 @@ public static class RoslynShortcuts
                                         emptyAetheryte.Never),
                                     Assignment(nameof(SkipAetheryteCondition.InSameTerritory),
                                         skipAetheryteCondition.InSameTerritory, emptyAetheryte.InSameTerritory)))));
+            }
+            else if (value is GatheringNodeLocation nodeLocation)
+            {
+                var emptyLocation = new GatheringNodeLocation();
+                return ObjectCreationExpression(
+                        IdentifierName(nameof(GatheringNodeLocation)))
+                    .WithInitializer(
+                        InitializerExpression(
+                            SyntaxKind.ObjectInitializerExpression,
+                            SeparatedList<ExpressionSyntax>(
+                                SyntaxNodeList(
+                                    Assignment(nameof(GatheringNodeLocation.DataId), nodeLocation.DataId,
+                                            emptyLocation.DataId)
+                                        .AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(GatheringNodeLocation.Position), nodeLocation.Position,
+                                        emptyLocation.Position).AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(GatheringNodeLocation.MinimumAngle), nodeLocation.MinimumAngle,
+                                        emptyLocation.MinimumAngle).AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(GatheringNodeLocation.MaximumAngle), nodeLocation.MaximumAngle,
+                                        emptyLocation.MaximumAngle).AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(GatheringNodeLocation.MinimumDistance),
+                                            nodeLocation.MinimumDistance, emptyLocation.MinimumDistance)
+                                        .AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(GatheringNodeLocation.MaximumDistance),
+                                            nodeLocation.MaximumDistance, emptyLocation.MaximumDistance)
+                                        .AsSyntaxNodeOrToken()))));
             }
             else if (value is null)
                 return LiteralExpression(SyntaxKind.NullLiteralExpression);

@@ -1,0 +1,98 @@
+﻿{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
+  "title": "Gathering Location V1",
+  "description": "A series of gathering locationsk",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "const": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json"
+    },
+    "Author": {
+      "description": "Author of the gathering location data",
+      "type": [
+        "string",
+        "array"
+      ],
+      "items": {
+        "type": "string"
+      }
+    },
+    "TerritoryId": {
+      "type": "number"
+    },
+    "AetheryteShortcut": {
+      "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Aetheryte"
+    },
+    "Nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "DataId": {
+            "type": "number",
+            "minimum": 30000,
+            "maximum": 50000
+          },
+          "Position": {
+            "$ref": "#/$defs/Vector3"
+          },
+          "MinimumAngle": {
+            "type": "number",
+            "minimum": -360,
+            "maximum": 360
+          },
+          "MaximumAngle": {
+            "type": "number",
+            "minimum": -360,
+            "maximum": 360
+          },
+          "MinimumDistance": {
+            "type": "number",
+            "minimum": 0
+          },
+          "MaximumDistance": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        },
+        "required": [
+          "DataId",
+          "Position"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "$schema",
+    "Author",
+    "TerritoryId",
+    "AetheryteShortcut",
+    "Nodes"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "Vector3": {
+      "type": "object",
+      "description": "Position to (typically) walk to",
+      "properties": {
+        "X": {
+          "type": "number"
+        },
+        "Y": {
+          "type": "number"
+        },
+        "Z": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "X",
+        "Y",
+        "Z"
+      ]
+    }
+  }
+}

@@ -13,4 +13,12 @@
     <ItemGroup>
         <PackageReference Include="System.Text.Json" Version="8.0.4" />
     </ItemGroup>
+
+
+    <ItemGroup>
+        <None Remove="common-schema.json" />
+        <EmbeddedResource Include="common-schema.json">
+            <LogicalName>Questionable.Model.CommonSchema</LogicalName>
+        </EmbeddedResource>
+    </ItemGroup>
 </Project>
