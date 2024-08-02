@@ -26,7 +26,7 @@
         <AdditionalFiles Include="..\Questionable.Model\common-schema.json" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <ItemGroup>
         <None Remove="2.x - A Realm Reborn" />
         <None Remove="3.x - Heavensward" />
         <None Remove="4.x - Stormblood" />

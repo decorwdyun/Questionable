@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Dalamud.Plugin;
+using Dalamud.Plugin.Ipc;
 using Microsoft.Extensions.Logging;
 using Questionable.Data;
 using Questionable.Model;
@@ -23,8 +24,9 @@ internal sealed class QuestRegistry
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly QuestData _questData;
     private readonly QuestValidator _questValidator;
-    private readonly ILogger<QuestRegistry> _logger;
     private readonly JsonSchemaValidator _jsonSchemaValidator;
+    private readonly ILogger<QuestRegistry> _logger;
+    private readonly ICallGateProvider<object> _reloadDataIpc;
 
     private readonly Dictionary<ushort, Quest> _quests = new();
 
@@ -37,6 +39,7 @@ internal sealed class QuestRegistry
         _questValidator = questValidator;
         _jsonSchemaValidator = jsonSchemaValidator;
         _logger = logger;
+        _reloadDataIpc = _pluginInterface.GetIpcProvider<object>("Questionable.ReloadData");
     }
 
     public IEnumerable<Quest> AllQuests => _quests.Values;
@@ -66,6 +69,7 @@ internal sealed class QuestRegistry
 
         ValidateQuests();
         Reloaded?.Invoke(this, EventArgs.Empty);
+        _reloadDataIpc.SendMessage();
         _logger.LogInformation("Loaded {Count} quests in total", _quests.Count);
     }
 

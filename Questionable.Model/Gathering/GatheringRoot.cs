@@ -14,5 +14,5 @@ public sealed class GatheringRoot
     [JsonConverter(typeof(AetheryteConverter))]
     public EAetheryteLocation? AetheryteShortcut { get; set; }
 
-    public List<GatheringNodeLocation> Nodes { get; set; } = [];
+    public List<GatheringNodeGroup> Groups { get; set; } = [];
 }

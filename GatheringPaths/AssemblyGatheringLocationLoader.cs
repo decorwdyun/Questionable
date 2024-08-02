@@ -16,12 +16,10 @@ public static partial class AssemblyGatheringLocationLoader
         if (_locations == null)
         {
             _locations = [];
-#if RELEASE
             LoadLocations();
-#endif
         }
 
-        return _locations ?? throw new InvalidOperationException("quest data is not initialized");
+        return _locations ?? throw new InvalidOperationException("location data is not initialized");
     }
 
     public static Stream QuestSchema =>

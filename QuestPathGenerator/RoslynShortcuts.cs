@@ -314,30 +314,55 @@ public static class RoslynShortcuts
                                     Assignment(nameof(SkipAetheryteCondition.InSameTerritory),
                                         skipAetheryteCondition.InSameTerritory, emptyAetheryte.InSameTerritory)))));
             }
-            else if (value is GatheringNodeLocation nodeLocation)
+            else if (value is GatheringNodeGroup nodeGroup)
             {
-                var emptyLocation = new GatheringNodeLocation();
                 return ObjectCreationExpression(
-                        IdentifierName(nameof(GatheringNodeLocation)))
+                        IdentifierName(nameof(GatheringNodeGroup)))
                     .WithInitializer(
                         InitializerExpression(
                             SyntaxKind.ObjectInitializerExpression,
                             SeparatedList<ExpressionSyntax>(
                                 SyntaxNodeList(
-                                    Assignment(nameof(GatheringNodeLocation.DataId), nodeLocation.DataId,
+                                    AssignmentList(nameof(GatheringNodeGroup.Nodes), nodeGroup.Nodes)
+                                        .AsSyntaxNodeOrToken()))));
+            }
+            else if (value is GatheringNode nodeLocation)
+            {
+                var emptyLocation = new GatheringNode();
+                return ObjectCreationExpression(
+                        IdentifierName(nameof(GatheringNode)))
+                    .WithInitializer(
+                        InitializerExpression(
+                            SyntaxKind.ObjectInitializerExpression,
+                            SeparatedList<ExpressionSyntax>(
+                                SyntaxNodeList(
+                                    Assignment(nameof(GatheringNode.DataId), nodeLocation.DataId,
                                             emptyLocation.DataId)
                                         .AsSyntaxNodeOrToken(),
-                                    Assignment(nameof(GatheringNodeLocation.Position), nodeLocation.Position,
+                                    AssignmentList(nameof(GatheringNode.Locations), nodeLocation.Locations)
+                                        .AsSyntaxNodeOrToken()))));
+            }
+            else if (value is GatheringLocation location)
+            {
+                var emptyLocation = new GatheringLocation();
+                return ObjectCreationExpression(
+                        IdentifierName(nameof(GatheringLocation)))
+                    .WithInitializer(
+                        InitializerExpression(
+                            SyntaxKind.ObjectInitializerExpression,
+                            SeparatedList<ExpressionSyntax>(
+                                SyntaxNodeList(
+                                    Assignment(nameof(GatheringLocation.Position), location.Position,
                                         emptyLocation.Position).AsSyntaxNodeOrToken(),
-                                    Assignment(nameof(GatheringNodeLocation.MinimumAngle), nodeLocation.MinimumAngle,
+                                    Assignment(nameof(GatheringLocation.MinimumAngle), location.MinimumAngle,
                                         emptyLocation.MinimumAngle).AsSyntaxNodeOrToken(),
-                                    Assignment(nameof(GatheringNodeLocation.MaximumAngle), nodeLocation.MaximumAngle,
+                                    Assignment(nameof(GatheringLocation.MaximumAngle), location.MaximumAngle,
                                         emptyLocation.MaximumAngle).AsSyntaxNodeOrToken(),
-                                    Assignment(nameof(GatheringNodeLocation.MinimumDistance),
-                                            nodeLocation.MinimumDistance, emptyLocation.MinimumDistance)
+                                    Assignment(nameof(GatheringLocation.MinimumDistance),
+                                            location.MinimumDistance, emptyLocation.MinimumDistance)
                                         .AsSyntaxNodeOrToken(),
-                                    Assignment(nameof(GatheringNodeLocation.MaximumDistance),
-                                            nodeLocation.MaximumDistance, emptyLocation.MaximumDistance)
+                                    Assignment(nameof(GatheringLocation.MaximumDistance),
+                                            location.MaximumDistance, emptyLocation.MaximumDistance)
                                         .AsSyntaxNodeOrToken()))));
             }
             else if (value is null)

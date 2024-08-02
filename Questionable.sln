@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GatheringPaths", "Gathering
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GatheringPathRenderer", "GatheringPathRenderer\GatheringPathRenderer.csproj", "{F514DA95-9867-4F3F-8062-ACE0C62E8740}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ECommons", "vendor\ECommons\ECommons\ECommons.csproj", "{A12D7B4B-8E6E-4DCF-A41A-12F62E9FF94B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -57,6 +59,10 @@ Global
 		{F514DA95-9867-4F3F-8062-ACE0C62E8740}.Debug|x64.Build.0 = Debug|Any CPU
 		{F514DA95-9867-4F3F-8062-ACE0C62E8740}.Release|x64.ActiveCfg = Release|Any CPU
 		{F514DA95-9867-4F3F-8062-ACE0C62E8740}.Release|x64.Build.0 = Release|Any CPU
+		{A12D7B4B-8E6E-4DCF-A41A-12F62E9FF94B}.Debug|x64.ActiveCfg = Debug|x64
+		{A12D7B4B-8E6E-4DCF-A41A-12F62E9FF94B}.Debug|x64.Build.0 = Debug|x64
+		{A12D7B4B-8E6E-4DCF-A41A-12F62E9FF94B}.Release|x64.ActiveCfg = Release|x64
+		{A12D7B4B-8E6E-4DCF-A41A-12F62E9FF94B}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

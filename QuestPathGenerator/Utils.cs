@@ -55,12 +55,13 @@ public static class Utils
                 Culture = CultureInfo.InvariantCulture,
                 OutputFormat = OutputFormat.List,
             });
-            if (!evaluationResult.IsValid)
+            if (evaluationResult.HasErrors)
             {
                 var error = Diagnostic.Create(invalidJson,
                     null,
                     Path.GetFileName(additionalFile.Path));
                 context.ReportDiagnostic(error);
+                continue;
             }
 
             yield return (id, node);
