@@ -3,7 +3,7 @@ using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Questionable.Model;
-using Questionable.Model.V1;
+using Questionable.Model.Questing;
 
 namespace Questionable.Controller.Steps.Interactions;
 

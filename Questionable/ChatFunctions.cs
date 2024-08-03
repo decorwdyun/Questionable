@@ -14,7 +14,7 @@ using FFXIVClientStructs.FFXIV.Client.System.Memory;
 using FFXIVClientStructs.FFXIV.Client.System.String;
 using Lumina.Excel.GeneratedSheets;
 using Microsoft.Extensions.Logging;
-using Questionable.Model.V1;
+using Questionable.Model.Questing;
 
 namespace Questionable;
 

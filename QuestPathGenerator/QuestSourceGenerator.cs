@@ -1,16 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using Json.Schema;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Questionable.Model.V1;
+using Questionable.Model.Questing;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 using static Questionable.QuestPathGenerator.RoslynShortcuts;
 
@@ -38,47 +36,21 @@ public class QuestSourceGenerator : ISourceGenerator
 
     public void Execute(GeneratorExecutionContext context)
     {
-        List<(ushort, QuestRoot)> quests = [];
-
         // Find schema definition
-        AdditionalText jsonSchemaFile =
-            context.AdditionalFiles.Single(x => Path.GetFileName(x.Path) == "quest-v1.json");
+        AdditionalText? questSchema =
+            context.AdditionalFiles.SingleOrDefault(x => Path.GetFileName(x.Path) == "quest-v1.json");
+        if (questSchema != null)
+            GenerateQuestSource(context, questSchema);
+    }
+
+    private void GenerateQuestSource(GeneratorExecutionContext context, AdditionalText jsonSchemaFile)
+    {
         var questSchema = JsonSchema.FromText(jsonSchemaFile.GetText()!.ToString());
 
-        // Go through all files marked as an Additional File in file properties.
-        foreach (var additionalFile in context.AdditionalFiles)
+        List<(ushort, QuestRoot)> quests = [];
+        foreach (var (id, node) in Utils.GetAdditionalFiles(context, jsonSchemaFile, questSchema, InvalidJson))
         {
-            if (additionalFile == null || additionalFile == jsonSchemaFile)
-                continue;
-
-            if (Path.GetExtension(additionalFile.Path) != ".json")
-                continue;
-
-            string name = Path.GetFileName(additionalFile.Path);
-            if (!name.Contains('_'))
-                continue;
-
-            ushort id = ushort.Parse(name.Substring(0, name.IndexOf('_')));
-
-            var text = additionalFile.GetText();
-            if (text == null)
-                continue;
-
-            var questNode = JsonNode.Parse(text.ToString());
-            var evaluationResult = questSchema.Evaluate(questNode, new EvaluationOptions
-            {
-                Culture = CultureInfo.InvariantCulture,
-                OutputFormat = OutputFormat.List
-            });
-            if (!evaluationResult.IsValid)
-            {
-                var error = Diagnostic.Create(InvalidJson,
-                    null,
-                    Path.GetFileName(additionalFile.Path));
-                context.ReportDiagnostic(error);
-            }
-
-            var quest = questNode.Deserialize<QuestRoot>()!;
+            var quest = node.Deserialize<QuestRoot>()!;
             if (quest.Disabled)
             {
                 quest.Author = [];
@@ -97,38 +69,7 @@ public class QuestSourceGenerator : ISourceGenerator
             .GroupBy(x => $"LoadQuests{x.Item1 / 50}")
             .ToList();
 
-        List<MethodDeclarationSyntax> methods =
-        [
-            MethodDeclaration(
-                    PredefinedType(
-                        Token(SyntaxKind.VoidKeyword)),
-                    Identifier("LoadQuests"))
-                .WithModifiers(
-                    TokenList(
-                        Token(SyntaxKind.PrivateKeyword),
-                        Token(SyntaxKind.StaticKeyword)))
-                .WithBody(
-                    Block(
-                        partitionedQuests
-                            .Select(x =>
-                                ExpressionStatement(
-                                    InvocationExpression(
-                                        IdentifierName(x.Key))))))
-        ];
-
-        foreach (var partition in partitionedQuests)
-        {
-            methods.Add(MethodDeclaration(
-                    PredefinedType(
-                        Token(SyntaxKind.VoidKeyword)),
-                    Identifier(partition.Key))
-                .WithModifiers(
-                    TokenList(
-                        Token(SyntaxKind.PrivateKeyword),
-                        Token(SyntaxKind.StaticKeyword)))
-                .WithBody(
-                    Block(CreateInitializer(partition.ToList()))));
-        }
+        var methods = Utils.CreateMethods("LoadQuests", partitionedQuests, CreateInitializer);
 
         var code =
             CompilationUnit()
@@ -156,7 +97,13 @@ public class QuestSourceGenerator : ISourceGenerator
                                     QualifiedName(
                                         IdentifierName("Questionable"),
                                         IdentifierName("Model")),
-                                    IdentifierName("V1")))
+                                    IdentifierName("Questing"))),
+                            UsingDirective(
+                                QualifiedName(
+                                    QualifiedName(
+                                        IdentifierName("Questionable"),
+                                        IdentifierName("Model")),
+                                    IdentifierName("Common")))
                         }))
                 .WithMembers(
                     SingletonList<MemberDeclarationSyntax>(

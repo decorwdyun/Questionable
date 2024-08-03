@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Reflection;
-using Questionable.Model.V1;
+using Questionable.Model.Questing;
 
 namespace Questionable.QuestPaths;
 
@@ -28,5 +27,6 @@ public static partial class AssemblyQuestLoader
     public static Stream QuestSchema =>
         typeof(AssemblyQuestLoader).Assembly.GetManifestResourceStream("Questionable.QuestPaths.QuestSchema")!;
 
+    [SuppressMessage("ReSharper", "UnusedMember.Local")]
     private static void AddQuest(ushort questId, QuestRoot root) => _quests![questId] = root;
 }

@@ -46,16 +46,16 @@
           "TerritoryId": 1190,
           "InteractionType": "WalkTo",
           "Fly": true,
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -64
-          ],
           "SkipConditions": {
             "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                64
+              ],
               "Flying": "Locked"
             }
           }
@@ -89,16 +89,16 @@
           "TerritoryId": 1190,
           "InteractionType": "WalkTo",
           "Fly": true,
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -128
-          ],
           "SkipConditions": {
             "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                128
+              ],
               "Flying": "Locked"
             }
           },
@@ -131,16 +131,16 @@
           },
           "TerritoryId": 1190,
           "InteractionType": "WalkTo",
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -32
-          ],
           "SkipConditions": {
             "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                32
+              ],
               "Flying": "Locked"
             }
           },

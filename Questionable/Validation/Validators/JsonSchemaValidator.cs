@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text.Json.Nodes;
 using Json.Schema;
@@ -11,6 +12,13 @@ internal sealed class JsonSchemaValidator : IQuestValidator
 {
     private readonly Dictionary<ushort, JsonNode> _questNodes = new();
     private JsonSchema? _questSchema;
+
+    public JsonSchemaValidator()
+    {
+        SchemaRegistry.Global.Register(
+            new Uri("https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json"),
+            JsonSchema.FromStream(AssemblyModelLoader.CommonSchema).AsTask().Result);
+    }
 
     public IEnumerable<ValidationIssue> Validate(Quest quest)
     {
@@ -36,7 +44,6 @@ internal sealed class JsonSchemaValidator : IQuestValidator
                 };
             }
         }
-
     }
 
     public void Enqueue(ushort questId, JsonNode questNode) => _questNodes[questId] = questNode;

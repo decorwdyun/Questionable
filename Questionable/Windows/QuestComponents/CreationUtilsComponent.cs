@@ -16,7 +16,8 @@ using Microsoft.Extensions.Logging;
 using Questionable.Controller;
 using Questionable.Data;
 using Questionable.Model;
-using Questionable.Model.V1;
+using Questionable.Model.Common;
+using Questionable.Model.Questing;
 using ObjectKind = Dalamud.Game.ClientState.Objects.Enums.ObjectKind;
 
 namespace Questionable.Windows.QuestComponents;
@@ -160,23 +161,38 @@ internal sealed class CreationUtilsComponent
                     "Left click: Copy target position as JSON.\nRight click: Copy target position as C# code.");
             if (copy)
             {
-                string interactionType = gameObject->NamePlateIconId switch
+                var target = _targetManager.Target;
+                if (target.ObjectKind == ObjectKind.GatheringPoint)
                 {
-                    71201 or 71211 or 71221 or 71231 or 71341 or 71351 => "AcceptQuest",
-                    71202 or 71212 or 71222 or 71232 or 71342 or 71352 => "AcceptQuest", // repeatable
-                    71205 or 71215 or 71225 or 71235 or 71345 or 71355 => "CompleteQuest",
-                    _ => "Interact",
-                };
-                ImGui.SetClipboardText($$"""
-                                         "DataId": {{_targetManager.Target.DataId}},
-                                         "Position": {
-                                             "X": {{_targetManager.Target.Position.X.ToString(CultureInfo.InvariantCulture)}},
-                                             "Y": {{_targetManager.Target.Position.Y.ToString(CultureInfo.InvariantCulture)}},
-                                             "Z": {{_targetManager.Target.Position.Z.ToString(CultureInfo.InvariantCulture)}}
-                                         },
-                                         "TerritoryId": {{_clientState.TerritoryType}},
-                                         "InteractionType": "{{interactionType}}"
-                                         """);
+                    ImGui.SetClipboardText($$"""
+                                             "DataId": {{target.DataId}},
+                                             "Position": {
+                                                 "X": {{target.Position.X.ToString(CultureInfo.InvariantCulture)}},
+                                                 "Y": {{target.Position.Y.ToString(CultureInfo.InvariantCulture)}},
+                                                 "Z": {{target.Position.Z.ToString(CultureInfo.InvariantCulture)}}
+                                             }
+                                             """);
+                }
+                else
+                {
+                    string interactionType = gameObject->NamePlateIconId switch
+                    {
+                        71201 or 71211 or 71221 or 71231 or 71341 or 71351 => "AcceptQuest",
+                        71202 or 71212 or 71222 or 71232 or 71342 or 71352 => "AcceptQuest", // repeatable
+                        71205 or 71215 or 71225 or 71235 or 71345 or 71355 => "CompleteQuest",
+                        _ => "Interact",
+                    };
+                    ImGui.SetClipboardText($$"""
+                                             "DataId": {{target.DataId}},
+                                             "Position": {
+                                                 "X": {{target.Position.X.ToString(CultureInfo.InvariantCulture)}},
+                                                 "Y": {{target.Position.Y.ToString(CultureInfo.InvariantCulture)}},
+                                                 "Z": {{target.Position.Z.ToString(CultureInfo.InvariantCulture)}}
+                                             },
+                                             "TerritoryId": {{_clientState.TerritoryType}},
+                                             "InteractionType": "{{interactionType}}"
+                                             """);
+                }
             }
             else if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
             {

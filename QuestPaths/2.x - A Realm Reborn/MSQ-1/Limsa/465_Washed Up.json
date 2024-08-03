@@ -36,14 +36,18 @@
             },
             "StopDistance": 3
           },
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -8
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                8
+              ]
+            }
+          }
         },
         {
           "DataId": 1002639,

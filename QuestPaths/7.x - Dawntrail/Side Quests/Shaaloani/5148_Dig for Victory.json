@@ -126,16 +126,16 @@
           "InteractionType": "WalkTo",
           "AetheryteShortcut": "Shaaloani - Hhusatahwi",
           "Fly": true,
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -128
-          ],
           "SkipConditions": {
             "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                128
+              ],
               "Flying": "Locked"
             }
           },

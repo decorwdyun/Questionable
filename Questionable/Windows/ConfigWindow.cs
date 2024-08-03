@@ -76,6 +76,13 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
                     Save();
                 }
 
+                bool useEscToCancelQuesting = _configuration.General.UseEscToCancelQuesting;
+                if (ImGui.Checkbox("Use ESC to cancel questing/movement", ref useEscToCancelQuesting))
+                {
+                    _configuration.General.UseEscToCancelQuesting = useEscToCancelQuesting;
+                    Save();
+                }
+
                 ImGui.EndTabItem();
             }
 

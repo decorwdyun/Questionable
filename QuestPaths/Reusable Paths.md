@@ -5,6 +5,21 @@ outside).
 This vastly improves the pathfinding performance, and avoids attempting to fly e.g. under the map or into the building
 that can sometimes be found as valid paths.
 
+## Ul'dah
+
+```json
+        {
+          "Position": {
+            "X": -119.1183,
+            "Y": 3.7999938,
+            "Z": -104.33473
+          },
+          "TerritoryId": 130,
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Ul'dah",
+          "$": "Ul'dah Aetheryte to Immortal Flames"
+        }
+```
 ## Mor Dhona
 
 ```json

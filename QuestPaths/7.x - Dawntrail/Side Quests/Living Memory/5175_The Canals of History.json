@@ -31,17 +31,17 @@
           "Fly": true,
           "SkipConditions": {
             "StepIf": {
-              "Flying": "Locked"
+              "Flying": "Locked",
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                128
+              ]
             }
-          },
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -128
-          ]
+          }
         },
         {
           "DataId": 2013901,

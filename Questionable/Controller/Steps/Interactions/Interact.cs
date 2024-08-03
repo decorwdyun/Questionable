@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Shared;
 using Questionable.Model;
-using Questionable.Model.V1;
+using Questionable.Model.Questing;
 
 namespace Questionable.Controller.Steps.Interactions;
 
@@ -59,7 +59,7 @@ internal static class Interact
 
         public bool Start()
         {
-            IGameObject? gameObject = gameFunctions.FindObjectByDataId(DataId);
+            IGameObject? gameObject = gameFunctions.FindObjectByDataId(DataId, targetable: true);
             if (gameObject == null)
             {
                 logger.LogWarning("No game object with dataId {DataId}", DataId);
@@ -67,17 +67,19 @@ internal static class Interact
             }
 
             // this is only relevant for followers on quests
-            if (!gameObject.IsTargetable && condition[ConditionFlag.Mounted])
+            if (!gameObject.IsTargetable && condition[ConditionFlag.Mounted] &&
+                gameObject.ObjectKind != ObjectKind.GatheringPoint)
             {
+                logger.LogInformation("Preparing interaction for {DataId} by unmounting", DataId);
                 _needsUnmount = true;
                 gameFunctions.Unmount();
                 _continueAt = DateTime.Now.AddSeconds(1);
                 return true;
             }
 
-            if (gameObject.IsTargetable && HasAnyMarker(gameObject))
+            if (IsTargetable(gameObject) && HasAnyMarker(gameObject))
             {
-                _interacted = gameFunctions.InteractWith(DataId);
+                _interacted = gameFunctions.InteractWith(gameObject);
                 _continueAt = DateTime.Now.AddSeconds(0.5);
                 return true;
             }
@@ -104,11 +106,11 @@ internal static class Interact
 
             if (!_interacted)
             {
-                IGameObject? gameObject = gameFunctions.FindObjectByDataId(DataId);
-                if (gameObject == null || !gameObject.IsTargetable || !HasAnyMarker(gameObject))
+                IGameObject? gameObject = gameFunctions.FindObjectByDataId(DataId, targetable: true);
+                if (gameObject == null || !IsTargetable(gameObject) || !HasAnyMarker(gameObject))
                     return ETaskResult.StillRunning;
 
-                _interacted = gameFunctions.InteractWith(DataId);
+                _interacted = gameFunctions.InteractWith(gameObject);
                 _continueAt = DateTime.Now.AddSeconds(0.5);
                 return ETaskResult.StillRunning;
             }
@@ -123,6 +125,11 @@ internal static class Interact
 
             var gameObjectStruct = (FFXIVClientStructs.FFXIV.Client.Game.Object.GameObject*)gameObject.Address;
             return gameObjectStruct->NamePlateIconId != 0;
+        }
+
+        private static bool IsTargetable(IGameObject gameObject)
+        {
+            return gameObject.IsTargetable;
         }
 
         public override string ToString() => $"Interact({DataId})";

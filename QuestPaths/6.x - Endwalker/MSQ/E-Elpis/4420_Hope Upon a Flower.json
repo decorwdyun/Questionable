@@ -71,14 +71,18 @@
               "Z": -1.1141448
             }
           },
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -16
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                16
+              ]
+            }
+          }
         },
         {
           "DataId": 2012128,

@@ -18,6 +18,7 @@ internal sealed class Configuration : IPluginConfiguration
         public uint MountId { get; set; } = 71;
         public GrandCompany GrandCompany { get; set; } = GrandCompany.None;
         public bool HideInAllInstances { get; set; } = true;
+        public bool UseEscToCancelQuesting { get; set; } = true;
     }
 
     internal sealed class AdvancedConfiguration

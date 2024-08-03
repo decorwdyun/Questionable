@@ -8,10 +8,11 @@ using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Dalamud.Plugin;
+using Dalamud.Plugin.Ipc;
 using Microsoft.Extensions.Logging;
 using Questionable.Data;
 using Questionable.Model;
-using Questionable.Model.V1;
+using Questionable.Model.Questing;
 using Questionable.QuestPaths;
 using Questionable.Validation;
 using Questionable.Validation.Validators;
@@ -23,8 +24,9 @@ internal sealed class QuestRegistry
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly QuestData _questData;
     private readonly QuestValidator _questValidator;
-    private readonly ILogger<QuestRegistry> _logger;
     private readonly JsonSchemaValidator _jsonSchemaValidator;
+    private readonly ILogger<QuestRegistry> _logger;
+    private readonly ICallGateProvider<object> _reloadDataIpc;
 
     private readonly Dictionary<ushort, Quest> _quests = new();
 
@@ -37,6 +39,7 @@ internal sealed class QuestRegistry
         _questValidator = questValidator;
         _jsonSchemaValidator = jsonSchemaValidator;
         _logger = logger;
+        _reloadDataIpc = _pluginInterface.GetIpcProvider<object>("Questionable.ReloadData");
     }
 
     public IEnumerable<Quest> AllQuests => _quests.Values;
@@ -66,6 +69,16 @@ internal sealed class QuestRegistry
 
         ValidateQuests();
         Reloaded?.Invoke(this, EventArgs.Empty);
+        try
+        {
+            _reloadDataIpc.SendMessage();
+        }
+        catch (Exception e)
+        {
+            // why does this even throw
+            _logger.LogWarning(e, "Error during Reload.SendMessage IPC");
+        }
+
         _logger.LogInformation("Loaded {Count} quests in total", _quests.Count);
     }
 
@@ -101,24 +114,10 @@ internal sealed class QuestRegistry
             {
                 try
                 {
-                    LoadFromDirectory(
-                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "2.x - A Realm Reborn")),
-                        LogLevel.Trace);
-                    LoadFromDirectory(
-                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "3.x - Heavensward")),
-                        LogLevel.Trace);
-                    LoadFromDirectory(
-                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "4.x - Stormblood")),
-                        LogLevel.Trace);
-                    LoadFromDirectory(
-                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "5.x - Shadowbringers")),
-                        LogLevel.Trace);
-                    LoadFromDirectory(
-                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "6.x - Endwalker")),
-                        LogLevel.Trace);
-                    LoadFromDirectory(
-                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "7.x - Dawntrail")),
-                        LogLevel.Trace);
+                    foreach (var expansionFolder in ExpansionData.ExpansionFolders.Values)
+                        LoadFromDirectory(
+                            new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, expansionFolder)),
+                            LogLevel.Trace);
                 }
                 catch (Exception e)
                 {

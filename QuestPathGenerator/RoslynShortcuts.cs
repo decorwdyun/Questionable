@@ -6,7 +6,9 @@ using System.Numerics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Questionable.Model.V1;
+using Questionable.Model.Common;
+using Questionable.Model.Gathering;
+using Questionable.Model.Questing;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace Questionable.QuestPathGenerator;
@@ -213,7 +215,9 @@ public static class RoslynShortcuts
                                 {
                                     Argument(LiteralValue(qwv.High)),
                                     Token(SyntaxKind.CommaToken),
-                                    Argument(LiteralValue(qwv.Low))
+                                    Argument(LiteralValue(qwv.Low)),
+                                    Token(SyntaxKind.CommaToken),
+                                    Argument(LiteralValue(qwv.Mode))
                                 })));
             }
             else if (value is List<QuestWorkValue> list)
@@ -254,6 +258,9 @@ public static class RoslynShortcuts
                                 SyntaxNodeList(
                                     Assignment(nameof(SkipStepConditions.Never), skipStepConditions.Never,
                                             emptyStep.Never)
+                                        .AsSyntaxNodeOrToken(),
+                                    AssignmentList(nameof(SkipStepConditions.CompletionQuestVariablesFlags),
+                                            skipStepConditions.CompletionQuestVariablesFlags)
                                         .AsSyntaxNodeOrToken(),
                                     Assignment(nameof(SkipStepConditions.Flying), skipStepConditions.Flying,
                                             emptyStep.Flying)
@@ -306,6 +313,57 @@ public static class RoslynShortcuts
                                         emptyAetheryte.Never),
                                     Assignment(nameof(SkipAetheryteCondition.InSameTerritory),
                                         skipAetheryteCondition.InSameTerritory, emptyAetheryte.InSameTerritory)))));
+            }
+            else if (value is GatheringNodeGroup nodeGroup)
+            {
+                return ObjectCreationExpression(
+                        IdentifierName(nameof(GatheringNodeGroup)))
+                    .WithInitializer(
+                        InitializerExpression(
+                            SyntaxKind.ObjectInitializerExpression,
+                            SeparatedList<ExpressionSyntax>(
+                                SyntaxNodeList(
+                                    AssignmentList(nameof(GatheringNodeGroup.Nodes), nodeGroup.Nodes)
+                                        .AsSyntaxNodeOrToken()))));
+            }
+            else if (value is GatheringNode nodeLocation)
+            {
+                var emptyLocation = new GatheringNode();
+                return ObjectCreationExpression(
+                        IdentifierName(nameof(GatheringNode)))
+                    .WithInitializer(
+                        InitializerExpression(
+                            SyntaxKind.ObjectInitializerExpression,
+                            SeparatedList<ExpressionSyntax>(
+                                SyntaxNodeList(
+                                    Assignment(nameof(GatheringNode.DataId), nodeLocation.DataId,
+                                            emptyLocation.DataId)
+                                        .AsSyntaxNodeOrToken(),
+                                    AssignmentList(nameof(GatheringNode.Locations), nodeLocation.Locations)
+                                        .AsSyntaxNodeOrToken()))));
+            }
+            else if (value is GatheringLocation location)
+            {
+                var emptyLocation = new GatheringLocation();
+                return ObjectCreationExpression(
+                        IdentifierName(nameof(GatheringLocation)))
+                    .WithInitializer(
+                        InitializerExpression(
+                            SyntaxKind.ObjectInitializerExpression,
+                            SeparatedList<ExpressionSyntax>(
+                                SyntaxNodeList(
+                                    Assignment(nameof(GatheringLocation.Position), location.Position,
+                                        emptyLocation.Position).AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(GatheringLocation.MinimumAngle), location.MinimumAngle,
+                                        emptyLocation.MinimumAngle).AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(GatheringLocation.MaximumAngle), location.MaximumAngle,
+                                        emptyLocation.MaximumAngle).AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(GatheringLocation.MinimumDistance),
+                                            location.MinimumDistance, emptyLocation.MinimumDistance)
+                                        .AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(GatheringLocation.MaximumDistance),
+                                            location.MaximumDistance, emptyLocation.MaximumDistance)
+                                        .AsSyntaxNodeOrToken()))));
             }
             else if (value is null)
                 return LiteralExpression(SyntaxKind.NullLiteralExpression);

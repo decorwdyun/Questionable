@@ -14,7 +14,7 @@ using FFXIVClientStructs.FFXIV.Common.Math;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.CombatModules;
 using Questionable.Controller.Utils;
-using Questionable.Model.V1;
+using Questionable.Model.Questing;
 
 namespace Questionable.Controller;
 
@@ -172,7 +172,7 @@ internal sealed class CombatController : IDisposable
                 {
                     var questWork = _gameFunctions.GetQuestEx(_currentFight.Data.QuestId);
                     if (questWork != null && QuestWorkUtils.MatchesQuestWork(condition.CompletionQuestVariablesFlags,
-                            questWork.Value, false))
+                            questWork.Value))
                     {
                         _logger.LogInformation("Complex combat condition fulfilled: QuestWork matches");
                         _currentFight.Data.CompletedComplexDatas.Add(i);

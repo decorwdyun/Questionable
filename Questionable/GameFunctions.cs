@@ -24,7 +24,8 @@ using Microsoft.Extensions.Logging;
 using Questionable.Controller;
 using Questionable.Data;
 using Questionable.Model;
-using Questionable.Model.V1;
+using Questionable.Model.Common;
+using Questionable.Model.Questing;
 using Action = Lumina.Excel.GeneratedSheets2.Action;
 using BattleChara = FFXIVClientStructs.FFXIV.Client.Game.Character.BattleChara;
 using ContentFinderCondition = Lumina.Excel.GeneratedSheets.ContentFinderCondition;
@@ -409,10 +410,13 @@ internal sealed unsafe class GameFunctions
                playerState->IsAetherCurrentUnlocked(aetherCurrentId);
     }
 
-    public IGameObject? FindObjectByDataId(uint dataId, ObjectKind? kind = null)
+    public IGameObject? FindObjectByDataId(uint dataId, ObjectKind? kind = null, bool targetable = false)
     {
         foreach (var gameObject in _objectTable)
         {
+            if (targetable && !gameObject.IsTargetable)
+                continue;
+
             if (gameObject.ObjectKind is ObjectKind.Player or ObjectKind.Companion or ObjectKind.MountType
                 or ObjectKind.Retainer or ObjectKind.Housing)
                 continue;
@@ -431,19 +435,31 @@ internal sealed unsafe class GameFunctions
     {
         IGameObject? gameObject = FindObjectByDataId(dataId, kind);
         if (gameObject != null)
-        {
-            _logger.LogInformation("Setting target with {DataId} to {ObjectId}", dataId, gameObject.EntityId);
-            _targetManager.Target = null;
-            _targetManager.Target = gameObject;
+            return InteractWith(gameObject);
 
+        _logger.LogDebug("Game object is null");
+        return false;
+    }
+
+    public bool InteractWith(IGameObject gameObject)
+    {
+        _logger.LogInformation("Setting target with {DataId} to {ObjectId}", gameObject.DataId, gameObject.EntityId);
+        _targetManager.Target = null;
+        _targetManager.Target = gameObject;
+
+        if (gameObject.ObjectKind == ObjectKind.GatheringPoint)
+        {
+            TargetSystem.Instance()->OpenObjectInteraction((GameObject*)gameObject.Address);
+            _logger.LogInformation("Interact result: (none) for GatheringPoint");
+            return true;
+        }
+        else
+        {
             long result = (long)TargetSystem.Instance()->InteractWithObject((GameObject*)gameObject.Address, false);
 
             _logger.LogInformation("Interact result: {Result}", result);
             return result != 7 && result > 0;
         }
-
-        _logger.LogDebug("Game object is null");
-        return false;
     }
 
     public bool UseItem(uint itemId)
@@ -730,7 +746,7 @@ internal sealed unsafe class GameFunctions
                _condition[ConditionFlag.OccupiedInQuestEvent] || _condition[ConditionFlag.OccupiedInCutSceneEvent] ||
                _condition[ConditionFlag.Casting] || _condition[ConditionFlag.Unknown57] ||
                _condition[ConditionFlag.BetweenAreas] || _condition[ConditionFlag.BetweenAreas51] ||
-               _condition[ConditionFlag.Jumping61];
+               _condition[ConditionFlag.Jumping61] || _condition[ConditionFlag.Gathering42];
     }
 
     public bool IsLoadingScreenVisible()

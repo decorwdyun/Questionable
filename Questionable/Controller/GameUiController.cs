@@ -14,7 +14,7 @@ using LLib.GameUI;
 using Lumina.Excel.GeneratedSheets;
 using Microsoft.Extensions.Logging;
 using Questionable.Data;
-using Questionable.Model.V1;
+using Questionable.Model.Questing;
 using Quest = Questionable.Model.Quest;
 using ValueType = FFXIVClientStructs.FFXIV.Component.GUI.ValueType;
 

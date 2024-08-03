@@ -23,6 +23,7 @@
             <LogicalName>Questionable.QuestPaths.QuestSchema</LogicalName>
         </EmbeddedResource>
         <AdditionalFiles Include="quest-v1.json" />
+        <AdditionalFiles Include="..\Questionable.Model\common-schema.json" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(Configuration)' == 'Release'">
@@ -38,5 +39,9 @@
         <AdditionalFiles Include="5.x - Shadowbringers\**\*.json" />
         <AdditionalFiles Include="6.x - Endwalker\**\*.json" />
         <AdditionalFiles Include="7.x - Dawntrail\**\*.json" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="7.x - Dawntrail\Custom Deliveries\" />
     </ItemGroup>
 </Project>

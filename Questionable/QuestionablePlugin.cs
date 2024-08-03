@@ -13,6 +13,7 @@ using Questionable.Controller.CombatModules;
 using Questionable.Controller.NavigationOverrides;
 using Questionable.Controller.Steps.Shared;
 using Questionable.Controller.Steps.Common;
+using Questionable.Controller.Steps.Gathering;
 using Questionable.Controller.Steps.Interactions;
 using Questionable.Data;
 using Questionable.External;
@@ -89,6 +90,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<ChatFunctions>();
         serviceCollection.AddSingleton<AetherCurrentData>();
         serviceCollection.AddSingleton<AetheryteData>();
+        serviceCollection.AddSingleton<GatheringData>();
         serviceCollection.AddSingleton<JournalData>();
         serviceCollection.AddSingleton<QuestData>();
         serviceCollection.AddSingleton<TerritoryData>();
@@ -102,9 +104,13 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         // individual tasks
         serviceCollection.AddTransient<MountTask>();
         serviceCollection.AddTransient<UnmountTask>();
+        serviceCollection.AddTransient<MoveToLandingLocation>();
+        serviceCollection.AddTransient<DoGather>();
+        serviceCollection.AddTransient<DoGatherCollectable>();
 
         // task factories
         serviceCollection.AddTaskWithFactory<StepDisabled.Factory, StepDisabled.Task>();
+        serviceCollection.AddTaskWithFactory<GatheringRequiredItems.Factory, GatheringRequiredItems.StartGathering>();
         serviceCollection.AddTaskWithFactory<AetheryteShortcut.Factory, AetheryteShortcut.UseAetheryteShortcut>();
         serviceCollection.AddTaskWithFactory<SkipCondition.Factory, SkipCondition.CheckSkip>();
         serviceCollection.AddTaskWithFactory<AethernetShortcut.Factory, AethernetShortcut.UseAethernetShortcut>();
@@ -149,6 +155,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<GameUiController>();
         serviceCollection.AddSingleton<NavigationShortcutController>();
         serviceCollection.AddSingleton<CombatController>();
+        serviceCollection.AddSingleton<GatheringController>();
 
         serviceCollection.AddSingleton<ICombatModule, RotationSolverRebornModule>();
     }

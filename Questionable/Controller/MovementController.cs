@@ -18,8 +18,10 @@ using Microsoft.Extensions.Logging;
 using Questionable.Controller.NavigationOverrides;
 using Questionable.External;
 using Questionable.Model;
-using Questionable.Model.V1;
-using Questionable.Model.V1.Converter;
+using Questionable.Model.Common;
+using Questionable.Model.Common.Converter;
+using Questionable.Model.Questing;
+using Questionable.Model.Questing.Converter;
 
 namespace Questionable.Controller;
 
@@ -258,7 +260,7 @@ internal sealed class MovementController : IDisposable
 
     private bool IsOnFlightPath(Vector3 p)
     {
-        Vector3? pointOnFloor = _navmeshIpc.GetPointOnFloor(p);
+        Vector3? pointOnFloor = _navmeshIpc.GetPointOnFloor(p, true);
         return pointOnFloor != null && Math.Abs(pointOnFloor.Value.Y - p.Y) > 0.5f;
     }
 

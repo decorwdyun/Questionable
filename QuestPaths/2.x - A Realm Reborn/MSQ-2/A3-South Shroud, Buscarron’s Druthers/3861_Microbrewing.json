@@ -29,6 +29,7 @@
           "TerritoryId": 139,
           "InteractionType": "WalkTo",
           "DisableNavmesh": true,
+          "Mount": true,
           "Comment": "Avoids swimming"
         },
         {

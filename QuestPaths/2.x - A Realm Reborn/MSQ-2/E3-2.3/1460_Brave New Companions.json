@@ -68,14 +68,18 @@
           "TerritoryId": 351,
           "InteractionType": "Interact",
           "TargetTerritoryId": 156,
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -2
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                2
+              ]
+            }
+          }
         },
         {
           "DataId": 1009147,

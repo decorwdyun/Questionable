@@ -4,46 +4,56 @@ using System.Linq;
 using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Shared;
-using Questionable.Model.V1;
+using Questionable.Model.Questing;
 
 namespace Questionable.Controller.Utils;
 
 internal static class QuestWorkUtils
 {
-    public static bool HasCompletionFlags(IList<short?> completionQuestVariablesFlags)
+    public static bool HasCompletionFlags(IList<QuestWorkValue?> completionQuestVariablesFlags)
     {
-        return completionQuestVariablesFlags.Count == 6 && completionQuestVariablesFlags.Any(x => x != null);
+        return completionQuestVariablesFlags.Count == 6 && completionQuestVariablesFlags.Any(x => x != null && (x.High != 0 || x.Low != 0));
     }
 
-    /// <summary>
-    /// Positive values: Must be set to this value; will wait for the step to have these set.
-    /// Negative values: Will skip if set to this value, won't wait for this to be set.
-    /// </summary>
-    public static bool MatchesQuestWork(IList<short?> completionQuestVariablesFlags, QuestWork questWork, bool forSkip)
+    public static bool MatchesQuestWork(IList<QuestWorkValue?> completionQuestVariablesFlags, QuestWork questWork)
     {
         if (!HasCompletionFlags(completionQuestVariablesFlags))
             return false;
 
         for (int i = 0; i < 6; ++i)
         {
-            short? check = completionQuestVariablesFlags[i];
+            QuestWorkValue? check = completionQuestVariablesFlags[i];
             if (check == null)
                 continue;
 
-            byte actualValue = questWork.Variables[i];
-            byte checkByte = check > 0 ? (byte)check : (byte)-check;
-            if (forSkip)
+            EQuestWorkMode mode = check.Mode;
+
+            byte actualHigh = (byte)(questWork.Variables[i] >> 4);
+            byte actualLow = (byte)(questWork.Variables[i] & 0xF);
+
+            byte? checkHigh = check.High;
+            byte? checkLow = check.Low;
+
+            byte expectedHigh = checkHigh.GetValueOrDefault();
+            byte expectedLow = checkLow.GetValueOrDefault();
+            if (mode == EQuestWorkMode.Exact)
             {
-                byte expectedValue = (byte)Math.Abs(check.Value);
-                if ((actualValue & checkByte) != expectedValue)
+                if (checkHigh != null && actualHigh != expectedHigh)
+                    return false;
+
+                if (checkLow != null && actualLow != expectedLow)
                     return false;
             }
-            else if (!forSkip && check > 0)
+            else if (mode == EQuestWorkMode.Bitwise)
             {
-                byte expectedValue = check > 0 ? (byte)check : (byte)0;
-                if ((actualValue & checkByte) != expectedValue)
+                if (checkHigh != null && (actualHigh & checkHigh) != expectedHigh)
+                    return false;
+
+                if (checkLow != null && (actualLow & checkLow) != expectedLow)
                     return false;
             }
+            else
+                throw new InvalidOperationException($"Unknown qw mode {mode}");
         }
 
         return true;
@@ -54,7 +64,7 @@ internal static class QuestWorkUtils
     {
         if (requiredQuestVariables.Count != 6 || requiredQuestVariables.All(x => x == null || x.Count == 0))
         {
-            logger.LogInformation("No RQW defined");
+            logger.LogDebug("No RQW defined");
             return true;
         }
 
@@ -71,7 +81,7 @@ internal static class QuestWorkUtils
 
             foreach (QuestWorkValue expectedValue in requiredQuestVariables[i]!)
             {
-                logger.LogInformation("H: {ExpectedHigh} - {ActualHigh}, L: {ExpectedLow} - {ActualLow}",
+                logger.LogDebug("H: {ExpectedHigh} - {ActualHigh}, L: {ExpectedLow} - {ActualLow}",
                     expectedValue.High, high, expectedValue.Low, low);
                 if (expectedValue.High != null && expectedValue.High != high)
                     continue;

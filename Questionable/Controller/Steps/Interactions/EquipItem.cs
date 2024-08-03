@@ -6,7 +6,7 @@ using FFXIVClientStructs.FFXIV.Client.Game;
 using Lumina.Excel.GeneratedSheets;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Questionable.Model.V1;
+using Questionable.Model.Questing;
 using Quest = Questionable.Model.Quest;
 
 namespace Questionable.Controller.Steps.Interactions;

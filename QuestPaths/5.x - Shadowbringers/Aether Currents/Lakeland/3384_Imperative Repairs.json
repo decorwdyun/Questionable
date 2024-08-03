@@ -29,14 +29,18 @@
           "TerritoryId": 813,
           "InteractionType": "WalkTo",
           "Comment": "Tower Bottom",
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -64
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                64
+              ]
+            }
+          }
         },
         {
           "Position": {
@@ -48,14 +52,18 @@
           "InteractionType": "WalkTo",
           "DisableNavmesh": true,
           "Comment": "Tower Bottom Platform 1",
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            -64
-          ]
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                64
+              ]
+            }
+          }
         },
         {
           "DataId": 2010618,
