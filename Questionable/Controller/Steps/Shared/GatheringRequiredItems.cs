@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Dalamud.Game.Text;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Questionable.Data;
@@ -70,6 +71,12 @@ internal static class GatheringRequiredItems
             return ETaskResult.StillRunning;
         }
 
-        public override string ToString() => $"Gather({_gatheredItem.ItemCount}x {_gatheredItem.ItemId})";
+        public override string ToString()
+        {
+            if (_gatheredItem.Collectability == 0)
+                return $"Gather({_gatheredItem.ItemCount}x {_gatheredItem.ItemId})";
+            else
+                return $"Gather({_gatheredItem.ItemCount}x {_gatheredItem.ItemId} {SeIconChar.Collectible.ToIconString()} {_gatheredItem.Collectability})";
+        }
     }
 }

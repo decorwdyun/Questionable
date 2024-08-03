@@ -4,5 +4,5 @@ public sealed class GatheredItem
 {
     public uint ItemId { get; set; }
     public int ItemCount { get; set; }
-    public short Collectability { get; set; }
+    public ushort Collectability { get; set; }
 }

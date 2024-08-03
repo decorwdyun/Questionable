@@ -461,35 +461,44 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         _combatController.Stop("Execute next step");
         _gatheringController.Stop("Execute next step");
 
-        var newTasks = _taskFactories
-            .SelectMany(x =>
-            {
-                IList<ITask> tasks = x.CreateAllTasks(CurrentQuest.Quest, seq, step).ToList();
-
-                if (tasks.Count > 0 && _logger.IsEnabled(LogLevel.Trace))
-                {
-                    string factoryName = x.GetType().FullName ?? x.GetType().Name;
-                    if (factoryName.Contains('.', StringComparison.Ordinal))
-                        factoryName = factoryName[(factoryName.LastIndexOf('.') + 1)..];
-
-                    _logger.LogTrace("Factory {FactoryName} created Task {TaskNames}",
-                        factoryName, string.Join(", ", tasks.Select(y => y.ToString())));
-                }
-
-                return tasks;
-            })
-            .ToList();
-        if (newTasks.Count == 0)
+        try
         {
-            _logger.LogInformation("Nothing to execute for step?");
-            return;
-        }
+            var newTasks = _taskFactories
+                .SelectMany(x =>
+                {
+                    IList<ITask> tasks = x.CreateAllTasks(CurrentQuest.Quest, seq, step).ToList();
 
-        _logger.LogInformation("Tasks for {QuestId}, {Sequence}, {Step}: {Tasks}",
-            CurrentQuest.Quest.QuestId, seq.Sequence, seq.Steps.IndexOf(step),
-            string.Join(", ", newTasks.Select(x => x.ToString())));
-        foreach (var task in newTasks)
-            _taskQueue.Enqueue(task);
+                    if (tasks.Count > 0 && _logger.IsEnabled(LogLevel.Trace))
+                    {
+                        string factoryName = x.GetType().FullName ?? x.GetType().Name;
+                        if (factoryName.Contains('.', StringComparison.Ordinal))
+                            factoryName = factoryName[(factoryName.LastIndexOf('.') + 1)..];
+
+                        _logger.LogTrace("Factory {FactoryName} created Task {TaskNames}",
+                            factoryName, string.Join(", ", tasks.Select(y => y.ToString())));
+                    }
+
+                    return tasks;
+                })
+                .ToList();
+            if (newTasks.Count == 0)
+            {
+                _logger.LogInformation("Nothing to execute for step?");
+                return;
+            }
+
+            _logger.LogInformation("Tasks for {QuestId}, {Sequence}, {Step}: {Tasks}",
+                CurrentQuest.Quest.QuestId, seq.Sequence, seq.Steps.IndexOf(step),
+                string.Join(", ", newTasks.Select(x => x.ToString())));
+            foreach (var task in newTasks)
+                _taskQueue.Enqueue(task);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Failed to create tasks");
+            _chatGui.PrintError("[Questionable] Failed to start next task sequence, please check /xllog for details.");
+            Stop("Tasks failed to create");
+        }
     }
 
     public string ToStatString()

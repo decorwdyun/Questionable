@@ -105,7 +105,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTransient<MountTask>();
         serviceCollection.AddTransient<UnmountTask>();
         serviceCollection.AddTransient<MoveToLandingLocation>();
-        serviceCollection.AddTransient<WaitGather>();
+        serviceCollection.AddTransient<DoGather>();
+        serviceCollection.AddTransient<DoGatherCollectable>();
 
         // task factories
         serviceCollection.AddTaskWithFactory<StepDisabled.Factory, StepDisabled.Task>();

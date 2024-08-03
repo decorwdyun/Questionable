@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
@@ -12,7 +13,6 @@ using Questionable.Controller.Steps.Common;
 using Questionable.Controller.Steps.Gathering;
 using Questionable.Controller.Steps.Interactions;
 using Questionable.Controller.Steps.Shared;
-using Questionable.Data;
 using Questionable.External;
 using Questionable.GatheringPaths;
 using Questionable.Model.Gathering;
@@ -22,25 +22,31 @@ namespace Questionable.Controller;
 internal sealed unsafe class GatheringController : MiniTaskController<GatheringController>
 {
     private readonly MovementController _movementController;
-    private readonly GatheringData _gatheringData;
     private readonly GameFunctions _gameFunctions;
     private readonly NavmeshIpc _navmeshIpc;
     private readonly IObjectTable _objectTable;
     private readonly IServiceProvider _serviceProvider;
+    private readonly ICondition _condition;
 
     private CurrentRequest? _currentRequest;
 
-    public GatheringController(MovementController movementController, GatheringData gatheringData,
-        GameFunctions gameFunctions, NavmeshIpc navmeshIpc, IObjectTable objectTable, IChatGui chatGui,
-        ILogger<GatheringController> logger, IServiceProvider serviceProvider)
+    public GatheringController(
+        MovementController movementController,
+        GameFunctions gameFunctions,
+        NavmeshIpc navmeshIpc,
+        IObjectTable objectTable,
+        IChatGui chatGui,
+        ILogger<GatheringController> logger,
+        IServiceProvider serviceProvider,
+        ICondition condition)
         : base(chatGui, logger)
     {
         _movementController = movementController;
-        _gatheringData = gatheringData;
         _gameFunctions = gameFunctions;
         _navmeshIpc = navmeshIpc;
         _objectTable = objectTable;
         _serviceProvider = serviceProvider;
+        _condition = condition;
     }
 
     public bool Start(GatheringRequest gatheringRequest)
@@ -58,7 +64,8 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
             Data = gatheringRequest,
             Root = gatheringRoot,
             Nodes = gatheringRoot.Groups
-                .SelectMany(x => x.Nodes)
+                // at least in EW-ish, there's one node with 1 fixed location and one node with 3 random locations
+                .SelectMany(x => x.Nodes.OrderBy(y => y.Locations.Count))
                 .ToList(),
         };
 
@@ -79,7 +86,7 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
         if (_movementController.IsPathfinding || _movementController.IsPathfinding)
             return EStatus.Moving;
 
-        if (HasRequestedItems())
+        if (HasRequestedItems() && !_condition[ConditionFlag.Gathering])
             return EStatus.Complete;
 
         if (_currentTask == null && _taskQueue.Count == 0)
@@ -118,12 +125,13 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
                 Y = currentNode.Locations.Select(x => x.Position.Y).Max() + 5f,
                 Z = currentNode.Locations.Sum(x => x.Position.Z) / currentNode.Locations.Count,
             };
-            Vector3? pointOnFloor = _navmeshIpc.GetPointOnFloor(averagePosition);
+            bool fly = _gameFunctions.IsFlyingUnlocked(_currentRequest.Root.TerritoryId);
+            Vector3? pointOnFloor = _navmeshIpc.GetPointOnFloor(averagePosition, true);
             if (pointOnFloor != null)
-                pointOnFloor = pointOnFloor.Value with { Y = pointOnFloor.Value.Y + 3f };
+                pointOnFloor = pointOnFloor.Value with { Y = pointOnFloor.Value.Y + (fly ? 3f : 0f) };
 
             _taskQueue.Enqueue(_serviceProvider.GetRequiredService<Move.MoveInternal>()
-                .With(_currentRequest.Root.TerritoryId, pointOnFloor ?? averagePosition, 50f, fly: true,
+                .With(_currentRequest.Root.TerritoryId, pointOnFloor ?? averagePosition, 50f, fly: fly,
                     ignoreDistanceToObject: true));
         }
 
@@ -131,7 +139,13 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
             .With(_currentRequest.Root.TerritoryId, currentNode));
         _taskQueue.Enqueue(_serviceProvider.GetRequiredService<Interact.DoInteract>()
             .With(currentNode.DataId, true));
-        _taskQueue.Enqueue(_serviceProvider.GetRequiredService<WaitGather>());
+        _taskQueue.Enqueue(_serviceProvider.GetRequiredService<DoGather>()
+            .With(_currentRequest.Data, currentNode));
+        if (_currentRequest.Data.Collectability > 0)
+        {
+            _taskQueue.Enqueue(_serviceProvider.GetRequiredService<DoGatherCollectable>()
+                .With(_currentRequest.Data, currentNode));
+        }
     }
 
     private bool HasRequestedItems()
@@ -144,7 +158,13 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
             return false;
 
         return inventoryManager->GetInventoryItemCount(_currentRequest.Data.ItemId,
-            minCollectability: _currentRequest.Data.Collectability) >= _currentRequest.Data.Quantity;
+            minCollectability: (short)_currentRequest.Data.Collectability) >= _currentRequest.Data.Quantity;
+    }
+
+    public bool HasNodeDisappeared(GatheringNode node)
+    {
+        return !_objectTable.Any(x =>
+            x.ObjectKind == ObjectKind.GatheringPoint && x.IsTargetable && x.DataId == node.DataId);
     }
 
     public override IList<string> GetRemainingTaskNames()
@@ -168,7 +188,11 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
         public int CurrentIndex { get; set; }
     }
 
-    public sealed record GatheringRequest(ushort GatheringPointId, uint ItemId, int Quantity, short Collectability = 0);
+    public sealed record GatheringRequest(
+        ushort GatheringPointId,
+        uint ItemId,
+        int Quantity,
+        ushort Collectability = 0);
 
     public enum EStatus
     {

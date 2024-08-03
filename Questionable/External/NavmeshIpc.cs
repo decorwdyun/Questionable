@@ -108,11 +108,11 @@ internal sealed class NavmeshIpc
         }
     }
 
-    public Vector3? GetPointOnFloor(Vector3 position)
+    public Vector3? GetPointOnFloor(Vector3 position, bool unlandable)
     {
         try
         {
-            return _queryPointOnFloor.InvokeFunc(position, true, 1);
+            return _queryPointOnFloor.InvokeFunc(position, unlandable, 0.2f);
         }
         catch (IpcError)
         {

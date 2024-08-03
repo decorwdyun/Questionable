@@ -15,6 +15,18 @@ public enum EAction
     RedGulal = 29382,
     YellowGulal = 29383,
     BlueGulal = 29384,
+
+    CollectMiner = 240,
+    ScourMiner = 22182,
+    MeticulousMiner = 22184,
+    ScrutinyMiner = 22185,
+
+    CollectBotanist = 815,
+    ScourBotanist = 22186,
+    MeticulousBotanist = 22188,
+    ScrutinyBotanist = 22189,
+
+
 }
 
 public static class EActionExtensions

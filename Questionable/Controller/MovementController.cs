@@ -260,7 +260,7 @@ internal sealed class MovementController : IDisposable
 
     private bool IsOnFlightPath(Vector3 p)
     {
-        Vector3? pointOnFloor = _navmeshIpc.GetPointOnFloor(p);
+        Vector3? pointOnFloor = _navmeshIpc.GetPointOnFloor(p, true);
         return pointOnFloor != null && Math.Abs(pointOnFloor.Value.Y - p.Y) > 0.5f;
     }
 

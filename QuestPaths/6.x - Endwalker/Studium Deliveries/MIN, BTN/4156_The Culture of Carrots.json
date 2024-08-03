@@ -1,4 +1,4 @@
-{
+﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
   "QuestSequence": [
@@ -36,12 +36,12 @@
           ],
           "RequiredGatheredItems": [
             {
-              "ItemId": 35600,
+              "ItemId": 35602,
               "ItemCount": 6,
               "Collectability": 600
             }
           ],
-          "NextQuestId": 4155
+          "NextQuestId": 4157
         }
       ]
     }

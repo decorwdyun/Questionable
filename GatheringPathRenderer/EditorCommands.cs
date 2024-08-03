@@ -93,7 +93,7 @@ internal sealed class EditorCommands : IDisposable
         }
         else
         {
-            (targetFile, root) = CreateNewFile(gatheringPoint, target, string.Join(" ", arguments));
+            (targetFile, root) = CreateNewFile(gatheringPoint, target);
             _chatGui.Print($"Creating new file under {targetFile.FullName}", "qG");
         }
 
@@ -164,12 +164,8 @@ internal sealed class EditorCommands : IDisposable
         }
     }
 
-    public (FileInfo targetFile, GatheringRoot root) CreateNewFile(GatheringPoint gatheringPoint, IGameObject target,
-        string fileName)
+    public (FileInfo targetFile, GatheringRoot root) CreateNewFile(GatheringPoint gatheringPoint, IGameObject target)
     {
-        if (string.IsNullOrEmpty(fileName))
-            throw new ArgumentException(nameof(fileName));
-
         // determine target folder
         DirectoryInfo? targetFolder = _plugin.GetLocationsInTerritory(_clientState.TerritoryType).FirstOrDefault()
             ?.File.Directory;
@@ -183,7 +179,8 @@ internal sealed class EditorCommands : IDisposable
 
         FileInfo targetFile =
             new FileInfo(
-                Path.Combine(targetFolder.FullName, $"{gatheringPoint.GatheringPointBase.Row}_{fileName}.json"));
+                Path.Combine(targetFolder.FullName,
+                    $"{gatheringPoint.GatheringPointBase.Row}_{gatheringPoint.PlaceName.Value!.Name}_{(_clientState.LocalPlayer!.ClassJob.Id == 16 ? "MIN" : "BTN")}.json"));
         var root = new GatheringRoot
         {
             TerritoryId = _clientState.TerritoryType,

@@ -7,6 +7,7 @@ using System.Numerics;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.Types;
+using Dalamud.Interface.Colors;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin.Services;
 using ImGuiNET;
@@ -30,8 +31,6 @@ internal sealed class EditorWindow : Window
 
     private (RendererPlugin.GatheringLocationContext Context, GatheringNode Node, GatheringLocation Location)?
         _targetLocation;
-
-    private string _newFileName = string.Empty;
 
     public EditorWindow(RendererPlugin plugin, EditorCommands editorCommands, IDataManager dataManager,
         ITargetManager targetManager, IClientState clientState, IObjectTable objectTable)
@@ -68,9 +67,15 @@ internal sealed class EditorWindow : Window
                             })
                             .Select(location => new { Context = context, Node = node, Location = location }))))
             .FirstOrDefault();
-        if (_target != null && _target.ObjectKind != ObjectKind.GatheringPoint || location == null)
+        if (_target != null && _target.ObjectKind != ObjectKind.GatheringPoint)
         {
             _target = null;
+            _targetLocation = null;
+            return;
+        }
+
+        if (location == null)
+        {
             _targetLocation = null;
             return;
         }
@@ -123,13 +128,18 @@ internal sealed class EditorWindow : Window
                 _plugin.Redraw();
             }
 
-            ImGui.BeginDisabled(locationOverride.MinimumAngle == null && locationOverride.MaximumAngle == null);
+            bool unsaved = locationOverride is { MinimumAngle: not null, MaximumAngle: not null };
+            ImGui.BeginDisabled(!unsaved);
+            if (unsaved)
+                ImGui.PushStyleColor(ImGuiCol.Button, ImGuiColors.DalamudRed);
             if (ImGui.Button("Save"))
             {
                 location.MinimumAngle = locationOverride.MinimumAngle;
                 location.MaximumAngle = locationOverride.MaximumAngle;
                 _plugin.Save(context.File, context.Root);
             }
+            if (unsaved)
+                ImGui.PopStyleColor();
 
             ImGui.SameLine();
             if (ImGui.Button("Reset"))
@@ -189,16 +199,11 @@ internal sealed class EditorWindow : Window
             }
             else
             {
-                ImGui.InputText("File Name", ref _newFileName, 128);
-                ImGui.BeginDisabled(string.IsNullOrEmpty(_newFileName));
                 if (ImGui.Button("Create location"))
                 {
-                    var (targetFile, root) = _editorCommands.CreateNewFile(gatheringPoint, _target, _newFileName);
+                    var (targetFile, root) = _editorCommands.CreateNewFile(gatheringPoint, _target);
                     _plugin.Save(targetFile, root);
-                    _newFileName = string.Empty;
                 }
-
-                ImGui.EndDisabled();
             }
         }
     }
