@@ -72,14 +72,14 @@ public sealed class QuestStep
     public IList<uint> PointMenuChoices { get; set; } = new List<uint>();
 
     // TODO: Not implemented
-    [JsonConverter(typeof(IdConverter))]
-    public IId? PickUpQuestId { get; set; }
+    [JsonConverter(typeof(ElementIdConverter))]
+    public ElementId? PickUpQuestId { get; set; }
 
-    [JsonConverter(typeof(IdConverter))]
-    public IId? TurnInQuestId { get; set; }
+    [JsonConverter(typeof(ElementIdConverter))]
+    public ElementId? TurnInQuestId { get; set; }
 
-    [JsonConverter(typeof(IdConverter))]
-    public IId? NextQuestId { get; set; }
+    [JsonConverter(typeof(ElementIdConverter))]
+    public ElementId? NextQuestId { get; set; }
 
     [JsonConstructor]
     public QuestStep()

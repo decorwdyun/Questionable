@@ -151,7 +151,7 @@ internal sealed class ActiveQuestComponent
 
     private QuestWork? DrawQuestWork(QuestController.QuestProgress currentQuest)
     {
-        if (currentQuest.Quest.QuestId is not QuestId questId)
+        if (currentQuest.Quest.QuestElementId is not QuestId questId)
             return null;
 
         var questWork = _gameFunctions.GetQuestEx(questId);
@@ -210,7 +210,7 @@ internal sealed class ActiveQuestComponent
         {
             using var disabled = ImRaii.Disabled();
 
-            if (currentQuest.Quest.QuestId == _questController.NextQuest?.Quest.QuestId)
+            if (currentQuest.Quest.QuestElementId == _questController.NextQuest?.Quest.QuestElementId)
                 ImGui.TextUnformatted("(Next quest in story line not accepted)");
             else
                 ImGui.TextUnformatted("(Not accepted)");
@@ -262,7 +262,7 @@ internal sealed class ActiveQuestComponent
         if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.ArrowCircleRight, "Skip"))
         {
             _movementController.Stop();
-            _questController.Skip(currentQuest.Quest.QuestId, currentQuest.Sequence);
+            _questController.Skip(currentQuest.Quest.QuestElementId, currentQuest.Sequence);
         }
 
         if (colored)
@@ -274,7 +274,7 @@ internal sealed class ActiveQuestComponent
             ImGui.SameLine();
             if (ImGuiComponents.IconButton(FontAwesomeIcon.Atlas))
                 _commandManager.DispatchCommand("/questinfo",
-                    currentQuest.Quest.QuestId.ToString() ?? string.Empty, commandInfo);
+                    currentQuest.Quest.QuestElementId.ToString() ?? string.Empty, commandInfo);
         }
 
         bool autoAcceptNextQuest = _configuration.General.AutoAcceptNextQuest;

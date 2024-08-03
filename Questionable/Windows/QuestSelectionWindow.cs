@@ -105,7 +105,7 @@ internal sealed class QuestSelectionWindow : LWindow
 
         _quests = _questRegistry.AllQuests
             .Where(x => x.FindSequence(0)?.FindStep(0)?.TerritoryId == territoryId)
-            .Select(x => _questData.GetQuestInfo(x.QuestId))
+            .Select(x => _questData.GetQuestInfo(x.QuestElementId))
             .ToList();
 
         foreach (var unacceptedQuest in Map.Instance()->UnacceptedQuestMarkers)

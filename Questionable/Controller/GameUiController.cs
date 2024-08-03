@@ -600,7 +600,7 @@ internal sealed class GameUiController : IDisposable
 
     private unsafe void UnendingCodexPostSetup(AddonEvent type, AddonArgs args)
     {
-        if (_questController.StartedQuest?.Quest.QuestId.Value == 4526)
+        if (_questController.StartedQuest?.Quest.QuestElementId.Value == 4526)
         {
             _logger.LogInformation("Closing Unending Codex");
             AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
@@ -610,7 +610,7 @@ internal sealed class GameUiController : IDisposable
 
     private unsafe void ContentsTutorialPostSetup(AddonEvent type, AddonArgs args)
     {
-        if (_questController.StartedQuest?.Quest.QuestId.Value == 245)
+        if (_questController.StartedQuest?.Quest.QuestElementId.Value == 245)
         {
             _logger.LogInformation("Closing ContentsTutorial");
             AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
@@ -623,7 +623,7 @@ internal sealed class GameUiController : IDisposable
     /// </summary>
     private unsafe void MultipleHelpWindowPostSetup(AddonEvent type, AddonArgs args)
     {
-        if (_questController.StartedQuest?.Quest.QuestId.Value == 245)
+        if (_questController.StartedQuest?.Quest.QuestElementId.Value == 245)
         {
             _logger.LogInformation("Closing MultipleHelpWindow");
             AtkUnitBase* addon = (AtkUnitBase*)args.Addon;

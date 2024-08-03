@@ -46,7 +46,7 @@ internal sealed class DebugOverlay : Window
         IsOpen = true;
     }
 
-    public IId? HighlightedQuest { get; set; }
+    public ElementId? HighlightedQuest { get; set; }
 
     public override bool DrawConditions() => _configuration.Advanced.DebugOverlay;
 
@@ -103,7 +103,7 @@ internal sealed class DebugOverlay : Window
                 QuestStep? step = sequence.FindStep(i);
                 if (step != null && TryGetPosition(step, out Vector3? position))
                 {
-                    DrawStep($"{quest.QuestId} / {sequence.Sequence} / {i}", step, position.Value, 0xFFFFFFFF);
+                    DrawStep($"{quest.QuestElementId} / {sequence.Sequence} / {i}", step, position.Value, 0xFFFFFFFF);
                 }
             }
         }

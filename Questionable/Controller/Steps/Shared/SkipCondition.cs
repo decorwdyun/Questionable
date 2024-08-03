@@ -34,7 +34,7 @@ internal static class SkipCondition
                 return null;
 
             return serviceProvider.GetRequiredService<CheckSkip>()
-                .With(step, skipConditions ?? new(), quest.QuestId);
+                .With(step, skipConditions ?? new(), quest.QuestElementId);
         }
     }
 
@@ -45,13 +45,13 @@ internal static class SkipCondition
     {
         public QuestStep Step { get; set; } = null!;
         public SkipStepConditions SkipConditions { get; set; } = null!;
-        public IId QuestId { get; set; } = null!;
+        public ElementId QuestElementId { get; set; } = null!;
 
-        public ITask With(QuestStep step, SkipStepConditions skipConditions, IId questId)
+        public ITask With(QuestStep step, SkipStepConditions skipConditions, ElementId questElementId)
         {
             Step = step;
             SkipConditions = skipConditions;
-            QuestId = questId;
+            QuestElementId = questElementId;
             return this;
         }
 
@@ -156,7 +156,7 @@ internal static class SkipCondition
                 return true;
             }
 
-            if (QuestId is QuestId questId)
+            if (QuestElementId is QuestId questId)
             {
                 QuestWork? questWork = gameFunctions.GetQuestEx(questId);
                 if (QuestWorkUtils.HasCompletionFlags(Step.CompletionQuestVariablesFlags) && questWork != null)

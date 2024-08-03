@@ -19,13 +19,13 @@ internal sealed class UiUtils
         _pluginInterface = pluginInterface;
     }
 
-    public (Vector4 color, FontAwesomeIcon icon, string status) GetQuestStyle(IId questId)
+    public (Vector4 color, FontAwesomeIcon icon, string status) GetQuestStyle(ElementId questElementId)
     {
-        if (_gameFunctions.IsQuestAccepted(questId))
+        if (_gameFunctions.IsQuestAccepted(questElementId))
             return (ImGuiColors.DalamudYellow, FontAwesomeIcon.Running, "Active");
-        else if (_gameFunctions.IsQuestAcceptedOrComplete(questId))
+        else if (_gameFunctions.IsQuestAcceptedOrComplete(questElementId))
             return (ImGuiColors.ParsedGreen, FontAwesomeIcon.Check, "Complete");
-        else if (_gameFunctions.IsQuestLocked(questId))
+        else if (_gameFunctions.IsQuestLocked(questElementId))
             return (ImGuiColors.DalamudRed, FontAwesomeIcon.Times, "Locked");
         else
             return (ImGuiColors.DalamudYellow, FontAwesomeIcon.PersonWalkingArrowRight, "Available");

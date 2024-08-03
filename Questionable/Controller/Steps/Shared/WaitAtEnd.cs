@@ -30,7 +30,7 @@ internal static class WaitAtEnd
             if (step.CompletionQuestVariablesFlags.Count == 6 && QuestWorkUtils.HasCompletionFlags(step.CompletionQuestVariablesFlags))
             {
                 var task = serviceProvider.GetRequiredService<WaitForCompletionFlags>()
-                    .With((QuestId)quest.QuestId, step);
+                    .With((QuestId)quest.QuestElementId, step);
                 var delay = serviceProvider.GetRequiredService<WaitDelay>();
                 return [task, delay, Next(quest, sequence)];
             }
@@ -110,7 +110,7 @@ internal static class WaitAtEnd
                 case EInteractionType.AcceptQuest:
                 {
                     var accept = serviceProvider.GetRequiredService<WaitQuestAccepted>()
-                        .With(step.PickUpQuestId ?? quest.QuestId);
+                        .With(step.PickUpQuestId ?? quest.QuestElementId);
                     var delay = serviceProvider.GetRequiredService<WaitDelay>();
                     if (step.PickUpQuestId != null)
                         return [accept, delay, Next(quest, sequence)];
@@ -121,7 +121,7 @@ internal static class WaitAtEnd
                 case EInteractionType.CompleteQuest:
                 {
                     var complete = serviceProvider.GetRequiredService<WaitQuestCompleted>()
-                        .With(step.TurnInQuestId ?? quest.QuestId);
+                        .With(step.TurnInQuestId ?? quest.QuestElementId);
                     var delay = serviceProvider.GetRequiredService<WaitDelay>();
                     if (step.TurnInQuestId != null)
                         return [complete, delay, Next(quest, sequence)];
@@ -140,7 +140,7 @@ internal static class WaitAtEnd
 
         private static NextStep Next(Quest quest, QuestSequence sequence)
         {
-            return new NextStep(quest.QuestId, sequence.Sequence);
+            return new NextStep(quest.QuestElementId, sequence.Sequence);
         }
     }
 
@@ -216,11 +216,11 @@ internal static class WaitAtEnd
 
     internal sealed class WaitQuestAccepted(GameFunctions gameFunctions) : ITask
     {
-        public IId QuestId { get; set; } = null!;
+        public ElementId QuestElementId { get; set; } = null!;
 
-        public ITask With(IId questId)
+        public ITask With(ElementId questElementId)
         {
-            QuestId = questId;
+            QuestElementId = questElementId;
             return this;
         }
 
@@ -228,21 +228,21 @@ internal static class WaitAtEnd
 
         public ETaskResult Update()
         {
-            return gameFunctions.IsQuestAccepted(QuestId)
+            return gameFunctions.IsQuestAccepted(QuestElementId)
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
         }
 
-        public override string ToString() => $"WaitQuestAccepted({QuestId})";
+        public override string ToString() => $"WaitQuestAccepted({QuestElementId})";
     }
 
     internal sealed class WaitQuestCompleted(GameFunctions gameFunctions) : ITask
     {
-        public IId QuestId { get; set; } = null!;
+        public ElementId QuestElementId { get; set; } = null!;
 
-        public ITask With(IId questId)
+        public ITask With(ElementId questElementId)
         {
-            QuestId = questId;
+            QuestElementId = questElementId;
             return this;
         }
 
@@ -250,15 +250,15 @@ internal static class WaitAtEnd
 
         public ETaskResult Update()
         {
-            return gameFunctions.IsQuestComplete(QuestId) ? ETaskResult.TaskComplete : ETaskResult.StillRunning;
+            return gameFunctions.IsQuestComplete(QuestElementId) ? ETaskResult.TaskComplete : ETaskResult.StillRunning;
         }
 
-        public override string ToString() => $"WaitQuestComplete({QuestId})";
+        public override string ToString() => $"WaitQuestComplete({QuestElementId})";
     }
 
-    internal sealed class NextStep(IId questId, int sequence) : ILastTask
+    internal sealed class NextStep(ElementId questElementId, int sequence) : ILastTask
     {
-        public IId QuestId { get; } = questId;
+        public ElementId QuestElementId { get; } = questElementId;
         public int Sequence { get; } = sequence;
 
         public bool Start() => true;
@@ -270,7 +270,7 @@ internal static class WaitAtEnd
 
     internal sealed class EndAutomation : ILastTask
     {
-        public IId QuestId => throw new InvalidOperationException();
+        public ElementId QuestElementId => throw new InvalidOperationException();
         public int Sequence => throw new InvalidOperationException();
 
         public bool Start() => true;

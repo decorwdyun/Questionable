@@ -23,12 +23,12 @@ internal sealed class QuestData
             .ToImmutableDictionary(x => x.QuestId, x => x);
     }
 
-    public QuestInfo GetQuestInfo(IId id)
+    public QuestInfo GetQuestInfo(ElementId elementId)
     {
-        if (id is QuestId questId)
+        if (elementId is QuestId questId)
             return GetQuestInfo(questId);
 
-        throw new ArgumentException("Invalid id", nameof(id));
+        throw new ArgumentException("Invalid id", nameof(elementId));
     }
 
     public QuestInfo GetQuestInfo(QuestId questId)

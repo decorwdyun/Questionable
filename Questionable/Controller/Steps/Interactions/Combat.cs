@@ -47,7 +47,7 @@ internal static class Combat
                     ArgumentNullException.ThrowIfNull(step.ItemId);
 
                     yield return serviceProvider.GetRequiredService<UseItem.UseOnObject>()
-                        .With(quest.QuestId, step.DataId.Value, step.ItemId.Value, step.CompletionQuestVariablesFlags,
+                        .With(quest.QuestElementId, step.DataId.Value, step.ItemId.Value, step.CompletionQuestVariablesFlags,
                             true);
                     yield return CreateTask(quest, sequence, step);
                     break;
@@ -73,7 +73,7 @@ internal static class Combat
 
             bool isLastStep = sequence.Steps.Last() == step;
             return serviceProvider.GetRequiredService<HandleCombat>()
-                .With(quest.QuestId, isLastStep, step.EnemySpawnType.Value, step.KillEnemyDataIds,
+                .With(quest.QuestElementId, isLastStep, step.EnemySpawnType.Value, step.KillEnemyDataIds,
                     step.CompletionQuestVariablesFlags, step.ComplexCombatData);
         }
     }
@@ -84,13 +84,13 @@ internal static class Combat
         private CombatController.CombatData _combatData = null!;
         private IList<QuestWorkValue?> _completionQuestVariableFlags = null!;
 
-        public ITask With(IId questId, bool isLastStep, EEnemySpawnType enemySpawnType, IList<uint> killEnemyDataIds,
+        public ITask With(ElementId questElementId, bool isLastStep, EEnemySpawnType enemySpawnType, IList<uint> killEnemyDataIds,
             IList<QuestWorkValue?> completionQuestVariablesFlags, IList<ComplexCombatData> complexCombatData)
         {
             _isLastStep = isLastStep;
             _combatData = new CombatController.CombatData
             {
-                QuestId = questId,
+                QuestElementId = questElementId,
                 SpawnType = enemySpawnType,
                 KillEnemyDataIds = killEnemyDataIds.ToList(),
                 ComplexCombatDatas = complexCombatData.ToList(),
@@ -107,7 +107,7 @@ internal static class Combat
                 return ETaskResult.StillRunning;
 
             // if our quest step has any completion flags, we need to check if they are set
-            if (QuestWorkUtils.HasCompletionFlags(_completionQuestVariableFlags) && _combatData.QuestId is QuestId questId)
+            if (QuestWorkUtils.HasCompletionFlags(_completionQuestVariableFlags) && _combatData.QuestElementId is QuestId questId)
             {
                 var questWork = gameFunctions.GetQuestEx(questId);
                 if (questWork == null)

@@ -11,7 +11,7 @@ internal sealed class QuestDisabledValidator : IQuestValidator
         {
             yield return new ValidationIssue
             {
-                QuestId = quest.QuestId,
+                QuestId = quest.QuestElementId,
                 Sequence = null,
                 Step = null,
                 Type = EIssueType.QuestDisabled,

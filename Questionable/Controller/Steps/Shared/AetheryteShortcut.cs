@@ -67,32 +67,44 @@ internal static class AetheryteShortcut
         {
             _continueAt = DateTime.Now.AddSeconds(8);
             ushort territoryType = clientState.TerritoryType;
-            if (Step != null && ExpectedTerritoryId == territoryType)
+            if (Step != null)
             {
                 var skipConditions = Step.SkipConditions?.AetheryteShortcutIf ?? new();
-                if (!skipConditions.Never)
+                if (skipConditions is { Never: false, InTerritory.Count: > 0 })
                 {
-                    if (skipConditions is { InSameTerritory: true })
+                    if (skipConditions.InTerritory.Contains(territoryType))
                     {
-                        logger.LogInformation("Skipping aetheryte teleport due to SkipCondition");
+                        logger.LogInformation("Skipping aetheryte teleport due to SkipCondition (InTerritory)");
                         return false;
                     }
+                }
 
-                    Vector3 pos = clientState.LocalPlayer!.Position;
-                    if (Step.Position != null &&
-                        (pos - Step.Position.Value).Length() < Step.CalculateActualStopDistance())
+                if (ExpectedTerritoryId == territoryType)
+                {
+                    if (!skipConditions.Never)
                     {
-                        logger.LogInformation("Skipping aetheryte teleport, we're near the target");
-                        return false;
-                    }
+                        if (skipConditions is { InSameTerritory: true })
+                        {
+                            logger.LogInformation("Skipping aetheryte teleport due to SkipCondition (InSameTerritory)");
+                            return false;
+                        }
 
-                    if (aetheryteData.CalculateDistance(pos, territoryType, TargetAetheryte) < 20 ||
-                        (Step.AethernetShortcut != null &&
-                         (aetheryteData.CalculateDistance(pos, territoryType, Step.AethernetShortcut.From) < 20 ||
-                          aetheryteData.CalculateDistance(pos, territoryType, Step.AethernetShortcut.To) < 20)))
-                    {
-                        logger.LogInformation("Skipping aetheryte teleport");
-                        return false;
+                        Vector3 pos = clientState.LocalPlayer!.Position;
+                        if (Step.Position != null &&
+                            (pos - Step.Position.Value).Length() < Step.CalculateActualStopDistance())
+                        {
+                            logger.LogInformation("Skipping aetheryte teleport, we're near the target");
+                            return false;
+                        }
+
+                        if (aetheryteData.CalculateDistance(pos, territoryType, TargetAetheryte) < 20 ||
+                            (Step.AethernetShortcut != null &&
+                             (aetheryteData.CalculateDistance(pos, territoryType, Step.AethernetShortcut.From) < 20 ||
+                              aetheryteData.CalculateDistance(pos, territoryType, Step.AethernetShortcut.To) < 20)))
+                        {
+                            logger.LogInformation("Skipping aetheryte teleport");
+                            return false;
+                        }
                     }
                 }
             }

@@ -48,7 +48,7 @@ internal static class UseItem
                 }
 
                 var task = serviceProvider.GetRequiredService<Use>()
-                    .With(quest.QuestId, step.ItemId.Value, step.CompletionQuestVariablesFlags);
+                    .With(quest.QuestElementId, step.ItemId.Value, step.CompletionQuestVariablesFlags);
                 return
                 [
                     unmount, task,
@@ -65,12 +65,12 @@ internal static class UseItem
                 ITask task;
                 if (step.DataId != null)
                     task = serviceProvider.GetRequiredService<UseOnGround>()
-                        .With(quest.QuestId, step.DataId.Value, step.ItemId.Value, step.CompletionQuestVariablesFlags);
+                        .With(quest.QuestElementId, step.DataId.Value, step.ItemId.Value, step.CompletionQuestVariablesFlags);
                 else
                 {
                     ArgumentNullException.ThrowIfNull(step.Position);
                     task = serviceProvider.GetRequiredService<UseOnPosition>()
-                        .With(quest.QuestId, step.Position.Value, step.ItemId.Value,
+                        .With(quest.QuestElementId, step.Position.Value, step.ItemId.Value,
                             step.CompletionQuestVariablesFlags);
                 }
 
@@ -79,13 +79,13 @@ internal static class UseItem
             else if (step.DataId != null)
             {
                 var task = serviceProvider.GetRequiredService<UseOnObject>()
-                    .With(quest.QuestId, step.DataId.Value, step.ItemId.Value, step.CompletionQuestVariablesFlags);
+                    .With(quest.QuestElementId, step.DataId.Value, step.ItemId.Value, step.CompletionQuestVariablesFlags);
                 return [unmount, task];
             }
             else
             {
                 var task = serviceProvider.GetRequiredService<Use>()
-                    .With(quest.QuestId, step.ItemId.Value, step.CompletionQuestVariablesFlags);
+                    .With(quest.QuestElementId, step.ItemId.Value, step.CompletionQuestVariablesFlags);
                 return [unmount, task];
             }
         }
@@ -118,7 +118,7 @@ internal static class UseItem
         private DateTime _continueAt;
         private int _itemCount;
 
-        public IId? QuestId { get; set; }
+        public ElementId? QuestId { get; set; }
         public uint ItemId { get; set; }
         public IList<QuestWorkValue?> CompletionQuestVariablesFlags { get; set; } = new List<QuestWorkValue?>();
         public bool StartingCombat { get; set; }
@@ -203,7 +203,7 @@ internal static class UseItem
 
         public uint DataId { get; set; }
 
-        public ITask With(IId? questId, uint dataId, uint itemId, IList<QuestWorkValue?> completionQuestVariablesFlags)
+        public ITask With(ElementId? questId, uint dataId, uint itemId, IList<QuestWorkValue?> completionQuestVariablesFlags)
         {
             QuestId = questId;
             DataId = dataId;
@@ -227,7 +227,7 @@ internal static class UseItem
 
         public Vector3 Position { get; set; }
 
-        public ITask With(IId? questId, Vector3 position, uint itemId, IList<QuestWorkValue?> completionQuestVariablesFlags)
+        public ITask With(ElementId? questId, Vector3 position, uint itemId, IList<QuestWorkValue?> completionQuestVariablesFlags)
         {
             QuestId = questId;
             Position = position;
@@ -249,7 +249,7 @@ internal static class UseItem
 
         public uint DataId { get; set; }
 
-        public ITask With(IId? questId, uint dataId, uint itemId, IList<QuestWorkValue?> completionQuestVariablesFlags,
+        public ITask With(ElementId? questId, uint dataId, uint itemId, IList<QuestWorkValue?> completionQuestVariablesFlags,
             bool startingCombat = false)
         {
             QuestId = questId;
@@ -270,7 +270,7 @@ internal static class UseItem
     {
         private readonly GameFunctions _gameFunctions = gameFunctions;
 
-        public ITask With(IId? questId, uint itemId, IList<QuestWorkValue?> completionQuestVariablesFlags)
+        public ITask With(ElementId? questId, uint itemId, IList<QuestWorkValue?> completionQuestVariablesFlags)
         {
             QuestId = questId;
             ItemId = itemId;

@@ -329,7 +329,28 @@ public static class RoslynShortcuts
                                     Assignment(nameof(SkipAetheryteCondition.Never), skipAetheryteCondition.Never,
                                         emptyAetheryte.Never),
                                     Assignment(nameof(SkipAetheryteCondition.InSameTerritory),
-                                        skipAetheryteCondition.InSameTerritory, emptyAetheryte.InSameTerritory)))));
+                                        skipAetheryteCondition.InSameTerritory, emptyAetheryte.InSameTerritory),
+                                    AssignmentList(nameof(SkipAetheryteCondition.InTerritory),
+                                        skipAetheryteCondition.InTerritory)))));
+            }
+            else if (value is GatheredItem gatheredItem)
+            {
+                var emptyItem = new GatheredItem();
+                return ObjectCreationExpression(
+                        IdentifierName(nameof(GatheredItem)))
+                    .WithInitializer(
+                        InitializerExpression(
+                            SyntaxKind.ObjectInitializerExpression,
+                            SeparatedList<ExpressionSyntax>(
+                                SyntaxNodeList(
+                                    Assignment(nameof(GatheredItem.ItemId), gatheredItem.ItemId, emptyItem.ItemId)
+                                        .AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(GatheredItem.ItemCount), gatheredItem.ItemCount,
+                                            emptyItem.ItemCount)
+                                        .AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(GatheredItem.Collectability), gatheredItem.Collectability,
+                                            emptyItem.Collectability)
+                                        .AsSyntaxNodeOrToken()))));
             }
             else if (value is GatheringNodeGroup nodeGroup)
             {

@@ -11,7 +11,7 @@ namespace Questionable.Validation.Validators;
 
 internal sealed class JsonSchemaValidator : IQuestValidator
 {
-    private readonly Dictionary<IId, JsonNode> _questNodes = new();
+    private readonly Dictionary<ElementId, JsonNode> _questNodes = new();
     private JsonSchema? _questSchema;
 
     public JsonSchemaValidator()
@@ -25,7 +25,7 @@ internal sealed class JsonSchemaValidator : IQuestValidator
     {
         _questSchema ??= JsonSchema.FromStream(AssemblyQuestLoader.QuestSchema).AsTask().Result;
 
-        if (_questNodes.TryGetValue(quest.QuestId, out JsonNode? questNode))
+        if (_questNodes.TryGetValue(quest.QuestElementId, out JsonNode? questNode))
         {
             var evaluationResult = _questSchema.Evaluate(questNode, new EvaluationOptions
             {
@@ -36,7 +36,7 @@ internal sealed class JsonSchemaValidator : IQuestValidator
             {
                 yield return new ValidationIssue
                 {
-                    QuestId = quest.QuestId,
+                    QuestId = quest.QuestElementId,
                     Sequence = null,
                     Step = null,
                     Type = EIssueType.InvalidJsonSchema,
@@ -47,7 +47,7 @@ internal sealed class JsonSchemaValidator : IQuestValidator
         }
     }
 
-    public void Enqueue(IId questId, JsonNode questNode) => _questNodes[questId] = questNode;
+    public void Enqueue(ElementId questElementId, JsonNode questNode) => _questNodes[questElementId] = questNode;
 
     public void Reset() => _questNodes.Clear();
 }

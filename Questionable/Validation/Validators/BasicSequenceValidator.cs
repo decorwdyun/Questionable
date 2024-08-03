@@ -18,7 +18,7 @@ internal sealed class BasicSequenceValidator : IQuestValidator
         {
             yield return new ValidationIssue
             {
-                QuestId = quest.QuestId,
+                QuestId = quest.QuestElementId,
                 Sequence = 0,
                 Step = null,
                 Type = EIssueType.MissingSequence0,
@@ -37,7 +37,7 @@ internal sealed class BasicSequenceValidator : IQuestValidator
 
                 yield return new ValidationIssue
                 {
-                    QuestId = quest.QuestId,
+                    QuestId = quest.QuestElementId,
                     Sequence = (byte)sequence.Sequence,
                     Step = null,
                     Type = EIssueType.InstantQuestWithMultipleSteps,
@@ -73,7 +73,7 @@ internal sealed class BasicSequenceValidator : IQuestValidator
         {
             return new ValidationIssue
             {
-                QuestId = quest.QuestId,
+                QuestId = quest.QuestElementId,
                 Sequence = (byte)sequenceNo,
                 Step = null,
                 Type = EIssueType.MissingSequence,
@@ -85,7 +85,7 @@ internal sealed class BasicSequenceValidator : IQuestValidator
         {
             return new ValidationIssue
             {
-                QuestId = quest.QuestId,
+                QuestId = quest.QuestElementId,
                 Sequence = (byte)sequenceNo,
                 Step = null,
                 Type = EIssueType.DuplicateSequence,

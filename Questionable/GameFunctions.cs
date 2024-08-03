@@ -89,7 +89,7 @@ internal sealed unsafe class GameFunctions
 
     public DateTime ReturnRequestedAt { get; set; } = DateTime.MinValue;
 
-    public (IId? CurrentQuest, byte Sequence) GetCurrentQuest()
+    public (ElementId? CurrentQuest, byte Sequence) GetCurrentQuest()
     {
         var (currentQuest, sequence) = GetCurrentQuestInternal();
         PlayerState* playerState = PlayerState.Instance();
@@ -141,7 +141,7 @@ internal sealed unsafe class GameFunctions
         return (currentQuest, sequence);
     }
 
-    public (IId? CurrentQuest, byte Sequence) GetCurrentQuestInternal()
+    public (ElementId? CurrentQuest, byte Sequence) GetCurrentQuestInternal()
     {
         var questManager = QuestManager.Instance();
         if (questManager != null)
@@ -158,7 +158,7 @@ internal sealed unsafe class GameFunctions
             // If no quests are marked as 'priority', accepting a new quest adds it to the top of the list.
             for (int i = questManager->TrackedQuests.Length - 1; i >= 0; --i)
             {
-                IId currentQuest;
+                ElementId currentQuest;
                 var trackedQuest = questManager->TrackedQuests[i];
                 switch (trackedQuest.QuestType)
                 {
@@ -242,9 +242,9 @@ internal sealed unsafe class GameFunctions
         return questWork != null ? *questWork : null;
     }
 
-    public bool IsReadyToAcceptQuest(IId id)
+    public bool IsReadyToAcceptQuest(ElementId elementId)
     {
-        if (id is QuestId questId)
+        if (elementId is QuestId questId)
             return IsReadyToAcceptQuest(questId);
         return false;
     }
@@ -274,14 +274,14 @@ internal sealed unsafe class GameFunctions
         return true;
     }
 
-    public bool IsQuestAcceptedOrComplete(IId questId)
+    public bool IsQuestAcceptedOrComplete(ElementId questElementId)
     {
-        return IsQuestComplete(questId) || IsQuestAccepted(questId);
+        return IsQuestComplete(questElementId) || IsQuestAccepted(questElementId);
     }
 
-    public bool IsQuestAccepted(IId id)
+    public bool IsQuestAccepted(ElementId elementId)
     {
-        if (id is QuestId questId)
+        if (elementId is QuestId questId)
             return IsQuestAccepted(questId);
         return false;
     }
@@ -292,9 +292,9 @@ internal sealed unsafe class GameFunctions
         return questManager->IsQuestAccepted(questId.Value);
     }
 
-    public bool IsQuestComplete(IId id)
+    public bool IsQuestComplete(ElementId elementId)
     {
-        if (id is QuestId questId)
+        if (elementId is QuestId questId)
             return IsQuestComplete(questId);
         return false;
     }
@@ -305,14 +305,14 @@ internal sealed unsafe class GameFunctions
         return QuestManager.IsQuestComplete(questId.Value);
     }
 
-    public bool IsQuestLocked(IId id, IId? extraCompletedQuest = null)
+    public bool IsQuestLocked(ElementId elementId, ElementId? extraCompletedQuest = null)
     {
-        if (id is QuestId questId)
+        if (elementId is QuestId questId)
             return IsQuestLocked(questId, extraCompletedQuest);
         return false;
     }
 
-    public bool IsQuestLocked(QuestId questId, IId? extraCompletedQuest = null)
+    public bool IsQuestLocked(QuestId questId, ElementId? extraCompletedQuest = null)
     {
         var questInfo = _questData.GetQuestInfo(questId);
         if (questInfo.QuestLocks.Count > 0)
@@ -330,7 +330,7 @@ internal sealed unsafe class GameFunctions
         return !HasCompletedPreviousQuests(questInfo, extraCompletedQuest) || !HasCompletedPreviousInstances(questInfo);
     }
 
-    private bool HasCompletedPreviousQuests(QuestInfo questInfo, IId? extraCompletedQuest)
+    private bool HasCompletedPreviousQuests(QuestInfo questInfo, ElementId? extraCompletedQuest)
     {
         if (questInfo.PreviousQuests.Count == 0)
             return true;
@@ -707,15 +707,15 @@ internal sealed unsafe class GameFunctions
         if (excelSheetName == null)
         {
             var questRow =
-                _dataManager.GetExcelSheet<Lumina.Excel.GeneratedSheets2.Quest>()!.GetRow((uint)currentQuest.QuestId.Value +
+                _dataManager.GetExcelSheet<Lumina.Excel.GeneratedSheets2.Quest>()!.GetRow((uint)currentQuest.QuestElementId.Value +
                     0x10000);
             if (questRow == null)
             {
-                _logger.LogError("Could not find quest row for {QuestId}", currentQuest.QuestId);
+                _logger.LogError("Could not find quest row for {QuestId}", currentQuest.QuestElementId);
                 return null;
             }
 
-            excelSheetName = $"quest/{(currentQuest.QuestId.Value / 100):000}/{questRow.Id}";
+            excelSheetName = $"quest/{(currentQuest.QuestElementId.Value / 100):000}/{questRow.Id}";
         }
 
         var excelSheet = _dataManager.Excel.GetSheet<QuestDialogueText>(excelSheetName);
