@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -13,7 +12,6 @@ using Dalamud.Plugin.Services;
 using ECommons;
 using ECommons.Schedulers;
 using ECommons.SplatoonAPI;
-using FFXIVClientStructs.FFXIV.Common.Math;
 using GatheringPathRenderer.Windows;
 using Questionable.Model;
 using Questionable.Model.Gathering;
@@ -44,7 +42,15 @@ public sealed class RendererPlugin : IDalamudPlugin
         _clientState = clientState;
         _pluginLog = pluginLog;
 
-        _editorCommands = new EditorCommands(this, dataManager, commandManager, targetManager, clientState, chatGui);
+        Configuration? configuration = (Configuration?)pluginInterface.GetPluginConfig();
+        if (configuration == null)
+        {
+            configuration = new Configuration();
+            pluginInterface.SavePluginConfig(configuration);
+        }
+
+        _editorCommands = new EditorCommands(this, dataManager, commandManager, targetManager, clientState, chatGui,
+            configuration);
         _editorWindow = new EditorWindow(this, _editorCommands, dataManager, targetManager, clientState, objectTable)
             { IsOpen = true };
         _windowSystem.AddWindow(_editorWindow);
@@ -221,7 +227,8 @@ public sealed class RendererPlugin : IDalamudPlugin
                                     refX = x.Position.X,
                                     refY = x.Position.Z,
                                     refZ = x.Position.Y,
-                                    color = 0x00000000,
+                                    color = 0xFFFFFFFF,
+                                    radius = 0.1f,
                                     Enabled = true,
                                     overlayText =
                                         $"{location.Root.Groups.IndexOf(group)} // {node.DataId} / {node.Locations.IndexOf(x)}",

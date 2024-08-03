@@ -4,7 +4,9 @@ using Dalamud.Game.Text;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using Microsoft.Extensions.DependencyInjection;
+using Questionable.Controller.Steps.Common;
 using Questionable.Data;
+using Questionable.External;
 using Questionable.GatheringPaths;
 using Questionable.Model;
 using Questionable.Model.Gathering;
@@ -16,8 +18,10 @@ internal static class GatheringRequiredItems
 {
     internal sealed class Factory(
         IServiceProvider serviceProvider,
+        MovementController movementController,
         IClientState clientState,
-        GatheringData gatheringData) : ITaskFactory
+        GatheringData gatheringData,
+        TerritoryData territoryData) : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -39,6 +43,12 @@ internal static class GatheringRequiredItems
                     yield return serviceProvider.GetRequiredService<AetheryteShortcut.UseAetheryteShortcut>()
                         .With(null, gatheringRoot.AetheryteShortcut.Value, gatheringRoot.TerritoryId);
                 }
+
+                yield return new WaitConditionTask(() => clientState.TerritoryType == gatheringRoot.TerritoryId,
+                    $"Wait(territory: {territoryData.GetNameAndId(gatheringRoot.TerritoryId)})");
+
+                yield return new WaitConditionTask(() => movementController.IsNavmeshReady,
+                    "Wait(navmesh ready)");
 
                 yield return serviceProvider.GetRequiredService<StartGathering>()
                     .With(gatheringPointId, requiredGatheredItems);

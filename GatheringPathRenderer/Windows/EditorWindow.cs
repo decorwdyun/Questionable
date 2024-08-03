@@ -103,7 +103,7 @@ internal sealed class EditorWindow : Window
             ImGui.Indent();
             ImGui.Text(context.File.Name);
             ImGui.Unindent();
-            ImGui.Text($"{_target.DataId} // {location.InternalId}");
+            ImGui.Text($"{_target.DataId} +{node.Locations.Count-1} / {location.InternalId.ToString().Substring(0, 4)}");
             ImGui.Text(string.Create(CultureInfo.InvariantCulture, $"{location.Position:G}"));
 
             if (!_changes.TryGetValue(location.InternalId, out LocationOverride? locationOverride))

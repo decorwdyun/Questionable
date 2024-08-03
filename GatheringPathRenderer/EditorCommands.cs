@@ -26,9 +26,10 @@ internal sealed class EditorCommands : IDisposable
     private readonly ITargetManager _targetManager;
     private readonly IClientState _clientState;
     private readonly IChatGui _chatGui;
+    private readonly Configuration _configuration;
 
     public EditorCommands(RendererPlugin plugin, IDataManager dataManager, ICommandManager commandManager,
-        ITargetManager targetManager, IClientState clientState, IChatGui chatGui)
+        ITargetManager targetManager, IClientState clientState, IChatGui chatGui, Configuration configuration)
     {
         _plugin = plugin;
         _dataManager = dataManager;
@@ -36,6 +37,7 @@ internal sealed class EditorCommands : IDisposable
         _targetManager = targetManager;
         _clientState = clientState;
         _chatGui = chatGui;
+        _configuration = configuration;
 
         _commandManager.AddHandler("/qg", new CommandInfo(ProcessCommand));
     }
@@ -183,6 +185,7 @@ internal sealed class EditorCommands : IDisposable
                     $"{gatheringPoint.GatheringPointBase.Row}_{gatheringPoint.PlaceName.Value!.Name}_{(_clientState.LocalPlayer!.ClassJob.Id == 16 ? "MIN" : "BTN")}.json"));
         var root = new GatheringRoot
         {
+            Author = [_configuration.AuthorName],
             TerritoryId = _clientState.TerritoryType,
             Groups =
             [
