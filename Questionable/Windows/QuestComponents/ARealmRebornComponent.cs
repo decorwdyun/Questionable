@@ -4,16 +4,19 @@ using Dalamud.Interface.Utility.Raii;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Common.Math;
 using Questionable.Data;
+using Questionable.Model.Questing;
 
 namespace Questionable.Windows.QuestComponents;
 
 internal sealed class ARealmRebornComponent
 {
-    private const ushort ATimeForEveryPurpose = 425;
-    private const ushort TheUltimateWeapon = 524;
-    private const ushort GoodIntentions = 363;
+    private static readonly QuestId ATimeForEveryPurpose = new(425);
+    private static readonly QuestId TheUltimateWeapon = new(524);
+    private static readonly QuestId GoodIntentions = new(363);
     private static readonly ushort[] RequiredPrimalInstances = [20004, 20006, 20005];
-    private static readonly ushort[] RequiredAllianceRaidQuests = [1709, 1200, 1201, 1202, 1203, 1474, 494, 495];
+
+    private static readonly QuestId[] RequiredAllianceRaidQuests =
+        [new(1709), new(1200), new(1201), new(1202), new(1203), new(1474), new(494), new(495)];
 
     private readonly GameFunctions _gameFunctions;
     private readonly QuestData _questData;

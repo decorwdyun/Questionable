@@ -151,7 +151,10 @@ internal sealed class ActiveQuestComponent
 
     private QuestWork? DrawQuestWork(QuestController.QuestProgress currentQuest)
     {
-        var questWork = _gameFunctions.GetQuestEx(currentQuest.Quest.QuestId);
+        if (currentQuest.Quest.QuestId is not QuestId questId)
+            return null;
+
+        var questWork = _gameFunctions.GetQuestEx(questId);
         if (questWork != null)
         {
             Vector4 color;
@@ -271,7 +274,7 @@ internal sealed class ActiveQuestComponent
             ImGui.SameLine();
             if (ImGuiComponents.IconButton(FontAwesomeIcon.Atlas))
                 _commandManager.DispatchCommand("/questinfo",
-                    currentQuest.Quest.QuestId.ToString(CultureInfo.InvariantCulture), commandInfo);
+                    currentQuest.Quest.QuestId.ToString() ?? string.Empty, commandInfo);
         }
 
         bool autoAcceptNextQuest = _configuration.General.AutoAcceptNextQuest;

@@ -5,6 +5,7 @@ using System.Linq;
 using Dalamud.Game.Text;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using JetBrains.Annotations;
+using Questionable.Model.Questing;
 using ExcelQuest = Lumina.Excel.GeneratedSheets.Quest;
 
 namespace Questionable.Model;
@@ -13,9 +14,9 @@ internal sealed class QuestInfo
 {
     public QuestInfo(ExcelQuest quest)
     {
-        QuestId = (ushort)(quest.RowId & 0xFFFF);
+        QuestId = new QuestId((ushort)(quest.RowId & 0xFFFF));
 
-        string suffix = QuestId switch
+        string suffix = QuestId.Value switch
         {
             85 => " (Lancer)",
             108 => " (Marauder)",
@@ -34,9 +35,15 @@ internal sealed class QuestInfo
         Level = quest.ClassJobLevel0;
         IssuerDataId = quest.IssuerStart;
         IsRepeatable = quest.IsRepeatable;
-        PreviousQuests = quest.PreviousQuest.Select(x => (ushort)(x.Row & 0xFFFF)).Where(x => x != 0).ToImmutableList();
+        PreviousQuests = quest.PreviousQuest
+            .Select(x => new QuestId((ushort)(x.Row & 0xFFFF)))
+            .Where(x => x.Value != 0)
+            .ToImmutableList();
         PreviousQuestJoin = (QuestJoin)quest.PreviousQuestJoin;
-        QuestLocks = quest.QuestLock.Select(x => (ushort)(x.Row & 0xFFFFF)).Where(x => x != 0).ToImmutableList();
+        QuestLocks = quest.QuestLock
+            .Select(x => new QuestId((ushort)(x.Row & 0xFFFFF)))
+            .Where(x => x.Value != 0)
+            .ToImmutableList();
         QuestLockJoin = (QuestJoin)quest.QuestLockJoin;
         JournalGenre = quest.JournalGenre?.Row;
         SortKey = quest.SortKey;
@@ -49,14 +56,14 @@ internal sealed class QuestInfo
     }
 
 
-    public ushort QuestId { get; }
+    public QuestId QuestId { get; }
     public string Name { get; }
     public ushort Level { get; }
     public uint IssuerDataId { get; }
     public bool IsRepeatable { get; }
-    public ImmutableList<ushort> PreviousQuests { get; }
+    public ImmutableList<QuestId> PreviousQuests { get; }
     public QuestJoin PreviousQuestJoin { get; }
-    public ImmutableList<ushort> QuestLocks { get; }
+    public ImmutableList<QuestId> QuestLocks { get; }
     public QuestJoin QuestLockJoin { get; }
     public List<ushort> PreviousInstanceContent { get; }
     public QuestJoin PreviousInstanceContentJoin { get; }

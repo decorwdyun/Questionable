@@ -13,8 +13,8 @@ public sealed class SkipStepConditions
     public List<ushort> InTerritory { get; set; } = new();
     public List<ushort> NotInTerritory { get; set; } = new();
     public SkipItemConditions? Item { get; set; }
-    public List<ushort> QuestsAccepted { get; set; } = new();
-    public List<ushort> QuestsCompleted { get; set; } = new();
+    public List<IId> QuestsAccepted { get; set; } = new();
+    public List<IId> QuestsCompleted { get; set; } = new();
     public EExtraSkipCondition? ExtraCondition { get; set; }
 
     public bool HasSkipConditions()

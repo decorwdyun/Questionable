@@ -4,13 +4,14 @@ using System.Globalization;
 using System.Text.Json.Nodes;
 using Json.Schema;
 using Questionable.Model;
+using Questionable.Model.Questing;
 using Questionable.QuestPaths;
 
 namespace Questionable.Validation.Validators;
 
 internal sealed class JsonSchemaValidator : IQuestValidator
 {
-    private readonly Dictionary<ushort, JsonNode> _questNodes = new();
+    private readonly Dictionary<IId, JsonNode> _questNodes = new();
     private JsonSchema? _questSchema;
 
     public JsonSchemaValidator()
@@ -46,7 +47,7 @@ internal sealed class JsonSchemaValidator : IQuestValidator
         }
     }
 
-    public void Enqueue(ushort questId, JsonNode questNode) => _questNodes[questId] = questNode;
+    public void Enqueue(IId questId, JsonNode questNode) => _questNodes[questId] = questNode;
 
     public void Reset() => _questNodes.Clear();
 }

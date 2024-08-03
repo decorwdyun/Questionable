@@ -110,7 +110,7 @@ internal sealed class QuestSelectionWindow : LWindow
 
         foreach (var unacceptedQuest in Map.Instance()->UnacceptedQuestMarkers)
         {
-            ushort questId = (ushort)(unacceptedQuest.ObjectiveId & 0xFFFF);
+            QuestId questId = new QuestId((ushort)(unacceptedQuest.ObjectiveId & 0xFFFF));
             if (_quests.All(q => q.QuestId != questId))
                 _quests.Add(_questData.GetQuestInfo(questId));
         }
@@ -161,7 +161,7 @@ internal sealed class QuestSelectionWindow : LWindow
         {
             ImGui.TableNextRow();
 
-            string questId = quest.QuestId.ToString(CultureInfo.InvariantCulture);
+            string questId = quest.QuestId.ToString();
             bool isKnownQuest = _questRegistry.TryGetQuest(quest.QuestId, out var knownQuest);
 
             if (ImGui.TableNextColumn())

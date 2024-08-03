@@ -1,10 +1,11 @@
 ﻿using Questionable.Model;
+using Questionable.Model.Questing;
 
 namespace Questionable.Validation;
 
 internal sealed record ValidationIssue
 {
-    public required ushort? QuestId { get; init; }
+    public required IId? QuestId { get; init; }
     public required byte? Sequence { get; init; }
     public required int? Step { get; init; }
     public EBeastTribe BeastTribe { get; init; } = EBeastTribe.None;

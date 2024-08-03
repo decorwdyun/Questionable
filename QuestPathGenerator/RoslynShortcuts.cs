@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using Microsoft.CodeAnalysis;
@@ -57,6 +56,24 @@ public static class RoslynShortcuts
                     SyntaxKind.SimpleMemberAccessExpression,
                     IdentifierName(value.GetType().Name),
                     IdentifierName(value.GetType().GetEnumName(value)!));
+            else if (value is QuestId questId)
+            {
+                return ObjectCreationExpression(
+                        IdentifierName(nameof(QuestId)))
+                    .WithArgumentList(
+                        ArgumentList(
+                            SingletonSeparatedList(
+                                Argument(LiteralValue(questId.Value)))));
+            }
+            else if (value is LeveId leveId)
+            {
+                return ObjectCreationExpression(
+                        IdentifierName(nameof(LeveId)))
+                    .WithArgumentList(
+                        ArgumentList(
+                            SingletonSeparatedList(
+                                Argument(LiteralValue(leveId.Value)))));
+            }
             else if (value is Vector3 vector)
             {
                 return ObjectCreationExpression(

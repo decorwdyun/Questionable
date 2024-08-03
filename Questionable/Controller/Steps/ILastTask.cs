@@ -1,7 +1,9 @@
-﻿namespace Questionable.Controller.Steps;
+﻿using Questionable.Model.Questing;
+
+namespace Questionable.Controller.Steps;
 
 internal interface ILastTask : ITask
 {
-    public ushort QuestId { get; }
+    public IId QuestId { get; }
     public int Sequence { get; }
 }

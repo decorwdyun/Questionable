@@ -4,13 +4,14 @@ using System.Collections.Immutable;
 using System.Linq;
 using Dalamud.Plugin.Services;
 using Questionable.Model;
+using Questionable.Model.Questing;
 using Quest = Lumina.Excel.GeneratedSheets.Quest;
 
 namespace Questionable.Data;
 
 internal sealed class QuestData
 {
-    private readonly ImmutableDictionary<ushort, QuestInfo> _quests;
+    private readonly ImmutableDictionary<QuestId, QuestInfo> _quests;
 
     public QuestData(IDataManager dataManager)
     {
@@ -22,7 +23,15 @@ internal sealed class QuestData
             .ToImmutableDictionary(x => x.QuestId, x => x);
     }
 
-    public QuestInfo GetQuestInfo(ushort questId)
+    public QuestInfo GetQuestInfo(IId id)
+    {
+        if (id is QuestId questId)
+            return GetQuestInfo(questId);
+
+        throw new ArgumentException("Invalid id", nameof(id));
+    }
+
+    public QuestInfo GetQuestInfo(QuestId questId)
     {
         return _quests[questId] ?? throw new ArgumentOutOfRangeException(nameof(questId));
     }

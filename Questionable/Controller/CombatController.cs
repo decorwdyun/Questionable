@@ -168,9 +168,9 @@ internal sealed class CombatController : IDisposable
                     }
                 }
 
-                if (QuestWorkUtils.HasCompletionFlags(condition.CompletionQuestVariablesFlags))
+                if (QuestWorkUtils.HasCompletionFlags(condition.CompletionQuestVariablesFlags) && _currentFight.Data.QuestId is QuestId questId)
                 {
-                    var questWork = _gameFunctions.GetQuestEx(_currentFight.Data.QuestId);
+                    var questWork = _gameFunctions.GetQuestEx(questId);
                     if (questWork != null && QuestWorkUtils.MatchesQuestWork(condition.CompletionQuestVariablesFlags,
                             questWork.Value))
                     {
@@ -303,7 +303,7 @@ internal sealed class CombatController : IDisposable
 
     public sealed class CombatData
     {
-        public required ushort QuestId { get; init; }
+        public required IId QuestId { get; init; }
         public required EEnemySpawnType SpawnType { get; init; }
         public required List<uint> KillEnemyDataIds { get; init; }
         public required List<ComplexCombatData> ComplexCombatDatas { get; init; }

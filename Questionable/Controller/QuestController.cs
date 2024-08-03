@@ -209,8 +209,8 @@ internal sealed class QuestController : MiniTaskController<QuestController>
             }
             else
             {
-                (ushort currentQuestId, currentSequence) = _gameFunctions.GetCurrentQuest();
-                if (currentQuestId == 0)
+                (IId? currentQuestId, currentSequence) = _gameFunctions.GetCurrentQuest();
+                if (currentQuestId == null || currentQuestId.Value == 0)
                 {
                     if (_startedQuest != null)
                     {
@@ -330,7 +330,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         return (seq, seq.Steps[CurrentQuest.Step]);
     }
 
-    public void IncreaseStepCount(ushort? questId, int? sequence, bool shouldContinue = false)
+    public void IncreaseStepCount(IId? questId, int? sequence, bool shouldContinue = false)
     {
         lock (_progressLock)
         {
@@ -545,7 +545,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         }
     }
 
-    public void Skip(ushort questQuestId, byte currentQuestSequence)
+    public void Skip(IId questQuestId, byte currentQuestSequence)
     {
         lock (_progressLock)
         {
@@ -609,8 +609,9 @@ internal sealed class QuestController : MiniTaskController<QuestController>
             1158, // Titan (Hard)
         ];
 
-        foreach (var questId in priorityQuests)
+        foreach (var id in priorityQuests)
         {
+            var questId = new QuestId(id);
             if (_gameFunctions.IsReadyToAcceptQuest(questId) && _questRegistry.TryGetQuest(questId, out var quest))
             {
                 SetNextQuest(quest);

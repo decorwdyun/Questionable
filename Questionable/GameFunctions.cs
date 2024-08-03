@@ -89,37 +89,36 @@ internal sealed unsafe class GameFunctions
 
     public DateTime ReturnRequestedAt { get; set; } = DateTime.MinValue;
 
-    public (ushort CurrentQuest, byte Sequence) GetCurrentQuest()
+    public (IId? CurrentQuest, byte Sequence) GetCurrentQuest()
     {
         var (currentQuest, sequence) = GetCurrentQuestInternal();
-        QuestManager* questManager = QuestManager.Instance();
         PlayerState* playerState = PlayerState.Instance();
 
-        if (currentQuest == 0)
+        if (currentQuest == null || currentQuest.Value == 0)
         {
             if (_clientState.TerritoryType == 181) // Starting in Limsa
-                return (107, 0);
+                return (new QuestId(107), 0);
             if (_clientState.TerritoryType == 182) // Starting in Ul'dah
-                return (594, 0);
+                return (new QuestId(594), 0);
             if (_clientState.TerritoryType == 183) // Starting in Gridania
-                return (39, 0);
+                return (new QuestId(39), 0);
             return default;
         }
-        else if (currentQuest == 681)
+        else if (currentQuest.Value == 681)
         {
             // if we have already picked up the GC quest, just return the progress for it
-            if (questManager->IsQuestAccepted(currentQuest) || QuestManager.IsQuestComplete(currentQuest))
+            if (IsQuestAccepted(currentQuest) || IsQuestComplete(currentQuest))
                 return (currentQuest, sequence);
 
             // The company you keep...
             return _configuration.General.GrandCompany switch
             {
-                GrandCompany.TwinAdder => (680, 0),
-                GrandCompany.Maelstrom => (681, 0),
+                GrandCompany.TwinAdder => (new QuestId(680), 0),
+                GrandCompany.Maelstrom => (new QuestId(681), 0),
                 _ => default
             };
         }
-        else if (currentQuest == 3856 && !playerState->IsMountUnlocked(1)) // we come in peace
+        else if (currentQuest.Value == 3856 && !playerState->IsMountUnlocked(1)) // we come in peace
         {
             ushort chocoboQuest = (GrandCompany)playerState->GrandCompany switch
             {
@@ -129,20 +128,20 @@ internal sealed unsafe class GameFunctions
             };
 
             if (chocoboQuest != 0 && !QuestManager.IsQuestComplete(chocoboQuest))
-                return (chocoboQuest, QuestManager.GetQuestSequence(chocoboQuest));
+                return (new QuestId(chocoboQuest), QuestManager.GetQuestSequence(chocoboQuest));
         }
-        else if (currentQuest == 801)
+        else if (currentQuest.Value == 801)
         {
             // skeletons in her closet, finish 'broadening horizons' to unlock the white wolf gate
-            ushort broadeningHorizons = 802;
-            if (questManager->IsQuestAccepted(broadeningHorizons))
-                return (broadeningHorizons, QuestManager.GetQuestSequence(broadeningHorizons));
+            QuestId broadeningHorizons = new QuestId(802);
+            if (IsQuestAccepted(broadeningHorizons))
+                return (broadeningHorizons, QuestManager.GetQuestSequence(broadeningHorizons.Value));
         }
 
         return (currentQuest, sequence);
     }
 
-    public (ushort CurrentQuest, byte Sequence) GetCurrentQuestInternal()
+    public (IId? CurrentQuest, byte Sequence) GetCurrentQuestInternal()
     {
         var questManager = QuestManager.Instance();
         if (questManager != null)
@@ -150,7 +149,7 @@ internal sealed unsafe class GameFunctions
             // always prioritize accepting MSQ quests, to make sure we don't turn in one MSQ quest and then go off to do
             // side quests until the end of time.
             var msqQuest = GetMainScenarioQuest(questManager);
-            if (msqQuest.CurrentQuest != 0 && _questRegistry.IsKnownQuest(msqQuest.CurrentQuest))
+            if (msqQuest.CurrentQuest is { Value: not 0 } && _questRegistry.IsKnownQuest(msqQuest.CurrentQuest))
                 return msqQuest;
 
             // Use the quests in the same order as they're shown in the to-do list, e.g. if the MSQ is the first item,
@@ -159,7 +158,7 @@ internal sealed unsafe class GameFunctions
             // If no quests are marked as 'priority', accepting a new quest adds it to the top of the list.
             for (int i = questManager->TrackedQuests.Length - 1; i >= 0; --i)
             {
-                ushort currentQuest;
+                IId currentQuest;
                 var trackedQuest = questManager->TrackedQuests[i];
                 switch (trackedQuest.QuestType)
                 {
@@ -167,12 +166,12 @@ internal sealed unsafe class GameFunctions
                         continue;
 
                     case 1: // normal quest
-                        currentQuest = questManager->NormalQuests[trackedQuest.Index].QuestId;
+                        currentQuest = new QuestId(questManager->NormalQuests[trackedQuest.Index].QuestId);
                         break;
                 }
 
                 if (_questRegistry.IsKnownQuest(currentQuest))
-                    return (currentQuest, QuestManager.GetQuestSequence(currentQuest));
+                    return (currentQuest, QuestManager.GetQuestSequence(currentQuest.Value));
             }
 
             // if we know no quest of those currently in the to-do list, just do MSQ
@@ -182,7 +181,7 @@ internal sealed unsafe class GameFunctions
         return default;
     }
 
-    private (ushort CurrentQuest, byte Sequence) GetMainScenarioQuest(QuestManager* questManager)
+    private (QuestId? CurrentQuest, byte Sequence) GetMainScenarioQuest(QuestManager* questManager)
     {
         if (QuestManager.IsQuestComplete(3759)) // Memories Rekindled
         {
@@ -202,7 +201,7 @@ internal sealed unsafe class GameFunctions
                     // redoHud+44 is chapter
                     // redoHud+46 is quest
                     ushort questId = MemoryHelper.Read<ushort>((nint)questRedoHud + 46);
-                    return (questId, QuestManager.GetQuestSequence(questId));
+                    return (new QuestId(questId), QuestManager.GetQuestSequence(questId));
                 }
             }
         }
@@ -214,12 +213,12 @@ internal sealed unsafe class GameFunctions
         if (scenarioTree->Data == null)
             return default;
 
-        ushort currentQuest = scenarioTree->Data->CurrentScenarioQuest;
-        if (currentQuest == 0)
+        QuestId currentQuest = new QuestId(scenarioTree->Data->CurrentScenarioQuest);
+        if (currentQuest.Value == 0)
             return default;
 
         // if the MSQ is hidden, we generally ignore it
-        if (questManager->IsQuestAccepted(currentQuest) && questManager->GetQuestById(currentQuest)->IsHidden)
+        if (IsQuestAccepted(currentQuest) && questManager->GetQuestById(currentQuest.Value)->IsHidden)
             return default;
 
         // it can sometimes happen (although this isn't reliably reproducible) that the quest returned here
@@ -234,16 +233,23 @@ internal sealed unsafe class GameFunctions
             && quest.Info.Level > currentLevel)
             return default;
 
-        return (currentQuest, QuestManager.GetQuestSequence(currentQuest));
+        return (currentQuest, QuestManager.GetQuestSequence(currentQuest.Value));
     }
 
-    public QuestWork? GetQuestEx(ushort questId)
+    public QuestWork? GetQuestEx(QuestId questId)
     {
-        QuestWork* questWork = QuestManager.Instance()->GetQuestById(questId);
+        QuestWork* questWork = QuestManager.Instance()->GetQuestById(questId.Value);
         return questWork != null ? *questWork : null;
     }
 
-    public bool IsReadyToAcceptQuest(ushort questId)
+    public bool IsReadyToAcceptQuest(IId id)
+    {
+        if (id is QuestId questId)
+            return IsReadyToAcceptQuest(questId);
+        return false;
+    }
+
+    public bool IsReadyToAcceptQuest(QuestId questId)
     {
         _questRegistry.TryGetQuest(questId, out var quest);
         if (quest is { Info.IsRepeatable: true })
@@ -268,29 +274,50 @@ internal sealed unsafe class GameFunctions
         return true;
     }
 
-    public bool IsQuestAcceptedOrComplete(ushort questId)
+    public bool IsQuestAcceptedOrComplete(IId questId)
     {
         return IsQuestComplete(questId) || IsQuestAccepted(questId);
     }
 
-    public bool IsQuestAccepted(ushort questId)
+    public bool IsQuestAccepted(IId id)
+    {
+        if (id is QuestId questId)
+            return IsQuestAccepted(questId);
+        return false;
+    }
+
+    public bool IsQuestAccepted(QuestId questId)
     {
         QuestManager* questManager = QuestManager.Instance();
-        return questManager->IsQuestAccepted(questId);
+        return questManager->IsQuestAccepted(questId.Value);
+    }
+
+    public bool IsQuestComplete(IId id)
+    {
+        if (id is QuestId questId)
+            return IsQuestComplete(questId);
+        return false;
     }
 
     [SuppressMessage("Performance", "CA1822")]
-    public bool IsQuestComplete(ushort questId)
+    public bool IsQuestComplete(QuestId questId)
     {
-        return QuestManager.IsQuestComplete(questId);
+        return QuestManager.IsQuestComplete(questId.Value);
     }
 
-    public bool IsQuestLocked(ushort questId, ushort? extraCompletedQuest = null)
+    public bool IsQuestLocked(IId id, IId? extraCompletedQuest = null)
+    {
+        if (id is QuestId questId)
+            return IsQuestLocked(questId, extraCompletedQuest);
+        return false;
+    }
+
+    public bool IsQuestLocked(QuestId questId, IId? extraCompletedQuest = null)
     {
         var questInfo = _questData.GetQuestInfo(questId);
         if (questInfo.QuestLocks.Count > 0)
         {
-            var completedQuests = questInfo.QuestLocks.Count(x => IsQuestComplete(x) || x == extraCompletedQuest);
+            var completedQuests = questInfo.QuestLocks.Count(x => IsQuestComplete(x) || x.Equals(extraCompletedQuest));
             if (questInfo.QuestLockJoin == QuestInfo.QuestJoin.All && questInfo.QuestLocks.Count == completedQuests)
                 return true;
             else if (questInfo.QuestLockJoin == QuestInfo.QuestJoin.AtLeastOne && completedQuests > 0)
@@ -303,12 +330,12 @@ internal sealed unsafe class GameFunctions
         return !HasCompletedPreviousQuests(questInfo, extraCompletedQuest) || !HasCompletedPreviousInstances(questInfo);
     }
 
-    private bool HasCompletedPreviousQuests(QuestInfo questInfo, ushort? extraCompletedQuest)
+    private bool HasCompletedPreviousQuests(QuestInfo questInfo, IId? extraCompletedQuest)
     {
         if (questInfo.PreviousQuests.Count == 0)
             return true;
 
-        var completedQuests = questInfo.PreviousQuests.Count(x => IsQuestComplete(x) || x == extraCompletedQuest);
+        var completedQuests = questInfo.PreviousQuests.Count(x => IsQuestComplete(x) || x.Equals(extraCompletedQuest));
         if (questInfo.PreviousQuestJoin == QuestInfo.QuestJoin.All &&
             questInfo.PreviousQuests.Count == completedQuests)
             return true;
@@ -388,7 +415,7 @@ internal sealed unsafe class GameFunctions
         if (_configuration.Advanced.NeverFly)
             return false;
 
-        if (IsQuestAccepted(3304) && _condition[ConditionFlag.Mounted])
+        if (IsQuestAccepted(new QuestId(3304)) && _condition[ConditionFlag.Mounted])
         {
             BattleChara* battleChara = (BattleChara*)(_clientState.LocalPlayer?.Address ?? 0);
             if (battleChara != null && battleChara->Mount.MountId == 198) // special quest amaro, not the normal one
@@ -680,7 +707,7 @@ internal sealed unsafe class GameFunctions
         if (excelSheetName == null)
         {
             var questRow =
-                _dataManager.GetExcelSheet<Lumina.Excel.GeneratedSheets2.Quest>()!.GetRow((uint)currentQuest.QuestId +
+                _dataManager.GetExcelSheet<Lumina.Excel.GeneratedSheets2.Quest>()!.GetRow((uint)currentQuest.QuestId.Value +
                     0x10000);
             if (questRow == null)
             {
@@ -688,7 +715,7 @@ internal sealed unsafe class GameFunctions
                 return null;
             }
 
-            excelSheetName = $"quest/{(currentQuest.QuestId / 100):000}/{questRow.Id}";
+            excelSheetName = $"quest/{(currentQuest.QuestId.Value / 100):000}/{questRow.Id}";
         }
 
         var excelSheet = _dataManager.Excel.GetSheet<QuestDialogueText>(excelSheetName);

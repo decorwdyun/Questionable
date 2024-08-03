@@ -162,6 +162,7 @@ public class QuestSourceGenerator : ISourceGenerator
                             SyntaxNodeList(
                                 AssignmentList(nameof(QuestRoot.Author), quest.Author)
                                     .AsSyntaxNodeOrToken(),
+                                Assignment(nameof(QuestRoot.Disabled), quest.Disabled, false).AsSyntaxNodeOrToken(),
                                 Assignment(nameof(QuestRoot.Comment), quest.Comment, null)
                                     .AsSyntaxNodeOrToken(),
                                 AssignmentList(nameof(QuestRoot.TerritoryBlacklist),
@@ -304,7 +305,8 @@ public class QuestSourceGenerator : ISourceGenerator
                                             Assignment(nameof(QuestStep.ContentFinderConditionId),
                                                     step.ContentFinderConditionId, emptyStep.ContentFinderConditionId)
                                                 .AsSyntaxNodeOrToken(),
-                                            Assignment(nameof(QuestStep.SkipConditions), step.SkipConditions, emptyStep.SkipConditions)
+                                            Assignment(nameof(QuestStep.SkipConditions), step.SkipConditions,
+                                                    emptyStep.SkipConditions)
                                                 .AsSyntaxNodeOrToken(),
                                             AssignmentList(nameof(QuestStep.RequiredQuestVariables),
                                                     step.RequiredQuestVariables)

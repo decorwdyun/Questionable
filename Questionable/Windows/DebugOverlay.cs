@@ -46,7 +46,7 @@ internal sealed class DebugOverlay : Window
         IsOpen = true;
     }
 
-    public ushort? HighlightedQuest { get; set; }
+    public IId? HighlightedQuest { get; set; }
 
     public override bool DrawConditions() => _configuration.Advanced.DebugOverlay;
 
@@ -93,7 +93,7 @@ internal sealed class DebugOverlay : Window
 
     private void DrawHighlightedQuest()
     {
-        if (HighlightedQuest == null || !_questRegistry.TryGetQuest(HighlightedQuest.Value, out var quest))
+        if (HighlightedQuest == null || !_questRegistry.TryGetQuest(HighlightedQuest, out var quest))
             return;
 
         foreach (var sequence in quest.Root.QuestSequence)

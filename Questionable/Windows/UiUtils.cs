@@ -4,6 +4,7 @@ using Dalamud.Interface.Colors;
 using Dalamud.Plugin;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using ImGuiNET;
+using Questionable.Model.Questing;
 
 namespace Questionable.Windows;
 
@@ -18,7 +19,7 @@ internal sealed class UiUtils
         _pluginInterface = pluginInterface;
     }
 
-    public (Vector4 color, FontAwesomeIcon icon, string status) GetQuestStyle(ushort questId)
+    public (Vector4 color, FontAwesomeIcon icon, string status) GetQuestStyle(IId questId)
     {
         if (_gameFunctions.IsQuestAccepted(questId))
             return (ImGuiColors.DalamudYellow, FontAwesomeIcon.Running, "Active");

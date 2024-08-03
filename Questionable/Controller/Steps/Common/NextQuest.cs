@@ -18,20 +18,20 @@ internal static class NextQuest
             if (step.NextQuestId == null)
                 return null;
 
-            if (step.NextQuestId.Value == quest.QuestId)
+            if (step.NextQuestId == quest.QuestId)
                 return null;
 
             return serviceProvider.GetRequiredService<SetQuest>()
-                .With(step.NextQuestId.Value, quest.QuestId);
+                .With(step.NextQuestId, quest.QuestId);
         }
     }
 
     internal sealed class SetQuest(QuestRegistry questRegistry, QuestController questController, GameFunctions gameFunctions, ILogger<SetQuest> logger) : ITask
     {
-        public ushort NextQuestId { get; set; }
-        public ushort CurrentQuestId { get; set; }
+        public IId NextQuestId { get; set; } = null!;
+        public IId CurrentQuestId { get; set; } = null!;
 
-        public ITask With(ushort nextQuestId, ushort currentQuestId)
+        public ITask With(IId nextQuestId, IId currentQuestId)
         {
             NextQuestId = nextQuestId;
             CurrentQuestId = currentQuestId;

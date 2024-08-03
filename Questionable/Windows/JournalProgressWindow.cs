@@ -201,8 +201,7 @@ internal sealed class JournalProgressWindow : LWindow, IDisposable
 
         if (ImGui.IsItemClicked() && _commandManager.Commands.TryGetValue("/questinfo", out var commandInfo))
         {
-            _commandManager.DispatchCommand("/questinfo",
-                questInfo.QuestId.ToString(CultureInfo.InvariantCulture), commandInfo);
+            _commandManager.DispatchCommand("/questinfo", questInfo.QuestId.ToString(), commandInfo);
         }
 
         if (ImGui.IsItemHovered())

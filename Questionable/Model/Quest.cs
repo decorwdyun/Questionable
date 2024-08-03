@@ -6,7 +6,7 @@ namespace Questionable.Model;
 
 internal sealed class Quest
 {
-    public required ushort QuestId { get; init; }
+    public required IId QuestId { get; init; }
     public required QuestRoot Root { get; init; }
     public required QuestInfo Info { get; init; }
     public required bool ReadOnly { get; init; }

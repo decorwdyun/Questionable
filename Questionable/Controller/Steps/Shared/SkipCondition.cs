@@ -45,9 +45,9 @@ internal static class SkipCondition
     {
         public QuestStep Step { get; set; } = null!;
         public SkipStepConditions SkipConditions { get; set; } = null!;
-        public ushort QuestId { get; set; }
+        public IId QuestId { get; set; } = null!;
 
-        public ITask With(QuestStep step, SkipStepConditions skipConditions, ushort questId)
+        public ITask With(QuestStep step, SkipStepConditions skipConditions, IId questId)
         {
             Step = step;
             SkipConditions = skipConditions;
@@ -156,32 +156,35 @@ internal static class SkipCondition
                 return true;
             }
 
-            QuestWork? questWork = gameFunctions.GetQuestEx(QuestId);
-            if (QuestWorkUtils.HasCompletionFlags(Step.CompletionQuestVariablesFlags) && questWork != null)
+            if (QuestId is QuestId questId)
             {
-                if (QuestWorkUtils.MatchesQuestWork(Step.CompletionQuestVariablesFlags, questWork.Value))
+                QuestWork? questWork = gameFunctions.GetQuestEx(questId);
+                if (QuestWorkUtils.HasCompletionFlags(Step.CompletionQuestVariablesFlags) && questWork != null)
                 {
-                    logger.LogInformation("Skipping step, as quest variables match (step is complete)");
-                    return true;
+                    if (QuestWorkUtils.MatchesQuestWork(Step.CompletionQuestVariablesFlags, questWork.Value))
+                    {
+                        logger.LogInformation("Skipping step, as quest variables match (step is complete)");
+                        return true;
+                    }
                 }
-            }
 
-            if (Step is { SkipConditions.StepIf: { } conditions } && questWork != null)
-            {
-                if (QuestWorkUtils.MatchesQuestWork(conditions.CompletionQuestVariablesFlags, questWork.Value))
+                if (Step is { SkipConditions.StepIf: { } conditions } && questWork != null)
                 {
-                    logger.LogInformation("Skipping step, as quest variables match (step can be skipped)");
-                    return true;
+                    if (QuestWorkUtils.MatchesQuestWork(conditions.CompletionQuestVariablesFlags, questWork.Value))
+                    {
+                        logger.LogInformation("Skipping step, as quest variables match (step can be skipped)");
+                        return true;
+                    }
                 }
-            }
 
-            if (Step is { RequiredQuestVariables: { } requiredQuestVariables } && questWork != null)
-            {
-                if (!QuestWorkUtils.MatchesRequiredQuestWorkConfig(requiredQuestVariables, questWork.Value,
-                        logger))
+                if (Step is { RequiredQuestVariables: { } requiredQuestVariables } && questWork != null)
                 {
-                    logger.LogInformation("Skipping step, as required variables do not match");
-                    return true;
+                    if (!QuestWorkUtils.MatchesRequiredQuestWorkConfig(requiredQuestVariables, questWork.Value,
+                            logger))
+                    {
+                        logger.LogInformation("Skipping step, as required variables do not match");
+                        return true;
+                    }
                 }
             }
 
@@ -195,13 +198,13 @@ internal static class SkipCondition
                 }
             }
 
-            if (Step.PickUpQuestId != null && gameFunctions.IsQuestAcceptedOrComplete(Step.PickUpQuestId.Value))
+            if (Step.PickUpQuestId != null && gameFunctions.IsQuestAcceptedOrComplete(Step.PickUpQuestId))
             {
                 logger.LogInformation("Skipping step, as we have already picked up the relevant quest");
                 return true;
             }
 
-            if (Step.TurnInQuestId != null && gameFunctions.IsQuestComplete(Step.TurnInQuestId.Value))
+            if (Step.TurnInQuestId != null && gameFunctions.IsQuestComplete(Step.TurnInQuestId))
             {
                 logger.LogInformation("Skipping step, as we have already completed the relevant quest");
                 return true;

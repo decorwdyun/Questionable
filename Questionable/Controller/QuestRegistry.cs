@@ -28,7 +28,7 @@ internal sealed class QuestRegistry
     private readonly ILogger<QuestRegistry> _logger;
     private readonly ICallGateProvider<object> _reloadDataIpc;
 
-    private readonly Dictionary<ushort, Quest> _quests = new();
+    private readonly Dictionary<IId, Quest> _quests = new();
 
     public QuestRegistry(IDalamudPluginInterface pluginInterface, QuestData questData,
         QuestValidator questValidator, JsonSchemaValidator jsonSchemaValidator,
@@ -91,12 +91,12 @@ internal sealed class QuestRegistry
         {
             Quest quest = new()
             {
-                QuestId = questId,
+                QuestId = new QuestId(questId),
                 Root = questRoot,
-                Info = _questData.GetQuestInfo(questId),
+                Info = _questData.GetQuestInfo(new QuestId(questId)),
                 ReadOnly = true,
             };
-            _quests[questId] = quest;
+            _quests[quest.QuestId] = quest;
         }
 
         _logger.LogInformation("Loaded {Count} quests from assembly", _quests.Count);
@@ -136,21 +136,21 @@ internal sealed class QuestRegistry
     private void LoadQuestFromStream(string fileName, Stream stream)
     {
         _logger.LogTrace("Loading quest from '{FileName}'", fileName);
-        ushort? questId = ExtractQuestIdFromName(fileName);
+        IId? questId = ExtractQuestIdFromName(fileName);
         if (questId == null)
             return;
 
         var questNode = JsonNode.Parse(stream)!;
-        _jsonSchemaValidator.Enqueue(questId.Value, questNode);
+        _jsonSchemaValidator.Enqueue(questId, questNode);
 
         Quest quest = new Quest
         {
-            QuestId = questId.Value,
+            QuestId = questId,
             Root = questNode.Deserialize<QuestRoot>()!,
-            Info = _questData.GetQuestInfo(questId.Value),
+            Info = _questData.GetQuestInfo(questId),
             ReadOnly = false,
         };
-        _quests[questId.Value] = quest;
+        _quests[quest.QuestId] = quest;
     }
 
     private void LoadFromDirectory(DirectoryInfo directory, LogLevel logLevel = LogLevel.Information)
@@ -179,7 +179,7 @@ internal sealed class QuestRegistry
             LoadFromDirectory(childDirectory, logLevel);
     }
 
-    private static ushort? ExtractQuestIdFromName(string resourceName)
+    private static IId? ExtractQuestIdFromName(string resourceName)
     {
         string name = resourceName.Substring(0, resourceName.Length - ".json".Length);
         name = name.Substring(name.LastIndexOf('.') + 1);
@@ -188,11 +188,30 @@ internal sealed class QuestRegistry
             return null;
 
         string[] parts = name.Split('_', 2);
-        return ushort.Parse(parts[0], CultureInfo.InvariantCulture);
+        return Id.From(uint.Parse(parts[0], CultureInfo.InvariantCulture));
     }
 
-    public bool IsKnownQuest(ushort questId) => _quests.ContainsKey(questId);
+    public bool IsKnownQuest(IId id)
+    {
+        if (id is QuestId questId)
+            return IsKnownQuest(questId);
+        else
+            return false;
+    }
 
-    public bool TryGetQuest(ushort questId, [NotNullWhen(true)] out Quest? quest)
+    public bool IsKnownQuest(QuestId questId) => _quests.ContainsKey(questId);
+
+    public bool TryGetQuest(IId id, [NotNullWhen(true)] out Quest? quest)
+    {
+        if (id is QuestId questId)
+            return TryGetQuest(questId, out quest);
+        else
+        {
+            quest = null;
+            return false;
+        }
+    }
+
+    public bool TryGetQuest(QuestId questId, [NotNullWhen(true)] out Quest? quest)
         => _quests.TryGetValue(questId, out quest);
 }

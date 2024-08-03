@@ -30,7 +30,7 @@ internal static class WaitAtEnd
             if (step.CompletionQuestVariablesFlags.Count == 6 && QuestWorkUtils.HasCompletionFlags(step.CompletionQuestVariablesFlags))
             {
                 var task = serviceProvider.GetRequiredService<WaitForCompletionFlags>()
-                    .With(quest, step);
+                    .With((QuestId)quest.QuestId, step);
                 var delay = serviceProvider.GetRequiredService<WaitDelay>();
                 return [task, delay, Next(quest, sequence)];
             }
@@ -162,11 +162,11 @@ internal static class WaitAtEnd
 
     internal sealed class WaitForCompletionFlags(GameFunctions gameFunctions) : ITask
     {
-        public Quest Quest { get; set; } = null!;
+        public QuestId Quest { get; set; } = null!;
         public QuestStep Step { get; set; } = null!;
         public IList<QuestWorkValue?> Flags { get; set; } = null!;
 
-        public ITask With(Quest quest, QuestStep step)
+        public ITask With(QuestId quest, QuestStep step)
         {
             Quest = quest;
             Step = step;
@@ -178,7 +178,7 @@ internal static class WaitAtEnd
 
         public ETaskResult Update()
         {
-            QuestWork? questWork = gameFunctions.GetQuestEx(Quest.QuestId);
+            QuestWork? questWork = gameFunctions.GetQuestEx(Quest);
             return questWork != null &&
                    QuestWorkUtils.MatchesQuestWork(Step.CompletionQuestVariablesFlags, questWork.Value)
                 ? ETaskResult.TaskComplete
@@ -214,11 +214,11 @@ internal static class WaitAtEnd
             $"WaitObj({DataId} at {Destination.ToString("G", CultureInfo.InvariantCulture)} < {Distance})";
     }
 
-    internal sealed class WaitQuestAccepted : ITask
+    internal sealed class WaitQuestAccepted(GameFunctions gameFunctions) : ITask
     {
-        public ushort QuestId { get; set; }
+        public IId QuestId { get; set; } = null!;
 
-        public ITask With(ushort questId)
+        public ITask With(IId questId)
         {
             QuestId = questId;
             return this;
@@ -228,23 +228,19 @@ internal static class WaitAtEnd
 
         public ETaskResult Update()
         {
-            unsafe
-            {
-                var questManager = QuestManager.Instance();
-                return questManager != null && questManager->IsQuestAccepted(QuestId)
-                    ? ETaskResult.TaskComplete
-                    : ETaskResult.StillRunning;
-            }
+            return gameFunctions.IsQuestAccepted(QuestId)
+                ? ETaskResult.TaskComplete
+                : ETaskResult.StillRunning;
         }
 
         public override string ToString() => $"WaitQuestAccepted({QuestId})";
     }
 
-    internal sealed class WaitQuestCompleted : ITask
+    internal sealed class WaitQuestCompleted(GameFunctions gameFunctions) : ITask
     {
-        public ushort QuestId { get; set; }
+        public IId QuestId { get; set; } = null!;
 
-        public ITask With(ushort questId)
+        public ITask With(IId questId)
         {
             QuestId = questId;
             return this;
@@ -254,15 +250,15 @@ internal static class WaitAtEnd
 
         public ETaskResult Update()
         {
-            return QuestManager.IsQuestComplete(QuestId) ? ETaskResult.TaskComplete : ETaskResult.StillRunning;
+            return gameFunctions.IsQuestComplete(QuestId) ? ETaskResult.TaskComplete : ETaskResult.StillRunning;
         }
 
         public override string ToString() => $"WaitQuestComplete({QuestId})";
     }
 
-    internal sealed class NextStep(ushort questId, int sequence) : ILastTask
+    internal sealed class NextStep(IId questId, int sequence) : ILastTask
     {
-        public ushort QuestId { get; } = questId;
+        public IId QuestId { get; } = questId;
         public int Sequence { get; } = sequence;
 
         public bool Start() => true;
@@ -274,7 +270,7 @@ internal static class WaitAtEnd
 
     internal sealed class EndAutomation : ILastTask
     {
-        public ushort QuestId => throw new InvalidOperationException();
+        public IId QuestId => throw new InvalidOperationException();
         public int Sequence => throw new InvalidOperationException();
 
         public bool Start() => true;
