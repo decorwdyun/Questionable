@@ -22,6 +22,7 @@ internal sealed class ActiveQuestComponent
     private readonly QuestController _questController;
     private readonly MovementController _movementController;
     private readonly CombatController _combatController;
+    private readonly GatheringController _gatheringController;
     private readonly GameFunctions _gameFunctions;
     private readonly ICommandManager _commandManager;
     private readonly IDalamudPluginInterface _pluginInterface;
@@ -29,14 +30,22 @@ internal sealed class ActiveQuestComponent
     private readonly QuestRegistry _questRegistry;
     private readonly IChatGui _chatGui;
 
-    public ActiveQuestComponent(QuestController questController, MovementController movementController,
-        CombatController combatController, GameFunctions gameFunctions, ICommandManager commandManager,
-        IDalamudPluginInterface pluginInterface, Configuration configuration, QuestRegistry questRegistry,
+    public ActiveQuestComponent(
+        QuestController questController,
+        MovementController movementController,
+        CombatController combatController,
+        GatheringController gatheringController,
+        GameFunctions gameFunctions,
+        ICommandManager commandManager,
+        IDalamudPluginInterface pluginInterface,
+        Configuration configuration,
+        QuestRegistry questRegistry,
         IChatGui chatGui)
     {
         _questController = questController;
         _movementController = movementController;
         _combatController = combatController;
+        _gatheringController = gatheringController;
         _gameFunctions = gameFunctions;
         _commandManager = commandManager;
         _pluginInterface = pluginInterface;
@@ -93,6 +102,7 @@ internal sealed class ActiveQuestComponent
             {
                 _movementController.Stop();
                 _questController.Stop("Manual (no active quest)");
+                _gatheringController.Stop("Manual (no active quest)");
             }
         }
     }
@@ -233,6 +243,7 @@ internal sealed class ActiveQuestComponent
         {
             _movementController.Stop();
             _questController.Stop("Manual");
+            _gatheringController.Stop("Manual");
         }
 
         bool lastStep = currentStep ==

@@ -2,6 +2,7 @@
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
   "Author": [],
   "TerritoryId": 1187,
+  "AetheryteShortcut": "Urqopacha - Wachunpelo",
   "Groups": [
     {
       "Nodes": [
@@ -39,6 +40,15 @@
               },
               "MinimumAngle": -50,
               "MaximumAngle": 210
+            },
+            {
+              "Position": {
+                "X": -394.2657,
+                "Y": -47.86026,
+                "Z": -394.9654
+              },
+              "MinimumAngle": -120,
+              "MaximumAngle": 120
             }
           ]
         }
@@ -71,6 +81,24 @@
               },
               "MinimumAngle": 225,
               "MaximumAngle": 360
+            },
+            {
+              "Position": {
+                "X": -532.3487,
+                "Y": -22.79275,
+                "Z": -510.8069
+              },
+              "MinimumAngle": 135,
+              "MaximumAngle": 270
+            },
+            {
+              "Position": {
+                "X": -536.2922,
+                "Y": -23.79476,
+                "Z": -526.0406
+              },
+              "MinimumAngle": -110,
+              "MaximumAngle": 35
             }
           ]
         }
@@ -103,6 +131,24 @@
               },
               "MinimumAngle": 0,
               "MaximumAngle": 150
+            },
+            {
+              "Position": {
+                "X": -431.5875,
+                "Y": -16.68724,
+                "Z": -656.528
+              },
+              "MinimumAngle": -35,
+              "MaximumAngle": 90
+            },
+            {
+              "Position": {
+                "X": -439.8079,
+                "Y": -16.67447,
+                "Z": -654.6749
+              },
+              "MinimumAngle": -45,
+              "MaximumAngle": 85
             }
           ]
         }

@@ -18,6 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\GatheringPaths\GatheringPaths.csproj" />
         <ProjectReference Include="..\LLib\LLib.csproj"/>
         <ProjectReference Include="..\Questionable.Model\Questionable.Model.csproj"/>
         <ProjectReference Include="..\QuestPaths\QuestPaths.csproj"/>

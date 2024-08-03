@@ -311,6 +311,30 @@
                     }
                   }
                 },
+                "RequiredGatheredItems": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "ItemId": {
+                        "type": "number"
+                      },
+                      "ItemCount": {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      },
+                      "Collectability": {
+                        "type": "number",
+                        "minimum": 0,
+                        "maximum": 1000
+                      }
+                    },
+                    "required": [
+                      "ItemId",
+                      "ItemCount"
+                    ]
+                  }
+                },
                 "DelaySecondsAtStart": {
                   "description": "Time to wait before starting",
                   "type": [

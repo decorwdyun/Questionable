@@ -66,6 +66,7 @@ public sealed class QuestStep
     public SkipConditions? SkipConditions { get; set; }
 
     public List<List<QuestWorkValue>?> RequiredQuestVariables { get; set; } = new();
+    public List<GatheredItem> RequiredGatheredItems { get; set; } = [];
     public IList<QuestWorkValue?> CompletionQuestVariablesFlags { get; set; } = new List<QuestWorkValue?>();
     public IList<DialogueChoice> DialogueChoices { get; set; } = new List<DialogueChoice>();
     public IList<uint> PointMenuChoices { get; set; } = new List<uint>();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -12,6 +13,7 @@ using Dalamud.Plugin.Services;
 using ECommons;
 using ECommons.Schedulers;
 using ECommons.SplatoonAPI;
+using FFXIVClientStructs.FFXIV.Common.Math;
 using GatheringPathRenderer.Windows;
 using Questionable.Model;
 using Questionable.Model.Gathering;
@@ -36,14 +38,15 @@ public sealed class RendererPlugin : IDalamudPlugin
 
     public RendererPlugin(IDalamudPluginInterface pluginInterface, IClientState clientState,
         ICommandManager commandManager, IDataManager dataManager, ITargetManager targetManager, IChatGui chatGui,
-        IPluginLog pluginLog)
+        IObjectTable objectTable, IPluginLog pluginLog)
     {
         _pluginInterface = pluginInterface;
         _clientState = clientState;
         _pluginLog = pluginLog;
 
         _editorCommands = new EditorCommands(this, dataManager, commandManager, targetManager, clientState, chatGui);
-        _editorWindow = new EditorWindow(this, _editorCommands, dataManager, targetManager, clientState) { IsOpen = true };
+        _editorWindow = new EditorWindow(this, _editorCommands, dataManager, targetManager, clientState, objectTable)
+            { IsOpen = true };
         _windowSystem.AddWindow(_editorWindow);
 
         _pluginInterface.GetIpcSubscriber<object>("Questionable.ReloadData")
@@ -175,7 +178,8 @@ public sealed class RendererPlugin : IDalamudPlugin
                             bool isCone = false;
                             int minimumAngle = 0;
                             int maximumAngle = 0;
-                            if (_editorWindow.TryGetOverride(x.InternalId, out LocationOverride? locationOverride) && locationOverride != null)
+                            if (_editorWindow.TryGetOverride(x.InternalId, out LocationOverride? locationOverride) &&
+                                locationOverride != null)
                             {
                                 if (locationOverride.IsCone())
                                 {
@@ -192,6 +196,8 @@ public sealed class RendererPlugin : IDalamudPlugin
                                 maximumAngle = x.MaximumAngle.GetValueOrDefault();
                             }
 
+                            var a = GatheringMath.CalculateLandingLocation(x, 0, 0);
+                            var b = GatheringMath.CalculateLandingLocation(x, 1, 1);
                             return new List<Element>
                             {
                                 new Element(isCone
@@ -219,6 +225,26 @@ public sealed class RendererPlugin : IDalamudPlugin
                                     Enabled = true,
                                     overlayText =
                                         $"{location.Root.Groups.IndexOf(group)} // {node.DataId} / {node.Locations.IndexOf(x)}",
+                                },
+                                new Element(ElementType.CircleAtFixedCoordinates)
+                                {
+                                    refX = a.X,
+                                    refY = a.Z,
+                                    refZ = a.Y,
+                                    color = _colors[0],
+                                    radius = 0.1f,
+                                    Enabled = true,
+                                    overlayText = "Min Angle"
+                                },
+                                new Element(ElementType.CircleAtFixedCoordinates)
+                                {
+                                    refX = b.X,
+                                    refY = b.Z,
+                                    refZ = b.Y,
+                                    color = _colors[1],
+                                    radius = 0.1f,
+                                    Enabled = true,
+                                    overlayText = "Max Angle"
                                 }
                             };
                         }))))

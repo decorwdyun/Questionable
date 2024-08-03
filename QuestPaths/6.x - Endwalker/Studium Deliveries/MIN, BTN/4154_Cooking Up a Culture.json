@@ -29,7 +29,14 @@
             "Z": -102.983154
           },
           "TerritoryId": 962,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "RequiredGatheredItems": [
+            {
+              "ItemId": 35600,
+              "ItemCount": 6,
+              "Collectability": 600
+            }
+          ]
         }
       ]
     }

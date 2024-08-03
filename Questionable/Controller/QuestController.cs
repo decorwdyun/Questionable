@@ -14,16 +14,15 @@ using Questionable.Model.Questing;
 
 namespace Questionable.Controller;
 
-internal sealed class QuestController
+internal sealed class QuestController : MiniTaskController<QuestController>
 {
     private readonly IClientState _clientState;
     private readonly GameFunctions _gameFunctions;
     private readonly MovementController _movementController;
     private readonly CombatController _combatController;
-    private readonly ILogger<QuestController> _logger;
+    private readonly GatheringController _gatheringController;
     private readonly QuestRegistry _questRegistry;
     private readonly IKeyState _keyState;
-    private readonly IChatGui _chatGui;
     private readonly ICondition _condition;
     private readonly Configuration _configuration;
     private readonly YesAlreadyIpc _yesAlreadyIpc;
@@ -34,8 +33,6 @@ internal sealed class QuestController
     private QuestProgress? _startedQuest;
     private QuestProgress? _nextQuest;
     private QuestProgress? _simulatedQuest;
-    private readonly Queue<ITask> _taskQueue = new();
-    private ITask? _currentTask;
     private bool _automatic;
 
     /// <summary>
@@ -50,6 +47,7 @@ internal sealed class QuestController
         GameFunctions gameFunctions,
         MovementController movementController,
         CombatController combatController,
+        GatheringController gatheringController,
         ILogger<QuestController> logger,
         QuestRegistry questRegistry,
         IKeyState keyState,
@@ -58,15 +56,15 @@ internal sealed class QuestController
         Configuration configuration,
         YesAlreadyIpc yesAlreadyIpc,
         IEnumerable<ITaskFactory> taskFactories)
+        : base(chatGui, logger)
     {
         _clientState = clientState;
         _gameFunctions = gameFunctions;
         _movementController = movementController;
         _combatController = combatController;
-        _logger = logger;
+        _gatheringController = gatheringController;
         _questRegistry = questRegistry;
         _keyState = keyState;
-        _chatGui = chatGui;
         _condition = condition;
         _configuration = configuration;
         _yesAlreadyIpc = yesAlreadyIpc;
@@ -138,6 +136,7 @@ internal sealed class QuestController
                 Stop("HP = 0");
                 _movementController.Stop();
                 _combatController.Stop("HP = 0");
+                _gatheringController.Stop("HP = 0");
             }
         }
         else if (_configuration.General.UseEscToCancelQuesting && _keyState[VirtualKey.ESCAPE])
@@ -147,6 +146,7 @@ internal sealed class QuestController
                 Stop("ESC pressed");
                 _movementController.Stop();
                 _combatController.Stop("ESC pressed");
+                _gatheringController.Stop("ESC pressed");
             }
         }
 
@@ -377,9 +377,10 @@ internal sealed class QuestController
 
         _yesAlreadyIpc.RestoreYesAlready();
         _combatController.Stop("ClearTasksInternal");
+        _gatheringController.Stop("ClearTasksInternal");
     }
 
-    public void Stop(string label, bool continueIfAutomatic = false)
+    public void Stop(string label, bool continueIfAutomatic)
     {
         using var scope = _logger.BeginScope(label);
 
@@ -401,6 +402,8 @@ internal sealed class QuestController
         }
     }
 
+    public override void Stop(string label) => Stop(label, false);
+
     public void SimulateQuest(Quest? quest)
     {
         _logger.LogInformation("SimulateQuest: {QuestId}", quest?.QuestId);
@@ -419,103 +422,23 @@ internal sealed class QuestController
             _nextQuest = null;
     }
 
-    private void UpdateCurrentTask()
+    protected override void UpdateCurrentTask()
     {
         if (_gameFunctions.IsOccupied())
             return;
 
-        if (_currentTask == null)
-        {
-            if (_taskQueue.TryDequeue(out ITask? upcomingTask))
-            {
-                try
-                {
-                    _logger.LogInformation("Starting task {TaskName}", upcomingTask.ToString());
-                    if (upcomingTask.Start())
-                    {
-                        _currentTask = upcomingTask;
-                        return;
-                    }
-                    else
-                    {
-                        _logger.LogTrace("Task {TaskName} was skipped", upcomingTask.ToString());
-                        return;
-                    }
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, "Failed to start task {TaskName}", upcomingTask.ToString());
-                    _chatGui.PrintError(
-                        $"[Questionable] Failed to start task '{upcomingTask}', please check /xllog for details.");
-                    Stop("Task failed to start");
-                    return;
-                }
-            }
-            else
-                return;
-        }
+        base.UpdateCurrentTask();
+    }
 
-        ETaskResult result;
-        try
-        {
-            result = _currentTask.Update();
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Failed to update task {TaskName}", _currentTask.ToString());
-            _chatGui.PrintError(
-                $"[Questionable] Failed to update task '{_currentTask}', please check /xllog for details.");
-            Stop("Task failed to update");
-            return;
-        }
+    protected override void OnTaskComplete(ITask task)
+    {
+        if (task is WaitAtEnd.WaitQuestCompleted)
+            _simulatedQuest = null;
+    }
 
-        switch (result)
-        {
-            case ETaskResult.StillRunning:
-                return;
-
-            case ETaskResult.SkipRemainingTasksForStep:
-                _logger.LogInformation("{Task} → {Result}, skipping remaining tasks for step",
-                    _currentTask, result);
-                _currentTask = null;
-
-                while (_taskQueue.TryDequeue(out ITask? nextTask))
-                {
-                    if (nextTask is ILastTask)
-                    {
-                        _currentTask = nextTask;
-                        return;
-                    }
-                }
-
-                return;
-
-            case ETaskResult.TaskComplete:
-                _logger.LogInformation("{Task} → {Result}, remaining tasks: {RemainingTaskCount}",
-                    _currentTask, result, _taskQueue.Count);
-
-                if (_currentTask is WaitAtEnd.WaitQuestCompleted)
-                    _simulatedQuest = null;
-
-                _currentTask = null;
-
-                // handled in next update
-                return;
-
-            case ETaskResult.NextStep:
-                _logger.LogInformation("{Task} → {Result}", _currentTask, result);
-
-                var lastTask = (ILastTask)_currentTask;
-                _currentTask = null;
-                IncreaseStepCount(lastTask.QuestId, lastTask.Sequence, true);
-                return;
-
-            case ETaskResult.End:
-                _logger.LogInformation("{Task} → {Result}", _currentTask, result);
-                _currentTask = null;
-                Stop("Task end");
-                return;
-        }
+    protected override void OnNextStep(ILastTask task)
+    {
+        IncreaseStepCount(task.QuestId, task.Sequence, true);
     }
 
     public void ExecuteNextStep(bool automatic)
@@ -536,6 +459,7 @@ internal sealed class QuestController
 
         _movementController.Stop();
         _combatController.Stop("Execute next step");
+        _gatheringController.Stop("Execute next step");
 
         var newTasks = _taskFactories
             .SelectMany(x =>
@@ -567,9 +491,6 @@ internal sealed class QuestController
         foreach (var task in newTasks)
             _taskQueue.Enqueue(task);
     }
-
-    public IList<string> GetRemainingTaskNames() =>
-        _taskQueue.Select(x => x.ToString() ?? "?").ToList();
 
     public string ToStatString()
     {

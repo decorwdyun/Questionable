@@ -22,15 +22,19 @@ internal sealed class EditorWindow : Window
     private readonly IDataManager _dataManager;
     private readonly ITargetManager _targetManager;
     private readonly IClientState _clientState;
+    private readonly IObjectTable _objectTable;
 
     private readonly Dictionary<Guid, LocationOverride> _changes = [];
 
     private IGameObject? _target;
-    private (RendererPlugin.GatheringLocationContext, GatheringLocation)? _targetLocation;
+
+    private (RendererPlugin.GatheringLocationContext Context, GatheringNode Node, GatheringLocation Location)?
+        _targetLocation;
+
     private string _newFileName = string.Empty;
 
     public EditorWindow(RendererPlugin plugin, EditorCommands editorCommands, IDataManager dataManager,
-        ITargetManager targetManager, IClientState clientState)
+        ITargetManager targetManager, IClientState clientState, IObjectTable objectTable)
         : base("Gathering Path Editor###QuestionableGatheringPathEditor")
     {
         _plugin = plugin;
@@ -38,38 +42,44 @@ internal sealed class EditorWindow : Window
         _dataManager = dataManager;
         _targetManager = targetManager;
         _clientState = clientState;
+        _objectTable = objectTable;
 
         SizeConstraints = new WindowSizeConstraints
         {
             MinimumSize = new Vector2(300, 300),
         };
+        ShowCloseButton = false;
     }
 
     public override void Update()
     {
         _target = _targetManager.Target;
-        if (_target == null || _target.ObjectKind != ObjectKind.GatheringPoint)
-        {
-            _targetLocation = null;
-            return;
-        }
-
         var gatheringLocations = _plugin.GetLocationsInTerritory(_clientState.TerritoryType);
         var location = gatheringLocations.SelectMany(context =>
                 context.Root.Groups.SelectMany(group =>
                     group.Nodes
-                        .Where(node => node.DataId == _target.DataId)
-                        .SelectMany(node => node.Locations)
-                        .Where(location => Vector3.Distance(location.Position, _target.Position) < 0.1f)
-                        .Select(location => new { Context = context, Location = location })))
+                        .SelectMany(node => node.Locations
+                            .Where(location =>
+                            {
+                                if (_target != null)
+                                    return Vector3.Distance(location.Position, _target.Position) < 0.1f;
+                                else
+                                    return Vector3.Distance(location.Position, _clientState.LocalPlayer!.Position) < 3f;
+                            })
+                            .Select(location => new { Context = context, Node = node, Location = location }))))
             .FirstOrDefault();
-        if (location == null)
+        if (_target != null && _target.ObjectKind != ObjectKind.GatheringPoint || location == null)
         {
+            _target = null;
             _targetLocation = null;
             return;
         }
 
-        _targetLocation = (location.Context, location.Location);
+        _target ??= _objectTable.FirstOrDefault(
+            x => x.ObjectKind == ObjectKind.GatheringPoint &&
+                 x.DataId == location.Node.DataId &&
+                 Vector3.Distance(location.Location.Position, _clientState.LocalPlayer!.Position) < 3f);
+        _targetLocation = (location.Context, location.Node, location.Location);
     }
 
     public override bool DrawConditions()
@@ -81,8 +91,9 @@ internal sealed class EditorWindow : Window
     {
         if (_target != null && _targetLocation != null)
         {
-            var context = _targetLocation.Value.Item1;
-            var location = _targetLocation.Value.Item2;
+            var context = _targetLocation.Value.Context;
+            var node = _targetLocation.Value.Node;
+            var location = _targetLocation.Value.Location;
             ImGui.Text(context.File.Directory?.Name ?? string.Empty);
             ImGui.Indent();
             ImGui.Text(context.File.Name);
@@ -97,7 +108,7 @@ internal sealed class EditorWindow : Window
             }
 
             int minAngle = locationOverride.MinimumAngle ?? location.MinimumAngle.GetValueOrDefault();
-            if (ImGui.DragInt("Min Angle", ref minAngle, 5, -180, 360))
+            if (ImGui.DragInt("Min Angle", ref minAngle, 5, -360, 360))
             {
                 locationOverride.MinimumAngle = minAngle;
                 locationOverride.MaximumAngle ??= location.MaximumAngle.GetValueOrDefault();
@@ -105,7 +116,7 @@ internal sealed class EditorWindow : Window
             }
 
             int maxAngle = locationOverride.MaximumAngle ?? location.MaximumAngle.GetValueOrDefault();
-            if (ImGui.DragInt("Max Angle", ref maxAngle, 5, -180, 360))
+            if (ImGui.DragInt("Max Angle", ref maxAngle, 5, -360, 360))
             {
                 locationOverride.MinimumAngle ??= location.MinimumAngle.GetValueOrDefault();
                 locationOverride.MaximumAngle = maxAngle;
@@ -119,14 +130,33 @@ internal sealed class EditorWindow : Window
                 location.MaximumAngle = locationOverride.MaximumAngle;
                 _plugin.Save(context.File, context.Root);
             }
+
             ImGui.SameLine();
             if (ImGui.Button("Reset"))
             {
                 _changes[location.InternalId] = new LocationOverride();
                 _plugin.Redraw();
             }
+
             ImGui.EndDisabled();
 
+
+            List<IGameObject> nodesInObjectTable = _objectTable
+                .Where(x => x.ObjectKind == ObjectKind.GatheringPoint && x.DataId == _target.DataId)
+                .ToList();
+            List<IGameObject> missingLocations = nodesInObjectTable
+                .Where(x => !node.Locations.Any(y => Vector3.Distance(x.Position, y.Position) < 0.1f))
+                .ToList();
+            if (missingLocations.Count > 0)
+            {
+                if (ImGui.Button("Add missing locations"))
+                {
+                    foreach (var missing in missingLocations)
+                        _editorCommands.AddToExistingGroup(context.Root, missing);
+
+                    _plugin.Save(context.File, context.Root);
+                }
+            }
         }
         else if (_target != null)
         {
@@ -154,6 +184,7 @@ internal sealed class EditorWindow : Window
                     _editorCommands.AddToNewGroup(root, _target);
                     _plugin.Save(targetFile, root);
                 }
+
                 ImGui.EndDisabled();
             }
             else
@@ -176,7 +207,7 @@ internal sealed class EditorWindow : Window
         => _changes.TryGetValue(internalId, out locationOverride);
 }
 
-internal class LocationOverride
+internal sealed class LocationOverride
 {
     public int? MinimumAngle { get; set; }
     public int? MaximumAngle { get; set; }
