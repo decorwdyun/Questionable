@@ -57,8 +57,8 @@ public sealed class VectorConverter : JsonConverter<Vector3>
     {
         writer.WriteStartObject();
         writer.WriteNumber(nameof(Vector3.X), value.X);
-        writer.WriteNumber(nameof(Vector3.Y), value.X);
-        writer.WriteNumber(nameof(Vector3.Z), value.X);
+        writer.WriteNumber(nameof(Vector3.Y), value.Y);
+        writer.WriteNumber(nameof(Vector3.Z), value.Z);
         writer.WriteEndObject();
     }
 }

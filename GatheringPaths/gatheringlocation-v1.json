@@ -92,8 +92,7 @@
     "$schema",
     "Author",
     "TerritoryId",
-    "AetheryteShortcut",
-    "Nodes"
+    "Groups"
   ],
   "additionalProperties": false,
   "$defs": {

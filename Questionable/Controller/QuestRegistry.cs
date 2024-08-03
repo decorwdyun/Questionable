@@ -69,7 +69,16 @@ internal sealed class QuestRegistry
 
         ValidateQuests();
         Reloaded?.Invoke(this, EventArgs.Empty);
-        _reloadDataIpc.SendMessage();
+        try
+        {
+            _reloadDataIpc.SendMessage();
+        }
+        catch (Exception e)
+        {
+            // why does this even throw
+            _logger.LogWarning(e, "Error during Reload.SendMessage IPC");
+        }
+
         _logger.LogInformation("Loaded {Count} quests in total", _quests.Count);
     }
 
@@ -105,24 +114,10 @@ internal sealed class QuestRegistry
             {
                 try
                 {
-                    LoadFromDirectory(
-                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "2.x - A Realm Reborn")),
-                        LogLevel.Trace);
-                    LoadFromDirectory(
-                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "3.x - Heavensward")),
-                        LogLevel.Trace);
-                    LoadFromDirectory(
-                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "4.x - Stormblood")),
-                        LogLevel.Trace);
-                    LoadFromDirectory(
-                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "5.x - Shadowbringers")),
-                        LogLevel.Trace);
-                    LoadFromDirectory(
-                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "6.x - Endwalker")),
-                        LogLevel.Trace);
-                    LoadFromDirectory(
-                        new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, "7.x - Dawntrail")),
-                        LogLevel.Trace);
+                    foreach (var expansionFolder in ExpansionData.ExpansionFolders.Values)
+                        LoadFromDirectory(
+                            new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, expansionFolder)),
+                            LogLevel.Trace);
                 }
                 catch (Exception e)
                 {

@@ -1,0 +1,95 @@
+{
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
+  "Author": [],
+  "TerritoryId": 1187,
+  "Groups": [
+    {
+      "Nodes": [
+        {
+          "DataId": 34857,
+          "Locations": [
+            {
+              "Position": {
+                "X": -12.48859,
+                "Y": -133.2091,
+                "Z": -427.7497
+              }
+            }
+          ]
+        },
+        {
+          "DataId": 34858,
+          "Locations": [
+            {
+              "Position": {
+                "X": -22.41956,
+                "Y": -129.3952,
+                "Z": -396.6573
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Nodes": [
+        {
+          "DataId": 34861,
+          "Locations": [
+            {
+              "Position": {
+                "X": -234.8222,
+                "Y": -99.01237,
+                "Z": -376.7287
+              },
+              "MinimumAngle": -180,
+              "MaximumAngle": 40
+            }
+          ]
+        },
+        {
+          "DataId": 34862,
+          "Locations": [
+            {
+              "Position": {
+                "X": -236.0182,
+                "Y": -97.50027,
+                "Z": -372.1523
+              },
+              "MinimumAngle": -180,
+              "MaximumAngle": 45
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Nodes": [
+        {
+          "DataId": 34860,
+          "Locations": [
+            {
+              "Position": {
+                "X": -169.8177,
+                "Y": -85.61841,
+                "Z": -240.1007
+              }
+            }
+          ]
+        },
+        {
+          "DataId": 34859,
+          "Locations": [
+            {
+              "Position": {
+                "X": -131.9198,
+                "Y": -89.88039,
+                "Z": -249.5422
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
