@@ -29,10 +29,25 @@ internal sealed class DoGatherCollectable(
 
     public bool Start() => true;
 
-    public ETaskResult Update()
+    public unsafe ETaskResult Update()
     {
         if (gatheringController.HasNodeDisappeared(_currentNode))
             return ETaskResult.TaskComplete;
+
+        if (gatheringController.HasRequestedItems())
+        {
+            if (gameGui.TryGetAddonByName("GatheringMasterpiece", out AtkUnitBase* atkUnitBase))
+            {
+                atkUnitBase->FireCallbackInt(1);
+                return ETaskResult.StillRunning;
+            }
+
+            if (gameGui.TryGetAddonByName("Gathering", out atkUnitBase))
+            {
+                atkUnitBase->FireCallbackInt(-1);
+                return ETaskResult.TaskComplete;
+            }
+        }
 
         NodeCondition? nodeCondition = GetNodeCondition();
         if (nodeCondition == null)
@@ -84,7 +99,7 @@ internal sealed class DoGatherCollectable(
         return null;
     }
 
-    private Queue<EAction>? GetNextActions(NodeCondition nodeCondition)
+    private Queue<EAction> GetNextActions(NodeCondition nodeCondition)
     {
         uint gp = clientState.LocalPlayer!.CurrentGp;
         Queue<EAction> actions = new();

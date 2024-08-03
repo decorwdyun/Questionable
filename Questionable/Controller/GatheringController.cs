@@ -148,7 +148,7 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
         }
     }
 
-    private bool HasRequestedItems()
+    public bool HasRequestedItems()
     {
         if (_currentRequest == null)
             return true;

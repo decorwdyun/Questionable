@@ -42,9 +42,16 @@ internal sealed class DoGather(
 
             if (gameGui.TryGetAddonByName("Gathering", out AtkUnitBase* atkUnitBase))
             {
-                _slots ??= ReadSlots(atkUnitBase);
-                var slot = _slots.Single(x => x.ItemId == _currentRequest.ItemId);
-                atkUnitBase->FireCallbackInt(slot.Index);
+                if (gatheringController.HasRequestedItems())
+                {
+                    atkUnitBase->FireCallbackInt(-1);
+                }
+                else
+                {
+                    _slots ??= ReadSlots(atkUnitBase);
+                    var slot = _slots.Single(x => x.ItemId == _currentRequest.ItemId);
+                    atkUnitBase->FireCallbackInt(slot.Index);
+                }
             }
         }
 

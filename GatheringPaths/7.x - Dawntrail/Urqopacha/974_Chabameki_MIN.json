@@ -1,6 +1,6 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
-  "Author": [],
+  "Author": "liza",
   "TerritoryId": 1187,
   "AetheryteShortcut": "Urqopacha - Wachunpelo",
   "Groups": [

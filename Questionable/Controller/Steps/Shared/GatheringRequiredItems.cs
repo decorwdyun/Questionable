@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Dalamud.Game.Text;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using Microsoft.Extensions.DependencyInjection;
 using Questionable.Data;
 using Questionable.GatheringPaths;
@@ -30,6 +31,9 @@ internal static class GatheringRequiredItems
                         .TryGetValue(gatheringPointId, out GatheringRoot? gatheringRoot))
                     throw new TaskException("No path found for gathering point");
 
+                if (HasRequiredItems(requiredGatheredItems))
+                    continue;
+
                 if (gatheringRoot.AetheryteShortcut != null && clientState.TerritoryType != gatheringRoot.TerritoryId)
                 {
                     yield return serviceProvider.GetRequiredService<AetheryteShortcut.UseAetheryteShortcut>()
@@ -39,6 +43,14 @@ internal static class GatheringRequiredItems
                 yield return serviceProvider.GetRequiredService<StartGathering>()
                     .With(gatheringPointId, requiredGatheredItems);
             }
+        }
+
+        private unsafe bool HasRequiredItems(GatheredItem requiredGatheredItems)
+        {
+            InventoryManager* inventoryManager = InventoryManager.Instance();
+            return inventoryManager != null &&
+                   inventoryManager->GetInventoryItemCount(requiredGatheredItems.ItemId,
+                       minCollectability: (short)requiredGatheredItems.Collectability) >= requiredGatheredItems.ItemCount;
         }
 
         public ITask CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
@@ -76,7 +88,8 @@ internal static class GatheringRequiredItems
             if (_gatheredItem.Collectability == 0)
                 return $"Gather({_gatheredItem.ItemCount}x {_gatheredItem.ItemId})";
             else
-                return $"Gather({_gatheredItem.ItemCount}x {_gatheredItem.ItemId} {SeIconChar.Collectible.ToIconString()} {_gatheredItem.Collectability})";
+                return
+                    $"Gather({_gatheredItem.ItemCount}x {_gatheredItem.ItemId} {SeIconChar.Collectible.ToIconString()} {_gatheredItem.Collectability})";
         }
     }
 }

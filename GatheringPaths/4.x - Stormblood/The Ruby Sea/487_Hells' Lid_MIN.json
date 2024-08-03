@@ -1,0 +1,108 @@
+{
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
+  "Author": "liza",
+  "TerritoryId": 613,
+  "AetheryteShortcut": "Ruby Sea - Onokoro",
+  "Groups": [
+    {
+      "Nodes": [
+        {
+          "DataId": 32140,
+          "Locations": [
+            {
+              "Position": {
+                "X": 210.5032,
+                "Y": 28.51213,
+                "Z": 718.0732
+              },
+              "MinimumAngle": 210,
+              "MaximumAngle": 325
+            },
+            {
+              "Position": {
+                "X": 202.0474,
+                "Y": 30.18633,
+                "Z": 700.0951
+              },
+              "MinimumAngle": 160,
+              "MaximumAngle": 295
+            },
+            {
+              "Position": {
+                "X": 195.6331,
+                "Y": 33.43727,
+                "Z": 695.2228
+              },
+              "MinimumAngle": 150,
+              "MaximumAngle": 235
+            }
+          ]
+        },
+        {
+          "DataId": 32139,
+          "Locations": [
+            {
+              "Position": {
+                "X": 208.3533,
+                "Y": 28.65312,
+                "Z": 706.8864
+              },
+              "MinimumAngle": 180,
+              "MaximumAngle": 250
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Nodes": [
+        {
+          "DataId": 32135,
+          "Locations": [
+            {
+              "Position": {
+                "X": 67.65472,
+                "Y": 25.89518,
+                "Z": 652.348
+              },
+              "MinimumAngle": -105,
+              "MaximumAngle": 15
+            }
+          ]
+        },
+        {
+          "DataId": 32136,
+          "Locations": [
+            {
+              "Position": {
+                "X": 41.55281,
+                "Y": 27.65364,
+                "Z": 654.9735
+              },
+              "MinimumAngle": -115,
+              "MaximumAngle": 35
+            },
+            {
+              "Position": {
+                "X": 52.98101,
+                "Y": 27.03981,
+                "Z": 652.5334
+              },
+              "MinimumAngle": -45,
+              "MaximumAngle": 55
+            },
+            {
+              "Position": {
+                "X": 71.80375,
+                "Y": 26.55341,
+                "Z": 644.8627
+              },
+              "MinimumAngle": 205,
+              "MaximumAngle": 335
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
