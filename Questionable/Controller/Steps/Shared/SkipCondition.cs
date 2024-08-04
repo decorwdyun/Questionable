@@ -34,7 +34,7 @@ internal static class SkipCondition
                 return null;
 
             return serviceProvider.GetRequiredService<CheckSkip>()
-                .With(step, skipConditions ?? new(), quest.QuestElementId);
+                .With(step, skipConditions ?? new(), quest.Id);
         }
     }
 

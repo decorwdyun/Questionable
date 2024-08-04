@@ -18,11 +18,11 @@ internal static class NextQuest
             if (step.NextQuestId == null)
                 return null;
 
-            if (step.NextQuestId == quest.QuestElementId)
+            if (step.NextQuestId == quest.Id)
                 return null;
 
             return serviceProvider.GetRequiredService<SetQuest>()
-                .With(step.NextQuestId, quest.QuestElementId);
+                .With(step.NextQuestId, quest.Id);
         }
     }
 

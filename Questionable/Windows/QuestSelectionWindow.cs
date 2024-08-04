@@ -39,8 +39,8 @@ internal sealed class QuestSelectionWindow : LWindow
     private readonly UiUtils _uiUtils;
     private readonly QuestTooltipComponent _questTooltipComponent;
 
-    private List<QuestInfo> _quests = [];
-    private List<QuestInfo> _offeredQuests = [];
+    private List<IQuestInfo> _quests = [];
+    private List<IQuestInfo> _offeredQuests = [];
     private bool _onlyAvailableQuests = true;
 
     public QuestSelectionWindow(QuestData questData, IGameGui gameGui, IChatGui chatGui, GameFunctions gameFunctions,
@@ -105,7 +105,7 @@ internal sealed class QuestSelectionWindow : LWindow
 
         _quests = _questRegistry.AllQuests
             .Where(x => x.FindSequence(0)?.FindStep(0)?.TerritoryId == territoryId)
-            .Select(x => _questData.GetQuestInfo(x.QuestElementId))
+            .Select(x => _questData.GetQuestInfo(x.Id))
             .ToList();
 
         foreach (var unacceptedQuest in Map.Instance()->UnacceptedQuestMarkers)
@@ -157,11 +157,11 @@ internal sealed class QuestSelectionWindow : LWindow
         ImGui.TableSetupColumn("Actions", ImGuiTableColumnFlags.WidthFixed, actionIconSize);
         ImGui.TableHeadersRow();
 
-        foreach (QuestInfo quest in (_offeredQuests.Count != 0 && _onlyAvailableQuests) ? _offeredQuests : _quests)
+        foreach (IQuestInfo quest in (_offeredQuests.Count != 0 && _onlyAvailableQuests) ? _offeredQuests : _quests)
         {
             ImGui.TableNextRow();
 
-            string questId = quest.QuestId.ToString();
+            string questId = quest.QuestId.ToString() ?? string.Empty;
             bool isKnownQuest = _questRegistry.TryGetQuest(quest.QuestId, out var knownQuest);
 
             if (ImGui.TableNextColumn())
@@ -228,7 +228,7 @@ internal sealed class QuestSelectionWindow : LWindow
                     if (startNextQuest)
                     {
                         _questController.SetNextQuest(knownQuest);
-                        _questController.ExecuteNextStep(true);
+                        _questController.ExecuteNextStep(QuestController.EAutomationType.Automatic);
                     }
 
                     ImGui.SameLine();
@@ -245,7 +245,7 @@ internal sealed class QuestSelectionWindow : LWindow
         }
     }
 
-    private void CopyToClipboard(QuestInfo quest, bool suffix)
+    private void CopyToClipboard(IQuestInfo quest, bool suffix)
     {
         string fileName = $"{quest.QuestId}_{quest.SimplifiedName}{(suffix ? ".json" : "")}";
         ImGui.SetClipboardText(fileName);

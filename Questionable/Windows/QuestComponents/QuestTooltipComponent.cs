@@ -6,6 +6,7 @@ using ImGuiNET;
 using Questionable.Controller;
 using Questionable.Data;
 using Questionable.Model;
+using Questionable.Model.Questing;
 
 namespace Questionable.Windows.QuestComponents;
 
@@ -29,6 +30,12 @@ internal sealed class QuestTooltipComponent
         _territoryData = territoryData;
         _gameFunctions = gameFunctions;
         _uiUtils = uiUtils;
+    }
+
+    public void Draw(IQuestInfo quest)
+    {
+        if (quest is QuestInfo questInfo)
+            Draw(questInfo);
     }
 
     public void Draw(QuestInfo quest)
@@ -93,8 +100,8 @@ internal sealed class QuestTooltipComponent
 
                 _uiUtils.ChecklistItem(FormatQuestUnlockName(qInfo), iconColor, icon);
 
-                if (counter <= 2 || icon != FontAwesomeIcon.Check)
-                    DrawQuestUnlocks(qInfo, counter + 1);
+                if (qInfo is QuestInfo qstInfo && (counter <= 2 || icon != FontAwesomeIcon.Check))
+                    DrawQuestUnlocks(qstInfo, counter + 1);
             }
         }
 
@@ -162,7 +169,7 @@ internal sealed class QuestTooltipComponent
             ImGui.Unindent();
     }
 
-    private static string FormatQuestUnlockName(QuestInfo questInfo)
+    private static string FormatQuestUnlockName(IQuestInfo questInfo)
     {
         if (questInfo.IsMainScenarioQuest)
             return $"{questInfo.Name} ({questInfo.QuestId}, MSQ)";

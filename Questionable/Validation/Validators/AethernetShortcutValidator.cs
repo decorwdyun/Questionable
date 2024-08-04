@@ -18,7 +18,7 @@ internal sealed class AethernetShortcutValidator : IQuestValidator
     public IEnumerable<ValidationIssue> Validate(Quest quest)
     {
         return quest.AllSteps()
-            .Select(x => Validate(quest.QuestElementId, x.Sequence.Sequence, x.StepId, x.Step.AethernetShortcut))
+            .Select(x => Validate(quest.Id, x.Sequence.Sequence, x.StepId, x.Step.AethernetShortcut))
             .Where(x => x != null)
             .Cast<ValidationIssue>();
     }

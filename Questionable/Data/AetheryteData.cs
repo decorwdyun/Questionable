@@ -28,6 +28,10 @@ internal sealed class AetheryteData
                 aethernetGroups[(EAetheryteLocation)aetheryte.RowId] = aetheryte.AethernetGroup;
         }
 
+        aethernetNames[EAetheryteLocation.IshgardFirmament] = "Firmament";
+        territoryIds[EAetheryteLocation.IshgardFirmament] = 886;
+        aethernetGroups[EAetheryteLocation.IshgardFirmament] = aethernetGroups[EAetheryteLocation.Ishgard];
+
         AethernetNames = aethernetNames.AsReadOnly();
         TerritoryIds = territoryIds.AsReadOnly();
         AethernetGroups = aethernetGroups.AsReadOnly();
@@ -267,6 +271,7 @@ internal sealed class AetheryteData
             { EAetheryteLocation.GridaniaAirship, new(24.86354f, -19.000002f, 96f) },
             { EAetheryteLocation.UldahAirship, new(-16.954851f, 82.999985f, -9.421141f) },
             { EAetheryteLocation.KuganeAirship, new(-55.72525f, 79.10602f, 46.23109f) },
+            { EAetheryteLocation.IshgardFirmament, new(9.92315f, -15.2f, 173.5059f) },
         }.AsReadOnly();
 
     public ReadOnlyDictionary<EAetheryteLocation, string> AethernetNames { get; }
@@ -298,6 +303,9 @@ internal sealed class AetheryteData
 
     public bool IsCityAetheryte(EAetheryteLocation aetheryte)
     {
+        if (aetheryte == EAetheryteLocation.IshgardFirmament)
+            return true;
+
         var territoryId = TerritoryIds[aetheryte];
         return TownTerritoryIds.Contains(territoryId);
     }

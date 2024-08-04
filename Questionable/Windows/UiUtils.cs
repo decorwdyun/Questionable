@@ -22,13 +22,13 @@ internal sealed class UiUtils
     public (Vector4 color, FontAwesomeIcon icon, string status) GetQuestStyle(ElementId questElementId)
     {
         if (_gameFunctions.IsQuestAccepted(questElementId))
-            return (ImGuiColors.DalamudYellow, FontAwesomeIcon.Running, "Active");
+            return (ImGuiColors.DalamudYellow, FontAwesomeIcon.PersonWalkingArrowRight, "Active");
         else if (_gameFunctions.IsQuestAcceptedOrComplete(questElementId))
             return (ImGuiColors.ParsedGreen, FontAwesomeIcon.Check, "Complete");
         else if (_gameFunctions.IsQuestLocked(questElementId))
             return (ImGuiColors.DalamudRed, FontAwesomeIcon.Times, "Locked");
         else
-            return (ImGuiColors.DalamudYellow, FontAwesomeIcon.PersonWalkingArrowRight, "Available");
+            return (ImGuiColors.DalamudYellow, FontAwesomeIcon.Running, "Available");
     }
 
     public static (Vector4 color, FontAwesomeIcon icon) GetInstanceStyle(ushort instanceId)
@@ -36,7 +36,7 @@ internal sealed class UiUtils
         if (UIState.IsInstanceContentCompleted(instanceId))
             return (ImGuiColors.ParsedGreen, FontAwesomeIcon.Check);
         else if (UIState.IsInstanceContentUnlocked(instanceId))
-            return (ImGuiColors.DalamudYellow, FontAwesomeIcon.PersonWalkingArrowRight);
+            return (ImGuiColors.DalamudYellow, FontAwesomeIcon.Running);
         else
             return (ImGuiColors.DalamudRed, FontAwesomeIcon.Times);
     }

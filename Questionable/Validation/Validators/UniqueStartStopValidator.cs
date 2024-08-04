@@ -9,6 +9,9 @@ internal sealed class UniqueStartStopValidator : IQuestValidator
 {
     public IEnumerable<ValidationIssue> Validate(Quest quest)
     {
+        if (quest.Id is SatisfactionSupplyNpcId)
+            yield break;
+
         var questAccepts = FindQuestStepsWithInteractionType(quest, EInteractionType.AcceptQuest)
             .Where(x => x.Step.PickUpQuestId == null)
             .ToList();
@@ -18,7 +21,7 @@ internal sealed class UniqueStartStopValidator : IQuestValidator
             {
                 yield return new ValidationIssue
                 {
-                    QuestId = quest.QuestElementId,
+                    QuestId = quest.Id,
                     Sequence = (byte)accept.Sequence.Sequence,
                     Step = accept.StepId,
                     Type = EIssueType.UnexpectedAcceptQuestStep,
@@ -32,7 +35,7 @@ internal sealed class UniqueStartStopValidator : IQuestValidator
         {
             yield return new ValidationIssue
             {
-                QuestId = quest.QuestElementId,
+                QuestId = quest.Id,
                 Sequence = 0,
                 Step = null,
                 Type = EIssueType.MissingQuestAccept,
@@ -50,7 +53,7 @@ internal sealed class UniqueStartStopValidator : IQuestValidator
             {
                 yield return new ValidationIssue
                 {
-                    QuestId = quest.QuestElementId,
+                    QuestId = quest.Id,
                     Sequence = (byte)complete.Sequence.Sequence,
                     Step = complete.StepId,
                     Type = EIssueType.UnexpectedCompleteQuestStep,
@@ -64,7 +67,7 @@ internal sealed class UniqueStartStopValidator : IQuestValidator
         {
             yield return new ValidationIssue
             {
-                QuestId = quest.QuestElementId,
+                QuestId = quest.Id,
                 Sequence = 255,
                 Step = null,
                 Type = EIssueType.MissingQuestComplete,

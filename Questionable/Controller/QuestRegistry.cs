@@ -91,12 +91,12 @@ internal sealed class QuestRegistry
         {
             Quest quest = new()
             {
-                QuestElementId = new QuestId(questId),
+                Id = new QuestId(questId),
                 Root = questRoot,
                 Info = _questData.GetQuestInfo(new QuestId(questId)),
                 ReadOnly = true,
             };
-            _quests[quest.QuestElementId] = quest;
+            _quests[quest.Id] = quest;
         }
 
         _logger.LogInformation("Loaded {Count} quests from assembly", _quests.Count);
@@ -145,12 +145,12 @@ internal sealed class QuestRegistry
 
         Quest quest = new Quest
         {
-            QuestElementId = questId,
+            Id = questId,
             Root = questNode.Deserialize<QuestRoot>()!,
             Info = _questData.GetQuestInfo(questId),
             ReadOnly = false,
         };
-        _quests[quest.QuestElementId] = quest;
+        _quests[quest.Id] = quest;
     }
 
     private void LoadFromDirectory(DirectoryInfo directory, LogLevel logLevel = LogLevel.Information)
@@ -188,30 +188,11 @@ internal sealed class QuestRegistry
             return null;
 
         string[] parts = name.Split('_', 2);
-        return ElementId.From(uint.Parse(parts[0], CultureInfo.InvariantCulture));
+        return ElementId.FromString(parts[0]);
     }
 
-    public bool IsKnownQuest(ElementId elementId)
-    {
-        if (elementId is QuestId questId)
-            return IsKnownQuest(questId);
-        else
-            return false;
-    }
+    public bool IsKnownQuest(ElementId questId) => _quests.ContainsKey(questId);
 
-    public bool IsKnownQuest(QuestId questId) => _quests.ContainsKey(questId);
-
-    public bool TryGetQuest(ElementId elementId, [NotNullWhen(true)] out Quest? quest)
-    {
-        if (elementId is QuestId questId)
-            return TryGetQuest(questId, out quest);
-        else
-        {
-            quest = null;
-            return false;
-        }
-    }
-
-    public bool TryGetQuest(QuestId questId, [NotNullWhen(true)] out Quest? quest)
+    public bool TryGetQuest(ElementId questId, [NotNullWhen(true)] out Quest? quest)
         => _quests.TryGetValue(questId, out quest);
 }

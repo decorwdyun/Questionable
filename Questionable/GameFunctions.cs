@@ -246,7 +246,10 @@ internal sealed unsafe class GameFunctions
     {
         if (elementId is QuestId questId)
             return IsReadyToAcceptQuest(questId);
-        return false;
+        else if (elementId is SatisfactionSupplyNpcId)
+            return true;
+        else
+            throw new ArgumentOutOfRangeException(nameof(elementId));
     }
 
     public bool IsReadyToAcceptQuest(QuestId questId)
@@ -283,7 +286,10 @@ internal sealed unsafe class GameFunctions
     {
         if (elementId is QuestId questId)
             return IsQuestAccepted(questId);
-        return false;
+        else if (elementId is SatisfactionSupplyNpcId)
+            return false;
+        else
+            throw new ArgumentOutOfRangeException(nameof(elementId));
     }
 
     public bool IsQuestAccepted(QuestId questId)
@@ -296,7 +302,10 @@ internal sealed unsafe class GameFunctions
     {
         if (elementId is QuestId questId)
             return IsQuestComplete(questId);
-        return false;
+        else if (elementId is SatisfactionSupplyNpcId)
+            return false;
+        else
+            throw new ArgumentOutOfRangeException(nameof(elementId));
     }
 
     [SuppressMessage("Performance", "CA1822")]
@@ -309,12 +318,15 @@ internal sealed unsafe class GameFunctions
     {
         if (elementId is QuestId questId)
             return IsQuestLocked(questId, extraCompletedQuest);
-        return false;
+        else if (elementId is SatisfactionSupplyNpcId)
+            return false;
+        else
+            throw new ArgumentOutOfRangeException(nameof(elementId));
     }
 
     public bool IsQuestLocked(QuestId questId, ElementId? extraCompletedQuest = null)
     {
-        var questInfo = _questData.GetQuestInfo(questId);
+        var questInfo = (QuestInfo) _questData.GetQuestInfo(questId);
         if (questInfo.QuestLocks.Count > 0)
         {
             var completedQuests = questInfo.QuestLocks.Count(x => IsQuestComplete(x) || x.Equals(extraCompletedQuest));
@@ -369,7 +381,11 @@ internal sealed unsafe class GameFunctions
     }
 
     public bool IsAetheryteUnlocked(EAetheryteLocation aetheryteLocation)
-        => IsAetheryteUnlocked((uint)aetheryteLocation, out _);
+    {
+        if (aetheryteLocation == EAetheryteLocation.IshgardFirmament)
+            return IsQuestComplete(new QuestId(3672));
+        return IsAetheryteUnlocked((uint)aetheryteLocation, out _);
+    }
 
     public bool CanTeleport(EAetheryteLocation aetheryteLocation)
     {
@@ -707,15 +723,15 @@ internal sealed unsafe class GameFunctions
         if (excelSheetName == null)
         {
             var questRow =
-                _dataManager.GetExcelSheet<Lumina.Excel.GeneratedSheets2.Quest>()!.GetRow((uint)currentQuest.QuestElementId.Value +
+                _dataManager.GetExcelSheet<Lumina.Excel.GeneratedSheets2.Quest>()!.GetRow((uint)currentQuest.Id.Value +
                     0x10000);
             if (questRow == null)
             {
-                _logger.LogError("Could not find quest row for {QuestId}", currentQuest.QuestElementId);
+                _logger.LogError("Could not find quest row for {QuestId}", currentQuest.Id);
                 return null;
             }
 
-            excelSheetName = $"quest/{(currentQuest.QuestElementId.Value / 100):000}/{questRow.Id}";
+            excelSheetName = $"quest/{(currentQuest.Id.Value / 100):000}/{questRow.Id}";
         }
 
         var excelSheet = _dataManager.Excel.GetSheet<QuestDialogueText>(excelSheetName);

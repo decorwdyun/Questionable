@@ -47,7 +47,7 @@ internal static class Combat
                     ArgumentNullException.ThrowIfNull(step.ItemId);
 
                     yield return serviceProvider.GetRequiredService<UseItem.UseOnObject>()
-                        .With(quest.QuestElementId, step.DataId.Value, step.ItemId.Value, step.CompletionQuestVariablesFlags,
+                        .With(quest.Id, step.DataId.Value, step.ItemId.Value, step.CompletionQuestVariablesFlags,
                             true);
                     yield return CreateTask(quest, sequence, step);
                     break;
@@ -73,7 +73,7 @@ internal static class Combat
 
             bool isLastStep = sequence.Steps.Last() == step;
             return serviceProvider.GetRequiredService<HandleCombat>()
-                .With(quest.QuestElementId, isLastStep, step.EnemySpawnType.Value, step.KillEnemyDataIds,
+                .With(quest.Id, isLastStep, step.EnemySpawnType.Value, step.KillEnemyDataIds,
                     step.CompletionQuestVariablesFlags, step.ComplexCombatData);
         }
     }

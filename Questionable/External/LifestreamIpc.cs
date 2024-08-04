@@ -18,6 +18,12 @@ internal sealed class LifestreamIpc
 
     public bool Teleport(EAetheryteLocation aetheryteLocation)
     {
+        if (aetheryteLocation == EAetheryteLocation.IshgardFirmament)
+        {
+            // TODO does this even work on non-EN clients?
+            return _aethernetTeleport.InvokeFunc("Firmament");
+        }
+
         if (!_aetheryteData.AethernetNames.TryGetValue(aetheryteLocation, out string? name))
             return false;
 

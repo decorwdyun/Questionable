@@ -1,0 +1,27 @@
+{
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1042241,
+          "Position": {
+            "X": 222.85791,
+            "Y": 24.942732,
+            "Z": -197.77222
+          },
+          "TerritoryId": 962,
+          "InteractionType": "Interact",
+          "RequiredGatheredItems": [],
+          "AetheryteShortcut": "Old Sharlayan",
+          "AethernetShortcut": [
+            "[Old Sharlayan] Aetheryte Plaza",
+            "[Old Sharlayan] The Leveilleur Estate"
+          ]
+        }
+      ]
+    }
+  ]
+}

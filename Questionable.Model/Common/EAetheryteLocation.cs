@@ -85,6 +85,7 @@ public enum EAetheryteLocation
     IshgardTribunal = 86,
     IshgardLastVigil = 87,
     IshgardGatesOfJudgement = 88,
+    IshgardFirmament = 100001,
 
     Idyllshire = 75,
     IdyllshireWest = 90,

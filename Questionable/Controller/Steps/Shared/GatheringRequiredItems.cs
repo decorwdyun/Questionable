@@ -33,7 +33,7 @@ internal static class GatheringRequiredItems
 
                 if (!AssemblyGatheringLocationLoader.GetLocations()
                         .TryGetValue(gatheringPointId, out GatheringRoot? gatheringRoot))
-                    throw new TaskException("No path found for gathering point");
+                    throw new TaskException($"No path found for gathering point {gatheringPointId}");
 
                 if (HasRequiredItems(requiredGatheredItems))
                     continue;

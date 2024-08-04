@@ -25,7 +25,7 @@ internal sealed class JsonSchemaValidator : IQuestValidator
     {
         _questSchema ??= JsonSchema.FromStream(AssemblyQuestLoader.QuestSchema).AsTask().Result;
 
-        if (_questNodes.TryGetValue(quest.QuestElementId, out JsonNode? questNode))
+        if (_questNodes.TryGetValue(quest.Id, out JsonNode? questNode))
         {
             var evaluationResult = _questSchema.Evaluate(questNode, new EvaluationOptions
             {
@@ -36,7 +36,7 @@ internal sealed class JsonSchemaValidator : IQuestValidator
             {
                 yield return new ValidationIssue
                 {
-                    QuestId = quest.QuestElementId,
+                    QuestId = quest.Id,
                     Sequence = null,
                     Step = null,
                     Type = EIssueType.InvalidJsonSchema,

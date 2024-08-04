@@ -10,7 +10,7 @@ using ExcelQuest = Lumina.Excel.GeneratedSheets.Quest;
 
 namespace Questionable.Model;
 
-internal sealed class QuestInfo
+internal sealed class QuestInfo : IQuestInfo
 {
     public QuestInfo(ExcelQuest quest)
     {
@@ -56,7 +56,7 @@ internal sealed class QuestInfo
     }
 
 
-    public QuestId QuestId { get; }
+    public ElementId QuestId { get; }
     public string Name { get; }
     public ushort Level { get; }
     public uint IssuerDataId { get; }
@@ -73,10 +73,6 @@ internal sealed class QuestInfo
     public bool CompletesInstantly { get; }
     public GrandCompany GrandCompany { get; }
     public EBeastTribe BeastTribe { get; }
-
-    public string SimplifiedName => Name
-        .Replace(".", "", StringComparison.Ordinal)
-        .TrimStart(SeIconChar.QuestSync.ToIconChar(), SeIconChar.QuestRepeatable.ToIconChar(), ' ');
 
     [UsedImplicitly(ImplicitUseKindFlags.Assign, ImplicitUseTargetFlags.Members)]
     public enum QuestJoin : byte

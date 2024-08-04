@@ -77,7 +77,7 @@ internal sealed class CommandHandler : IDisposable
 
             case "start":
                 _questWindow.IsOpen = true;
-                _questController.ExecuteNextStep(true);
+                _questController.ExecuteNextStep(QuestController.EAutomationType.Automatic);
                 break;
 
             case "stop":
@@ -128,11 +128,11 @@ internal sealed class CommandHandler : IDisposable
             return;
         }
 
-        if (arguments.Length >= 1 && uint.TryParse(arguments[0], out uint questId))
+        if (arguments.Length >= 1 && ElementId.TryFromString(arguments[0], out ElementId? questId) && questId != null)
         {
-            if (_questRegistry.TryGetQuest(ElementId.From(questId), out Quest? quest))
+            if (_questRegistry.TryGetQuest(questId, out Quest? quest))
             {
-                _debugOverlay.HighlightedQuest = quest.QuestElementId;
+                _debugOverlay.HighlightedQuest = quest.Id;
                 _chatGui.Print($"[Questionable] Set highlighted quest to {questId} ({quest.Info.Name}).");
             }
             else
@@ -147,11 +147,11 @@ internal sealed class CommandHandler : IDisposable
 
     private void SetNextQuest(string[] arguments)
     {
-        if (arguments.Length >= 1 && uint.TryParse(arguments[0], out uint questId))
+        if (arguments.Length >= 1 && ElementId.TryFromString(arguments[0], out ElementId? questId) && questId != null)
         {
-            if (_gameFunctions.IsQuestLocked(ElementId.From(questId)))
+            if (_gameFunctions.IsQuestLocked(questId))
                 _chatGui.PrintError($"[Questionable] Quest {questId} is locked.");
-            else if (_questRegistry.TryGetQuest(ElementId.From(questId), out Quest? quest))
+            else if (_questRegistry.TryGetQuest(questId, out Quest? quest))
             {
                 _questController.SetNextQuest(quest);
                 _chatGui.Print($"[Questionable] Set next quest to {questId} ({quest.Info.Name}).");
@@ -170,9 +170,9 @@ internal sealed class CommandHandler : IDisposable
 
     private void SetSimulatedQuest(string[] arguments)
     {
-        if (arguments.Length >= 1 && ushort.TryParse(arguments[0], out ushort questId))
+        if (arguments.Length >= 1 && ElementId.TryFromString(arguments[0], out ElementId? questId) && questId != null)
         {
-            if (_questRegistry.TryGetQuest(ElementId.From(questId), out Quest? quest))
+            if (_questRegistry.TryGetQuest(questId, out Quest? quest))
             {
                 _questController.SimulateQuest(quest);
                 _chatGui.Print($"[Questionable] Simulating quest {questId} ({quest.Info.Name}).");

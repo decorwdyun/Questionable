@@ -58,7 +58,7 @@ internal sealed class ActiveQuestComponent
     {
         var currentQuestDetails = _questController.CurrentQuestDetails;
         QuestController.QuestProgress? currentQuest = currentQuestDetails?.Progress;
-        QuestController.CurrentQuestType? currentQuestType = currentQuestDetails?.Type;
+        QuestController.ECurrentQuestType? currentQuestType = currentQuestDetails?.Type;
         if (currentQuest != null)
         {
             DrawQuestNames(currentQuest, currentQuestType);
@@ -108,9 +108,9 @@ internal sealed class ActiveQuestComponent
     }
 
     private void DrawQuestNames(QuestController.QuestProgress currentQuest,
-        QuestController.CurrentQuestType? currentQuestType)
+        QuestController.ECurrentQuestType? currentQuestType)
     {
-        if (currentQuestType == QuestController.CurrentQuestType.Simulated)
+        if (currentQuestType == QuestController.ECurrentQuestType.Simulated)
         {
             using var _ = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudRed);
             ImGui.TextUnformatted(
@@ -151,7 +151,7 @@ internal sealed class ActiveQuestComponent
 
     private QuestWork? DrawQuestWork(QuestController.QuestProgress currentQuest)
     {
-        if (currentQuest.Quest.QuestElementId is not QuestId questId)
+        if (currentQuest.Quest.Id is not QuestId questId)
             return null;
 
         var questWork = _gameFunctions.GetQuestEx(questId);
@@ -210,7 +210,7 @@ internal sealed class ActiveQuestComponent
         {
             using var disabled = ImRaii.Disabled();
 
-            if (currentQuest.Quest.QuestElementId == _questController.NextQuest?.Quest.QuestElementId)
+            if (currentQuest.Quest.Id == _questController.NextQuest?.Quest.Id)
                 ImGui.TextUnformatted("(Next quest in story line not accepted)");
             else
                 ImGui.TextUnformatted("(Not accepted)");
@@ -229,14 +229,14 @@ internal sealed class ActiveQuestComponent
             if (questWork == null)
                 _questController.SetNextQuest(currentQuest.Quest);
 
-            _questController.ExecuteNextStep(true);
+            _questController.ExecuteNextStep(QuestController.EAutomationType.Automatic);
         }
 
         ImGui.SameLine();
 
         if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.StepForward, "Step"))
         {
-            _questController.ExecuteNextStep(false);
+            _questController.ExecuteNextStep(QuestController.EAutomationType.Manual);
         }
 
         ImGui.EndDisabled();
@@ -262,7 +262,7 @@ internal sealed class ActiveQuestComponent
         if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.ArrowCircleRight, "Skip"))
         {
             _movementController.Stop();
-            _questController.Skip(currentQuest.Quest.QuestElementId, currentQuest.Sequence);
+            _questController.Skip(currentQuest.Quest.Id, currentQuest.Sequence);
         }
 
         if (colored)
@@ -274,7 +274,7 @@ internal sealed class ActiveQuestComponent
             ImGui.SameLine();
             if (ImGuiComponents.IconButton(FontAwesomeIcon.Atlas))
                 _commandManager.DispatchCommand("/questinfo",
-                    currentQuest.Quest.QuestElementId.ToString() ?? string.Empty, commandInfo);
+                    currentQuest.Quest.Id.ToString() ?? string.Empty, commandInfo);
         }
 
         bool autoAcceptNextQuest = _configuration.General.AutoAcceptNextQuest;

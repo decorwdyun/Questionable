@@ -33,7 +33,8 @@ internal static class Interact
                 yield return serviceProvider.GetRequiredService<WaitAtEnd.WaitDelay>();
 
             yield return serviceProvider.GetRequiredService<DoInteract>()
-                .With(step.DataId.Value, step.TargetTerritoryId != null);
+                .With(step.DataId.Value,
+                    step.TargetTerritoryId != null || quest.Id is SatisfactionSupplyNpcId);
         }
 
         public ITask CreateTask(Quest quest, QuestSequence sequence, QuestStep step)

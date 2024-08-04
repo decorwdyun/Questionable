@@ -92,12 +92,6 @@
       "ecommons": {
         "type": "Project"
       },
-      "gatheringpaths": {
-        "type": "Project",
-        "dependencies": {
-          "Questionable.Model": "[1.0.0, )"
-        }
-      },
       "questionable.model": {
         "type": "Project",
         "dependencies": {

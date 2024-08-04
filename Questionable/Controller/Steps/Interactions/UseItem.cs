@@ -48,7 +48,7 @@ internal static class UseItem
                 }
 
                 var task = serviceProvider.GetRequiredService<Use>()
-                    .With(quest.QuestElementId, step.ItemId.Value, step.CompletionQuestVariablesFlags);
+                    .With(quest.Id, step.ItemId.Value, step.CompletionQuestVariablesFlags);
                 return
                 [
                     unmount, task,
@@ -65,12 +65,12 @@ internal static class UseItem
                 ITask task;
                 if (step.DataId != null)
                     task = serviceProvider.GetRequiredService<UseOnGround>()
-                        .With(quest.QuestElementId, step.DataId.Value, step.ItemId.Value, step.CompletionQuestVariablesFlags);
+                        .With(quest.Id, step.DataId.Value, step.ItemId.Value, step.CompletionQuestVariablesFlags);
                 else
                 {
                     ArgumentNullException.ThrowIfNull(step.Position);
                     task = serviceProvider.GetRequiredService<UseOnPosition>()
-                        .With(quest.QuestElementId, step.Position.Value, step.ItemId.Value,
+                        .With(quest.Id, step.Position.Value, step.ItemId.Value,
                             step.CompletionQuestVariablesFlags);
                 }
 
@@ -79,13 +79,13 @@ internal static class UseItem
             else if (step.DataId != null)
             {
                 var task = serviceProvider.GetRequiredService<UseOnObject>()
-                    .With(quest.QuestElementId, step.DataId.Value, step.ItemId.Value, step.CompletionQuestVariablesFlags);
+                    .With(quest.Id, step.DataId.Value, step.ItemId.Value, step.CompletionQuestVariablesFlags);
                 return [unmount, task];
             }
             else
             {
                 var task = serviceProvider.GetRequiredService<Use>()
-                    .With(quest.QuestElementId, step.ItemId.Value, step.CompletionQuestVariablesFlags);
+                    .With(quest.Id, step.ItemId.Value, step.CompletionQuestVariablesFlags);
                 return [unmount, task];
             }
         }

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1031801,
+          "Position": {
+            "X": 52.8114,
+            "Y": 83.001076,
+            "Z": -65.38495
+          },
+          "TerritoryId": 820,
+          "InteractionType": "Interact",
+          "RequiredGatheredItems": [],
+          "AetheryteShortcut": "Eulmore"
+        }
+      ]
+    }
+  ]
+}

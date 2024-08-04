@@ -1,0 +1,23 @@
+{
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1020337,
+          "Position": {
+            "X": 171.31299,
+            "Y": 13.02367,
+            "Z": -89.951965
+          },
+          "TerritoryId": 635,
+          "InteractionType": "Interact",
+          "RequiredGatheredItems": [],
+          "AetheryteShortcut": "Rhalgr's Reach"
+        }
+      ]
+    }
+  ]
+}

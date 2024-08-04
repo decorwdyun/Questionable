@@ -50,37 +50,51 @@ public abstract class ElementId : IComparable<ElementId>, IEquatable<ElementId>
         return !Equals(left, right);
     }
 
-    public static ElementId From(uint value)
+    public static ElementId FromString(string value)
     {
-        if (value >= 100_000 && value < 200_000)
-            return new LeveId((ushort)(value - 100_000));
+        if (value.StartsWith("L"))
+            return new LeveId(ushort.Parse(value.Substring(1), CultureInfo.InvariantCulture));
+        else if (value.StartsWith("S"))
+            return new SatisfactionSupplyNpcId(ushort.Parse(value.Substring(1), CultureInfo.InvariantCulture));
         else
-            return new QuestId((ushort)value);
+            return new QuestId(ushort.Parse(value, CultureInfo.InvariantCulture));
+    }
+
+    public static bool TryFromString(string value, out ElementId? elementId)
+    {
+        try
+        {
+            elementId = FromString(value);
+            return true;
+        }
+        catch (Exception)
+        {
+            elementId = null;
+            return false;
+        }
     }
 }
 
-public sealed class QuestId : ElementId
+public sealed class QuestId(ushort value) : ElementId(value)
 {
-    public QuestId(ushort value)
-        : base(value)
-    {
-    }
-
     public override string ToString()
     {
         return Value.ToString(CultureInfo.InvariantCulture);
     }
 }
 
-public sealed class LeveId : ElementId
+public sealed class LeveId(ushort value) : ElementId(value)
 {
-    public LeveId(ushort value)
-        : base(value)
-    {
-    }
-
     public override string ToString()
     {
         return "L" + Value.ToString(CultureInfo.InvariantCulture);
+    }
+}
+
+public sealed class SatisfactionSupplyNpcId(ushort value) : ElementId(value)
+{
+    public override string ToString()
+    {
+        return "S" + Value.ToString(CultureInfo.InvariantCulture);
     }
 }

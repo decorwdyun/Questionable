@@ -1,0 +1,26 @@
+{
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1033543,
+          "Position": {
+            "X": 113.38977,
+            "Y": -20,
+            "Z": -0.96136475
+          },
+          "TerritoryId": 886,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Ishgard",
+          "AethernetShortcut": [
+            "[Ishgard] Aetheryte Plaza",
+            "[Ishgard] Firmament"
+          ]
+        }
+      ]
+    }
+  ]
+}

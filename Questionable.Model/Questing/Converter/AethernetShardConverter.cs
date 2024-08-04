@@ -56,6 +56,7 @@ public sealed class AethernetShardConverter() : EnumConverter<EAetheryteLocation
         { EAetheryteLocation.IshgardTribunal, "[Ishgard] The Tribunal" },
         { EAetheryteLocation.IshgardLastVigil, "[Ishgard] The Last Vigil" },
         { EAetheryteLocation.IshgardGatesOfJudgement, "[Ishgard] The Gates of Judgement (Coerthas Central Highlands)" },
+        { EAetheryteLocation.IshgardFirmament, "[Ishgard] Firmament" },
 
         { EAetheryteLocation.Idyllshire, "[Idyllshire] Aetheryte Plaza" },
         { EAetheryteLocation.IdyllshireWest, "[Idyllshire] West Idyllshire" },

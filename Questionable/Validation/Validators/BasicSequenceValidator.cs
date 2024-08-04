@@ -18,7 +18,7 @@ internal sealed class BasicSequenceValidator : IQuestValidator
         {
             yield return new ValidationIssue
             {
-                QuestId = quest.QuestElementId,
+                QuestId = quest.Id,
                 Sequence = 0,
                 Step = null,
                 Type = EIssueType.MissingSequence0,
@@ -28,7 +28,7 @@ internal sealed class BasicSequenceValidator : IQuestValidator
             yield break;
         }
 
-        if (quest.Info.CompletesInstantly)
+        if (quest.Info is QuestInfo { CompletesInstantly: true })
         {
             foreach (var sequence in sequences)
             {
@@ -37,7 +37,7 @@ internal sealed class BasicSequenceValidator : IQuestValidator
 
                 yield return new ValidationIssue
                 {
-                    QuestId = quest.QuestElementId,
+                    QuestId = quest.Id,
                     Sequence = (byte)sequence.Sequence,
                     Step = null,
                     Type = EIssueType.InstantQuestWithMultipleSteps,
@@ -46,7 +46,7 @@ internal sealed class BasicSequenceValidator : IQuestValidator
                 };
             }
         }
-        else
+        else if (quest.Info is QuestInfo)
         {
             int maxSequence = sequences.Select(x => x.Sequence)
                 .Where(x => x != 255)
@@ -73,7 +73,7 @@ internal sealed class BasicSequenceValidator : IQuestValidator
         {
             return new ValidationIssue
             {
-                QuestId = quest.QuestElementId,
+                QuestId = quest.Id,
                 Sequence = (byte)sequenceNo,
                 Step = null,
                 Type = EIssueType.MissingSequence,
@@ -85,7 +85,7 @@ internal sealed class BasicSequenceValidator : IQuestValidator
         {
             return new ValidationIssue
             {
-                QuestId = quest.QuestElementId,
+                QuestId = quest.Id,
                 Sequence = (byte)sequenceNo,
                 Step = null,
                 Type = EIssueType.DuplicateSequence,

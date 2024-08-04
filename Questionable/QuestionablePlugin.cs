@@ -43,7 +43,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         IChatGui chatGui,
         ICommandManager commandManager,
         IAddonLifecycle addonLifecycle,
-        IKeyState keyState)
+        IKeyState keyState,
+        IContextMenu contextMenu)
     {
         ArgumentNullException.ThrowIfNull(pluginInterface);
 
@@ -66,6 +67,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton(commandManager);
         serviceCollection.AddSingleton(addonLifecycle);
         serviceCollection.AddSingleton(keyState);
+        serviceCollection.AddSingleton(contextMenu);
         serviceCollection.AddSingleton(new WindowSystem(nameof(Questionable)));
         serviceCollection.AddSingleton((Configuration?)pluginInterface.GetPluginConfig() ?? new Configuration());
 
@@ -81,6 +83,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         _serviceProvider = serviceCollection.BuildServiceProvider();
         _serviceProvider.GetRequiredService<QuestRegistry>().Reload();
         _serviceProvider.GetRequiredService<CommandHandler>();
+        _serviceProvider.GetRequiredService<ContextMenuController>();
         _serviceProvider.GetRequiredService<DalamudInitializer>();
     }
 
@@ -156,6 +159,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<NavigationShortcutController>();
         serviceCollection.AddSingleton<CombatController>();
         serviceCollection.AddSingleton<GatheringController>();
+        serviceCollection.AddSingleton<ContextMenuController>();
 
         serviceCollection.AddSingleton<ICombatModule, RotationSolverRebornModule>();
     }

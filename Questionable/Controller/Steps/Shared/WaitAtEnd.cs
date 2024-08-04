@@ -30,7 +30,7 @@ internal static class WaitAtEnd
             if (step.CompletionQuestVariablesFlags.Count == 6 && QuestWorkUtils.HasCompletionFlags(step.CompletionQuestVariablesFlags))
             {
                 var task = serviceProvider.GetRequiredService<WaitForCompletionFlags>()
-                    .With((QuestId)quest.QuestElementId, step);
+                    .With((QuestId)quest.Id, step);
                 var delay = serviceProvider.GetRequiredService<WaitDelay>();
                 return [task, delay, Next(quest, sequence)];
             }
@@ -110,7 +110,7 @@ internal static class WaitAtEnd
                 case EInteractionType.AcceptQuest:
                 {
                     var accept = serviceProvider.GetRequiredService<WaitQuestAccepted>()
-                        .With(step.PickUpQuestId ?? quest.QuestElementId);
+                        .With(step.PickUpQuestId ?? quest.Id);
                     var delay = serviceProvider.GetRequiredService<WaitDelay>();
                     if (step.PickUpQuestId != null)
                         return [accept, delay, Next(quest, sequence)];
@@ -121,7 +121,7 @@ internal static class WaitAtEnd
                 case EInteractionType.CompleteQuest:
                 {
                     var complete = serviceProvider.GetRequiredService<WaitQuestCompleted>()
-                        .With(step.TurnInQuestId ?? quest.QuestElementId);
+                        .With(step.TurnInQuestId ?? quest.Id);
                     var delay = serviceProvider.GetRequiredService<WaitDelay>();
                     if (step.TurnInQuestId != null)
                         return [complete, delay, Next(quest, sequence)];
@@ -140,7 +140,7 @@ internal static class WaitAtEnd
 
         private static NextStep Next(Quest quest, QuestSequence sequence)
         {
-            return new NextStep(quest.QuestElementId, sequence.Sequence);
+            return new NextStep(quest.Id, sequence.Sequence);
         }
     }
 

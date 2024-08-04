@@ -8,11 +8,11 @@ internal sealed class NextQuestValidator : IQuestValidator
 {
     public IEnumerable<ValidationIssue> Validate(Quest quest)
     {
-        foreach (var invalidNextQuest in quest.AllSteps().Where(x => x.Step.NextQuestId == quest.QuestElementId))
+        foreach (var invalidNextQuest in quest.AllSteps().Where(x => x.Step.NextQuestId == quest.Id))
         {
             yield return new ValidationIssue
             {
-                QuestId = quest.QuestElementId,
+                QuestId = quest.Id,
                 Sequence = (byte)invalidNextQuest.Sequence.Sequence,
                 Step = invalidNextQuest.StepId,
                 Type = EIssueType.InvalidNextQuestId,

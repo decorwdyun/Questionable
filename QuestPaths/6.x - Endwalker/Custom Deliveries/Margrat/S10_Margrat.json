@@ -1,0 +1,33 @@
+{
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "Position": {
+            "X": -44.066154,
+            "Y": -29.530005,
+            "Z": -55.85129
+          },
+          "TerritoryId": 956,
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Labyrinthos - Sharlayan Hamlet",
+          "RequiredGatheredItems": [],
+          "Fly": true
+        },
+        {
+          "DataId": 1046073,
+          "Position": {
+            "X": -53.635498,
+            "Y": -29.497286,
+            "Z": -65.14081
+          },
+          "TerritoryId": 956,
+          "InteractionType": "Interact"
+        }
+      ]
+    }
+  ]
+}
