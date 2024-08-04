@@ -1,0 +1,90 @@
+{
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+  "Author": "JerryWester",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1019988,
+          "Position": {
+            "X": -761.83716,
+            "Y": 4.763445,
+            "Z": -455.2224
+          },
+          "TerritoryId": 613,
+          "InteractionType": "AcceptQuest"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1019991,
+          "Position": {
+            "X": -807.3701,
+            "Y": 8.49827,
+            "Z": -418.87543
+          },
+          "TerritoryId": 613,
+          "InteractionType": "Interact",
+          "$": "0 0 0 0 0 0 -> 0 16 0 0 0 64"
+        },
+        {
+          "Position": {
+            "X": -796.88367,
+            "Y": 7.982711,
+            "Z": -415.81467
+          },
+          "TerritoryId": 613,
+          "InteractionType": "Jump",
+          "Mount": true,
+          "JumpDestination": {
+            "Position": {
+              "X": -794.9495,
+              "Y": 5.107234,
+              "Z": -411.20563
+            }
+          }
+        },
+        {
+          "DataId": 1019990,
+          "Position": {
+            "X": -794.6136,
+            "Y": 4.993313,
+            "Z": -372.67108
+          },
+          "TerritoryId": 613,
+          "InteractionType": "Interact",
+          "$": "0 16 0 0 0 64 -> 16 32 0 0 0 192"
+        },
+        {
+          "DataId": 1019992,
+          "Position": {
+            "X": -791.2566,
+            "Y": 21.428185,
+            "Z": -480.24725
+          },
+          "TerritoryId": 613,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1019989,
+          "Position": {
+            "X": -761.83716,
+            "Y": 4.763445,
+            "Z": -453.4829
+          },
+          "TerritoryId": 613,
+          "InteractionType": "CompleteQuest"
+        }
+      ]
+    }
+  ]
+}
