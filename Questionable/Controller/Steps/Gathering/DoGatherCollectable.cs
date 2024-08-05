@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Dalamud.Game.Text;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Component.GUI;
@@ -149,6 +150,7 @@ internal sealed class DoGatherCollectable(
     public override string ToString() =>
         $"DoGatherCollectable({SeIconChar.Collectible.ToIconString()} {_currentRequest.Collectability})";
 
+    [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local")]
     private sealed record NodeCondition(
         uint CurrentCollectability,
         uint MaxCollectability,

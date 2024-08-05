@@ -182,7 +182,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         UpdateCurrentTask();
     }
 
-    private unsafe void UpdateCurrentQuest()
+    private void UpdateCurrentQuest()
     {
         lock (_progressLock)
         {

@@ -4,11 +4,11 @@ using System.Linq;
 using System.Numerics;
 using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Plugin.Services;
-using GatheringPathRenderer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Shared;
 using Questionable.Functions;
+using Questionable.Model;
 using Questionable.Model.Gathering;
 
 namespace Questionable.Controller.Steps.Gathering;

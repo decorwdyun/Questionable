@@ -24,7 +24,6 @@ internal sealed class ActiveQuestComponent
     private readonly MovementController _movementController;
     private readonly CombatController _combatController;
     private readonly GatheringController _gatheringController;
-    private readonly GameFunctions _gameFunctions;
     private readonly QuestFunctions _questFunctions;
     private readonly ICommandManager _commandManager;
     private readonly IDalamudPluginInterface _pluginInterface;
@@ -37,7 +36,6 @@ internal sealed class ActiveQuestComponent
         MovementController movementController,
         CombatController combatController,
         GatheringController gatheringController,
-        GameFunctions gameFunctions,
         QuestFunctions questFunctions,
         ICommandManager commandManager,
         IDalamudPluginInterface pluginInterface,
@@ -49,7 +47,6 @@ internal sealed class ActiveQuestComponent
         _movementController = movementController;
         _combatController = combatController;
         _gatheringController = gatheringController;
-        _gameFunctions = gameFunctions;
         _questFunctions = questFunctions;
         _commandManager = commandManager;
         _pluginInterface = pluginInterface;

@@ -2,23 +2,23 @@
 using System.Numerics;
 using Questionable.Model.Gathering;
 
-namespace GatheringPathRenderer;
+namespace Questionable.Model;
 
 public static class GatheringMath
 {
-    private static readonly Random RNG = new Random();
+    private static readonly Random Rng = new Random();
 
     public static (Vector3, int, float) CalculateLandingLocation(GatheringLocation location)
     {
         int degrees;
         if (location.IsCone())
-            degrees = RNG.Next(
+            degrees = Rng.Next(
                 location.MinimumAngle.GetValueOrDefault(),
                 location.MaximumAngle.GetValueOrDefault());
         else
-            degrees = RNG.Next(0, 360);
+            degrees = Rng.Next(0, 360);
 
-        float range = RNG.Next(
+        float range = Rng.Next(
             (int)(location.CalculateMinimumDistance() * 100),
             (int)((location.CalculateMaximumDistance() - location.CalculateMinimumDistance()) * 100)) / 100f;
         return (CalculateLandingLocation(location.Position, degrees, range), degrees, range);
