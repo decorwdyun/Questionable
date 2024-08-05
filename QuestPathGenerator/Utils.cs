@@ -14,8 +14,8 @@ namespace Questionable.QuestPathGenerator;
 
 public static class Utils
 {
-    public static IEnumerable<(ushort, JsonNode)> GetAdditionalFiles(GeneratorExecutionContext context,
-        AdditionalText jsonSchemaFile, JsonSchema jsonSchema, DiagnosticDescriptor invalidJson)
+    public static IEnumerable<(T, JsonNode)> GetAdditionalFiles<T>(GeneratorExecutionContext context,
+        AdditionalText jsonSchemaFile, JsonSchema jsonSchema, DiagnosticDescriptor invalidJson, Func<string, T> idParser)
     {
         var commonSchemaFile = context.AdditionalFiles.Single(x => Path.GetFileName(x.Path) == "common-schema.json");
         List<AdditionalText> jsonSchemaFiles = [jsonSchemaFile, commonSchemaFile];
@@ -36,7 +36,7 @@ public static class Utils
             if (!name.Contains("_"))
                 continue;
 
-            ushort id = ushort.Parse(name.Substring(0, name.IndexOf('_')));
+            T id = idParser(name.Substring(0, name.IndexOf('_')));
 
             var text = additionalFile.GetText();
             if (text == null)
@@ -68,9 +68,9 @@ public static class Utils
         }
     }
 
-    public static List<MethodDeclarationSyntax> CreateMethods<T>(string prefix,
-        List<IGrouping<string, (ushort, T)>> partitions,
-        Func<List<(ushort, T)>, StatementSyntax[]> toInitializers)
+    public static List<MethodDeclarationSyntax> CreateMethods<TId, TQuest>(string prefix,
+        List<IGrouping<string, (TId, TQuest)>> partitions,
+        Func<List<(TId, TQuest)>, StatementSyntax[]> toInitializers)
     {
         List<MethodDeclarationSyntax> methods =
         [

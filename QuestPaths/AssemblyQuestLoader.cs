@@ -9,9 +9,9 @@ namespace Questionable.QuestPaths;
 [SuppressMessage("ReSharper", "PartialTypeWithSinglePart", Justification = "Required for RELEASE")]
 public static partial class AssemblyQuestLoader
 {
-    private static Dictionary<ushort, QuestRoot>? _quests;
+    private static Dictionary<ElementId, QuestRoot>? _quests;
 
-    public static IReadOnlyDictionary<ushort, QuestRoot> GetQuests()
+    public static IReadOnlyDictionary<ElementId, QuestRoot> GetQuests()
     {
         if (_quests == null)
         {
@@ -28,5 +28,5 @@ public static partial class AssemblyQuestLoader
         typeof(AssemblyQuestLoader).Assembly.GetManifestResourceStream("Questionable.QuestPaths.QuestSchema")!;
 
     [SuppressMessage("ReSharper", "UnusedMember.Local")]
-    private static void AddQuest(ushort questId, QuestRoot root) => _quests![questId] = root;
+    private static void AddQuest(ElementId questId, QuestRoot root) => _quests![questId] = root;
 }

@@ -44,7 +44,8 @@ public class GatheringSourceGenerator : ISourceGenerator
         var gatheringSchema = JsonSchema.FromText(jsonSchemaFile.GetText()!.ToString());
 
         List<(ushort, GatheringRoot)> gatheringLocations = [];
-        foreach (var (id, node) in Utils.GetAdditionalFiles(context, jsonSchemaFile, gatheringSchema, InvalidJson))
+        foreach (var (id, node) in Utils.GetAdditionalFiles(context, jsonSchemaFile, gatheringSchema, InvalidJson,
+                     ushort.Parse))
         {
             var gatheringLocation = node.Deserialize<GatheringRoot>()!;
             gatheringLocations.Add((id, gatheringLocation));

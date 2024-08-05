@@ -47,8 +47,9 @@ public class QuestSourceGenerator : ISourceGenerator
     {
         var questSchema = JsonSchema.FromText(jsonSchemaFile.GetText()!.ToString());
 
-        List<(ushort, QuestRoot)> quests = [];
-        foreach (var (id, node) in Utils.GetAdditionalFiles(context, jsonSchemaFile, questSchema, InvalidJson))
+        List<(ElementId, QuestRoot)> quests = [];
+        foreach (var (id, node) in Utils.GetAdditionalFiles(context, jsonSchemaFile, questSchema, InvalidJson,
+                     ElementId.FromString))
         {
             var quest = node.Deserialize<QuestRoot>()!;
             if (quest.Disabled)
@@ -65,8 +66,8 @@ public class QuestSourceGenerator : ISourceGenerator
             return;
 
         var partitionedQuests = quests
-            .OrderBy(x => x.Item1)
-            .GroupBy(x => $"LoadQuests{x.Item1 / 50}")
+            .OrderBy(x => x.Item1.Value)
+            .GroupBy(x => $"LoadQuests{x.Item1.Value / 50}")
             .ToList();
 
         var methods = Utils.CreateMethods("LoadQuests", partitionedQuests, CreateInitializer);
@@ -123,7 +124,7 @@ public class QuestSourceGenerator : ISourceGenerator
         context.AddSource("AssemblyQuestLoader.g.cs", code.ToFullString());
     }
 
-    private static StatementSyntax[] CreateInitializer(List<(ushort QuestId, QuestRoot Root)> quests)
+    private static StatementSyntax[] CreateInitializer(List<(ElementId QuestId, QuestRoot Root)> quests)
     {
         List<StatementSyntax> statements = [];
 
@@ -138,9 +139,7 @@ public class QuestSourceGenerator : ISourceGenerator
                                 SeparatedList<ArgumentSyntax>(
                                     new SyntaxNodeOrToken[]
                                     {
-                                        Argument(
-                                            LiteralExpression(SyntaxKind.NumericLiteralExpression,
-                                                Literal(quest.QuestId))),
+                                        Argument(LiteralValue(quest.QuestId)),
                                         Token(SyntaxKind.CommaToken),
                                         Argument(CreateQuestRootExpression(quest.QuestId, quest.Root))
                                     })))));
@@ -149,7 +148,7 @@ public class QuestSourceGenerator : ISourceGenerator
         return statements.ToArray();
     }
 
-    private static ObjectCreationExpressionSyntax CreateQuestRootExpression(ushort questId, QuestRoot quest)
+    private static ObjectCreationExpressionSyntax CreateQuestRootExpression(ElementId questId, QuestRoot quest)
     {
         try
         {

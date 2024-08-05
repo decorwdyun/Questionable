@@ -74,6 +74,15 @@ public static class RoslynShortcuts
                             SingletonSeparatedList(
                                 Argument(LiteralValue(leveId.Value)))));
             }
+            else if (value is SatisfactionSupplyNpcId satisfactionSupplyNpcId)
+            {
+                return ObjectCreationExpression(
+                        IdentifierName(nameof(SatisfactionSupplyNpcId)))
+                    .WithArgumentList(
+                        ArgumentList(
+                            SingletonSeparatedList(
+                                Argument(LiteralValue(satisfactionSupplyNpcId.Value)))));
+            }
             else if (value is Vector3 vector)
             {
                 return ObjectCreationExpression(
