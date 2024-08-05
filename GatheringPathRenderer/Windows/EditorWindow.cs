@@ -216,7 +216,7 @@ internal sealed class EditorWindow : Window
             }
             else
             {
-                if (ImGui.Button("Create location"))
+                if (ImGui.Button($"Create location ({gatheringPoint.GatheringPointBase.Row})"))
                 {
                     var (targetFile, root) = _editorCommands.CreateNewFile(gatheringPoint, _target);
                     _plugin.Save(targetFile, root);
