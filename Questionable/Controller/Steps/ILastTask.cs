@@ -4,6 +4,6 @@ namespace Questionable.Controller.Steps;
 
 internal interface ILastTask : ITask
 {
-    public ElementId QuestElementId { get; }
+    public ElementId ElementId { get; }
     public int Sequence { get; }
 }

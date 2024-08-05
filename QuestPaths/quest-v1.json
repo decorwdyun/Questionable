@@ -101,6 +101,7 @@
                   "type": "string",
                   "description": "What to do at the position",
                   "enum": [
+                    "None",
                     "Interact",
                     "WalkTo",
                     "AttuneAethernetShard",

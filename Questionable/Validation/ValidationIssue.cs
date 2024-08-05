@@ -5,7 +5,7 @@ namespace Questionable.Validation;
 
 internal sealed record ValidationIssue
 {
-    public required ElementId? QuestId { get; init; }
+    public required ElementId? ElementId { get; init; }
     public required byte? Sequence { get; init; }
     public required int? Step { get; init; }
     public EBeastTribe BeastTribe { get; init; } = EBeastTribe.None;

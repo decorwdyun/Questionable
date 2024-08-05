@@ -45,7 +45,7 @@ internal sealed class CompletionFlagsValidator : IQuestValidator
                 {
                     yield return new ValidationIssue
                     {
-                        QuestId = quest.Id,
+                        ElementId = quest.Id,
                         Sequence = (byte)sequence.Sequence,
                         Step = i,
                         Type = EIssueType.DuplicateCompletionFlags,

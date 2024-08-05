@@ -24,7 +24,7 @@ internal sealed class AethernetShortcutValidator : IQuestValidator
             .Cast<ValidationIssue>();
     }
 
-    private ValidationIssue? Validate(ElementId questElementId, int sequenceNo, int stepId, AethernetShortcut? aethernetShortcut)
+    private ValidationIssue? Validate(ElementId elementId, int sequenceNo, int stepId, AethernetShortcut? aethernetShortcut)
     {
         if (aethernetShortcut == null)
             return null;
@@ -35,7 +35,7 @@ internal sealed class AethernetShortcutValidator : IQuestValidator
         {
             return new ValidationIssue
             {
-                QuestId = questElementId,
+                ElementId = elementId,
                 Sequence = (byte)sequenceNo,
                 Step = stepId,
                 Type = EIssueType.InvalidAethernetShortcut,

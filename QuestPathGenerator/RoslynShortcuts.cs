@@ -155,6 +155,10 @@ public static class RoslynShortcuts
                                         .AsSyntaxNodeOrToken(),
                                     Assignment(nameof(DialogueChoice.Answer), dialogueChoice.Answer, emptyChoice.Answer)
                                         .AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(DialogueChoice.AnswerIsRegularExpression),
+                                            dialogueChoice.AnswerIsRegularExpression,
+                                            emptyChoice.AnswerIsRegularExpression)
+                                        .AsSyntaxNodeOrToken(),
                                     Assignment(nameof(DialogueChoice.DataId), dialogueChoice.DataId, emptyChoice.DataId)
                                         .AsSyntaxNodeOrToken()))));
             }
@@ -359,6 +363,9 @@ public static class RoslynShortcuts
                                         .AsSyntaxNodeOrToken(),
                                     Assignment(nameof(GatheredItem.Collectability), gatheredItem.Collectability,
                                             emptyItem.Collectability)
+                                        .AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(GatheredItem.ClassJob), gatheredItem.ClassJob,
+                                            emptyItem.ClassJob)
                                         .AsSyntaxNodeOrToken()))));
             }
             else if (value is GatheringNodeGroup nodeGroup)

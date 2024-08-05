@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Questionable.Controller.Steps.Common;
+using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
 
@@ -9,7 +10,7 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class Say
 {
-    internal sealed class Factory(IServiceProvider serviceProvider, GameFunctions gameFunctions) : ITaskFactory
+    internal sealed class Factory(IServiceProvider serviceProvider, ExcelFunctions excelFunctions) : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -20,7 +21,7 @@ internal static class Say
             ArgumentNullException.ThrowIfNull(step.ChatMessage);
 
             string? excelString =
-                gameFunctions.GetDialogueText(quest, step.ChatMessage.ExcelSheet, step.ChatMessage.Key);
+                excelFunctions.GetDialogueText(quest, step.ChatMessage.ExcelSheet, step.ChatMessage.Key, false).GetString();
             ArgumentNullException.ThrowIfNull(excelString);
 
             var unmount = serviceProvider.GetRequiredService<UnmountTask>();

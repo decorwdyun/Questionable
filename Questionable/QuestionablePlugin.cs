@@ -17,6 +17,7 @@ using Questionable.Controller.Steps.Gathering;
 using Questionable.Controller.Steps.Interactions;
 using Questionable.Data;
 using Questionable.External;
+using Questionable.Functions;
 using Questionable.Validation;
 using Questionable.Validation.Validators;
 using Questionable.Windows;
@@ -47,50 +48,58 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         IContextMenu contextMenu)
     {
         ArgumentNullException.ThrowIfNull(pluginInterface);
+        ArgumentNullException.ThrowIfNull(chatGui);
+        try
+        {
+            ServiceCollection serviceCollection = new();
+            serviceCollection.AddLogging(builder => builder.SetMinimumLevel(LogLevel.Trace)
+                .ClearProviders()
+                .AddDalamudLogger(pluginLog, t => t[(t.LastIndexOf('.') + 1)..]));
+            serviceCollection.AddSingleton<IDalamudPlugin>(this);
+            serviceCollection.AddSingleton(pluginInterface);
+            serviceCollection.AddSingleton(clientState);
+            serviceCollection.AddSingleton(targetManager);
+            serviceCollection.AddSingleton(framework);
+            serviceCollection.AddSingleton(gameGui);
+            serviceCollection.AddSingleton(dataManager);
+            serviceCollection.AddSingleton(sigScanner);
+            serviceCollection.AddSingleton(objectTable);
+            serviceCollection.AddSingleton(pluginLog);
+            serviceCollection.AddSingleton(condition);
+            serviceCollection.AddSingleton(chatGui);
+            serviceCollection.AddSingleton(commandManager);
+            serviceCollection.AddSingleton(addonLifecycle);
+            serviceCollection.AddSingleton(keyState);
+            serviceCollection.AddSingleton(contextMenu);
+            serviceCollection.AddSingleton(new WindowSystem(nameof(Questionable)));
+            serviceCollection.AddSingleton((Configuration?)pluginInterface.GetPluginConfig() ?? new Configuration());
 
-        ServiceCollection serviceCollection = new();
-        serviceCollection.AddLogging(builder => builder.SetMinimumLevel(LogLevel.Trace)
-            .ClearProviders()
-            .AddDalamudLogger(pluginLog, t => t[(t.LastIndexOf('.') + 1)..]));
-        serviceCollection.AddSingleton<IDalamudPlugin>(this);
-        serviceCollection.AddSingleton(pluginInterface);
-        serviceCollection.AddSingleton(clientState);
-        serviceCollection.AddSingleton(targetManager);
-        serviceCollection.AddSingleton(framework);
-        serviceCollection.AddSingleton(gameGui);
-        serviceCollection.AddSingleton(dataManager);
-        serviceCollection.AddSingleton(sigScanner);
-        serviceCollection.AddSingleton(objectTable);
-        serviceCollection.AddSingleton(pluginLog);
-        serviceCollection.AddSingleton(condition);
-        serviceCollection.AddSingleton(chatGui);
-        serviceCollection.AddSingleton(commandManager);
-        serviceCollection.AddSingleton(addonLifecycle);
-        serviceCollection.AddSingleton(keyState);
-        serviceCollection.AddSingleton(contextMenu);
-        serviceCollection.AddSingleton(new WindowSystem(nameof(Questionable)));
-        serviceCollection.AddSingleton((Configuration?)pluginInterface.GetPluginConfig() ?? new Configuration());
+            AddBasicFunctionsAndData(serviceCollection);
+            AddTaskFactories(serviceCollection);
+            AddControllers(serviceCollection);
+            AddWindows(serviceCollection);
+            AddQuestValidators(serviceCollection);
 
-        AddBasicFunctionsAndData(serviceCollection);
-        AddTaskFactories(serviceCollection);
-        AddControllers(serviceCollection);
-        AddWindows(serviceCollection);
-        AddQuestValidators(serviceCollection);
+            serviceCollection.AddSingleton<CommandHandler>();
+            serviceCollection.AddSingleton<DalamudInitializer>();
 
-        serviceCollection.AddSingleton<CommandHandler>();
-        serviceCollection.AddSingleton<DalamudInitializer>();
-
-        _serviceProvider = serviceCollection.BuildServiceProvider();
-        _serviceProvider.GetRequiredService<QuestRegistry>().Reload();
-        _serviceProvider.GetRequiredService<CommandHandler>();
-        _serviceProvider.GetRequiredService<ContextMenuController>();
-        _serviceProvider.GetRequiredService<DalamudInitializer>();
+            _serviceProvider = serviceCollection.BuildServiceProvider();
+            Initialize(_serviceProvider);
+        }
+        catch (Exception)
+        {
+            chatGui.PrintError("Unable to load plugin, check /xllog for details", "Questionable");
+            throw;
+        }
     }
 
     private static void AddBasicFunctionsAndData(ServiceCollection serviceCollection)
     {
+        serviceCollection.AddSingleton<ExcelFunctions>();
         serviceCollection.AddSingleton<GameFunctions>();
         serviceCollection.AddSingleton<ChatFunctions>();
+        serviceCollection.AddSingleton<QuestFunctions>();
+
         serviceCollection.AddSingleton<AetherCurrentData>();
         serviceCollection.AddSingleton<AetheryteData>();
         serviceCollection.AddSingleton<GatheringData>();
@@ -110,6 +119,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTransient<MoveToLandingLocation>();
         serviceCollection.AddTransient<DoGather>();
         serviceCollection.AddTransient<DoGatherCollectable>();
+        serviceCollection.AddTransient<SwitchClassJob>();
 
         // task factories
         serviceCollection.AddTaskWithFactory<StepDisabled.Factory, StepDisabled.Task>();
@@ -135,6 +145,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTaskWithFactory<Say.Factory, Say.UseChat>();
         serviceCollection.AddTaskWithFactory<UseItem.Factory, UseItem.UseOnGround, UseItem.UseOnObject, UseItem.Use, UseItem.UseOnPosition>();
         serviceCollection.AddTaskWithFactory<EquipItem.Factory, EquipItem.DoEquip>();
+        serviceCollection.AddTaskWithFactory<TurnInDelivery.Factory, TurnInDelivery.SatisfactionSupplyTurnIn>();
         serviceCollection
             .AddTaskWithFactory<SinglePlayerDuty.Factory, SinglePlayerDuty.DisableYesAlready,
                 SinglePlayerDuty.RestoreYesAlready>();
@@ -192,8 +203,17 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<IQuestValidator, NextQuestValidator>();
         serviceCollection.AddSingleton<IQuestValidator, CompletionFlagsValidator>();
         serviceCollection.AddSingleton<IQuestValidator, AethernetShortcutValidator>();
+        serviceCollection.AddSingleton<IQuestValidator, DialogueChoiceValidator>();
         serviceCollection.AddSingleton<JsonSchemaValidator>();
         serviceCollection.AddSingleton<IQuestValidator>(sp => sp.GetRequiredService<JsonSchemaValidator>());
+    }
+
+    private static void Initialize(IServiceProvider serviceProvider)
+    {
+        serviceProvider.GetRequiredService<QuestRegistry>().Reload();
+        serviceProvider.GetRequiredService<CommandHandler>();
+        serviceProvider.GetRequiredService<ContextMenuController>();
+        serviceProvider.GetRequiredService<DalamudInitializer>();
     }
 
     public void Dispose()

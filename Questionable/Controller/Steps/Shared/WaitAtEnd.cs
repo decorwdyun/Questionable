@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Questionable.Controller.Steps.Common;
 using Questionable.Controller.Utils;
 using Questionable.Data;
+using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
 
@@ -160,7 +161,7 @@ internal static class WaitAtEnd
         public override string ToString() => "Wait(next step or sequence)";
     }
 
-    internal sealed class WaitForCompletionFlags(GameFunctions gameFunctions) : ITask
+    internal sealed class WaitForCompletionFlags(QuestFunctions questFunctions) : ITask
     {
         public QuestId Quest { get; set; } = null!;
         public QuestStep Step { get; set; } = null!;
@@ -178,7 +179,7 @@ internal static class WaitAtEnd
 
         public ETaskResult Update()
         {
-            QuestWork? questWork = gameFunctions.GetQuestEx(Quest);
+            QuestWork? questWork = questFunctions.GetQuestEx(Quest);
             return questWork != null &&
                    QuestWorkUtils.MatchesQuestWork(Step.CompletionQuestVariablesFlags, questWork.Value)
                 ? ETaskResult.TaskComplete
@@ -214,13 +215,13 @@ internal static class WaitAtEnd
             $"WaitObj({DataId} at {Destination.ToString("G", CultureInfo.InvariantCulture)} < {Distance})";
     }
 
-    internal sealed class WaitQuestAccepted(GameFunctions gameFunctions) : ITask
+    internal sealed class WaitQuestAccepted(QuestFunctions questFunctions) : ITask
     {
-        public ElementId QuestElementId { get; set; } = null!;
+        public ElementId ElementId { get; set; } = null!;
 
-        public ITask With(ElementId questElementId)
+        public ITask With(ElementId elementId)
         {
-            QuestElementId = questElementId;
+            ElementId = elementId;
             return this;
         }
 
@@ -228,21 +229,21 @@ internal static class WaitAtEnd
 
         public ETaskResult Update()
         {
-            return gameFunctions.IsQuestAccepted(QuestElementId)
+            return questFunctions.IsQuestAccepted(ElementId)
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
         }
 
-        public override string ToString() => $"WaitQuestAccepted({QuestElementId})";
+        public override string ToString() => $"WaitQuestAccepted({ElementId})";
     }
 
-    internal sealed class WaitQuestCompleted(GameFunctions gameFunctions) : ITask
+    internal sealed class WaitQuestCompleted(QuestFunctions questFunctions) : ITask
     {
-        public ElementId QuestElementId { get; set; } = null!;
+        public ElementId ElementId { get; set; } = null!;
 
-        public ITask With(ElementId questElementId)
+        public ITask With(ElementId elementId)
         {
-            QuestElementId = questElementId;
+            ElementId = elementId;
             return this;
         }
 
@@ -250,15 +251,15 @@ internal static class WaitAtEnd
 
         public ETaskResult Update()
         {
-            return gameFunctions.IsQuestComplete(QuestElementId) ? ETaskResult.TaskComplete : ETaskResult.StillRunning;
+            return questFunctions.IsQuestComplete(ElementId) ? ETaskResult.TaskComplete : ETaskResult.StillRunning;
         }
 
-        public override string ToString() => $"WaitQuestComplete({QuestElementId})";
+        public override string ToString() => $"WaitQuestComplete({ElementId})";
     }
 
-    internal sealed class NextStep(ElementId questElementId, int sequence) : ILastTask
+    internal sealed class NextStep(ElementId elementId, int sequence) : ILastTask
     {
-        public ElementId QuestElementId { get; } = questElementId;
+        public ElementId ElementId { get; } = elementId;
         public int Sequence { get; } = sequence;
 
         public bool Start() => true;
@@ -270,7 +271,7 @@ internal static class WaitAtEnd
 
     internal sealed class EndAutomation : ILastTask
     {
-        public ElementId QuestElementId => throw new InvalidOperationException();
+        public ElementId ElementId => throw new InvalidOperationException();
         public int Sequence => throw new InvalidOperationException();
 
         public bool Start() => true;

@@ -18,6 +18,32 @@
           "AethernetShortcut": [
             "[Ishgard] Aetheryte Plaza",
             "[Ishgard] Firmament"
+          ],
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "ExcelSheet": "custom/006/CtsSfsCharacter6_00674",
+              "Prompt": "TEXT_CTSSFSCHARACTER6_00674_TOPMENU_000_000",
+              "Answer": "TEXT_CTSSFSCHARACTER6_00674_TOPMENU_000_001",
+              "AnswerIsRegularExpression": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "TerritoryId": 635,
+          "InteractionType": "None",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "ExcelSheet": "custom/006/CtsSfsCharacter6_00674",
+              "Prompt": "TEXT_CTSSFSCHARACTER6_00674_TOPMENU_000_000",
+              "Answer": "TEXT_CTSSFSCHARACTER6_00674_TOPMENU_000_003"
+            }
           ]
         }
       ]

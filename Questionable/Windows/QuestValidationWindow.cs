@@ -56,11 +56,11 @@ internal sealed class QuestValidationWindow : LWindow
             ImGui.TableNextRow();
 
             if (ImGui.TableNextColumn())
-                ImGui.TextUnformatted(validationIssue.QuestId?.ToString() ?? string.Empty);
+                ImGui.TextUnformatted(validationIssue.ElementId?.ToString() ?? string.Empty);
 
             if (ImGui.TableNextColumn())
-                ImGui.TextUnformatted(validationIssue.QuestId != null
-                    ? _questData.GetQuestInfo(validationIssue.QuestId).Name
+                ImGui.TextUnformatted(validationIssue.ElementId != null
+                    ? _questData.GetQuestInfo(validationIssue.ElementId).Name
                     : validationIssue.BeastTribe.ToString());
 
             if (ImGui.TableNextColumn())

@@ -12,12 +12,12 @@ using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.UI;
-using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using ImGuiNET;
 using LLib.GameUI;
 using LLib.ImGui;
 using Questionable.Controller;
 using Questionable.Data;
+using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
 using Questionable.Windows.QuestComponents;
@@ -30,7 +30,7 @@ internal sealed class QuestSelectionWindow : LWindow
     private readonly QuestData _questData;
     private readonly IGameGui _gameGui;
     private readonly IChatGui _chatGui;
-    private readonly GameFunctions _gameFunctions;
+    private readonly QuestFunctions _questFunctions;
     private readonly QuestController _questController;
     private readonly QuestRegistry _questRegistry;
     private readonly IDalamudPluginInterface _pluginInterface;
@@ -43,16 +43,24 @@ internal sealed class QuestSelectionWindow : LWindow
     private List<IQuestInfo> _offeredQuests = [];
     private bool _onlyAvailableQuests = true;
 
-    public QuestSelectionWindow(QuestData questData, IGameGui gameGui, IChatGui chatGui, GameFunctions gameFunctions,
-        QuestController questController, QuestRegistry questRegistry, IDalamudPluginInterface pluginInterface,
-        TerritoryData territoryData, IClientState clientState, UiUtils uiUtils,
+    public QuestSelectionWindow(
+        QuestData questData,
+        IGameGui gameGui,
+        IChatGui chatGui,
+        QuestFunctions questFunctions,
+        QuestController questController,
+        QuestRegistry questRegistry,
+        IDalamudPluginInterface pluginInterface,
+        TerritoryData territoryData,
+        IClientState clientState,
+        UiUtils uiUtils,
         QuestTooltipComponent questTooltipComponent)
         : base($"Quest Selection{WindowId}")
     {
         _questData = questData;
         _gameGui = gameGui;
         _chatGui = chatGui;
-        _gameFunctions = gameFunctions;
+        _questFunctions = questFunctions;
         _questController = questController;
         _questRegistry = questRegistry;
         _pluginInterface = pluginInterface;
@@ -82,7 +90,7 @@ internal sealed class QuestSelectionWindow : LWindow
             {
                 var answers = GameUiController.GetChoices(addonSelectIconString);
                 _offeredQuests = _quests
-                    .Where(x => answers.Any(y => GameUiController.GameStringEquals(x.Name, y)))
+                    .Where(x => answers.Any(y => GameFunctions.GameStringEquals(x.Name, y)))
                     .ToList();
             }
             else
@@ -216,9 +224,9 @@ internal sealed class QuestSelectionWindow : LWindow
 
                 if (knownQuest != null &&
                     knownQuest.FindSequence(0)?.LastStep()?.InteractionType == EInteractionType.AcceptQuest &&
-                    !_gameFunctions.IsQuestAccepted(quest.QuestId) &&
-                    !_gameFunctions.IsQuestLocked(quest.QuestId) &&
-                    (quest.IsRepeatable || !_gameFunctions.IsQuestAcceptedOrComplete(quest.QuestId)))
+                    !_questFunctions.IsQuestAccepted(quest.QuestId) &&
+                    !_questFunctions.IsQuestLocked(quest.QuestId) &&
+                    (quest.IsRepeatable || !_questFunctions.IsQuestAcceptedOrComplete(quest.QuestId)))
                 {
                     ImGui.BeginDisabled(_questController.NextQuest != null || _questController.SimulatedQuest != null);
 

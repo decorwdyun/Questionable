@@ -2,6 +2,7 @@
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.Logging;
+using Questionable.Functions;
 
 namespace Questionable.Controller.Steps.Common;
 

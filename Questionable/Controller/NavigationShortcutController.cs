@@ -1,6 +1,7 @@
 ﻿using System.Numerics;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.UI;
+using Questionable.Functions;
 using Questionable.Model;
 
 namespace Questionable.Controller;

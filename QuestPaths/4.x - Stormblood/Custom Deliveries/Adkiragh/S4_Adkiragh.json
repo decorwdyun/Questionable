@@ -15,7 +15,33 @@
           "TerritoryId": 478,
           "InteractionType": "Interact",
           "RequiredGatheredItems": [],
-          "AetheryteShortcut": "Idyllshire"
+          "AetheryteShortcut": "Idyllshire",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "ExcelSheet": "custom/005/CtsSfsCharacter4_00541",
+              "Prompt": "TEXT_CTSSFSCHARACTER4_00541_TOPMENU_000_000",
+              "Answer": "TEXT_CTSSFSCHARACTER4_00541_TOPMENU_000_001",
+              "AnswerIsRegularExpression": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "TerritoryId": 635,
+          "InteractionType": "None",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "ExcelSheet": "custom/005/CtsSfsCharacter4_00541",
+              "Prompt": "TEXT_CTSSFSCHARACTER4_00541_TOPMENU_000_000",
+              "Answer": "TEXT_CTSSFSCHARACTER4_00541_TOPMENU_000_004"
+            }
+          ]
         }
       ]
     }

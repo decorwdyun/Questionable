@@ -56,7 +56,7 @@ internal sealed class QuestValidator
                                 : LogLevel.Information;
                             _logger.Log(level,
                                 "Validation failed: {QuestId} ({QuestName}) / {QuestSequence} / {QuestStep} - {Description}",
-                                issue.QuestId, quest.Info.Name, issue.Sequence, issue.Step, issue.Description);
+                                issue.ElementId, quest.Info.Name, issue.Sequence, issue.Step, issue.Description);
                             if (issue.Type == EIssueType.QuestDisabled && quest.Info.BeastTribe != EBeastTribe.None)
                             {
                                 disabledTribeQuests.TryAdd(quest.Info.BeastTribe, 0);
@@ -70,12 +70,12 @@ internal sealed class QuestValidator
 
                 var disabledQuests = issues
                     .Where(x => x.Type == EIssueType.QuestDisabled)
-                    .Select(x => x.QuestId)
+                    .Select(x => x.ElementId)
                     .ToList();
 
                 _validationIssues = issues
-                    .Where(x => !disabledQuests.Contains(x.QuestId) || x.Type == EIssueType.QuestDisabled)
-                    .OrderBy(x => x.QuestId)
+                    .Where(x => !disabledQuests.Contains(x.ElementId) || x.Type == EIssueType.QuestDisabled)
+                    .OrderBy(x => x.ElementId)
                     .ThenBy(x => x.Sequence)
                     .ThenBy(x => x.Step)
                     .ThenBy(x => x.Description)
@@ -95,7 +95,7 @@ internal sealed class QuestValidator
             .OrderBy(x => x.Key)
             .Select(x => new ValidationIssue
             {
-                QuestId = null,
+                ElementId = null,
                 Sequence = null,
                 Step = null,
                 BeastTribe = x.Key,

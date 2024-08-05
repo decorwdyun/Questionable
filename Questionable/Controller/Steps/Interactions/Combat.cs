@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Questionable.Controller.Steps.Common;
 using Questionable.Controller.Steps.Shared;
 using Questionable.Controller.Utils;
+using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
 
@@ -78,19 +79,19 @@ internal static class Combat
         }
     }
 
-    internal sealed class HandleCombat(CombatController combatController, GameFunctions gameFunctions) : ITask
+    internal sealed class HandleCombat(CombatController combatController, QuestFunctions questFunctions) : ITask
     {
         private bool _isLastStep;
         private CombatController.CombatData _combatData = null!;
         private IList<QuestWorkValue?> _completionQuestVariableFlags = null!;
 
-        public ITask With(ElementId questElementId, bool isLastStep, EEnemySpawnType enemySpawnType, IList<uint> killEnemyDataIds,
+        public ITask With(ElementId elementId, bool isLastStep, EEnemySpawnType enemySpawnType, IList<uint> killEnemyDataIds,
             IList<QuestWorkValue?> completionQuestVariablesFlags, IList<ComplexCombatData> complexCombatData)
         {
             _isLastStep = isLastStep;
             _combatData = new CombatController.CombatData
             {
-                QuestElementId = questElementId,
+                ElementId = elementId,
                 SpawnType = enemySpawnType,
                 KillEnemyDataIds = killEnemyDataIds.ToList(),
                 ComplexCombatDatas = complexCombatData.ToList(),
@@ -107,9 +108,9 @@ internal static class Combat
                 return ETaskResult.StillRunning;
 
             // if our quest step has any completion flags, we need to check if they are set
-            if (QuestWorkUtils.HasCompletionFlags(_completionQuestVariableFlags) && _combatData.QuestElementId is QuestId questId)
+            if (QuestWorkUtils.HasCompletionFlags(_completionQuestVariableFlags) && _combatData.ElementId is QuestId questId)
             {
-                var questWork = gameFunctions.GetQuestEx(questId);
+                var questWork = questFunctions.GetQuestEx(questId);
                 if (questWork == null)
                     return ETaskResult.StillRunning;
 

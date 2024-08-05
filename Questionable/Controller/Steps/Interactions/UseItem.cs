@@ -12,6 +12,7 @@ using Questionable.Controller.Steps.Common;
 using Questionable.Controller.Steps.Shared;
 using Questionable.Controller.Utils;
 using Questionable.Data;
+using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Common;
 using Questionable.Model.Questing;
@@ -103,7 +104,7 @@ internal static class UseItem
             yield return serviceProvider.GetRequiredService<AetheryteShortcut.UseAetheryteShortcut>()
                 .With(null, EAetheryteLocation.Limsa, territoryId);
             yield return serviceProvider.GetRequiredService<AethernetShortcut.UseAethernetShortcut>()
-                .With(EAetheryteLocation.Limsa, EAetheryteLocation.LimsaArcanist, null);
+                .With(EAetheryteLocation.Limsa, EAetheryteLocation.LimsaArcanist);
             yield return serviceProvider.GetRequiredService<WaitAtEnd.WaitDelay>();
             yield return serviceProvider.GetRequiredService<Move.MoveInternal>()
                 .With(territoryId, destination, dataId: npcId, sprint: false);
@@ -112,7 +113,7 @@ internal static class UseItem
         }
     }
 
-    internal abstract class UseItemBase(GameFunctions gameFunctions, ICondition condition, ILogger logger) : ITask
+    internal abstract class UseItemBase(QuestFunctions questFunctions, ICondition condition, ILogger logger) : ITask
     {
         private bool _usedItem;
         private DateTime _continueAt;
@@ -144,7 +145,7 @@ internal static class UseItem
         {
             if (QuestId is QuestId questId && QuestWorkUtils.HasCompletionFlags(CompletionQuestVariablesFlags))
             {
-                QuestWork? questWork = gameFunctions.GetQuestEx(questId);
+                QuestWork? questWork = questFunctions.GetQuestEx(questId);
                 if (questWork != null &&
                     QuestWorkUtils.MatchesQuestWork(CompletionQuestVariablesFlags, questWork.Value))
                     return ETaskResult.TaskComplete;
@@ -196,11 +197,9 @@ internal static class UseItem
     }
 
 
-    internal sealed class UseOnGround(GameFunctions gameFunctions, ICondition condition, ILogger<UseOnGround> logger)
-        : UseItemBase(gameFunctions, condition, logger)
+    internal sealed class UseOnGround(GameFunctions gameFunctions, QuestFunctions questFunctions, ICondition condition, ILogger<UseOnGround> logger)
+        : UseItemBase(questFunctions, condition, logger)
     {
-        private readonly GameFunctions _gameFunctions = gameFunctions;
-
         public uint DataId { get; set; }
 
         public ITask With(ElementId? questId, uint dataId, uint itemId, IList<QuestWorkValue?> completionQuestVariablesFlags)
@@ -212,19 +211,18 @@ internal static class UseItem
             return this;
         }
 
-        protected override bool UseItem() => _gameFunctions.UseItemOnGround(DataId, ItemId);
+        protected override bool UseItem() => gameFunctions.UseItemOnGround(DataId, ItemId);
 
         public override string ToString() => $"UseItem({ItemId} on ground at {DataId})";
     }
 
     internal sealed class UseOnPosition(
         GameFunctions gameFunctions,
+        QuestFunctions questFunctions,
         ICondition condition,
         ILogger<UseOnPosition> logger)
-        : UseItemBase(gameFunctions, condition, logger)
+        : UseItemBase(questFunctions, condition, logger)
     {
-        private readonly GameFunctions _gameFunctions = gameFunctions;
-
         public Vector3 Position { get; set; }
 
         public ITask With(ElementId? questId, Vector3 position, uint itemId, IList<QuestWorkValue?> completionQuestVariablesFlags)
@@ -236,17 +234,15 @@ internal static class UseItem
             return this;
         }
 
-        protected override bool UseItem() => _gameFunctions.UseItemOnPosition(Position, ItemId);
+        protected override bool UseItem() => gameFunctions.UseItemOnPosition(Position, ItemId);
 
         public override string ToString() =>
             $"UseItem({ItemId} on ground at {Position.ToString("G", CultureInfo.InvariantCulture)})";
     }
 
-    internal sealed class UseOnObject(GameFunctions gameFunctions, ICondition condition, ILogger<UseOnObject> logger)
-        : UseItemBase(gameFunctions, condition, logger)
+    internal sealed class UseOnObject(QuestFunctions questFunctions, GameFunctions gameFunctions, ICondition condition, ILogger<UseOnObject> logger)
+        : UseItemBase(questFunctions, condition, logger)
     {
-        private readonly GameFunctions _gameFunctions = gameFunctions;
-
         public uint DataId { get; set; }
 
         public ITask With(ElementId? questId, uint dataId, uint itemId, IList<QuestWorkValue?> completionQuestVariablesFlags,
@@ -260,16 +256,14 @@ internal static class UseItem
             return this;
         }
 
-        protected override bool UseItem() => _gameFunctions.UseItem(DataId, ItemId);
+        protected override bool UseItem() => gameFunctions.UseItem(DataId, ItemId);
 
         public override string ToString() => $"UseItem({ItemId} on {DataId})";
     }
 
-    internal sealed class Use(GameFunctions gameFunctions, ICondition condition, ILogger<Use> logger)
-        : UseItemBase(gameFunctions, condition, logger)
+    internal sealed class Use(GameFunctions gameFunctions, QuestFunctions questFunctions, ICondition condition, ILogger<Use> logger)
+        : UseItemBase(questFunctions, condition, logger)
     {
-        private readonly GameFunctions _gameFunctions = gameFunctions;
-
         public ITask With(ElementId? questId, uint itemId, IList<QuestWorkValue?> completionQuestVariablesFlags)
         {
             QuestId = questId;
@@ -278,7 +272,7 @@ internal static class UseItem
             return this;
         }
 
-        protected override bool UseItem() => _gameFunctions.UseItem(ItemId);
+        protected override bool UseItem() => gameFunctions.UseItem(ItemId);
 
         public override string ToString() => $"UseItem({ItemId})";
     }

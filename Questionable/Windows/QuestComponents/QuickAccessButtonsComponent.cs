@@ -12,6 +12,7 @@ using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using ImGuiNET;
 using Questionable.Controller;
 using Questionable.External;
+using Questionable.Functions;
 
 namespace Questionable.Windows.QuestComponents;
 

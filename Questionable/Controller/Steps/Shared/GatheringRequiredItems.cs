@@ -28,13 +28,24 @@ internal static class GatheringRequiredItems
         {
             foreach (var requiredGatheredItems in step.RequiredGatheredItems)
             {
-                if (!gatheringData.TryGetGatheringPointId(requiredGatheredItems.ItemId,
-                        (EClassJob)clientState.LocalPlayer!.ClassJob.Id, out var gatheringPointId))
+                EClassJob currentClassJob = (EClassJob)clientState.LocalPlayer!.ClassJob.Id;
+                EClassJob classJob = currentClassJob;
+                if (requiredGatheredItems.ClassJob != null)
+                    classJob = (EClassJob)requiredGatheredItems.ClassJob.Value;
+
+                if (!gatheringData.TryGetGatheringPointId(requiredGatheredItems.ItemId, classJob,
+                        out var gatheringPointId))
                     throw new TaskException($"No gathering point found for item {requiredGatheredItems.ItemId}");
 
                 if (!AssemblyGatheringLocationLoader.GetLocations()
                         .TryGetValue(gatheringPointId, out GatheringRoot? gatheringRoot))
                     throw new TaskException($"No path found for gathering point {gatheringPointId}");
+
+                if (classJob != currentClassJob)
+                {
+                    yield return serviceProvider.GetRequiredService<SwitchClassJob>()
+                        .With(classJob);
+                }
 
                 if (HasRequiredItems(requiredGatheredItems))
                     continue;
@@ -71,7 +82,8 @@ internal static class GatheringRequiredItems
             InventoryManager* inventoryManager = InventoryManager.Instance();
             return inventoryManager != null &&
                    inventoryManager->GetInventoryItemCount(requiredGatheredItems.ItemId,
-                       minCollectability: (short)requiredGatheredItems.Collectability) >= requiredGatheredItems.ItemCount;
+                       minCollectability: (short)requiredGatheredItems.Collectability) >=
+                   requiredGatheredItems.ItemCount;
         }
 
         public ITask CreateTask(Quest quest, QuestSequence sequence, QuestStep step)

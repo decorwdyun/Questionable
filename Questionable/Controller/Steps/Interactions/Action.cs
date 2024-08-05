@@ -6,6 +6,7 @@ using FFXIVClientStructs.FFXIV.Client.Game;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Common;
+using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
 

@@ -15,6 +15,7 @@ using ImGuiNET;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller;
 using Questionable.Data;
+using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Common;
 using Questionable.Model.Questing;
@@ -26,6 +27,7 @@ internal sealed class CreationUtilsComponent
 {
     private readonly MovementController _movementController;
     private readonly GameFunctions _gameFunctions;
+    private readonly QuestFunctions _questFunctions;
     private readonly TerritoryData _territoryData;
     private readonly QuestData _questData;
     private readonly QuestSelectionWindow _questSelectionWindow;
@@ -35,13 +37,22 @@ internal sealed class CreationUtilsComponent
     private readonly IGameGui _gameGui;
     private readonly ILogger<CreationUtilsComponent> _logger;
 
-    public CreationUtilsComponent(MovementController movementController, GameFunctions gameFunctions,
-        TerritoryData territoryData, QuestData questData, QuestSelectionWindow questSelectionWindow,
-        IClientState clientState, ITargetManager targetManager, ICondition condition, IGameGui gameGui,
+    public CreationUtilsComponent(
+        MovementController movementController,
+        GameFunctions gameFunctions,
+        QuestFunctions questFunctions,
+        TerritoryData territoryData,
+        QuestData questData,
+        QuestSelectionWindow questSelectionWindow,
+        IClientState clientState,
+        ITargetManager targetManager,
+        ICondition condition,
+        IGameGui gameGui,
         ILogger<CreationUtilsComponent> logger)
     {
         _movementController = movementController;
         _gameFunctions = gameFunctions;
+        _questFunctions = questFunctions;
         _territoryData = territoryData;
         _questData = questData;
         _questSelectionWindow = questSelectionWindow;
@@ -65,7 +76,7 @@ internal sealed class CreationUtilsComponent
             ImGui.Text(SeIconChar.BotanistSprout.ToIconString());
         }
 
-        var q = _gameFunctions.GetCurrentQuest();
+        var q = _questFunctions.GetCurrentQuest();
         ImGui.Text($"Current Quest: {q.CurrentQuest} → {q.Sequence}");
 
 #if false

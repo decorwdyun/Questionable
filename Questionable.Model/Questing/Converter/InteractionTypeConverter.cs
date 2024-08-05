@@ -7,6 +7,7 @@ public sealed class InteractionTypeConverter() : EnumConverter<EInteractionType>
 {
     private static readonly Dictionary<EInteractionType, string> Values = new()
     {
+        { EInteractionType.None, "None" },
         { EInteractionType.Interact, "Interact" },
         { EInteractionType.WalkTo, "WalkTo" },
         { EInteractionType.AttuneAethernetShard, "AttuneAethernetShard" },

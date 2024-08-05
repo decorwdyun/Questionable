@@ -6,6 +6,7 @@ namespace Questionable.Model.Questing;
 [JsonConverter(typeof(InteractionTypeConverter))]
 public enum EInteractionType
 {
+    None,
     Interact,
     WalkTo,
     AttuneAethernetShard,

@@ -14,6 +14,7 @@ using FFXIVClientStructs.FFXIV.Common.Math;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.CombatModules;
 using Questionable.Controller.Utils;
+using Questionable.Functions;
 using Questionable.Model.Questing;
 
 namespace Questionable.Controller;
@@ -26,7 +27,7 @@ internal sealed class CombatController : IDisposable
     private readonly IObjectTable _objectTable;
     private readonly ICondition _condition;
     private readonly IClientState _clientState;
-    private readonly GameFunctions _gameFunctions;
+    private readonly QuestFunctions _questFunctions;
     private readonly ILogger<CombatController> _logger;
 
     private CurrentFight? _currentFight;
@@ -39,7 +40,7 @@ internal sealed class CombatController : IDisposable
         IObjectTable objectTable,
         ICondition condition,
         IClientState clientState,
-        GameFunctions gameFunctions,
+        QuestFunctions questFunctions,
         ILogger<CombatController> logger)
     {
         _combatModules = combatModules.ToList();
@@ -48,7 +49,7 @@ internal sealed class CombatController : IDisposable
         _objectTable = objectTable;
         _condition = condition;
         _clientState = clientState;
-        _gameFunctions = gameFunctions;
+        _questFunctions = questFunctions;
         _logger = logger;
 
         _clientState.TerritoryChanged += TerritoryChanged;
@@ -168,9 +169,9 @@ internal sealed class CombatController : IDisposable
                     }
                 }
 
-                if (QuestWorkUtils.HasCompletionFlags(condition.CompletionQuestVariablesFlags) && _currentFight.Data.QuestElementId is QuestId questId)
+                if (QuestWorkUtils.HasCompletionFlags(condition.CompletionQuestVariablesFlags) && _currentFight.Data.ElementId is QuestId questId)
                 {
-                    var questWork = _gameFunctions.GetQuestEx(questId);
+                    var questWork = _questFunctions.GetQuestEx(questId);
                     if (questWork != null && QuestWorkUtils.MatchesQuestWork(condition.CompletionQuestVariablesFlags,
                             questWork.Value))
                     {
@@ -303,7 +304,7 @@ internal sealed class CombatController : IDisposable
 
     public sealed class CombatData
     {
-        public required ElementId QuestElementId { get; init; }
+        public required ElementId ElementId { get; init; }
         public required EEnemySpawnType SpawnType { get; init; }
         public required List<uint> KillEnemyDataIds { get; init; }
         public required List<ComplexCombatData> ComplexCombatDatas { get; init; }

@@ -13,6 +13,7 @@ using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using ImGuiNET;
 using Questionable.Controller;
 using Questionable.Controller.Steps.Shared;
+using Questionable.Functions;
 using Questionable.Model.Questing;
 
 namespace Questionable.Windows.QuestComponents;
@@ -24,6 +25,7 @@ internal sealed class ActiveQuestComponent
     private readonly CombatController _combatController;
     private readonly GatheringController _gatheringController;
     private readonly GameFunctions _gameFunctions;
+    private readonly QuestFunctions _questFunctions;
     private readonly ICommandManager _commandManager;
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly Configuration _configuration;
@@ -36,6 +38,7 @@ internal sealed class ActiveQuestComponent
         CombatController combatController,
         GatheringController gatheringController,
         GameFunctions gameFunctions,
+        QuestFunctions questFunctions,
         ICommandManager commandManager,
         IDalamudPluginInterface pluginInterface,
         Configuration configuration,
@@ -47,6 +50,7 @@ internal sealed class ActiveQuestComponent
         _combatController = combatController;
         _gatheringController = gatheringController;
         _gameFunctions = gameFunctions;
+        _questFunctions = questFunctions;
         _commandManager = commandManager;
         _pluginInterface = pluginInterface;
         _configuration = configuration;
@@ -116,6 +120,12 @@ internal sealed class ActiveQuestComponent
             ImGui.TextUnformatted(
                 $"Simulated Quest: {Shorten(currentQuest.Quest.Info.Name)} / {currentQuest.Sequence} / {currentQuest.Step}");
         }
+        else if (currentQuestType == QuestController.ECurrentQuestType.Gathering)
+        {
+            using var _ = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.ParsedGold);
+            ImGui.TextUnformatted(
+                $"Gathering: {Shorten(currentQuest.Quest.Info.Name)} / {currentQuest.Sequence} / {currentQuest.Step}");
+        }
         else
         {
             var startedQuest = _questController.StartedQuest;
@@ -154,7 +164,7 @@ internal sealed class ActiveQuestComponent
         if (currentQuest.Quest.Id is not QuestId questId)
             return null;
 
-        var questWork = _gameFunctions.GetQuestEx(questId);
+        var questWork = _questFunctions.GetQuestEx(questId);
         if (questWork != null)
         {
             Vector4 color;

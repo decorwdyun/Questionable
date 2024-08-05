@@ -16,6 +16,7 @@ public sealed class DialogueChoice
 
     [JsonConverter(typeof(ExcelRefConverter))]
     public ExcelRef? Answer { get; set; }
+    public bool AnswerIsRegularExpression { get; set; }
 
     /// <summary>
     /// If set, only applies when focusing the given target id.

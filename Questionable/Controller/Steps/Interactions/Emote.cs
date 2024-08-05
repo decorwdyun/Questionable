@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Questionable.Controller.Steps.Common;
+using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
 

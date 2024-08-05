@@ -5,6 +5,7 @@ using FFXIVClientStructs.FFXIV.Component.GUI;
 using LLib.GameData;
 using LLib.GameUI;
 using Microsoft.Extensions.Logging;
+using Questionable.Functions;
 using Questionable.Model.Gathering;
 using Questionable.Model.Questing;
 

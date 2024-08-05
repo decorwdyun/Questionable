@@ -3,6 +3,7 @@ using System.Linq;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.Command;
 using Dalamud.Plugin.Services;
+using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
 using Questionable.Windows;
@@ -23,7 +24,7 @@ internal sealed class CommandHandler : IDisposable
     private readonly QuestWindow _questWindow;
     private readonly QuestSelectionWindow _questSelectionWindow;
     private readonly ITargetManager _targetManager;
-    private readonly GameFunctions _gameFunctions;
+    private readonly QuestFunctions _questFunctions;
 
     public CommandHandler(
         ICommandManager commandManager,
@@ -37,7 +38,7 @@ internal sealed class CommandHandler : IDisposable
         QuestWindow questWindow,
         QuestSelectionWindow questSelectionWindow,
         ITargetManager targetManager,
-        GameFunctions gameFunctions)
+        QuestFunctions questFunctions)
     {
         _commandManager = commandManager;
         _chatGui = chatGui;
@@ -50,7 +51,7 @@ internal sealed class CommandHandler : IDisposable
         _questWindow = questWindow;
         _questSelectionWindow = questSelectionWindow;
         _targetManager = targetManager;
-        _gameFunctions = gameFunctions;
+        _questFunctions = questFunctions;
 
         _commandManager.AddHandler("/qst", new CommandInfo(ProcessCommand)
         {
@@ -149,7 +150,7 @@ internal sealed class CommandHandler : IDisposable
     {
         if (arguments.Length >= 1 && ElementId.TryFromString(arguments[0], out ElementId? questId) && questId != null)
         {
-            if (_gameFunctions.IsQuestLocked(questId))
+            if (_questFunctions.IsQuestLocked(questId))
                 _chatGui.PrintError($"[Questionable] Quest {questId} is locked.");
             else if (_questRegistry.TryGetQuest(questId, out Quest? quest))
             {

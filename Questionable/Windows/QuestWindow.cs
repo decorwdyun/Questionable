@@ -63,6 +63,11 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
 
     public void SaveWindowConfig() => _pluginInterface.SavePluginConfig(_configuration);
 
+    public override void PreOpenCheck()
+    {
+        IsOpen |= _questController.IsRunning;
+    }
+
     public override bool DrawConditions()
     {
         if (!_clientState.IsLoggedIn || _clientState.LocalPlayer == null || _clientState.IsPvPExcludingDen)

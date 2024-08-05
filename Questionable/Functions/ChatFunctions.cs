@@ -16,7 +16,7 @@ using Lumina.Excel.GeneratedSheets;
 using Microsoft.Extensions.Logging;
 using Questionable.Model.Questing;
 
-namespace Questionable;
+namespace Questionable.Functions;
 
 internal sealed unsafe class ChatFunctions
 {

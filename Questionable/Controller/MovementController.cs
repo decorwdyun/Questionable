@@ -17,6 +17,7 @@ using FFXIVClientStructs.FFXIV.Client.Game.Control;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.NavigationOverrides;
 using Questionable.External;
+using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Common;
 using Questionable.Model.Common.Converter;

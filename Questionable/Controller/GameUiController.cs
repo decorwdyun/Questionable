@@ -14,6 +14,8 @@ using LLib.GameUI;
 using Lumina.Excel.GeneratedSheets;
 using Microsoft.Extensions.Logging;
 using Questionable.Data;
+using Questionable.Functions;
+using Questionable.Model;
 using Questionable.Model.Questing;
 using Quest = Questionable.Model.Quest;
 using ValueType = FFXIVClientStructs.FFXIV.Component.GUI.ValueType;
@@ -25,6 +27,8 @@ internal sealed class GameUiController : IDisposable
     private readonly IAddonLifecycle _addonLifecycle;
     private readonly IDataManager _dataManager;
     private readonly GameFunctions _gameFunctions;
+    private readonly QuestFunctions _questFunctions;
+    private readonly ExcelFunctions _excelFunctions;
     private readonly QuestController _questController;
     private readonly QuestRegistry _questRegistry;
     private readonly QuestData _questData;
@@ -33,13 +37,24 @@ internal sealed class GameUiController : IDisposable
     private readonly ILogger<GameUiController> _logger;
     private readonly Regex _returnRegex;
 
-    public GameUiController(IAddonLifecycle addonLifecycle, IDataManager dataManager, GameFunctions gameFunctions,
-        QuestController questController, QuestRegistry questRegistry, QuestData questData, IGameGui gameGui,
-        ITargetManager targetManager, IPluginLog pluginLog, ILogger<GameUiController> logger)
+    public GameUiController(
+        IAddonLifecycle addonLifecycle,
+        IDataManager dataManager,
+        GameFunctions gameFunctions,
+        QuestFunctions questFunctions,
+        ExcelFunctions excelFunctions,
+        QuestController questController,
+        QuestRegistry questRegistry,
+        QuestData questData,
+        IGameGui gameGui,
+        ITargetManager targetManager,
+        IPluginLog pluginLog, ILogger<GameUiController> logger)
     {
         _addonLifecycle = addonLifecycle;
         _dataManager = dataManager;
         _gameFunctions = gameFunctions;
+        _questFunctions = questFunctions;
+        _excelFunctions = excelFunctions;
         _questController = questController;
         _questRegistry = questRegistry;
         _questData = questData;
@@ -188,7 +203,7 @@ internal sealed class GameUiController : IDisposable
     {
         // it is possible for this to be a quest selection
         string questName = quest.Info.Name;
-        int questSelection = answers.FindIndex(x => GameStringEquals(questName, x));
+        int questSelection = answers.FindIndex(x => GameFunctions.GameStringEquals(questName, x));
         if (questSelection >= 0)
         {
             addonSelectIconString->AtkUnitBase.FireCallbackInt(questSelection);
@@ -210,7 +225,7 @@ internal sealed class GameUiController : IDisposable
     private int? HandleListChoice(string? actualPrompt, List<string?> answers, bool checkAllSteps)
     {
         List<DialogueChoiceInfo> dialogueChoices = [];
-        var currentQuest = _questController.SimulatedQuest ?? _questController.StartedQuest;
+        var currentQuest = _questController.SimulatedQuest ?? _questController.GatheringQuest ?? _questController.StartedQuest;
         if (currentQuest != null)
         {
             var quest = currentQuest.Quest;
@@ -260,9 +275,9 @@ internal sealed class GameUiController : IDisposable
         var target = _targetManager.Target;
         if (target != null)
         {
-            foreach (var questInfo in _questData.GetAllByIssuerDataId(target.DataId))
+            foreach (var questInfo in _questData.GetAllByIssuerDataId(target.DataId).Where(x => x.QuestId is QuestId))
             {
-                if (_gameFunctions.IsReadyToAcceptQuest(questInfo.QuestId) &&
+                if (_questFunctions.IsReadyToAcceptQuest(questInfo.QuestId) &&
                     _questRegistry.TryGetQuest(questInfo.QuestId, out Quest? knownQuest))
                 {
                     var questChoices = knownQuest.FindSequence(0)?.Steps
@@ -300,8 +315,10 @@ internal sealed class GameUiController : IDisposable
                 continue;
             }
 
-            string? excelPrompt = ResolveReference(quest, dialogueChoice.ExcelSheet, dialogueChoice.Prompt);
-            string? excelAnswer = ResolveReference(quest, dialogueChoice.ExcelSheet, dialogueChoice.Answer);
+            string? excelPrompt = ResolveReference(quest, dialogueChoice.ExcelSheet, dialogueChoice.Prompt, false)
+                ?.GetString();
+            StringOrRegex? excelAnswer = ResolveReference(quest, dialogueChoice.ExcelSheet, dialogueChoice.Answer,
+                dialogueChoice.AnswerIsRegularExpression);
 
             if (actualPrompt == null && !string.IsNullOrEmpty(excelPrompt))
             {
@@ -309,7 +326,8 @@ internal sealed class GameUiController : IDisposable
                 continue;
             }
 
-            if (actualPrompt != null && (excelPrompt == null || !GameStringEquals(actualPrompt, excelPrompt)))
+            if (actualPrompt != null &&
+                (excelPrompt == null || !GameFunctions.GameStringEquals(actualPrompt, excelPrompt)))
             {
                 _logger.LogInformation("Unexpected excelPrompt: {ExcelPrompt}, actualPrompt: {ActualPrompt}",
                     excelPrompt, actualPrompt);
@@ -320,10 +338,22 @@ internal sealed class GameUiController : IDisposable
             {
                 _logger.LogTrace("Checking if {ActualAnswer} == {ExpectedAnswer}",
                     answers[i], excelAnswer);
-                if (GameStringEquals(answers[i], excelAnswer))
+                if (IsMatch(answers[i], excelAnswer))
                 {
                     _logger.LogInformation("Returning {Index}: '{Answer}' for '{Prompt}'",
                         i, answers[i], actualPrompt);
+
+                    // ensure we only open the dialog once
+                    if (quest.Id is SatisfactionSupplyNpcId)
+                    {
+                        if (_questController.GatheringQuest == null ||
+                            _questController.GatheringQuest.Sequence == 255)
+                            return null;
+
+                        _questController.GatheringQuest.SetSequence(1);
+                        _questController.ExecuteNextStep(QuestController.EAutomationType.CurrentQuestOnly);
+                    }
+
                     return i;
                 }
             }
@@ -333,13 +363,24 @@ internal sealed class GameUiController : IDisposable
         return null;
     }
 
+    private static bool IsMatch(string? actualAnswer, StringOrRegex? expectedAnswer)
+    {
+        if (actualAnswer == null && expectedAnswer == null)
+            return true;
+
+        if (actualAnswer == null || expectedAnswer == null)
+            return false;
+
+        return expectedAnswer.IsMatch(actualAnswer);
+    }
+
     private int? HandleInstanceListChoice(string? actualPrompt)
     {
         if (!_questController.IsRunning)
             return null;
 
-        string? expectedPrompt = _gameFunctions.GetDialogueTextByRowId("Addon", 2090);
-        if (GameStringEquals(actualPrompt, expectedPrompt))
+        string? expectedPrompt = _excelFunctions.GetDialogueTextByRowId("Addon", 2090, false).GetString();
+        if (GameFunctions.GameStringEquals(actualPrompt, expectedPrompt))
         {
             _logger.LogInformation("Selecting no prefered instance as answer for '{Prompt}'", actualPrompt);
             return 0; // any instance
@@ -419,8 +460,9 @@ internal sealed class GameUiController : IDisposable
                 continue;
             }
 
-            string? excelPrompt = ResolveReference(quest, dialogueChoice.ExcelSheet, dialogueChoice.Prompt);
-            if (excelPrompt == null || !GameStringEquals(actualPrompt, excelPrompt))
+            string? excelPrompt = ResolveReference(quest, dialogueChoice.ExcelSheet, dialogueChoice.Prompt, false)
+                ?.GetString();
+            if (excelPrompt == null || !GameFunctions.GameStringEquals(actualPrompt, excelPrompt))
             {
                 _logger.LogInformation("Unexpected excelPrompt: {ExcelPrompt}, actualPrompt: {ActualPrompt}",
                     excelPrompt, actualPrompt);
@@ -506,13 +548,13 @@ internal sealed class GameUiController : IDisposable
             string? excelName = entry.Name?.ToString();
             string? excelQuestion = entry.Question?.ToString();
 
-            if (excelQuestion != null && GameStringEquals(excelQuestion, actualPrompt))
+            if (excelQuestion != null && GameFunctions.GameStringEquals(excelQuestion, actualPrompt))
             {
                 warpId = entry.RowId;
                 warpText = excelQuestion;
                 return true;
             }
-            else if (excelName != null && GameStringEquals(excelName, actualPrompt))
+            else if (excelName != null && GameFunctions.GameStringEquals(excelName, actualPrompt))
             {
                 warpId = entry.RowId;
                 warpText = excelName;
@@ -642,31 +684,17 @@ internal sealed class GameUiController : IDisposable
         }
     }
 
-    /// <summary>
-    /// Ensures characters like '-' are handled equally in both strings.
-    /// </summary>
-    public static bool GameStringEquals(string? a, string? b)
-    {
-        if (a == null)
-            return b == null;
-
-        if (b == null)
-            return false;
-
-        return a.ReplaceLineEndings().Replace('\u2013', '-') == b.ReplaceLineEndings().Replace('\u2013', '-');
-    }
-
-    private string? ResolveReference(Quest quest, string? excelSheet, ExcelRef? excelRef)
+    private StringOrRegex? ResolveReference(Quest quest, string? excelSheet, ExcelRef? excelRef, bool isRegExp)
     {
         if (excelRef == null)
             return null;
 
         if (excelRef.Type == ExcelRef.EType.Key)
-            return _gameFunctions.GetDialogueText(quest, excelSheet, excelRef.AsKey());
+            return _excelFunctions.GetDialogueText(quest, excelSheet, excelRef.AsKey(), isRegExp);
         else if (excelRef.Type == ExcelRef.EType.RowId)
-            return _gameFunctions.GetDialogueTextByRowId(excelSheet, excelRef.AsRowId());
+            return _excelFunctions.GetDialogueTextByRowId(excelSheet, excelRef.AsRowId(), isRegExp);
         else if (excelRef.Type == ExcelRef.EType.RawString)
-            return excelRef.AsRawString();
+            return new StringOrRegex(excelRef.AsRawString());
 
         return null;
     }

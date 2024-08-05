@@ -15,7 +15,33 @@
           "TerritoryId": 613,
           "InteractionType": "Interact",
           "RequiredGatheredItems": [],
-          "AetheryteShortcut": "Ruby Sea - Tamamizu"
+          "AetheryteShortcut": "Ruby Sea - Tamamizu",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "ExcelSheet": "custom/004/CtsSfsCharacter3_00481",
+              "Prompt": "TEXT_CTSSFSCHARACTER3_00481_TOPMENU_000_000",
+              "Answer": "TEXT_CTSSFSCHARACTER3_00481_TOPMENU_000_001",
+              "AnswerIsRegularExpression": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "TerritoryId": 613,
+          "InteractionType": "None",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "ExcelSheet": "custom/004/CtsSfsCharacter3_00481",
+              "Prompt": "TEXT_CTSSFSCHARACTER3_00481_TOPMENU_000_000",
+              "Answer": "TEXT_CTSSFSCHARACTER3_00481_TOPMENU_000_004"
+            }
+          ]
         }
       ]
     }

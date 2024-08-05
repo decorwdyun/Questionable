@@ -25,7 +25,33 @@
             "Z": -65.14081
           },
           "TerritoryId": 956,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "ExcelSheet": "custom/008/CtsSfsCharacter10_00842",
+              "Prompt": "TEXT_CTSSFSCHARACTER10_00842_TOPMENU_000_000",
+              "Answer": "TEXT_CTSSFSCHARACTER10_00842_TOPMENU_000_001",
+              "AnswerIsRegularExpression": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "TerritoryId": 635,
+          "InteractionType": "None",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "ExcelSheet": "custom/008/CtsSfsCharacter10_00842",
+              "Prompt": "TEXT_CTSSFSCHARACTER10_00842_TOPMENU_000_000",
+              "Answer": "TEXT_CTSSFSCHARACTER10_00842_TOPMENU_000_004"
+            }
+          ]
         }
       ]
     }

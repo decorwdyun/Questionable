@@ -2,6 +2,7 @@
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.DependencyInjection;
+using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
 

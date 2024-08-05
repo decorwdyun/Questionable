@@ -14,6 +14,7 @@ using Questionable.Controller.Steps.Gathering;
 using Questionable.Controller.Steps.Interactions;
 using Questionable.Controller.Steps.Shared;
 using Questionable.External;
+using Questionable.Functions;
 using Questionable.GatheringPaths;
 using Questionable.Model.Gathering;
 

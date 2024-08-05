@@ -4,6 +4,7 @@ using Dalamud.Interface.Utility.Raii;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Common.Math;
 using Questionable.Data;
+using Questionable.Functions;
 using Questionable.Model.Questing;
 
 namespace Questionable.Windows.QuestComponents;
@@ -18,26 +19,26 @@ internal sealed class ARealmRebornComponent
     private static readonly QuestId[] RequiredAllianceRaidQuests =
         [new(1709), new(1200), new(1201), new(1202), new(1203), new(1474), new(494), new(495)];
 
-    private readonly GameFunctions _gameFunctions;
+    private readonly QuestFunctions _questFunctions;
     private readonly QuestData _questData;
     private readonly TerritoryData _territoryData;
     private readonly UiUtils _uiUtils;
 
-    public ARealmRebornComponent(GameFunctions gameFunctions, QuestData questData, TerritoryData territoryData,
+    public ARealmRebornComponent(QuestFunctions questFunctions, QuestData questData, TerritoryData territoryData,
         UiUtils uiUtils)
     {
-        _gameFunctions = gameFunctions;
+        _questFunctions = questFunctions;
         _questData = questData;
         _territoryData = territoryData;
         _uiUtils = uiUtils;
     }
 
-    public bool ShouldDraw => !_gameFunctions.IsQuestAcceptedOrComplete(ATimeForEveryPurpose) &&
-                              _gameFunctions.IsQuestComplete(TheUltimateWeapon);
+    public bool ShouldDraw => !_questFunctions.IsQuestAcceptedOrComplete(ATimeForEveryPurpose) &&
+                              _questFunctions.IsQuestComplete(TheUltimateWeapon);
 
     public void Draw()
     {
-        if (!_gameFunctions.IsQuestAcceptedOrComplete(GoodIntentions))
+        if (!_questFunctions.IsQuestAcceptedOrComplete(GoodIntentions))
             DrawPrimals();
 
         DrawAllianceRaids();
@@ -63,7 +64,7 @@ internal sealed class ARealmRebornComponent
 
     private void DrawAllianceRaids()
     {
-        bool complete = _gameFunctions.IsQuestComplete(RequiredAllianceRaidQuests.Last());
+        bool complete = _questFunctions.IsQuestComplete(RequiredAllianceRaidQuests.Last());
         bool hover = _uiUtils.ChecklistItem("Crystal Tower Raids", complete);
         if (complete || !hover)
             return;

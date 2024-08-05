@@ -25,7 +25,33 @@
           },
           "StopDistance": 5,
           "TerritoryId": 478,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "ExcelSheet": "custom/003/CtsSfsCharacter1_00386",
+              "Prompt": "TEXT_CTSSFSCHARACTER1_00386_TOPMENU_000_000",
+              "Answer": "TEXT_CTSSFSCHARACTER1_00386_TOPMENU_000_001",
+              "AnswerIsRegularExpression": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "TerritoryId": 635,
+          "InteractionType": "None",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "ExcelSheet": "custom/003/CtsSfsCharacter1_00386",
+              "Prompt": "TEXT_CTSSFSCHARACTER1_00386_TOPMENU_000_000",
+              "Answer": "TEXT_CTSSFSCHARACTER1_00386_TOPMENU_000_003"
+            }
+          ]
         }
       ]
     }

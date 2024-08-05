@@ -7,6 +7,7 @@ using Dalamud.Plugin.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Shared;
+using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
 

@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Questionable.Controller.NavigationOverrides;
 using Questionable.Controller.Steps.Common;
 using Questionable.Data;
+using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
 

@@ -5,6 +5,7 @@ using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using ImGuiNET;
 using Questionable.Controller;
 using Questionable.Data;
+using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
 
@@ -15,20 +16,20 @@ internal sealed class QuestTooltipComponent
     private readonly QuestRegistry _questRegistry;
     private readonly QuestData _questData;
     private readonly TerritoryData _territoryData;
-    private readonly GameFunctions _gameFunctions;
+    private readonly QuestFunctions _questFunctions;
     private readonly UiUtils _uiUtils;
 
     public QuestTooltipComponent(
         QuestRegistry questRegistry,
         QuestData questData,
         TerritoryData territoryData,
-        GameFunctions gameFunctions,
+        QuestFunctions questFunctions,
         UiUtils uiUtils)
     {
         _questRegistry = questRegistry;
         _questData = questData;
         _territoryData = territoryData;
-        _gameFunctions = gameFunctions;
+        _questFunctions = questFunctions;
         _uiUtils = uiUtils;
     }
 
@@ -161,7 +162,7 @@ internal sealed class QuestTooltipComponent
                 _ => "None",
             };
 
-            GrandCompany currentGrandCompany = _gameFunctions.GetGrandCompany();
+            GrandCompany currentGrandCompany = ~_questFunctions.GetGrandCompany();
             _uiUtils.ChecklistItem($"Grand Company: {gcName}", quest.GrandCompany == currentGrandCompany);
         }
 

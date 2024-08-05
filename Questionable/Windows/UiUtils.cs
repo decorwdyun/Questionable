@@ -4,28 +4,29 @@ using Dalamud.Interface.Colors;
 using Dalamud.Plugin;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using ImGuiNET;
+using Questionable.Functions;
 using Questionable.Model.Questing;
 
 namespace Questionable.Windows;
 
 internal sealed class UiUtils
 {
-    private readonly GameFunctions _gameFunctions;
+    private readonly QuestFunctions _questFunctions;
     private readonly IDalamudPluginInterface _pluginInterface;
 
-    public UiUtils(GameFunctions gameFunctions, IDalamudPluginInterface pluginInterface)
+    public UiUtils(QuestFunctions questFunctions, IDalamudPluginInterface pluginInterface)
     {
-        _gameFunctions = gameFunctions;
+        _questFunctions = questFunctions;
         _pluginInterface = pluginInterface;
     }
 
-    public (Vector4 color, FontAwesomeIcon icon, string status) GetQuestStyle(ElementId questElementId)
+    public (Vector4 color, FontAwesomeIcon icon, string status) GetQuestStyle(ElementId elementId)
     {
-        if (_gameFunctions.IsQuestAccepted(questElementId))
+        if (_questFunctions.IsQuestAccepted(elementId))
             return (ImGuiColors.DalamudYellow, FontAwesomeIcon.PersonWalkingArrowRight, "Active");
-        else if (_gameFunctions.IsQuestAcceptedOrComplete(questElementId))
+        else if (_questFunctions.IsQuestAcceptedOrComplete(elementId))
             return (ImGuiColors.ParsedGreen, FontAwesomeIcon.Check, "Complete");
-        else if (_gameFunctions.IsQuestLocked(questElementId))
+        else if (_questFunctions.IsQuestLocked(elementId))
             return (ImGuiColors.DalamudRed, FontAwesomeIcon.Times, "Locked");
         else
             return (ImGuiColors.DalamudYellow, FontAwesomeIcon.Running, "Available");

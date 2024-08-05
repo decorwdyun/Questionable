@@ -12,7 +12,7 @@ internal sealed class NextQuestValidator : IQuestValidator
         {
             yield return new ValidationIssue
             {
-                QuestId = quest.Id,
+                ElementId = quest.Id,
                 Sequence = (byte)invalidNextQuest.Sequence.Sequence,
                 Step = invalidNextQuest.StepId,
                 Type = EIssueType.InvalidNextQuestId,

@@ -15,7 +15,33 @@
           "TerritoryId": 635,
           "InteractionType": "Interact",
           "RequiredGatheredItems": [],
-          "AetheryteShortcut": "Rhalgr's Reach"
+          "AetheryteShortcut": "Rhalgr's Reach",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "ExcelSheet": "custom/004/CtsSfsCharacter2_00434",
+              "Prompt": "TEXT_CTSSFSCHARACTER2_00434_TOPMENU_000_000",
+              "Answer": "TEXT_CTSSFSCHARACTER2_00434_TOPMENU_000_001",
+              "AnswerIsRegularExpression": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "TerritoryId": 635,
+          "InteractionType": "None",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "ExcelSheet": "custom/004/CtsSfsCharacter2_00434",
+              "Prompt": "TEXT_CTSSFSCHARACTER2_00434_TOPMENU_000_000",
+              "Answer": "TEXT_CTSSFSCHARACTER2_00434_TOPMENU_000_003"
+            }
+          ]
         }
       ]
     }

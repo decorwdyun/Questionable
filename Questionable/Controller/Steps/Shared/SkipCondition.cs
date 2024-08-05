@@ -10,6 +10,7 @@ using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Utils;
+using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Common;
 using Questionable.Model.Questing;
@@ -41,17 +42,18 @@ internal static class SkipCondition
     internal sealed class CheckSkip(
         ILogger<CheckSkip> logger,
         GameFunctions gameFunctions,
+        QuestFunctions questFunctions,
         IClientState clientState) : ITask
     {
         public QuestStep Step { get; set; } = null!;
         public SkipStepConditions SkipConditions { get; set; } = null!;
-        public ElementId QuestElementId { get; set; } = null!;
+        public ElementId ElementId { get; set; } = null!;
 
-        public ITask With(QuestStep step, SkipStepConditions skipConditions, ElementId questElementId)
+        public ITask With(QuestStep step, SkipStepConditions skipConditions, ElementId elementId)
         {
             Step = step;
             SkipConditions = skipConditions;
-            QuestElementId = questElementId;
+            ElementId = elementId;
             return this;
         }
 
@@ -95,14 +97,14 @@ internal static class SkipCondition
             }
 
             if (SkipConditions.QuestsCompleted.Count > 0 &&
-                SkipConditions.QuestsCompleted.All(gameFunctions.IsQuestComplete))
+                SkipConditions.QuestsCompleted.All(questFunctions.IsQuestComplete))
             {
                 logger.LogInformation("Skipping step, all prequisite quests are complete");
                 return true;
             }
 
             if (SkipConditions.QuestsAccepted.Count > 0 &&
-                SkipConditions.QuestsAccepted.All(gameFunctions.IsQuestAccepted))
+                SkipConditions.QuestsAccepted.All(questFunctions.IsQuestAccepted))
             {
                 logger.LogInformation("Skipping step, all prequisite quests are accepted");
                 return true;
@@ -156,9 +158,9 @@ internal static class SkipCondition
                 return true;
             }
 
-            if (QuestElementId is QuestId questId)
+            if (ElementId is QuestId questId)
             {
-                QuestWork? questWork = gameFunctions.GetQuestEx(questId);
+                QuestWork? questWork = questFunctions.GetQuestEx(questId);
                 if (QuestWorkUtils.HasCompletionFlags(Step.CompletionQuestVariablesFlags) && questWork != null)
                 {
                     if (QuestWorkUtils.MatchesQuestWork(Step.CompletionQuestVariablesFlags, questWork.Value))
@@ -198,13 +200,13 @@ internal static class SkipCondition
                 }
             }
 
-            if (Step.PickUpQuestId != null && gameFunctions.IsQuestAcceptedOrComplete(Step.PickUpQuestId))
+            if (Step.PickUpQuestId != null && questFunctions.IsQuestAcceptedOrComplete(Step.PickUpQuestId))
             {
                 logger.LogInformation("Skipping step, as we have already picked up the relevant quest");
                 return true;
             }
 
-            if (Step.TurnInQuestId != null && gameFunctions.IsQuestComplete(Step.TurnInQuestId))
+            if (Step.TurnInQuestId != null && questFunctions.IsQuestComplete(Step.TurnInQuestId))
             {
                 logger.LogInformation("Skipping step, as we have already completed the relevant quest");
                 return true;

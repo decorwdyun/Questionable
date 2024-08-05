@@ -36,7 +36,7 @@ internal sealed class JsonSchemaValidator : IQuestValidator
             {
                 yield return new ValidationIssue
                 {
-                    QuestId = quest.Id,
+                    ElementId = quest.Id,
                     Sequence = null,
                     Step = null,
                     Type = EIssueType.InvalidJsonSchema,
@@ -47,7 +47,7 @@ internal sealed class JsonSchemaValidator : IQuestValidator
         }
     }
 
-    public void Enqueue(ElementId questElementId, JsonNode questNode) => _questNodes[questElementId] = questNode;
+    public void Enqueue(ElementId elementId, JsonNode questNode) => _questNodes[elementId] = questNode;
 
     public void Reset() => _questNodes.Clear();
 }

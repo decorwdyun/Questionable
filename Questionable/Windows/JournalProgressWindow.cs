@@ -12,6 +12,7 @@ using ImGuiNET;
 using LLib.ImGui;
 using Questionable.Controller;
 using Questionable.Data;
+using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Windows.QuestComponents;
 
@@ -21,7 +22,7 @@ internal sealed class JournalProgressWindow : LWindow, IDisposable
 {
     private readonly JournalData _journalData;
     private readonly QuestRegistry _questRegistry;
-    private readonly GameFunctions _gameFunctions;
+    private readonly QuestFunctions _questFunctions;
     private readonly UiUtils _uiUtils;
     private readonly QuestTooltipComponent _questTooltipComponent;
     private readonly IDalamudPluginInterface _pluginInterface;
@@ -37,7 +38,7 @@ internal sealed class JournalProgressWindow : LWindow, IDisposable
 
     public JournalProgressWindow(JournalData journalData,
         QuestRegistry questRegistry,
-        GameFunctions gameFunctions,
+        QuestFunctions questFunctions,
         UiUtils uiUtils,
         QuestTooltipComponent questTooltipComponent,
         IDalamudPluginInterface pluginInterface,
@@ -47,7 +48,7 @@ internal sealed class JournalProgressWindow : LWindow, IDisposable
     {
         _journalData = journalData;
         _questRegistry = questRegistry;
-        _gameFunctions = gameFunctions;
+        _questFunctions = questFunctions;
         _uiUtils = uiUtils;
         _questTooltipComponent = questTooltipComponent;
         _pluginInterface = pluginInterface;
@@ -327,7 +328,7 @@ internal sealed class JournalProgressWindow : LWindow, IDisposable
         {
             int available = genre.Quests.Count(x =>
                 _questRegistry.TryGetQuest(x.QuestId, out var quest) && !quest.Root.Disabled);
-            int completed = genre.Quests.Count(x => _gameFunctions.IsQuestComplete(x.QuestId));
+            int completed = genre.Quests.Count(x => _questFunctions.IsQuestComplete(x.QuestId));
             _genreCounts[genre] = (available, completed);
         }
 

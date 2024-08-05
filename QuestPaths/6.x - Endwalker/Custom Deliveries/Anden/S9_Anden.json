@@ -16,7 +16,33 @@
           "InteractionType": "Interact",
           "RequiredGatheredItems": [],
           "AetheryteShortcut": "Il Mheg - Lydha Lran",
-          "Fly": true
+          "Fly": true,
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "ExcelSheet": "custom/008/CtsSfsCharacter9_00815",
+              "Prompt": "TEXT_CTSSFSCHARACTER9_00815_TOPMENU_000_000",
+              "Answer": "TEXT_CTSSFSCHARACTER9_00815_TOPMENU_000_001",
+              "AnswerIsRegularExpression": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "TerritoryId": 635,
+          "InteractionType": "None",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "ExcelSheet": "custom/008/CtsSfsCharacter9_00815",
+              "Prompt": "TEXT_CTSSFSCHARACTER9_00815_TOPMENU_000_000",
+              "Answer": "TEXT_CTSSFSCHARACTER9_00815_TOPMENU_000_004"
+            }
+          ]
         }
       ]
     }
