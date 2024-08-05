@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using Dalamud.Game.Text;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using LLib.GameData;
 using Microsoft.Extensions.DependencyInjection;
 using Questionable.Controller.Steps.Common;
 using Questionable.Data;
-using Questionable.External;
 using Questionable.GatheringPaths;
 using Questionable.Model;
 using Questionable.Model.Gathering;
@@ -21,14 +21,15 @@ internal static class GatheringRequiredItems
         MovementController movementController,
         IClientState clientState,
         GatheringData gatheringData,
-        TerritoryData territoryData) : ITaskFactory
+        TerritoryData territoryData,
+        AetheryteData aetheryteData) : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
             foreach (var requiredGatheredItems in step.RequiredGatheredItems)
             {
                 if (!gatheringData.TryGetGatheringPointId(requiredGatheredItems.ItemId,
-                        clientState.LocalPlayer!.ClassJob.Id, out var gatheringPointId))
+                        (EClassJob)clientState.LocalPlayer!.ClassJob.Id, out var gatheringPointId))
                     throw new TaskException($"No gathering point found for item {requiredGatheredItems.ItemId}");
 
                 if (!AssemblyGatheringLocationLoader.GetLocations()
@@ -40,8 +41,18 @@ internal static class GatheringRequiredItems
 
                 if (gatheringRoot.AetheryteShortcut != null && clientState.TerritoryType != gatheringRoot.TerritoryId)
                 {
+                    ushort expectedTerritoryId = gatheringRoot.TerritoryId;
+                    if (gatheringRoot.AethernetShortcut != null)
+                        expectedTerritoryId = aetheryteData.TerritoryIds[gatheringRoot.AethernetShortcut.From];
+
                     yield return serviceProvider.GetRequiredService<AetheryteShortcut.UseAetheryteShortcut>()
-                        .With(null, gatheringRoot.AetheryteShortcut.Value, gatheringRoot.TerritoryId);
+                        .With(null, gatheringRoot.AetheryteShortcut.Value, expectedTerritoryId);
+                }
+
+                if (gatheringRoot.AethernetShortcut != null)
+                {
+                    yield return serviceProvider.GetRequiredService<AethernetShortcut.UseAethernetShortcut>()
+                        .With(gatheringRoot.AethernetShortcut.From, gatheringRoot.AethernetShortcut.To);
                 }
 
                 yield return new WaitConditionTask(() => clientState.TerritoryType == gatheringRoot.TerritoryId,

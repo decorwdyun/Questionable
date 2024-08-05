@@ -181,12 +181,14 @@ public sealed class RendererPlugin : IDalamudPlugin
                     group.Nodes.SelectMany(node => node.Locations
                         .SelectMany(x =>
                         {
+                            bool isUnsaved = false;
                             bool isCone = false;
                             int minimumAngle = 0;
                             int maximumAngle = 0;
                             if (_editorWindow.TryGetOverride(x.InternalId, out LocationOverride? locationOverride) &&
                                 locationOverride != null)
                             {
+                                isUnsaved = locationOverride.NeedsSave();
                                 if (locationOverride.IsCone())
                                 {
                                     isCone = true;
@@ -232,6 +234,7 @@ public sealed class RendererPlugin : IDalamudPlugin
                                     Enabled = true,
                                     overlayText =
                                         $"{location.Root.Groups.IndexOf(group)} // {node.DataId} / {node.Locations.IndexOf(x)}",
+                                    overlayBGColor = isUnsaved ? 0xFF2020FF : 0,
                                 },
                                 new Element(ElementType.CircleAtFixedCoordinates)
                                 {

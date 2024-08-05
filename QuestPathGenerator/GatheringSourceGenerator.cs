@@ -153,6 +153,7 @@ public class GatheringSourceGenerator : ISourceGenerator
                                 Assignment(nameof(GatheringRoot.TerritoryId), root.TerritoryId, default)
                                     .AsSyntaxNodeOrToken(),
                                 Assignment(nameof(GatheringRoot.AetheryteShortcut), root.AetheryteShortcut, null),
+                                Assignment(nameof(GatheringRoot.AethernetShortcut), root.AethernetShortcut, null),
                                 AssignmentList(nameof(GatheringRoot.Groups), root.Groups).AsSyntaxNodeOrToken()))));
         }
         catch (Exception e)

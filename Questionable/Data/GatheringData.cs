@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Dalamud.Plugin.Services;
+using LLib.GameData;
 using Lumina.Excel.GeneratedSheets;
 using Microsoft.Extensions.Logging;
 
@@ -58,11 +59,11 @@ internal sealed class GatheringData
             .ToDictionary(x => x.ItemId, x => x.NpcId);
     }
 
-    public bool TryGetGatheringPointId(uint itemId, uint classJobId, out ushort gatheringPointId)
+    public bool TryGetGatheringPointId(uint itemId, EClassJob classJobId, out ushort gatheringPointId)
     {
-        if (classJobId == 16)
+        if (classJobId == EClassJob.Miner)
             return _minerGatheringPoints.TryGetValue(itemId, out gatheringPointId);
-        else if (classJobId == 17)
+        else if (classJobId == EClassJob.Botanist)
             return _botanistGatheringPoints.TryGetValue(itemId, out gatheringPointId);
         else
         {

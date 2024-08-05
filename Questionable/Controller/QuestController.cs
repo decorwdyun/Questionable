@@ -33,6 +33,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
     private QuestProgress? _startedQuest;
     private QuestProgress? _nextQuest;
     private QuestProgress? _simulatedQuest;
+    private QuestProgress? _gatheringQuest;
     private EAutomationType _automationType;
 
     /// <summary>
@@ -79,6 +80,8 @@ internal sealed class QuestController : MiniTaskController<QuestController>
                 return (_simulatedQuest, ECurrentQuestType.Simulated);
             else if (_nextQuest != null && _gameFunctions.IsReadyToAcceptQuest(_nextQuest.Quest.Id))
                 return (_nextQuest, ECurrentQuestType.Next);
+            else if (_gatheringQuest != null)
+                return (_gatheringQuest, ECurrentQuestType.Gathering);
             else if (_startedQuest != null)
                 return (_startedQuest, ECurrentQuestType.Normal);
             else
@@ -91,6 +94,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
     public QuestProgress? StartedQuest => _startedQuest;
     public QuestProgress? SimulatedQuest => _simulatedQuest;
     public QuestProgress? NextQuest => _nextQuest;
+    public QuestProgress? GatheringQuest => _gatheringQuest;
 
     public string? DebugState { get; private set; }
 
@@ -102,6 +106,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
 
             _startedQuest = null;
             _nextQuest = null;
+            _gatheringQuest = null;
             _simulatedQuest = null;
             _safeAnimationEnd = DateTime.MinValue;
 
@@ -211,6 +216,17 @@ internal sealed class QuestController : MiniTaskController<QuestController>
                     _taskQueue.Count == 0 &&
                     _automationType == EAutomationType.Automatic)
                     ExecuteNextStep(_automationType);
+            }
+            else if (_gatheringQuest != null)
+            {
+                questToRun = _gatheringQuest;
+                currentSequence = _gatheringQuest.Sequence;
+                if (_gatheringQuest.Step == 0 &&
+                    _currentTask == null &&
+                    _taskQueue.Count == 0 &&
+                    _automationType == EAutomationType.Automatic)
+                    ExecuteNextStep(_automationType);
+
             }
             else
             {
@@ -404,6 +420,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
             _logger.LogInformation("Stopping automatic questing");
             _automationType = EAutomationType.Manual;
             _nextQuest = null;
+            _gatheringQuest = null;
         }
     }
 
@@ -425,6 +442,15 @@ internal sealed class QuestController : MiniTaskController<QuestController>
             _nextQuest = new QuestProgress(quest);
         else
             _nextQuest = null;
+    }
+
+    public void SetGatheringQuest(Quest? quest)
+    {
+        _logger.LogInformation("GatheringQuest: {QuestId}", quest?.Id);
+        if (quest != null)
+            _gatheringQuest = new QuestProgress(quest);
+        else
+            _gatheringQuest = null;
     }
 
     protected override void UpdateCurrentTask()
@@ -460,10 +486,11 @@ internal sealed class QuestController : MiniTaskController<QuestController>
             if (CurrentQuestDetails?.Progress.Quest.Id is SatisfactionSupplyNpcId &&
                 CurrentQuestDetails?.Progress.Sequence == 0 &&
                 CurrentQuestDetails?.Progress.Step == 255 &&
-                CurrentQuestDetails?.Type == ECurrentQuestType.Next)
+                CurrentQuestDetails?.Type == ECurrentQuestType.Gathering)
             {
                 _logger.LogInformation("Completed delivery quest");
-                SetNextQuest(null);
+                SetGatheringQuest(null);
+                Stop("Gathering quest complete");
             }
             else
             {
@@ -650,6 +677,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
     {
         Normal,
         Next,
+        Gathering,
         Simulated,
     }
 

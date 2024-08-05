@@ -56,17 +56,19 @@ internal sealed class EditorWindow : Window
         var gatheringLocations = _plugin.GetLocationsInTerritory(_clientState.TerritoryType);
         var location = gatheringLocations.SelectMany(context =>
                 context.Root.Groups.SelectMany(group =>
-                    group.Nodes
-                        .SelectMany(node => node.Locations
-                            .Where(location =>
-                            {
-                                if (_target != null)
-                                    return Vector3.Distance(location.Position, _target.Position) < 0.1f;
-                                else
-                                    return Vector3.Distance(location.Position, _clientState.LocalPlayer!.Position) < 3f;
-                            })
-                            .Select(location => new { Context = context, Node = node, Location = location }))))
-            .FirstOrDefault();
+                    group.Nodes.SelectMany(node => node.Locations
+                        .Select(location =>
+                        {
+                            float distance;
+                            if (_target != null)
+                                distance = Vector3.Distance(location.Position, _target.Position);
+                            else
+                                distance = Vector3.Distance(location.Position, _clientState.LocalPlayer!.Position);
+
+                            return new { Context = context, Node = node, Location = location, Distance = distance };
+                        })
+                        .Where(location => location.Distance < (_target == null ? 3f : 0.1f)))))
+            .MinBy(x => x.Distance);
         if (_target != null && _target.ObjectKind != ObjectKind.GatheringPoint)
         {
             _target = null;
@@ -80,10 +82,16 @@ internal sealed class EditorWindow : Window
             return;
         }
 
-        _target ??= _objectTable.FirstOrDefault(
-            x => x.ObjectKind == ObjectKind.GatheringPoint &&
-                 x.DataId == location.Node.DataId &&
-                 Vector3.Distance(location.Location.Position, _clientState.LocalPlayer!.Position) < 3f);
+        _target ??= _objectTable.Where(x => x.ObjectKind == ObjectKind.GatheringPoint && x.DataId == location.Node.DataId)
+            .Select(x => new
+            {
+                Object = x,
+                Distance = Vector3.Distance(location.Location.Position, _clientState.LocalPlayer!.Position)
+            })
+            .Where(x => x.Distance < 3f)
+            .OrderBy(x => x.Distance)
+            .Select(x => x.Object)
+            .FirstOrDefault();
         _targetLocation = (location.Context, location.Node, location.Location);
     }
 
@@ -103,7 +111,8 @@ internal sealed class EditorWindow : Window
             ImGui.Indent();
             ImGui.Text(context.File.Name);
             ImGui.Unindent();
-            ImGui.Text($"{_target.DataId} +{node.Locations.Count-1} / {location.InternalId.ToString().Substring(0, 4)}");
+            ImGui.Text(
+                $"{_target.DataId} +{node.Locations.Count - 1} / {location.InternalId.ToString().Substring(0, 4)}");
             ImGui.Text(string.Create(CultureInfo.InvariantCulture, $"{location.Position:G}"));
 
             if (!_changes.TryGetValue(location.InternalId, out LocationOverride? locationOverride))
@@ -128,7 +137,7 @@ internal sealed class EditorWindow : Window
                 _plugin.Redraw();
             }
 
-            bool unsaved = locationOverride is { MinimumAngle: not null, MaximumAngle: not null };
+            bool unsaved = locationOverride.NeedsSave();
             ImGui.BeginDisabled(!unsaved);
             if (unsaved)
                 ImGui.PushStyleColor(ImGuiCol.Button, ImGuiColors.DalamudRed);
@@ -138,6 +147,7 @@ internal sealed class EditorWindow : Window
                 location.MaximumAngle = locationOverride.MaximumAngle;
                 _plugin.Save(context.File, context.Root);
             }
+
             if (unsaved)
                 ImGui.PopStyleColor();
 
@@ -222,5 +232,10 @@ internal sealed class LocationOverride
     public bool IsCone()
     {
         return MinimumAngle != null && MaximumAngle != null && MinimumAngle != MaximumAngle;
+    }
+
+    public bool NeedsSave()
+    {
+        return MinimumAngle != null && MaximumAngle != null;
     }
 }

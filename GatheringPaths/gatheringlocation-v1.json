@@ -25,6 +25,15 @@
     "AetheryteShortcut": {
       "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Aetheryte"
     },
+    "AethernetShortcut": {
+      "type": "array",
+      "description": "A pair of aethernet locations (from + to) to use as a shortcut",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/AethernetShard"
+      }
+    },
     "Groups": {
       "type": "array",
       "items": {

@@ -45,7 +45,7 @@ internal static class AethernetShortcut
         public SkipAetheryteCondition SkipConditions { get; set; } = null!;
 
         public ITask With(EAetheryteLocation from, EAetheryteLocation to,
-            SkipAetheryteCondition? skipConditions)
+            SkipAetheryteCondition? skipConditions = null)
         {
             From = from;
             To = to;

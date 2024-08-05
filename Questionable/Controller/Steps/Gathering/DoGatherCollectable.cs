@@ -2,6 +2,7 @@
 using Dalamud.Game.Text;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Component.GUI;
+using LLib.GameData;
 using LLib.GameUI;
 using Microsoft.Extensions.Logging;
 using Questionable.Model.Gathering;
@@ -138,7 +139,7 @@ internal sealed class DoGatherCollectable(
 
     private EAction PickAction(EAction minerAction, EAction botanistAction)
     {
-        if (clientState.LocalPlayer?.ClassJob.Id == 16)
+        if ((EClassJob?)clientState.LocalPlayer?.ClassJob.Id == EClassJob.Miner)
             return minerAction;
         else
             return botanistAction;

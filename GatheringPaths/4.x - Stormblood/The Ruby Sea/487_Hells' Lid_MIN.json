@@ -2,7 +2,11 @@
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
   "Author": "liza",
   "TerritoryId": 613,
-  "AetheryteShortcut": "Ruby Sea - Onokoro",
+  "AetheryteShortcut": "Kugane",
+  "AethernetShortcut": [
+    "[Kugane] Aetheryte Plaza",
+    "[Kugane] The Ruby Price"
+  ],
   "Groups": [
     {
       "Nodes": [
@@ -99,6 +103,56 @@
               },
               "MinimumAngle": 205,
               "MaximumAngle": 335
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Nodes": [
+        {
+          "DataId": 32137,
+          "Locations": [
+            {
+              "Position": {
+                "X": 136.1673,
+                "Y": 35.7457,
+                "Z": 802.5483
+              },
+              "MinimumAngle": 175,
+              "MaximumAngle": 300
+            }
+          ]
+        },
+        {
+          "DataId": 32138,
+          "Locations": [
+            {
+              "Position": {
+                "X": 120.3011,
+                "Y": 33.62519,
+                "Z": 797.1313
+              },
+              "MinimumAngle": 100,
+              "MaximumAngle": 215
+            },
+            {
+              "Position": {
+                "X": 137.5746,
+                "Y": 35.89635,
+                "Z": 805.4796
+              },
+              "MinimumAngle": 195,
+              "MaximumAngle": 325
+            },
+            {
+              "Position": {
+                "X": 136.7552,
+                "Y": 38.41375,
+                "Z": 817.2667
+              },
+              "MinimumAngle": 215,
+              "MaximumAngle": 325
             }
           ]
         }

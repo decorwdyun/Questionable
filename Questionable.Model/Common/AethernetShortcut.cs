@@ -1,8 +1,7 @@
 ﻿using System.Text.Json.Serialization;
-using Questionable.Model.Common;
 using Questionable.Model.Questing.Converter;
 
-namespace Questionable.Model.Questing;
+namespace Questionable.Model.Common;
 
 [JsonConverter(typeof(AethernetShortcutConverter))]
 public sealed class AethernetShortcut

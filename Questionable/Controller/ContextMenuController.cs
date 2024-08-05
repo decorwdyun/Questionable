@@ -4,8 +4,11 @@ using Dalamud.Game.Gui.ContextMenu;
 using Dalamud.Game.Text;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using FFXIVClientStructs.FFXIV.Client.UI.Agent;
+using LLib.GameData;
 using Microsoft.Extensions.Logging;
 using Questionable.Data;
+using Questionable.GameStructs;
 using Questionable.Model;
 using Questionable.Model.Questing;
 
@@ -59,7 +62,7 @@ internal sealed class ContextMenuController : IDisposable
         if (itemId >= 500_000)
             itemId -= 500_000;
 
-        if (!_gatheringData.TryGetGatheringPointId(itemId, _clientState.LocalPlayer!.ClassJob.Id, out _))
+        if (!_gatheringData.TryGetGatheringPointId(itemId, (EClassJob)_clientState.LocalPlayer!.ClassJob.Id, out _))
         {
             _logger.LogInformation("No gathering point found for current job.");
             return;
@@ -72,12 +75,23 @@ internal sealed class ContextMenuController : IDisposable
             if (collectability == 0)
                 return;
 
+            unsafe
+            {
+                var agentSatisfactionSupply = AgentSatisfactionSupply.Instance();
+                if (agentSatisfactionSupply->IsAgentActive())
+                {
+                    quantityToGather = Math.Min(agentSatisfactionSupply->RemainingAllowances,
+                        ((AgentSatisfactionSupply2*)agentSatisfactionSupply)->TurnInsToNextRank);
+                }
+            }
+
             args.AddMenuItem(new MenuItem
             {
                 Prefix = SeIconChar.Hyadelyn,
                 PrefixColor = 52,
                 Name = "Gather with Questionable",
                 OnClicked = _ => StartGathering(npcId, itemId, quantityToGather, collectability),
+                IsEnabled = quantityToGather > 0,
             });
         }
     }
@@ -97,7 +111,7 @@ internal sealed class ContextMenuController : IDisposable
                     Collectability = collectability
                 }
             ];
-            _questController.SetNextQuest(quest);
+            _questController.SetGatheringQuest(quest);
             _questController.ExecuteNextStep(QuestController.EAutomationType.CurrentQuestOnly);
         }
         else
