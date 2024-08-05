@@ -52,6 +52,9 @@ internal sealed class DoGatherCollectable(
             }
         }
 
+        if (gameFunctions.GetFreeInventorySlots() == 0)
+            throw new TaskException("Inventory full");
+
         NodeCondition? nodeCondition = GetNodeCondition();
         if (nodeCondition == null)
             return ETaskResult.TaskComplete;

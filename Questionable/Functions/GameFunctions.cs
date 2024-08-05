@@ -477,4 +477,30 @@ internal sealed unsafe class GameFunctions
                LAddon.IsAddonReady(fade) &&
                fade->IsVisible;
     }
+
+    public int GetFreeInventorySlots()
+    {
+        InventoryManager* inventoryManager = InventoryManager.Instance();
+        if (inventoryManager == null)
+            return 0;
+
+        int slots = 0;
+        for (InventoryType inventoryType = InventoryType.Inventory1;
+             inventoryType <= InventoryType.Inventory4;
+             ++inventoryType)
+        {
+            InventoryContainer* inventoryContainer = inventoryManager->GetInventoryContainer(inventoryType);
+            if (inventoryContainer == null)
+                continue;
+
+            for (int i = 0; i < inventoryContainer->Size; ++i)
+            {
+                InventoryItem* item = inventoryContainer->GetInventorySlot(i);
+                if (item == null || item->ItemId == 0)
+                    ++slots;
+            }
+        }
+
+        return slots;
+    }
 }

@@ -4,12 +4,14 @@ using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using LLib.GameUI;
+using Questionable.Functions;
 using Questionable.Model.Gathering;
 
 namespace Questionable.Controller.Steps.Gathering;
 
 internal sealed class DoGather(
     GatheringController gatheringController,
+    GameFunctions gameFunctions,
     IGameGui gameGui,
     ICondition condition) : ITask
 {
@@ -32,6 +34,9 @@ internal sealed class DoGather(
     {
         if (gatheringController.HasNodeDisappeared(_currentNode))
             return ETaskResult.TaskComplete;
+
+        if (gameFunctions.GetFreeInventorySlots() == 0)
+            throw new TaskException("Inventory full");
 
         if (condition[ConditionFlag.Gathering])
         {
