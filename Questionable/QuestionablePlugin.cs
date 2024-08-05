@@ -164,6 +164,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
     {
         serviceCollection.AddSingleton<MovementController>();
         serviceCollection.AddSingleton<MovementOverrideController>();
+        serviceCollection.AddSingleton<GatheringPointRegistry>();
         serviceCollection.AddSingleton<QuestRegistry>();
         serviceCollection.AddSingleton<QuestController>();
         serviceCollection.AddSingleton<GameUiController>();
@@ -211,6 +212,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
     private static void Initialize(IServiceProvider serviceProvider)
     {
         serviceProvider.GetRequiredService<QuestRegistry>().Reload();
+        serviceProvider.GetRequiredService<GatheringPointRegistry>().Reload();
         serviceProvider.GetRequiredService<CommandHandler>();
         serviceProvider.GetRequiredService<ContextMenuController>();
         serviceProvider.GetRequiredService<DalamudInitializer>();

@@ -1,16 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Dalamud.Plugin.Services;
 using LLib.GameData;
 using Lumina.Excel.GeneratedSheets;
 using Microsoft.Extensions.Logging;
+using Questionable.Model.Gathering;
 
 namespace Questionable.Data;
 
 internal sealed class GatheringData
 {
-    private readonly Dictionary<uint, ushort> _minerGatheringPoints = [];
-    private readonly Dictionary<uint, ushort> _botanistGatheringPoints = [];
+    private readonly Dictionary<uint, GatheringPointId> _minerGatheringPoints = [];
+    private readonly Dictionary<uint, GatheringPointId> _botanistGatheringPoints = [];
     private readonly Dictionary<uint, ushort> _itemIdToCollectability;
     private readonly Dictionary<uint, uint> _npcForCustomDeliveries;
 
@@ -27,9 +29,9 @@ internal sealed class GatheringData
                 if (gatheringItemToItem.TryGetValue((uint)gatheringItemId, out uint itemId))
                 {
                     if (gatheringPointBase.GatheringType.Row is 0 or 1)
-                        _minerGatheringPoints[itemId] = (ushort)gatheringPointBase.RowId;
+                        _minerGatheringPoints[itemId] = new GatheringPointId((ushort)gatheringPointBase.RowId);
                     else if (gatheringPointBase.GatheringType.Row is 2 or 3)
-                        _botanistGatheringPoints[itemId] = (ushort)gatheringPointBase.RowId;
+                        _botanistGatheringPoints[itemId] = new GatheringPointId((ushort)gatheringPointBase.RowId);
                 }
             }
         }
@@ -59,7 +61,8 @@ internal sealed class GatheringData
             .ToDictionary(x => x.ItemId, x => x.NpcId);
     }
 
-    public bool TryGetGatheringPointId(uint itemId, EClassJob classJobId, out ushort gatheringPointId)
+    public bool TryGetGatheringPointId(uint itemId, EClassJob classJobId,
+        [NotNullWhen(true)] out GatheringPointId? gatheringPointId)
     {
         if (classJobId == EClassJob.Miner)
             return _minerGatheringPoints.TryGetValue(itemId, out gatheringPointId);
@@ -67,7 +70,7 @@ internal sealed class GatheringData
             return _botanistGatheringPoints.TryGetValue(itemId, out gatheringPointId);
         else
         {
-            gatheringPointId = 0;
+            gatheringPointId = null;
             return false;
         }
     }

@@ -16,13 +16,15 @@ public static partial class AssemblyGatheringLocationLoader
         if (_locations == null)
         {
             _locations = [];
+#if RELEASE
             LoadLocations();
+#endif
         }
 
         return _locations ?? throw new InvalidOperationException("location data is not initialized");
     }
 
-    public static Stream QuestSchema =>
+    public static Stream GatheringSchema =>
         typeof(AssemblyGatheringLocationLoader).Assembly.GetManifestResourceStream("Questionable.GatheringPaths.GatheringLocationSchema")!;
 
     [SuppressMessage("ReSharper", "UnusedMember.Local")]

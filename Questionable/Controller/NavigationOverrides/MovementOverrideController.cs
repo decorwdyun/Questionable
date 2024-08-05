@@ -13,7 +13,7 @@ internal sealed class MovementOverrideController
     [
         new BlacklistedArea(1191, new(-223.0412f, 31.937134f, -584.03906f), 5f, 7.75f),
 
-        // limsa, aftcastle to baderon
+        // limsa, aftcastle to Baderon
         new BlacklistedPoint(128, new(2f, 40.25f, 36.5f), new(0.25f, 40.25f, 36.5f)),
 
         // New Gridania, Carline Canopy stairs
@@ -28,7 +28,7 @@ internal sealed class MovementOverrideController
         new BlacklistedPoint(132, new(45.5f, -8f, 101f), new(50.53978f, -8.046954f, 101.06045f)),
         new BlacklistedPoint(132, new(48.5f, -8f, 98.25f), new(50.53978f, -8.046954f, 101.06045f)),
 
-        // ul'dah lamp near adventuer's guild
+        // ul'dah lamp near adventurers' guild
         new BlacklistedPoint(130, new(59.5f, 4.25f, -118f), new(60.551353f, 4f, -119.76446f)),
 
         // eastern thanalan
@@ -37,7 +37,7 @@ internal sealed class MovementOverrideController
         // southern thanalan
         new BlacklistedPoint(146, new(-201.75f, 10.5f, -265.5f), new(-203.75235f, 10.130764f, -265.15314f)),
 
-        // lower la noscea - moraby drydocks aetheryte
+        // lower la noscea - Moraby Drydocks aetheryte
         new BlacklistedArea(135, new(156.11499f, 15.518433f, 673.21277f), 0.5f, 5f),
 
         // coerthas central highlands
@@ -55,8 +55,12 @@ internal sealed class MovementOverrideController
         // moghome, mogmug's trial
         new BlacklistedPoint(400, new(384, -74, 648.75f), new(386.0543f, -72.409454f, 652.0184f), 3),
 
-        // leaving idyllshiret through the west gate attempts to run into this wall
+        // leaving Idyllshire through the west gate attempts to run into this wall
         new BlacklistedPoint(399, new(-514.4851f, 149.63762f, -480.58087f), new(-528.78656f, 151.17374f, -473.07077f), 5, true),
+
+        // Idyllshire: random rocks in the north, passable one way only
+        new BlacklistedPoint(478, new(14.5f, 215.25f, -101.5f), new(18.133032f, 215.44998f, -107.83075f), 5),
+        new BlacklistedPoint(478, new(11, 215.5f, -104.5f), new(18.133032f, 215.44998f, -107.83075f), 5),
 
         new BlacklistedPoint(1189, new(574f, -142.25f, 504.25f), new(574.44183f, -142.12766f, 507.60065f)),
 
@@ -66,7 +70,7 @@ internal sealed class MovementOverrideController
         // yak t'el, rock near cenote jayunja
         new BlacklistedPoint(1189, new(-115.75f, -213.75f, 336.5f), new(-112.40265f, -215.01514f, 339.0067f), 2),
 
-        // sheshenewezi springs aetheryte: couple of barrel rings that get in the way if you go north
+        // sheshenewezi springs aetheryte: a couple of barrel rings that get in the way if you go north
         new BlacklistedPoint(1190, new(-292.29004f, 18.598045f, -133.83907f), new(-288.20895f, 18.652182f, -132.67445f),
             4),
 

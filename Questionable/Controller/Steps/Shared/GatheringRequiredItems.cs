@@ -19,6 +19,7 @@ internal static class GatheringRequiredItems
     internal sealed class Factory(
         IServiceProvider serviceProvider,
         MovementController movementController,
+        GatheringPointRegistry gatheringPointRegistry,
         IClientState clientState,
         GatheringData gatheringData,
         TerritoryData territoryData,
@@ -34,11 +35,10 @@ internal static class GatheringRequiredItems
                     classJob = (EClassJob)requiredGatheredItems.ClassJob.Value;
 
                 if (!gatheringData.TryGetGatheringPointId(requiredGatheredItems.ItemId, classJob,
-                        out var gatheringPointId))
+                        out GatheringPointId? gatheringPointId))
                     throw new TaskException($"No gathering point found for item {requiredGatheredItems.ItemId}");
 
-                if (!AssemblyGatheringLocationLoader.GetLocations()
-                        .TryGetValue(gatheringPointId, out GatheringRoot? gatheringRoot))
+                if (!gatheringPointRegistry.TryGetGatheringPoint(gatheringPointId, out GatheringRoot? gatheringRoot))
                     throw new TaskException($"No path found for gathering point {gatheringPointId}");
 
                 if (classJob != currentClassJob)
@@ -92,10 +92,10 @@ internal static class GatheringRequiredItems
 
     internal sealed class StartGathering(GatheringController gatheringController) : ITask
     {
-        private ushort _gatheringPointId;
+        private GatheringPointId _gatheringPointId = null!;
         private GatheredItem _gatheredItem = null!;
 
-        public ITask With(ushort gatheringPointId, GatheredItem gatheredItem)
+        public ITask With(GatheringPointId gatheringPointId, GatheredItem gatheredItem)
         {
             _gatheringPointId = gatheringPointId;
             _gatheredItem = gatheredItem;

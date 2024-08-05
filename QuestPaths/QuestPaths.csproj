@@ -22,6 +22,7 @@
         <EmbeddedResource Include="quest-v1.json">
             <LogicalName>Questionable.QuestPaths.QuestSchema</LogicalName>
         </EmbeddedResource>
+        <AdditionalFiles Include="4.x - Stormblood\Class Quests\BTN\2623_The White Death.json" />
         <AdditionalFiles Include="quest-v1.json" />
         <AdditionalFiles Include="..\Questionable.Model\common-schema.json" />
     </ItemGroup>

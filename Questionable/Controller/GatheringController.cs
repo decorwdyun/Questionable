@@ -23,6 +23,7 @@ namespace Questionable.Controller;
 internal sealed unsafe class GatheringController : MiniTaskController<GatheringController>
 {
     private readonly MovementController _movementController;
+    private readonly GatheringPointRegistry _gatheringPointRegistry;
     private readonly GameFunctions _gameFunctions;
     private readonly NavmeshIpc _navmeshIpc;
     private readonly IObjectTable _objectTable;
@@ -33,6 +34,7 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
 
     public GatheringController(
         MovementController movementController,
+        GatheringPointRegistry gatheringPointRegistry,
         GameFunctions gameFunctions,
         NavmeshIpc navmeshIpc,
         IObjectTable objectTable,
@@ -43,6 +45,7 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
         : base(chatGui, logger)
     {
         _movementController = movementController;
+        _gatheringPointRegistry = gatheringPointRegistry;
         _gameFunctions = gameFunctions;
         _navmeshIpc = navmeshIpc;
         _objectTable = objectTable;
@@ -52,8 +55,8 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
 
     public bool Start(GatheringRequest gatheringRequest)
     {
-        if (!AssemblyGatheringLocationLoader.GetLocations()
-                .TryGetValue(gatheringRequest.GatheringPointId, out GatheringRoot? gatheringRoot))
+        if (!_gatheringPointRegistry.TryGetGatheringPoint(gatheringRequest.GatheringPointId,
+                out GatheringRoot? gatheringRoot))
         {
             _logger.LogError("Unable to resolve gathering point, no path found for {ItemId} / point {PointId}",
                 gatheringRequest.ItemId, gatheringRequest.GatheringPointId);
@@ -190,7 +193,7 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
     }
 
     public sealed record GatheringRequest(
-        ushort GatheringPointId,
+        GatheringPointId GatheringPointId,
         uint ItemId,
         int Quantity,
         ushort Collectability = 0);

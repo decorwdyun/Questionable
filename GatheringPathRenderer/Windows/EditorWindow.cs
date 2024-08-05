@@ -52,6 +52,13 @@ internal sealed class EditorWindow : Window
 
     public override void Update()
     {
+        if (!_clientState.IsLoggedIn || _clientState.LocalPlayer == null)
+        {
+            _target = null;
+            _targetLocation = null;
+            return;
+        }
+
         _target = _targetManager.Target;
         var gatheringLocations = _plugin.GetLocationsInTerritory(_clientState.TerritoryType);
         var location = gatheringLocations.SelectMany(context =>
@@ -63,7 +70,7 @@ internal sealed class EditorWindow : Window
                             if (_target != null)
                                 distance = Vector3.Distance(location.Position, _target.Position);
                             else
-                                distance = Vector3.Distance(location.Position, _clientState.LocalPlayer!.Position);
+                                distance = Vector3.Distance(location.Position, _clientState.LocalPlayer.Position);
 
                             return new { Context = context, Node = node, Location = location, Distance = distance };
                         })
@@ -86,7 +93,7 @@ internal sealed class EditorWindow : Window
             .Select(x => new
             {
                 Object = x,
-                Distance = Vector3.Distance(location.Location.Position, _clientState.LocalPlayer!.Position)
+                Distance = Vector3.Distance(location.Location.Position, _clientState.LocalPlayer.Position)
             })
             .Where(x => x.Distance < 3f)
             .OrderBy(x => x.Distance)
