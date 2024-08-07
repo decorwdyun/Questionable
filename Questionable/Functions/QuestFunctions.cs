@@ -172,8 +172,11 @@ internal sealed unsafe class QuestFunctions
             return default;
 
         // it can sometimes happen (although this isn't reliably reproducible) that the quest returned here
-        // is one you've just completed.
-        if (!IsReadyToAcceptQuest(currentQuest))
+        // is one you've just completed. We return 255 as sequence here, since that is the end of said quest;
+        // but this is just really hoping that this breaks nothing.
+        if (IsQuestComplete(currentQuest))
+            return (currentQuest, 255);
+        else if (!IsReadyToAcceptQuest(currentQuest))
             return default;
 
         // if we're not at a high enough level to continue, we also ignore it
