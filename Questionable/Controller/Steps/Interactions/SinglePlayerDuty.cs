@@ -22,7 +22,7 @@ internal static class SinglePlayerDuty
             [
                 serviceProvider.GetRequiredService<DisableYesAlready>(),
                 serviceProvider.GetRequiredService<Interact.DoInteract>()
-                    .With(step.DataId.Value, true),
+                    .With(step.DataId.Value, quest, EInteractionType.None, true),
                 serviceProvider.GetRequiredService<RestoreYesAlready>()
             ];
         }

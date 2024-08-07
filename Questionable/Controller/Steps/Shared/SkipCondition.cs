@@ -158,12 +158,12 @@ internal static class SkipCondition
                 return true;
             }
 
-            if (ElementId is QuestId questId)
+            if (ElementId is QuestId || ElementId is LeveId)
             {
-                QuestWork? questWork = questFunctions.GetQuestEx(questId);
+                QuestProgressInfo? questWork = questFunctions.GetQuestProgressInfo(ElementId);
                 if (QuestWorkUtils.HasCompletionFlags(Step.CompletionQuestVariablesFlags) && questWork != null)
                 {
-                    if (QuestWorkUtils.MatchesQuestWork(Step.CompletionQuestVariablesFlags, questWork.Value))
+                    if (QuestWorkUtils.MatchesQuestWork(Step.CompletionQuestVariablesFlags, questWork))
                     {
                         logger.LogInformation("Skipping step, as quest variables match (step is complete)");
                         return true;
@@ -172,7 +172,7 @@ internal static class SkipCondition
 
                 if (Step is { SkipConditions.StepIf: { } conditions } && questWork != null)
                 {
-                    if (QuestWorkUtils.MatchesQuestWork(conditions.CompletionQuestVariablesFlags, questWork.Value))
+                    if (QuestWorkUtils.MatchesQuestWork(conditions.CompletionQuestVariablesFlags, questWork))
                     {
                         logger.LogInformation("Skipping step, as quest variables match (step can be skipped)");
                         return true;
@@ -181,8 +181,7 @@ internal static class SkipCondition
 
                 if (Step is { RequiredQuestVariables: { } requiredQuestVariables } && questWork != null)
                 {
-                    if (!QuestWorkUtils.MatchesRequiredQuestWorkConfig(requiredQuestVariables, questWork.Value,
-                            logger))
+                    if (!QuestWorkUtils.MatchesRequiredQuestWorkConfig(requiredQuestVariables, questWork, logger))
                     {
                         logger.LogInformation("Skipping step, as required variables do not match");
                         return true;

@@ -6,6 +6,8 @@ using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using FFXIVClientStructs.FFXIV.Client.Game.Event;
+using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps;
@@ -17,6 +19,7 @@ using Questionable.External;
 using Questionable.Functions;
 using Questionable.GatheringPaths;
 using Questionable.Model.Gathering;
+using Questionable.Model.Questing;
 
 namespace Questionable.Controller;
 
@@ -119,6 +122,16 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
 
         var currentNode = _currentRequest.Nodes[_currentRequest.CurrentIndex++ % _currentRequest.Nodes.Count];
 
+        var director = UIState.Instance()->DirectorTodo.Director;
+        if (director != null && director->EventHandlerInfo != null &&
+            director->EventHandlerInfo->EventId.ContentId == EventHandlerType.GatheringLeveDirector)
+        {
+            if (director->Sequence == 254)
+                return;
+
+            _taskQueue.Enqueue(new WaitAtEnd.WaitDelay());
+        }
+
         _taskQueue.Enqueue(_serviceProvider.GetRequiredService<MountTask>()
             .With(_currentRequest.Root.TerritoryId, MountTask.EMountIf.Always));
         if (currentNode.Locations.Count > 1)
@@ -142,7 +155,7 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
         _taskQueue.Enqueue(_serviceProvider.GetRequiredService<MoveToLandingLocation>()
             .With(_currentRequest.Root.TerritoryId, currentNode));
         _taskQueue.Enqueue(_serviceProvider.GetRequiredService<Interact.DoInteract>()
-            .With(currentNode.DataId, true));
+            .With(currentNode.DataId, null, EInteractionType.None, true));
         _taskQueue.Enqueue(_serviceProvider.GetRequiredService<DoGather>()
             .With(_currentRequest.Data, currentNode));
         if (_currentRequest.Data.Collectability > 0)
@@ -195,6 +208,7 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
     public sealed record GatheringRequest(
         GatheringPointId GatheringPointId,
         uint ItemId,
+        uint AlternativeItemId,
         int Quantity,
         ushort Collectability = 0);
 

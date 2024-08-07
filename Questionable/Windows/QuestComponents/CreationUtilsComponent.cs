@@ -9,8 +9,11 @@ using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
+using FFXIVClientStructs.FFXIV.Client.Game.Event;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
+using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using ImGuiNET;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller;
@@ -93,12 +96,33 @@ internal sealed class CreationUtilsComponent
                         break;
 
                     case 1:
-                        _questRegistry.TryGetQuest(questManager->NormalQuests[trackedQuest.Index].QuestId,
-                            out var quest);
+                        //_questRegistry.TryGetQuest(questManager->NormalQuests[trackedQuest.Index].QuestId,
+                        //    out var quest);
                         ImGui.Text(
-                            $"Tracked quest: {questManager->NormalQuests[trackedQuest.Index].QuestId}, {trackedQuest.Index}: {quest?.Info.Name}");
+                            $"Quest: {questManager->NormalQuests[trackedQuest.Index].QuestId}, {trackedQuest.Index}");
+                        break;
+
+                    case 2:
+                        ImGui.Text($"Leve: {questManager->LeveQuests[trackedQuest.Index].LeveId}, {trackedQuest.Index}");
                         break;
                 }
+            }
+        }
+#endif
+
+#if false
+        var director = UIState.Instance()->DirectorTodo.Director;
+        if (director != null)
+        {
+            ImGui.Text($"Director: {director->ContentId}");
+            ImGui.Text($"Seq: {director->Sequence}");
+            ImGui.Text($"Ico: {director->IconId}");
+            if (director->EventHandlerInfo != null)
+            {
+                ImGui.Text($"  EHI: {director->EventHandlerInfo->EventId.ContentId}");
+                ImGui.Text($"  EHI: {director->EventHandlerInfo->EventId.Id}");
+                ImGui.Text($"  EHI: {director->EventHandlerInfo->EventId.EntryId}");
+                ImGui.Text($"  EHI: {director->EventHandlerInfo->Flags}");
             }
         }
 #endif

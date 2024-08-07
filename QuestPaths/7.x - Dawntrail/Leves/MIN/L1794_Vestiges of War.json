@@ -1,0 +1,39 @@
+﻿{
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "Position": {
+            "X": 664.32874,
+            "Y": 24.373428,
+            "Z": -85.7219
+          },
+          "TerritoryId": 1189,
+          "InteractionType": "InitiateLeve",
+          "AetheryteShortcut": "Yak T'el - Mamook",
+          "Fly": true,
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
+          }
+        },
+        {
+          "TerritoryId": 1189,
+          "InteractionType": "None",
+          "RequiredGatheredItems": [
+            {
+              "ItemId": 2003552,
+              "AlternativeItemId": 2003553,
+              "ItemCount": 999
+            }
+          ],
+          "$.0": "41635 → 970"
+        }
+      ]
+    }
+  ]
+}

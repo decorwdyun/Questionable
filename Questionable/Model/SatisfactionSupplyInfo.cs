@@ -1,4 +1,6 @@
-﻿using Lumina.Excel.GeneratedSheets;
+﻿using System.Collections.Generic;
+using LLib.GameData;
+using Lumina.Excel.GeneratedSheets;
 using Questionable.Model.Questing;
 
 namespace Questionable.Model;
@@ -20,4 +22,9 @@ internal sealed class SatisfactionSupplyInfo : IQuestInfo
     public ushort Level { get; }
     public EBeastTribe BeastTribe => EBeastTribe.None;
     public bool IsMainScenarioQuest => false;
+
+    /// <summary>
+    /// We don't have collectables implemented for any other class.
+    /// </summary>
+    public IReadOnlyList<EClassJob> ClassJobs { get; } = [EClassJob.Miner, EClassJob.Botanist];
 }

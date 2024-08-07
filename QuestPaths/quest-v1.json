@@ -121,7 +121,8 @@
                     "Dive",
                     "Instruction",
                     "AcceptQuest",
-                    "CompleteQuest"
+                    "CompleteQuest",
+                    "InitiateLeve"
                   ]
                 },
                 "Disabled": {
@@ -324,6 +325,10 @@
                     "type": "object",
                     "properties": {
                       "ItemId": {
+                        "type": "number"
+                      },
+                      "AlternativeItemId": {
+                        "description": "For leves that allow you to gather two items with different chance percentage, this is the preferred item if the gathering chance is 100% (after buffs)",
                         "type": "number"
                       },
                       "ItemCount": {

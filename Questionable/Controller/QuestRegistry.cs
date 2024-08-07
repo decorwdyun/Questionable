@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -26,19 +25,21 @@ internal sealed class QuestRegistry
     private readonly QuestValidator _questValidator;
     private readonly JsonSchemaValidator _jsonSchemaValidator;
     private readonly ILogger<QuestRegistry> _logger;
-    private readonly ICallGateProvider<object> _reloadDataIpc;
+    private readonly LeveData _leveData;
 
+    private readonly ICallGateProvider<object> _reloadDataIpc;
     private readonly Dictionary<ElementId, Quest> _quests = new();
 
     public QuestRegistry(IDalamudPluginInterface pluginInterface, QuestData questData,
         QuestValidator questValidator, JsonSchemaValidator jsonSchemaValidator,
-        ILogger<QuestRegistry> logger)
+        ILogger<QuestRegistry> logger, LeveData leveData)
     {
         _pluginInterface = pluginInterface;
         _questData = questData;
         _questValidator = questValidator;
         _jsonSchemaValidator = jsonSchemaValidator;
         _logger = logger;
+        _leveData = leveData;
         _reloadDataIpc = _pluginInterface.GetIpcProvider<object>("Questionable.ReloadData");
     }
 
@@ -89,11 +90,14 @@ internal sealed class QuestRegistry
 
         foreach ((ElementId questId, QuestRoot questRoot) in AssemblyQuestLoader.GetQuests())
         {
+            var questInfo = _questData.GetQuestInfo(questId);
+            if (questInfo is LeveInfo leveInfo)
+                _leveData.AddQuestSteps(leveInfo, questRoot);
             Quest quest = new()
             {
                 Id = questId,
                 Root = questRoot,
-                Info = _questData.GetQuestInfo(questId),
+                Info = questInfo,
                 ReadOnly = true,
             };
             _quests[quest.Id] = quest;
@@ -143,11 +147,15 @@ internal sealed class QuestRegistry
         var questNode = JsonNode.Parse(stream)!;
         _jsonSchemaValidator.Enqueue(questId, questNode);
 
+        var questRoot = questNode.Deserialize<QuestRoot>()!;
+        var questInfo = _questData.GetQuestInfo(questId);
+        if (questInfo is LeveInfo leveInfo)
+            _leveData.AddQuestSteps(leveInfo, questRoot);
         Quest quest = new Quest
         {
             Id = questId,
-            Root = questNode.Deserialize<QuestRoot>()!,
-            Info = _questData.GetQuestInfo(questId),
+            Root = questRoot,
+            Info = questInfo,
             ReadOnly = false,
         };
         _quests[quest.Id] = quest;

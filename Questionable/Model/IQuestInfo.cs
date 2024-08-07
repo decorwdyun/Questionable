@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using Dalamud.Game.Text;
+using LLib.GameData;
 using Questionable.Model.Questing;
 
 namespace Questionable.Model;
@@ -13,6 +15,7 @@ public interface IQuestInfo
     public ushort Level { get; }
     public EBeastTribe BeastTribe { get; }
     public bool IsMainScenarioQuest { get; }
+    public IReadOnlyList<EClassJob> ClassJobs { get; }
 
     public string SimplifiedName => Name
         .Replace(".", "", StringComparison.Ordinal)

@@ -15,6 +15,7 @@ using Questionable.Controller.Steps.Shared;
 using Questionable.Controller.Steps.Common;
 using Questionable.Controller.Steps.Gathering;
 using Questionable.Controller.Steps.Interactions;
+using Questionable.Controller.Steps.Leves;
 using Questionable.Data;
 using Questionable.External;
 using Questionable.Functions;
@@ -103,6 +104,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<AetherCurrentData>();
         serviceCollection.AddSingleton<AetheryteData>();
         serviceCollection.AddSingleton<GatheringData>();
+        serviceCollection.AddSingleton<LeveData>();
         serviceCollection.AddSingleton<JournalData>();
         serviceCollection.AddSingleton<QuestData>();
         serviceCollection.AddSingleton<TerritoryData>();
@@ -143,12 +145,17 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTaskWithFactory<Jump.Factory, Jump.SingleJump, Jump.RepeatedJumps>();
         serviceCollection.AddTaskWithFactory<Dive.Factory, Dive.DoDive>();
         serviceCollection.AddTaskWithFactory<Say.Factory, Say.UseChat>();
-        serviceCollection.AddTaskWithFactory<UseItem.Factory, UseItem.UseOnGround, UseItem.UseOnObject, UseItem.Use, UseItem.UseOnPosition>();
+        serviceCollection
+            .AddTaskWithFactory<UseItem.Factory, UseItem.UseOnGround, UseItem.UseOnObject, UseItem.Use,
+                UseItem.UseOnPosition>();
         serviceCollection.AddTaskWithFactory<EquipItem.Factory, EquipItem.DoEquip>();
         serviceCollection.AddTaskWithFactory<TurnInDelivery.Factory, TurnInDelivery.SatisfactionSupplyTurnIn>();
         serviceCollection
             .AddTaskWithFactory<SinglePlayerDuty.Factory, SinglePlayerDuty.DisableYesAlready,
                 SinglePlayerDuty.RestoreYesAlready>();
+        serviceCollection
+            .AddTaskWithFactory<InitiateLeve.Factory, InitiateLeve.OpenJournal, InitiateLeve.Initiate,
+                InitiateLeve.SelectDifficulty>();
 
         serviceCollection
             .AddTaskWithFactory<WaitAtEnd.Factory,

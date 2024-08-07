@@ -14,6 +14,7 @@ using ImGuiNET;
 using Questionable.Controller;
 using Questionable.Controller.Steps.Shared;
 using Questionable.Functions;
+using Questionable.Model;
 using Questionable.Model.Questing;
 
 namespace Questionable.Windows.QuestComponents;
@@ -156,18 +157,15 @@ internal sealed class ActiveQuestComponent
         }
     }
 
-    private QuestWork? DrawQuestWork(QuestController.QuestProgress currentQuest)
+    private QuestProgressInfo? DrawQuestWork(QuestController.QuestProgress currentQuest)
     {
-        if (currentQuest.Quest.Id is not QuestId questId)
-            return null;
-
-        var questWork = _questFunctions.GetQuestEx(questId);
+        var questWork = _questFunctions.GetQuestProgressInfo(currentQuest.Quest.Id);
         if (questWork != null)
         {
             Vector4 color;
             unsafe
             {
-                var ptr =ImGui.GetStyleColorVec4(ImGuiCol.TextDisabled);
+                var ptr = ImGui.GetStyleColorVec4(ImGuiCol.TextDisabled);
                 if (ptr != null)
                     color = *ptr;
                 else
@@ -175,34 +173,12 @@ internal sealed class ActiveQuestComponent
             }
 
             using var styleColor = ImRaii.PushColor(ImGuiCol.Text, color);
-
-            var qw = questWork.Value;
-            string vars = "";
-            for (int i = 0; i < 6; ++i)
-            {
-                vars += qw.Variables[i] + " ";
-                if (i % 2 == 1)
-                    vars += "   ";
-            }
-
-            // For combat quests, a sequence to kill 3 enemies works a bit like this:
-            // Trigger enemies → 0
-            // Kill first enemy → 1
-            // Kill second enemy → 2
-            // Last enemy → increase sequence, reset variable to 0
-            // The order in which enemies are killed doesn't seem to matter.
-            // If multiple waves spawn, this continues to count up (e.g. 1 enemy from wave 1, 2 enemies from wave 2, 1 from wave 3) would count to 3 then 0
-            ImGui.Text($"QW: {vars.Trim()}");
+            ImGui.Text($"{questWork}");
 
             if (ImGui.IsItemClicked())
             {
-                string copy = "";
-                for (int i = 0; i < 6; ++i)
-                    copy += qw.Variables[i] + " ";
-
-                copy = copy.Trim();
-                ImGui.SetClipboardText(copy);
-                _chatGui.Print($"Copied '{copy}' to clipboard");
+                ImGui.SetClipboardText(questWork.ToString());
+                _chatGui.Print($"Copied '{questWork}' to clipboard");
             }
 
             if (ImGui.IsItemHovered())
@@ -213,7 +189,7 @@ internal sealed class ActiveQuestComponent
                 ImGui.PopFont();
             }
         }
-        else
+        else if (currentQuest.Quest.Id is QuestId)
         {
             using var disabled = ImRaii.Disabled();
 
@@ -227,13 +203,13 @@ internal sealed class ActiveQuestComponent
     }
 
     private void DrawQuestButtons(QuestController.QuestProgress currentQuest, QuestStep? currentStep,
-        QuestWork? questWork)
+        QuestProgressInfo? questProgressInfo)
     {
         ImGui.BeginDisabled(_questController.IsRunning);
         if (ImGuiComponents.IconButton(FontAwesomeIcon.Play))
         {
             // if we haven't accepted this quest, mark it as next quest so that we can optionally use aetherytes to travel
-            if (questWork == null)
+            if (questProgressInfo == null)
                 _questController.SetNextQuest(currentQuest.Quest);
 
             _questController.ExecuteNextStep(QuestController.EAutomationType.Automatic);
@@ -261,7 +237,7 @@ internal sealed class ActiveQuestComponent
         bool colored = currentStep != null
                        && !lastStep
                        && currentStep.InteractionType == EInteractionType.Instruction
-                       && _questController.HasCurrentTaskMatching<WaitAtEnd.WaitNextStepOrSequence>();
+                       && _questController.HasCurrentTaskMatching<WaitAtEnd.WaitNextStepOrSequence>(out _);
 
         ImGui.BeginDisabled(lastStep);
         if (colored)

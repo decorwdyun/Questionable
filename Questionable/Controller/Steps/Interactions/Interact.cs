@@ -19,7 +19,8 @@ internal static class Interact
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
-            if (step.InteractionType is EInteractionType.AcceptQuest or EInteractionType.CompleteQuest)
+            if (step.InteractionType is EInteractionType.AcceptQuest or EInteractionType.CompleteQuest
+                or EInteractionType.AcceptLeve or EInteractionType.CompleteLeve)
             {
                 if (step.Emote != null)
                     yield break;
@@ -34,7 +35,7 @@ internal static class Interact
                 yield return serviceProvider.GetRequiredService<WaitAtEnd.WaitDelay>();
 
             yield return serviceProvider.GetRequiredService<DoInteract>()
-                .With(step.DataId.Value,
+                .With(step.DataId.Value, quest, step.InteractionType,
                     step.TargetTerritoryId != null || quest.Id is SatisfactionSupplyNpcId);
         }
 
@@ -50,11 +51,15 @@ internal static class Interact
         private DateTime _continueAt = DateTime.MinValue;
 
         private uint DataId { get; set; }
+        public Quest? Quest { get; private set; }
+        public EInteractionType InteractionType { get; set; }
         private bool SkipMarkerCheck { get; set; }
 
-        public ITask With(uint dataId, bool skipMarkerCheck)
+        public DoInteract With(uint dataId, Quest? quest, EInteractionType interactionType, bool skipMarkerCheck)
         {
             DataId = dataId;
+            Quest = quest;
+            InteractionType = interactionType;
             SkipMarkerCheck = skipMarkerCheck;
             return this;
         }

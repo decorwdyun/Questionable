@@ -223,7 +223,8 @@ internal sealed class QuestSelectionWindow : LWindow
                 ImGui.SameLine();
 
                 if (knownQuest != null &&
-                    knownQuest.FindSequence(0)?.LastStep()?.InteractionType == EInteractionType.AcceptQuest &&
+                    knownQuest.FindSequence(0)?.LastStep()?.InteractionType is EInteractionType.AcceptQuest
+                        or EInteractionType.AcceptLeve &&
                     !_questFunctions.IsQuestAccepted(quest.QuestId) &&
                     !_questFunctions.IsQuestLocked(quest.QuestId) &&
                     (quest.IsRepeatable || !_questFunctions.IsQuestAcceptedOrComplete(quest.QuestId)))

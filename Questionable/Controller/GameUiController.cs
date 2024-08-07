@@ -7,12 +7,17 @@ using Dalamud.Game.Addon.Lifecycle;
 using Dalamud.Game.Addon.Lifecycle.AddonArgTypes;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Client.Game.Event;
+using FFXIVClientStructs.FFXIV.Client.Game.Object;
+using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.UI;
+using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using LLib;
 using LLib.GameUI;
 using Lumina.Excel.GeneratedSheets;
 using Microsoft.Extensions.Logging;
+using Questionable.Controller.Steps.Interactions;
 using Questionable.Data;
 using Questionable.Functions;
 using Questionable.Model;
@@ -34,6 +39,7 @@ internal sealed class GameUiController : IDisposable
     private readonly QuestData _questData;
     private readonly IGameGui _gameGui;
     private readonly ITargetManager _targetManager;
+    private readonly IFramework _framework;
     private readonly ILogger<GameUiController> _logger;
     private readonly Regex _returnRegex;
 
@@ -48,7 +54,9 @@ internal sealed class GameUiController : IDisposable
         QuestData questData,
         IGameGui gameGui,
         ITargetManager targetManager,
-        IPluginLog pluginLog, ILogger<GameUiController> logger)
+        IFramework framework,
+        IPluginLog pluginLog,
+        ILogger<GameUiController> logger)
     {
         _addonLifecycle = addonLifecycle;
         _dataManager = dataManager;
@@ -60,6 +68,7 @@ internal sealed class GameUiController : IDisposable
         _questData = questData;
         _gameGui = gameGui;
         _targetManager = targetManager;
+        _framework = framework;
         _logger = logger;
 
         _returnRegex = _dataManager.GetExcelSheet<Addon>()!.GetRow(196)!.GetRegex(addon => addon.Text, pluginLog)!;
@@ -75,6 +84,8 @@ internal sealed class GameUiController : IDisposable
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "ContentsTutorial", ContentsTutorialPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "MultipleHelpWindow", MultipleHelpWindowPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "HousingSelectBlock", HousingSelectBlockPostSetup);
+        _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "JournalResult", JournalResultPostSetup);
+        _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "GuildLeve", GuildLevePostSetup);
     }
 
     internal unsafe void HandleCurrentDialogueChoices()
@@ -225,7 +236,41 @@ internal sealed class GameUiController : IDisposable
     private int? HandleListChoice(string? actualPrompt, List<string?> answers, bool checkAllSteps)
     {
         List<DialogueChoiceInfo> dialogueChoices = [];
-        var currentQuest = _questController.SimulatedQuest ?? _questController.GatheringQuest ?? _questController.StartedQuest;
+
+        // levequest choices have some vague sort of priority
+        if (_questController.HasCurrentTaskMatching<Interact.DoInteract>(out var interact) &&
+            interact.Quest != null &&
+            interact.InteractionType is EInteractionType.AcceptLeve or EInteractionType.CompleteLeve)
+        {
+            if (interact.InteractionType == EInteractionType.AcceptLeve)
+            {
+                dialogueChoices.Add(new DialogueChoiceInfo(interact.Quest,
+                    new DialogueChoice
+                    {
+                        Type = EDialogChoiceType.List,
+                        ExcelSheet = "leve/GuildleveAssignment",
+                        Prompt = new ExcelRef("TEXT_GUILDLEVEASSIGNMENT_SELECT_MENU_TITLE"),
+                        Answer = new ExcelRef("TEXT_GUILDLEVEASSIGNMENT_SELECT_MENU_01"),
+                    }));
+                interact.InteractionType = EInteractionType.None;
+            }
+            else if (interact.InteractionType == EInteractionType.CompleteLeve)
+            {
+                dialogueChoices.Add(new DialogueChoiceInfo(interact.Quest,
+                    new DialogueChoice
+                    {
+                        Type = EDialogChoiceType.List,
+                        ExcelSheet = "leve/GuildleveAssignment",
+                        Prompt = new ExcelRef("TEXT_GUILDLEVEASSIGNMENT_SELECT_MENU_TITLE"),
+                        Answer = new ExcelRef("TEXT_GUILDLEVEASSIGNMENT_SELECT_MENU_REWARD"),
+                    }));
+                interact.InteractionType = EInteractionType.None;
+            }
+        }
+
+        var currentQuest = _questController.SimulatedQuest ??
+                           _questController.GatheringQuest ??
+                           _questController.StartedQuest;
         if (currentQuest != null)
         {
             var quest = currentQuest.Quest;
@@ -291,10 +336,30 @@ internal sealed class GameUiController : IDisposable
                     }
                 }
             }
+
+            if (_questController.NextQuest == null)
+            {
+                // make sure to always close the leve dialogue
+                if (_questData.GetAllByIssuerDataId(target.DataId).Any(x => x.QuestId is LeveId))
+                {
+                    _logger.LogInformation("Adding close leve dialogue as option");
+                    dialogueChoices.Add(new DialogueChoiceInfo(null,
+                        new DialogueChoice
+                        {
+                            Type = EDialogChoiceType.List,
+                            ExcelSheet = "leve/GuildleveAssignment",
+                            Prompt = new ExcelRef("TEXT_GUILDLEVEASSIGNMENT_SELECT_MENU_TITLE"),
+                            Answer = new ExcelRef("TEXT_GUILDLEVEASSIGNMENT_SELECT_MENU_07"),
+                        }));
+                }
+            }
         }
 
         if (dialogueChoices.Count == 0)
+        {
+            _logger.LogDebug("No dialogue choices to check");
             return null;
+        }
 
         foreach (var (quest, dialogueChoice) in dialogueChoices)
         {
@@ -344,7 +409,7 @@ internal sealed class GameUiController : IDisposable
                         i, answers[i], actualPrompt);
 
                     // ensure we only open the dialog once
-                    if (quest.Id is SatisfactionSupplyNpcId)
+                    if (quest?.Id is SatisfactionSupplyNpcId)
                     {
                         if (_questController.GatheringQuest == null ||
                             _questController.GatheringQuest.Sequence == 255)
@@ -403,6 +468,16 @@ internal sealed class GameUiController : IDisposable
             return;
 
         _logger.LogTrace("Prompt: '{Prompt}'", actualPrompt);
+        var director = UIState.Instance()->DirectorTodo.Director;
+        if (director != null && director->EventHandlerInfo != null &&
+            director->EventHandlerInfo->EventId.ContentId == EventHandlerType.GatheringLeveDirector &&
+            director->Sequence == 254)
+        {
+            // just close the dialogue for 'do you want to return to next settlement', should prolly be different for
+            // ARR territories
+            addonSelectYesno->AtkUnitBase.FireCallbackInt(1);
+            return;
+        }
 
         var currentQuest = _questController.StartedQuest;
         if (currentQuest != null && CheckQuestYesNo(addonSelectYesno, currentQuest, actualPrompt, checkAllSteps))
@@ -434,6 +509,20 @@ internal sealed class GameUiController : IDisposable
         {
             var step = quest.FindSequence(currentQuest.Sequence)?.FindStep(currentQuest.Step);
             if (step != null && HandleDefaultYesNo(addonSelectYesno, quest, step.DialogueChoices, actualPrompt))
+                return true;
+        }
+
+        if (currentQuest.Quest.Id is LeveId)
+        {
+            var dialogueChoice = new DialogueChoice
+            {
+                Type = EDialogChoiceType.YesNo,
+                ExcelSheet = "Addon",
+                Prompt = new ExcelRef(608),
+                Yes = true
+            };
+
+            if (HandleDefaultYesNo(addonSelectYesno, quest, [dialogueChoice], actualPrompt))
                 return true;
         }
 
@@ -515,22 +604,24 @@ internal sealed class GameUiController : IDisposable
 
         QuestStep? step = sequence.FindStep(currentQuest.Step);
         if (step != null)
-            _logger.LogTrace("Current step: {CurrentTerritory}, {TargetTerritory}", step.TerritoryId,
+            _logger.LogTrace("FindTargetTerritoryFromQuestStep (current): {CurrentTerritory}, {TargetTerritory}",
+                step.TerritoryId,
                 step.TargetTerritoryId);
 
         if (step == null || step.TargetTerritoryId == null)
         {
-            _logger.LogTrace("TravelYesNo: Checking previous step...");
+            _logger.LogTrace("FindTargetTerritoryFromQuestStep: Checking previous step...");
             step = sequence.FindStep(currentQuest.Step == 255 ? (sequence.Steps.Count - 1) : (currentQuest.Step - 1));
 
             if (step != null)
-                _logger.LogTrace("Previous step: {CurrentTerritory}, {TargetTerritory}", step.TerritoryId,
+                _logger.LogTrace("FindTargetTerritoryFromQuestStep (previous): {CurrentTerritory}, {TargetTerritory}",
+                    step.TerritoryId,
                     step.TargetTerritoryId);
         }
 
         if (step == null || step.TargetTerritoryId == null)
         {
-            _logger.LogTrace("TravelYesNo: Not found");
+            _logger.LogTrace("FindTargetTerritoryFromQuestStep: Not found");
             return null;
         }
 
@@ -684,7 +775,74 @@ internal sealed class GameUiController : IDisposable
         }
     }
 
-    private StringOrRegex? ResolveReference(Quest quest, string? excelSheet, ExcelRef? excelRef, bool isRegExp)
+    private unsafe void JournalResultPostSetup(AddonEvent type, AddonArgs args)
+    {
+        if (_questController.IsRunning)
+        {
+            _logger.LogInformation("Checking for quest name of journal result");
+            AddonJournalResult* addon = (AddonJournalResult*)args.Addon;
+
+            string questName = addon->AtkTextNode250->NodeText.ToString();
+            if (_questController.CurrentQuest != null &&
+                GameFunctions.GameStringEquals(_questController.CurrentQuest.Quest.Info.Name, questName))
+                addon->FireCallbackInt(0);
+            else
+                addon->FireCallbackInt(1);
+        }
+    }
+
+    private unsafe void GuildLevePostSetup(AddonEvent type, AddonArgs args)
+    {
+        var target = _targetManager.Target;
+        if (target == null)
+            return;
+
+        if (_questController is { IsRunning: true, NextQuest: { Quest.Id: LeveId } nextQuest } &&
+            _questFunctions.IsReadyToAcceptQuest(nextQuest.Quest.Id))
+        {
+            var addon = (AddonGuildLeve*)args.Addon;
+            /*
+            var atkValues = addon->AtkValues;
+
+            var availableLeves = _questData.GetAllByIssuerDataId(target.DataId);
+            List<(int, IQuestInfo)> offeredLeves = [];
+            for (int i = 0; i <= 20; ++i) // 3 leves per group, 1 label for group
+            {
+                string? leveName = atkValues[626 + i * 2].ReadAtkString();
+                if (leveName == null)
+                    continue;
+
+                var questInfo = availableLeves.FirstOrDefault(x => GameFunctions.GameStringEquals(x.Name, leveName));
+                if (questInfo == null)
+                    continue;
+
+                offeredLeves.Add((i, questInfo));
+
+            }
+
+            foreach (var (i, questInfo) in offeredLeves)
+                _logger.LogInformation("Leve {Index} = {Id}, {Name}", i, questInfo.QuestId, questInfo.Name);
+            */
+
+            _framework.RunOnTick(() =>
+            {
+                _questController.SetPendingQuest(nextQuest);
+                _questController.SetNextQuest(null);
+
+                var agent = UIModule.Instance()->GetAgentModule()->GetAgentByInternalId(AgentId.LeveQuest);
+                var returnValue = stackalloc AtkValue[1];
+                var selectQuest = stackalloc AtkValue[]
+                {
+                    new() { Type = ValueType.Int, Int = 3 },
+                    new() { Type = ValueType.UInt, UInt = nextQuest.Quest.Id.Value }
+                };
+                agent->ReceiveEvent(returnValue, selectQuest, 2, 0);
+                addon->Close(true);
+            }, TimeSpan.FromMilliseconds(100));
+        }
+    }
+
+    private StringOrRegex? ResolveReference(Quest? quest, string? excelSheet, ExcelRef? excelRef, bool isRegExp)
     {
         if (excelRef == null)
             return null;
@@ -701,6 +859,8 @@ internal sealed class GameUiController : IDisposable
 
     public void Dispose()
     {
+        _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "GuildLeve", GuildLevePostSetup);
+        _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "JournalResult", JournalResultPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "HousingSelectBlock", HousingSelectBlockPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "MultipleHelpWindow", MultipleHelpWindowPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "ContentsTutorial", ContentsTutorialPostSetup);
@@ -714,5 +874,5 @@ internal sealed class GameUiController : IDisposable
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "SelectString", SelectStringPostSetup);
     }
 
-    private sealed record DialogueChoiceInfo(Quest Quest, DialogueChoice DialogueChoice);
+    private sealed record DialogueChoiceInfo(Quest? Quest, DialogueChoice DialogueChoice);
 }

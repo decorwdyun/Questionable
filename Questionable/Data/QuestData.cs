@@ -24,7 +24,11 @@ internal sealed class QuestData
                 .Select(x => new QuestInfo(x)),
             ..dataManager.GetExcelSheet<SatisfactionNpc>()!
                 .Where(x => x.RowId > 0)
-                .Select(x => new SatisfactionSupplyInfo(x))
+                .Select(x => new SatisfactionSupplyInfo(x)),
+            ..dataManager.GetExcelSheet<Leve>()!
+                .Where(x => x.RowId > 0)
+                .Where(x => x.LevelLevemete.Row != 0)
+                .Select(x => new LeveInfo(x)),
         ];
         _quests = quests.ToDictionary(x => x.QuestId, x => x);
     }

@@ -26,7 +26,12 @@ public enum EAction
     MeticulousBotanist = 22188,
     ScrutinyBotanist = 22189,
 
-
+    SharpVision1 = 235,
+    SharpVision2 = 237,
+    SharpVision3 = 295,
+    FieldMastery1 = 218,
+    FieldMastery2 = 220,
+    FieldMastery3 = 294,
 }
 
 public static class EActionExtensions

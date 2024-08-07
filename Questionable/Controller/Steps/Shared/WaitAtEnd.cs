@@ -179,9 +179,9 @@ internal static class WaitAtEnd
 
         public ETaskResult Update()
         {
-            QuestWork? questWork = questFunctions.GetQuestEx(Quest);
+            QuestProgressInfo? questWork = questFunctions.GetQuestProgressInfo(Quest);
             return questWork != null &&
-                   QuestWorkUtils.MatchesQuestWork(Step.CompletionQuestVariablesFlags, questWork.Value)
+                   QuestWorkUtils.MatchesQuestWork(Step.CompletionQuestVariablesFlags, questWork)
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
         }

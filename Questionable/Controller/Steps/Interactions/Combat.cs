@@ -37,7 +37,7 @@ internal static class Combat
                     ArgumentNullException.ThrowIfNull(step.DataId);
 
                     yield return serviceProvider.GetRequiredService<Interact.DoInteract>()
-                        .With(step.DataId.Value, true);
+                        .With(step.DataId.Value, quest, EInteractionType.None, true);
                     yield return CreateTask(quest, sequence, step);
                     break;
                 }
@@ -110,11 +110,11 @@ internal static class Combat
             // if our quest step has any completion flags, we need to check if they are set
             if (QuestWorkUtils.HasCompletionFlags(_completionQuestVariableFlags) && _combatData.ElementId is QuestId questId)
             {
-                var questWork = questFunctions.GetQuestEx(questId);
+                var questWork = questFunctions.GetQuestProgressInfo(questId);
                 if (questWork == null)
                     return ETaskResult.StillRunning;
 
-                if (QuestWorkUtils.MatchesQuestWork(_completionQuestVariableFlags, questWork.Value))
+                if (QuestWorkUtils.MatchesQuestWork(_completionQuestVariableFlags, questWork))
                     return ETaskResult.TaskComplete;
                 else
                     return ETaskResult.StillRunning;

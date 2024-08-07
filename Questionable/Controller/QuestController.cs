@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Keys;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
-using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps;
 using Questionable.Controller.Steps.Shared;
@@ -37,6 +37,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
     private QuestProgress? _nextQuest;
     private QuestProgress? _simulatedQuest;
     private QuestProgress? _gatheringQuest;
+    private QuestProgress? _pendingQuest;
     private EAutomationType _automationType;
 
     /// <summary>
@@ -101,6 +102,11 @@ internal sealed class QuestController : MiniTaskController<QuestController>
     public QuestProgress? NextQuest => _nextQuest;
     public QuestProgress? GatheringQuest => _gatheringQuest;
 
+    /// <summary>
+    /// Used when accepting leves, as there's a small delay
+    /// </summary>
+    public QuestProgress? PendingQuest => _pendingQuest;
+
     public string? DebugState { get; private set; }
 
     public void Reload()
@@ -112,6 +118,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
             _startedQuest = null;
             _nextQuest = null;
             _gatheringQuest = null;
+            _pendingQuest = null;
             _simulatedQuest = null;
             _safeAnimationEnd = DateTime.MinValue;
 
@@ -188,6 +195,20 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         {
             DebugState = null;
 
+            if (_pendingQuest != null)
+            {
+                if (!_questFunctions.IsQuestAccepted(_pendingQuest.Quest.Id))
+                {
+                    DebugState = $"Waiting for Leve {_pendingQuest.Quest.Id}";
+                    return;
+                }
+                else
+                {
+                    _startedQuest = _pendingQuest;
+                    _pendingQuest = null;
+                    Stop("Pending quest accepted", continueIfAutomatic: true);
+                }
+            }
             if (_simulatedQuest == null && _nextQuest != null)
             {
                 // if the quest is accepted, we no longer track it
@@ -201,6 +222,10 @@ internal sealed class QuestController : MiniTaskController<QuestController>
                 {
                     _logger.LogInformation("Next quest {QuestId} accepted or completed",
                         _nextQuest.Quest.Id);
+
+                    // if (_nextQuest.Quest.Id is LeveId)
+                      //  _startedQuest = _nextQuest;
+
                     _nextQuest = null;
                 }
             }
@@ -315,7 +340,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
             var sequence = q.FindSequence(questToRun.Sequence);
             if (sequence == null)
             {
-                DebugState = "Sequence not found";
+                DebugState = $"Sequence {sequence} not found";
                 Stop("Unknown sequence");
                 return;
             }
@@ -457,6 +482,12 @@ internal sealed class QuestController : MiniTaskController<QuestController>
             _gatheringQuest = null;
     }
 
+    public void SetPendingQuest(QuestProgress? quest)
+    {
+        _logger.LogInformation("PendingQuest: {QuestId}", quest?.Quest.Id);
+        _pendingQuest = quest;
+    }
+
     protected override void UpdateCurrentTask()
     {
         if (_gameFunctions.IsOccupied() && !_gameFunctions.IsOccupiedWithCustomDeliveryNpc(CurrentQuest?.Quest))
@@ -555,8 +586,20 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         return _currentTask == null ? $"- (+{_taskQueue.Count})" : $"{_currentTask} (+{_taskQueue.Count})";
     }
 
-    public bool HasCurrentTaskMatching<T>() =>
-        _currentTask is T;
+    public bool HasCurrentTaskMatching<T>([NotNullWhen(true)] out T? task)
+        where T : class, ITask
+    {
+        if (_currentTask is T t)
+        {
+            task = t;
+            return true;
+        }
+        else
+        {
+            task = null;
+            return false;
+        }
+    }
 
     public bool IsRunning => _currentTask != null || _taskQueue.Count > 0;
 

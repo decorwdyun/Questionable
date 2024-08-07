@@ -24,7 +24,7 @@ internal sealed class ExcelFunctions
         _logger = logger;
     }
 
-    public StringOrRegex GetDialogueText(Quest currentQuest, string? excelSheetName, string key, bool isRegex)
+    public StringOrRegex GetDialogueText(Quest? currentQuest, string? excelSheetName, string key, bool isRegex)
     {
         var seString = GetRawDialogueText(currentQuest, excelSheetName, key);
         if (isRegex)
@@ -33,9 +33,9 @@ internal sealed class ExcelFunctions
             return new StringOrRegex(seString?.ToDalamudString().ToString());
     }
 
-    public SeString? GetRawDialogueText(Quest currentQuest, string? excelSheetName, string key)
+    public SeString? GetRawDialogueText(Quest? currentQuest, string? excelSheetName, string key)
     {
-        if (excelSheetName == null)
+        if (currentQuest != null && excelSheetName == null)
         {
             var questRow =
                 _dataManager.GetExcelSheet<Lumina.Excel.GeneratedSheets2.Quest>()!.GetRow((uint)currentQuest.Id.Value +
@@ -49,6 +49,7 @@ internal sealed class ExcelFunctions
             excelSheetName = $"quest/{(currentQuest.Id.Value / 100):000}/{questRow.Id}";
         }
 
+        ArgumentNullException.ThrowIfNull(excelSheetName);
         var excelSheet = _dataManager.Excel.GetSheet<QuestDialogueText>(excelSheetName);
         if (excelSheet == null)
         {

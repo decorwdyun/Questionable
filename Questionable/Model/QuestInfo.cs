@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using Dalamud.Game.Text;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using JetBrains.Annotations;
+using LLib.GameData;
 using Questionable.Model.Questing;
 using ExcelQuest = Lumina.Excel.GeneratedSheets.Quest;
 
@@ -53,6 +52,7 @@ internal sealed class QuestInfo : IQuestInfo
         PreviousInstanceContentJoin = (QuestJoin)quest.InstanceContentJoin;
         GrandCompany = (GrandCompany)quest.GrandCompany.Row;
         BeastTribe = (EBeastTribe)quest.BeastTribe.Row;
+        ClassJobs = QuestInfoUtils.AsList(quest.ClassJobCategory0.Value!);
     }
 
 
@@ -73,6 +73,7 @@ internal sealed class QuestInfo : IQuestInfo
     public bool CompletesInstantly { get; }
     public GrandCompany GrandCompany { get; }
     public EBeastTribe BeastTribe { get; }
+    public IReadOnlyList<EClassJob> ClassJobs { get; }
 
     [UsedImplicitly(ImplicitUseKindFlags.Assign, ImplicitUseTargetFlags.Members)]
     public enum QuestJoin : byte

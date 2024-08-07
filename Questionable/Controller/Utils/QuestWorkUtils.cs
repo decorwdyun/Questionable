@@ -4,6 +4,7 @@ using System.Linq;
 using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Shared;
+using Questionable.Model;
 using Questionable.Model.Questing;
 
 namespace Questionable.Controller.Utils;
@@ -15,12 +16,12 @@ internal static class QuestWorkUtils
         return completionQuestVariablesFlags.Count == 6 && completionQuestVariablesFlags.Any(x => x != null && (x.High != 0 || x.Low != 0));
     }
 
-    public static bool MatchesQuestWork(IList<QuestWorkValue?> completionQuestVariablesFlags, QuestWork questWork)
+    public static bool MatchesQuestWork(IList<QuestWorkValue?> completionQuestVariablesFlags, QuestProgressInfo questProgressInfo)
     {
-        if (!HasCompletionFlags(completionQuestVariablesFlags))
+        if (!HasCompletionFlags(completionQuestVariablesFlags) || questProgressInfo.Variables.Count != 6)
             return false;
 
-        for (int i = 0; i < 6; ++i)
+        for (int i = 0; i < questProgressInfo.Variables.Count; ++i)
         {
             QuestWorkValue? check = completionQuestVariablesFlags[i];
             if (check == null)
@@ -28,8 +29,8 @@ internal static class QuestWorkUtils
 
             EQuestWorkMode mode = check.Mode;
 
-            byte actualHigh = (byte)(questWork.Variables[i] >> 4);
-            byte actualLow = (byte)(questWork.Variables[i] & 0xF);
+            byte actualHigh = (byte)(questProgressInfo.Variables[i] >> 4);
+            byte actualLow = (byte)(questProgressInfo.Variables[i] & 0xF);
 
             byte? checkHigh = check.High;
             byte? checkLow = check.Low;
@@ -60,7 +61,7 @@ internal static class QuestWorkUtils
     }
 
     public static bool MatchesRequiredQuestWorkConfig(List<List<QuestWorkValue>?> requiredQuestVariables,
-        QuestWork questWork, ILogger<SkipCondition.CheckSkip> logger)
+        QuestProgressInfo questWork, ILogger<SkipCondition.CheckSkip> logger)
     {
         if (requiredQuestVariables.Count != 6 || requiredQuestVariables.All(x => x == null || x.Count == 0))
         {

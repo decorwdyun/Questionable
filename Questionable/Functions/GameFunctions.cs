@@ -344,6 +344,17 @@ internal sealed unsafe class GameFunctions
                statusManager->HasStatus(2730);
     }
 
+    public bool HasStatus(uint statusId)
+    {
+        var localPlayer = _clientState.LocalPlayer;
+        if (localPlayer == null)
+            return false;
+
+        var battleChara = (BattleChara*)localPlayer.Address;
+        StatusManager* statusManager = battleChara->GetStatusManager();
+        return statusManager->HasStatus(statusId);
+    }
+
     public bool Mount()
     {
         if (_condition[ConditionFlag.Mounted])
@@ -503,4 +514,16 @@ internal sealed unsafe class GameFunctions
 
         return slots;
     }
+
+#if false
+    private byte ExecuteCommand(int id, int a, int b, int c, int d)
+    {
+        // Initiate Leve:    804 1794 [1]  0 0 // with [1] = extra difficulty levels
+        //                   705 2    1794 0 0
+        //                   801 0    0    0 0
+        // Abandon:          805 1794 0    0 0
+        // Retry button:     803 1794 0 0 0
+        return 0;
+    }
+#endif
 }

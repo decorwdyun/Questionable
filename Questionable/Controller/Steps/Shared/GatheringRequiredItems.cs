@@ -105,7 +105,8 @@ internal static class GatheringRequiredItems
         public bool Start()
         {
             return gatheringController.Start(new GatheringController.GatheringRequest(_gatheringPointId,
-                _gatheredItem.ItemId, _gatheredItem.ItemCount, _gatheredItem.Collectability));
+                _gatheredItem.ItemId, _gatheredItem.AlternativeItemId, _gatheredItem.ItemCount,
+                _gatheredItem.Collectability));
         }
 
         public ETaskResult Update()

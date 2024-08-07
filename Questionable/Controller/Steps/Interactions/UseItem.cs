@@ -109,7 +109,7 @@ internal static class UseItem
             yield return serviceProvider.GetRequiredService<Move.MoveInternal>()
                 .With(territoryId, destination, dataId: npcId, sprint: false);
             yield return serviceProvider.GetRequiredService<Interact.DoInteract>()
-                .With(npcId, true);
+                .With(npcId, null, EInteractionType.None, true);
         }
     }
 
@@ -145,9 +145,9 @@ internal static class UseItem
         {
             if (QuestId is QuestId questId && QuestWorkUtils.HasCompletionFlags(CompletionQuestVariablesFlags))
             {
-                QuestWork? questWork = questFunctions.GetQuestEx(questId);
+                QuestProgressInfo? questWork = questFunctions.GetQuestProgressInfo(questId);
                 if (questWork != null &&
-                    QuestWorkUtils.MatchesQuestWork(CompletionQuestVariablesFlags, questWork.Value))
+                    QuestWorkUtils.MatchesQuestWork(CompletionQuestVariablesFlags, questWork))
                     return ETaskResult.TaskComplete;
             }
 

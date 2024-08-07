@@ -171,9 +171,8 @@ internal sealed class CombatController : IDisposable
 
                 if (QuestWorkUtils.HasCompletionFlags(condition.CompletionQuestVariablesFlags) && _currentFight.Data.ElementId is QuestId questId)
                 {
-                    var questWork = _questFunctions.GetQuestEx(questId);
-                    if (questWork != null && QuestWorkUtils.MatchesQuestWork(condition.CompletionQuestVariablesFlags,
-                            questWork.Value))
+                    var questWork = _questFunctions.GetQuestProgressInfo(questId);
+                    if (questWork != null && QuestWorkUtils.MatchesQuestWork(condition.CompletionQuestVariablesFlags, questWork))
                     {
                         _logger.LogInformation("Complex combat condition fulfilled: QuestWork matches");
                         _currentFight.Data.CompletedComplexDatas.Add(i);
