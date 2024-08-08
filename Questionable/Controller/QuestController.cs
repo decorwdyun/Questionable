@@ -47,6 +47,11 @@ internal sealed class QuestController : MiniTaskController<QuestController>
     /// </summary>
     private DateTime _safeAnimationEnd = DateTime.MinValue;
 
+    /// <summary>
+    ///
+    /// </summary>
+    private DateTime _lastTaskUpdate = DateTime.Now;
+
     public QuestController(
         IClientState clientState,
         GameFunctions gameFunctions,
@@ -443,6 +448,8 @@ internal sealed class QuestController : MiniTaskController<QuestController>
                 ExecuteNextStep(_automationType);
             else
                 _logger.LogInformation("Couldn't execute next step during Stop() call");
+
+            _lastTaskUpdate = DateTime.Now;
         }
         else if (_automationType != EAutomationType.Manual)
         {
@@ -450,6 +457,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
             _automationType = EAutomationType.Manual;
             _nextQuest = null;
             _gatheringQuest = null;
+            _lastTaskUpdate = DateTime.Now;
         }
     }
 
@@ -714,6 +722,12 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         }
 
         return false;
+    }
+
+    public bool WasLastTaskUpdateWithin(TimeSpan timeSpan)
+    {
+        _logger.LogInformation("Last update: {Update}", _lastTaskUpdate);
+        return IsRunning || DateTime.Now <= _lastTaskUpdate.Add(timeSpan);
     }
 
     public sealed record StepProgress(
