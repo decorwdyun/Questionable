@@ -486,9 +486,16 @@ internal sealed unsafe class GameFunctions
 
     public bool IsLoadingScreenVisible()
     {
-        return _gameGui.TryGetAddonByName("FadeMiddle", out AtkUnitBase* fade) &&
-               LAddon.IsAddonReady(fade) &&
-               fade->IsVisible;
+        if (_gameGui.TryGetAddonByName("FadeMiddle", out AtkUnitBase* fade) && fade->IsVisible)
+            return true;
+
+        if (_gameGui.TryGetAddonByName("FadeBack", out fade) && fade->IsVisible)
+            return true;
+
+        if (_gameGui.TryGetAddonByName("NowLoading", out fade) && fade->IsVisible)
+            return true;
+
+        return false;
     }
 
     public int GetFreeInventorySlots()
