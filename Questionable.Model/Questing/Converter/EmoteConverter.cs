@@ -29,5 +29,6 @@ public sealed class EmoteConverter() : EnumConverter<EEmote>(Values)
         { EEmote.Lookout, "lookout" },
         { EEmote.Kneel, "kneel" },
         { EEmote.Bow, "bow" },
+        { EEmote.Uchiwasshoi, "uchiwasshoi" },
     };
 }

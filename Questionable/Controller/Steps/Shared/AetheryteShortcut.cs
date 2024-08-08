@@ -71,11 +71,25 @@ internal static class AetheryteShortcut
             if (Step != null)
             {
                 var skipConditions = Step.SkipConditions?.AetheryteShortcutIf ?? new();
-                if (skipConditions is { Never: false, InTerritory.Count: > 0 })
+                if (skipConditions is { Never: false })
                 {
                     if (skipConditions.InTerritory.Contains(territoryType))
                     {
                         logger.LogInformation("Skipping aetheryte teleport due to SkipCondition (InTerritory)");
+                        return false;
+                    }
+
+                    if (skipConditions.AetheryteLocked != null &&
+                        !gameFunctions.IsAetheryteUnlocked(skipConditions.AetheryteLocked.Value))
+                    {
+                        logger.LogInformation("Skipping aetheryte teleport due to SkipCondition (AetheryteLocked)");
+                        return false;
+                    }
+
+                    if (skipConditions.AetheryteUnlocked != null &&
+                        gameFunctions.IsAetheryteUnlocked(skipConditions.AetheryteUnlocked.Value))
+                    {
+                        logger.LogInformation("Skipping aetheryte teleport due to SkipCondition (AetheryteUnlocked)");
                         return false;
                     }
                 }

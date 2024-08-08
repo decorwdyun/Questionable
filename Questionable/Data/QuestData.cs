@@ -20,7 +20,6 @@ internal sealed class QuestData
             ..dataManager.GetExcelSheet<Quest>()!
                 .Where(x => x.RowId > 0)
                 .Where(x => x.IssuerLocation.Row > 0)
-                .Where(x => x.Festival.Row == 0)
                 .Select(x => new QuestInfo(x)),
             ..dataManager.GetExcelSheet<SatisfactionNpc>()!
                 .Where(x => x.RowId > 0)
@@ -50,7 +49,7 @@ internal sealed class QuestData
     public List<QuestInfo> GetAllByJournalGenre(uint journalGenre)
     {
         return _quests.Values
-            .Where(x => x is QuestInfo)
+            .Where(x => x is QuestInfo { IsSeasonalEvent: false })
             .Cast<QuestInfo>()
             .Where(x => x.JournalGenre == journalGenre)
             .OrderBy(x => x.SortKey)

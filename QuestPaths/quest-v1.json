@@ -236,6 +236,12 @@
                             "type": "number"
                           }
                         },
+                        "AetheryteLocked": {
+                          "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Aetheryte"
+                        },
+                        "AetheryteUnlocked": {
+                          "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Aetheryte"
+                        },
                         "ExtraCondition": {
                           "type": "string",
                           "enum": [
@@ -259,6 +265,12 @@
                           "items": {
                             "type": "integer"
                           }
+                        },
+                        "AetheryteLocked": {
+                          "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Aetheryte"
+                        },
+                        "AetheryteUnlocked": {
+                          "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Aetheryte"
                         }
                       },
                       "additionalProperties": false
@@ -271,6 +283,12 @@
                         },
                         "InSameTerritory": {
                           "type": "boolean"
+                        },
+                        "AetheryteLocked": {
+                          "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Aetheryte"
+                        },
+                        "AetheryteUnlocked": {
+                          "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Aetheryte"
                         }
                       },
                       "additionalProperties": false
@@ -694,7 +712,8 @@
                           "respect",
                           "lookout",
                           "kneel",
-                          "bow"
+                          "bow",
+                          "uchiwasshoi"
                         ]
                       }
                     }

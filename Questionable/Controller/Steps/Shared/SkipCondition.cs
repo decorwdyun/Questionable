@@ -151,6 +151,20 @@ internal static class SkipCondition
                 return true;
             }
 
+            if (SkipConditions.AetheryteLocked != null &&
+                !gameFunctions.IsAetheryteUnlocked(SkipConditions.AetheryteLocked.Value))
+            {
+                logger.LogInformation("Skipping step, as aetheryte is locked");
+                return true;
+            }
+
+            if (SkipConditions.AetheryteUnlocked != null &&
+                gameFunctions.IsAetheryteUnlocked(SkipConditions.AetheryteUnlocked.Value))
+            {
+                logger.LogInformation("Skipping step, as aetheryte is unlocked");
+                return true;
+            }
+
             if (Step is { DataId: not null, InteractionType: EInteractionType.AttuneAetherCurrent } &&
                 gameFunctions.IsAetherCurrentUnlocked(Step.DataId.Value))
             {

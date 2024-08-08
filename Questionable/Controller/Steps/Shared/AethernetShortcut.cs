@@ -63,6 +63,27 @@ internal static class AethernetShortcut
                     logger.LogInformation("Skipping aethernet shortcut because the target is in the same territory");
                     return false;
                 }
+
+                if (SkipConditions.InTerritory.Contains(clientState.TerritoryType))
+                {
+                    logger.LogInformation(
+                        "Skipping aethernet shortcut because the target is in the specified territory");
+                    return false;
+                }
+
+                if (SkipConditions.AetheryteLocked != null &&
+                    !gameFunctions.IsAetheryteUnlocked(SkipConditions.AetheryteLocked.Value))
+                {
+                    logger.LogInformation("Skipping aethernet shortcut because the target aetheryte is locked");
+                    return false;
+                }
+
+                if (SkipConditions.AetheryteUnlocked != null &&
+                    gameFunctions.IsAetheryteUnlocked(SkipConditions.AetheryteUnlocked.Value))
+                {
+                    logger.LogInformation("Skipping aethernet shortcut because the target aetheryte is unlocked");
+                    return false;
+                }
             }
 
             if (gameFunctions.IsAetheryteUnlocked(From) &&

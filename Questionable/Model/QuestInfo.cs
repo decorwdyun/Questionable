@@ -53,6 +53,7 @@ internal sealed class QuestInfo : IQuestInfo
         GrandCompany = (GrandCompany)quest.GrandCompany.Row;
         BeastTribe = (EBeastTribe)quest.BeastTribe.Row;
         ClassJobs = QuestInfoUtils.AsList(quest.ClassJobCategory0.Value!);
+        IsSeasonalEvent = quest.Festival.Row != 0;
     }
 
 
@@ -74,6 +75,7 @@ internal sealed class QuestInfo : IQuestInfo
     public GrandCompany GrandCompany { get; }
     public EBeastTribe BeastTribe { get; }
     public IReadOnlyList<EClassJob> ClassJobs { get; }
+    public bool IsSeasonalEvent { get; }
 
     [UsedImplicitly(ImplicitUseKindFlags.Assign, ImplicitUseTargetFlags.Members)]
     public enum QuestJoin : byte

@@ -786,9 +786,23 @@ internal sealed class GameUiController : IDisposable
             string questName = addon->AtkTextNode250->NodeText.ToString();
             if (_questController.CurrentQuest is { Quest.Id: LeveId } &&
                 GameFunctions.GameStringEquals(_questController.CurrentQuest.Quest.Info.Name, questName))
+            {
+                _logger.LogInformation("JournalResult has the current leve, auto-accepting it");
                 addon->FireCallbackInt(0);
-            else
-                addon->FireCallbackInt(1);
+            }
+            else if (_targetManager.Target is { } target)
+            {
+                var issuedLeves = _questData.GetAllByIssuerDataId(target.DataId)
+                    .Where(x => x.QuestId is LeveId)
+                    .ToList();
+
+                if (issuedLeves.Any(x => GameFunctions.GameStringEquals(x.Name, questName)))
+                {
+                    _logger.LogInformation(
+                        "JournalResult has a leve but not the one we're currently on, auto-declining it");
+                    addon->FireCallbackInt(1);
+                }
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Questionable.Model.Common;
 
 namespace Questionable.Model.Questing;
 
@@ -15,6 +16,8 @@ public sealed class SkipStepConditions
     public SkipItemConditions? Item { get; set; }
     public List<ElementId> QuestsAccepted { get; set; } = new();
     public List<ElementId> QuestsCompleted { get; set; } = new();
+    public EAetheryteLocation? AetheryteLocked { get; set; }
+    public EAetheryteLocation? AetheryteUnlocked { get; set; }
     public EExtraSkipCondition? ExtraCondition { get; set; }
 
     public bool HasSkipConditions()
@@ -30,6 +33,8 @@ public sealed class SkipStepConditions
                Item != null ||
                QuestsAccepted.Count > 0 ||
                QuestsCompleted.Count > 0 ||
+               AetheryteLocked != null ||
+               AetheryteUnlocked != null ||
                ExtraCondition != null;
     }
 
