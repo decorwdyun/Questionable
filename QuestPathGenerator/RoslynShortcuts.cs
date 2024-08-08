@@ -358,6 +358,9 @@ public static class RoslynShortcuts
                                 SyntaxNodeList(
                                     Assignment(nameof(GatheredItem.ItemId), gatheredItem.ItemId, emptyItem.ItemId)
                                         .AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(GatheredItem.AlternativeItemId), gatheredItem.AlternativeItemId,
+                                        emptyItem.AlternativeItemId)
+                                        .AsSyntaxNodeOrToken(),
                                     Assignment(nameof(GatheredItem.ItemCount), gatheredItem.ItemCount,
                                             emptyItem.ItemCount)
                                         .AsSyntaxNodeOrToken(),
