@@ -120,8 +120,6 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
         if (_taskQueue.Count > 0)
             return;
 
-        var currentNode = _currentRequest.Nodes[_currentRequest.CurrentIndex++ % _currentRequest.Nodes.Count];
-
         var director = UIState.Instance()->DirectorTodo.Director;
         if (director != null && director->EventHandlerInfo != null &&
             director->EventHandlerInfo->EventId.ContentId == EventHandlerType.GatheringLeveDirector)
@@ -131,6 +129,10 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
 
             _taskQueue.Enqueue(new WaitAtEnd.WaitDelay());
         }
+
+        GatheringNode? currentNode = FindNextTargetableNodeAndUpdateIndex(_currentRequest);
+        if (currentNode == null)
+            return;
 
         _taskQueue.Enqueue(_serviceProvider.GetRequiredService<MountTask>()
             .With(_currentRequest.Root.TerritoryId, MountTask.EMountIf.Always));
@@ -182,6 +184,41 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
     {
         return !_objectTable.Any(x =>
             x.ObjectKind == ObjectKind.GatheringPoint && x.IsTargetable && x.DataId == node.DataId);
+    }
+
+    /// <summary>
+    /// For leves in particular, there's a good chance you're close enough to all nodes in the next group
+    /// but none are targetable (if they're not part of the randomly-picked route).
+    /// </summary>
+    private GatheringNode? FindNextTargetableNodeAndUpdateIndex(CurrentRequest currentRequest)
+    {
+        for (int i = 0; i < currentRequest.Nodes.Count; ++i)
+        {
+            int currentIndex = (currentRequest.CurrentIndex + i) % currentRequest.Nodes.Count;
+            var currentNode = currentRequest.Nodes[currentIndex];
+            var locationsAsObjects = currentNode.Locations.Select(x =>
+                _objectTable.FirstOrDefault(y =>
+                    currentNode.DataId == y.DataId && Vector3.Distance(x.Position, y.Position) < 0.1f))
+                .ToList();
+
+            // Are any of the nodes too far away to be found? This is likely around ~100 yalms. All closer gathering
+            // points are always in the object table, even if they're not targetable.
+            if (locationsAsObjects.Any(x => x == null))
+            {
+                currentRequest.CurrentIndex = (currentIndex + 1) % currentRequest.Nodes.Count;
+                return currentNode;
+            }
+
+            // If any are targetable, this group should be targeted as part of the route.
+            if (locationsAsObjects.Any(x => x is { IsTargetable: true }))
+            {
+                currentRequest.CurrentIndex = (currentIndex + 1) % currentRequest.Nodes.Count;
+                return currentNode;
+            }
+        }
+
+        // unsure what to even do here
+        return null;
     }
 
     public override IList<string> GetRemainingTaskNames()
