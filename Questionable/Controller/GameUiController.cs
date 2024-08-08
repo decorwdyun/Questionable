@@ -784,7 +784,7 @@ internal sealed class GameUiController : IDisposable
             AddonJournalResult* addon = (AddonJournalResult*)args.Addon;
 
             string questName = addon->AtkTextNode250->NodeText.ToString();
-            if (_questController.CurrentQuest != null &&
+            if (_questController.CurrentQuest is { Quest.Id: LeveId } &&
                 GameFunctions.GameStringEquals(_questController.CurrentQuest.Quest.Info.Name, questName))
                 addon->FireCallbackInt(0);
             else

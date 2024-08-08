@@ -12,9 +12,10 @@ internal sealed class UniqueStartStopValidator : IQuestValidator
         if (quest.Id is SatisfactionSupplyNpcId)
             yield break;
 
-        var questAccepts = FindQuestStepsWithInteractionType(quest, EInteractionType.AcceptQuest)
-            .Where(x => x.Step.PickUpQuestId == null)
-            .ToList();
+        var questAccepts =
+            FindQuestStepsWithInteractionType(quest, [EInteractionType.AcceptQuest, EInteractionType.AcceptLeve])
+                .Where(x => x.Step.PickUpQuestId == null)
+                .ToList();
         foreach (var accept in questAccepts)
         {
             if (accept.Sequence.Sequence != 0 || accept.StepId != quest.FindSequence(0)!.Steps.Count - 1)
@@ -44,9 +45,10 @@ internal sealed class UniqueStartStopValidator : IQuestValidator
             };
         }
 
-        var questCompletes = FindQuestStepsWithInteractionType(quest, EInteractionType.CompleteQuest)
-            .Where(x => x.Step.TurnInQuestId == null)
-            .ToList();
+        var questCompletes =
+            FindQuestStepsWithInteractionType(quest, [EInteractionType.CompleteQuest, EInteractionType.CompleteLeve])
+                .Where(x => x.Step.TurnInQuestId == null)
+                .ToList();
         foreach (var complete in questCompletes)
         {
             if (complete.Sequence.Sequence != 255 || complete.StepId != quest.FindSequence(255)!.Steps.Count - 1)
@@ -78,6 +80,6 @@ internal sealed class UniqueStartStopValidator : IQuestValidator
     }
 
     private static IEnumerable<(QuestSequence Sequence, int StepId, QuestStep Step)> FindQuestStepsWithInteractionType(
-        Quest quest, EInteractionType interactionType)
-        => quest.AllSteps().Where(x => x.Step.InteractionType == interactionType);
+        Quest quest, List<EInteractionType> interactionType)
+        => quest.AllSteps().Where(x => interactionType.Contains(x.Step.InteractionType));
 }

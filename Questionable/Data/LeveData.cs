@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FFXIVClientStructs.FFXIV.Common.Math;
 using LLib.GameData;
@@ -24,7 +25,9 @@ internal sealed class LeveData
 
     public void AddQuestSteps(LeveInfo leveInfo, QuestRoot questRoot)
     {
-        LeveStepData leveStepData = Leves.Single(x => x.IssuerDataId == leveInfo.IssuerDataId);
+        LeveStepData leveStepData = Leves.SingleOrDefault(x => x.IssuerDataId == leveInfo.IssuerDataId)
+                                    ?? throw new InvalidOperationException(
+                                        $"No leve location for issuer data id {leveInfo.IssuerDataId} found");
 
         QuestSequence? startSequence = questRoot.QuestSequence.FirstOrDefault(x => x.Sequence == 0);
         if (startSequence == null)
