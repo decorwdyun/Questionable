@@ -311,6 +311,12 @@ public static class RoslynShortcuts
                                         skipStepConditions.QuestsAccepted).AsSyntaxNodeOrToken(),
                                     AssignmentList(nameof(SkipStepConditions.QuestsCompleted),
                                         skipStepConditions.QuestsCompleted).AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(SkipStepConditions.AetheryteLocked),
+                                            skipStepConditions.AetheryteLocked, emptyStep.AetheryteLocked)
+                                        .AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(SkipStepConditions.AetheryteUnlocked),
+                                            skipStepConditions.AetheryteUnlocked, emptyStep.AetheryteUnlocked)
+                                        .AsSyntaxNodeOrToken(),
                                     Assignment(nameof(SkipStepConditions.ExtraCondition),
                                             skipStepConditions.ExtraCondition, emptyStep.ExtraCondition)
                                         .AsSyntaxNodeOrToken()))));
@@ -344,7 +350,13 @@ public static class RoslynShortcuts
                                     Assignment(nameof(SkipAetheryteCondition.InSameTerritory),
                                         skipAetheryteCondition.InSameTerritory, emptyAetheryte.InSameTerritory),
                                     AssignmentList(nameof(SkipAetheryteCondition.InTerritory),
-                                        skipAetheryteCondition.InTerritory)))));
+                                        skipAetheryteCondition.InTerritory),
+                                    Assignment(nameof(SkipAetheryteCondition.AetheryteLocked),
+                                            skipAetheryteCondition.AetheryteLocked, emptyAetheryte.AetheryteLocked)
+                                        .AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(SkipAetheryteCondition.AetheryteUnlocked),
+                                            skipAetheryteCondition.AetheryteUnlocked, emptyAetheryte.AetheryteUnlocked)
+                                        .AsSyntaxNodeOrToken()))));
             }
             else if (value is GatheredItem gatheredItem)
             {
@@ -359,7 +371,7 @@ public static class RoslynShortcuts
                                     Assignment(nameof(GatheredItem.ItemId), gatheredItem.ItemId, emptyItem.ItemId)
                                         .AsSyntaxNodeOrToken(),
                                     Assignment(nameof(GatheredItem.AlternativeItemId), gatheredItem.AlternativeItemId,
-                                        emptyItem.AlternativeItemId)
+                                            emptyItem.AlternativeItemId)
                                         .AsSyntaxNodeOrToken(),
                                     Assignment(nameof(GatheredItem.ItemCount), gatheredItem.ItemCount,
                                             emptyItem.ItemCount)
