@@ -36,6 +36,7 @@ internal static class InitiateLeve
     {
         private ElementId _elementId = null!;
         private uint _questType;
+        private DateTime _openedAt = DateTime.MinValue;
 
         public ITask With(ElementId elementId)
         {
@@ -47,19 +48,25 @@ internal static class InitiateLeve
         public bool Start()
         {
             AgentQuestJournal.Instance()->OpenForQuest(_elementId.Value, _questType);
+            _openedAt = DateTime.Now;
             return true;
         }
 
         public ETaskResult Update()
         {
             AgentQuestJournal* agentQuestJournal = AgentQuestJournal.Instance();
-            if (!agentQuestJournal->IsAgentActive())
-                return ETaskResult.StillRunning;
+            if (agentQuestJournal->IsAgentActive() &&
+                agentQuestJournal->SelectedQuestId == _elementId.Value &&
+                agentQuestJournal->SelectedQuestType == _questType)
+                return ETaskResult.TaskComplete;
 
-            return agentQuestJournal->SelectedQuestId == _elementId.Value &&
-                   agentQuestJournal->SelectedQuestType == _questType
-                ? ETaskResult.TaskComplete
-                : ETaskResult.StillRunning;
+            if (DateTime.Now > _openedAt.AddSeconds(3))
+            {
+                AgentQuestJournal.Instance()->OpenForQuest(_elementId.Value, _questType);
+                _openedAt = DateTime.Now;
+            }
+
+            return ETaskResult.StillRunning;
         }
 
         public override string ToString() => $"OpenJournal({_elementId})";
@@ -118,5 +125,7 @@ internal static class InitiateLeve
 
             return ETaskResult.StillRunning;
         }
+
+        public override string ToString() => "SelectLeveDifficulty";
     }
 }
