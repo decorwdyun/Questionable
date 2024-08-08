@@ -337,7 +337,7 @@ internal sealed class GameUiController : IDisposable
                 }
             }
 
-            if (_questController.NextQuest == null)
+            if (_questController.IsRunning && _questController.NextQuest == null)
             {
                 // make sure to always close the leve dialogue
                 if (_questData.GetAllByIssuerDataId(target.DataId).Any(x => x.QuestId is LeveId))
