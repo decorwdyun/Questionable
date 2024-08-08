@@ -66,7 +66,7 @@ internal static class Interact
 
         public bool Start()
         {
-            IGameObject? gameObject = gameFunctions.FindObjectByDataId(DataId, targetable: true);
+            IGameObject? gameObject = gameFunctions.FindObjectByDataId(DataId);
             if (gameObject == null)
             {
                 logger.LogWarning("No game object with dataId {DataId}", DataId);
@@ -113,7 +113,7 @@ internal static class Interact
 
             if (!_interacted)
             {
-                IGameObject? gameObject = gameFunctions.FindObjectByDataId(DataId, targetable: true);
+                IGameObject? gameObject = gameFunctions.FindObjectByDataId(DataId);
                 if (gameObject == null || !IsTargetable(gameObject) || !HasAnyMarker(gameObject))
                     return ETaskResult.StillRunning;
 

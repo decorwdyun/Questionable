@@ -157,15 +157,17 @@ internal sealed unsafe class GameFunctions
                playerState->IsAetherCurrentUnlocked(aetherCurrentId);
     }
 
-    public IGameObject? FindObjectByDataId(uint dataId, ObjectKind? kind = null, bool targetable = false)
+    public IGameObject? FindObjectByDataId(uint dataId, ObjectKind? kind = null)
     {
         foreach (var gameObject in _objectTable)
         {
-            if (targetable && !gameObject.IsTargetable)
-                continue;
-
             if (gameObject.ObjectKind is ObjectKind.Player or ObjectKind.Companion or ObjectKind.MountType
                 or ObjectKind.Retainer or ObjectKind.Housing)
+                continue;
+
+            // multiple objects in the object table can share the same data id for gathering points; only one of those
+            // (at most) is visible
+            if (gameObject is { ObjectKind: ObjectKind.GatheringPoint, IsTargetable: false })
                 continue;
 
             if (gameObject.DataId == dataId && (kind == null || kind.Value == gameObject.ObjectKind))
