@@ -89,7 +89,8 @@
             "Z": 262.19138
           },
           "TerritoryId": 137,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "Fly": true
         },
         {
           "DataId": 1050817,
