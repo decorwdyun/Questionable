@@ -40,6 +40,9 @@ internal sealed class MovementOverrideController
         // lower la noscea - Moraby Drydocks aetheryte
         new BlacklistedArea(135, new(156.11499f, 15.518433f, 673.21277f), 0.5f, 5f),
 
+        // upper la noscea
+        new BlacklistedPoint(139, new(366, -2.5f, 95.5f), new(362.65973f, -3.4f, 96.6896f), 2),
+
         // coerthas central highlands
         new BlacklistedPoint(155, new(-478.75f, 149.25f, -305.75f), new(-476.1802f, 149.06573f, -304.7811f)),
 

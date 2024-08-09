@@ -35,8 +35,10 @@
           "TerritoryId": 146,
           "InteractionType": "Combat",
           "EnemySpawnType": "OverworldEnemies",
-          "KillEnemyDataIds": [
-            356
+          "ComplexCombatData": [
+            {
+              "DataId": 356
+            }
           ]
         }
       ]

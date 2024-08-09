@@ -30,7 +30,12 @@
           "TerritoryId": 132,
           "InteractionType": "AcceptQuest",
           "PickUpQuestId": 802,
-          "AetheryteShortcut": "Gridania"
+          "AetheryteShortcut": "Gridania",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
+          }
         },
         {
           "DataId": 1000171,

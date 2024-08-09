@@ -53,7 +53,7 @@ internal sealed class QuestValidator
                         {
                             var level = issue.Severity == EIssueSeverity.Error
                                 ? LogLevel.Warning
-                                : LogLevel.Information;
+                                : LogLevel.Debug;
                             _logger.Log(level,
                                 "Validation failed: {QuestId} ({QuestName}) / {QuestSequence} / {QuestStep} - {Description}",
                                 issue.ElementId, quest.Info.Name, issue.Sequence, issue.Step, issue.Description);

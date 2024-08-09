@@ -20,6 +20,30 @@ that can sometimes be found as valid paths.
           "$": "Ul'dah Aetheryte to Immortal Flames"
         }
 ```
+
+## Western Thanalan
+
+Vesper Bay side of the gate:
+
+```json
+        {
+          "Position": {
+            "X": -408.92343,
+            "Y": 23.167036,
+            "Z": -351.16223
+          },
+          "TerritoryId": 140,
+          "InteractionType": "WalkTo",
+          "$": "Vesper Bay Gate"
+        }
+```
+
+Horizon side of the gate:
+
+```json
+
+```
+
 ## Mor Dhona
 
 ```json

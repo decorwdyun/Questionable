@@ -27,24 +27,6 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 2002061,
-          "Position": {
-            "X": -248.40167,
-            "Y": 33.98181,
-            "Z": 299.39722
-          },
-          "TerritoryId": 137,
-          "InteractionType": "Interact",
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            32
-          ]
-        },
-        {
           "DataId": 2002059,
           "Position": {
             "X": -282.88702,
@@ -63,12 +45,52 @@
           ]
         },
         {
+          "DataId": 2002061,
+          "Position": {
+            "X": -248.40167,
+            "Y": 33.98181,
+            "Z": 299.39722
+          },
+          "TerritoryId": 137,
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
+        },
+        {
+          "Position": {
+            "X": -301.2062,
+            "Y": 35.646942,
+            "Z": 273.47797
+          },
+          "TerritoryId": 137,
+          "InteractionType": "WalkTo",
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                64
+              ]
+            }
+          }
+        },
+        {
           "DataId": 2002060,
           "Position": {
             "X": -298.2987,
             "Y": 33.89026,
             "Z": 276.53918
           },
+          "StopDistance": 4.5,
           "TerritoryId": 137,
           "InteractionType": "Interact",
           "CompletionQuestVariablesFlags": [

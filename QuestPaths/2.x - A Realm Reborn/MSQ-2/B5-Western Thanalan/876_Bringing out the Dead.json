@@ -125,6 +125,16 @@
       "Sequence": 3,
       "Steps": [
         {
+          "Position": {
+            "X": -408.92343,
+            "Y": 23.167036,
+            "Z": -351.16223
+          },
+          "TerritoryId": 140,
+          "InteractionType": "WalkTo",
+          "$": "Vesper Bay Gate"
+        },
+        {
           "DataId": 1006362,
           "Position": {
             "X": -395.8954,
@@ -132,13 +142,38 @@
             "Z": -353.6584
           },
           "TerritoryId": 140,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DisableNavmesh": true
         }
       ]
     },
     {
       "Sequence": 4,
       "Steps": [
+        {
+          "Position": {
+            "X": -408.92343,
+            "Y": 23.167036,
+            "Z": -351.16223
+          },
+          "TerritoryId": 140,
+          "InteractionType": "WalkTo",
+          "$": "Vesper Bay Gate",
+          "DisableNavmesh": true,
+          "Mount": true,
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                64,
+                null
+              ]
+            }
+          }
+        },
         {
           "DataId": 1006344,
           "Position": {
@@ -202,13 +237,30 @@
           },
           "TerritoryId": 140,
           "InteractionType": "Interact",
-          "Comment": "TODO QW"
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            128,
+            null
+          ]
         }
       ]
     },
     {
       "Sequence": 5,
       "Steps": [
+        {
+          "Position": {
+            "X": -408.92343,
+            "Y": 23.167036,
+            "Z": -351.16223
+          },
+          "TerritoryId": 140,
+          "InteractionType": "WalkTo",
+          "$": "Vesper Bay Gate"
+        },
         {
           "DataId": 1006362,
           "Position": {

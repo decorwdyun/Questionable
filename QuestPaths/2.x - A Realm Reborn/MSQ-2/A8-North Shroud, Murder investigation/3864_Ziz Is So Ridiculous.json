@@ -12,6 +12,7 @@
             "Y": -44.86564,
             "Z": 262.745
           },
+          "StopDistance": 5,
           "TerritoryId": 154,
           "InteractionType": "AcceptQuest"
         }
@@ -44,8 +45,11 @@
           "TerritoryId": 154,
           "InteractionType": "Combat",
           "EnemySpawnType": "OverworldEnemies",
-          "KillEnemyDataIds": [
-            179
+          "ComplexCombatData": [
+            {
+              "DataId": 179,
+              "MinimumKillCount": 3
+            }
           ]
         }
       ]

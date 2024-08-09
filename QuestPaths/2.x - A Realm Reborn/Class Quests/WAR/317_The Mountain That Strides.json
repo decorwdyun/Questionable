@@ -82,7 +82,8 @@
             "Z": 212.84802
           },
           "TerritoryId": 138,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Western La Noscea - Aleport"
         }
       ]
     },
