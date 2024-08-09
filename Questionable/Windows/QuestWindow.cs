@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Numerics;
+using Dalamud.Interface;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using ImGuiNET;
@@ -24,6 +25,9 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
     private readonly CreationUtilsComponent _creationUtilsComponent;
     private readonly QuickAccessButtonsComponent _quickAccessButtonsComponent;
     private readonly RemainingTasksComponent _remainingTasksComponent;
+    private readonly IFramework _framework;
+    private readonly GameUiController _gameUiController;
+    private readonly TitleBarButton _minimizeButton;
 
     public QuestWindow(IDalamudPluginInterface pluginInterface,
         QuestController questController,
@@ -34,8 +38,11 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         ARealmRebornComponent aRealmRebornComponent,
         CreationUtilsComponent creationUtilsComponent,
         QuickAccessButtonsComponent quickAccessButtonsComponent,
-        RemainingTasksComponent remainingTasksComponent)
-        : base($"Questionable v{PluginVersion.ToString(2)}###Questionable", ImGuiWindowFlags.AlwaysAutoResize)
+        RemainingTasksComponent remainingTasksComponent,
+        IFramework framework,
+        GameUiController gameUiController)
+        : base($"Questionable v{PluginVersion.ToString(2)}###Questionable",
+            ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoCollapse)
     {
         _pluginInterface = pluginInterface;
         _questController = questController;
@@ -47,6 +54,8 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         _creationUtilsComponent = creationUtilsComponent;
         _quickAccessButtonsComponent = quickAccessButtonsComponent;
         _remainingTasksComponent = remainingTasksComponent;
+        _framework = framework;
+        _gameUiController = gameUiController;
 
 #if DEBUG
         IsOpen = true;
@@ -57,9 +66,27 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
             MaximumSize = default
         };
         RespectCloseHotkey = false;
+
+        _minimizeButton = new TitleBarButton
+        {
+            Icon = FontAwesomeIcon.Minus,
+            Priority = int.MinValue,
+            IconOffset = new Vector2(1.5f, 1),
+            Click = _ =>
+            {
+                IsMinimized = !IsMinimized;
+                _minimizeButton!.Icon = IsMinimized ? FontAwesomeIcon.WindowMaximize : FontAwesomeIcon.Minus;
+            },
+            AvailableClickthrough = true,
+        };
+        TitleBarButtons.Insert(0, _minimizeButton);
+
+        _activeQuestComponent.Reload += OnReload;
+        _quickAccessButtonsComponent.Reload += OnReload;
     }
 
     public WindowConfig WindowConfig => _configuration.DebugWindowConfig;
+    public bool IsMinimized { get; set; }
 
     public void SaveWindowConfig() => _pluginInterface.SavePluginConfig(_configuration);
 
@@ -82,19 +109,31 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
 
     public override void Draw()
     {
-        _activeQuestComponent.Draw();
-        ImGui.Separator();
-
-        if (_aRealmRebornComponent.ShouldDraw)
+        _activeQuestComponent.Draw(IsMinimized);
+        if (!IsMinimized)
         {
-            _aRealmRebornComponent.Draw();
             ImGui.Separator();
+
+            if (_aRealmRebornComponent.ShouldDraw)
+            {
+                _aRealmRebornComponent.Draw();
+                ImGui.Separator();
+            }
+
+            _creationUtilsComponent.Draw();
+            ImGui.Separator();
+
+            _quickAccessButtonsComponent.Draw();
+            _remainingTasksComponent.Draw();
         }
+    }
 
-        _creationUtilsComponent.Draw();
-        ImGui.Separator();
+    private void OnReload(object? sender, EventArgs e) => Reload();
 
-        _quickAccessButtonsComponent.Draw();
-        _remainingTasksComponent.Draw();
+    internal void Reload()
+    {
+        _questController.Reload();
+        _framework.RunOnTick(() => _gameUiController.HandleCurrentDialogueChoices(),
+            TimeSpan.FromMilliseconds(200));
     }
 }

@@ -18,9 +18,7 @@ namespace Questionable.Windows.QuestComponents;
 
 internal sealed class QuickAccessButtonsComponent
 {
-    private readonly QuestController _questController;
     private readonly MovementController _movementController;
-    private readonly GameUiController _gameUiController;
     private readonly GameFunctions _gameFunctions;
     private readonly ChatFunctions _chatFunctions;
     private readonly QuestRegistry _questRegistry;
@@ -29,12 +27,10 @@ internal sealed class QuickAccessButtonsComponent
     private readonly JournalProgressWindow _journalProgressWindow;
     private readonly IClientState _clientState;
     private readonly ICondition _condition;
-    private readonly IFramework _framework;
     private readonly ICommandManager _commandManager;
 
-    public QuickAccessButtonsComponent(QuestController questController,
+    public QuickAccessButtonsComponent(
         MovementController movementController,
-        GameUiController gameUiController,
         GameFunctions gameFunctions,
         ChatFunctions chatFunctions,
         QuestRegistry questRegistry,
@@ -43,12 +39,9 @@ internal sealed class QuickAccessButtonsComponent
         JournalProgressWindow journalProgressWindow,
         IClientState clientState,
         ICondition condition,
-        IFramework framework,
         ICommandManager commandManager)
     {
-        _questController = questController;
         _movementController = movementController;
-        _gameUiController = gameUiController;
         _gameFunctions = gameFunctions;
         _chatFunctions = chatFunctions;
         _questRegistry = questRegistry;
@@ -57,9 +50,10 @@ internal sealed class QuickAccessButtonsComponent
         _journalProgressWindow = journalProgressWindow;
         _clientState = clientState;
         _condition = condition;
-        _framework = framework;
         _commandManager = commandManager;
     }
+
+    public event EventHandler? Reload;
 
     public unsafe void Draw()
     {
@@ -89,8 +83,8 @@ internal sealed class QuickAccessButtonsComponent
                 ImGui.SetTooltip("Hold CTRL to enable this button.\nRebuilding the navmesh will take some time.");
         }
 
-        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.RedoAlt,"Reload Data"))
-            Reload();
+        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.RedoAlt, "Reload Data"))
+            Reload?.Invoke(this, EventArgs.Empty);
 
         ImGui.SameLine();
         if (ImGuiComponents.IconButton(FontAwesomeIcon.ChartColumn))
@@ -103,13 +97,6 @@ internal sealed class QuickAccessButtonsComponent
             if (DrawValidationIssuesButton())
                 _questValidationWindow.IsOpen = true;
         }
-    }
-
-    public void Reload()
-    {
-        _questController.Reload();
-        _framework.RunOnTick(() => _gameUiController.HandleCurrentDialogueChoices(),
-            TimeSpan.FromMilliseconds(200));
     }
 
     private bool DrawValidationIssuesButton()

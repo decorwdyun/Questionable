@@ -17,7 +17,6 @@ internal sealed class CommandHandler : IDisposable
     private readonly IChatGui _chatGui;
     private readonly QuestController _questController;
     private readonly MovementController _movementController;
-    private readonly QuickAccessButtonsComponent _quickAccessButtonsComponent;
     private readonly QuestRegistry _questRegistry;
     private readonly ConfigWindow _configWindow;
     private readonly DebugOverlay _debugOverlay;
@@ -31,7 +30,6 @@ internal sealed class CommandHandler : IDisposable
         IChatGui chatGui,
         QuestController questController,
         MovementController movementController,
-        QuickAccessButtonsComponent quickAccessButtonsComponent,
         QuestRegistry questRegistry,
         ConfigWindow configWindow,
         DebugOverlay debugOverlay,
@@ -44,7 +42,6 @@ internal sealed class CommandHandler : IDisposable
         _chatGui = chatGui;
         _questController = questController;
         _movementController = movementController;
-        _quickAccessButtonsComponent = quickAccessButtonsComponent;
         _questRegistry = questRegistry;
         _configWindow = configWindow;
         _debugOverlay = debugOverlay;
@@ -87,7 +84,7 @@ internal sealed class CommandHandler : IDisposable
                 break;
 
             case "reload":
-                _quickAccessButtonsComponent.Reload();
+                _questWindow.Reload();
                 break;
 
             case "do":
