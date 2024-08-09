@@ -44,10 +44,10 @@ internal static class Interact
     }
 
     internal sealed class DoInteract(GameFunctions gameFunctions, ICondition condition, ILogger<DoInteract> logger)
-        : ITask
+        : ITask, IConditionChangeAware
     {
         private bool _needsUnmount;
-        private bool _interacted;
+        private EInteractionState _interactionState = EInteractionState.None;
         private DateTime _continueAt = DateTime.MinValue;
 
         private uint DataId { get; set; }
@@ -84,9 +84,11 @@ internal static class Interact
                 return true;
             }
 
-            if (IsTargetable(gameObject) && HasAnyMarker(gameObject))
+            if (gameObject.IsTargetable && HasAnyMarker(gameObject))
             {
-                _interacted = gameFunctions.InteractWith(gameObject);
+                _interactionState = gameFunctions.InteractWith(gameObject)
+                    ? EInteractionState.InteractionTriggered
+                    : EInteractionState.None;
                 _continueAt = DateTime.Now.AddSeconds(0.5);
                 return true;
             }
@@ -111,18 +113,18 @@ internal static class Interact
                     _needsUnmount = false;
             }
 
-            if (!_interacted)
-            {
-                IGameObject? gameObject = gameFunctions.FindObjectByDataId(DataId);
-                if (gameObject == null || !IsTargetable(gameObject) || !HasAnyMarker(gameObject))
-                    return ETaskResult.StillRunning;
+            if (_interactionState == EInteractionState.InteractionConfirmed)
+                return ETaskResult.TaskComplete;
 
-                _interacted = gameFunctions.InteractWith(gameObject);
-                _continueAt = DateTime.Now.AddSeconds(0.5);
+            IGameObject? gameObject = gameFunctions.FindObjectByDataId(DataId);
+            if (gameObject == null || !gameObject.IsTargetable || !HasAnyMarker(gameObject))
                 return ETaskResult.StillRunning;
-            }
 
-            return ETaskResult.TaskComplete;
+            _interactionState = gameFunctions.InteractWith(gameObject)
+                ? EInteractionState.InteractionTriggered
+                : EInteractionState.None;
+            _continueAt = DateTime.Now.AddSeconds(0.5);
+            return ETaskResult.StillRunning;
         }
 
         private unsafe bool HasAnyMarker(IGameObject gameObject)
@@ -134,11 +136,24 @@ internal static class Interact
             return gameObjectStruct->NamePlateIconId != 0;
         }
 
-        private static bool IsTargetable(IGameObject gameObject)
+        public override string ToString() => $"Interact({DataId})";
+
+        public void OnConditionChange(ConditionFlag flag, bool value)
         {
-            return gameObject.IsTargetable;
+            logger.LogDebug("Condition change: {Flag} = {Value}", flag, value);
+            if (_interactionState == EInteractionState.InteractionTriggered &&
+                flag == ConditionFlag.OccupiedInQuestEvent && value)
+            {
+                logger.LogInformation("Interaction was most likely triggered");
+                _interactionState = EInteractionState.InteractionConfirmed;
+            }
         }
 
-        public override string ToString() => $"Interact({DataId})";
+        private enum EInteractionState
+        {
+            None,
+            InteractionTriggered,
+            InteractionConfirmed,
+        }
     }
 }

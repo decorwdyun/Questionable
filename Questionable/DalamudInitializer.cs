@@ -1,7 +1,10 @@
 ﻿using System;
+using Dalamud.Game.Gui.Toast;
+using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
+using Microsoft.Extensions.Logging;
 using Questionable.Controller;
 using Questionable.Windows;
 
@@ -17,6 +20,8 @@ internal sealed class DalamudInitializer : IDisposable
     private readonly WindowSystem _windowSystem;
     private readonly QuestWindow _questWindow;
     private readonly ConfigWindow _configWindow;
+    private readonly IToastGui _toastGui;
+    private readonly ILogger<DalamudInitializer> _logger;
 
     public DalamudInitializer(
         IDalamudPluginInterface pluginInterface,
@@ -31,7 +36,9 @@ internal sealed class DalamudInitializer : IDisposable
         ConfigWindow configWindow,
         QuestSelectionWindow questSelectionWindow,
         QuestValidationWindow questValidationWindow,
-        JournalProgressWindow journalProgressWindow)
+        JournalProgressWindow journalProgressWindow,
+        IToastGui toastGui,
+        ILogger<DalamudInitializer> logger)
     {
         _pluginInterface = pluginInterface;
         _framework = framework;
@@ -41,6 +48,8 @@ internal sealed class DalamudInitializer : IDisposable
         _windowSystem = windowSystem;
         _questWindow = questWindow;
         _configWindow = configWindow;
+        _toastGui = toastGui;
+        _logger = logger;
 
         _windowSystem.AddWindow(questWindow);
         _windowSystem.AddWindow(configWindow);
@@ -54,6 +63,9 @@ internal sealed class DalamudInitializer : IDisposable
         _pluginInterface.UiBuilder.OpenConfigUi += _configWindow.Toggle;
         _framework.Update += FrameworkUpdate;
         _framework.RunOnTick(gameUiController.HandleCurrentDialogueChoices, TimeSpan.FromMilliseconds(200));
+        _toastGui.Toast += OnToast;
+        _toastGui.ErrorToast += OnErrorToast;
+        _toastGui.QuestToast += OnQuestToast;
     }
 
     private void FrameworkUpdate(IFramework framework)
@@ -71,8 +83,20 @@ internal sealed class DalamudInitializer : IDisposable
         }
     }
 
+    private void OnToast(ref SeString message, ref ToastOptions options, ref bool isHandled)
+        => _logger.LogInformation("Normal Toast: {Message}", message);
+
+    private void OnErrorToast(ref SeString message, ref bool isHandled)
+        => _logger.LogInformation("Error Toast: {Message}", message);
+
+    private void OnQuestToast(ref SeString message, ref QuestToastOptions options, ref bool isHandled)
+        => _logger.LogInformation("Quest Toast: {Message}", message);
+
     public void Dispose()
     {
+        _toastGui.QuestToast -= OnQuestToast;
+        _toastGui.ErrorToast -= OnErrorToast;
+        _toastGui.Toast -= OnToast;
         _framework.Update -= FrameworkUpdate;
         _pluginInterface.UiBuilder.OpenConfigUi -= _configWindow.Toggle;
         _pluginInterface.UiBuilder.OpenMainUi -= _questWindow.Toggle;

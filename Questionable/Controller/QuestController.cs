@@ -81,6 +81,8 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         _configuration = configuration;
         _yesAlreadyIpc = yesAlreadyIpc;
         _taskFactories = taskFactories.ToList().AsReadOnly();
+
+        _condition.ConditionChange += OnConditionChange;
     }
 
     public (QuestProgress Progress, ECurrentQuestType Type)? CurrentQuestDetails
@@ -728,6 +730,12 @@ internal sealed class QuestController : MiniTaskController<QuestController>
     {
         _logger.LogInformation("Last update: {Update}", _lastTaskUpdate);
         return IsRunning || DateTime.Now <= _lastTaskUpdate.Add(timeSpan);
+    }
+
+    private void OnConditionChange(ConditionFlag flag, bool value)
+    {
+        if (_currentTask is IConditionChangeAware conditionChangeAware)
+            conditionChangeAware.OnConditionChange(flag, value);
     }
 
     public sealed record StepProgress(

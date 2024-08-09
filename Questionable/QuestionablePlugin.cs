@@ -46,7 +46,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         ICommandManager commandManager,
         IAddonLifecycle addonLifecycle,
         IKeyState keyState,
-        IContextMenu contextMenu)
+        IContextMenu contextMenu,
+        IToastGui toastGui)
     {
         ArgumentNullException.ThrowIfNull(pluginInterface);
         ArgumentNullException.ThrowIfNull(chatGui);
@@ -72,6 +73,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
             serviceCollection.AddSingleton(addonLifecycle);
             serviceCollection.AddSingleton(keyState);
             serviceCollection.AddSingleton(contextMenu);
+            serviceCollection.AddSingleton(toastGui);
             serviceCollection.AddSingleton(new WindowSystem(nameof(Questionable)));
             serviceCollection.AddSingleton((Configuration?)pluginInterface.GetPluginConfig() ?? new Configuration());
 
