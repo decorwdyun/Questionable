@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Numerics;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Plugin.Services;
@@ -50,11 +51,19 @@ internal static class UseItem
 
                 var task = serviceProvider.GetRequiredService<Use>()
                     .With(quest.Id, step.ItemId.Value, step.CompletionQuestVariablesFlags);
+
+                int currentStepIndex = sequence.Steps.IndexOf(step);
+                QuestStep? nextStep = sequence.Steps.Skip(currentStepIndex + 1).SingleOrDefault();
+                Vector3? nextPosition = (nextStep ?? step).Position;
                 return
                 [
                     unmount, task,
                     new WaitConditionTask(() => clientState.TerritoryType == 140,
                         $"Wait(territory: {territoryData.GetNameAndId(140)})"),
+                    serviceProvider.GetRequiredService<MountTask>()
+                        .With(140,
+                            nextPosition != null ? MountTask.EMountIf.AwayFromPosition : MountTask.EMountIf.Always,
+                            nextPosition),
                     serviceProvider.GetRequiredService<Move.MoveInternal>()
                         .With(140, new(-408.92343f, 23.167036f, -351.16223f), 0.25f, dataId: null, disableNavMesh: true,
                             sprint: false, fly: false)
@@ -197,12 +206,17 @@ internal static class UseItem
     }
 
 
-    internal sealed class UseOnGround(GameFunctions gameFunctions, QuestFunctions questFunctions, ICondition condition, ILogger<UseOnGround> logger)
+    internal sealed class UseOnGround(
+        GameFunctions gameFunctions,
+        QuestFunctions questFunctions,
+        ICondition condition,
+        ILogger<UseOnGround> logger)
         : UseItemBase(questFunctions, condition, logger)
     {
         public uint DataId { get; set; }
 
-        public ITask With(ElementId? questId, uint dataId, uint itemId, IList<QuestWorkValue?> completionQuestVariablesFlags)
+        public ITask With(ElementId? questId, uint dataId, uint itemId,
+            IList<QuestWorkValue?> completionQuestVariablesFlags)
         {
             QuestId = questId;
             DataId = dataId;
@@ -225,7 +239,8 @@ internal static class UseItem
     {
         public Vector3 Position { get; set; }
 
-        public ITask With(ElementId? questId, Vector3 position, uint itemId, IList<QuestWorkValue?> completionQuestVariablesFlags)
+        public ITask With(ElementId? questId, Vector3 position, uint itemId,
+            IList<QuestWorkValue?> completionQuestVariablesFlags)
         {
             QuestId = questId;
             Position = position;
@@ -240,12 +255,17 @@ internal static class UseItem
             $"UseItem({ItemId} on ground at {Position.ToString("G", CultureInfo.InvariantCulture)})";
     }
 
-    internal sealed class UseOnObject(QuestFunctions questFunctions, GameFunctions gameFunctions, ICondition condition, ILogger<UseOnObject> logger)
+    internal sealed class UseOnObject(
+        QuestFunctions questFunctions,
+        GameFunctions gameFunctions,
+        ICondition condition,
+        ILogger<UseOnObject> logger)
         : UseItemBase(questFunctions, condition, logger)
     {
         public uint DataId { get; set; }
 
-        public ITask With(ElementId? questId, uint dataId, uint itemId, IList<QuestWorkValue?> completionQuestVariablesFlags,
+        public ITask With(ElementId? questId, uint dataId, uint itemId,
+            IList<QuestWorkValue?> completionQuestVariablesFlags,
             bool startingCombat = false)
         {
             QuestId = questId;
@@ -261,7 +281,11 @@ internal static class UseItem
         public override string ToString() => $"UseItem({ItemId} on {DataId})";
     }
 
-    internal sealed class Use(GameFunctions gameFunctions, QuestFunctions questFunctions, ICondition condition, ILogger<Use> logger)
+    internal sealed class Use(
+        GameFunctions gameFunctions,
+        QuestFunctions questFunctions,
+        ICondition condition,
+        ILogger<Use> logger)
         : UseItemBase(questFunctions, condition, logger)
     {
         public ITask With(ElementId? questId, uint itemId, IList<QuestWorkValue?> completionQuestVariablesFlags)
