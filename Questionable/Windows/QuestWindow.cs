@@ -42,7 +42,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         IFramework framework,
         GameUiController gameUiController)
         : base($"Questionable v{PluginVersion.ToString(2)}###Questionable",
-            ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoCollapse)
+            ImGuiWindowFlags.AlwaysAutoResize)
     {
         _pluginInterface = pluginInterface;
         _questController = questController;
@@ -92,7 +92,17 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
 
     public override void PreOpenCheck()
     {
-        IsOpen |= _questController.IsRunning;
+        if (_questController.IsRunning)
+        {
+            IsOpen = true;
+            Flags |= ImGuiWindowFlags.NoCollapse;
+            ShowCloseButton = false;
+        }
+        else
+        {
+            Flags &= ~ImGuiWindowFlags.NoCollapse;
+            ShowCloseButton = true;
+        }
     }
 
     public override bool DrawConditions()

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Game.Text;
@@ -9,7 +8,6 @@ using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
-using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using ImGuiNET;
 using Questionable.Controller;
 using Questionable.Controller.Steps.Shared;
