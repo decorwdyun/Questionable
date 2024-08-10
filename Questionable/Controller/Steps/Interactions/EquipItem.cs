@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using LLib;
 using Lumina.Excel.GeneratedSheets;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Questionable.Functions;
 using Questionable.Model.Questing;
 using Quest = Questionable.Model.Quest;
 
@@ -26,8 +29,9 @@ internal static class EquipItem
         }
     }
 
-    internal sealed class DoEquip(IDataManager dataManager, ILogger<DoEquip> logger) : ITask
+    internal sealed class DoEquip(IDataManager dataManager, ILogger<DoEquip> logger) : ITask, IToastAware
     {
+        private const int MaxAttempts = 3;
         private static readonly IReadOnlyList<InventoryType> SourceInventoryTypes =
         [
             InventoryType.ArmoryMainHand,
@@ -98,7 +102,7 @@ internal static class EquipItem
         private unsafe void Equip()
         {
             ++_attempts;
-            if (_attempts > 3)
+            if (_attempts > MaxAttempts)
                 throw new TaskException("Unable to equip gear.");
 
             var inventoryManager = InventoryManager.Instance();
@@ -169,5 +173,12 @@ internal static class EquipItem
         }
 
         public override string ToString() => $"Equip({_item.Name})";
+
+        public void OnErrorToast(SeString message)
+        {
+            string? insufficientArmoryChestSpace = dataManager.GetString<LogMessage>(709, x => x.Text);
+            if (GameFunctions.GameStringEquals(message.TextValue, insufficientArmoryChestSpace))
+                _attempts = MaxAttempts;
+        }
     }
 }

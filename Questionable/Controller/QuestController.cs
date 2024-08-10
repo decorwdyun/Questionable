@@ -4,11 +4,15 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Keys;
+using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using LLib.GameData;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps;
+using Questionable.Controller.Steps.Interactions;
 using Questionable.Controller.Steps.Shared;
+using Questionable.Data;
 using Questionable.External;
 using Questionable.Functions;
 using Questionable.Model;
@@ -16,7 +20,7 @@ using Questionable.Model.Questing;
 
 namespace Questionable.Controller;
 
-internal sealed class QuestController : MiniTaskController<QuestController>
+internal sealed class QuestController : MiniTaskController<QuestController>, IDisposable
 {
     private readonly IClientState _clientState;
     private readonly GameFunctions _gameFunctions;
@@ -27,6 +31,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
     private readonly QuestRegistry _questRegistry;
     private readonly IKeyState _keyState;
     private readonly ICondition _condition;
+    private readonly IToastGui _toastGui;
     private readonly Configuration _configuration;
     private readonly YesAlreadyIpc _yesAlreadyIpc;
     private readonly IReadOnlyList<ITaskFactory> _taskFactories;
@@ -64,6 +69,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         IKeyState keyState,
         IChatGui chatGui,
         ICondition condition,
+        IToastGui toastGui,
         Configuration configuration,
         YesAlreadyIpc yesAlreadyIpc,
         IEnumerable<ITaskFactory> taskFactories)
@@ -78,11 +84,13 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         _questRegistry = questRegistry;
         _keyState = keyState;
         _condition = condition;
+        _toastGui = toastGui;
         _configuration = configuration;
         _yesAlreadyIpc = yesAlreadyIpc;
         _taskFactories = taskFactories.ToList().AsReadOnly();
 
         _condition.ConditionChange += OnConditionChange;
+        _toastGui.ErrorToast += OnErrorToast;
     }
 
     public (QuestProgress Progress, ECurrentQuestType Type)? CurrentQuestDetails
@@ -216,6 +224,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
                     Stop("Pending quest accepted", continueIfAutomatic: true);
                 }
             }
+
             if (_simulatedQuest == null && _nextQuest != null)
             {
                 // if the quest is accepted, we no longer track it
@@ -231,7 +240,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
                         _nextQuest.Quest.Id);
 
                     // if (_nextQuest.Quest.Id is LeveId)
-                      //  _startedQuest = _nextQuest;
+                    //  _startedQuest = _nextQuest;
 
                     _nextQuest = null;
                 }
@@ -693,34 +702,86 @@ internal sealed class QuestController : MiniTaskController<QuestController>
             return false;
 
         QuestSequence? currentSequence = currentQuest.Quest.FindSequence(currentQuest.Sequence);
-        QuestStep? currentStep = currentSequence?.FindStep(currentQuest.Step);
+        if (currentQuest.Step > 0)
+            return false;
 
-        // TODO Should this check that all previous steps have CompletionFlags so that we avoid running to places
-        // no longer relevant for the non-priority quest (after we're done with the priority quest)?
+        QuestStep? currentStep = currentSequence?.FindStep(currentQuest.Step);
         return currentStep?.AetheryteShortcut != null;
+    }
+
+    private List<ElementId> GetPriorityQuests()
+    {
+        List<ElementId> priorityQuests =
+        [
+            new QuestId(1157), // Garuda (Hard)
+            new QuestId(1158), // Titan (Hard)
+            ..QuestData.CrystalTowerQuests
+        ];
+
+        EClassJob classJob = (EClassJob?)_clientState.LocalPlayer?.ClassJob.Id ?? EClassJob.Adventurer;
+        if (classJob != EClassJob.Adventurer)
+        {
+            priorityQuests.AddRange(_questRegistry.GetKnownClassJobQuests(classJob)
+                .Where(x => _questRegistry.TryGetQuest(x.QuestId, out Quest? quest) && quest.Info is QuestInfo
+                {
+                    // ignore Endwalker/Dawntrail, as the class quests are optional
+                    Expansion: EExpansionVersion.ARealmReborn or EExpansionVersion.Heavensward or EExpansionVersion.Stormblood or EExpansionVersion.Shadowbringers
+                })
+                .Select(x => x.QuestId));
+        }
+
+        return priorityQuests;
     }
 
     public bool TryPickPriorityQuest()
     {
-        if (!IsInterruptible())
+        if (!IsInterruptible() || _nextQuest != null || _gatheringQuest != null || _simulatedQuest != null)
             return false;
 
-        ushort[] priorityQuests =
-        [
-            1157, // Garuda (Hard)
-            1158, // Titan (Hard)
-        ];
+        // don't start a second priority quest until the first one is resolved
+        List<ElementId> priorityQuests = GetPriorityQuests();
+        if (_startedQuest != null && priorityQuests.Contains(_startedQuest.Quest.Id))
+            return false;
 
-        foreach (var id in priorityQuests)
+        foreach (ElementId questId in priorityQuests)
         {
-            var questId = new QuestId(id);
-            if (_questFunctions.IsReadyToAcceptQuest(questId) && _questRegistry.TryGetQuest(questId, out var quest))
+            if (!_questFunctions.IsReadyToAcceptQuest(questId) || !_questRegistry.TryGetQuest(questId, out var quest))
+                continue;
+
+            var firstStep = quest.FindSequence(0)?.FindStep(0);
+            if (firstStep == null)
+                continue;
+
+            if (firstStep.AetheryteShortcut is { } aetheryteShortcut)
             {
+                if (_gameFunctions.IsAetheryteUnlocked(aetheryteShortcut))
+                {
+                    _logger.LogInformation("Priority quest is accessible via aetheryte {Aetheryte}", aetheryteShortcut);
+                    SetNextQuest(quest);
+
+                    _chatGui.Print(
+                        $"[Questionable] Picking up quest '{quest.Info.Name}' as a priority over current main story/side quests.");
+                    return true;
+                }
+                else
+                {
+                    _logger.LogWarning("Ignoring priority quest {QuestId} / {QuestName}, aetheryte locked", quest.Id,
+                        quest.Info.Name);
+                }
+            }
+
+            if (firstStep is { InteractionType: EInteractionType.UseItem, ItemId: UseItem.VesperBayAetheryteTicket })
+            {
+                _logger.LogInformation("Priority quest is accessible via vesper bay");
                 SetNextQuest(quest);
+
                 _chatGui.Print(
                     $"[Questionable] Picking up quest '{quest.Info.Name}' as a priority over current main story/side quests.");
                 return true;
             }
+            else
+                _logger.LogTrace("Ignoring priority quest {QuestId} / {QuestName}, as we don't know how to get there",
+                    questId, quest.Info.Name);
         }
 
         return false;
@@ -736,6 +797,18 @@ internal sealed class QuestController : MiniTaskController<QuestController>
     {
         if (_currentTask is IConditionChangeAware conditionChangeAware)
             conditionChangeAware.OnConditionChange(flag, value);
+    }
+
+    private void OnErrorToast(ref SeString message, ref bool ishandled)
+    {
+        if (_currentTask is IToastAware toastAware)
+            toastAware.OnErrorToast(message);
+    }
+
+    public void Dispose()
+    {
+        _toastGui.ErrorToast -= OnErrorToast;
+        _condition.ConditionChange -= OnConditionChange;
     }
 
     public sealed record StepProgress(

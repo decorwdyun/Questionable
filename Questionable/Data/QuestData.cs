@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Dalamud.Plugin.Services;
+using LLib.GameData;
 using Lumina.Excel.GeneratedSheets;
 using Questionable.Model;
 using Questionable.Model.Questing;
@@ -11,6 +12,8 @@ namespace Questionable.Data;
 
 internal sealed class QuestData
 {
+    public static readonly IReadOnlyList<QuestId> CrystalTowerQuests =
+        [new(1709), new(1200), new(1201), new(1202), new(1203), new(1474), new(494), new(495)];
     private readonly Dictionary<ElementId, IQuestInfo> _quests;
 
     public QuestData(IDataManager dataManager)
