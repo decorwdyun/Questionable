@@ -32,7 +32,8 @@
           "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
             43
-          ]
+          ],
+          "CombatDelaySecondsAtStart": 5
         }
       ]
     },

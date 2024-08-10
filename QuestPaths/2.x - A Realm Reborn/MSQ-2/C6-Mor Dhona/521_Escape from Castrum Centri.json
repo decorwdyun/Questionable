@@ -138,6 +138,15 @@
       "Sequence": 5,
       "Steps": [
         {
+          "Position": {
+            "X": -427.75616,
+            "Y": -0.77819824,
+            "Z": -273.82324
+          },
+          "TerritoryId": 335,
+          "InteractionType": "EquipRecommended"
+        },
+        {
           "DataId": 2002376,
           "Position": {
             "X": -427.75616,
@@ -159,6 +168,7 @@
             "Y": 84,
             "Z": 2.1514893
           },
+          "StopDistance": 5,
           "TerritoryId": 130,
           "InteractionType": "CompleteQuest"
         }

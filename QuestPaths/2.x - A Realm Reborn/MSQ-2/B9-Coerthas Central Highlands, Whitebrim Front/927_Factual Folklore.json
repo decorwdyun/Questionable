@@ -35,10 +35,14 @@
             "Z": 89.58569
           },
           "TerritoryId": 155,
-          "InteractionType": "Combat",
+          "InteractionType": "Instruction",
+          "Comment": "Use Quest item on enemy to weaken it first",
+          "$": "Status Effects: 22 (HP Penalty) + 62 (Damage Down)",
           "EnemySpawnType": "AfterInteraction",
-          "KillEnemyDataIds": [
-            2196
+          "ComplexCombatData": [
+            {
+              "DataId": 2196
+            }
           ]
         }
       ]
@@ -136,6 +140,26 @@
     {
       "Sequence": 255,
       "Steps": [
+        {
+          "Position": {
+            "X": -421.5307,
+            "Y": 219.52408,
+            "Z": -292.88748
+          },
+          "TerritoryId": 155,
+          "InteractionType": "WalkTo",
+          "Comment": "North Whitebrim, Stairs (bottom)"
+        },
+        {
+          "Position": {
+            "X": -417.45395,
+            "Y": 223.30249,
+            "Z": -291.59283
+          },
+          "TerritoryId": 155,
+          "InteractionType": "WalkTo",
+          "Comment": "North Whitebrim, Stairs (top)"
+        },
         {
           "DataId": 1007567,
           "Position": {

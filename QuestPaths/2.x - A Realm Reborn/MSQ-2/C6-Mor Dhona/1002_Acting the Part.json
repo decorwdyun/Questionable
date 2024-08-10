@@ -31,7 +31,8 @@
           "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
             55
-          ]
+          ],
+          "CombatDelaySecondsAtStart": 5
         },
         {
           "DataId": 2002238,

@@ -8,7 +8,13 @@
         {
           "TerritoryId": 137,
           "InteractionType": "EquipItem",
-          "ItemId": 4544
+          "ItemId": 4544,
+          "AetheryteShortcut": "Eastern La Noscea - Costa Del Sol",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
+          }
         },
         {
           "DataId": 1006746,
