@@ -347,7 +347,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
             var sequence = q.FindSequence(questToRun.Sequence);
             if (sequence == null)
             {
-                DebugState = $"Sequence {sequence} not found";
+                DebugState = $"Sequence {questToRun.Sequence} not found";
                 Stop("Unknown sequence");
                 return;
             }
