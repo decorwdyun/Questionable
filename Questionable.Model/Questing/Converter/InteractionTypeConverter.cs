@@ -16,6 +16,7 @@ public sealed class InteractionTypeConverter() : EnumConverter<EInteractionType>
         { EInteractionType.Combat, "Combat" },
         { EInteractionType.UseItem, "UseItem" },
         { EInteractionType.EquipItem, "EquipItem" },
+        { EInteractionType.EquipRecommended, "EquipRecommended" },
         { EInteractionType.Say, "Say" },
         { EInteractionType.Emote, "Emote" },
         { EInteractionType.Action, "Action" },
