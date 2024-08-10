@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Ipc;
+using LLib.GameData;
 using Microsoft.Extensions.Logging;
 using Questionable.Data;
 using Questionable.Model;
@@ -203,4 +204,11 @@ internal sealed class QuestRegistry
 
     public bool TryGetQuest(ElementId questId, [NotNullWhen(true)] out Quest? quest)
         => _quests.TryGetValue(questId, out quest);
+
+    public List<QuestInfo> GetKnownClassJobQuests(EClassJob classJob)
+    {
+        return _questData.GetClassJobQuests(classJob)
+            .Where(x => IsKnownQuest(x.QuestId))
+            .ToList();
+    }
 }

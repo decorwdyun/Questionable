@@ -175,7 +175,7 @@ internal sealed class EditorCommands : IDisposable
         {
             var territoryInfo = _dataManager.GetExcelSheet<TerritoryType>()!.GetRow(_clientState.TerritoryType)!;
             targetFolder = _plugin.PathsDirectory
-                .CreateSubdirectory(ExpansionData.ExpansionFolders[(byte)territoryInfo.ExVersion.Row])
+                .CreateSubdirectory(ExpansionData.ExpansionFolders[(EExpansionVersion)territoryInfo.ExVersion.Row])
                 .CreateSubdirectory(territoryInfo.PlaceName.Value!.Name.ToString());
         }
 

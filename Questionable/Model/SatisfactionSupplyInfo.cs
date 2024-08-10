@@ -13,6 +13,7 @@ internal sealed class SatisfactionSupplyInfo : IQuestInfo
         Name = npc.Npc.Value!.Singular;
         IssuerDataId = npc.Npc.Row;
         Level = npc.LevelUnlock;
+        Expansion = (EExpansionVersion)npc.QuestRequired.Value!.Expansion.Row;
     }
 
     public ElementId QuestId { get; }
@@ -22,6 +23,7 @@ internal sealed class SatisfactionSupplyInfo : IQuestInfo
     public ushort Level { get; }
     public EBeastTribe BeastTribe => EBeastTribe.None;
     public bool IsMainScenarioQuest => false;
+    public EExpansionVersion Expansion { get; }
 
     /// <summary>
     /// We don't have collectables implemented for any other class.

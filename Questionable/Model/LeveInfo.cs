@@ -14,6 +14,7 @@ internal sealed class LeveInfo : IQuestInfo
         Level = leve.ClassJobLevel;
         IssuerDataId = leve.LevelLevemete.Value!.Object;
         ClassJobs = QuestInfoUtils.AsList(leve.ClassJobCategory.Value!);
+        Expansion = (EExpansionVersion)leve.LevelLevemete.Value.Territory.Value!.ExVersion.Row;
     }
 
     public ElementId QuestId { get; }
@@ -24,4 +25,5 @@ internal sealed class LeveInfo : IQuestInfo
     public EBeastTribe BeastTribe => EBeastTribe.None;
     public bool IsMainScenarioQuest => false;
     public IReadOnlyList<EClassJob> ClassJobs { get; }
+    public EExpansionVersion Expansion { get; }
 }

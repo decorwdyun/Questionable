@@ -11,7 +11,7 @@ namespace Questionable.Model;
 
 internal sealed class QuestInfo : IQuestInfo
 {
-    public QuestInfo(ExcelQuest quest)
+    public QuestInfo(ExcelQuest quest, ushort newGamePlusChapter)
     {
         QuestId = new QuestId((ushort)(quest.RowId & 0xFFFF));
 
@@ -54,6 +54,8 @@ internal sealed class QuestInfo : IQuestInfo
         BeastTribe = (EBeastTribe)quest.BeastTribe.Row;
         ClassJobs = QuestInfoUtils.AsList(quest.ClassJobCategory0.Value!);
         IsSeasonalEvent = quest.Festival.Row != 0;
+        NewGamePlusChapter = newGamePlusChapter;
+        Expansion = (EExpansionVersion)quest.Expansion.Row;
     }
 
 
@@ -76,6 +78,8 @@ internal sealed class QuestInfo : IQuestInfo
     public EBeastTribe BeastTribe { get; }
     public IReadOnlyList<EClassJob> ClassJobs { get; }
     public bool IsSeasonalEvent { get; }
+    public ushort NewGamePlusChapter { get; }
+    public EExpansionVersion Expansion { get; }
 
     [UsedImplicitly(ImplicitUseKindFlags.Assign, ImplicitUseTargetFlags.Members)]
     public enum QuestJoin : byte

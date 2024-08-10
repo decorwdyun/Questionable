@@ -16,6 +16,7 @@ public interface IQuestInfo
     public EBeastTribe BeastTribe { get; }
     public bool IsMainScenarioQuest { get; }
     public IReadOnlyList<EClassJob> ClassJobs { get; }
+    public EExpansionVersion Expansion { get; }
 
     public string SimplifiedName => Name
         .Replace(".", "", StringComparison.Ordinal)
