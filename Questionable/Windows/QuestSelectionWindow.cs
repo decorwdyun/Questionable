@@ -237,7 +237,7 @@ internal sealed class QuestSelectionWindow : LWindow
                     if (startNextQuest)
                     {
                         _questController.SetNextQuest(knownQuest);
-                        _questController.ExecuteNextStep(QuestController.EAutomationType.Automatic);
+                        _questController.Start("QuestSelectionWindow");
                     }
 
                     ImGui.SameLine();

@@ -221,7 +221,7 @@ internal sealed class ActiveQuestComponent
             if (questProgressInfo == null)
                 _questController.SetNextQuest(currentQuest.Quest);
 
-            _questController.ExecuteNextStep(QuestController.EAutomationType.Automatic);
+            _questController.Start("UI start");
         }
 
         if (!isMinimized)
@@ -230,7 +230,7 @@ internal sealed class ActiveQuestComponent
 
             if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.StepForward, "Step"))
             {
-                _questController.ExecuteNextStep(QuestController.EAutomationType.Manual);
+                _questController.StartSingleStep("UI step");
             }
         }
 
@@ -240,8 +240,8 @@ internal sealed class ActiveQuestComponent
         if (ImGuiComponents.IconButton(FontAwesomeIcon.Stop))
         {
             _movementController.Stop();
-            _questController.Stop("Manual");
-            _gatheringController.Stop("Manual");
+            _questController.Stop("UI stop");
+            _gatheringController.Stop("UI stop");
         }
 
         if (isMinimized)
@@ -278,13 +278,6 @@ internal sealed class ActiveQuestComponent
                 if (ImGuiComponents.IconButton(FontAwesomeIcon.Atlas))
                     _commandManager.DispatchCommand("/questinfo",
                         currentQuest.Quest.Id.ToString() ?? string.Empty, commandInfo);
-            }
-
-            bool autoAcceptNextQuest = _configuration.General.AutoAcceptNextQuest;
-            if (ImGui.Checkbox("Automatically accept next quest", ref autoAcceptNextQuest))
-            {
-                _configuration.General.AutoAcceptNextQuest = autoAcceptNextQuest;
-                _pluginInterface.SavePluginConfig(_configuration);
             }
         }
     }

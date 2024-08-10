@@ -417,7 +417,7 @@ internal sealed class GameUiController : IDisposable
                             return null;
 
                         _questController.GatheringQuest.SetSequence(1);
-                        _questController.ExecuteNextStep(QuestController.EAutomationType.CurrentQuestOnly);
+                        _questController.StartSingleQuest("SatisfactionSupply turn in");
                     }
 
                     return i;

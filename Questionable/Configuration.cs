@@ -14,7 +14,6 @@ internal sealed class Configuration : IPluginConfiguration
 
     internal sealed class GeneralConfiguration
     {
-        public bool AutoAcceptNextQuest { get; set; }
         public uint MountId { get; set; } = 71;
         public GrandCompany GrandCompany { get; set; } = GrandCompany.None;
         public bool HideInAllInstances { get; set; } = true;

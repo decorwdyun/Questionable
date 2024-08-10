@@ -93,6 +93,20 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
         _toastGui.ErrorToast += OnErrorToast;
     }
 
+    public EAutomationType AutomationType
+    {
+        get => _automationType;
+        set
+        {
+            if (value == _automationType)
+                return;
+
+            _logger.LogInformation("Setting automation type to {NewAutomationType} (previous: {OldAutomationType})",
+                value, _automationType);
+            _automationType = value;
+        }
+    }
+
     public (QuestProgress Progress, ECurrentQuestType Type)? CurrentQuestDetails
     {
         get
@@ -185,7 +199,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
         if (CurrentQuest != null && CurrentQuest.Quest.Root.TerritoryBlacklist.Contains(_clientState.TerritoryType))
             return;
 
-        if (_automationType == EAutomationType.Automatic &&
+        if (AutomationType == EAutomationType.Automatic &&
             ((_currentTask == null && _taskQueue.Count == 0) ||
              _currentTask is WaitAtEnd.WaitQuestAccepted)
             && CurrentQuest is { Sequence: 0, Step: 0 } or { Sequence: 0, Step: 255 }
@@ -197,7 +211,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
                 CurrentQuest.SetStep(0);
             }
 
-            ExecuteNextStep(_automationType);
+            ExecuteNextStep();
             return;
         }
 
@@ -221,7 +235,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
                 {
                     _startedQuest = _pendingQuest;
                     _pendingQuest = null;
-                    Stop("Pending quest accepted", continueIfAutomatic: true);
+                    CheckNextTasks("Pending quest accepted");
                 }
             }
 
@@ -260,8 +274,8 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
                 if (_nextQuest.Step == 0 &&
                     _currentTask == null &&
                     _taskQueue.Count == 0 &&
-                    _automationType == EAutomationType.Automatic)
-                    ExecuteNextStep(_automationType);
+                    AutomationType == EAutomationType.Automatic)
+                    ExecuteNextStep();
             }
             else if (_gatheringQuest != null)
             {
@@ -270,8 +284,8 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
                 if (_gatheringQuest.Step == 0 &&
                     _currentTask == null &&
                     _taskQueue.Count == 0 &&
-                    _automationType == EAutomationType.Automatic)
-                    ExecuteNextStep(_automationType);
+                    AutomationType == EAutomationType.Automatic)
+                    ExecuteNextStep();
             }
             else
             {
@@ -294,12 +308,14 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
                         _logger.LogInformation("New quest: {QuestName}", quest.Info.Name);
                         _startedQuest = new QuestProgress(quest, currentSequence);
 
-                        bool continueAutomatically = _configuration.General.AutoAcceptNextQuest;
-
-                        if (_clientState.LocalPlayer?.Level < quest.Info.Level)
-                            continueAutomatically = false;
-
-                        Stop("Different Quest", continueAutomatically);
+                        if (_clientState.LocalPlayer!.Level < quest.Info.Level)
+                        {
+                            _logger.LogInformation("Stopping automation, player level ({PlayerLevel}) < quest level ({QuestLevel}",
+                                _clientState.LocalPlayer!.Level, quest.Info.Level);
+                            Stop("Quest level too high");
+                        }
+                        else
+                            CheckNextTasks("Different Quest");
                     }
                     else if (_startedQuest != null)
                     {
@@ -348,8 +364,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
             if (questToRun.Sequence != currentSequence)
             {
                 questToRun.SetSequence(currentSequence);
-                Stop($"New sequence {questToRun == _startedQuest}/{_questFunctions.GetCurrentQuestInternal()}",
-                    continueIfAutomatic: true);
+                CheckNextTasks($"New sequence {questToRun == _startedQuest}/{_questFunctions.GetCurrentQuestInternal()}");
             }
 
             var q = questToRun.Quest;
@@ -365,7 +380,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
             {
                 DebugState = "Step completed";
                 if (_currentTask != null || _taskQueue.Count > 0)
-                    Stop("Step complete", continueIfAutomatic: true);
+                    CheckNextTasks("Step complete");
                 return;
             }
 
@@ -429,8 +444,9 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
                 CurrentQuest.SetStep(255);
         }
 
-        if (shouldContinue && _automationType != EAutomationType.Manual)
-            ExecuteNextStep(_automationType);
+        using var scope = _logger.BeginScope("IncStepCt");
+        if (shouldContinue && AutomationType != EAutomationType.Manual)
+            ExecuteNextStep();
     }
 
     private void ClearTasksInternal()
@@ -446,33 +462,38 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
         _gatheringController.Stop("ClearTasksInternal");
     }
 
-    public void Stop(string label, bool continueIfAutomatic)
+    public override void Stop(string label)
     {
-        using var scope = _logger.BeginScope(label);
-
-        ClearTasksInternal();
-
-        // reset task queue
-        if (continueIfAutomatic && _automationType == EAutomationType.Automatic)
+        using var scope = _logger.BeginScope($"Stop/{label}");
+        if (IsRunning || AutomationType != EAutomationType.Manual)
         {
-            if (CurrentQuest?.Step is >= 0 and < 255)
-                ExecuteNextStep(_automationType);
-            else
-                _logger.LogInformation("Couldn't execute next step during Stop() call");
-
-            _lastTaskUpdate = DateTime.Now;
-        }
-        else if (_automationType != EAutomationType.Manual)
-        {
+            ClearTasksInternal();
             _logger.LogInformation("Stopping automatic questing");
-            _automationType = EAutomationType.Manual;
+            AutomationType = EAutomationType.Manual;
             _nextQuest = null;
             _gatheringQuest = null;
             _lastTaskUpdate = DateTime.Now;
         }
     }
 
-    public override void Stop(string label) => Stop(label, false);
+    private void CheckNextTasks(string label)
+    {
+        if (AutomationType == EAutomationType.Automatic)
+        {
+            using var scope = _logger.BeginScope(label);
+
+            ClearTasksInternal();
+
+            if (CurrentQuest?.Step is >= 0 and < 255)
+                ExecuteNextStep();
+            else
+                _logger.LogInformation("Couldn't execute next step during Stop() call");
+
+            _lastTaskUpdate = DateTime.Now;
+        }
+        else
+            Stop(label);
+    }
 
     public void SimulateQuest(Quest? quest)
     {
@@ -526,10 +547,30 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
         IncreaseStepCount(task.ElementId, task.Sequence, true);
     }
 
-    public void ExecuteNextStep(EAutomationType automatic)
+    public void Start(string label)
+    {
+        using var scope = _logger.BeginScope($"Q/{label}");
+        AutomationType = EAutomationType.Automatic;
+        ExecuteNextStep();
+    }
+
+    public void StartSingleQuest(string label)
+    {
+        using var scope = _logger.BeginScope($"SQ/{label}");
+        AutomationType = EAutomationType.CurrentQuestOnly;
+        ExecuteNextStep();
+    }
+
+    public void StartSingleStep(string label)
+    {
+        using var scope = _logger.BeginScope($"SS/{label}");
+        AutomationType = EAutomationType.Manual;
+        ExecuteNextStep();
+    }
+
+    private void ExecuteNextStep()
     {
         ClearTasksInternal();
-        _automationType = automatic;
 
         if (TryPickPriorityQuest())
             _logger.LogInformation("Using priority quest over current quest");

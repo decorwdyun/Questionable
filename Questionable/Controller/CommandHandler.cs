@@ -75,7 +75,7 @@ internal sealed class CommandHandler : IDisposable
 
             case "start":
                 _questWindow.IsOpen = true;
-                _questController.ExecuteNextStep(QuestController.EAutomationType.Automatic);
+                _questController.Start("Start command");
                 break;
 
             case "stop":
