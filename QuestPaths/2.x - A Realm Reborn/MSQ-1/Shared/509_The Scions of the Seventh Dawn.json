@@ -31,6 +31,26 @@
           "AetheryteShortcut": "Western Thanalan - Horizon"
         },
         {
+          "Position": {
+            "X": -396.50018,
+            "Y": 23,
+            "Z": -351.0944
+          },
+          "TerritoryId": 140,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "Position": {
+            "X": -408.92343,
+            "Y": 23.167036,
+            "Z": -351.16223
+          },
+          "TerritoryId": 140,
+          "InteractionType": "WalkTo",
+          "$": "Vesper Bay Gate",
+          "DisableNavmesh": true
+        },
+        {
           "DataId": 1004603,
           "Position": {
             "X": -489.8299,
