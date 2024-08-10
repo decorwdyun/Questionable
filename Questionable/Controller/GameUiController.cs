@@ -80,6 +80,7 @@ internal sealed class GameUiController : IDisposable
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "PointMenu", PointMenuPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "CreditScroll", CreditScrollPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "Credit", CreditPostSetup);
+        _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "CreditPlayer", CreditPlayerPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "AkatsukiNote", UnendingCodexPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "ContentsTutorial", ContentsTutorialPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "MultipleHelpWindow", MultipleHelpWindowPostSetup);
@@ -732,6 +733,13 @@ internal sealed class GameUiController : IDisposable
         addon->FireCallbackInt(-2);
     }
 
+    private unsafe void CreditPlayerPostSetup(AddonEvent type, AddonArgs args)
+    {
+        _logger.LogInformation("Closing CreditPlayer");
+        AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
+        addon->Close(true);
+    }
+
     private unsafe void UnendingCodexPostSetup(AddonEvent type, AddonArgs args)
     {
         if (_questController.StartedQuest?.Quest.Id.Value == 4526)
@@ -880,6 +888,7 @@ internal sealed class GameUiController : IDisposable
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "MultipleHelpWindow", MultipleHelpWindowPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "ContentsTutorial", ContentsTutorialPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "AkatsukiNote", UnendingCodexPostSetup);
+        _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "CreditPlayer", CreditPlayerPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "Credit", CreditPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "CreditScroll", CreditScrollPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "PointMenu", PointMenuPostSetup);
