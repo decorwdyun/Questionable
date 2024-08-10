@@ -310,7 +310,8 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
 
                         if (_clientState.LocalPlayer!.Level < quest.Info.Level)
                         {
-                            _logger.LogInformation("Stopping automation, player level ({PlayerLevel}) < quest level ({QuestLevel}",
+                            _logger.LogInformation(
+                                "Stopping automation, player level ({PlayerLevel}) < quest level ({QuestLevel}",
                                 _clientState.LocalPlayer!.Level, quest.Info.Level);
                             Stop("Quest level too high");
                         }
@@ -364,7 +365,8 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
             if (questToRun.Sequence != currentSequence)
             {
                 questToRun.SetSequence(currentSequence);
-                CheckNextTasks($"New sequence {questToRun == _startedQuest}/{_questFunctions.GetCurrentQuestInternal()}");
+                CheckNextTasks(
+                    $"New sequence {questToRun == _startedQuest}/{_questFunctions.GetCurrentQuestInternal()}");
             }
 
             var q = questToRun.Quest;
@@ -760,13 +762,28 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
         ];
 
         EClassJob classJob = (EClassJob?)_clientState.LocalPlayer?.ClassJob.Id ?? EClassJob.Adventurer;
+        ushort[] shadowbringersRoleQuestChapters = QuestData.AllRoleQuestChapters.Select(x => x[0]).ToArray();
         if (classJob != EClassJob.Adventurer)
         {
             priorityQuests.AddRange(_questRegistry.GetKnownClassJobQuests(classJob)
-                .Where(x => _questRegistry.TryGetQuest(x.QuestId, out Quest? quest) && quest.Info is QuestInfo
+                .Where(x =>
                 {
-                    // ignore Endwalker/Dawntrail, as the class quests are optional
-                    Expansion: EExpansionVersion.ARealmReborn or EExpansionVersion.Heavensward or EExpansionVersion.Stormblood or EExpansionVersion.Shadowbringers
+                    if (!_questRegistry.TryGetQuest(x.QuestId, out Quest? quest) ||
+                        quest.Info is not QuestInfo questInfo)
+                        return false;
+
+                    // if no shadowbringers role quest is complete, (at least one) is required
+                    if (shadowbringersRoleQuestChapters.Contains(questInfo.NewGamePlusChapter))
+                        return !QuestData.FinalShadowbringersRoleQuests.Any(_questFunctions.IsQuestComplete);
+
+                    // ignore all other role quests
+                    if (QuestData.AllRoleQuestChapters.Any(y => y.Contains(questInfo.NewGamePlusChapter)))
+                        return false;
+
+                    // even job quests for the later expacs (after role quests were introduced) might have skills locked
+                    // behind them, e.g. reaper and sage
+
+                    return true;
                 })
                 .Select(x => x.QuestId));
         }

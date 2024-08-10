@@ -14,6 +14,24 @@ internal sealed class QuestData
 {
     public static readonly IReadOnlyList<QuestId> CrystalTowerQuests =
         [new(1709), new(1200), new(1201), new(1202), new(1203), new(1474), new(494), new(495)];
+
+    public static readonly IReadOnlyList<ushort> TankRoleQuests = [136, 154, 178];
+    public static readonly IReadOnlyList<ushort> HealerRoleQuests = [137, 155, 179];
+    public static readonly IReadOnlyList<ushort> MeleeRoleQuests = [138, 156, 180];
+    public static readonly IReadOnlyList<ushort> PhysicalRangedRoleQuests = [138, 157, 181];
+    public static readonly IReadOnlyList<ushort> CasterRoleQuests = [139, 158, 182];
+    public static readonly IReadOnlyList<IReadOnlyList<ushort>> AllRoleQuestChapters =
+    [
+        TankRoleQuests,
+        HealerRoleQuests,
+        MeleeRoleQuests,
+        PhysicalRangedRoleQuests,
+        CasterRoleQuests
+    ];
+
+    public static readonly IReadOnlyList<QuestId> FinalShadowbringersRoleQuests =
+        [new(3248), new(3272), new(3278), new(3628)];
+
     private readonly Dictionary<ElementId, IQuestInfo> _quests;
 
     public QuestData(IDataManager dataManager)
@@ -134,11 +152,11 @@ internal sealed class QuestData
 
         chapterIds.AddRange(classJob switch
         {
-            _ when classJob.IsTank() => [136, 154, 178],
-            _ when classJob.IsHealer() => [137, 155, 179],
-            _ when classJob.IsMelee() => [138, 156, 180],
-            _ when classJob.IsPhysicalRanged() => [138, 157, 181],
-            _ when classJob.IsCaster() && classJob != EClassJob.BlueMage => [139, 158, 182],
+            _ when classJob.IsTank() => TankRoleQuests,
+            _ when classJob.IsHealer() => HealerRoleQuests,
+            _ when classJob.IsMelee() => MeleeRoleQuests,
+            _ when classJob.IsPhysicalRanged() => PhysicalRangedRoleQuests,
+            _ when classJob.IsCaster() && classJob != EClassJob.BlueMage => CasterRoleQuests,
             _ => []
         });
 
