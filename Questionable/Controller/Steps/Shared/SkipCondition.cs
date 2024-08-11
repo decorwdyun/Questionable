@@ -41,6 +41,7 @@ internal static class SkipCondition
 
     internal sealed class CheckSkip(
         ILogger<CheckSkip> logger,
+        AetheryteFunctions aetheryteFunctions,
         GameFunctions gameFunctions,
         QuestFunctions questFunctions,
         IClientState clientState) : ITask
@@ -145,21 +146,21 @@ internal static class SkipCondition
                     DataId: not null,
                     InteractionType: EInteractionType.AttuneAetheryte or EInteractionType.AttuneAethernetShard
                 } &&
-                gameFunctions.IsAetheryteUnlocked((EAetheryteLocation)Step.DataId.Value))
+                aetheryteFunctions.IsAetheryteUnlocked((EAetheryteLocation)Step.DataId.Value))
             {
                 logger.LogInformation("Skipping step, as aetheryte/aethernet shard is unlocked");
                 return true;
             }
 
             if (SkipConditions.AetheryteLocked != null &&
-                !gameFunctions.IsAetheryteUnlocked(SkipConditions.AetheryteLocked.Value))
+                !aetheryteFunctions.IsAetheryteUnlocked(SkipConditions.AetheryteLocked.Value))
             {
                 logger.LogInformation("Skipping step, as aetheryte is locked");
                 return true;
             }
 
             if (SkipConditions.AetheryteUnlocked != null &&
-                gameFunctions.IsAetheryteUnlocked(SkipConditions.AetheryteUnlocked.Value))
+                aetheryteFunctions.IsAetheryteUnlocked(SkipConditions.AetheryteUnlocked.Value))
             {
                 logger.LogInformation("Skipping step, as aetheryte is unlocked");
                 return true;

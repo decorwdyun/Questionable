@@ -17,7 +17,7 @@ internal static class AetheryteShortcut
 {
     internal sealed class Factory(
         IServiceProvider serviceProvider,
-        GameFunctions gameFunctions,
+        AetheryteFunctions aetheryteFunctions,
         AetheryteData aetheryteData) : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
@@ -29,7 +29,7 @@ internal static class AetheryteShortcut
                 .With(step, step.AetheryteShortcut.Value, aetheryteData.TerritoryIds[step.AetheryteShortcut.Value]);
             return
             [
-                new WaitConditionTask(() => gameFunctions.CanTeleport(step.AetheryteShortcut.Value), "CanTeleport"),
+                new WaitConditionTask(() => aetheryteFunctions.CanTeleport(step.AetheryteShortcut.Value), "CanTeleport"),
                 task
             ];
         }
@@ -40,7 +40,7 @@ internal static class AetheryteShortcut
 
     internal sealed class UseAetheryteShortcut(
         ILogger<UseAetheryteShortcut> logger,
-        GameFunctions gameFunctions,
+        AetheryteFunctions aetheryteFunctions,
         IClientState clientState,
         IChatGui chatGui,
         AetheryteData aetheryteData) : ISkippableTask
@@ -80,14 +80,14 @@ internal static class AetheryteShortcut
                     }
 
                     if (skipConditions.AetheryteLocked != null &&
-                        !gameFunctions.IsAetheryteUnlocked(skipConditions.AetheryteLocked.Value))
+                        !aetheryteFunctions.IsAetheryteUnlocked(skipConditions.AetheryteLocked.Value))
                     {
                         logger.LogInformation("Skipping aetheryte teleport due to SkipCondition (AetheryteLocked)");
                         return false;
                     }
 
                     if (skipConditions.AetheryteUnlocked != null &&
-                        gameFunctions.IsAetheryteUnlocked(skipConditions.AetheryteUnlocked.Value))
+                        aetheryteFunctions.IsAetheryteUnlocked(skipConditions.AetheryteUnlocked.Value))
                     {
                         logger.LogInformation("Skipping aetheryte teleport due to SkipCondition (AetheryteUnlocked)");
                         return false;
@@ -124,12 +124,12 @@ internal static class AetheryteShortcut
                 }
             }
 
-            if (!gameFunctions.IsAetheryteUnlocked(TargetAetheryte))
+            if (!aetheryteFunctions.IsAetheryteUnlocked(TargetAetheryte))
             {
                 chatGui.PrintError($"[Questionable] Aetheryte {TargetAetheryte} is not unlocked.");
                 throw new TaskException("Aetheryte is not unlocked");
             }
-            else if (gameFunctions.TeleportAetheryte(TargetAetheryte))
+            else if (aetheryteFunctions.TeleportAetheryte(TargetAetheryte))
             {
                 logger.LogInformation("Travelling via aetheryte...");
                 return true;

@@ -94,15 +94,22 @@ internal sealed class QuestTooltipComponent
 
             foreach (var q in quest.PreviousQuests)
             {
-                var qInfo = _questData.GetQuestInfo(q);
-                var (iconColor, icon, _) = _uiUtils.GetQuestStyle(q);
-                if (!_questRegistry.IsKnownQuest(qInfo.QuestId))
-                    iconColor = ImGuiColors.DalamudGrey;
+                if (_questData.TryGetQuestInfo(q, out var qInfo))
+                {
+                    var (iconColor, icon, _) = _uiUtils.GetQuestStyle(q);
+                    if (!_questRegistry.IsKnownQuest(qInfo.QuestId))
+                        iconColor = ImGuiColors.DalamudGrey;
 
-                _uiUtils.ChecklistItem(FormatQuestUnlockName(qInfo), iconColor, icon);
+                    _uiUtils.ChecklistItem(FormatQuestUnlockName(qInfo), iconColor, icon);
 
-                if (qInfo is QuestInfo qstInfo && (counter <= 2 || icon != FontAwesomeIcon.Check))
-                    DrawQuestUnlocks(qstInfo, counter + 1);
+                    if (qInfo is QuestInfo qstInfo && (counter <= 2 || icon != FontAwesomeIcon.Check))
+                        DrawQuestUnlocks(qstInfo, counter + 1);
+                }
+                else
+                {
+                    using var _ = ImRaii.Disabled();
+                    _uiUtils.ChecklistItem($"Unknown Quest ({q})", ImGuiColors.DalamudGrey, FontAwesomeIcon.Question);
+                }
             }
         }
 

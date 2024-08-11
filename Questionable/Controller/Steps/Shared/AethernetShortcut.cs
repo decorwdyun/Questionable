@@ -32,7 +32,7 @@ internal static class AethernetShortcut
 
     internal sealed class UseAethernetShortcut(
         ILogger<UseAethernetShortcut> logger,
-        GameFunctions gameFunctions,
+        AetheryteFunctions aetheryteFunctions,
         IClientState clientState,
         AetheryteData aetheryteData,
         LifestreamIpc lifestreamIpc,
@@ -72,22 +72,22 @@ internal static class AethernetShortcut
                 }
 
                 if (SkipConditions.AetheryteLocked != null &&
-                    !gameFunctions.IsAetheryteUnlocked(SkipConditions.AetheryteLocked.Value))
+                    !aetheryteFunctions.IsAetheryteUnlocked(SkipConditions.AetheryteLocked.Value))
                 {
                     logger.LogInformation("Skipping aethernet shortcut because the target aetheryte is locked");
                     return false;
                 }
 
                 if (SkipConditions.AetheryteUnlocked != null &&
-                    gameFunctions.IsAetheryteUnlocked(SkipConditions.AetheryteUnlocked.Value))
+                    aetheryteFunctions.IsAetheryteUnlocked(SkipConditions.AetheryteUnlocked.Value))
                 {
                     logger.LogInformation("Skipping aethernet shortcut because the target aetheryte is unlocked");
                     return false;
                 }
             }
 
-            if (gameFunctions.IsAetheryteUnlocked(From) &&
-                gameFunctions.IsAetheryteUnlocked(To))
+            if (aetheryteFunctions.IsAetheryteUnlocked(From) &&
+                aetheryteFunctions.IsAetheryteUnlocked(To))
             {
                 ushort territoryType = clientState.TerritoryType;
                 Vector3 playerPosition = clientState.LocalPlayer!.Position;

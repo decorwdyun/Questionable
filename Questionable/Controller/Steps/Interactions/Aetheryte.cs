@@ -24,7 +24,10 @@ internal static class Aetheryte
         }
     }
 
-    internal sealed class DoAttune(GameFunctions gameFunctions, ILogger<DoAttune> logger) : ITask
+    internal sealed class DoAttune(
+        AetheryteFunctions aetheryteFunctions,
+        GameFunctions gameFunctions,
+        ILogger<DoAttune> logger) : ITask
     {
         public EAetheryteLocation AetheryteLocation { get; set; }
 
@@ -36,7 +39,7 @@ internal static class Aetheryte
 
         public bool Start()
         {
-            if (!gameFunctions.IsAetheryteUnlocked(AetheryteLocation))
+            if (!aetheryteFunctions.IsAetheryteUnlocked(AetheryteLocation))
             {
                 logger.LogInformation("Attuning to aetheryte {Aetheryte}", AetheryteLocation);
                 gameFunctions.InteractWith((uint)AetheryteLocation);
@@ -48,7 +51,7 @@ internal static class Aetheryte
         }
 
         public ETaskResult Update() =>
-            gameFunctions.IsAetheryteUnlocked(AetheryteLocation)
+            aetheryteFunctions.IsAetheryteUnlocked(AetheryteLocation)
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
 

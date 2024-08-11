@@ -752,94 +752,23 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
         return currentStep?.AetheryteShortcut != null;
     }
 
-    private List<ElementId> GetPriorityQuests()
-    {
-        List<ElementId> priorityQuests =
-        [
-            new QuestId(1157), // Garuda (Hard)
-            new QuestId(1158), // Titan (Hard)
-            ..QuestData.CrystalTowerQuests
-        ];
-
-        EClassJob classJob = (EClassJob?)_clientState.LocalPlayer?.ClassJob.Id ?? EClassJob.Adventurer;
-        ushort[] shadowbringersRoleQuestChapters = QuestData.AllRoleQuestChapters.Select(x => x[0]).ToArray();
-        if (classJob != EClassJob.Adventurer)
-        {
-            priorityQuests.AddRange(_questRegistry.GetKnownClassJobQuests(classJob)
-                .Where(x =>
-                {
-                    if (!_questRegistry.TryGetQuest(x.QuestId, out Quest? quest) ||
-                        quest.Info is not QuestInfo questInfo)
-                        return false;
-
-                    // if no shadowbringers role quest is complete, (at least one) is required
-                    if (shadowbringersRoleQuestChapters.Contains(questInfo.NewGamePlusChapter))
-                        return !QuestData.FinalShadowbringersRoleQuests.Any(_questFunctions.IsQuestComplete);
-
-                    // ignore all other role quests
-                    if (QuestData.AllRoleQuestChapters.Any(y => y.Contains(questInfo.NewGamePlusChapter)))
-                        return false;
-
-                    // even job quests for the later expacs (after role quests were introduced) might have skills locked
-                    // behind them, e.g. reaper and sage
-
-                    return true;
-                })
-                .Select(x => x.QuestId));
-        }
-
-        return priorityQuests;
-    }
-
     public bool TryPickPriorityQuest()
     {
         if (!IsInterruptible() || _nextQuest != null || _gatheringQuest != null || _simulatedQuest != null)
             return false;
 
-        // don't start a second priority quest until the first one is resolved
-        List<ElementId> priorityQuests = GetPriorityQuests();
-        if (_startedQuest != null && priorityQuests.Contains(_startedQuest.Quest.Id))
+        ElementId? priorityQuestId = _questFunctions.GetNextPriorityQuestThatCanBeAccepted();
+        if (priorityQuestId == null)
             return false;
 
-        foreach (ElementId questId in priorityQuests)
+        // don't start a second priority quest until the first one is resolved
+        if (_startedQuest != null && priorityQuestId == _startedQuest.Quest.Id)
+            return false;
+
+        if (_questRegistry.TryGetQuest(priorityQuestId, out var quest))
         {
-            if (!_questFunctions.IsReadyToAcceptQuest(questId) || !_questRegistry.TryGetQuest(questId, out var quest))
-                continue;
-
-            var firstStep = quest.FindSequence(0)?.FindStep(0);
-            if (firstStep == null)
-                continue;
-
-            if (firstStep.AetheryteShortcut is { } aetheryteShortcut)
-            {
-                if (_gameFunctions.IsAetheryteUnlocked(aetheryteShortcut))
-                {
-                    _logger.LogInformation("Priority quest is accessible via aetheryte {Aetheryte}", aetheryteShortcut);
-                    SetNextQuest(quest);
-
-                    _chatGui.Print(
-                        $"[Questionable] Picking up quest '{quest.Info.Name}' as a priority over current main story/side quests.");
-                    return true;
-                }
-                else
-                {
-                    _logger.LogWarning("Ignoring priority quest {QuestId} / {QuestName}, aetheryte locked", quest.Id,
-                        quest.Info.Name);
-                }
-            }
-
-            if (firstStep is { InteractionType: EInteractionType.UseItem, ItemId: UseItem.VesperBayAetheryteTicket })
-            {
-                _logger.LogInformation("Priority quest is accessible via vesper bay");
-                SetNextQuest(quest);
-
-                _chatGui.Print(
-                    $"[Questionable] Picking up quest '{quest.Info.Name}' as a priority over current main story/side quests.");
-                return true;
-            }
-            else
-                _logger.LogTrace("Ignoring priority quest {QuestId} / {QuestName}, as we don't know how to get there",
-                    questId, quest.Info.Name);
+            SetNextQuest(quest);
+            return true;
         }
 
         return false;

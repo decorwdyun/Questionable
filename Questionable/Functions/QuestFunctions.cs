@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Dalamud.Memory;
@@ -12,8 +13,10 @@ using LLib.GameData;
 using LLib.GameUI;
 using Lumina.Excel.GeneratedSheets;
 using Questionable.Controller;
+using Questionable.Controller.Steps.Interactions;
 using Questionable.Data;
 using Questionable.Model;
+using Questionable.Model.Common;
 using Questionable.Model.Questing;
 using GrandCompany = FFXIVClientStructs.FFXIV.Client.UI.Agent.GrandCompany;
 using Quest = Questionable.Model.Quest;
@@ -24,16 +27,24 @@ internal sealed unsafe class QuestFunctions
 {
     private readonly QuestRegistry _questRegistry;
     private readonly QuestData _questData;
+    private readonly AetheryteFunctions _aetheryteFunctions;
     private readonly Configuration _configuration;
     private readonly IDataManager _dataManager;
     private readonly IClientState _clientState;
     private readonly IGameGui _gameGui;
 
-    public QuestFunctions(QuestRegistry questRegistry, QuestData questData, Configuration configuration,
-        IDataManager dataManager, IClientState clientState, IGameGui gameGui)
+    public QuestFunctions(
+        QuestRegistry questRegistry,
+        QuestData questData,
+        AetheryteFunctions aetheryteFunctions,
+        Configuration configuration,
+        IDataManager dataManager,
+        IClientState clientState,
+        IGameGui gameGui)
     {
         _questRegistry = questRegistry;
         _questData = questData;
+        _aetheryteFunctions = aetheryteFunctions;
         _configuration = configuration;
         _dataManager = dataManager;
         _clientState = clientState;
@@ -99,8 +110,11 @@ internal sealed unsafe class QuestFunctions
         {
             // always prioritize accepting MSQ quests, to make sure we don't turn in one MSQ quest and then go off to do
             // side quests until the end of time.
-            var msqQuest = GetMainScenarioQuest(questManager);
-            if (msqQuest.CurrentQuest is { Value: not 0 } && _questRegistry.IsKnownQuest(msqQuest.CurrentQuest))
+            var msqQuest = GetMainScenarioQuest();
+            if (msqQuest.CurrentQuest != null && !_questRegistry.IsKnownQuest(msqQuest.CurrentQuest))
+                msqQuest = default;
+
+            if (msqQuest.CurrentQuest != null && !IsQuestAccepted(msqQuest.CurrentQuest))
                 return msqQuest;
 
             // Use the quests in the same order as they're shown in the to-do list, e.g. if the MSQ is the first item,
@@ -133,14 +147,24 @@ internal sealed unsafe class QuestFunctions
                     return (currentQuest, QuestManager.GetQuestSequence(currentQuest.Value));
             }
 
-            // if we know no quest of those currently in the to-do list, just do MSQ
-            return msqQuest;
+            ElementId? priorityQuest = GetNextPriorityQuestThatCanBeAccepted();
+            if (priorityQuest != null)
+            {
+                // if we have an accepted msq quest, and know of no quest of those currently in the to-do list...
+                // (1) try and find a priority quest to do
+                return (priorityQuest, QuestManager.GetQuestSequence(priorityQuest.Value));
+            }
+            else if (msqQuest.CurrentQuest != null)
+            {
+                // (2) just do a normal msq quest
+                return msqQuest;
+            }
         }
 
         return default;
     }
 
-    private (QuestId? CurrentQuest, byte Sequence) GetMainScenarioQuest(QuestManager* questManager)
+    private (QuestId? CurrentQuest, byte Sequence) GetMainScenarioQuest()
     {
         if (QuestManager.IsQuestComplete(3759)) // Memories Rekindled
         {
@@ -177,6 +201,7 @@ internal sealed unsafe class QuestFunctions
             return default;
 
         // if the MSQ is hidden, we generally ignore it
+        QuestManager* questManager = QuestManager.Instance();
         if (IsQuestAccepted(currentQuest) && questManager->GetQuestById(currentQuest.Value)->IsHidden)
             return default;
 
@@ -212,6 +237,72 @@ internal sealed unsafe class QuestFunctions
         }
         else
             return null;
+    }
+
+    public ElementId? GetNextPriorityQuestThatCanBeAccepted()
+    {
+        return GetPriorityQuestsThatCanBeAccepted()
+            .FirstOrDefault(x =>
+            {
+                if (!_questRegistry.TryGetQuest(x, out Quest? quest))
+                    return false;
+
+                var firstStep = quest.FindSequence(0)?.FindStep(0);
+                if (firstStep == null)
+                    return false;
+
+                if (firstStep.AetheryteShortcut is { } aetheryteShortcut &&
+                    _aetheryteFunctions.IsAetheryteUnlocked(aetheryteShortcut))
+                    return true;
+
+                if (firstStep is
+                    { InteractionType: EInteractionType.UseItem, ItemId: UseItem.VesperBayAetheryteTicket })
+                    return true;
+
+                return false;
+            });
+    }
+
+    private List<ElementId> GetPriorityQuestsThatCanBeAccepted()
+    {
+        List<ElementId> priorityQuests =
+        [
+            new QuestId(1157), // Garuda (Hard)
+            new QuestId(1158), // Titan (Hard)
+            ..QuestData.CrystalTowerQuests
+        ];
+
+        EClassJob classJob = (EClassJob?)_clientState.LocalPlayer?.ClassJob.Id ?? EClassJob.Adventurer;
+        ushort[] shadowbringersRoleQuestChapters = QuestData.AllRoleQuestChapters.Select(x => x[0]).ToArray();
+        if (classJob != EClassJob.Adventurer)
+        {
+            priorityQuests.AddRange(_questRegistry.GetKnownClassJobQuests(classJob)
+                .Where(x =>
+                {
+                    if (!_questRegistry.TryGetQuest(x.QuestId, out Quest? quest) ||
+                        quest.Info is not QuestInfo questInfo)
+                        return false;
+
+                    // if no shadowbringers role quest is complete, (at least one) is required
+                    if (shadowbringersRoleQuestChapters.Contains(questInfo.NewGamePlusChapter))
+                        return !QuestData.FinalShadowbringersRoleQuests.Any(IsQuestComplete);
+
+                    // ignore all other role quests
+                    if (QuestData.AllRoleQuestChapters.Any(y => y.Contains(questInfo.NewGamePlusChapter)))
+                        return false;
+
+                    // even job quests for the later expacs (after role quests were introduced) might have skills locked
+                    // behind them, e.g. reaper and sage
+
+                    return true;
+                })
+                .Select(x => x.QuestId));
+        }
+
+        return priorityQuests
+            .Where(_questRegistry.IsKnownQuest)
+            .Where(IsReadyToAcceptQuest)
+            .ToList();
     }
 
     public bool IsReadyToAcceptQuest(ElementId questId)

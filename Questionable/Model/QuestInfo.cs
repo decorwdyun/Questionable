@@ -64,7 +64,7 @@ internal sealed class QuestInfo : IQuestInfo
     public ushort Level { get; }
     public uint IssuerDataId { get; }
     public bool IsRepeatable { get; }
-    public ImmutableList<QuestId> PreviousQuests { get; }
+    public ImmutableList<QuestId> PreviousQuests { get; set; }
     public QuestJoin PreviousQuestJoin { get; }
     public ImmutableList<QuestId> QuestLocks { get; }
     public QuestJoin QuestLockJoin { get; }
@@ -87,5 +87,10 @@ internal sealed class QuestInfo : IQuestInfo
         None = 0,
         All = 1,
         AtLeastOne = 2,
+    }
+
+    public void AddPreviousQuest(QuestId questId)
+    {
+        PreviousQuests = [..PreviousQuests, questId];
     }
 }

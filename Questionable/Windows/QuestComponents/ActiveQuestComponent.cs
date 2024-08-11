@@ -25,7 +25,6 @@ internal sealed class ActiveQuestComponent
     private readonly GatheringController _gatheringController;
     private readonly QuestFunctions _questFunctions;
     private readonly ICommandManager _commandManager;
-    private readonly IDalamudPluginInterface _pluginInterface;
     private readonly Configuration _configuration;
     private readonly QuestRegistry _questRegistry;
     private readonly IChatGui _chatGui;
@@ -37,7 +36,6 @@ internal sealed class ActiveQuestComponent
         GatheringController gatheringController,
         QuestFunctions questFunctions,
         ICommandManager commandManager,
-        IDalamudPluginInterface pluginInterface,
         Configuration configuration,
         QuestRegistry questRegistry,
         IChatGui chatGui)
@@ -48,7 +46,6 @@ internal sealed class ActiveQuestComponent
         _gatheringController = gatheringController;
         _questFunctions = questFunctions;
         _commandManager = commandManager;
-        _pluginInterface = pluginInterface;
         _configuration = configuration;
         _questRegistry = questRegistry;
         _chatGui = chatGui;

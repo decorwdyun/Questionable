@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Dalamud.Plugin.Services;
 using LLib.GameData;
@@ -61,6 +62,11 @@ internal sealed class QuestData
     public IQuestInfo GetQuestInfo(ElementId elementId)
     {
         return _quests[elementId] ?? throw new ArgumentOutOfRangeException(nameof(elementId));
+    }
+
+    public bool TryGetQuestInfo(ElementId elementId, [NotNullWhen(true)] out IQuestInfo? questInfo)
+    {
+        return _quests.TryGetValue(elementId, out questInfo);
     }
 
     public List<IQuestInfo> GetAllByIssuerDataId(uint targetId)

@@ -8,7 +8,6 @@ using Dalamud.Game.Addon.Lifecycle.AddonArgTypes;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game.Event;
-using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
@@ -31,8 +30,8 @@ internal sealed class GameUiController : IDisposable
 {
     private readonly IAddonLifecycle _addonLifecycle;
     private readonly IDataManager _dataManager;
-    private readonly GameFunctions _gameFunctions;
     private readonly QuestFunctions _questFunctions;
+    private readonly AetheryteFunctions _aetheryteFunctions;
     private readonly ExcelFunctions _excelFunctions;
     private readonly QuestController _questController;
     private readonly QuestRegistry _questRegistry;
@@ -46,8 +45,8 @@ internal sealed class GameUiController : IDisposable
     public GameUiController(
         IAddonLifecycle addonLifecycle,
         IDataManager dataManager,
-        GameFunctions gameFunctions,
         QuestFunctions questFunctions,
+        AetheryteFunctions aetheryteFunctions,
         ExcelFunctions excelFunctions,
         QuestController questController,
         QuestRegistry questRegistry,
@@ -60,8 +59,8 @@ internal sealed class GameUiController : IDisposable
     {
         _addonLifecycle = addonLifecycle;
         _dataManager = dataManager;
-        _gameFunctions = gameFunctions;
         _questFunctions = questFunctions;
+        _aetheryteFunctions = aetheryteFunctions;
         _excelFunctions = excelFunctions;
         _questController = questController;
         _questRegistry = questRegistry;
@@ -570,7 +569,7 @@ internal sealed class GameUiController : IDisposable
     private unsafe bool HandleTravelYesNo(AddonSelectYesno* addonSelectYesno,
         QuestController.QuestProgress currentQuest, string actualPrompt)
     {
-        if (_gameFunctions.ReturnRequestedAt >= DateTime.Now.AddSeconds(-2) && _returnRegex.IsMatch(actualPrompt))
+        if (_aetheryteFunctions.ReturnRequestedAt >= DateTime.Now.AddSeconds(-2) && _returnRegex.IsMatch(actualPrompt))
         {
             _logger.LogInformation("Automatically confirming return...");
             addonSelectYesno->AtkUnitBase.FireCallbackInt(0);

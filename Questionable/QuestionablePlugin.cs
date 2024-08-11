@@ -98,6 +98,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
 
     private static void AddBasicFunctionsAndData(ServiceCollection serviceCollection)
     {
+        serviceCollection.AddSingleton<AetheryteFunctions>();
         serviceCollection.AddSingleton<ExcelFunctions>();
         serviceCollection.AddSingleton<GameFunctions>();
         serviceCollection.AddSingleton<ChatFunctions>();

@@ -25,7 +25,10 @@ internal static class AethernetShard
         }
     }
 
-    internal sealed class DoAttune(GameFunctions gameFunctions, ILogger<DoAttune> logger) : ITask
+    internal sealed class DoAttune(
+        AetheryteFunctions aetheryteFunctions,
+        GameFunctions gameFunctions,
+        ILogger<DoAttune> logger) : ITask
     {
         public EAetheryteLocation AetheryteLocation { get; set; }
 
@@ -37,7 +40,7 @@ internal static class AethernetShard
 
         public bool Start()
         {
-            if (!gameFunctions.IsAetheryteUnlocked(AetheryteLocation))
+            if (!aetheryteFunctions.IsAetheryteUnlocked(AetheryteLocation))
             {
                 logger.LogInformation("Attuning to aethernet shard {AethernetShard}", AetheryteLocation);
                 gameFunctions.InteractWith((uint)AetheryteLocation, ObjectKind.Aetheryte);
@@ -49,7 +52,7 @@ internal static class AethernetShard
         }
 
         public ETaskResult Update() =>
-            gameFunctions.IsAetheryteUnlocked(AetheryteLocation)
+            aetheryteFunctions.IsAetheryteUnlocked(AetheryteLocation)
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
 
