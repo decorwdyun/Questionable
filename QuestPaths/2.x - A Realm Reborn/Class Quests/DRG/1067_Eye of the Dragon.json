@@ -1,0 +1,139 @@
+{
+    "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+    "Author": "Cacahuetes",
+    "QuestSequence": [
+        {
+            "Sequence": 0,
+            "Steps": [
+                {
+                    "DataId": 1000254,
+                    "Position": {
+                        "X": 157.7019,
+                        "Y": 15.900381,
+                        "Z": -270.34418
+                    },
+                    "TerritoryId": 133,
+                    "InteractionType": "AcceptQuest",
+                    "AetheryteShortcut": "Gridania",
+                    "AethernetShortcut": [
+                        "[Gridania] Aetheryte Plaza",
+                        "[Gridania] Lancers' Guild"
+                    ],
+                    "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": false
+            }
+          }
+                }
+            ]
+        },
+        {
+            "Sequence": 1,
+            "Steps": [
+                {
+                    "DataId": 1006748,
+"Position": {
+    "X": 217.88354,
+    "Y": 222,
+    "Z": 345.3269
+},
+"TerritoryId": 155,
+"InteractionType": "Interact",
+"AetheryteShortcut": "Coerthas Central Highlands - Camp Dragonhead"
+                }
+            ]
+        },
+        {
+            "Sequence": 2,
+            "Steps": [
+                {
+                    "DataId": 1007564,
+"Position": {
+    "X": 272.23608,
+    "Y": 222.26244,
+    "Z": 339.1317
+},
+"TerritoryId": 155,
+"InteractionType": "Interact"
+                }
+            ]
+        },
+        {
+            "Sequence": 3,
+            "Steps": [
+                {
+                    "DataId": 1006375,
+"Position": {
+    "X": -296.65063,
+    "Y": -13.630577,
+    "Z": 197.34485
+},
+"TerritoryId": 154,
+"InteractionType": "Interact",
+"AetheryteShortcut": "North Shroud - Fallgourd Float"
+                }
+            ]
+        },
+        {
+            "Sequence": 4,
+            "Steps": [
+                {
+                    "DataId": 1007564,
+"Position": {
+    "X": 272.23608,
+    "Y": 222.26244,
+    "Z": 339.1317
+},
+"TerritoryId": 155,
+"InteractionType": "Interact",
+"AetheryteShortcut": "Coerthas Central Highlands - Camp Dragonhead"
+                }
+            ]
+        },
+        {
+            "Sequence": 5,
+            "Steps": [
+                {
+"Position": {
+    "X": 522.39246,
+    "Y": 234.74356,
+    "Z": 322.10266
+},
+"TerritoryId": 155,
+"InteractionType": "Combat",
+"EnemySpawnType": "AutoOnEnterArea",
+"KillEnemyDataIds": [1928]
+                },
+                {
+                    "DataId": 2002420,
+"Position": {
+    "X": 524.6509,
+    "Y": 234.72949,
+    "Z": 324.08643
+},
+"TerritoryId": 155,
+"InteractionType": "Interact"
+                }
+            ]
+        },
+        {
+            "Sequence": 255,
+            "Steps": [
+                {
+"DataId": 1006748,
+"Position": {
+    "X": 217.88354,
+    "Y": 222,
+    "Z": 345.3269
+},
+"TerritoryId": 155,
+"InteractionType": "CompleteQuest",
+"NextQuestId": 1068
+                }
+            ]
+        }
+    ]
+}
+
+
+

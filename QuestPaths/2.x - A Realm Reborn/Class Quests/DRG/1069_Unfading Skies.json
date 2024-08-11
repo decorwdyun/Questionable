@@ -1,0 +1,70 @@
+{
+    "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+    "Author": "Cacahuetes",
+    "QuestSequence": [
+        {
+            "Sequence": 0,
+            "Steps": [
+                {
+                    "DataId": 1006748,
+"Position": {
+    "X": 217.88354,
+    "Y": 222,
+    "Z": 345.3269
+},
+"TerritoryId": 155,
+"InteractionType": "AcceptQuest",
+"AetheryteShortcut": "Coerthas Central Highlands - Camp Dragonhead",
+                    "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": false
+            }
+          }
+                }
+            ]
+        },
+        {
+            "Sequence": 1,
+            "Steps": [
+                {
+                    "DataId": 1007857,
+"Position": {
+    "X": 485.92358,
+    "Y": 248.1806,
+    "Z": -268.66565
+},
+"TerritoryId": 155,
+"InteractionType": "Combat",
+"EnemySpawnType":"AfterInteraction",
+"KillEnemyDataIds":[11, 1931]
+                },
+                {
+                    "DataId": 1007857,
+"Position": {
+    "X": 485.92358,
+    "Y": 248.1806,
+    "Z": -268.66565
+},
+"TerritoryId": 155,
+"InteractionType": "Interact"
+                }
+            ]
+        },
+        {
+            "Sequence": 255,
+            "Steps": [
+                {
+                    "DataId": 1006748,
+"Position": {
+    "X": 217.88354,
+    "Y": 222,
+    "Z": 345.3269
+},
+"TerritoryId": 155,
+"InteractionType": "CompleteQuest",
+"NextQuestId": 1070
+                }
+            ]
+        }
+    ]
+}
