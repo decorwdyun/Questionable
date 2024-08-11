@@ -408,6 +408,8 @@ public static class RoslynShortcuts
                                     Assignment(nameof(GatheringNode.DataId), nodeLocation.DataId,
                                             emptyLocation.DataId)
                                         .AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(GatheringNode.Fly), nodeLocation.Fly, emptyLocation.Fly)
+                                        .AsSyntaxNodeOrToken(),
                                     AssignmentList(nameof(GatheringNode.Locations), nodeLocation.Locations)
                                         .AsSyntaxNodeOrToken()))));
             }

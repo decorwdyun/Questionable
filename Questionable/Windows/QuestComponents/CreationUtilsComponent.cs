@@ -119,10 +119,10 @@ internal sealed class CreationUtilsComponent
             ImGui.Text($"Ico: {director->IconId}");
             if (director->EventHandlerInfo != null)
             {
-                ImGui.Text($"  EHI: {director->EventHandlerInfo->EventId.ContentId}");
-                ImGui.Text($"  EHI: {director->EventHandlerInfo->EventId.Id}");
-                ImGui.Text($"  EHI: {director->EventHandlerInfo->EventId.EntryId}");
-                ImGui.Text($"  EHI: {director->EventHandlerInfo->Flags}");
+                ImGui.Text($"  EHI CI: {director->EventHandlerInfo->EventId.ContentId}");
+                ImGui.Text($"  EHI EI: {director->EventHandlerInfo->EventId.Id}");
+                ImGui.Text($"  EHI EEI: {director->EventHandlerInfo->EventId.EntryId}");
+                ImGui.Text($"  EHI F: {director->EventHandlerInfo->Flags}");
             }
         }
 #endif

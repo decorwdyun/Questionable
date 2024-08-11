@@ -34,6 +34,11 @@
         "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/AethernetShard"
       }
     },
+    "FlyBetweenNodes": {
+      "description": "If nodes are close enough together, flying makes no sense due to the pathfinding overhead",
+      "type": "boolean",
+      "default": true
+    },
     "Groups": {
       "type": "array",
       "items": {
@@ -48,6 +53,9 @@
                   "type": "number",
                   "minimum": 30000,
                   "maximum": 50000
+                },
+                "Fly": {
+                  "type": "boolean"
                 },
                 "Locations": {
                   "type": "array",

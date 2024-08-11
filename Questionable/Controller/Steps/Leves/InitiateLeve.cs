@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Client.Game.Event;
+using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using LLib.GameUI;
@@ -22,6 +24,7 @@ internal static class InitiateLeve
             if (step.InteractionType != EInteractionType.InitiateLeve)
                 yield break;
 
+            yield return serviceProvider.GetRequiredService<SkipInitiateIfActive>().With(quest.Id);
             yield return serviceProvider.GetRequiredService<OpenJournal>().With(quest.Id);
             yield return serviceProvider.GetRequiredService<Initiate>().With(quest.Id);
             yield return serviceProvider.GetRequiredService<SelectDifficulty>();
@@ -30,6 +33,33 @@ internal static class InitiateLeve
 
         public ITask CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
             => throw new NotImplementedException();
+    }
+
+    internal sealed unsafe class SkipInitiateIfActive : ITask
+    {
+        private ElementId _elementId = null!;
+
+        public ITask With(ElementId elementId)
+        {
+            _elementId = elementId;
+            return this;
+        }
+
+        public bool Start() => true;
+
+        public ETaskResult Update()
+        {
+            var director = UIState.Instance()->DirectorTodo.Director;
+            if (director != null &&
+                director->EventHandlerInfo != null &&
+                director->EventHandlerInfo->EventId.ContentId == EventHandlerType.GatheringLeveDirector &&
+                director->ContentId == _elementId.Value)
+                return ETaskResult.SkipRemainingTasksForStep;
+
+            return ETaskResult.TaskComplete;
+        }
+
+        public override string ToString() => $"CheckIfAlreadyActive({_elementId})";
     }
 
     internal sealed unsafe class OpenJournal : ITask

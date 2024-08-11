@@ -158,7 +158,10 @@ public sealed class QuestionablePlugin : IDalamudPlugin
             .AddTaskWithFactory<SinglePlayerDuty.Factory, SinglePlayerDuty.DisableYesAlready,
                 SinglePlayerDuty.RestoreYesAlready>();
         serviceCollection
-            .AddTaskWithFactory<InitiateLeve.Factory, InitiateLeve.OpenJournal, InitiateLeve.Initiate,
+            .AddTaskWithFactory<InitiateLeve.Factory,
+                InitiateLeve.SkipInitiateIfActive,
+                InitiateLeve.OpenJournal,
+                InitiateLeve.Initiate,
                 InitiateLeve.SelectDifficulty>();
 
         serviceCollection

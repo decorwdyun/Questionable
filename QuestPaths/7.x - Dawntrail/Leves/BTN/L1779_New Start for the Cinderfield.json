@@ -7,13 +7,13 @@
       "Steps": [
         {
           "Position": {
-            "X": 664.32874,
-            "Y": 24.373428,
-            "Z": -85.7219
+            "X": 518.05945,
+            "Y": 19.47163,
+            "Z": -335.71478
           },
           "TerritoryId": 1189,
           "InteractionType": "InitiateLeve",
-          "AetheryteShortcut": "Yak T'el - Mamook",
+          "AetheryteShortcut": "Yak T'el - Iq Br'aax",
           "Fly": true,
           "SkipConditions": {
             "AetheryteShortcutIf": {
@@ -26,8 +26,8 @@
           "InteractionType": "None",
           "RequiredGatheredItems": [
             {
-              "ItemId": 2003552,
-              "AlternativeItemId": 2003553,
+              "ItemId": 2003529,
+              "AlternativeItemId": 2003530,
               "ItemCount": 999
             }
           ]

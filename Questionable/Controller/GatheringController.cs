@@ -144,7 +144,8 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
                 Y = currentNode.Locations.Select(x => x.Position.Y).Max() + 5f,
                 Z = currentNode.Locations.Sum(x => x.Position.Z) / currentNode.Locations.Count,
             };
-            bool fly = _gameFunctions.IsFlyingUnlocked(_currentRequest.Root.TerritoryId);
+            bool fly = (currentNode.Fly || _currentRequest.Root.FlyBetweenNodes)
+                       && _gameFunctions.IsFlyingUnlocked(_currentRequest.Root.TerritoryId);
             Vector3? pointOnFloor = _navmeshIpc.GetPointOnFloor(averagePosition, true);
             if (pointOnFloor != null)
                 pointOnFloor = pointOnFloor.Value with { Y = pointOnFloor.Value.Y + (fly ? 3f : 0f) };
@@ -155,9 +156,11 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
         }
 
         _taskQueue.Enqueue(_serviceProvider.GetRequiredService<MoveToLandingLocation>()
-            .With(_currentRequest.Root.TerritoryId, currentNode));
+            .With(_currentRequest.Root.TerritoryId,
+                currentNode.Fly || _currentRequest.Root.FlyBetweenNodes,
+                currentNode));
         _taskQueue.Enqueue(_serviceProvider.GetRequiredService<Interact.DoInteract>()
-            .With(currentNode.DataId, null, EInteractionType.None, true));
+            .With(currentNode.DataId, null, EInteractionType.InternalGather, true));
         _taskQueue.Enqueue(_serviceProvider.GetRequiredService<DoGather>()
             .With(_currentRequest.Data, currentNode));
         if (_currentRequest.Data.Collectability > 0)
@@ -197,8 +200,8 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
             int currentIndex = (currentRequest.CurrentIndex + i) % currentRequest.Nodes.Count;
             var currentNode = currentRequest.Nodes[currentIndex];
             var locationsAsObjects = currentNode.Locations.Select(x =>
-                _objectTable.FirstOrDefault(y =>
-                    currentNode.DataId == y.DataId && Vector3.Distance(x.Position, y.Position) < 0.1f))
+                    _objectTable.FirstOrDefault(y =>
+                        currentNode.DataId == y.DataId && Vector3.Distance(x.Position, y.Position) < 0.1f))
                 .ToList();
 
             // Are any of the nodes too far away to be found? This is likely around ~100 yalms. All closer gathering

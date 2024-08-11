@@ -36,4 +36,7 @@ public enum EInteractionType
     AcceptLeve,
     InitiateLeve,
     CompleteLeve,
+
+    // unmapped extra types below
+    InternalGather,
 }

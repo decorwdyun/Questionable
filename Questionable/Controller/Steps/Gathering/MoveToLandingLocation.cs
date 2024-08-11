@@ -20,12 +20,14 @@ internal sealed class MoveToLandingLocation(
     ILogger<MoveToLandingLocation> logger) : ITask
 {
     private ushort _territoryId;
+    private bool _flyBetweenNodes;
     private GatheringNode _gatheringNode = null!;
     private ITask _moveTask = null!;
 
-    public ITask With(ushort territoryId, GatheringNode gatheringNode)
+    public ITask With(ushort territoryId, bool flyBetweenNodes, GatheringNode gatheringNode)
     {
         _territoryId = territoryId;
+        _flyBetweenNodes = flyBetweenNodes;
         _gatheringNode = gatheringNode;
         return this;
     }
@@ -47,7 +49,7 @@ internal sealed class MoveToLandingLocation(
         logger.LogInformation("Preliminary landing location: {Location}, with degrees = {Degrees}, range = {Range}",
             target.ToString("G", CultureInfo.InvariantCulture), degrees, range);
 
-        bool fly = gameFunctions.IsFlyingUnlocked(_territoryId);
+        bool fly = _flyBetweenNodes && gameFunctions.IsFlyingUnlocked(_territoryId);
         _moveTask = serviceProvider.GetRequiredService<Move.MoveInternal>()
             .With(_territoryId, target, 0.25f, dataId: _gatheringNode.DataId, fly: fly,
                 ignoreDistanceToObject: true);
@@ -56,5 +58,5 @@ internal sealed class MoveToLandingLocation(
 
     public ETaskResult Update() => _moveTask.Update();
 
-    public override string ToString() => $"Land/{_moveTask}";
+    public override string ToString() => $"Land/{_moveTask}/{_flyBetweenNodes}";
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
@@ -147,6 +148,7 @@ public sealed class RendererPlugin : IDalamudPlugin
     {
         JsonSerializerOptions options = new()
         {
+            Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
             WriteIndented = true,
         };
@@ -161,6 +163,7 @@ public sealed class RendererPlugin : IDalamudPlugin
 
             using var writer = new Utf8JsonWriter(stream, new JsonWriterOptions
             {
+                Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
                 Indented = true
             });
             newNode.WriteTo(writer, options);
@@ -234,7 +237,7 @@ public sealed class RendererPlugin : IDalamudPlugin
                                     Enabled = true,
                                     overlayText =
                                         $"{location.Root.Groups.IndexOf(group)} // {node.DataId} / {node.Locations.IndexOf(x)}",
-                                    overlayBGColor = isUnsaved ? 0xFF2020FF : 0,
+                                    overlayBGColor = isUnsaved ? 0xFF2020FF : 0xFF000000,
                                 },
                                 new Element(ElementType.CircleAtFixedCoordinates)
                                 {

@@ -846,22 +846,41 @@ internal sealed class GameUiController : IDisposable
                 _logger.LogInformation("Leve {Index} = {Id}, {Name}", i, questInfo.QuestId, questInfo.Name);
             */
 
-            _framework.RunOnTick(() =>
-            {
-                _questController.SetPendingQuest(nextQuest);
-                _questController.SetNextQuest(null);
-
-                var agent = UIModule.Instance()->GetAgentModule()->GetAgentByInternalId(AgentId.LeveQuest);
-                var returnValue = stackalloc AtkValue[1];
-                var selectQuest = stackalloc AtkValue[]
-                {
-                    new() { Type = ValueType.Int, Int = 3 },
-                    new() { Type = ValueType.UInt, UInt = nextQuest.Quest.Id.Value }
-                };
-                agent->ReceiveEvent(returnValue, selectQuest, 2, 0);
-                addon->Close(true);
-            }, TimeSpan.FromMilliseconds(100));
+            _framework.RunOnTick(() => AcceptLeveOrWait(nextQuest), TimeSpan.FromMilliseconds(100));
         }
+    }
+
+    private unsafe void AcceptLeveOrWait(QuestController.QuestProgress nextQuest, int counter = 0)
+    {
+        var agent = UIModule.Instance()->GetAgentModule()->GetAgentByInternalId(AgentId.LeveQuest);
+        if (agent->IsAgentActive() &&
+            _gameGui.TryGetAddonByName("GuildLeve", out AddonGuildLeve* addonGuildLeve) &&
+            LAddon.IsAddonReady(&addonGuildLeve->AtkUnitBase) &&
+            _gameGui.TryGetAddonByName("JournalDetail", out AtkUnitBase* addonJournalDetail) &&
+            LAddon.IsAddonReady(addonJournalDetail))
+        {
+            AcceptLeve(agent, addonGuildLeve, nextQuest);
+        }
+        else if (counter >= 10)
+            _logger.LogWarning("Unable to accept leve?");
+        else
+            _framework.RunOnTick(() => AcceptLeveOrWait(nextQuest, counter + 1), TimeSpan.FromMilliseconds(100));
+    }
+
+    private unsafe void AcceptLeve(AgentInterface* agent, AddonGuildLeve* addon,
+        QuestController.QuestProgress nextQuest)
+    {
+        _questController.SetPendingQuest(nextQuest);
+        _questController.SetNextQuest(null);
+
+        var returnValue = stackalloc AtkValue[1];
+        var selectQuest = stackalloc AtkValue[]
+        {
+            new() { Type = ValueType.Int, Int = 3 },
+            new() { Type = ValueType.UInt, UInt = nextQuest.Quest.Id.Value }
+        };
+        agent->ReceiveEvent(returnValue, selectQuest, 2, 0);
+        addon->Close(true);
     }
 
     private StringOrRegex? ResolveReference(Quest? quest, string? excelSheet, ExcelRef? excelRef, bool isRegExp)

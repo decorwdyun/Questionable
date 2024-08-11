@@ -16,5 +16,6 @@ public sealed class GatheringRoot
     public EAetheryteLocation? AetheryteShortcut { get; set; }
 
     public AethernetShortcut? AethernetShortcut { get; set; }
+    public bool FlyBetweenNodes { get; set; } = true;
     public List<GatheringNodeGroup> Groups { get; set; } = [];
 }

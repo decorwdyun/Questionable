@@ -7,13 +7,13 @@
       "Steps": [
         {
           "Position": {
-            "X": 664.32874,
-            "Y": 24.373428,
-            "Z": -85.7219
+            "X": 228.24704,
+            "Y": -91.93331,
+            "Z": -229.72751
           },
-          "TerritoryId": 1189,
+          "TerritoryId": 1187,
           "InteractionType": "InitiateLeve",
-          "AetheryteShortcut": "Yak T'el - Mamook",
+          "AetheryteShortcut": "Urqopacha - Wachunpelo",
           "Fly": true,
           "SkipConditions": {
             "AetheryteShortcutIf": {
@@ -22,12 +22,12 @@
           }
         },
         {
-          "TerritoryId": 1189,
+          "TerritoryId": 1187,
           "InteractionType": "None",
           "RequiredGatheredItems": [
             {
-              "ItemId": 2003552,
-              "AlternativeItemId": 2003553,
+              "ItemId": 2003539,
+              "AlternativeItemId": 2003540,
               "ItemCount": 999
             }
           ]

@@ -7,13 +7,13 @@
       "Steps": [
         {
           "Position": {
-            "X": 664.32874,
-            "Y": 24.373428,
-            "Z": -85.7219
+            "X": 767.05066,
+            "Y": 24.645323,
+            "Z": -561.67883
           },
-          "TerritoryId": 1189,
+          "TerritoryId": 1188,
           "InteractionType": "InitiateLeve",
-          "AetheryteShortcut": "Yak T'el - Mamook",
+          "AetheryteShortcut": "Kozama'uka - Ok'hanu",
           "Fly": true,
           "SkipConditions": {
             "AetheryteShortcutIf": {
@@ -22,12 +22,12 @@
           }
         },
         {
-          "TerritoryId": 1189,
+          "TerritoryId": 1188,
           "InteractionType": "None",
           "RequiredGatheredItems": [
             {
-              "ItemId": 2003552,
-              "AlternativeItemId": 2003553,
+              "ItemId": 2003516,
+              "AlternativeItemId": 2003517,
               "ItemCount": 999
             }
           ]

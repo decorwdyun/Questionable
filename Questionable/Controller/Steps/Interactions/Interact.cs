@@ -116,6 +116,9 @@ internal static class Interact
             if (_interactionState == EInteractionState.InteractionConfirmed)
                 return ETaskResult.TaskComplete;
 
+            if (InteractionType == EInteractionType.InternalGather && condition[ConditionFlag.Gathering])
+                return ETaskResult.TaskComplete;
+
             IGameObject? gameObject = gameFunctions.FindObjectByDataId(DataId);
             if (gameObject == null || !gameObject.IsTargetable || !HasAnyMarker(gameObject))
                 return ETaskResult.StillRunning;

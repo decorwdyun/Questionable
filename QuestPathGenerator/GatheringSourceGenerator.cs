@@ -143,6 +143,7 @@ public class GatheringSourceGenerator : ISourceGenerator
     {
         try
         {
+            var emptyRoot = new GatheringRoot();
             return ObjectCreationExpression(
                     IdentifierName(nameof(GatheringRoot)))
                 .WithInitializer(
@@ -151,10 +152,17 @@ public class GatheringSourceGenerator : ISourceGenerator
                         SeparatedList<ExpressionSyntax>(
                             SyntaxNodeList(
                                 AssignmentList(nameof(GatheringRoot.Author), root.Author).AsSyntaxNodeOrToken(),
-                                Assignment(nameof(GatheringRoot.TerritoryId), root.TerritoryId, default)
+                                Assignment(nameof(GatheringRoot.TerritoryId), root.TerritoryId, emptyRoot.TerritoryId)
                                     .AsSyntaxNodeOrToken(),
-                                Assignment(nameof(GatheringRoot.AetheryteShortcut), root.AetheryteShortcut, null),
-                                Assignment(nameof(GatheringRoot.AethernetShortcut), root.AethernetShortcut, null),
+                                Assignment(nameof(GatheringRoot.AetheryteShortcut), root.AetheryteShortcut,
+                                        emptyRoot.AetheryteShortcut)
+                                    .AsSyntaxNodeOrToken(),
+                                Assignment(nameof(GatheringRoot.AethernetShortcut), root.AethernetShortcut,
+                                        emptyRoot.AethernetShortcut)
+                                    .AsSyntaxNodeOrToken(),
+                                Assignment(nameof(GatheringRoot.FlyBetweenNodes), root.FlyBetweenNodes,
+                                        emptyRoot.FlyBetweenNodes)
+                                    .AsSyntaxNodeOrToken(),
                                 AssignmentList(nameof(GatheringRoot.Groups), root.Groups).AsSyntaxNodeOrToken()))));
         }
         catch (Exception e)
