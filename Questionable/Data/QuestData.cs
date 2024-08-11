@@ -57,6 +57,10 @@ internal sealed class QuestData
                 .Select(x => new LeveInfo(x)),
         ];
         _quests = quests.ToDictionary(x => x.QuestId, x => x);
+
+        // workaround because the game doesn't require completion of the CT questline through normal means
+        QuestInfo aTimeToEveryPurpose = (QuestInfo) _quests[new QuestId(425)];
+        aTimeToEveryPurpose.AddPreviousQuest(new QuestId(495));
     }
 
     public IQuestInfo GetQuestInfo(ElementId elementId)
