@@ -17,16 +17,19 @@ internal sealed class DoGatherCollectable(
     GameFunctions gameFunctions,
     IClientState clientState,
     IGameGui gameGui,
-    ILogger<DoGatherCollectable> logger) : ITask
+    ILogger<DoGatherCollectable> logger) : ITask, IRevisitAware
 {
     private GatheringController.GatheringRequest _currentRequest = null!;
     private GatheringNode _currentNode = null!;
+    private bool _revisitRequired;
+    private bool _revisitTriggered;
     private Queue<EAction>? _actionQueue;
 
-    public ITask With(GatheringController.GatheringRequest currentRequest, GatheringNode currentNode)
+    public ITask With(GatheringController.GatheringRequest currentRequest, GatheringNode currentNode, bool revisitRequired)
     {
         _currentRequest = currentRequest;
         _currentNode = currentNode;
+        _revisitRequired = revisitRequired;
         return this;
     }
 
@@ -34,8 +37,17 @@ internal sealed class DoGatherCollectable(
 
     public unsafe ETaskResult Update()
     {
-        if (gatheringController.HasNodeDisappeared(_currentNode))
+        if (_revisitRequired && !_revisitTriggered)
+        {
+            logger.LogInformation("No revisit");
             return ETaskResult.TaskComplete;
+        }
+
+        if (gatheringController.HasNodeDisappeared(_currentNode))
+        {
+            logger.LogInformation("Node disappeared");
+            return ETaskResult.TaskComplete;
+        }
 
         if (gatheringController.HasRequestedItems())
         {
@@ -150,8 +162,13 @@ internal sealed class DoGatherCollectable(
             return botanistAction;
     }
 
+    public void OnRevisit()
+    {
+        _revisitTriggered = true;
+    }
+
     public override string ToString() =>
-        $"DoGatherCollectable({SeIconChar.Collectible.ToIconString()} {_currentRequest.Collectability})";
+        $"DoGatherCollectable({SeIconChar.Collectible.ToIconString()} {_currentRequest.Collectability}){(_revisitRequired ? " if revist" : "")}";
 
     [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local")]
     private sealed record NodeCondition(

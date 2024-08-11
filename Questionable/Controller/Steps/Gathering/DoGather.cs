@@ -22,20 +22,24 @@ internal sealed class DoGather(
     IGameGui gameGui,
     IClientState clientState,
     ICondition condition,
-    ILogger<DoGather> logger) : ITask
+    ILogger<DoGather> logger) : ITask, IRevisitAware
 {
     private const uint StatusGatheringRateUp = 218;
 
     private GatheringController.GatheringRequest _currentRequest = null!;
     private GatheringNode _currentNode = null!;
+    private bool _revisitRequired;
+    private bool _revisitTriggered;
     private bool _wasGathering;
     private SlotInfo? _slotToGather;
     private Queue<EAction>? _actionQueue;
 
-    public ITask With(GatheringController.GatheringRequest currentRequest, GatheringNode currentNode)
+    public ITask With(GatheringController.GatheringRequest currentRequest, GatheringNode currentNode,
+        bool revisitRequired)
     {
         _currentRequest = currentRequest;
         _currentNode = currentNode;
+        _revisitRequired = revisitRequired;
         return this;
     }
 
@@ -43,8 +47,17 @@ internal sealed class DoGather(
 
     public unsafe ETaskResult Update()
     {
-        if (gatheringController.HasNodeDisappeared(_currentNode))
+        if (_revisitRequired && !_revisitTriggered)
+        {
+            logger.LogInformation("No revisit");
             return ETaskResult.TaskComplete;
+        }
+
+        if (gatheringController.HasNodeDisappeared(_currentNode))
+        {
+            logger.LogInformation("Node disappeared");
+            return ETaskResult.TaskComplete;
+        }
 
         if (gameFunctions.GetFreeInventorySlots() == 0)
             throw new TaskException("Inventory full");
@@ -225,7 +238,12 @@ internal sealed class DoGather(
         return ActionManager.Instance()->GetActionStatus(ActionType.Action, (uint)action) == 0;
     }
 
-    public override string ToString() => "DoGather";
+    public void OnRevisit()
+    {
+        _revisitTriggered = true;
+    }
+
+    public override string ToString() => $"DoGather{(_revisitRequired ? " if revist" : "")}";
 
     private sealed record SlotInfo(int Index, uint ItemId, int GatheringChance, int BoonChance, int Quantity);
 

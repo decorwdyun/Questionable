@@ -16,12 +16,15 @@
                 "Z": 405.1829
               },
               "MinimumAngle": 100,
-              "MaximumAngle": 250
+              "MaximumAngle": 250,
+              "MinimumDistance": 1.5,
+              "MaximumDistance": 3
             }
           ]
         },
         {
           "DataId": 31345,
+          "Fly": false,
           "Locations": [
             {
               "Position": {
@@ -29,8 +32,10 @@
                 "Y": 216.5585,
                 "Z": 412.4353
               },
-              "MinimumAngle": 50,
-              "MaximumAngle": 165
+              "MinimumAngle": 75,
+              "MaximumAngle": 145,
+              "MinimumDistance": 1.5,
+              "MaximumDistance": 3
             },
             {
               "Position": {
@@ -39,7 +44,9 @@
                 "Z": 421.5481
               },
               "MinimumAngle": 0,
-              "MaximumAngle": 145
+              "MaximumAngle": 145,
+              "MinimumDistance": 1.5,
+              "MaximumDistance": 3
             },
             {
               "Position": {
@@ -48,7 +55,9 @@
                 "Z": 408.2164
               },
               "MinimumAngle": 155,
-              "MaximumAngle": 225
+              "MaximumAngle": 225,
+              "MinimumDistance": 1.5,
+              "MaximumDistance": 3
             }
           ]
         }

@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Keys;
+using Dalamud.Game.Gui.Toast;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
@@ -90,6 +91,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
         _taskFactories = taskFactories.ToList().AsReadOnly();
 
         _condition.ConditionChange += OnConditionChange;
+        _toastGui.Toast += OnNormalToast;
         _toastGui.ErrorToast += OnErrorToast;
     }
 
@@ -786,6 +788,11 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
             conditionChangeAware.OnConditionChange(flag, value);
     }
 
+    private void OnNormalToast(ref SeString message, ref ToastOptions options, ref bool ishandled)
+    {
+        _gatheringController.OnNormalToast(message);
+    }
+
     private void OnErrorToast(ref SeString message, ref bool ishandled)
     {
         if (_currentTask is IToastAware toastAware)
@@ -795,6 +802,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
     public void Dispose()
     {
         _toastGui.ErrorToast -= OnErrorToast;
+        _toastGui.Toast -= OnNormalToast;
         _condition.ConditionChange -= OnConditionChange;
     }
 

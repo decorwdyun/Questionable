@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Numerics;
+using System.Text.RegularExpressions;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects.Enums;
+using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Event;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
+using LLib;
+using Lumina.Excel.GeneratedSheets;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps;
@@ -32,6 +37,7 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
     private readonly IObjectTable _objectTable;
     private readonly IServiceProvider _serviceProvider;
     private readonly ICondition _condition;
+    private readonly Regex _revisitRegex;
 
     private CurrentRequest? _currentRequest;
 
@@ -44,7 +50,9 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
         IChatGui chatGui,
         ILogger<GatheringController> logger,
         IServiceProvider serviceProvider,
-        ICondition condition)
+        ICondition condition,
+        IDataManager dataManager,
+        IPluginLog pluginLog)
         : base(chatGui, logger)
     {
         _movementController = movementController;
@@ -54,6 +62,9 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
         _objectTable = objectTable;
         _serviceProvider = serviceProvider;
         _condition = condition;
+
+        _revisitRegex = dataManager.GetRegex<LogMessage>(5574, x => x.Text, pluginLog)
+                        ?? throw new InvalidDataException("No regex found for revisit message");
     }
 
     public bool Start(GatheringRequest gatheringRequest)
@@ -88,13 +99,19 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
     public EStatus Update()
     {
         if (_currentRequest == null)
+        {
+            Stop("No request");
             return EStatus.Complete;
+        }
 
         if (_movementController.IsPathfinding || _movementController.IsPathfinding)
             return EStatus.Moving;
 
         if (HasRequestedItems() && !_condition[ConditionFlag.Gathering])
+        {
+            Stop("Has all items");
             return EStatus.Complete;
+        }
 
         if (_currentTask == null && _taskQueue.Count == 0)
             GoToNextNode();
@@ -136,6 +153,9 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
 
         _taskQueue.Enqueue(_serviceProvider.GetRequiredService<MountTask>()
             .With(_currentRequest.Root.TerritoryId, MountTask.EMountIf.Always));
+
+        bool fly = currentNode.Fly.GetValueOrDefault(_currentRequest.Root.FlyBetweenNodes.GetValueOrDefault(true)) &&
+                   _gameFunctions.IsFlyingUnlocked(_currentRequest.Root.TerritoryId);
         if (currentNode.Locations.Count > 1)
         {
             Vector3 averagePosition = new Vector3
@@ -144,8 +164,7 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
                 Y = currentNode.Locations.Select(x => x.Position.Y).Max() + 5f,
                 Z = currentNode.Locations.Sum(x => x.Position.Z) / currentNode.Locations.Count,
             };
-            bool fly = (currentNode.Fly || _currentRequest.Root.FlyBetweenNodes)
-                       && _gameFunctions.IsFlyingUnlocked(_currentRequest.Root.TerritoryId);
+
             Vector3? pointOnFloor = _navmeshIpc.GetPointOnFloor(averagePosition, true);
             if (pointOnFloor != null)
                 pointOnFloor = pointOnFloor.Value with { Y = pointOnFloor.Value.Y + (fly ? 3f : 0f) };
@@ -156,17 +175,19 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
         }
 
         _taskQueue.Enqueue(_serviceProvider.GetRequiredService<MoveToLandingLocation>()
-            .With(_currentRequest.Root.TerritoryId,
-                currentNode.Fly || _currentRequest.Root.FlyBetweenNodes,
-                currentNode));
+            .With(_currentRequest.Root.TerritoryId, fly, currentNode));
         _taskQueue.Enqueue(_serviceProvider.GetRequiredService<Interact.DoInteract>()
             .With(currentNode.DataId, null, EInteractionType.InternalGather, true));
-        _taskQueue.Enqueue(_serviceProvider.GetRequiredService<DoGather>()
-            .With(_currentRequest.Data, currentNode));
-        if (_currentRequest.Data.Collectability > 0)
+
+        foreach (bool revisitRequired in new[] { false, true })
         {
-            _taskQueue.Enqueue(_serviceProvider.GetRequiredService<DoGatherCollectable>()
-                .With(_currentRequest.Data, currentNode));
+            _taskQueue.Enqueue(_serviceProvider.GetRequiredService<DoGather>()
+                .With(_currentRequest.Data, currentNode, revisitRequired));
+            if (_currentRequest.Data.Collectability > 0)
+            {
+                _taskQueue.Enqueue(_serviceProvider.GetRequiredService<DoGatherCollectable>()
+                    .With(_currentRequest.Data, currentNode, revisitRequired));
+            }
         }
     }
 
@@ -230,6 +251,21 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
             return [_currentTask.ToString() ?? "?", .. base.GetRemainingTaskNames()];
         else
             return base.GetRemainingTaskNames();
+    }
+
+    public void OnNormalToast(SeString message)
+    {
+        if (_revisitRegex.IsMatch(message.TextValue))
+        {
+            if (_currentTask is IRevisitAware currentTaskRevisitAware)
+                currentTaskRevisitAware.OnRevisit();
+
+            foreach (ITask task in _taskQueue)
+            {
+                if (task is IRevisitAware taskRevisitAware)
+                    taskRevisitAware.OnRevisit();
+            }
+        }
     }
 
     private sealed class CurrentRequest
