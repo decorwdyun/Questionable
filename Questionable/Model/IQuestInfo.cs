@@ -14,6 +14,8 @@ public interface IQuestInfo
     public bool IsRepeatable { get; }
     public ushort Level { get; }
     public EBeastTribe BeastTribe { get; }
+    public uint? JournalGenre { get; }
+    public ushort SortKey { get; }
     public bool IsMainScenarioQuest { get; }
     public IReadOnlyList<EClassJob> ClassJobs { get; }
     public EExpansionVersion Expansion { get; }

@@ -190,7 +190,7 @@ internal sealed class JournalProgressWindow : LWindow, IDisposable
         }
     }
 
-    private void DrawQuest(QuestInfo questInfo)
+    private void DrawQuest(IQuestInfo questInfo)
     {
         _questRegistry.TryGetQuest(questInfo.QuestId, out var quest);
 
@@ -200,7 +200,7 @@ internal sealed class JournalProgressWindow : LWindow, IDisposable
             ImGuiTreeNodeFlags.Leaf | ImGuiTreeNodeFlags.NoTreePushOnOpen | ImGuiTreeNodeFlags.SpanFullWidth);
 
 
-        if (ImGui.IsItemClicked() && _commandManager.Commands.TryGetValue("/questinfo", out var commandInfo))
+        if (questInfo is QuestInfo && ImGui.IsItemClicked() && _commandManager.Commands.TryGetValue("/questinfo", out var commandInfo))
         {
             _commandManager.DispatchCommand("/questinfo", questInfo.QuestId.ToString() ?? string.Empty, commandInfo);
         }
@@ -308,7 +308,7 @@ internal sealed class JournalProgressWindow : LWindow, IDisposable
             return new FilteredGenre(genre, genre.Quests);
         else
         {
-            List<QuestInfo> filteredQuests = genre.Quests
+            List<IQuestInfo> filteredQuests = genre.Quests
                 .Where(x => match(x.Name))
                 .ToList();
             if (filteredQuests.Count > 0)
@@ -378,5 +378,5 @@ internal sealed class JournalProgressWindow : LWindow, IDisposable
 
     private sealed record FilteredCategory(JournalData.Category Category, List<FilteredGenre> Genres);
 
-    private sealed record FilteredGenre(JournalData.Genre Genre, List<QuestInfo> Quests);
+    private sealed record FilteredGenre(JournalData.Genre Genre, List<IQuestInfo> Quests);
 }

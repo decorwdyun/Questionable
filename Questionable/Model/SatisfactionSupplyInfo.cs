@@ -13,6 +13,7 @@ internal sealed class SatisfactionSupplyInfo : IQuestInfo
         Name = npc.Npc.Value!.Singular;
         IssuerDataId = npc.Npc.Row;
         Level = npc.LevelUnlock;
+        SortKey = QuestId.Value;
         Expansion = (EExpansionVersion)npc.QuestRequired.Value!.Expansion.Row;
     }
 
@@ -22,6 +23,8 @@ internal sealed class SatisfactionSupplyInfo : IQuestInfo
     public bool IsRepeatable => true;
     public ushort Level { get; }
     public EBeastTribe BeastTribe => EBeastTribe.None;
+    public uint? JournalGenre => null;
+    public ushort SortKey { get; }
     public bool IsMainScenarioQuest => false;
     public EExpansionVersion Expansion { get; }
 

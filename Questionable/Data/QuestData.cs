@@ -82,11 +82,10 @@ internal sealed class QuestData
 
     public bool IsIssuerOfAnyQuest(uint targetId) => _quests.Values.Any(x => x.IssuerDataId == targetId);
 
-    public List<QuestInfo> GetAllByJournalGenre(uint journalGenre)
+    public List<IQuestInfo> GetAllByJournalGenre(uint journalGenre)
     {
         return _quests.Values
-            .Where(x => x is QuestInfo { IsSeasonalEvent: false })
-            .Cast<QuestInfo>()
+            .Where(x => x is QuestInfo { IsSeasonalEvent: false } or not QuestInfo)
             .Where(x => x.JournalGenre == journalGenre)
             .OrderBy(x => x.SortKey)
             .ThenBy(x => x.QuestId)

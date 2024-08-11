@@ -22,17 +22,17 @@ internal sealed class JournalData
         var genreLimsa = new Genre(uint.MaxValue - 3, "Starting in Limsa Lominsa", 1,
             new uint[] { 108, 109 }.Concat(limsaStart.Quest.Select(x => x.Row))
                 .Where(x => x != 0)
-                .Select(x => (QuestInfo)questData.GetQuestInfo(new QuestId((ushort)(x & 0xFFFF))))
+                .Select(x => questData.GetQuestInfo(new QuestId((ushort)(x & 0xFFFF))))
                 .ToList());
         var genreGridania = new Genre(uint.MaxValue - 2, "Starting in Gridania", 1,
             new uint[] { 85, 123, 124 }.Concat(gridaniaStart.Quest.Select(x => x.Row))
                 .Where(x => x != 0)
-                .Select(x => (QuestInfo)questData.GetQuestInfo(new QuestId((ushort)(x & 0xFFFF))))
+                .Select(x => questData.GetQuestInfo(new QuestId((ushort)(x & 0xFFFF))))
                 .ToList());
         var genreUldah = new Genre(uint.MaxValue - 1, "Starting in Ul'dah", 1,
             new uint[] { 568, 569, 570 }.Concat(uldahStart.Quest.Select(x => x.Row))
                 .Where(x => x != 0)
-                .Select(x => (QuestInfo)questData.GetQuestInfo(new QuestId((ushort)(x & 0xFFFF))))
+                .Select(x => questData.GetQuestInfo(new QuestId((ushort)(x & 0xFFFF))))
                 .ToList());
         genres.InsertRange(0, [genreLimsa, genreGridania, genreUldah]);
         genres.Single(x => x.Id == 1)
@@ -57,7 +57,7 @@ internal sealed class JournalData
 
     internal sealed class Genre
     {
-        public Genre(JournalGenre journalGenre, List<QuestInfo> quests)
+        public Genre(JournalGenre journalGenre, List<IQuestInfo> quests)
         {
             Id = journalGenre.RowId;
             Name = journalGenre.Name.ToString();
@@ -65,7 +65,7 @@ internal sealed class JournalData
             Quests = quests;
         }
 
-        public Genre(uint id, string name, uint categoryId, List<QuestInfo> quests)
+        public Genre(uint id, string name, uint categoryId, List<IQuestInfo> quests)
         {
             Id = id;
             Name = name;
@@ -76,7 +76,7 @@ internal sealed class JournalData
         public uint Id { get; }
         public string Name { get; }
         public uint CategoryId { get; }
-        public List<QuestInfo> Quests { get; }
+        public List<IQuestInfo> Quests { get; }
         public int QuestCount => Quests.Count;
     }
 

@@ -12,6 +12,8 @@ internal sealed class LeveInfo : IQuestInfo
         QuestId = new LeveId((ushort)leve.RowId);
         Name = leve.Name;
         Level = leve.ClassJobLevel;
+        JournalGenre = leve.JournalGenre.Row;
+        SortKey = QuestId.Value;
         IssuerDataId = leve.LevelLevemete.Value!.Object;
         ClassJobs = QuestInfoUtils.AsList(leve.ClassJobCategory.Value!);
         Expansion = (EExpansionVersion)leve.LevelLevemete.Value.Territory.Value!.ExVersion.Row;
@@ -23,6 +25,8 @@ internal sealed class LeveInfo : IQuestInfo
     public bool IsRepeatable => true;
     public ushort Level { get; }
     public EBeastTribe BeastTribe => EBeastTribe.None;
+    public uint? JournalGenre { get; }
+    public ushort SortKey { get; }
     public bool IsMainScenarioQuest => false;
     public IReadOnlyList<EClassJob> ClassJobs { get; }
     public EExpansionVersion Expansion { get; }
