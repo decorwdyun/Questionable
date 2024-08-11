@@ -8,4 +8,6 @@ public enum EExtraSkipCondition
 {
     None,
     WakingSandsMainArea,
+
+    RisingStonesSolar,
 }

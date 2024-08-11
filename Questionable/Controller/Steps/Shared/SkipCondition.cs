@@ -204,12 +204,24 @@ internal static class SkipCondition
                 }
             }
 
-            if (SkipConditions.ExtraCondition == EExtraSkipCondition.WakingSandsMainArea)
+            if (SkipConditions.ExtraCondition == EExtraSkipCondition.WakingSandsMainArea &&
+                clientState.TerritoryType == 212)
             {
                 var position = clientState.LocalPlayer!.Position;
                 if (position.X < 24)
                 {
                     logger.LogInformation("Skipping step, as we're not in the Solar");
+                    return true;
+                }
+            }
+
+            if (SkipConditions.ExtraCondition == EExtraSkipCondition.RisingStonesSolar &&
+                clientState.TerritoryType == 351)
+            {
+                var position = clientState.LocalPlayer!.Position;
+                if (position.Z <= -28)
+                {
+                    logger.LogInformation("Skipping step, as we're in the Rising Stones Solar");
                     return true;
                 }
             }

@@ -8,5 +8,6 @@ public sealed class SkipConditionConverter() : EnumConverter<EExtraSkipCondition
     private static readonly Dictionary<EExtraSkipCondition, string> Values = new()
     {
         { EExtraSkipCondition.WakingSandsMainArea, "WakingSandsMainArea" },
+        { EExtraSkipCondition.RisingStonesSolar, "RisingStonesSolar"},
     };
 }

@@ -246,7 +246,8 @@
                         "ExtraCondition": {
                           "type": "string",
                           "enum": [
-                            "WakingSandsMainArea"
+                            "WakingSandsMainArea",
+                            "RisingStonesSolar"
                           ]
                         }
                       },

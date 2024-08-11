@@ -117,7 +117,12 @@
           },
           "TerritoryId": 135,
           "InteractionType": "WalkTo",
-          "Mount": true
+          "Mount": true,
+          "SkipConditions": {
+            "StepIf": {
+              "AetheryteUnlocked": "Lower La Noscea - Moraby Drydocks"
+            }
+          }
         },
         {
           "Position": {
@@ -127,12 +132,22 @@
           },
           "TerritoryId": 135,
           "InteractionType": "WalkTo",
-          "Fly": true
+          "Fly": true,
+          "SkipConditions": {
+            "StepIf": {
+              "AetheryteUnlocked": "Lower La Noscea - Moraby Drydocks"
+            }
+          }
         },
         {
           "TerritoryId": 135,
           "InteractionType": "AttuneAetheryte",
-          "Aetheryte": "Lower La Noscea - Moraby Drydocks"
+          "Aetheryte": "Lower La Noscea - Moraby Drydocks",
+          "SkipConditions": {
+            "StepIf": {
+              "AetheryteUnlocked": "Lower La Noscea - Moraby Drydocks"
+            }
+          }
         },
         {
           "Position": {
@@ -142,7 +157,13 @@
           },
           "TerritoryId": 135,
           "InteractionType": "WalkTo",
-          "Fly": true
+          "Fly": true,
+          "AetheryteShortcut": "Lower La Noscea - Moraby Drydocks",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "AetheryteLocked": "Lower La Noscea - Moraby Drydocks"
+            }
+          }
         },
         {
           "DataId": 1008693,

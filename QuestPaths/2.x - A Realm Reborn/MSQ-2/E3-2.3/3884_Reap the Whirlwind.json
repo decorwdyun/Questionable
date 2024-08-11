@@ -92,6 +92,17 @@
       "Sequence": 255,
       "Steps": [
         {
+          "Position": {
+            "X": -119.1183,
+            "Y": 3.7999938,
+            "Z": -104.33473
+          },
+          "TerritoryId": 130,
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Ul'dah",
+          "$": "Ul'dah Aetheryte to Immortal Flames"
+        },
+        {
           "DataId": 1004576,
           "Position": {
             "X": -141.64954,
@@ -99,8 +110,7 @@
             "Z": -114.67157
           },
           "TerritoryId": 130,
-          "InteractionType": "CompleteQuest",
-          "AetheryteShortcut": "Ul'dah"
+          "InteractionType": "CompleteQuest"
         }
       ]
     }
