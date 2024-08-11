@@ -66,6 +66,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
             MaximumSize = default
         };
         RespectCloseHotkey = false;
+        AllowClickthrough = false;
 
         _minimizeButton = new TitleBarButton
         {
