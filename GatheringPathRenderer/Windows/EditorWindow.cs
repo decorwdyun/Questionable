@@ -89,7 +89,8 @@ internal sealed class EditorWindow : Window
             return;
         }
 
-        _target ??= _objectTable.Where(x => x.ObjectKind == ObjectKind.GatheringPoint && x.DataId == location.Node.DataId)
+        _target ??= _objectTable
+            .Where(x => x.ObjectKind == ObjectKind.GatheringPoint && x.DataId == location.Node.DataId)
             .Select(x => new
             {
                 Object = x,
@@ -129,18 +130,20 @@ internal sealed class EditorWindow : Window
             }
 
             int minAngle = locationOverride.MinimumAngle ?? location.MinimumAngle.GetValueOrDefault();
-            if (ImGui.DragInt("Min Angle", ref minAngle, 5, -360, 360))
+            int maxAngle = locationOverride.MaximumAngle ?? location.MaximumAngle.GetValueOrDefault();
+            if (ImGui.DragIntRange2("Angle", ref minAngle, ref maxAngle, 5, -360, 360))
             {
                 locationOverride.MinimumAngle = minAngle;
-                locationOverride.MaximumAngle ??= location.MaximumAngle.GetValueOrDefault();
+                locationOverride.MaximumAngle = maxAngle;
                 _plugin.Redraw();
             }
 
-            int maxAngle = locationOverride.MaximumAngle ?? location.MaximumAngle.GetValueOrDefault();
-            if (ImGui.DragInt("Max Angle", ref maxAngle, 5, -360, 360))
+            float minDistance = locationOverride.MinimumDistance ?? location.CalculateMinimumDistance();
+            float maxDistance = locationOverride.MaximumDistance ?? location.CalculateMaximumDistance();
+            if (ImGui.DragFloatRange2("Distance", ref minDistance, ref maxDistance, 0.1f, 1f, 3f))
             {
-                locationOverride.MinimumAngle ??= location.MinimumAngle.GetValueOrDefault();
-                locationOverride.MaximumAngle = maxAngle;
+                locationOverride.MinimumDistance = minDistance;
+                locationOverride.MaximumDistance = maxDistance;
                 _plugin.Redraw();
             }
 
@@ -150,8 +153,18 @@ internal sealed class EditorWindow : Window
                 ImGui.PushStyleColor(ImGuiCol.Button, ImGuiColors.DalamudRed);
             if (ImGui.Button("Save"))
             {
-                location.MinimumAngle = locationOverride.MinimumAngle;
-                location.MaximumAngle = locationOverride.MaximumAngle;
+                if (locationOverride is { MinimumAngle: not null, MaximumAngle: not null })
+                {
+                    location.MinimumAngle = locationOverride.MinimumAngle ?? location.MinimumAngle;
+                    location.MaximumAngle = locationOverride.MaximumAngle ?? location.MaximumAngle;
+                }
+
+                if (locationOverride is { MinimumDistance: not null, MaximumDistance: not null })
+                {
+                    location.MinimumDistance = locationOverride.MinimumDistance;
+                    location.MaximumDistance = locationOverride.MaximumDistance;
+                }
+
                 _plugin.Save(context.File, context.Root);
             }
 
@@ -243,6 +256,6 @@ internal sealed class LocationOverride
 
     public bool NeedsSave()
     {
-        return MinimumAngle != null && MaximumAngle != null;
+        return (MinimumAngle != null && MaximumAngle != null) || (MinimumDistance != null && MaximumDistance != null);
     }
 }

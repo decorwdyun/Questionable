@@ -7,6 +7,7 @@
     "[Kugane] Aetheryte Plaza",
     "[Kugane] The Ruby Price"
   ],
+  "FlyBetweenNodes": true,
   "Groups": [
     {
       "Nodes": [
@@ -33,8 +34,10 @@
                 "Y": 0.503479,
                 "Z": 634.821
               },
-              "MinimumAngle": 60,
-              "MaximumAngle": 150
+              "MinimumAngle": 45,
+              "MaximumAngle": 90,
+              "MinimumDistance": 1.6,
+              "MaximumDistance": 3
             },
             {
               "Position": {

@@ -19,8 +19,9 @@ public static class GatheringMath
             degrees = Rng.Next(0, 360);
 
         float range = Rng.Next(
-            (int)(location.CalculateMinimumDistance() * 100),
-            (int)((location.CalculateMaximumDistance() - location.CalculateMinimumDistance()) * 100)) / 100f;
+                          (int)(location.CalculateMinimumDistance() * 100),
+                          (int)(location.CalculateMaximumDistance() * 100))
+                      / 100f;
         return (CalculateLandingLocation(location.Position, degrees, range), degrees, range);
     }
 
