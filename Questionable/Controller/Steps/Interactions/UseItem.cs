@@ -39,7 +39,6 @@ internal static class UseItem
 
             ArgumentNullException.ThrowIfNull(step.ItemId);
 
-            var unmount = serviceProvider.GetRequiredService<UnmountTask>();
             if (step.ItemId == VesperBayAetheryteTicket)
             {
                 unsafe
@@ -53,11 +52,11 @@ internal static class UseItem
                     .With(quest.Id, step.ItemId.Value, step.CompletionQuestVariablesFlags);
 
                 int currentStepIndex = sequence.Steps.IndexOf(step);
-                QuestStep? nextStep = sequence.Steps.Skip(currentStepIndex + 1).SingleOrDefault();
+                QuestStep? nextStep = sequence.Steps.Skip(currentStepIndex + 1).FirstOrDefault();
                 Vector3? nextPosition = (nextStep ?? step).Position;
                 return
                 [
-                    unmount, task,
+                    task,
                     new WaitConditionTask(() => clientState.TerritoryType == 140,
                         $"Wait(territory: {territoryData.GetNameAndId(140)})"),
                     serviceProvider.GetRequiredService<MountTask>()
@@ -70,6 +69,7 @@ internal static class UseItem
                 ];
             }
 
+            var unmount = serviceProvider.GetRequiredService<UnmountTask>();
             if (step.GroundTarget == true)
             {
                 ITask task;
