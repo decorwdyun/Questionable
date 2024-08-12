@@ -1,0 +1,114 @@
+{
+    "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+    "Author": "Cacahuetes",
+    "QuestSequence": [
+        {
+            "Sequence": 0,
+            "Steps": [
+                                    {
+                                        "DataId": 1006751,
+                    "Position": {
+                        "X": -139.45221,
+                        "Y": 8.712891,
+                        "Z": 281.69678
+                    },
+                    "TerritoryId": 153,
+                    "InteractionType": "AcceptQuest"
+                }
+            ]
+        },
+        {
+            "Sequence": 1,
+            "Steps": [
+                {
+"Position": {
+    "X": -272.38885,
+    "Y": 12.935407,
+    "Z": -46.28064
+},
+"TerritoryId": 152,
+"InteractionType": "WalkTo",
+                    "AetheryteShortcut": "East Shroud - Hawthorne Hut"
+                },
+                {
+                    "DataId": 1007852,
+"Position": {
+    "X": -272.38885,
+    "Y": 12.935407,
+    "Z": -46.28064
+},
+"TerritoryId": 152,
+"InteractionType": "Interact"
+                }
+            ]
+        },
+        {
+            "Sequence": 2,
+            "Steps": [
+                {
+                    "Position": {
+    "X": -270.7748,
+    "Y": 13.192019,
+    "Z": -49.86504
+},
+"TerritoryId": 152,
+"InteractionType": "WalkTo"
+                },
+                {
+                    "Position": {
+    "X": -270.7748,
+    "Y": 13.192019,
+    "Z": -49.86504
+},
+"TerritoryId": 152,
+"InteractionType": "Combat",
+"EnemySpawnType": "AutoOnEnterArea",
+"KillEnemyDataIds": [
+    1938,1939
+]
+                },
+                {
+                    "DataId": 2002394,
+"Position": {
+    "X": -271.5343,
+    "Y": 13.748352,
+    "Z": -51.773926
+},
+"TerritoryId": 152,
+"InteractionType": "Interact"
+                }
+            ]
+        },
+        {
+            "Sequence": 255,
+            "Steps": [
+                {
+                    "Position": {
+    "X": -146.86935,
+    "Y": 8.006159,
+    "Z": 268.78055
+},
+"TerritoryId": 153,
+                    "AetheryteShortcut": "South Shroud - Camp Tranquil",
+                    "InteractionType": "Jump",
+          "JumpDestination": {
+            "Position": {
+    "X": -137.77051,
+    "Y": 7.7094107,
+    "Z": 275.28036
+}}},
+                {
+                    "DataId": 1006751,
+"Position": {
+    "X": -139.45221,
+    "Y": 8.712891,
+    "Z": 281.69678
+},
+"TerritoryId": 153,
+"InteractionType": "CompleteQuest",
+"NextQuestId": 1082
+                }
+            ]
+        }
+    ]
+}

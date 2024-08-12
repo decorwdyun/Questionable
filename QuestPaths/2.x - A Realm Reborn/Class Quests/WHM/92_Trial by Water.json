@@ -1,0 +1,226 @@
+{
+    "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+    "Author": "Cacahuetes",
+    "QuestSequence": [
+        {
+            "Sequence": 0,
+            "Steps": [
+                { 
+                    "DataId": 1000692,
+                    "Position": {
+                        "X": -258.8083,
+                        "Y": -5.7735243,
+                        "Z": -27.267883
+                    },
+                    "TerritoryId": 133,
+                    "AetheryteShortcut": "Gridania",
+                    "AethernetShortcut": [
+                        "[Gridania] Aetheryte Plaza",
+                        "[Gridania] Conjurers' Guild"
+                    ],
+                    "InteractionType": "AcceptQuest",
+                    "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": false
+            }
+          }
+                }
+            ]
+        },
+        {
+            "Sequence": 1,
+            "Steps": [
+                {
+                    "Position": {
+    "X": -276.804,
+    "Y": 11.2529,
+    "Z": 366.10303
+},
+"TerritoryId": 152,
+                    "InteractionType": "WalkTo",
+                    "AetheryteShortcut": "East Shroud - Hawthorne Hut"
+                },
+                {
+                    "DataId": 2000889,
+"Position": {
+    "X": -276.93604,
+    "Y": 11.734131,
+    "Z": 367.20825
+},
+"TerritoryId": 152,
+"InteractionType": "Combat",
+"EnemySpawnType": "AfterItemUse",
+"ItemId": 2000121,
+"KillEnemyDataIds": [
+            297
+          ]
+                }
+            ]
+        },
+        {
+            "Sequence": 2,
+            "Steps": [
+                {
+                    "Position": {
+    "X": -228.65686,
+    "Y": 3.5446393,
+    "Z": 279.4041
+},
+"TerritoryId": 152,
+"InteractionType": "WalkTo"
+                },
+                {
+                    "DataId": 1000561,
+"Position": {
+    "X": -230.18237,
+    "Y": 3.544826,
+    "Z": 279.07214
+},
+"TerritoryId": 152,
+"InteractionType": "Interact"
+                }
+            ]
+        },
+        {
+            "Sequence": 3,
+            "Steps": [
+                {
+                    "Position": {
+    "X": -210.88799,
+    "Y": 22.813288,
+    "Z": 243.95592
+},
+"TerritoryId": 152,
+"InteractionType": "WalkTo"
+                },
+                {
+                    "DataId": 1000619,
+"Position": {
+    "X": -209.0639,
+    "Y": 22.813372,
+    "Z": 245.34973
+},
+"TerritoryId": 152,
+"InteractionType": "Interact"
+                }
+            ]
+        },
+        {
+            "Sequence": 4,
+            "Steps": [
+                {
+                    "Position": {
+    "X": -236.00592,
+    "Y": 17.87103,
+    "Z": 245.8962
+},
+"TerritoryId": 152,
+"InteractionType": "WalkTo"
+                },
+                {
+                    "DataId": 1003001,
+"Position": {
+    "X": -234.33282,
+    "Y": 18.310072,
+    "Z": 245.68542
+},
+"TerritoryId": 152,
+"InteractionType": "WaitForManualProgress",
+"$": "Action needs to be cure, cure needs to be added to schema--manual until then" 
+                }
+            ]
+        },
+        {
+            "Sequence": 5,
+            "Steps": [
+                {"DataId": 1003057,
+"Position": {
+"X": -237.6593,
+"Y": 17.850079,
+"Z": 243.48816
+},
+"TerritoryId": 152,
+"InteractionType": "Interact"
+                    }
+            ]
+        },
+        {
+            "Sequence": 6,
+            "Steps": [
+                {
+                    "Position": {
+    "X": -63.76642,
+    "Y": -8.177125,
+    "Z": 232.76166
+},
+"TerritoryId": 152,
+"InteractionType": "WalkTo"
+                },
+                {
+                    "DataId": 1001213,
+"Position": {
+    "X": -66.056335,
+    "Y": -7.982843,
+    "Z": 231.15894
+},
+"TerritoryId": 152,
+                            "InteractionType": "SinglePlayerDuty"
+                }
+            ]
+        },
+        {
+            "Sequence": 7,
+            "Steps": [
+                {
+                    "Position": {
+    "X": -75.92712,
+    "Y": -9.128448,
+    "Z": 280.5949
+},
+"TerritoryId": 152,
+"InteractionType": "WalkTo"
+                },
+                {
+                    "DataId": 1003006,
+"Position": {
+    "X": -76.64612,
+    "Y": -9.205922,
+    "Z": 283.22266
+},
+"TerritoryId": 152,
+"InteractionType": "Interact"
+                }
+            ]
+        },
+        {
+            "Sequence": 255,
+                    "Steps": [
+                        {
+                            "Position": {
+                                "X": -259.39578,
+                                "Y": -5.7723713,
+                                "Z": -24.069485
+                            },
+                            "TerritoryId": 133,
+                            "InteractionType": "WalkTo",
+                            "AetheryteShortcut": "Gridania",
+                            "AethernetShortcut": [
+                                "[Gridania] Aetheryte Plaza",
+                                "[Gridania] Conjurers' Guild"
+                            ]
+                        },
+                        {
+                            "DataId": 1000692,
+                            "Position": {
+                                "X": -258.8083,
+                                "Y": -5.7735243,
+                                "Z": -27.267883
+                            },
+                            "TerritoryId": 133,
+                            "InteractionType": "CompleteQuest",
+                            "NextQuestId": 93
+                        }
+                    ]
+        }
+    ]
+}
