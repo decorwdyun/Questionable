@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -33,13 +34,18 @@ internal static class AethernetShortcut
     internal sealed class UseAethernetShortcut(
         ILogger<UseAethernetShortcut> logger,
         AetheryteFunctions aetheryteFunctions,
+        GameFunctions gameFunctions,
         IClientState clientState,
         AetheryteData aetheryteData,
+        TerritoryData territoryData,
         LifestreamIpc lifestreamIpc,
-        MovementController movementController) : ISkippableTask
+        MovementController movementController,
+        ICondition condition) : ISkippableTask
     {
         private bool _moving;
         private bool _teleported;
+        private bool _triedMounting;
+        private DateTime _continueAt = DateTime.MinValue;
 
         public EAetheryteLocation From { get; set; }
         public EAetheryteLocation To { get; set; }
@@ -123,11 +129,19 @@ internal static class AethernetShortcut
                     }
                     else
                     {
-                        logger.LogInformation("Moving to aethernet shortcut");
-                        _moving = true;
-                        movementController.NavigateTo(EMovementType.Quest, (uint)From, aetheryteData.Locations[From],
-                            false, true,
-                            AetheryteConverter.IsLargeAetheryte(From) ? 10.9f : 6.9f);
+                        if (territoryData.CanUseMount(territoryType) &&
+                            aetheryteData.CalculateDistance(playerPosition, territoryType, From) > 30 &&
+                            !gameFunctions.HasStatusPreventingMount())
+                        {
+                            _triedMounting = gameFunctions.Mount();
+                            if (_triedMounting)
+                            {
+                                _continueAt = DateTime.Now.AddSeconds(0.5);
+                                return true;
+                            }
+                        }
+
+                        MoveTo(From);
                         return true;
                     }
                 }
@@ -140,8 +154,32 @@ internal static class AethernetShortcut
             return false;
         }
 
+        private void MoveTo(EAetheryteLocation from)
+        {
+            logger.LogInformation("Moving to aethernet shortcut");
+            _moving = true;
+            movementController.NavigateTo(EMovementType.Quest, (uint)From, aetheryteData.Locations[From],
+                false, true,
+                AetheryteConverter.IsLargeAetheryte(From) ? 10.9f : 6.9f);
+        }
+
         public ETaskResult Update()
         {
+            if (DateTime.Now < _continueAt)
+                return ETaskResult.StillRunning;
+
+            if (_triedMounting)
+            {
+                if (condition[ConditionFlag.Mounted])
+                {
+                    _triedMounting = false;
+                    MoveTo(From);
+                    return ETaskResult.StillRunning;
+                }
+                else
+                    return ETaskResult.StillRunning;
+            }
+
             if (_moving)
             {
                 var movementStartedAt = movementController.MovementStartedAt;
