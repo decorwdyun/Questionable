@@ -92,6 +92,12 @@
       "ecommons": {
         "type": "Project"
       },
+      "llib": {
+        "type": "Project",
+        "dependencies": {
+          "DalamudPackager": "[2.1.13, )"
+        }
+      },
       "questionable.model": {
         "type": "Project",
         "dependencies": {

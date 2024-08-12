@@ -14,6 +14,7 @@ using ECommons;
 using ECommons.Schedulers;
 using ECommons.SplatoonAPI;
 using GatheringPathRenderer.Windows;
+using LLib.GameData;
 using Questionable.Model;
 using Questionable.Model.Gathering;
 
@@ -64,6 +65,7 @@ public sealed class RendererPlugin : IDalamudPlugin
 
         _pluginInterface.UiBuilder.Draw += _windowSystem.Draw;
         _clientState.TerritoryChanged += TerritoryChanged;
+        _clientState.ClassJobChanged += ClassJobChanged;
         if (_clientState.IsLoggedIn)
             TerritoryChanged(_clientState.TerritoryType);
     }
@@ -174,9 +176,15 @@ public sealed class RendererPlugin : IDalamudPlugin
 
     private void TerritoryChanged(ushort territoryId) => Redraw();
 
-    internal void Redraw()
+    private void ClassJobChanged(uint classJobId) => Redraw((EClassJob)classJobId);
+
+    internal void Redraw() => Redraw((EClassJob)_clientState.LocalPlayer!.ClassJob.Id);
+
+    private void Redraw(EClassJob classJob)
     {
         Splatoon.RemoveDynamicElements("GatheringPathRenderer");
+        if (!classJob.IsGatherer())
+            return;
 
         var elements = GetLocationsInTerritory(_clientState.TerritoryType)
             .SelectMany(location =>
@@ -289,6 +297,7 @@ public sealed class RendererPlugin : IDalamudPlugin
 
     public void Dispose()
     {
+        _clientState.ClassJobChanged -= ClassJobChanged;
         _clientState.TerritoryChanged -= TerritoryChanged;
         _pluginInterface.UiBuilder.Draw -= _windowSystem.Draw;
 

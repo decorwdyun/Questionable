@@ -1,5 +1,6 @@
 <Project Sdk="Dalamud.NET.Sdk/10.0.0">
     <ItemGroup>
+      <ProjectReference Include="..\LLib\LLib.csproj" />
       <ProjectReference Include="..\Questionable.Model\Questionable.Model.csproj" />
       <ProjectReference Include="..\vendor\ECommons\ECommons\ECommons.csproj" />
     </ItemGroup>
