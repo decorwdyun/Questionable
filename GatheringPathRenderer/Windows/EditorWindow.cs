@@ -34,7 +34,8 @@ internal sealed class EditorWindow : Window
 
     public EditorWindow(RendererPlugin plugin, EditorCommands editorCommands, IDataManager dataManager,
         ITargetManager targetManager, IClientState clientState, IObjectTable objectTable)
-        : base("Gathering Path Editor###QuestionableGatheringPathEditor")
+        : base("Gathering Path Editor###QuestionableGatheringPathEditor",
+            ImGuiWindowFlags.NoFocusOnAppearing | ImGuiWindowFlags.NoNavFocus)
     {
         _plugin = plugin;
         _editorCommands = editorCommands;
@@ -47,7 +48,11 @@ internal sealed class EditorWindow : Window
         {
             MinimumSize = new Vector2(300, 300),
         };
+
+        RespectCloseHotkey = false;
         ShowCloseButton = false;
+        AllowPinning = false;
+        AllowClickthrough = false;
     }
 
     public override void Update()

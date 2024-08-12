@@ -35,6 +35,7 @@ public sealed class RendererPlugin : IDalamudPlugin
     private readonly EditorWindow _editorWindow;
 
     private readonly List<GatheringLocationContext> _gatheringLocations = [];
+    private EClassJob _currentClassJob;
 
     public RendererPlugin(IDalamudPluginInterface pluginInterface, IClientState clientState,
         ICommandManager commandManager, IDataManager dataManager, ITargetManager targetManager, IChatGui chatGui,
@@ -56,6 +57,7 @@ public sealed class RendererPlugin : IDalamudPlugin
         _editorWindow = new EditorWindow(this, _editorCommands, dataManager, targetManager, clientState, objectTable)
             { IsOpen = true };
         _windowSystem.AddWindow(_editorWindow);
+        _currentClassJob = (EClassJob?)_clientState.LocalPlayer?.ClassJob.Id ?? EClassJob.Adventurer;
 
         _pluginInterface.GetIpcSubscriber<object>("Questionable.ReloadData")
             .Subscribe(Reload);
@@ -176,9 +178,13 @@ public sealed class RendererPlugin : IDalamudPlugin
 
     private void TerritoryChanged(ushort territoryId) => Redraw();
 
-    private void ClassJobChanged(uint classJobId) => Redraw((EClassJob)classJobId);
+    private void ClassJobChanged(uint classJobId)
+    {
+        _currentClassJob = (EClassJob)classJobId;
+        Redraw(_currentClassJob);
+    }
 
-    internal void Redraw() => Redraw((EClassJob)_clientState.LocalPlayer!.ClassJob.Id);
+    internal void Redraw() => Redraw(_currentClassJob);
 
     private void Redraw(EClassJob classJob)
     {
