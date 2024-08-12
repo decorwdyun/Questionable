@@ -31,4 +31,5 @@ public enum EEmote
     Kneel = 19,
     Bow = 5,
     Uchiwasshoi = 278,
+    Clap = 7,
 }

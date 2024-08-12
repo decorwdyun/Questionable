@@ -239,6 +239,7 @@ public sealed class RendererPlugin : IDalamudPlugin
                                         $"{location.Root.Groups.IndexOf(group)} // {node.DataId} / {node.Locations.IndexOf(x)}",
                                     overlayBGColor = isUnsaved ? 0xFF2020FF : 0xFF000000,
                                 },
+#if false
                                 new Element(ElementType.CircleAtFixedCoordinates)
                                 {
                                     refX = a.X,
@@ -259,6 +260,7 @@ public sealed class RendererPlugin : IDalamudPlugin
                                     Enabled = true,
                                     overlayText = "Max Angle"
                                 }
+#endif
                             };
                         }))))
             .ToList();

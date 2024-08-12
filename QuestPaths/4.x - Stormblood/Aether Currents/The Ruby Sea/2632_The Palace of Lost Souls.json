@@ -44,13 +44,23 @@
       "Steps": [
         {
           "Position": {
-            "X": 20.067955,
+            "X": 21.067955,
             "Y": -197.78902,
-            "Z": -154.23956
+            "Z": -155.23956
           },
           "TerritoryId": 613,
           "InteractionType": "WalkTo",
-          "StopDistance": 0.25
+          "$": "Sui-no-Sato, NE inside"
+        },
+        {
+          "Position": {
+            "X": -238.47687,
+            "Y": -192.81738,
+            "Z": 329.51413
+          },
+          "TerritoryId": 613,
+          "InteractionType": "WalkTo",
+          "$": "To shorten pathfinding time, not strictly necessary"
         },
         {
           "DataId": 1023293,
@@ -106,13 +116,13 @@
         },
         {
           "Position": {
-            "X": 6.516514,
-            "Y": -198.04588,
-            "Z": -143.52591
+            "X": 22.288645,
+            "Y": -196.2301,
+            "Z": -155.5739
           },
           "TerritoryId": 613,
           "InteractionType": "WalkTo",
-          "Fly": true
+          "$": "Sui-no-Sato, NE outside"
         },
         {
           "DataId": 1023280,
