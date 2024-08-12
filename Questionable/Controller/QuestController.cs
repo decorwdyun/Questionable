@@ -788,15 +788,21 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
             conditionChangeAware.OnConditionChange(flag, value);
     }
 
-    private void OnNormalToast(ref SeString message, ref ToastOptions options, ref bool ishandled)
+    private void OnNormalToast(ref SeString message, ref ToastOptions options, ref bool isHandled)
     {
         _gatheringController.OnNormalToast(message);
     }
 
-    private void OnErrorToast(ref SeString message, ref bool ishandled)
+    private void OnErrorToast(ref SeString message, ref bool isHandled)
     {
         if (_currentTask is IToastAware toastAware)
-            toastAware.OnErrorToast(message);
+        {
+            if (toastAware.OnErrorToast(message))
+            {
+                isHandled = true;
+                return;
+            }
+        }
     }
 
     public void Dispose()

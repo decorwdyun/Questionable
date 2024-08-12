@@ -4,17 +4,21 @@ using System.Globalization;
 using System.Numerics;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects.Types;
+using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Character;
+using LLib;
+using Lumina.Excel.GeneratedSheets;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Questionable.Controller.NavigationOverrides;
 using Questionable.Controller.Steps.Common;
 using Questionable.Data;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
+using Action = System.Action;
+using Quest = Questionable.Model.Quest;
 
 namespace Questionable.Controller.Steps.Shared;
 
@@ -146,8 +150,12 @@ internal static class Move
     internal sealed class MoveInternal(
         MovementController movementController,
         GameFunctions gameFunctions,
-        ILogger<MoveInternal> logger) : ITask
+        ILogger<MoveInternal> logger,
+        ICondition condition,
+        IDataManager dataManager) : ITask, IToastAware
     {
+        private string _cannotExecuteAtThisTime = dataManager.GetString<LogMessage>(579, x => x.Text)!;
+
         public Action StartAction { get; set; } = null!;
         public Vector3 Destination { get; set; }
 
@@ -221,6 +229,15 @@ internal static class Move
         }
 
         public override string ToString() => $"MoveTo({Destination.ToString("G", CultureInfo.InvariantCulture)})";
+
+        public bool OnErrorToast(SeString message)
+        {
+            if (GameFunctions.GameStringEquals(_cannotExecuteAtThisTime, message.TextValue) &&
+                condition[ConditionFlag.Diving])
+                return true;
+
+            return false;
+        }
     }
 
     internal sealed class ExpectToBeNearDataId(GameFunctions gameFunctions, IClientState clientState) : ITask

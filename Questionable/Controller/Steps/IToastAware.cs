@@ -4,5 +4,5 @@ namespace Questionable.Controller.Steps;
 
 public interface IToastAware
 {
-    void OnErrorToast(SeString message);
+    bool OnErrorToast(SeString message);
 }

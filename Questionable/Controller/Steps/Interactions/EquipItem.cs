@@ -174,11 +174,13 @@ internal static class EquipItem
 
         public override string ToString() => $"Equip({_item.Name})";
 
-        public void OnErrorToast(SeString message)
+        public bool OnErrorToast(SeString message)
         {
             string? insufficientArmoryChestSpace = dataManager.GetString<LogMessage>(709, x => x.Text);
             if (GameFunctions.GameStringEquals(message.TextValue, insufficientArmoryChestSpace))
                 _attempts = MaxAttempts;
+
+            return false;
         }
     }
 }
