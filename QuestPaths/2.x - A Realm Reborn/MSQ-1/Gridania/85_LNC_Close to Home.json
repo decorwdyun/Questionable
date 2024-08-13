@@ -141,6 +141,12 @@
           ]
         },
         {
+          "DataId": 1000100,
+          "Position": {
+            "X": 23.819275,
+            "Y": -8,
+            "Z": 115.92273
+          },
           "TerritoryId": 132,
           "InteractionType": "CompleteQuest",
           "AethernetShortcut": [
