@@ -182,7 +182,6 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<QuestRegistry>();
         serviceCollection.AddSingleton<QuestController>();
         serviceCollection.AddSingleton<GameUiController>();
-        serviceCollection.AddSingleton<NavigationShortcutController>();
         serviceCollection.AddSingleton<CombatController>();
         serviceCollection.AddSingleton<GatheringController>();
         serviceCollection.AddSingleton<ContextMenuController>();

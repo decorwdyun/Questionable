@@ -16,7 +16,6 @@ internal sealed class DalamudInitializer : IDisposable
     private readonly IFramework _framework;
     private readonly QuestController _questController;
     private readonly MovementController _movementController;
-    private readonly NavigationShortcutController _navigationShortcutController;
     private readonly WindowSystem _windowSystem;
     private readonly QuestWindow _questWindow;
     private readonly ConfigWindow _configWindow;
@@ -29,7 +28,6 @@ internal sealed class DalamudInitializer : IDisposable
         QuestController questController,
         MovementController movementController,
         GameUiController gameUiController,
-        NavigationShortcutController navigationShortcutController,
         WindowSystem windowSystem,
         QuestWindow questWindow,
         DebugOverlay debugOverlay,
@@ -44,7 +42,6 @@ internal sealed class DalamudInitializer : IDisposable
         _framework = framework;
         _questController = questController;
         _movementController = movementController;
-        _navigationShortcutController = navigationShortcutController;
         _windowSystem = windowSystem;
         _questWindow = questWindow;
         _configWindow = configWindow;
@@ -71,7 +68,6 @@ internal sealed class DalamudInitializer : IDisposable
     private void FrameworkUpdate(IFramework framework)
     {
         _questController.Update();
-        _navigationShortcutController.HandleNavigationShortcut();
 
         try
         {
