@@ -42,6 +42,8 @@ internal sealed class GameUiController : IDisposable
     private readonly ILogger<GameUiController> _logger;
     private readonly Regex _returnRegex;
 
+    private bool _isInitialCheck;
+
     public GameUiController(
         IAddonLifecycle addonLifecycle,
         IDataManager dataManager,
@@ -88,37 +90,47 @@ internal sealed class GameUiController : IDisposable
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "GuildLeve", GuildLevePostSetup);
     }
 
+    private bool ShouldHandleUiInteractions => _isInitialCheck || _questController.IsRunning;
+
     internal unsafe void HandleCurrentDialogueChoices()
     {
-        if (_gameGui.TryGetAddonByName("SelectString", out AddonSelectString* addonSelectString))
+        try
         {
-            _logger.LogInformation("SelectString window is open");
-            SelectStringPostSetup(addonSelectString, true);
-        }
+            _isInitialCheck = true;
+            if (_gameGui.TryGetAddonByName("SelectString", out AddonSelectString* addonSelectString))
+            {
+                _logger.LogInformation("SelectString window is open");
+                SelectStringPostSetup(addonSelectString, true);
+            }
 
-        if (_gameGui.TryGetAddonByName("CutSceneSelectString",
-                out AddonCutSceneSelectString* addonCutSceneSelectString))
-        {
-            _logger.LogInformation("CutSceneSelectString window is open");
-            CutsceneSelectStringPostSetup(addonCutSceneSelectString, true);
-        }
+            if (_gameGui.TryGetAddonByName("CutSceneSelectString",
+                    out AddonCutSceneSelectString* addonCutSceneSelectString))
+            {
+                _logger.LogInformation("CutSceneSelectString window is open");
+                CutsceneSelectStringPostSetup(addonCutSceneSelectString, true);
+            }
 
-        if (_gameGui.TryGetAddonByName("SelectIconString", out AddonSelectIconString* addonSelectIconString))
-        {
-            _logger.LogInformation("SelectIconString window is open");
-            SelectIconStringPostSetup(addonSelectIconString, true);
-        }
+            if (_gameGui.TryGetAddonByName("SelectIconString", out AddonSelectIconString* addonSelectIconString))
+            {
+                _logger.LogInformation("SelectIconString window is open");
+                SelectIconStringPostSetup(addonSelectIconString, true);
+            }
 
-        if (_gameGui.TryGetAddonByName("SelectYesno", out AddonSelectYesno* addonSelectYesno))
-        {
-            _logger.LogInformation("SelectYesno window is open");
-            SelectYesnoPostSetup(addonSelectYesno, true);
-        }
+            if (_gameGui.TryGetAddonByName("SelectYesno", out AddonSelectYesno* addonSelectYesno))
+            {
+                _logger.LogInformation("SelectYesno window is open");
+                SelectYesnoPostSetup(addonSelectYesno, true);
+            }
 
-        if (_gameGui.TryGetAddonByName("PointMenu", out AtkUnitBase* addonPointMenu))
+            if (_gameGui.TryGetAddonByName("PointMenu", out AtkUnitBase* addonPointMenu))
+            {
+                _logger.LogInformation("PointMenu is open");
+                PointMenuPostSetup(addonPointMenu);
+            }
+        }
+        finally
         {
-            _logger.LogInformation("PointMenu is open");
-            PointMenuPostSetup(addonPointMenu);
+            _isInitialCheck = false;
         }
     }
 
@@ -130,6 +142,9 @@ internal sealed class GameUiController : IDisposable
 
     private unsafe void SelectStringPostSetup(AddonSelectString* addonSelectString, bool checkAllSteps)
     {
+        if (!ShouldHandleUiInteractions)
+            return;
+
         string? actualPrompt = addonSelectString->AtkUnitBase.AtkValues[2].ReadAtkString();
         if (actualPrompt == null)
             return;
@@ -155,6 +170,9 @@ internal sealed class GameUiController : IDisposable
     private unsafe void CutsceneSelectStringPostSetup(AddonCutSceneSelectString* addonCutSceneSelectString,
         bool checkAllSteps)
     {
+        if (!ShouldHandleUiInteractions)
+            return;
+
         string? actualPrompt = addonCutSceneSelectString->AtkUnitBase.AtkValues[2].ReadAtkString();
         if (actualPrompt == null)
             return;
@@ -177,6 +195,9 @@ internal sealed class GameUiController : IDisposable
     [SuppressMessage("ReSharper", "RedundantJumpStatement")]
     private unsafe void SelectIconStringPostSetup(AddonSelectIconString* addonSelectIconString, bool checkAllSteps)
     {
+        if (!ShouldHandleUiInteractions)
+            return;
+
         string? actualPrompt = addonSelectIconString->AtkUnitBase.AtkValues[3].ReadAtkString();
         if (string.IsNullOrEmpty(actualPrompt))
             actualPrompt = null;
@@ -442,9 +463,6 @@ internal sealed class GameUiController : IDisposable
 
     private int? HandleInstanceListChoice(string? actualPrompt)
     {
-        if (!_questController.IsRunning)
-            return null;
-
         string? expectedPrompt = _excelFunctions.GetDialogueTextByRowId("Addon", 2090, false).GetString();
         if (GameFunctions.GameStringEquals(actualPrompt, expectedPrompt))
         {
@@ -464,6 +482,9 @@ internal sealed class GameUiController : IDisposable
     [SuppressMessage("ReSharper", "RedundantJumpStatement")]
     private unsafe void SelectYesnoPostSetup(AddonSelectYesno* addonSelectYesno, bool checkAllSteps)
     {
+        if (!ShouldHandleUiInteractions)
+            return;
+
         string? actualPrompt = addonSelectYesno->AtkUnitBase.AtkValues[0].ReadAtkString();
         if (actualPrompt == null)
             return;
@@ -671,6 +692,9 @@ internal sealed class GameUiController : IDisposable
 
     private unsafe void PointMenuPostSetup(AtkUnitBase* addonPointMenu)
     {
+        if (!ShouldHandleUiInteractions)
+            return;
+
         var currentQuest = _questController.StartedQuest;
         if (currentQuest == null)
         {
@@ -717,6 +741,9 @@ internal sealed class GameUiController : IDisposable
     /// </summary>
     private unsafe void CreditScrollPostSetup(AddonEvent type, AddonArgs args)
     {
+        if (!ShouldHandleUiInteractions)
+            return;
+
         _logger.LogInformation("Closing Credits sequence");
         AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
         addon->FireCallbackInt(-2);
@@ -727,6 +754,9 @@ internal sealed class GameUiController : IDisposable
     /// </summary>
     private unsafe void CreditPostSetup(AddonEvent type, AddonArgs args)
     {
+        if (!ShouldHandleUiInteractions)
+            return;
+
         _logger.LogInformation("Closing Credits sequence");
         AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
         addon->FireCallbackInt(-2);
@@ -734,6 +764,9 @@ internal sealed class GameUiController : IDisposable
 
     private unsafe void CreditPlayerPostSetup(AddonEvent type, AddonArgs args)
     {
+        if (!ShouldHandleUiInteractions)
+            return;
+
         _logger.LogInformation("Closing CreditPlayer");
         AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
         addon->Close(true);
@@ -741,6 +774,9 @@ internal sealed class GameUiController : IDisposable
 
     private unsafe void UnendingCodexPostSetup(AddonEvent type, AddonArgs args)
     {
+        if (!ShouldHandleUiInteractions)
+            return;
+
         if (_questController.StartedQuest?.Quest.Id.Value == 4526)
         {
             _logger.LogInformation("Closing Unending Codex");
@@ -751,6 +787,9 @@ internal sealed class GameUiController : IDisposable
 
     private unsafe void ContentsTutorialPostSetup(AddonEvent type, AddonArgs args)
     {
+        if (!ShouldHandleUiInteractions)
+            return;
+
         if (_questController.StartedQuest?.Quest.Id.Value == 245)
         {
             _logger.LogInformation("Closing ContentsTutorial");
@@ -764,6 +803,9 @@ internal sealed class GameUiController : IDisposable
     /// </summary>
     private unsafe void MultipleHelpWindowPostSetup(AddonEvent type, AddonArgs args)
     {
+        if (!ShouldHandleUiInteractions)
+            return;
+
         if (_questController.StartedQuest?.Quest.Id.Value == 245)
         {
             _logger.LogInformation("Closing MultipleHelpWindow");
@@ -775,40 +817,40 @@ internal sealed class GameUiController : IDisposable
 
     private unsafe void HousingSelectBlockPostSetup(AddonEvent type, AddonArgs args)
     {
-        if (_questController.IsRunning)
-        {
-            _logger.LogInformation("Confirming selected housing ward");
-            AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
-            addon->FireCallbackInt(0);
-        }
+        if (!ShouldHandleUiInteractions)
+            return;
+
+        _logger.LogInformation("Confirming selected housing ward");
+        AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
+        addon->FireCallbackInt(0);
     }
 
     private unsafe void JournalResultPostSetup(AddonEvent type, AddonArgs args)
     {
-        if (_questController.IsRunning)
+        if (!ShouldHandleUiInteractions)
+            return;
+
+        _logger.LogInformation("Checking for quest name of journal result");
+        AddonJournalResult* addon = (AddonJournalResult*)args.Addon;
+
+        string questName = addon->AtkTextNode250->NodeText.ToString();
+        if (_questController.CurrentQuest is { Quest.Id: LeveId } &&
+            GameFunctions.GameStringEquals(_questController.CurrentQuest.Quest.Info.Name, questName))
         {
-            _logger.LogInformation("Checking for quest name of journal result");
-            AddonJournalResult* addon = (AddonJournalResult*)args.Addon;
+            _logger.LogInformation("JournalResult has the current leve, auto-accepting it");
+            addon->FireCallbackInt(0);
+        }
+        else if (_targetManager.Target is { } target)
+        {
+            var issuedLeves = _questData.GetAllByIssuerDataId(target.DataId)
+                .Where(x => x.QuestId is LeveId)
+                .ToList();
 
-            string questName = addon->AtkTextNode250->NodeText.ToString();
-            if (_questController.CurrentQuest is { Quest.Id: LeveId } &&
-                GameFunctions.GameStringEquals(_questController.CurrentQuest.Quest.Info.Name, questName))
+            if (issuedLeves.Any(x => GameFunctions.GameStringEquals(x.Name, questName)))
             {
-                _logger.LogInformation("JournalResult has the current leve, auto-accepting it");
-                addon->FireCallbackInt(0);
-            }
-            else if (_targetManager.Target is { } target)
-            {
-                var issuedLeves = _questData.GetAllByIssuerDataId(target.DataId)
-                    .Where(x => x.QuestId is LeveId)
-                    .ToList();
-
-                if (issuedLeves.Any(x => GameFunctions.GameStringEquals(x.Name, questName)))
-                {
-                    _logger.LogInformation(
-                        "JournalResult has a leve but not the one we're currently on, auto-declining it");
-                    addon->FireCallbackInt(1);
-                }
+                _logger.LogInformation(
+                    "JournalResult has a leve but not the one we're currently on, auto-declining it");
+                addon->FireCallbackInt(1);
             }
         }
     }
