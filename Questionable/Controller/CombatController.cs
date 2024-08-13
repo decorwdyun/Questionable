@@ -169,10 +169,12 @@ internal sealed class CombatController : IDisposable
                     }
                 }
 
-                if (QuestWorkUtils.HasCompletionFlags(condition.CompletionQuestVariablesFlags) && _currentFight.Data.ElementId is QuestId questId)
+                if (QuestWorkUtils.HasCompletionFlags(condition.CompletionQuestVariablesFlags) &&
+                    _currentFight.Data.ElementId is QuestId questId)
                 {
                     var questWork = _questFunctions.GetQuestProgressInfo(questId);
-                    if (questWork != null && QuestWorkUtils.MatchesQuestWork(condition.CompletionQuestVariablesFlags, questWork))
+                    if (questWork != null &&
+                        QuestWorkUtils.MatchesQuestWork(condition.CompletionQuestVariablesFlags, questWork))
                     {
                         _logger.LogInformation("Complex combat condition fulfilled: QuestWork matches");
                         _currentFight.Data.CompletedComplexDatas.Add(i);
@@ -248,10 +250,15 @@ internal sealed class CombatController : IDisposable
                     if (battleNpc.StatusFlags.HasFlag(StatusFlags.InCombat))
                         return 20;
                 }
-                else
+                else if (enemyData != null)
                 {
                     if (gameObjectStruct->NamePlateIconId != 0)
                         return 30;
+
+                    // for enemies that are very far away, their nameplate doesn't render but they're in the object table
+                    if (_currentFight?.Data.SpawnType == EEnemySpawnType.OverworldEnemies &&
+                        Vector3.Distance(_clientState.LocalPlayer?.Position ?? Vector3.Zero, battleNpc.Position) > 50)
+                        return 25;
                 }
             }
 
