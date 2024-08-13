@@ -401,23 +401,6 @@
                   "if": {
                     "properties": {
                       "InteractionType": {
-                        "const": "SinglePlayerDuty"
-                      },
-                      "Emote": {
-                        "not": true
-                      }
-                    }
-                  },
-                  "then": {
-                    "required": [
-                      "DataId"
-                    ]
-                  }
-                },
-                {
-                  "if": {
-                    "properties": {
-                      "InteractionType": {
                         "const": "WalkTo"
                       }
                     }

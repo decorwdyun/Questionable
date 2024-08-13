@@ -155,9 +155,6 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTaskWithFactory<EquipRecommended.Factory, EquipRecommended.DoEquipRecommended>();
         serviceCollection.AddTaskWithFactory<TurnInDelivery.Factory, TurnInDelivery.SatisfactionSupplyTurnIn>();
         serviceCollection
-            .AddTaskWithFactory<SinglePlayerDuty.Factory, SinglePlayerDuty.DisableYesAlready,
-                SinglePlayerDuty.RestoreYesAlready>();
-        serviceCollection
             .AddTaskWithFactory<InitiateLeve.Factory,
                 InitiateLeve.SkipInitiateIfActive,
                 InitiateLeve.OpenJournal,

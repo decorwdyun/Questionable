@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using Dalamud.Interface;
+using Dalamud.Interface.Colors;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using ImGuiNET;
@@ -120,22 +121,29 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
 
     public override void Draw()
     {
-        _activeQuestComponent.Draw(IsMinimized);
-        if (!IsMinimized)
+        try
         {
-            ImGui.Separator();
-
-            if (_aRealmRebornComponent.ShouldDraw)
+            _activeQuestComponent.Draw(IsMinimized);
+            if (!IsMinimized)
             {
-                _aRealmRebornComponent.Draw();
                 ImGui.Separator();
+
+                if (_aRealmRebornComponent.ShouldDraw)
+                {
+                    _aRealmRebornComponent.Draw();
+                    ImGui.Separator();
+                }
+
+                _creationUtilsComponent.Draw();
+                ImGui.Separator();
+
+                _quickAccessButtonsComponent.Draw();
+                _remainingTasksComponent.Draw();
             }
-
-            _creationUtilsComponent.Draw();
-            ImGui.Separator();
-
-            _quickAccessButtonsComponent.Draw();
-            _remainingTasksComponent.Draw();
+        }
+        catch (Exception e)
+        {
+            ImGui.TextColored(ImGuiColors.DalamudRed, e.ToString());
         }
     }
 
