@@ -241,8 +241,21 @@ internal sealed unsafe class QuestFunctions
 
     public ElementId? GetNextPriorityQuestThatCanBeAccepted()
     {
+        // all priority quests assume we're able to teleport to the beginning (and for e.g. class quests, the end)
+        // ideally without having to wait 15m for Return.
+        if (!_aetheryteFunctions.IsTeleportUnlocked())
+            return null;
+
+        // ideally, we'd also be able to afford *some* teleports
+        // this implicitly makes sure we're not starting one of the lv1 class quests if we can't afford to teleport back
+        //
+        // Of course, they can still be accepted manually.
+        InventoryManager* inventoryManager = InventoryManager.Instance();
+        if (inventoryManager->GetItemCountInContainer(1, InventoryType.Currency) < 2000)
+            return null;
+
         return GetPriorityQuestsThatCanBeAccepted()
-            .FirstOrDefault(x =>
+            .Where(x =>
             {
                 if (!_questRegistry.TryGetQuest(x, out Quest? quest))
                     return false;
@@ -251,8 +264,7 @@ internal sealed unsafe class QuestFunctions
                 if (firstStep == null)
                     return false;
 
-                if (firstStep.AetheryteShortcut is { } aetheryteShortcut &&
-                    _aetheryteFunctions.IsAetheryteUnlocked(aetheryteShortcut))
+                if (firstStep.AetheryteShortcut != null)
                     return true;
 
                 if (firstStep is
@@ -260,6 +272,25 @@ internal sealed unsafe class QuestFunctions
                     return true;
 
                 return false;
+            })
+            .FirstOrDefault(x =>
+            {
+                if (!_questRegistry.TryGetQuest(x, out Quest? quest))
+                    return false;
+
+                return quest.AllSteps().All(x =>
+                {
+                    if (x.Step.AetheryteShortcut is { } aetheryteShortcut &&
+                        _aetheryteFunctions.IsAetheryteUnlocked(aetheryteShortcut))
+                        return false;
+
+                    if (x.Step.AethernetShortcut is { } aethernetShortcut &&
+                        (!_aetheryteFunctions.IsAetheryteUnlocked(aethernetShortcut.From) ||
+                         !_aetheryteFunctions.IsAetheryteUnlocked(aethernetShortcut.To)))
+                        return false;
+
+                    return true;
+                });
             });
     }
 
@@ -413,6 +444,9 @@ internal sealed unsafe class QuestFunctions
         }
 
         if (questInfo.GrandCompany != GrandCompany.None && questInfo.GrandCompany != GetGrandCompany())
+            return true;
+
+        if (_questData.GetLockedClassQuests().Contains(questId))
             return true;
 
         return !HasCompletedPreviousQuests(questInfo, extraCompletedQuest) || !HasCompletedPreviousInstances(questInfo);

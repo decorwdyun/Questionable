@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using LLib.GameData;
 using Lumina.Excel.GeneratedSheets;
 using Questionable.Model;
@@ -21,6 +22,7 @@ internal sealed class QuestData
     public static readonly IReadOnlyList<ushort> MeleeRoleQuests = [138, 156, 180];
     public static readonly IReadOnlyList<ushort> PhysicalRangedRoleQuests = [138, 157, 181];
     public static readonly IReadOnlyList<ushort> CasterRoleQuests = [139, 158, 182];
+
     public static readonly IReadOnlyList<IReadOnlyList<ushort>> AllRoleQuestChapters =
     [
         TankRoleQuests,
@@ -59,7 +61,7 @@ internal sealed class QuestData
         _quests = quests.ToDictionary(x => x.QuestId, x => x);
 
         // workaround because the game doesn't require completion of the CT questline through normal means
-        QuestInfo aTimeToEveryPurpose = (QuestInfo) _quests[new QuestId(425)];
+        QuestInfo aTimeToEveryPurpose = (QuestInfo)_quests[new QuestId(425)];
         aTimeToEveryPurpose.AddPreviousQuest(new QuestId(495));
     }
 
@@ -179,5 +181,33 @@ internal sealed class QuestData
             .Cast<QuestInfo>()
             .Where(x => chapterIds.Contains(x.NewGamePlusChapter))
             .ToList();
+    }
+
+    public List<QuestId> GetLockedClassQuests()
+    {
+        EClassJob startingClass;
+        unsafe
+        {
+            var playerState = PlayerState.Instance();
+            if (playerState != null)
+                startingClass = (EClassJob)playerState->FirstClass;
+            else
+                startingClass = EClassJob.Adventurer;
+        }
+
+        if (startingClass == EClassJob.Adventurer)
+            return [];
+
+        return
+        [
+            startingClass == EClassJob.Gladiator ? new(177) : new(253),
+            startingClass == EClassJob.Pugilist ? new(178) : new(533),
+            startingClass == EClassJob.Marauder ? new(179) : new(311),
+            startingClass == EClassJob.Lancer ? new(180) : new(23),
+            startingClass == EClassJob.Archer ? new(181) : new(21),
+            startingClass == EClassJob.Conjurer ? new(182) : new(22),
+            startingClass == EClassJob.Thaumaturge ? new(183) : new(345),
+            startingClass == EClassJob.Arcanist ? new(451) : new(453),
+        ];
     }
 }

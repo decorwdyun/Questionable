@@ -1,16 +1,12 @@
-﻿using System;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using System.Linq;
 using System.Numerics;
 using Dalamud.Game.ClientState.Conditions;
-using Dalamud.Interface.Utility;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin.Services;
 using ImGuiNET;
 using Questionable.Controller;
 using Questionable.Data;
-using Questionable.Model;
 using Questionable.Model.Questing;
 
 namespace Questionable.Windows;
