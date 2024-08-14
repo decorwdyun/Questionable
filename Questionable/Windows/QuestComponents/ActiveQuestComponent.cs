@@ -381,7 +381,7 @@ internal sealed partial class ActiveQuestComponent
     private static string Shorten(string text)
     {
         if (text.Length > 35)
-            return string.Concat(text.AsSpan(0, 35).Trim(), ((SeIconChar)57434).ToIconString());
+            return string.Concat(text.AsSpan(0, 30).Trim(), ((SeIconChar)57434).ToIconString());
 
         return text;
     }
