@@ -1,5 +1,6 @@
 ﻿using System;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
 using Microsoft.Extensions.DependencyInjection;
 using Questionable.Model;
@@ -20,7 +21,20 @@ internal static class EquipRecommended
         }
     }
 
-    internal sealed unsafe class DoEquipRecommended(IClientState clientState) : ITask
+    internal sealed class BeforeDutyOrInstance(IServiceProvider serviceProvider) : ITaskFactory
+    {
+        public ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
+        {
+            if (step.InteractionType != EInteractionType.Duty &&
+                step.InteractionType != EInteractionType.SinglePlayerDuty &&
+                step.InteractionType != EInteractionType.Combat)
+                return null;
+
+            return serviceProvider.GetRequiredService<DoEquipRecommended>();
+        }
+    }
+
+    internal sealed unsafe class DoEquipRecommended(IClientState clientState, IChatGui chatGui) : ITask
     {
         private bool _equipped;
 
@@ -32,12 +46,43 @@ internal static class EquipRecommended
 
         public ETaskResult Update()
         {
-            if (RecommendEquipModule.Instance()->IsUpdating)
+            var recommendedEquipModule = RecommendEquipModule.Instance();
+            if (recommendedEquipModule->IsUpdating)
                 return ETaskResult.StillRunning;
 
             if (!_equipped)
             {
-                RecommendEquipModule.Instance()->EquipRecommendedGear();
+                InventoryManager* inventoryManager = InventoryManager.Instance();
+                InventoryContainer* equippedItems =
+                    inventoryManager->GetInventoryContainer(InventoryType.EquippedItems);
+                bool isAllEquipped = true;
+                foreach (var recommendedItemPtr in recommendedEquipModule->RecommendedItems)
+                {
+                    var recommendedItem = recommendedItemPtr.Value;
+                    if (recommendedItem == null || recommendedItem->ItemId == 0)
+                        continue;
+
+                    bool isEquipped = false;
+                    for (int i = 0; i < equippedItems->Size; ++i)
+                    {
+                        var equippedItem = equippedItems->Items[i];
+                        if (equippedItem.ItemId != 0 && equippedItem.ItemId == recommendedItem->ItemId)
+                        {
+                            isEquipped = true;
+                            break;
+                        }
+                    }
+
+                    if (!isEquipped)
+                        isAllEquipped = false;
+                }
+
+                if (!isAllEquipped)
+                {
+                    chatGui.Print("Equipping recommended gear.", "Questionable");
+                    recommendedEquipModule->EquipRecommendedGear();
+                }
+
                 _equipped = true;
                 return ETaskResult.StillRunning;
             }

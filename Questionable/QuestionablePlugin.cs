@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Questionable.Controller;
 using Questionable.Controller.CombatModules;
 using Questionable.Controller.NavigationOverrides;
+using Questionable.Controller.Steps;
 using Questionable.Controller.Steps.Shared;
 using Questionable.Controller.Steps.Common;
 using Questionable.Controller.Steps.Gathering;
@@ -128,6 +129,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
 
         // task factories
         serviceCollection.AddTaskWithFactory<StepDisabled.Factory, StepDisabled.Task>();
+        serviceCollection.AddSingleton<ITaskFactory, EquipRecommended.BeforeDutyOrInstance>();
         serviceCollection.AddTaskWithFactory<GatheringRequiredItems.Factory, GatheringRequiredItems.StartGathering>();
         serviceCollection.AddTaskWithFactory<AetheryteShortcut.Factory, AetheryteShortcut.UseAetheryteShortcut>();
         serviceCollection.AddTaskWithFactory<SkipCondition.Factory, SkipCondition.CheckSkip>();
