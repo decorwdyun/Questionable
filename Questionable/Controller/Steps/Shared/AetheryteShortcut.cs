@@ -145,6 +145,8 @@ internal static class AetheryteShortcut
                 if (!aetheryteFunctions.IsTeleportUnlocked())
                     throw new TaskException("Teleport is not unlocked, attune to any aetheryte first.");
 
+                _continueAt = DateTime.Now.AddSeconds(1);
+                logger.LogTrace("Waiting for teleport cooldown...");
                 return false;
             }
 

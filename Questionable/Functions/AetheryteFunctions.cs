@@ -8,13 +8,14 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Model.Common;
 using Questionable.Model.Questing;
+using Action = Lumina.Excel.GeneratedSheets.Action;
 
 namespace Questionable.Functions;
 
 internal sealed unsafe class AetheryteFunctions
 {
     private const uint TeleportAction = 5;
-    private const uint ReturnAction = 8;
+    private const uint ReturnAction = 6;
 
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<AetheryteFunctions> _logger;
@@ -48,16 +49,16 @@ internal sealed unsafe class AetheryteFunctions
     public bool CanTeleport(EAetheryteLocation aetheryteLocation)
     {
         if ((ushort)aetheryteLocation == PlayerState.Instance()->HomeAetheryteId &&
-            ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, ReturnAction) == 0)
+            ActionManager.Instance()->GetActionStatus(ActionType.Action, ReturnAction) == 0)
             return true;
 
-        return ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, TeleportAction) == 0;
+        return ActionManager.Instance()->GetActionStatus(ActionType.Action, TeleportAction) == 0;
     }
 
     public bool IsTeleportUnlocked()
     {
-        ushort unlockLink = _dataManager.GetExcelSheet<GeneralAction>()!
-            .Single(x => x.Action.Row == 5)
+        uint unlockLink = _dataManager.GetExcelSheet<Action>()!
+            .GetRow(5)!
             .UnlockLink;
         return UIState.Instance()->IsUnlockLinkUnlocked(unlockLink);
     }
@@ -68,17 +69,17 @@ internal sealed unsafe class AetheryteFunctions
         if (IsAetheryteUnlocked(aetheryteId, out var subIndex))
         {
             if (aetheryteId == PlayerState.Instance()->HomeAetheryteId &&
-                ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, ReturnAction) == 0)
+                ActionManager.Instance()->GetActionStatus(ActionType.Action, ReturnAction) == 0)
             {
                 ReturnRequestedAt = DateTime.Now;
-                if (ActionManager.Instance()->UseAction(ActionType.GeneralAction, ReturnAction))
+                if (ActionManager.Instance()->UseAction(ActionType.Action, ReturnAction))
                 {
                     _logger.LogInformation("Using 'return' for home aetheryte");
                     return true;
                 }
             }
 
-            if (ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, TeleportAction) == 0)
+            if (ActionManager.Instance()->GetActionStatus(ActionType.Action, TeleportAction) == 0)
             {
                 // fallback if return isn't available or (more likely) on a different aetheryte
                 _logger.LogInformation("Teleporting to aetheryte {AetheryteId}", aetheryteId);
