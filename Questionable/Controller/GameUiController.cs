@@ -741,9 +741,6 @@ internal sealed class GameUiController : IDisposable
     /// </summary>
     private unsafe void CreditScrollPostSetup(AddonEvent type, AddonArgs args)
     {
-        if (!ShouldHandleUiInteractions)
-            return;
-
         _logger.LogInformation("Closing Credits sequence");
         AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
         addon->FireCallbackInt(-2);
@@ -754,9 +751,6 @@ internal sealed class GameUiController : IDisposable
     /// </summary>
     private unsafe void CreditPostSetup(AddonEvent type, AddonArgs args)
     {
-        if (!ShouldHandleUiInteractions)
-            return;
-
         _logger.LogInformation("Closing Credits sequence");
         AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
         addon->FireCallbackInt(-2);
@@ -764,9 +758,6 @@ internal sealed class GameUiController : IDisposable
 
     private unsafe void CreditPlayerPostSetup(AddonEvent type, AddonArgs args)
     {
-        if (!ShouldHandleUiInteractions)
-            return;
-
         _logger.LogInformation("Closing CreditPlayer");
         AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
         addon->Close(true);
