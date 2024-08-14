@@ -260,6 +260,13 @@ internal sealed class CombatController : IDisposable
                         Vector3.Distance(_clientState.LocalPlayer?.Position ?? Vector3.Zero, battleNpc.Position) > 50)
                         return 25;
                 }
+                else
+                {
+                    // as part of KillEnemyDataIds, not ComplexCombatData
+                    // TODO maybe remove KillEnemyDataIds, rename ComplexCombatData to CombatData
+                    if (gameObjectStruct->NamePlateIconId != 0)
+                        return 29;
+                }
             }
 
             // stuff trying to kill us
