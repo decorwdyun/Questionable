@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Numerics;
+using System.Text.RegularExpressions;
 using Dalamud.Game.Text;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
@@ -17,8 +18,11 @@ using Questionable.Model.Questing;
 
 namespace Questionable.Windows.QuestComponents;
 
-internal sealed class ActiveQuestComponent
+internal sealed partial class ActiveQuestComponent
 {
+    [GeneratedRegex(@"\s\s+", RegexOptions.IgnoreCase, "en-US")]
+    private static partial Regex MultipleWhitespaceRegex();
+
     private readonly QuestController _questController;
     private readonly MovementController _movementController;
     private readonly CombatController _combatController;
@@ -183,8 +187,9 @@ internal sealed class ActiveQuestComponent
 
             if (ImGui.IsItemClicked())
             {
-                ImGui.SetClipboardText(questWork.ToString());
-                _chatGui.Print($"Copied '{questWork}' to clipboard");
+                string progressText = MultipleWhitespaceRegex().Replace(questWork.ToString(), " ");
+                ImGui.SetClipboardText(progressText);
+                _chatGui.Print($"Copied '{progressText}' to clipboard");
             }
 
             if (ImGui.IsItemHovered())
