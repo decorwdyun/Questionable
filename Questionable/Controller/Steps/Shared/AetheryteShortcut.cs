@@ -17,25 +17,16 @@ internal static class AetheryteShortcut
 {
     internal sealed class Factory(
         IServiceProvider serviceProvider,
-        AetheryteFunctions aetheryteFunctions,
         AetheryteData aetheryteData) : ITaskFactory
     {
-        public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
+        public ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
             if (step.AetheryteShortcut == null)
-                return [];
+                return null;
 
-            var task = serviceProvider.GetRequiredService<UseAetheryteShortcut>()
+            return serviceProvider.GetRequiredService<UseAetheryteShortcut>()
                 .With(step, step.AetheryteShortcut.Value, aetheryteData.TerritoryIds[step.AetheryteShortcut.Value]);
-            return
-            [
-                new WaitConditionTask(() => aetheryteFunctions.CanTeleport(step.AetheryteShortcut.Value), "CanTeleport"),
-                task
-            ];
         }
-
-        public ITask CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
-            => throw new InvalidOperationException();
     }
 
     internal sealed class UseAetheryteShortcut(
@@ -45,6 +36,7 @@ internal static class AetheryteShortcut
         IChatGui chatGui,
         AetheryteData aetheryteData) : ISkippableTask
     {
+        private bool _teleported;
         private DateTime _continueAt;
 
         public QuestStep? Step { get; set; }
@@ -64,9 +56,27 @@ internal static class AetheryteShortcut
             return this;
         }
 
-        public bool Start()
+        public bool Start() => !ShouldSkipTeleport();
+
+        public ETaskResult Update()
         {
-            _continueAt = DateTime.Now.AddSeconds(8);
+            if (DateTime.Now < _continueAt)
+                return ETaskResult.StillRunning;
+
+            if (!_teleported)
+            {
+                _teleported = DoTeleport();
+                return ETaskResult.StillRunning;
+            }
+
+            if (clientState.TerritoryType == ExpectedTerritoryId)
+                return ETaskResult.TaskComplete;
+
+            return ETaskResult.StillRunning;
+        }
+
+        private bool ShouldSkipTeleport()
+        {
             ushort territoryType = clientState.TerritoryType;
             if (Step != null)
             {
@@ -76,21 +86,21 @@ internal static class AetheryteShortcut
                     if (skipConditions.InTerritory.Contains(territoryType))
                     {
                         logger.LogInformation("Skipping aetheryte teleport due to SkipCondition (InTerritory)");
-                        return false;
+                        return true;
                     }
 
                     if (skipConditions.AetheryteLocked != null &&
                         !aetheryteFunctions.IsAetheryteUnlocked(skipConditions.AetheryteLocked.Value))
                     {
                         logger.LogInformation("Skipping aetheryte teleport due to SkipCondition (AetheryteLocked)");
-                        return false;
+                        return true;
                     }
 
                     if (skipConditions.AetheryteUnlocked != null &&
                         aetheryteFunctions.IsAetheryteUnlocked(skipConditions.AetheryteUnlocked.Value))
                     {
                         logger.LogInformation("Skipping aetheryte teleport due to SkipCondition (AetheryteUnlocked)");
-                        return false;
+                        return true;
                     }
                 }
 
@@ -101,7 +111,7 @@ internal static class AetheryteShortcut
                         if (skipConditions is { InSameTerritory: true })
                         {
                             logger.LogInformation("Skipping aetheryte teleport due to SkipCondition (InSameTerritory)");
-                            return false;
+                            return true;
                         }
 
                         Vector3 pos = clientState.LocalPlayer!.Position;
@@ -109,7 +119,7 @@ internal static class AetheryteShortcut
                             (pos - Step.Position.Value).Length() < Step.CalculateActualStopDistance())
                         {
                             logger.LogInformation("Skipping aetheryte teleport, we're near the target");
-                            return false;
+                            return true;
                         }
 
                         if (aetheryteData.CalculateDistance(pos, territoryType, TargetAetheryte) < 20 ||
@@ -118,11 +128,27 @@ internal static class AetheryteShortcut
                               aetheryteData.CalculateDistance(pos, territoryType, Step.AethernetShortcut.To) < 20)))
                         {
                             logger.LogInformation("Skipping aetheryte teleport");
-                            return false;
+                            return true;
                         }
                     }
                 }
             }
+
+            return false;
+        }
+
+        private bool DoTeleport()
+        {
+
+            if (!aetheryteFunctions.CanTeleport(TargetAetheryte))
+            {
+                if (!aetheryteFunctions.IsTeleportUnlocked())
+                    throw new TaskException("Teleport is not unlocked, attune to any aetheryte first.");
+
+                return false;
+            }
+
+            _continueAt = DateTime.Now.AddSeconds(8);
 
             if (!aetheryteFunctions.IsAetheryteUnlocked(TargetAetheryte))
             {
@@ -139,14 +165,6 @@ internal static class AetheryteShortcut
                 chatGui.Print("[Questionable] Unable to teleport to aetheryte.");
                 throw new TaskException("Unable to teleport to aetheryte");
             }
-        }
-
-        public ETaskResult Update()
-        {
-            if (DateTime.Now >= _continueAt && clientState.TerritoryType == ExpectedTerritoryId)
-                return ETaskResult.TaskComplete;
-
-            return ETaskResult.StillRunning;
         }
 
         public override string ToString() => $"UseAetheryte({TargetAetheryte})";
