@@ -1,6 +1,6 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "JerryWester",
+  "Author": ["JerryWester", "ewlame"],
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -44,15 +44,19 @@
           "$": "QW: 0 0    0 0    0 0 -> QW: 16 32    0 0    0 128"
         },
         {
+          "DataId": 2008203,
           "Position": {
-            "X": -462.5758,
-            "Y": 295.61258,
-            "Z": 255.73582
+            "X": -460.92932,
+            "Y": 295.58252,
+            "Z": 256.0005
           },
           "TerritoryId": 620,
-          "InteractionType": "WaitForManualProgress",
-          "Comment": "Oops, I forgot to grab the point here",
-          "$": "KillEnemyDataIds: [8031, 8032]"
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
+          "KillEnemyDataIds": [
+            8031,
+            8032
+          ]
         }
       ]
     },
