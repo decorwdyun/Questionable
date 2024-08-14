@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
@@ -201,6 +202,15 @@ internal static class SkipCondition
                         logger.LogInformation("Skipping step, as required variables do not match");
                         return true;
                     }
+                }
+            }
+
+            if (SkipConditions.NearPosition is { } nearPosition && clientState.TerritoryType == Step.TerritoryId)
+            {
+                if (Vector3.Distance(nearPosition.Position, clientState.LocalPlayer!.Position) <= nearPosition.MaximumDistance)
+                {
+                    logger.LogInformation("Skipping step, as we're near the position");
+                    return true;
                 }
             }
 

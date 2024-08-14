@@ -56,24 +56,7 @@
                   "exclusiveMinimum": 0
                 },
                 "Position": {
-                  "type": "object",
-                  "description": "Position to (typically) walk to",
-                  "properties": {
-                    "X": {
-                      "type": "number"
-                    },
-                    "Y": {
-                      "type": "number"
-                    },
-                    "Z": {
-                      "type": "number"
-                    }
-                  },
-                  "required": [
-                    "X",
-                    "Y",
-                    "Z"
-                  ]
+                  "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Vector3"
                 },
                 "StopDistance": {
                   "type": [
@@ -242,6 +225,22 @@
                         },
                         "AetheryteUnlocked": {
                           "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Aetheryte"
+                        },
+                        "NearPosition": {
+                          "type": "object",
+                          "properties": {
+                            "Position": {
+                              "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Vector3"
+                            },
+                            "MaximumDistance": {
+                              "type": "number"
+                            }
+                          },
+                          "required": [
+                            "Position",
+                            "MaximumDistance"
+                          ],
+                          "additionalProperties": false
                         },
                         "ExtraCondition": {
                           "type": "string",
@@ -814,24 +813,7 @@
                         "type": "object",
                         "properties": {
                           "Position": {
-                            "type": "object",
-                            "description": "Position to try reaching after the jump",
-                            "properties": {
-                              "X": {
-                                "type": "number"
-                              },
-                              "Y": {
-                                "type": "number"
-                              },
-                              "Z": {
-                                "type": "number"
-                              }
-                            },
-                            "required": [
-                              "X",
-                              "Y",
-                              "Z"
-                            ]
+                            "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Vector3"
                           },
                           "StopDistance": {
                             "type": [

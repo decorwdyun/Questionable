@@ -1,218 +1,161 @@
 {
-    "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-    "Author": "Cacahuetes",
-    "QuestSequence": [
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+  "Author": "Cacahuetes",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
         {
-            "Sequence": 0,
-            "Steps": [
-                { 
-                    "DataId": 1000692,
-                    "Position": {
-                        "X": -258.8083,
-                        "Y": -5.7735243,
-                        "Z": -27.267883
-                    },
-                    "TerritoryId": 133,
-                    "AetheryteShortcut": "Gridania",
-                    "AethernetShortcut": [
-                        "[Gridania] Aetheryte Plaza",
-                        "[Gridania] Conjurers' Guild"
-                    ],
-                    "InteractionType": "AcceptQuest",
-                    "SkipConditions": {
+          "DataId": 1000692,
+          "Position": {
+            "X": -258.8083,
+            "Y": -5.7735243,
+            "Z": -27.267883
+          },
+          "TerritoryId": 133,
+          "AetheryteShortcut": "Gridania",
+          "AethernetShortcut": [
+            "[Gridania] Aetheryte Plaza",
+            "[Gridania] Conjurers' Guild"
+          ],
+          "InteractionType": "AcceptQuest",
+          "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": false
+              "InSameTerritory": true,
+              "InTerritory": [
+                133
+              ]
             }
           }
-                }
-            ]
-        },
-        {
-            "Sequence": 1,
-            "Steps": [
-                {
-                "Position": {
-    "X": -72.07284,
-    "Y": 1,
-    "Z": -33.972404
-},
-"TerritoryId": 148,
-"InteractionType": "WalkTo",
-"AetheryteShortcut": "Central Shroud - Bentbranch Meadows"
-                },
-                {
-                    "DataId": 2000891,
-"Position": {
-    "X": -74.50989,
-    "Y": 1.449585,
-    "Z": -32.76117
-},
-"TerritoryId": 148,
-"InteractionType": "Combat",
-                    "EnemySpawnType": "AfterInteraction",
-                    "KillEnemyDataIds": [
-                        294
-                    ]
-}
-            ]
-        },
-        {
-            "Sequence": 2,
-            "Steps": [
-                {
-"Position": {
-    "X": -67.59361,
-    "Y": 1,
-    "Z": -36.785305
-},
-"TerritoryId": 148,
-"InteractionType": "WalkTo"
-                },
-                {
-                    "DataId": 1002961,
-"Position": {
-    "X": -66.7583,
-    "Y": 0.9667693,
-    "Z": -38.4375
-},
-"TerritoryId": 148,
-"InteractionType": "Interact"
-                }
-            ]
-        },
-        {
-            "Sequence": 3,
-            "Steps": [
-                {
-                "Position": {
-    "X": 148.54672,
-    "Y": -5.9836235,
-    "Z": -34.821217
-},
-"TerritoryId": 148,
-"InteractionType": "WalkTo"
-                },
-                {
-                    "DataId": 2000893,
-"Position": {
-    "X": 147.02063,
-    "Y": -5.6916504,
-    "Z": -35.50775
-},
-"TerritoryId": 148,
-"InteractionType": "Combat",
-                    "EnemySpawnType": "AfterInteraction",
-                    "KillEnemyDataIds": [
-                        299
-                    ]
-                }
-            ]
-        },
-        {
-            "Sequence": 4,
-            "Steps": [
-                {
-                    "Position": {
-    "X": 155.83203,
-    "Y": -6.3384933,
-    "Z": -34.853024
-},
-"TerritoryId": 148,
-"InteractionType": "WalkTo"
-                },
-                {
-                    "DataId": 1002962,
-"Position": {
-    "X": 155.9624,
-    "Y": -6.358468,
-    "Z": -35.53833
-},
-"TerritoryId": 148,
-"InteractionType": "Interact"
-                }
-            ]
-        },
-        {
-            "Sequence": 5,
-            "Steps": [
-                {
-                    "Position": {
-    "X": 330.1284,
-    "Y": -31.660528,
-    "Z": 413.6492
-},
-"TerritoryId": 148,
-"InteractionType": "WalkTo"
-                },
-                {
-                    "DataId": 2000895,
-"Position": {
-    "X": 332.3567,
-    "Y": -31.540405,
-    "Z": 414.69434
-},
-"TerritoryId": 148,
-"InteractionType": "Combat",
-                    "EnemySpawnType": "AfterInteraction",
-                    "KillEnemyDataIds": [
-                        297
-                    ]
-                }
-            ]
-        },
-        {
-            "Sequence": 6,
-            "Steps": [
-                {
-                    "Position": {
-    "X": 335.10825,
-    "Y": -31.669537,
-    "Z": 422.18082
-},
-"TerritoryId": 148,
-"InteractionType": "WalkTo"
-                },
-                {
-                    "DataId": 1002963,
-"Position": {
-    "X": 335.95776,
-    "Y": -31.68247,
-    "Z": 423.63623
-},
-"TerritoryId": 148,
-"InteractionType": "Interact"
-                }
-            ]
-        },
-        {
-            "Sequence": 255,
-                    "Steps": [
-                        {
-                            "Position": {
-                                "X": -259.39578,
-                                "Y": -5.7723713,
-                                "Z": -24.069485
-                            },
-                            "TerritoryId": 133,
-                            "InteractionType": "WalkTo",
-                            "AetheryteShortcut": "Gridania",
-                            "AethernetShortcut": [
-                                "[Gridania] Aetheryte Plaza",
-                                "[Gridania] Conjurers' Guild"
-                            ]
-                        },
-                        {
-                            "DataId": 1000692,
-                            "Position": {
-                                "X": -258.8083,
-                                "Y": -5.7735243,
-                                "Z": -27.267883
-                            },
-                            "TerritoryId": 133,
-                            "InteractionType": "CompleteQuest",
-                            "NextQuestId": 440
-                        }
-                    ]
         }
-    ]
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 2000891,
+          "Position": {
+            "X": -74.50989,
+            "Y": 1.449585,
+            "Z": -32.76117
+          },
+          "TerritoryId": 148,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
+          "KillEnemyDataIds": [
+            294
+          ],
+          "AetheryteShortcut": "Central Shroud - Bentbranch Meadows",
+          "Fly": true
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1002961,
+          "Position": {
+            "X": -66.7583,
+            "Y": 0.9667693,
+            "Z": -38.4375
+          },
+          "TerritoryId": 148,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 2000893,
+          "Position": {
+            "X": 147.02063,
+            "Y": -5.6916504,
+            "Z": -35.50775
+          },
+          "TerritoryId": 148,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
+          "KillEnemyDataIds": [
+            299
+          ],
+          "Fly": true
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 1002962,
+          "Position": {
+            "X": 155.9624,
+            "Y": -6.358468,
+            "Z": -35.53833
+          },
+          "TerritoryId": 148,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "DataId": 2000895,
+          "Position": {
+            "X": 332.3567,
+            "Y": -31.540405,
+            "Z": 414.69434
+          },
+          "TerritoryId": 148,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
+          "KillEnemyDataIds": [
+            297
+          ],
+          "Fly": true
+        }
+      ]
+    },
+    {
+      "Sequence": 6,
+      "Steps": [
+        {
+          "DataId": 1002963,
+          "Position": {
+            "X": 335.95776,
+            "Y": -31.68247,
+            "Z": 423.63623
+          },
+          "TerritoryId": 148,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1000692,
+          "Position": {
+            "X": -258.8083,
+            "Y": -5.7735243,
+            "Z": -27.267883
+          },
+          "TerritoryId": 133,
+          "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Gridania",
+          "AethernetShortcut": [
+            "[Gridania] Aetheryte Plaza",
+            "[Gridania] Conjurers' Guild"
+          ],
+          "NextQuestId": 440
+        }
+      ]
+    }
+  ]
 }

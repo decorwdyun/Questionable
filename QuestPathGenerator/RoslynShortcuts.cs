@@ -317,6 +317,9 @@ public static class RoslynShortcuts
                                     Assignment(nameof(SkipStepConditions.AetheryteUnlocked),
                                             skipStepConditions.AetheryteUnlocked, emptyStep.AetheryteUnlocked)
                                         .AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(SkipStepConditions.NearPosition),
+                                            skipStepConditions.NearPosition, emptyStep.NearPosition)
+                                        .AsSyntaxNodeOrToken(),
                                     Assignment(nameof(SkipStepConditions.ExtraCondition),
                                             skipStepConditions.ExtraCondition, emptyStep.ExtraCondition)
                                         .AsSyntaxNodeOrToken()))));
@@ -334,6 +337,22 @@ public static class RoslynShortcuts
                                     Assignment(nameof(SkipItemConditions.NotInInventory),
                                         skipItemCondition.NotInInventory,
                                         emptyItem.NotInInventory)))));
+            }
+            else if (value is NearPositionCondition nearPositionCondition)
+            {
+                var emptyCondition = new NearPositionCondition();
+                return ObjectCreationExpression(
+                        IdentifierName(nameof(NearPositionCondition)))
+                    .WithInitializer(
+                        InitializerExpression(
+                            SyntaxKind.ObjectInitializerExpression,
+                            SeparatedList<ExpressionSyntax>(
+                                SyntaxNodeList(
+                                    Assignment(nameof(NearPositionCondition.Position),
+                                        nearPositionCondition.Position, emptyCondition.Position).AsSyntaxNodeOrToken(),
+                                    Assignment(nameof(NearPositionCondition.MaximumDistance),
+                                            nearPositionCondition.MaximumDistance, emptyCondition.MaximumDistance)
+                                        .AsSyntaxNodeOrToken()))));
             }
             else if (value is SkipAetheryteCondition skipAetheryteCondition)
             {

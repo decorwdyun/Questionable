@@ -2,6 +2,26 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json",
   "$defs": {
+    "Vector3": {
+      "type": "object",
+      "description": "Position to try reaching after the jump",
+      "properties": {
+        "X": {
+          "type": "number"
+        },
+        "Y": {
+          "type": "number"
+        },
+        "Z": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "X",
+        "Y",
+        "Z"
+      ]
+    },
     "Aetheryte": {
       "type": "string",
       "enum": [

@@ -29,10 +29,12 @@
           "TerritoryId": 148,
           "InteractionType": "Combat",
           "EnemySpawnType": "OverworldEnemies",
-          "KillEnemyDataIds": [
-            43
-          ],
-          "Comment": "Kill Chigoes manually"
+          "ComplexCombatData": [
+            {
+              "DataId": 43,
+              "MinimumKillCount": 3
+            }
+          ]
         }
       ]
     },

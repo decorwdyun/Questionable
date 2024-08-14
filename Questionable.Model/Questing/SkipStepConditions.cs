@@ -18,6 +18,7 @@ public sealed class SkipStepConditions
     public List<ElementId> QuestsCompleted { get; set; } = new();
     public EAetheryteLocation? AetheryteLocked { get; set; }
     public EAetheryteLocation? AetheryteUnlocked { get; set; }
+    public NearPositionCondition? NearPosition { get; set; }
     public EExtraSkipCondition? ExtraCondition { get; set; }
 
     public bool HasSkipConditions()
@@ -35,12 +36,13 @@ public sealed class SkipStepConditions
                QuestsCompleted.Count > 0 ||
                AetheryteLocked != null ||
                AetheryteUnlocked != null ||
+               NearPosition != null ||
                ExtraCondition != null;
     }
 
     public override string ToString()
     {
         return
-            $"{nameof(Never)}: {Never}, {nameof(CompletionQuestVariablesFlags)}: {CompletionQuestVariablesFlags}, {nameof(Flying)}: {Flying}, {nameof(Chocobo)}: {Chocobo}, {nameof(NotTargetable)}: {NotTargetable}, {nameof(InTerritory)}: {string.Join(" ", InTerritory)}, {nameof(NotInTerritory)}: {string.Join(" ", NotInTerritory)}, {nameof(Item)}: {Item}, {nameof(QuestsAccepted)}: {string.Join(" ", QuestsAccepted)}, {nameof(QuestsCompleted)}: {string.Join(" ", QuestsCompleted)}, {nameof(ExtraCondition)}: {ExtraCondition}";
+            $"{nameof(Never)}: {Never}, {nameof(CompletionQuestVariablesFlags)}: {CompletionQuestVariablesFlags}, {nameof(Flying)}: {Flying}, {nameof(Chocobo)}: {Chocobo}, {nameof(NotTargetable)}: {NotTargetable}, {nameof(InTerritory)}: {string.Join(" ", InTerritory)}, {nameof(NotInTerritory)}: {string.Join(" ", NotInTerritory)}, {nameof(Item)}: {Item}, {nameof(QuestsAccepted)}: {string.Join(" ", QuestsAccepted)}, {nameof(QuestsCompleted)}: {string.Join(" ", QuestsCompleted)}, {nameof(NearPosition)}: {NearPosition}, {nameof(ExtraCondition)}: {ExtraCondition}";
     }
 }

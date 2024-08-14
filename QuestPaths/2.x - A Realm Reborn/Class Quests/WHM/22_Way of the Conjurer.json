@@ -1,195 +1,197 @@
 {
-    "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-    "Author": "Cacahuetes",
-    "QuestSequence": [
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+  "Author": "Cacahuetes",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
         {
-            "Sequence": 0,
-            "Steps": [
-                {
-                    "DataId": 1000692,
-                    "Position": {
-                        "X": -258.8083,
-                        "Y": -5.7735243,
-                        "Z": -27.267883
-                    },
-                    "TerritoryId": 133,
-                    "AetheryteShortcut": "Gridania",
-                    "AethernetShortcut": ["[Gridania] Aetheryte Plaza","[Gridania] Conjurers' Guild"],
-                    "InteractionType": "AcceptQuest",
-                    "SkipConditions": {
+          "DataId": 1000323,
+          "Position": {
+            "X": -234.02765,
+            "Y": -4.0000043,
+            "Z": -11.093384
+          },
+          "TerritoryId": 133,
+          "AetheryteShortcut": "Gridania",
+          "AethernetShortcut": [
+            "[Gridania] Aetheryte Plaza",
+            "[Gridania] Conjurers' Guild"
+          ],
+          "InteractionType": "AcceptQuest",
+          "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NotInSameTerritory": true
+              "InSameTerritory": true,
+              "InTerritory": [
+                133
+              ]
             }
           }
-                }
-            ]
-        },
-        {
-            "Sequence": 1,
-            "Steps": [
-                {
-                    "DataId": 1000692,
-                    "Position": {
-                        "X": -258.8083,
-                        "Y": -5.7735243,
-                        "Z": -27.267883
-                    },
-                    "TerritoryId": 133,
-                    "InteractionType": "Interact",
-                    "DialogueChoices": [
-                        {
-                            "Type": "YesNo",
-                            "Prompt": "TEXT_CLSGLA020_00253_Q1_000_1",
-                            "Yes": true,
-                            "$": "Need to find real prompt in godbert"
-                        }
-                    ]
-                }
-            ]
-        },
-        {
-            "Sequence": 2,
-            "Steps": [
-                {
-                    "Position": {
-                        "X": 104.02482,
-                        "Y": 14.71474,
-                        "Z": -263.02206
-                    },
-                    "TerritoryId": 148,
-                    "InteractionType": "WalkTo",
-                    "AethernetShortcut": [
-                        "[Gridania] Conjurers' Guild",
-                        "[Gridania] Blue Badger Gate (Central Shroud)"
-                    ]
-                },
-                {
-                    "Position": {
-                        "X": 97.18397,
-                        "Y": 17.128555,
-                        "Z": -269.5008
-                    },
-                    "TerritoryId": 148,
-                    "InteractionType": "Combat",
-                    "EnemySpawnType": "OverworldEnemies",
-                    "ComplexCombatData": [
-                        {
-                            "DataId": 37,
-                            "CompletionQuestVariablesFlags": [
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                null
-                            ],
-                            "MinimumKillCount": 3
-                        }
-                    ],
-                    "CompletionQuestVariablesFlags": [
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null
-                    ],
-                    "$": "0 0  0 0  0 0 -> 19 0  0 0  0 0"
-                },
-                {
-                    "Position": {
-                        "X": 119.449745,
-                        "Y": 17.399649,
-                        "Z": -259.6467
-                    },
-                    "TerritoryId": 148,
-                    "InteractionType": "Combat",
-                    "EnemySpawnType": "OverworldEnemies",
-                    "ComplexCombatData": [
-                        {
-                            "DataId": 49,
-                            "CompletionQuestVariablesFlags": [
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                null
-                            ],
-                            "MinimumKillCount": 3
-                        }
-                    ],
-                    "CompletionQuestVariablesFlags": [
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null
-                    ],
-                    "$": "19 0  0 0  0 0 -> 35 48  0 0  0 0"
-                },
-                {
-                    "Position": {
-                        "X": 83.756714,
-                        "Y": 4.1801105,
-                        "Z": -191.24133
-                    },
-                    "TerritoryId": 148,
-                    "InteractionType": "Combat",
-                    "EnemySpawnType": "OverworldEnemies",
-                    "ComplexCombatData": [
-                        {
-                            "DataId": 47,
-                            "CompletionQuestVariablesFlags": [
-                                null,
-                                null,
-                                null,
-                                null,
-                                null,
-                                null
-                            ],
-                            "MinimumKillCount": 3
-                        }
-                    ],
-                    "CompletionQuestVariablesFlags": [
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        null
-                    ],
-                    "$": "35 48  0 0  0 0 -> 35 51  0 0  0 0 // This one automatically went to 0 0 0 0 0 0 so I am not sure about the 51 part"
-                }
-            ]
-        },
-        {
-            "Sequence": 255,
-            "Steps": [
-                {
-"Position": {
-    "X": -259.39578,
-    "Y": -5.7723713,
-    "Z": -24.069485
-},
-"TerritoryId": 133,
-"InteractionType": "WalkTo",
-                    "AetheryteShortcut": "Gridania",
-                    "AethernetShortcut": ["[Gridania] Aetheryte Plaza","[Gridania] Conjurers' Guild"]
-                },
-                {
-                    "DataId": 1000692,
-"Position": {
-    "X": -258.8083,
-    "Y": -5.7735243,
-    "Z": -27.267883
-},
-"TerritoryId": 133,
-"InteractionType": "CompleteQuest",
-"NextQuestId": 48
-                }
-            ]
         }
-    ]
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1000692,
+          "Position": {
+            "X": -258.8083,
+            "Y": -5.7735243,
+            "Z": -27.267883
+          },
+          "TerritoryId": 133,
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_CLSCNJ000_00022_Q1_000_1",
+              "Yes": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "Position": {
+            "X": 97.18397,
+            "Y": 17.128555,
+            "Z": -269.5008
+          },
+          "TerritoryId": 148,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "OverworldEnemies",
+          "ComplexCombatData": [
+            {
+              "DataId": 37,
+              "CompletionQuestVariablesFlags": [
+                {
+                  "Low": 3
+                },
+                null,
+                null,
+                null,
+                null,
+                null
+              ],
+              "MinimumKillCount": 3
+            }
+          ],
+          "CompletionQuestVariablesFlags": [
+            {
+              "Low": 3
+            },
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "$": "0 0  0 0  0 0 -> 19 0  0 0  0 0",
+          "AethernetShortcut": [
+            "[Gridania] Conjurers' Guild",
+            "[Gridania] Blue Badger Gate (Central Shroud)"
+          ]
+        },
+        {
+          "Position": {
+            "X": 119.449745,
+            "Y": 17.399649,
+            "Z": -259.6467
+          },
+          "TerritoryId": 148,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "OverworldEnemies",
+          "ComplexCombatData": [
+            {
+              "DataId": 49,
+              "CompletionQuestVariablesFlags": [
+                null,
+                {
+                  "High": 3
+                },
+                null,
+                null,
+                null,
+                null
+              ],
+              "MinimumKillCount": 3
+            }
+          ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            {
+              "High": 3
+            },
+            null,
+            null,
+            null,
+            null
+          ],
+          "$": "19 0  0 0  0 0 -> 35 48  0 0  0 0"
+        },
+        {
+          "Position": {
+            "X": 83.756714,
+            "Y": 4.1801105,
+            "Z": -191.24133
+          },
+          "TerritoryId": 148,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "OverworldEnemies",
+          "ComplexCombatData": [
+            {
+              "DataId": 47,
+              "CompletionQuestVariablesFlags": [
+                null,
+                {
+                  "Low": 3
+                },
+                null,
+                null,
+                null,
+                null
+              ],
+              "MinimumKillCount": 3
+            }
+          ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            {
+              "Low": 3
+            },
+            null,
+            null,
+            null,
+            null
+          ],
+          "$": "35 48  0 0  0 0 -> 35 51  0 0  0 0 // This one automatically went to 0 0 0 0 0 0 so I am not sure about the 51 part"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1000692,
+          "Position": {
+            "X": -258.8083,
+            "Y": -5.7735243,
+            "Z": -27.267883
+          },
+          "TerritoryId": 133,
+          "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Gridania",
+          "AethernetShortcut": [
+            "[Gridania] Aetheryte Plaza",
+            "[Gridania] Conjurers' Guild"
+          ],
+          "NextQuestId": 48
+        }
+      ]
+    }
+  ]
 }

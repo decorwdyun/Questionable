@@ -1,6 +1,5 @@
 ﻿<Project Sdk="Dalamud.NET.Sdk/10.0.0">
     <PropertyGroup>
-        <Version>2.4</Version>
         <OutputPath>dist</OutputPath>
         <PathMap Condition="$(SolutionDir) != ''">$(SolutionDir)=X:\</PathMap>
         <Platforms>x64</Platforms>
