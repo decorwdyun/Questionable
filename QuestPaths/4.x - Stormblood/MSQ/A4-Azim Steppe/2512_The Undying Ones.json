@@ -12,6 +12,7 @@
             "Y": 10.389871,
             "Z": 598.9928
           },
+          "StopDistance": 7,
           "TerritoryId": 622,
           "InteractionType": "AcceptQuest"
         }
@@ -59,7 +60,15 @@
           },
           "TerritoryId": 622,
           "InteractionType": "Interact",
-          "$": "QW: 0 0    0 0    0 0 -> QW: 1 0    0 0    0 64"
+          "$": "QW: 0 0    0 0    0 0 -> QW: 1 0    0 0    0 64",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 1019322,
@@ -70,7 +79,15 @@
           },
           "TerritoryId": 622,
           "InteractionType": "Interact",
-          "$": "QW: 1 0    0 0    0 64 -> QW: 2 0    0 0    0 96"
+          "$": "QW: 1 0    0 0    0 64 -> QW: 2 0    0 0    0 96",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 1019321,
@@ -80,7 +97,15 @@
             "Z": 616.907
           },
           "TerritoryId": 622,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         }
       ]
     },

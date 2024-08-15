@@ -32,4 +32,5 @@ public enum EEmote
     Bow = 5,
     Uchiwasshoi = 278,
     Clap = 7,
+    VictoryPose = 122,
 }

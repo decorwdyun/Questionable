@@ -33,6 +33,7 @@
             "Y": 50.00002,
             "Z": -1.9990234
           },
+          "StopDistance": 7,
           "TerritoryId": 621,
           "InteractionType": "SinglePlayerDuty"
         }

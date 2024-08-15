@@ -52,6 +52,16 @@
       "Sequence": 2,
       "Steps": [
         {
+          "Position": {
+            "X": -672.0402,
+            "Y": 49.99975,
+            "Z": 15.600315
+          },
+          "TerritoryId": 621,
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Lochs - Porta Praetoria"
+        },
+        {
           "DataId": 1021698,
           "Position": {
             "X": -672.694,
@@ -59,8 +69,7 @@
             "Z": 14.999573
           },
           "TerritoryId": 621,
-          "InteractionType": "Interact",
-          "AetheryteShortcut": "Lochs - Porta Praetoria"
+          "InteractionType": "Interact"
         }
       ]
     },
@@ -74,6 +83,7 @@
             "Y": 50.01024,
             "Z": 17.92926
           },
+          "StopDistance": 5,
           "TerritoryId": 621,
           "InteractionType": "Interact"
         }
@@ -91,7 +101,15 @@
           },
           "TerritoryId": 621,
           "InteractionType": "Interact",
-          "$": "QW: 0 0    0 0    0 0 -> QW: 16 16    0 0    0 32"
+          "$": "QW: 0 0    0 0    0 0 -> QW: 16 16    0 0    0 32",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 1021701,
@@ -102,7 +120,15 @@
           },
           "TerritoryId": 621,
           "InteractionType": "Interact",
-          "$": "QW: 16 16    0 0    0 32 -> QW: 32 17    0 0    0 160"
+          "$": "QW: 16 16    0 0    0 32 -> QW: 32 17    0 0    0 160",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 1021702,
@@ -112,7 +138,15 @@
             "Z": -4.043701
           },
           "TerritoryId": 621,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         }
       ]
     },

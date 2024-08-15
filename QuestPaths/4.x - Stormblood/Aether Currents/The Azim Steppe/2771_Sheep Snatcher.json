@@ -28,7 +28,8 @@
             "Z": -210.22363
           },
           "TerritoryId": 622,
-          "InteractionType": "Interact"
+          "InteractionType": "WaitForManualProgress",
+          "Comment": "Snipe sheep"
         }
       ]
     },

@@ -12,6 +12,7 @@
             "Y": -0.11677644,
             "Z": -28.610718
           },
+          "StopDistance": 7,
           "TerritoryId": 635,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Rhalgr's Reach",
@@ -62,6 +63,20 @@
           "TerritoryId": 620,
           "InteractionType": "Interact",
           "TargetTerritoryId": 620,
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
+        },
+        {
+          "Position": {
+            "X": 1.7183262,
+            "Y": 317.60666,
+            "Z": 141.11252
+          },
+          "TerritoryId": 620,
+          "InteractionType": "WalkTo",
           "SkipConditions": {
             "StepIf": {
               "Flying": "Unlocked"

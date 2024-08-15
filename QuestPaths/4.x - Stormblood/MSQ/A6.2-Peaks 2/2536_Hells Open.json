@@ -41,7 +41,15 @@
             8033,
             8045
           ],
-          "$": "QW: 0 0    0 0    0 0 -> QW: 16 32    0 0    0 128"
+          "$": "QW: 0 0    0 0    0 0 -> QW: 16 32    0 0    0 128",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 2008203,
@@ -56,6 +64,14 @@
           "KillEnemyDataIds": [
             8031,
             8032
+          ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
           ]
         }
       ]

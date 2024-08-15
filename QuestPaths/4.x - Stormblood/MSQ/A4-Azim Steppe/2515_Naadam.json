@@ -36,7 +36,15 @@
               "Answer": "TEXT_STMBDA416_02515_A1_000_103"
             }
           ],
-          "$": "QW: 0 0    0 0    0 0 -> QW: 17 0    0 0    0 32"
+          "$": "QW: 0 0    0 0    0 0 -> QW: 17 0    0 0    0 32",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 1021634,
@@ -54,7 +62,15 @@
               "Answer": "TEXT_STMBDA416_02515_A1_120_070"
             }
           ],
-          "$": "QW: 17 0    0 0    0 32 -> QW: 33 0    16 0    0 96"
+          "$": "QW: 17 0    0 0    0 32 -> QW: 33 0    16 0    0 96",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 1019396,
@@ -65,7 +81,15 @@
           },
           "TerritoryId": 622,
           "InteractionType": "Interact",
-          "$": "QW: 33 0    16 0    0 96 -> QW: 49 16    16 0    0 112"
+          "$": "QW: 33 0    16 0    0 96 -> QW: 49 16    16 0    0 112",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            16
+          ]
         },
         {
           "DataId": 1019386,
@@ -75,7 +99,15 @@
             "Z": -505.9129
           },
           "TerritoryId": 622,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         }
       ]
     },

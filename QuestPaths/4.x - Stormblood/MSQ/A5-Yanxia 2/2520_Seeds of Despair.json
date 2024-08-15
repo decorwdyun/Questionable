@@ -48,7 +48,12 @@
             "Z": -545.8195
           },
           "TerritoryId": 614,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
         },
         {
           "DataId": 2007923,
@@ -105,6 +110,20 @@
     {
       "Sequence": 5,
       "Steps": [
+        {
+          "Position": {
+            "X": 543.4046,
+            "Y": 22.617083,
+            "Z": -726.5077
+          },
+          "TerritoryId": 614,
+          "InteractionType": "WalkTo",
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
+        },
         {
           "DataId": 1020230,
           "Position": {

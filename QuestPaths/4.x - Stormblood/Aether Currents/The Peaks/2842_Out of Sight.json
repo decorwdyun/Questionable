@@ -42,6 +42,15 @@
       "Sequence": 2,
       "Steps": [
         {
+          "Position": {
+            "X": -245.80753,
+            "Y": 258.90652,
+            "Z": 786.1918
+          },
+          "TerritoryId": 620,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 1023259,
           "Position": {
             "X": -293.41577,
@@ -50,7 +59,15 @@
           },
           "TerritoryId": 620,
           "InteractionType": "Interact",
-          "$": "QW: 0 0    0 0    0 0 -> QW: 1 0    0 0    0 32"
+          "$": "QW: 0 0    0 0    0 0 -> QW: 1 0    0 0    0 32",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 1020871,
@@ -61,7 +78,15 @@
           },
           "TerritoryId": 620,
           "InteractionType": "Interact",
-          "$": "QW: 1 0    0 0    0 32 -> QW: 2 0    0 0    0 160"
+          "$": "QW: 1 0    0 0    0 32 -> QW: 2 0    0 0    0 160",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 1020870,
@@ -71,7 +96,15 @@
             "Z": 737.1786
           },
           "TerritoryId": 620,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         }
       ]
     },

@@ -29,7 +29,15 @@
           },
           "TerritoryId": 622,
           "InteractionType": "Interact",
-          "$": "QW: 0 0    0 0    0 0 -> QW: 1 0    0 0    0 128"
+          "$": "QW: 0 0    0 0    0 0 -> QW: 1 0    0 0    0 128",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 1022222,
@@ -40,7 +48,15 @@
           },
           "TerritoryId": 622,
           "InteractionType": "Interact",
-          "$": "QW: 1 0    0 0    0 128 -> QW: 2 0    0 0    0 192"
+          "$": "QW: 1 0    0 0    0 128 -> QW: 2 0    0 0    0 192",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 1022228,
@@ -50,7 +66,15 @@
             "Z": 573.4187
           },
           "TerritoryId": 622,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         }
       ]
     },
@@ -65,7 +89,14 @@
             "Z": 650.01904
           },
           "TerritoryId": 622,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_STMBDZ613_02791_Q1_000_000",
+              "Answer": "TEXT_STMBDZ613_02791_A1_000_002"
+            }
+          ]
         }
       ]
     }

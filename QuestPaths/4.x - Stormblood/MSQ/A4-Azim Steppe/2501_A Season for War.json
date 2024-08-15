@@ -28,6 +28,16 @@
       "Steps": [
         {
           "Position": {
+            "X": 553.1567,
+            "Y": -19.505648,
+            "Z": 306.37933
+          },
+          "TerritoryId": 622,
+          "InteractionType": "WalkTo",
+          "Mount": true
+        },
+        {
+          "Position": {
             "X": 259.30197,
             "Y": 1.436653,
             "Z": 337.41043
@@ -40,7 +50,17 @@
               "DataId": 6626,
               "MinimumKillCount": 2,
               "RewardItemId": 2002204,
-              "RewardItemCount": 2
+              "RewardItemCount": 2,
+              "CompletionQuestVariablesFlags": [
+                null,
+                {
+                  "High": 2
+                },
+                null,
+                null,
+                null,
+                null
+              ]
             }
           ]
         }

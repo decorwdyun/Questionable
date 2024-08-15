@@ -43,13 +43,14 @@
       "Steps": [
         {
           "DataId": 1020631,
-"Position": {
-    "X": -300.49597,
-    "Y": 257.5265,
-    "Z": 765.0415
-},
-"TerritoryId": 620,
-"InteractionType": "CompleteQuest","StopDistance": 7
+          "Position": {
+            "X": -300.49597,
+            "Y": 257.5265,
+            "Z": 765.0415
+          },
+          "TerritoryId": 620,
+          "InteractionType": "CompleteQuest",
+          "StopDistance": 7
         }
       ]
     }

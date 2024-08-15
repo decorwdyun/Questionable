@@ -12,6 +12,7 @@
             "Y": 130,
             "Z": -506.95053
           },
+          "StopDistance": 5,
           "TerritoryId": 612,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Fringes - Castrum Oriens",
@@ -54,7 +55,15 @@
           },
           "TerritoryId": 635,
           "InteractionType": "Interact",
-          "$": "QW: 0 0    0 0    0 0 -> QW: 17 0    0 0    0 64"
+          "$": "QW: 0 0    0 0    0 0 -> QW: 17 0    0 0    0 64",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 1023298,
@@ -65,7 +74,15 @@
           },
           "TerritoryId": 635,
           "InteractionType": "Interact",
-          "$": "QW: 17 0    0 0    0 64 -> QW: 33 1    0 0    0 192"
+          "$": "QW: 17 0    0 0    0 64 -> QW: 33 1    0 0    0 192",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 1023763,
@@ -75,7 +92,15 @@
             "Z": 121.87378
           },
           "TerritoryId": 635,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         }
       ]
     },

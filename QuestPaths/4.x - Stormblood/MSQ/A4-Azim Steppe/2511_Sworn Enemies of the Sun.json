@@ -79,6 +79,16 @@
           "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
             7563
+          ],
+          "CompletionQuestVariablesFlags": [
+            {
+              "Low": 3
+            },
+            null,
+            null,
+            null,
+            null,
+            null
           ]
         },
         {
@@ -103,6 +113,7 @@
             "Y": 10.389871,
             "Z": 598.9928
           },
+          "StopDistance": 7,
           "TerritoryId": 622,
           "InteractionType": "CompleteQuest"
         }

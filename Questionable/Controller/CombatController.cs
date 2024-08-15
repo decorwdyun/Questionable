@@ -257,7 +257,7 @@ internal sealed class CombatController : IDisposable
 
                     // for enemies that are very far away, their nameplate doesn't render but they're in the object table
                     if (_currentFight?.Data.SpawnType == EEnemySpawnType.OverworldEnemies &&
-                        Vector3.Distance(_clientState.LocalPlayer?.Position ?? Vector3.Zero, battleNpc.Position) > 50)
+                        Vector3.Distance(_clientState.LocalPlayer?.Position ?? Vector3.Zero, battleNpc.Position) > 45)
                         return 25;
                 }
                 else

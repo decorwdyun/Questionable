@@ -49,7 +49,15 @@
           "KillEnemyDataIds": [
             7546
           ],
-          "$": "0 0 0 3 0 0 -> 18 0 0 2 0 8"
+          "$": "0 0 0 3 0 0 -> 18 0 0 2 0 8",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            8
+          ]
         },
         {
           "DataId": 2008456,
@@ -66,18 +74,15 @@
             7546,
             7562
           ],
-          "$": "18 0 0 2 0 8 -> 34 0 32 17 0 24"
-        },
-        {
-          "DataId": 2008017,
-          "Position": {
-            "X": 231.98291,
-            "Y": 93.36987,
-            "Z": -515.8008
-          },
-          "TerritoryId": 622,
-          "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818210
+          "$": "18 0 0 2 0 8 -> 34 0 32 17 0 24",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            16
+          ]
         },
         {
           "DataId": 2008131,
@@ -92,6 +97,15 @@
           "ItemId": 2002199,
           "KillEnemyDataIds": [
             7562
+          ],
+          "$": "If skipping the step before: 34 2 0 33 0 40",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
           ]
         }
       ]
@@ -99,6 +113,28 @@
     {
       "Sequence": 3,
       "Steps": [
+        {
+          "DataId": 2008017,
+          "Position": {
+            "X": 231.98291,
+            "Y": 93.36987,
+            "Z": -515.8008
+          },
+          "TerritoryId": 622,
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818210
+        },
+        {
+          "Position": {
+            "X": 235.19914,
+            "Y": 62.795677,
+            "Z": -495.62
+          },
+          "TerritoryId": 622,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true,
+          "Mount": true
+        },
         {
           "DataId": 1020547,
           "Position": {

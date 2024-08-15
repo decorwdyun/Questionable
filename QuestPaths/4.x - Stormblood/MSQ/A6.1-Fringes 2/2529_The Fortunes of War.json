@@ -12,6 +12,7 @@
             "Y": 50.004436,
             "Z": 185.6565
           },
+          "StopDistance": 7,
           "TerritoryId": 612,
           "InteractionType": "AcceptQuest"
         }
@@ -32,7 +33,15 @@
           "KillEnemyDataIds": [
             8036
           ],
-          "$": "QW: 0 0    0 0    0 0 -> QW: 16 16    0 0    0 128"
+          "$": "QW: 0 0    0 0    0 0 -> QW: 16 16    0 0    0 128",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "Position": {
@@ -46,6 +55,14 @@
           "KillEnemyDataIds": [
             8044,
             8050
+          ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
           ]
         }
       ]
