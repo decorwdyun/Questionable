@@ -1,8 +1,13 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
   "Author": "liza",
-  "TerritoryId": 956,
-  "AetheryteShortcut": "Labyrinthos - Archeion",
+  "Steps": [
+    {
+      "TerritoryId": 956,
+      "InteractionType": "None",
+      "AetheryteShortcut": "Labyrinthos - Archeion"
+    }
+  ],
   "Groups": [
     {
       "Nodes": [

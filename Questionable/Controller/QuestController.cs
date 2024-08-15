@@ -35,7 +35,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
     private readonly IToastGui _toastGui;
     private readonly Configuration _configuration;
     private readonly YesAlreadyIpc _yesAlreadyIpc;
-    private readonly IReadOnlyList<ITaskFactory> _taskFactories;
+    private readonly TaskCreator _taskCreator;
 
     private readonly object _progressLock = new();
 
@@ -73,7 +73,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
         IToastGui toastGui,
         Configuration configuration,
         YesAlreadyIpc yesAlreadyIpc,
-        IEnumerable<ITaskFactory> taskFactories)
+        TaskCreator taskCreator)
         : base(chatGui, logger)
     {
         _clientState = clientState;
@@ -88,7 +88,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
         _toastGui = toastGui;
         _configuration = configuration;
         _yesAlreadyIpc = yesAlreadyIpc;
-        _taskFactories = taskFactories.ToList().AsReadOnly();
+        _taskCreator = taskCreator;
 
         _condition.ConditionChange += OnConditionChange;
         _toastGui.Toast += OnNormalToast;
@@ -607,34 +607,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
 
         try
         {
-            var newTasks = _taskFactories
-                .SelectMany(x =>
-                {
-                    IList<ITask> tasks = x.CreateAllTasks(CurrentQuest.Quest, seq, step).ToList();
-
-                    if (tasks.Count > 0 && _logger.IsEnabled(LogLevel.Trace))
-                    {
-                        string factoryName = x.GetType().FullName ?? x.GetType().Name;
-                        if (factoryName.Contains('.', StringComparison.Ordinal))
-                            factoryName = factoryName[(factoryName.LastIndexOf('.') + 1)..];
-
-                        _logger.LogTrace("Factory {FactoryName} created Task {TaskNames}",
-                            factoryName, string.Join(", ", tasks.Select(y => y.ToString())));
-                    }
-
-                    return tasks;
-                })
-                .ToList();
-            if (newTasks.Count == 0)
-            {
-                _logger.LogInformation("Nothing to execute for step?");
-                return;
-            }
-
-            _logger.LogInformation("Tasks for {QuestId}, {Sequence}, {Step}: {Tasks}",
-                CurrentQuest.Quest.Id, seq.Sequence, seq.Steps.IndexOf(step),
-                string.Join(", ", newTasks.Select(x => x.ToString())));
-            foreach (var task in newTasks)
+            foreach (var task in _taskCreator.CreateTasks(CurrentQuest.Quest, seq, step))
                 _taskQueue.Enqueue(task);
         }
         catch (Exception e)

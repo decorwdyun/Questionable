@@ -171,6 +171,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
                 WaitAtEnd.WaitObjectAtPosition>();
         serviceCollection.AddTransient<WaitAtEnd.WaitQuestAccepted>();
         serviceCollection.AddTransient<WaitAtEnd.WaitQuestCompleted>();
+
+        serviceCollection.AddSingleton<TaskCreator>();
     }
 
     private static void AddControllers(ServiceCollection serviceCollection)

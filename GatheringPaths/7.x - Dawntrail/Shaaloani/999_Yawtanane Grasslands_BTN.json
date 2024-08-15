@@ -1,8 +1,13 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
   "Author": "liza",
-  "TerritoryId": 1190,
-  "AetheryteShortcut": "Shaaloani - Hhusatahwi",
+  "Steps": [
+    {
+      "TerritoryId": 1190,
+      "InteractionType": "None",
+      "AetheryteShortcut": "Shaaloani - Hhusatahwi"
+    }
+  ],
   "Groups": [
     {
       "Nodes": [

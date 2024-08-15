@@ -146,7 +146,7 @@ public sealed class RendererPlugin : IDalamudPlugin
     }
 
     internal IEnumerable<GatheringLocationContext> GetLocationsInTerritory(ushort territoryId)
-        => _gatheringLocations.Where(x => x.Root.TerritoryId == territoryId);
+        => _gatheringLocations.Where(x => x.Root.Steps.LastOrDefault()?.TerritoryId == territoryId);
 
     internal void Save(FileInfo targetFile, GatheringRoot root)
     {

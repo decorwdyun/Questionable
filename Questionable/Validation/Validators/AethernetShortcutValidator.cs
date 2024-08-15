@@ -29,8 +29,8 @@ internal sealed class AethernetShortcutValidator : IQuestValidator
         if (aethernetShortcut == null)
             return null;
 
-        byte fromGroup = _aetheryteData.AethernetGroups.GetValueOrDefault(aethernetShortcut.From);
-        byte toGroup = _aetheryteData.AethernetGroups.GetValueOrDefault(aethernetShortcut.To);
+        ushort fromGroup = _aetheryteData.AethernetGroups.GetValueOrDefault(aethernetShortcut.From);
+        ushort toGroup = _aetheryteData.AethernetGroups.GetValueOrDefault(aethernetShortcut.To);
         if (fromGroup != toGroup)
         {
             return new ValidationIssue

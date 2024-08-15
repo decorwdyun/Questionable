@@ -1,8 +1,13 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
   "Author": "liza",
-  "TerritoryId": 1187,
-  "AetheryteShortcut": "Urqopacha - Worlar's Echo",
+  "Steps": [
+    {
+      "TerritoryId": 1187,
+      "InteractionType": "None",
+      "AetheryteShortcut": "Urqopacha - Worlar's Echo"
+    }
+  ],
   "Groups": [
     {
       "Nodes": [

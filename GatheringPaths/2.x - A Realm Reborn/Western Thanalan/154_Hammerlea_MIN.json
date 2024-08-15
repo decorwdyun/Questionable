@@ -1,8 +1,13 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
   "Author": "liza",
-  "TerritoryId": 140,
-  "AetheryteShortcut": "Western Thanalan - Horizon",
+  "Steps": [
+    {
+      "TerritoryId": 140,
+      "InteractionType": "None",
+      "AetheryteShortcut": "Western Thanalan - Horizon"
+    }
+  ],
   "Groups": [
     {
       "Nodes": [

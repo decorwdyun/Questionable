@@ -87,6 +87,15 @@ public enum EAetheryteLocation
     IshgardGatesOfJudgement = 88,
     IshgardFirmament = 100001,
 
+    FirmamentMendicantsCourt = 2011373,
+    FirmamentMattock = 2011374,
+    FirmamentNewNest = 2011384,
+    FirmanentSaintRoellesDais = 2011385,
+    FirmamentFeatherfall = 2011386,
+    FirmamentHoarfrostHall = 2011387,
+    FirmamentWesternRisensongQuarter = 2011388,
+    FIrmamentEasternRisensongQuarter = 2011389,
+
     Idyllshire = 75,
     IdyllshireWest = 90,
     IdyllshirePrologueGate = 91,
@@ -250,4 +259,18 @@ public enum EAetheryteLocation
     LivingMemoryLeynodeMnemo = 213,
     LivingMemoryLeynodePyro = 214,
     LivingMemoryLeynodeAero = 215,
+}
+
+public static class EAetheryteLocationExtensions
+{
+    public static bool IsFirmamentAetheryte(this EAetheryteLocation aetheryteLocation) =>
+        aetheryteLocation is EAetheryteLocation.IshgardFirmament
+            or EAetheryteLocation.FirmamentMendicantsCourt
+            or EAetheryteLocation.FirmamentMattock
+            or EAetheryteLocation.FirmamentNewNest
+            or EAetheryteLocation.FirmanentSaintRoellesDais
+            or EAetheryteLocation.FirmamentFeatherfall
+            or EAetheryteLocation.FirmamentHoarfrostHall
+            or EAetheryteLocation.FirmamentWesternRisensongQuarter
+            or EAetheryteLocation.FIrmamentEasternRisensongQuarter;
 }

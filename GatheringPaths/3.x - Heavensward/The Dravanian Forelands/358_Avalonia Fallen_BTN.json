@@ -1,8 +1,13 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
   "Author": "liza",
-  "TerritoryId": 398,
-  "AetheryteShortcut": "The Dravanian Forelands - Anyx Trine",
+  "Steps": [
+    {
+      "TerritoryId": 398,
+      "InteractionType": "None",
+      "AetheryteShortcut": "The Dravanian Forelands - Anyx Trine"
+    }
+  ],
   "Groups": [
     {
       "Nodes": [

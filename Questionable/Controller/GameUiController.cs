@@ -20,7 +20,9 @@ using Questionable.Controller.Steps.Interactions;
 using Questionable.Data;
 using Questionable.Functions;
 using Questionable.Model;
+using Questionable.Model.Common;
 using Questionable.Model.Questing;
+using AethernetShortcut = Questionable.Controller.Steps.Shared.AethernetShortcut;
 using Quest = Questionable.Model.Quest;
 using ValueType = FFXIVClientStructs.FFXIV.Component.GUI.ValueType;
 
@@ -88,6 +90,7 @@ internal sealed class GameUiController : IDisposable
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "HousingSelectBlock", HousingSelectBlockPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "JournalResult", JournalResultPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "GuildLeve", GuildLevePostSetup);
+        _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "TelepotTown", TeleportTownPostSetup);
     }
 
     private bool ShouldHandleUiInteractions => _isInitialCheck || _questController.IsRunning;
@@ -916,6 +919,46 @@ internal sealed class GameUiController : IDisposable
         addon->Close(true);
     }
 
+    private void TeleportTownPostSetup(AddonEvent type, AddonArgs args)
+    {
+        if (ShouldHandleUiInteractions &&
+            _questController.HasCurrentTaskMatching(out AethernetShortcut.UseAethernetShortcut? aethernetShortcut) &&
+            aethernetShortcut.From.IsFirmamentAetheryte())
+        {
+            // this might be better via atkvalues; but this works for now
+            uint toIndex = aethernetShortcut.To switch
+            {
+                EAetheryteLocation.FirmamentMendicantsCourt => 0,
+                EAetheryteLocation.FirmamentMattock => 1,
+                EAetheryteLocation.FirmamentNewNest => 2,
+                EAetheryteLocation.FirmanentSaintRoellesDais => 3,
+                EAetheryteLocation.FirmamentFeatherfall => 4,
+                EAetheryteLocation.FirmamentHoarfrostHall => 5,
+                EAetheryteLocation.FirmamentWesternRisensongQuarter => 6,
+                EAetheryteLocation.FIrmamentEasternRisensongQuarter => 7,
+                _ => uint.MaxValue,
+            };
+
+            if (toIndex == uint.MaxValue)
+                return;
+
+            _logger.LogInformation("Teleporting to {ToName} with menu index {ToIndex}", aethernetShortcut.From,
+                toIndex);
+            unsafe
+            {
+                var teleportToDestination = stackalloc AtkValue[]
+                {
+                    new() { Type = ValueType.Int, Int = 11 },
+                    new() { Type = ValueType.UInt, UInt = toIndex }
+                };
+
+                var addon = (AtkUnitBase*)args.Addon;
+                addon->FireCallback(2, teleportToDestination);
+                addon->FireCallback(2, teleportToDestination, true);
+            }
+        }
+    }
+
     private StringOrRegex? ResolveReference(Quest? quest, string? excelSheet, ExcelRef? excelRef, bool isRegExp)
     {
         if (excelRef == null)
@@ -933,6 +976,7 @@ internal sealed class GameUiController : IDisposable
 
     public void Dispose()
     {
+        _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "TelepotTown", TeleportTownPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "GuildLeve", GuildLevePostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "JournalResult", JournalResultPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "HousingSelectBlock", HousingSelectBlockPostSetup);

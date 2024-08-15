@@ -151,11 +151,12 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
         if (currentNode == null)
             return;
 
+        ushort territoryId = _currentRequest.Root.Steps.Last().TerritoryId;
         _taskQueue.Enqueue(_serviceProvider.GetRequiredService<MountTask>()
-            .With(_currentRequest.Root.TerritoryId, MountTask.EMountIf.Always));
+            .With(territoryId, MountTask.EMountIf.Always));
 
         bool fly = currentNode.Fly.GetValueOrDefault(_currentRequest.Root.FlyBetweenNodes.GetValueOrDefault(true)) &&
-                   _gameFunctions.IsFlyingUnlocked(_currentRequest.Root.TerritoryId);
+                   _gameFunctions.IsFlyingUnlocked(territoryId);
         if (currentNode.Locations.Count > 1)
         {
             Vector3 averagePosition = new Vector3
@@ -170,12 +171,12 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
                 pointOnFloor = pointOnFloor.Value with { Y = pointOnFloor.Value.Y + (fly ? 3f : 0f) };
 
             _taskQueue.Enqueue(_serviceProvider.GetRequiredService<Move.MoveInternal>()
-                .With(_currentRequest.Root.TerritoryId, pointOnFloor ?? averagePosition, 50f, fly: fly,
+                .With(territoryId, pointOnFloor ?? averagePosition, 50f, fly: fly,
                     ignoreDistanceToObject: true));
         }
 
         _taskQueue.Enqueue(_serviceProvider.GetRequiredService<MoveToLandingLocation>()
-            .With(_currentRequest.Root.TerritoryId, fly, currentNode));
+            .With(territoryId, fly, currentNode));
         _taskQueue.Enqueue(_serviceProvider.GetRequiredService<Interact.DoInteract>()
             .With(currentNode.DataId, null, EInteractionType.InternalGather, true));
 

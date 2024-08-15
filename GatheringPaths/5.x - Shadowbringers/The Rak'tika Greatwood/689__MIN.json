@@ -1,7 +1,12 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
   "Author": "liza",
-  "TerritoryId": 817,
+  "Steps": [
+    {
+      "TerritoryId": 817,
+      "InteractionType": "None"
+    }
+  ],
   "Groups": [
     {
       "Nodes": [

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Game.ClientState.Conditions;
+using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -102,12 +103,9 @@ internal static class AethernetShortcut
                 if (aetheryteData.CalculateDistance(playerPosition, territoryType, From) <
                     aetheryteData.CalculateDistance(playerPosition, territoryType, To))
                 {
-                    if (aetheryteData.CalculateDistance(playerPosition, territoryType, From) < 11)
+                    if (aetheryteData.CalculateDistance(playerPosition, territoryType, From) < (From.IsFirmamentAetheryte() ? 11f : 4f))
                     {
-                        logger.LogInformation("Using lifestream to teleport to {Destination}", To);
-                        lifestreamIpc.Teleport(To);
-
-                        _teleported = true;
+                        DoTeleport();
                         return true;
                     }
                     else if (From == EAetheryteLocation.SolutionNine)
@@ -141,7 +139,7 @@ internal static class AethernetShortcut
                             }
                         }
 
-                        MoveTo(From);
+                        MoveTo();
                         return true;
                     }
                 }
@@ -154,13 +152,32 @@ internal static class AethernetShortcut
             return false;
         }
 
-        private void MoveTo(EAetheryteLocation from)
+        private void MoveTo()
         {
             logger.LogInformation("Moving to aethernet shortcut");
             _moving = true;
             movementController.NavigateTo(EMovementType.Quest, (uint)From, aetheryteData.Locations[From],
                 false, true,
-                AetheryteConverter.IsLargeAetheryte(From) ? 10.9f : 6.9f);
+                From.IsFirmamentAetheryte()
+                    ? 4.4f
+                    : AetheryteConverter.IsLargeAetheryte(From)
+                        ? 10.9f
+                        : 6.9f);
+        }
+
+        private void DoTeleport()
+        {
+            if (From.IsFirmamentAetheryte())
+            {
+                logger.LogInformation("Using manual teleport interaction");
+                _teleported = gameFunctions.InteractWith((uint)From, ObjectKind.EventObj);
+            }
+            else
+            {
+                logger.LogInformation("Using lifestream to teleport to {Destination}", To);
+                lifestreamIpc.Teleport(To);
+                _teleported = true;
+            }
         }
 
         public ETaskResult Update()
@@ -173,7 +190,7 @@ internal static class AethernetShortcut
                 if (condition[ConditionFlag.Mounted])
                 {
                     _triedMounting = false;
-                    MoveTo(From);
+                    MoveTo();
                     return ETaskResult.StillRunning;
                 }
                 else
@@ -194,10 +211,7 @@ internal static class AethernetShortcut
 
             if (!_teleported)
             {
-                logger.LogInformation("Using lifestream to teleport to {Destination}", To);
-                lifestreamIpc.Teleport(To);
-
-                _teleported = true;
+                DoTeleport();
                 return ETaskResult.StillRunning;
             }
 

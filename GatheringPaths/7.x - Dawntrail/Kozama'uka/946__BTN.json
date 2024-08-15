@@ -1,8 +1,13 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
   "Author": "liza",
-  "TerritoryId": 1188,
-  "AetheryteShortcut": "Kozama'uka - Ok'hanu",
+  "Steps": [
+    {
+      "TerritoryId": 1188,
+      "InteractionType": "None",
+      "AetheryteShortcut": "Kozama'uka - Ok'hanu"
+    }
+  ],
   "FlyBetweenNodes": true,
   "Groups": [
     {

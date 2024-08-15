@@ -1,8 +1,13 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
   "Author": "liza",
-  "TerritoryId": 958,
-  "AetheryteShortcut": "Garlemald - Camp Broken Glass",
+  "Steps": [
+    {
+      "TerritoryId": 958,
+      "InteractionType": "None",
+      "AetheryteShortcut": "Garlemald - Camp Broken Glass"
+    }
+  ],
   "Groups": [
     {
       "Nodes": [

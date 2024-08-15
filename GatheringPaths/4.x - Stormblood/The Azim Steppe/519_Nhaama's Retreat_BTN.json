@@ -1,8 +1,13 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
   "Author": "liza",
-  "TerritoryId": 622,
-  "AetheryteShortcut": "Azim Steppe - Dawn Throne",
+  "Steps": [
+    {
+      "TerritoryId": 622,
+      "InteractionType": "None",
+      "AetheryteShortcut": "Azim Steppe - Dawn Throne"
+    }
+  ],
   "Groups": [
     {
       "Nodes": [

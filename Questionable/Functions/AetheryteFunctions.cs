@@ -41,7 +41,7 @@ internal sealed unsafe class AetheryteFunctions
 
     public bool IsAetheryteUnlocked(EAetheryteLocation aetheryteLocation)
     {
-        if (aetheryteLocation == EAetheryteLocation.IshgardFirmament)
+        if (aetheryteLocation.IsFirmamentAetheryte())
             return _serviceProvider.GetRequiredService<QuestFunctions>().IsQuestComplete(new QuestId(3672));
         return IsAetheryteUnlocked((uint)aetheryteLocation, out _);
     }

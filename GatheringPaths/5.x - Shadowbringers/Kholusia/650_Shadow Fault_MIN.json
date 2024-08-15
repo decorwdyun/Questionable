@@ -1,8 +1,13 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
   "Author": "liza",
-  "TerritoryId": 814,
-  "AetheryteShortcut": "Kholusia - Wright",
+  "Steps": [
+    {
+      "TerritoryId": 814,
+      "InteractionType": "None",
+      "AetheryteShortcut": "Kholusia - Wright"
+    }
+  ],
   "Groups": [
     {
       "Nodes": [

@@ -1,11 +1,16 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
   "Author": "liza",
-  "TerritoryId": 613,
-  "AetheryteShortcut": "Kugane",
-  "AethernetShortcut": [
-    "[Kugane] Aetheryte Plaza",
-    "[Kugane] The Ruby Price"
+  "Steps": [
+    {
+      "TerritoryId": 613,
+      "InteractionType": "None",
+      "AetheryteShortcut": "Kugane",
+      "AethernetShortcut": [
+        "[Kugane] Aetheryte Plaza",
+        "[Kugane] The Ruby Price"
+      ]
+    }
   ],
   "Groups": [
     {

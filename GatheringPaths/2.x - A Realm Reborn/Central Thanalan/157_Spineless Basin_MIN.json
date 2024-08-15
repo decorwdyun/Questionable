@@ -1,8 +1,13 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
   "Author": "liza",
-  "TerritoryId": 141,
-  "AetheryteShortcut": "Central Thanalan - Black Brush Station",
+  "Steps": [
+    {
+      "TerritoryId": 141,
+      "InteractionType": "None",
+      "AetheryteShortcut": "Central Thanalan - Black Brush Station"
+    }
+  ],
   "Groups": [
     {
       "Nodes": [

@@ -15,6 +15,7 @@ using Dalamud.Plugin.Services;
 using Lumina.Excel.GeneratedSheets;
 using Questionable.Model;
 using Questionable.Model.Gathering;
+using Questionable.Model.Questing;
 
 namespace GatheringPathRenderer;
 
@@ -186,7 +187,14 @@ internal sealed class EditorCommands : IDisposable
         var root = new GatheringRoot
         {
             Author = [_configuration.AuthorName],
-            TerritoryId = _clientState.TerritoryType,
+            Steps =
+            [
+                new QuestStep
+                {
+                    TerritoryId = _clientState.TerritoryType,
+                    InteractionType = EInteractionType.None,
+                }
+            ],
             Groups =
             [
                 new GatheringNodeGroup

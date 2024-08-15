@@ -1,8 +1,13 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
   "Author": "liza",
-  "TerritoryId": 612,
-  "AetheryteShortcut": "Fringes - Castrum Oriens",
+  "Steps": [
+    {
+      "TerritoryId": 612,
+      "InteractionType": "None",
+      "AetheryteShortcut": "Fringes - Castrum Oriens"
+    }
+  ],
   "Groups": [
     {
       "Nodes": [

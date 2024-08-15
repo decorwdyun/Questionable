@@ -1,8 +1,13 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
   "Author": "liza",
-  "TerritoryId": 400,
-  "AetheryteShortcut": "The Churning Mists - Zenith",
+  "Steps": [
+    {
+      "TerritoryId": 400,
+      "InteractionType": "None",
+      "AetheryteShortcut": "The Churning Mists - Zenith"
+    }
+  ],
   "Groups": [
     {
       "Nodes": [

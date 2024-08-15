@@ -1,11 +1,16 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
   "Author": "liza",
-  "TerritoryId": 399,
-  "AetheryteShortcut": "Idyllshire",
-  "AethernetShortcut": [
-    "[Idyllshire] Aetheryte Plaza",
-    "[Idyllshire] Prologue Gate (Western Hinterlands)"
+  "Steps": [
+    {
+      "TerritoryId": 399,
+      "InteractionType": "None",
+      "AetheryteShortcut": "Idyllshire",
+      "AethernetShortcut": [
+        "[Idyllshire] Aetheryte Plaza",
+        "[Idyllshire] Prologue Gate (Western Hinterlands)"
+      ]
+    }
   ],
   "Groups": [
     {

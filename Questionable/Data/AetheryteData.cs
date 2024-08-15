@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Plugin.Services;
+using Dalamud.Utility;
 using Lumina.Excel.GeneratedSheets;
 using Questionable.Model.Common;
 
@@ -14,7 +15,25 @@ internal sealed class AetheryteData
     {
         Dictionary<EAetheryteLocation, string> aethernetNames = new();
         Dictionary<EAetheryteLocation, ushort> territoryIds = new();
-        Dictionary<EAetheryteLocation, byte> aethernetGroups = new();
+        Dictionary<EAetheryteLocation, ushort> aethernetGroups = new();
+
+
+        void ConfigureAetheryte(EAetheryteLocation aetheryteLocation, string name, ushort territoryId,
+            ushort aethernetGroup)
+        {
+            aethernetNames[aetheryteLocation] = name;
+            territoryIds[aetheryteLocation] = territoryId;
+            aethernetGroups[aetheryteLocation] = aethernetGroup;
+        }
+
+        void ConfigureAetheryteWithPlaceName(EAetheryteLocation aetheryteLocation, uint placeNameId, ushort territoryId)
+        {
+            ConfigureAetheryte(aetheryteLocation,
+                dataManager.GetExcelSheet<PlaceName>()!.GetRow(placeNameId)!.Name.ToDalamudString().TextValue,
+                territoryId,
+                (ushort)((int)aetheryteLocation / 100));
+        }
+
         foreach (var aetheryte in dataManager.GetExcelSheet<Aetheryte>()!.Where(x => x.RowId > 0))
         {
             string? aethernetName = aetheryte.AethernetName?.Value?.Name.ToString();
@@ -28,9 +47,16 @@ internal sealed class AetheryteData
                 aethernetGroups[(EAetheryteLocation)aetheryte.RowId] = aetheryte.AethernetGroup;
         }
 
-        aethernetNames[EAetheryteLocation.IshgardFirmament] = "Firmament";
-        territoryIds[EAetheryteLocation.IshgardFirmament] = 886;
-        aethernetGroups[EAetheryteLocation.IshgardFirmament] = aethernetGroups[EAetheryteLocation.Ishgard];
+        ConfigureAetheryte(EAetheryteLocation.IshgardFirmament, "Firmament", 886,
+            aethernetGroups[EAetheryteLocation.Ishgard]);
+        ConfigureAetheryteWithPlaceName(EAetheryteLocation.FirmamentMendicantsCourt, 3436, 886);
+        ConfigureAetheryteWithPlaceName(EAetheryteLocation.FirmamentMattock, 3473, 886);
+        ConfigureAetheryteWithPlaceName(EAetheryteLocation.FirmamentNewNest, 3475, 886);
+        ConfigureAetheryteWithPlaceName(EAetheryteLocation.FirmanentSaintRoellesDais, 3474, 886);
+        ConfigureAetheryteWithPlaceName(EAetheryteLocation.FirmamentFeatherfall, 3525, 886);
+        ConfigureAetheryteWithPlaceName(EAetheryteLocation.FirmamentHoarfrostHall, 3528, 886);
+        ConfigureAetheryteWithPlaceName(EAetheryteLocation.FirmamentWesternRisensongQuarter, 3646, 886);
+        ConfigureAetheryteWithPlaceName(EAetheryteLocation.FIrmamentEasternRisensongQuarter, 3645, 886);
 
         AethernetNames = aethernetNames.AsReadOnly();
         TerritoryIds = territoryIds.AsReadOnly();
@@ -207,6 +233,15 @@ internal sealed class AetheryteData
                 { EAetheryteLocation.RadzAtHanKama, new(129.59485f, 26.993164f, 13.473633f) },
                 { EAetheryteLocation.RadzAtHanHighCrucible, new(57.90796f, -24.704407f, -210.6203f) },
 
+                { EAetheryteLocation.FirmamentMendicantsCourt, new(23.941406f, -16.006714f, 169.35986f) },
+                { EAetheryteLocation.FirmamentMattock, new(76.035645f, -18.509216f, 10.299805f) },
+                { EAetheryteLocation.FirmamentNewNest, new(149.49255f, -50.003845f, 98.55798f) },
+                { EAetheryteLocation.FirmanentSaintRoellesDais, new(207.75159f, -40.024475f, -25.589417f) },
+                { EAetheryteLocation.FirmamentFeatherfall, new(-78.78235f, -0.015319824f, 75.97461f) },
+                { EAetheryteLocation.FirmamentHoarfrostHall, new(-132.55518f, 9.964111f, -14.66394f) },
+                { EAetheryteLocation.FirmamentWesternRisensongQuarter, new(-91.722046f, -0.015319824f, -115.19043f) },
+                { EAetheryteLocation.FIrmamentEasternRisensongQuarter, new(114.3053f, -20.004639f, -107.43884f) },
+
                 { EAetheryteLocation.LabyrinthosArcheion, new(443.5338f, 170.6416f, -476.18835f) },
                 { EAetheryteLocation.LabyrinthosSharlayanHamlet, new(8.377136f, -27.542603f, -46.67737f) },
                 { EAetheryteLocation.LabyrinthosAporia, new(-729.18286f, -27.634155f, 302.1438f) },
@@ -276,7 +311,7 @@ internal sealed class AetheryteData
 
     public ReadOnlyDictionary<EAetheryteLocation, string> AethernetNames { get; }
     public ReadOnlyDictionary<EAetheryteLocation, ushort> TerritoryIds { get; }
-    public ReadOnlyDictionary<EAetheryteLocation, byte> AethernetGroups { get; }
+    public ReadOnlyDictionary<EAetheryteLocation, ushort> AethernetGroups { get; }
     public IReadOnlyList<ushort> TownTerritoryIds { get; set; }
 
     public float CalculateDistance(Vector3 fromPosition, ushort fromTerritoryType, EAetheryteLocation to)
