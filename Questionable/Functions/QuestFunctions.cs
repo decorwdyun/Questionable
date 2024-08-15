@@ -278,13 +278,13 @@ internal sealed unsafe class QuestFunctions
                 if (!_questRegistry.TryGetQuest(x, out Quest? quest))
                     return false;
 
-                return quest.AllSteps().All(x =>
+                return quest.AllSteps().All(y =>
                 {
-                    if (x.Step.AetheryteShortcut is { } aetheryteShortcut &&
+                    if (y.Step.AetheryteShortcut is { } aetheryteShortcut &&
                         _aetheryteFunctions.IsAetheryteUnlocked(aetheryteShortcut))
                         return false;
 
-                    if (x.Step.AethernetShortcut is { } aethernetShortcut &&
+                    if (y.Step.AethernetShortcut is { } aethernetShortcut &&
                         (!_aetheryteFunctions.IsAetheryteUnlocked(aethernetShortcut.From) ||
                          !_aetheryteFunctions.IsAetheryteUnlocked(aethernetShortcut.To)))
                         return false;

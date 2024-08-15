@@ -9,7 +9,14 @@
       "AethernetShortcut": [
         "[Idyllshire] Aetheryte Plaza",
         "[Idyllshire] Epilogue Gate (Eastern Hinterlands)"
-      ]
+      ],
+      "SkipConditions": {
+        "AetheryteShortcutIf": {
+          "InTerritory": [
+            399
+          ]
+        }
+      }
     }
   ],
   "Groups": [

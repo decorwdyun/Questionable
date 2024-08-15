@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization.Metadata;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
@@ -155,6 +157,10 @@ public sealed class RendererPlugin : IDalamudPlugin
             Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
             WriteIndented = true,
+            TypeInfoResolver = new DefaultJsonTypeInfoResolver
+            {
+                Modifiers = { NoEmptyCollectionModifier }
+            },
         };
         using (var stream = File.Create(targetFile.FullName))
         {
@@ -174,6 +180,17 @@ public sealed class RendererPlugin : IDalamudPlugin
         }
 
         Reload();
+    }
+
+    private static void NoEmptyCollectionModifier(JsonTypeInfo typeInfo)
+    {
+        foreach (var property in typeInfo.Properties)
+        {
+            if (typeof(ICollection).IsAssignableFrom(property.PropertyType))
+            {
+                property.ShouldSerialize = (_, val) => val is ICollection { Count: > 0 };
+            }
+        }
     }
 
     private void TerritoryChanged(ushort territoryId) => Redraw();
@@ -234,7 +251,8 @@ public sealed class RendererPlugin : IDalamudPlugin
                                     refZ = x.Position.Y,
                                     Filled = true,
                                     radius = locationOverride?.MinimumDistance ?? x.CalculateMinimumDistance(),
-                                    Donut = (locationOverride?.MaximumDistance ?? x.CalculateMaximumDistance()) - (locationOverride?.MinimumDistance ?? x.CalculateMinimumDistance()),
+                                    Donut = (locationOverride?.MaximumDistance ?? x.CalculateMaximumDistance()) -
+                                            (locationOverride?.MinimumDistance ?? x.CalculateMinimumDistance()),
                                     color = _colors[location.Root.Groups.IndexOf(group) % _colors.Count],
                                     Enabled = true,
                                     coneAngleMin = minimumAngle,

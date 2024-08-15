@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using System.Text.Json.Serialization;
 using Questionable.Model.Common;
@@ -7,11 +8,10 @@ using Questionable.Model.Questing.Converter;
 
 namespace Questionable.Model.Questing;
 
+[SuppressMessage("ReSharper", "CollectionNeverUpdated.Global")]
 public sealed class QuestStep
 {
     public const float DefaultStopDistance = 3f;
-
-    public EInteractionType InteractionType { get; set; }
 
     public uint? DataId { get; set; }
 
@@ -19,8 +19,12 @@ public sealed class QuestStep
     public Vector3? Position { get; set; }
 
     public float? StopDistance { get; set; }
-    public float? NpcWaitDistance { get; set; }
     public ushort TerritoryId { get; set; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+    public EInteractionType InteractionType { get; set; }
+
+    public float? NpcWaitDistance { get; set; }
     public ushort? TargetTerritoryId { get; set; }
     public float? DelaySecondsAtStart { get; set; }
 
@@ -57,8 +61,8 @@ public sealed class QuestStep
     public EAction? Action { get; set; }
 
     public EEnemySpawnType? EnemySpawnType { get; set; }
-    public IList<uint> KillEnemyDataIds { get; set; } = new List<uint>();
-    public IList<ComplexCombatData> ComplexCombatData { get; set; } = new List<ComplexCombatData>();
+    public List<uint> KillEnemyDataIds { get; set; } = [];
+    public List<ComplexCombatData> ComplexCombatData { get; set; } = [];
     public float? CombatDelaySecondsAtStart { get; set; }
 
     public JumpDestination? JumpDestination { get; set; }
@@ -67,9 +71,9 @@ public sealed class QuestStep
 
     public List<List<QuestWorkValue>?> RequiredQuestVariables { get; set; } = new();
     public List<GatheredItem> RequiredGatheredItems { get; set; } = [];
-    public IList<QuestWorkValue?> CompletionQuestVariablesFlags { get; set; } = new List<QuestWorkValue?>();
-    public IList<DialogueChoice> DialogueChoices { get; set; } = new List<DialogueChoice>();
-    public IList<uint> PointMenuChoices { get; set; } = new List<uint>();
+    public List<QuestWorkValue?> CompletionQuestVariablesFlags { get; set; } = [];
+    public List<DialogueChoice> DialogueChoices { get; set; } = [];
+    public List<uint> PointMenuChoices { get; set; } = [];
 
     // TODO: Not implemented
     [JsonConverter(typeof(ElementIdConverter))]

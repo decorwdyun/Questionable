@@ -773,7 +773,6 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
             if (toastAware.OnErrorToast(message))
             {
                 isHandled = true;
-                return;
             }
         }
     }
