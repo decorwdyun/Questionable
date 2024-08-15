@@ -9,7 +9,7 @@ internal sealed class Quest
     public required ElementId Id { get; init; }
     public required QuestRoot Root { get; init; }
     public required IQuestInfo Info { get; init; }
-    public required bool ReadOnly { get; init; }
+    public required ESource Source { get; init; }
 
     public QuestSequence? FindSequence(byte currentSequence)
         => Root.QuestSequence.SingleOrDefault(seq => seq.Sequence == currentSequence);
@@ -26,5 +26,12 @@ internal sealed class Quest
                 yield return (sequence, i, step);
             }
         }
+    }
+
+    public enum ESource
+    {
+        Assembly,
+        ProjectDirectory,
+        UserDirectory,
     }
 }

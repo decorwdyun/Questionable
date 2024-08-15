@@ -134,6 +134,17 @@ internal sealed partial class ActiveQuestComponent
             var startedQuest = _questController.StartedQuest;
             if (startedQuest != null)
             {
+                if (startedQuest.Quest.Source == Quest.ESource.UserDirectory)
+                {
+                    ImGui.PushFont(UiBuilder.IconFont);
+                    ImGui.TextColored(ImGuiColors.DalamudOrange, FontAwesomeIcon.FilePen.ToIconString());
+                    ImGui.PopFont();
+                    ImGui.SameLine(0);
+
+                    if (ImGui.IsItemHovered())
+                        ImGui.SetTooltip("This quest is loaded from your 'pluginConfigs\\Questionable\\Quests' directory.\nThis gets loaded even if Questionable ships with a newer/different version of the quest.");
+                }
+
                 ImGui.TextUnformatted(
                     $"Quest: {Shorten(startedQuest.Quest.Info.Name)} / {startedQuest.Sequence} / {startedQuest.Step}");
 

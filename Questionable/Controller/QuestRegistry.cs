@@ -61,7 +61,8 @@ internal sealed class QuestRegistry
 
         try
         {
-            LoadFromDirectory(new DirectoryInfo(Path.Combine(_pluginInterface.ConfigDirectory.FullName, "Quests")));
+            LoadFromDirectory(new DirectoryInfo(Path.Combine(_pluginInterface.ConfigDirectory.FullName, "Quests")),
+                Quest.ESource.UserDirectory);
         }
         catch (Exception e)
         {
@@ -99,7 +100,7 @@ internal sealed class QuestRegistry
                 Id = questId,
                 Root = questRoot,
                 Info = questInfo,
-                ReadOnly = true,
+                Source = Quest.ESource.Assembly,
             };
             _quests[quest.Id] = quest;
         }
@@ -122,6 +123,7 @@ internal sealed class QuestRegistry
                     foreach (var expansionFolder in ExpansionData.ExpansionFolders.Values)
                         LoadFromDirectory(
                             new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, expansionFolder)),
+                            Quest.ESource.ProjectDirectory,
                             LogLevel.Trace);
                 }
                 catch (Exception e)
@@ -135,10 +137,10 @@ internal sealed class QuestRegistry
 
     private void ValidateQuests()
     {
-        _questValidator.Validate(_quests.Values.Where(x => !x.ReadOnly));
+        _questValidator.Validate(_quests.Values.Where(x => x.Source != Quest.ESource.Assembly));
     }
 
-    private void LoadQuestFromStream(string fileName, Stream stream)
+    private void LoadQuestFromStream(string fileName, Stream stream, Quest.ESource source)
     {
         _logger.LogTrace("Loading quest from '{FileName}'", fileName);
         ElementId? questId = ExtractQuestIdFromName(fileName);
@@ -157,12 +159,13 @@ internal sealed class QuestRegistry
             Id = questId,
             Root = questRoot,
             Info = questInfo,
-            ReadOnly = false,
+            Source = source,
         };
         _quests[quest.Id] = quest;
     }
 
-    private void LoadFromDirectory(DirectoryInfo directory, LogLevel logLevel = LogLevel.Information)
+    private void LoadFromDirectory(DirectoryInfo directory, Quest.ESource source,
+        LogLevel logLevel = LogLevel.Information)
     {
         if (!directory.Exists)
         {
@@ -176,7 +179,7 @@ internal sealed class QuestRegistry
             try
             {
                 using FileStream stream = new FileStream(fileInfo.FullName, FileMode.Open, FileAccess.Read);
-                LoadQuestFromStream(fileInfo.Name, stream);
+                LoadQuestFromStream(fileInfo.Name, stream, source);
             }
             catch (Exception e)
             {
@@ -185,7 +188,7 @@ internal sealed class QuestRegistry
         }
 
         foreach (DirectoryInfo childDirectory in directory.GetDirectories())
-            LoadFromDirectory(childDirectory, logLevel);
+            LoadFromDirectory(childDirectory, source, logLevel);
     }
 
     private static ElementId? ExtractQuestIdFromName(string resourceName)
