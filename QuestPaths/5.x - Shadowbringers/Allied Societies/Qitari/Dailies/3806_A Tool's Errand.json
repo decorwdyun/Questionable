@@ -33,12 +33,12 @@
           "RequiredGatheredItems": [
             {
               "QuestAcceptedAsClass": "Miner",
-              "ItemId": 29522,
+              "ItemId": 29517,
               "ItemCount": 3
             },
             {
               "QuestAcceptedAsClass": "Botanist",
-              "ItemId": 29548,
+              "ItemId": 29543,
               "ItemCount": 3
             }
           ]

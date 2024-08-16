@@ -20,21 +20,21 @@ internal static class Craft
                 return null;
 
             ArgumentNullException.ThrowIfNull(step.ItemId);
-            ArgumentNullException.ThrowIfNull(step.Quantity);
+            ArgumentNullException.ThrowIfNull(step.ItemCount);
             return serviceProvider.GetRequiredService<DoCraft>()
-                .With(step.ItemId.Value, step.Quantity.Value);
+                .With(step.ItemId.Value, step.ItemCount.Value);
         }
     }
 
     internal sealed class DoCraft(IDataManager dataManager, IClientState clientState, ArtisanIpc artisanIpc) : ITask
     {
         private uint _itemId;
-        private int _quantity;
+        private int _itemCount;
 
-        public ITask With(uint itemId, int quantity)
+        public ITask With(uint itemId, int itemCount)
         {
             _itemId = itemId;
-            _quantity = quantity;
+            _itemCount = itemCount;
             return this;
         }
 
@@ -75,7 +75,7 @@ internal static class Craft
             if (recipeId == 0)
                 throw new TaskException($"Unable to determine recipe for item {_itemId}");
 
-            if (!artisanIpc.CraftItem((ushort)recipeId, _quantity))
+            if (!artisanIpc.CraftItem((ushort)recipeId, _itemCount))
                 throw new TaskException($"Failed to start Artisan craft for recipe {recipeId}");
 
             return true;

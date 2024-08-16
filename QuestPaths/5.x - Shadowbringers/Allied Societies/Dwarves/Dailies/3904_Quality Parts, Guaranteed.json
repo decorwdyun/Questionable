@@ -7,21 +7,21 @@
       "Steps": [
         {
           "Position": {
-            "X": -201.42024,
-            "Y": -49.149708,
-            "Z": -273.68756
+            "X": -615.73865,
+            "Y": 65.602264,
+            "Z": -423.84705
           },
-          "TerritoryId": 959,
+          "TerritoryId": 813,
           "InteractionType": "WalkTo"
         },
         {
-          "DataId": 1044403,
+          "DataId": 1033712,
           "Position": {
-            "X": -203.5401,
-            "Y": -48.949707,
-            "Z": -273.60956
+            "X": -617.1206,
+            "Y": 65.602264,
+            "Z": -425.25372
           },
-          "TerritoryId": 959,
+          "TerritoryId": 813,
           "InteractionType": "AcceptQuest"
         }
       ]
@@ -30,13 +30,13 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 1044572,
+          "DataId": 1033767,
           "Position": {
-            "X": -638.056,
-            "Y": -143.79326,
-            "Z": -513.0846
+            "X": -608.6061,
+            "Y": 65.60222,
+            "Z": -431.81506
           },
-          "TerritoryId": 959,
+          "TerritoryId": 813,
           "InteractionType": "Interact"
         }
       ]
@@ -45,28 +45,29 @@
       "Sequence": 255,
       "Steps": [
         {
-          "TerritoryId": 959,
+          "TerritoryId": 813,
           "InteractionType": "Craft",
-          "ItemId": 38857,
+          "ItemId": 31151,
           "ItemCount": 4
         },
         {
           "Position": {
-            "X": -201.42024,
-            "Y": -49.149708,
-            "Z": -273.68756
+            "X": -615.73865,
+            "Y": 65.602264,
+            "Z": -423.84705
           },
-          "TerritoryId": 959,
-          "InteractionType": "WalkTo"
+          "TerritoryId": 813,
+          "InteractionType": "WalkTo",
+          "Fly": true
         },
         {
-          "DataId": 1044403,
+          "DataId": 1033712,
           "Position": {
-            "X": -203.5401,
-            "Y": -48.949707,
-            "Z": -273.60956
+            "X": -617.1206,
+            "Y": 65.602264,
+            "Z": -425.25372
           },
-          "TerritoryId": 959,
+          "TerritoryId": 813,
           "InteractionType": "CompleteQuest"
         }
       ]

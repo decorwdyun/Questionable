@@ -1,6 +1,7 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
+  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -31,16 +32,9 @@
           "AetheryteShortcut": "Rak'tika - Fanow",
           "Fly": true,
           "RequiredGatheredItems": [
-            {
-              "QuestAcceptedAsClass": "Miner",
-              "ItemId": 29522,
-              "ItemCount": 3
-            },
-            {
-              "QuestAcceptedAsClass": "Botanist",
-              "ItemId": 29548,
-              "ItemCount": 3
-            }
+
+
+
           ]
         },
         {

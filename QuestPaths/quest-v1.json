@@ -1112,13 +1112,13 @@
           },
           "then": {
             "properties": {
-              "Quantity": {
+              "ItemCount": {
                 "type": "number"
               }
             },
             "required": [
               "ItemId",
-              "Quantity"
+              "ItemCount"
             ]
           }
         }

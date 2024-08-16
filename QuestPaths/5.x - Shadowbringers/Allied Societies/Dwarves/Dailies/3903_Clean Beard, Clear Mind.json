@@ -7,21 +7,21 @@
       "Steps": [
         {
           "Position": {
-            "X": -201.42024,
-            "Y": -49.149708,
-            "Z": -273.68756
+            "X": -615.73865,
+            "Y": 65.602264,
+            "Z": -423.84705
           },
-          "TerritoryId": 959,
+          "TerritoryId": 813,
           "InteractionType": "WalkTo"
         },
         {
-          "DataId": 1044403,
+          "DataId": 1033712,
           "Position": {
-            "X": -203.5401,
-            "Y": -48.949707,
-            "Z": -273.60956
+            "X": -617.1206,
+            "Y": 65.602264,
+            "Z": -425.25372
           },
-          "TerritoryId": 959,
+          "TerritoryId": 813,
           "InteractionType": "AcceptQuest"
         }
       ]
@@ -30,15 +30,16 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 1044564,
+          "DataId": 1034105,
           "Position": {
-            "X": 456.13794,
-            "Y": -167.50003,
-            "Z": -759.02954
+            "X": 775.9059,
+            "Y": 21.325724,
+            "Z": 21.286316
           },
-          "TerritoryId": 959,
+          "StopDistance": 1,
+          "TerritoryId": 813,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow",
+          "AetheryteShortcut": "Lakeland - Fort Jobb",
           "Fly": true
         }
       ]
@@ -47,30 +48,30 @@
       "Sequence": 255,
       "Steps": [
         {
-          "TerritoryId": 959,
+          "TerritoryId": 813,
           "InteractionType": "Craft",
-          "ItemId": 38853,
-          "ItemCount": 3
+          "ItemId": 31149,
+          "ItemCount": 2
         },
         {
           "Position": {
-            "X": -201.42024,
-            "Y": -49.149708,
-            "Z": -273.68756
+            "X": -615.73865,
+            "Y": 65.602264,
+            "Z": -423.84705
           },
-          "TerritoryId": 959,
+          "TerritoryId": 813,
           "InteractionType": "WalkTo",
-          "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow",
+          "AetheryteShortcut": "Lakeland - Ostall Imperative",
           "Fly": true
         },
         {
-          "DataId": 1044403,
+          "DataId": 1033712,
           "Position": {
-            "X": -203.5401,
-            "Y": -48.949707,
-            "Z": -273.60956
+            "X": -617.1206,
+            "Y": 65.602264,
+            "Z": -425.25372
           },
-          "TerritoryId": 959,
+          "TerritoryId": 813,
           "InteractionType": "CompleteQuest"
         }
       ]
