@@ -34,8 +34,9 @@ internal sealed class QuestProgressInfo
         // The order in which enemies are killed doesn't seem to matter.
         // If multiple waves spawn, this continues to count up (e.g. 1 enemy from wave 1, 2 enemies from wave 2, 1 from wave 3) would count to 3 then 0
         _asString = $"QW: {vars.Trim()}";
-        if (questWork.AcceptClassJob != 0)
-            _asString += $", {(EClassJob)questWork.AcceptClassJob}";
+
+        //if (questWork.AcceptClassJob != 0)
+        //    _asString += $", {(EClassJob)questWork.AcceptClassJob}";
     }
 
     public QuestProgressInfo(LeveWork leveWork)
