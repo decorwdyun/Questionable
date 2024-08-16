@@ -24,6 +24,7 @@
         </EmbeddedResource>
         <AdditionalFiles Include="gatheringlocation-v1.json" />
         <AdditionalFiles Include="..\Questionable.Model\common-schema.json" />
+        <AdditionalFiles Include="..\QuestPaths\quest-v1.json" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(Configuration)' == 'Release'">

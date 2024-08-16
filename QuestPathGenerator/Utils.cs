@@ -14,16 +14,40 @@ namespace Questionable.QuestPathGenerator;
 
 public static class Utils
 {
-    public static IEnumerable<(T, JsonNode)> GetAdditionalFiles<T>(GeneratorExecutionContext context,
-        AdditionalText jsonSchemaFile, JsonSchema jsonSchema, DiagnosticDescriptor invalidJson, Func<string, T> idParser)
+    public static List<AdditionalText> RegisterSchemas(GeneratorExecutionContext context)
     {
         var commonSchemaFile = context.AdditionalFiles.Single(x => Path.GetFileName(x.Path) == "common-schema.json");
-        List<AdditionalText> jsonSchemaFiles = [jsonSchemaFile, commonSchemaFile];
+        var gatheringSchemaFile =
+            context.AdditionalFiles.SingleOrDefault(x => Path.GetFileName(x.Path) == "gatheringlocation-v1.json");
+        var questSchemaFile = context.AdditionalFiles.SingleOrDefault(x => Path.GetFileName(x.Path) == "quest-v1.json");
 
         SchemaRegistry.Global.Register(
             new Uri("https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json"),
             JsonSchema.FromText(commonSchemaFile.GetText()!.ToString()));
 
+        if (gatheringSchemaFile != null)
+        {
+            SchemaRegistry.Global.Register(
+                new Uri(
+                    "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json"),
+                JsonSchema.FromText(gatheringSchemaFile.GetText()!.ToString()));
+        }
+
+        if (questSchemaFile != null)
+        {
+            SchemaRegistry.Global.Register(
+                new Uri("https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json"),
+                JsonSchema.FromText(questSchemaFile.GetText()!.ToString()));
+        }
+
+        List<AdditionalText?> jsonSchemaFiles = [commonSchemaFile, gatheringSchemaFile, questSchemaFile];
+        return jsonSchemaFiles.Where(x => x != null).Cast<AdditionalText>().ToList();
+    }
+
+    public static IEnumerable<(T, JsonNode)> GetAdditionalFiles<T>(GeneratorExecutionContext context,
+        List<AdditionalText> jsonSchemaFiles, JsonSchema jsonSchema, DiagnosticDescriptor invalidJson,
+        Func<string, T> idParser)
+    {
         foreach (var additionalFile in context.AdditionalFiles)
         {
             if (additionalFile == null || jsonSchemaFiles.Contains(additionalFile))

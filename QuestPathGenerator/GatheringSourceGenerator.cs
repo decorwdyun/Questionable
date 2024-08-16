@@ -42,9 +42,10 @@ public class GatheringSourceGenerator : ISourceGenerator
     private void GenerateGatheringSource(GeneratorExecutionContext context, AdditionalText jsonSchemaFile)
     {
         var gatheringSchema = JsonSchema.FromText(jsonSchemaFile.GetText()!.ToString());
+        var jsonSchemaFiles = Utils.RegisterSchemas(context);
 
         List<(ushort, GatheringRoot)> gatheringLocations = [];
-        foreach (var (id, node) in Utils.GetAdditionalFiles(context, jsonSchemaFile, gatheringSchema, InvalidJson,
+        foreach (var (id, node) in Utils.GetAdditionalFiles(context, jsonSchemaFiles, gatheringSchema, InvalidJson,
                      ushort.Parse))
         {
             var gatheringLocation = node.Deserialize<GatheringRoot>()!;
@@ -88,6 +89,12 @@ public class GatheringSourceGenerator : ISourceGenerator
                                         IdentifierName("Questionable"),
                                         IdentifierName("Model")),
                                     IdentifierName("Gathering"))),
+                            UsingDirective(
+                                QualifiedName(
+                                    QualifiedName(
+                                        IdentifierName("Questionable"),
+                                        IdentifierName("Model")),
+                                    IdentifierName("Questing"))),
                             UsingDirective(
                                 QualifiedName(
                                     QualifiedName(
