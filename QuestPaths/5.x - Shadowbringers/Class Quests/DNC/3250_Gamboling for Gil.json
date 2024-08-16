@@ -60,7 +60,8 @@
             "Z": 447.8064
           },
           "TerritoryId": 137,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "NextQuestId": 3251
         }
       ]
     }

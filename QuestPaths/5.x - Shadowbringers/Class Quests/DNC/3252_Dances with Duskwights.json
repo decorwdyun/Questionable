@@ -120,7 +120,8 @@
           },
           "TerritoryId": 132,
           "InteractionType": "CompleteQuest",
-          "AetheryteShortcut": "Gridania"
+          "AetheryteShortcut": "Gridania",
+          "NextQuestId": 3253
         }
       ]
     }

@@ -71,7 +71,8 @@
               "Prompt": "TEXT_LUCKBB201_03249_Q1_000_000",
               "Yes": true
             }
-          ]
+          ],
+          "NextQuestId": 3250
         }
       ]
     }
