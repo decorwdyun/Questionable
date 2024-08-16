@@ -55,6 +55,7 @@ public sealed class QuestStep
 
     public uint? ItemId { get; set; }
     public bool? GroundTarget { get; set; }
+    public int? Quantity { get; set; }
 
     public EEmote? Emote { get; set; }
     public ChatMessage? ChatMessage { get; set; }

@@ -115,6 +115,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<NavmeshIpc>();
         serviceCollection.AddSingleton<LifestreamIpc>();
         serviceCollection.AddSingleton<YesAlreadyIpc>();
+        serviceCollection.AddSingleton<ArtisanIpc>();
     }
 
     private static void AddTaskFactories(ServiceCollection serviceCollection)
@@ -155,6 +156,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
                 UseItem.UseOnPosition>();
         serviceCollection.AddTaskWithFactory<EquipItem.Factory, EquipItem.DoEquip>();
         serviceCollection.AddTaskWithFactory<EquipRecommended.Factory, EquipRecommended.DoEquipRecommended>();
+        serviceCollection.AddTaskWithFactory<Craft.Factory, Craft.DoCraft>();
         serviceCollection.AddTaskWithFactory<TurnInDelivery.Factory, TurnInDelivery.SatisfactionSupplyTurnIn>();
         serviceCollection
             .AddTaskWithFactory<InitiateLeve.Factory,

@@ -125,6 +125,7 @@
             "SinglePlayerDuty",
             "Jump",
             "Dive",
+            "Craft",
             "Instruction",
             "AcceptQuest",
             "CompleteQuest",
@@ -1099,6 +1100,26 @@
                 "description": "For quest chains (e.g. DT healer role quests) Which quest to do next, given that you meet the required level."
               }
             }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "InteractionType": {
+                "const": "Craft"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "Quantity": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "ItemId",
+              "Quantity"
+            ]
           }
         }
       ],

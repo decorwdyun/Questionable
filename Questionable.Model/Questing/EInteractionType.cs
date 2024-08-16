@@ -25,6 +25,7 @@ public enum EInteractionType
     SinglePlayerDuty,
     Jump,
     Dive,
+    Craft,
 
     /// <summary>
     /// Needs to be manually continued.

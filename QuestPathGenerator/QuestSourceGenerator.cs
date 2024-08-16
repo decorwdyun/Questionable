@@ -280,6 +280,8 @@ public class QuestSourceGenerator : ISourceGenerator
                                             Assignment(nameof(QuestStep.GroundTarget), step.GroundTarget,
                                                     emptyStep.GroundTarget)
                                                 .AsSyntaxNodeOrToken(),
+                                            Assignment(nameof(QuestStep.Quantity), step.Quantity, emptyStep.Quantity)
+                                                .AsSyntaxNodeOrToken(),
                                             Assignment(nameof(QuestStep.Emote), step.Emote, emptyStep.Emote)
                                                 .AsSyntaxNodeOrToken(),
                                             Assignment(nameof(QuestStep.ChatMessage), step.ChatMessage,
