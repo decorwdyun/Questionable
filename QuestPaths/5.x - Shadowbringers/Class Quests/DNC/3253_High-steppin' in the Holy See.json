@@ -35,7 +35,14 @@
           },
           "TerritoryId": 418,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "Ishgard"
+          "AetheryteShortcut": "Ishgard",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_LUCKBB231_03253_Q1_000_000",
+              "Answer": "TEXT_LUCKBB231_03253_A1_000_000"
+            }
+          ]
         }
       ]
     },
@@ -84,7 +91,9 @@
           "TerritoryId": 155,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
-          "KillEnemyDataIds": [10852]
+          "KillEnemyDataIds": [
+            10852
+          ]
         }
       ]
     },
@@ -98,6 +107,7 @@
             "Y": 298.9,
             "Z": -229.51093
           },
+          "StopDistance": 7,
           "TerritoryId": 155,
           "InteractionType": "Interact"
         }

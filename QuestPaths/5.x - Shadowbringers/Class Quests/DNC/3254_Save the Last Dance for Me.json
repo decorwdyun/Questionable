@@ -70,6 +70,21 @@
       ]
     },
     {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 1028787,
+          "Position": {
+            "X": 91.081055,
+            "Y": 118.15579,
+            "Z": -739.92523
+          },
+          "TerritoryId": 620,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
       "Sequence": 255,
       "Steps": [
         {
@@ -82,10 +97,6 @@
           "TerritoryId": 129,
           "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Limsa Lominsa",
-          "AethernetShortcut": [
-            "[Limsa Lominsa] Aetheryte Plaza",
-            "[Limsa Lominsa] Fishermens' Guild"
-          ],
           "SkipConditions": {
             "AetheryteShortcutIf": {
               "InSameTerritory": true

@@ -64,7 +64,14 @@
             "Z": 195.94104
           },
           "TerritoryId": 129,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_LUCKBB201_03249_Q1_000_000",
+              "Yes": true
+            }
+          ]
         }
       ]
     }
