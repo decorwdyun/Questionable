@@ -52,6 +52,7 @@
       "Sequence": 3,
       "Steps": [
         {
+          "StopDistance": 6,
           "TerritoryId": 961,
           "InteractionType": "AttuneAetheryte",
           "Aetheryte": "Elpis - Twelve Wonders"
