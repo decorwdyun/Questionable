@@ -380,6 +380,13 @@
                 "type": "number",
                 "minimum": 0,
                 "maximum": 1000
+              },
+              "QuestAcceptedAsClass": {
+                "type": "string",
+                "enum": [
+                  "Miner",
+                  "Botanist"
+                ]
               }
             },
             "required": [

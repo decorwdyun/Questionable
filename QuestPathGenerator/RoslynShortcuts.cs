@@ -398,8 +398,8 @@ public static class RoslynShortcuts
                                     Assignment(nameof(GatheredItem.Collectability), gatheredItem.Collectability,
                                             emptyItem.Collectability)
                                         .AsSyntaxNodeOrToken(),
-                                    Assignment(nameof(GatheredItem.ClassJob), gatheredItem.ClassJob,
-                                            emptyItem.ClassJob)
+                                    Assignment(nameof(GatheredItem.QuestAcceptedAsClass), gatheredItem.QuestAcceptedAsClass,
+                                            emptyItem.QuestAcceptedAsClass)
                                         .AsSyntaxNodeOrToken()))));
             }
             else if (value is GatheringNodeGroup nodeGroup)

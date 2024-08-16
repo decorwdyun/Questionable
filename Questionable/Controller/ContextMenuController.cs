@@ -142,7 +142,7 @@ internal sealed class ContextMenuController : IDisposable
                     ItemId = itemId,
                     ItemCount = quantity,
                     Collectability = collectability,
-                    ClassJob = (uint)classJob,
+                    QuestAcceptedAsClass = (uint)classJob,
                 }
             ];
             _questController.SetGatheringQuest(quest);

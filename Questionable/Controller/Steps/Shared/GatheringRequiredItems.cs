@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Dalamud.Game.Text;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using LLib.GameData;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Common;
 using Questionable.Data;
+using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Gathering;
 using Questionable.Model.Questing;
@@ -32,8 +34,12 @@ internal static class GatheringRequiredItems
             {
                 EClassJob currentClassJob = (EClassJob)clientState.LocalPlayer!.ClassJob.Id;
                 EClassJob classJob = currentClassJob;
-                if (requiredGatheredItems.ClassJob != null)
-                    classJob = (EClassJob)requiredGatheredItems.ClassJob.Value;
+                if (requiredGatheredItems.QuestAcceptedAsClass != null)
+                {
+                    classJob = (EClassJob)requiredGatheredItems.QuestAcceptedAsClass.Value;
+                    if (!IsClassJobQuestWasAcceptedWith(quest.Id, classJob))
+                        continue;
+                }
 
                 if (!gatheringData.TryGetGatheringPointId(requiredGatheredItems.ItemId, classJob,
                         out GatheringPointId? gatheringPointId))
@@ -77,6 +83,18 @@ internal static class GatheringRequiredItems
                 yield return serviceProvider.GetRequiredService<StartGathering>()
                     .With(gatheringPointId, requiredGatheredItems);
             }
+        }
+
+        private unsafe bool IsClassJobQuestWasAcceptedWith(ElementId questId, EClassJob expectedClassJob)
+        {
+            if (questId is not QuestId)
+                return true;
+
+            QuestWork* questWork = QuestManager.Instance()->GetQuestById(questId.Value);
+            if (questWork->AcceptClassJob != 0)
+                return (EClassJob)questWork->AcceptClassJob == expectedClassJob;
+
+            return true;
         }
 
         private unsafe bool HasRequiredItems(GatheredItem requiredGatheredItems)

@@ -1,4 +1,7 @@
-﻿namespace Questionable.Model.Questing;
+﻿using System.Text.Json.Serialization;
+using Questionable.Model.Questing.Converter;
+
+namespace Questionable.Model.Questing;
 
 public sealed class GatheredItem
 {
@@ -10,5 +13,6 @@ public sealed class GatheredItem
     /// <summary>
     /// Either miner or botanist; null if it is irrelevant (prefers current class/job, then any unlocked ones).
     /// </summary>
-    public uint? ClassJob { get; set; }
+    [JsonConverter(typeof(ClassJobConverter))]
+    public uint? QuestAcceptedAsClass { get; set; }
 }

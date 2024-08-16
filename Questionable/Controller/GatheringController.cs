@@ -269,7 +269,7 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
         }
     }
 
-    private sealed class CurrentRequest
+    internal sealed class CurrentRequest
     {
         public required GatheringRequest Data { get; init; }
         public required GatheringRoot Root { get; init; }

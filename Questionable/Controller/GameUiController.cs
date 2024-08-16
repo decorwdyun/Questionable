@@ -13,6 +13,7 @@ using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using LLib;
+using LLib.GameData;
 using LLib.GameUI;
 using Lumina.Excel.GeneratedSheets;
 using Microsoft.Extensions.Logging;
@@ -21,6 +22,7 @@ using Questionable.Data;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Common;
+using Questionable.Model.Gathering;
 using Questionable.Model.Questing;
 using AethernetShortcut = Questionable.Controller.Steps.Shared.AethernetShortcut;
 using Quest = Questionable.Model.Quest;
@@ -36,11 +38,14 @@ internal sealed class GameUiController : IDisposable
     private readonly AetheryteFunctions _aetheryteFunctions;
     private readonly ExcelFunctions _excelFunctions;
     private readonly QuestController _questController;
+    private readonly GatheringData _gatheringData;
+    private readonly GatheringPointRegistry _gatheringPointRegistry;
     private readonly QuestRegistry _questRegistry;
     private readonly QuestData _questData;
     private readonly IGameGui _gameGui;
     private readonly ITargetManager _targetManager;
     private readonly IFramework _framework;
+    private readonly IClientState _clientState;
     private readonly ILogger<GameUiController> _logger;
     private readonly Regex _returnRegex;
 
@@ -53,12 +58,15 @@ internal sealed class GameUiController : IDisposable
         AetheryteFunctions aetheryteFunctions,
         ExcelFunctions excelFunctions,
         QuestController questController,
+        GatheringData gatheringData,
+        GatheringPointRegistry gatheringPointRegistry,
         QuestRegistry questRegistry,
         QuestData questData,
         IGameGui gameGui,
         ITargetManager targetManager,
         IFramework framework,
         IPluginLog pluginLog,
+        IClientState clientState,
         ILogger<GameUiController> logger)
     {
         _addonLifecycle = addonLifecycle;
@@ -67,11 +75,14 @@ internal sealed class GameUiController : IDisposable
         _aetheryteFunctions = aetheryteFunctions;
         _excelFunctions = excelFunctions;
         _questController = questController;
+        _gatheringData = gatheringData;
+        _gatheringPointRegistry = gatheringPointRegistry;
         _questRegistry = questRegistry;
         _questData = questData;
         _gameGui = gameGui;
         _targetManager = targetManager;
         _framework = framework;
+        _clientState = clientState;
         _logger = logger;
 
         _returnRegex = _dataManager.GetExcelSheet<Addon>()!.GetRow(196)!.GetRegex(addon => addon.Text, pluginLog)!;
@@ -593,6 +604,7 @@ internal sealed class GameUiController : IDisposable
     private unsafe bool HandleTravelYesNo(AddonSelectYesno* addonSelectYesno,
         QuestController.QuestProgress currentQuest, string actualPrompt)
     {
+        _logger.LogInformation("TravelYesNo");
         if (_aetheryteFunctions.ReturnRequestedAt >= DateTime.Now.AddSeconds(-2) && _returnRegex.IsMatch(actualPrompt))
         {
             _logger.LogInformation("Automatically confirming return...");
@@ -632,6 +644,29 @@ internal sealed class GameUiController : IDisposable
             _logger.LogTrace("FindTargetTerritoryFromQuestStep (current): {CurrentTerritory}, {TargetTerritory}",
                 step.TerritoryId,
                 step.TargetTerritoryId);
+
+        if (step != null && (step.TerritoryId != _clientState.TerritoryType || step.TargetTerritoryId == null) &&
+            step.RequiredGatheredItems.Count > 0)
+        {
+            if (_gatheringData.TryGetGatheringPointId(step.RequiredGatheredItems[0].ItemId,
+                    (EClassJob?)_clientState.LocalPlayer?.ClassJob.Id ?? EClassJob.Adventurer,
+                    out GatheringPointId? gatheringPointId) &&
+                _gatheringPointRegistry.TryGetGatheringPoint(gatheringPointId, out GatheringRoot? root))
+            {
+                foreach (var gatheringStep in root.Steps)
+                {
+                    if (gatheringStep.TerritoryId == _clientState.TerritoryType &&
+                        gatheringStep.TargetTerritoryId != null)
+                    {
+                        _logger.LogTrace(
+                            "FindTargetTerritoryFromQuestStep (gathering): {CurrentTerritory}, {TargetTerritory}",
+                            gatheringStep.TerritoryId,
+                            gatheringStep.TargetTerritoryId);
+                        return gatheringStep.TargetTerritoryId;
+                    }
+                }
+            }
+        }
 
         if (step == null || step.TargetTerritoryId == null)
         {
