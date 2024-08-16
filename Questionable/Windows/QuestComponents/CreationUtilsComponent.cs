@@ -148,7 +148,7 @@ internal sealed class CreationUtilsComponent
             ImGui.SameLine();
             ImGui.Text($"QM: {gameObject->NamePlateIconId}");
 
-            ImGui.BeginDisabled(!_movementController.IsNavmeshReady);
+            ImGui.BeginDisabled(!_movementController.IsNavmeshReady || _gameFunctions.IsOccupied());
             if (!_movementController.IsPathfinding)
             {
                 if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Bullseye, "To Target"))
@@ -177,6 +177,7 @@ internal sealed class CreationUtilsComponent
 
             ImGui.EndDisabled();
 
+            ImGui.BeginDisabled(_gameFunctions.IsOccupied());
             ImGui.SameLine();
             bool interact = ImGuiComponents.IconButton(FontAwesomeIcon.MousePointer);
             if (ImGui.IsItemHovered())
@@ -187,7 +188,7 @@ internal sealed class CreationUtilsComponent
                     (GameObject*)_targetManager.Target.Address, false);
                 _logger.LogInformation("XXXXX Interaction Result: {Result}", result);
             }
-
+            ImGui.EndDisabled();
             ImGui.SameLine();
 
             bool copy = ImGuiComponents.IconButton(FontAwesomeIcon.Copy);
