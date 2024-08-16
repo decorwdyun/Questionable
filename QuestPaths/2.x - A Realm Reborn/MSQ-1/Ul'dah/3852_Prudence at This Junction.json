@@ -41,6 +41,10 @@
       "Sequence": 255,
       "Steps": [
         {
+          "TerritoryId": 141,
+          "InteractionType": "EquipRecommended"
+        },
+        {
           "DataId": 1001447,
           "Position": {
             "X": -32.6391,
