@@ -35,78 +35,11 @@
                 "NotInInventory": true
               }
             }
-          },
-          "$": "This should probably call /equiprecommended if it exists"
-        },
-        {
-          "TerritoryId": 131,
-          "InteractionType": "EquipItem",
-          "ItemId": 43178,
-          "SkipConditions": {
-            "StepIf": {
-              "Item": {
-                "NotInInventory": true
-              }
-            }
           }
         },
         {
           "TerritoryId": 131,
-          "InteractionType": "EquipItem",
-          "ItemId": 43179,
-          "SkipConditions": {
-            "StepIf": {
-              "Item": {
-                "NotInInventory": true
-              }
-            }
-          }
-        },
-        {
-         "TerritoryId": 131,
-          "InteractionType": "EquipItem",
-          "ItemId": 43180,
-          "SkipConditions": {
-            "StepIf": {
-              "Item": {
-                "NotInInventory": true
-              }
-            }
-          }
-        },
-        {
-          "Position": {
-            "X": 89.036255,
-            "Y": 12,
-            "Z": 47.287598
-          },
-          "TerritoryId": 131,
-          "InteractionType": "EquipItem",
-          "ItemId": 43181,
-          "SkipConditions": {
-            "StepIf": {
-              "Item": {
-                "NotInInventory": true
-              }
-            }
-          }
-        },
-        {
-          "Position": {
-            "X": 89.036255,
-            "Y": 12,
-            "Z": 47.287598
-          },
-          "TerritoryId": 131,
-          "InteractionType": "EquipItem",
-          "ItemId": 43182,
-          "SkipConditions": {
-            "StepIf": {
-              "Item": {
-                "NotInInventory": true
-              }
-            }
-          }
+          "InteractionType": "EquipRecommended"
         },
         {
           "DataId": 1046337,
