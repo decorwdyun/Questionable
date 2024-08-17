@@ -210,6 +210,12 @@ internal sealed partial class ActiveQuestComponent
                 ImGui.Text(FontAwesomeIcon.Copy.ToIconString());
                 ImGui.PopFont();
             }
+
+            if (currentQuest.Quest.Id is LeveId || currentQuest.Quest.Info.AlliedSociety != EAlliedSociety.None)
+            {
+                ImGui.SameLine();
+                ImGui.Text($"/ {questWork.ClassJob}");
+            }
         }
         else if (currentQuest.Quest.Id is QuestId)
         {

@@ -16,6 +16,7 @@ internal sealed class QuestProgressInfo
         Flags = questWork.Flags;
         Variables = [..questWork.Variables.ToArray()];
         IsHidden = questWork.IsHidden;
+        ClassJob = (EClassJob)questWork.AcceptClassJob;
 
         var qw = questWork.Variables;
         string vars = "";
@@ -34,9 +35,6 @@ internal sealed class QuestProgressInfo
         // The order in which enemies are killed doesn't seem to matter.
         // If multiple waves spawn, this continues to count up (e.g. 1 enemy from wave 1, 2 enemies from wave 2, 1 from wave 3) would count to 3 then 0
         _asString = $"QW: {vars.Trim()}";
-
-        //if (questWork.AcceptClassJob != 0)
-        //    _asString += $", {(EClassJob)questWork.AcceptClassJob}";
     }
 
     public QuestProgressInfo(LeveWork leveWork)
@@ -46,8 +44,9 @@ internal sealed class QuestProgressInfo
         Flags = leveWork.Flags;
         Variables = [0, 0, 0, 0, 0, 0];
         IsHidden = leveWork.IsHidden;
+        ClassJob = (EClassJob)leveWork.ClearClass;
 
-        _asString = $"Seed: {leveWork.LeveSeed}, Flags: {Flags:X}, Class: {(EClassJob)leveWork.ClearClass}";
+        _asString = $"Seed: {leveWork.LeveSeed}, Flags: {Flags:X}";
     }
 
     public ElementId Id { get; }
@@ -55,6 +54,7 @@ internal sealed class QuestProgressInfo
     public ushort Flags { get; init; }
     public List<byte> Variables { get; }
     public bool IsHidden { get; }
+    public EClassJob ClassJob { get; }
 
     public override string ToString() => _asString;
 }
