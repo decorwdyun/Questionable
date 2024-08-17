@@ -298,6 +298,22 @@
                 },
                 "RequiredQuestVariablesNotMet": {
                   "type": "boolean"
+                },
+                "NearPosition": {
+                  "type": "object",
+                  "properties": {
+                    "Position": {
+                      "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Vector3"
+                    },
+                    "MaximumDistance": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "Position",
+                    "MaximumDistance"
+                  ],
+                  "additionalProperties": false
                 }
               },
               "additionalProperties": false

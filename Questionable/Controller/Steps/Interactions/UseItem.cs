@@ -108,7 +108,7 @@ internal static class UseItem
             ushort territoryId = 129;
             Vector3 destination = new(-360.9217f, 8f, 38.92566f);
             yield return serviceProvider.GetRequiredService<AetheryteShortcut.UseAetheryteShortcut>()
-                .With(null, EAetheryteLocation.Limsa, territoryId);
+                .With(null, null, EAetheryteLocation.Limsa, territoryId);
             yield return serviceProvider.GetRequiredService<AethernetShortcut.UseAethernetShortcut>()
                 .With(EAetheryteLocation.Limsa, EAetheryteLocation.LimsaArcanist);
             yield return serviceProvider.GetRequiredService<WaitAtEnd.WaitDelay>();

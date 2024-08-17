@@ -1,7 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -19,8 +18,72 @@
       ]
     },
     {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "TerritoryId": 960,
+          "InteractionType": "None",
+          "RequiredGatheredItems": [
+            {
+              "QuestAcceptedAsClass": "Miner",
+              "ItemId": 38284,
+              "ItemCount": 3
+            },
+            {
+              "QuestAcceptedAsClass": "Botanist",
+              "ItemId": 38308,
+              "ItemCount": 3
+            }
+          ]
+        },
+        {
+          "DataId": 1043421,
+          "Position": {
+            "X": 2.4261475,
+            "Y": 499.87805,
+            "Z": 46.036377
+          },
+          "TerritoryId": 1073,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 960
+        },
+        {
+          "DataId": 1043865,
+          "Position": {
+            "X": 301.8081,
+            "Y": 482.13644,
+            "Z": 165.02625
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 960
+        },
+        {
+          "DataId": 1043936,
+          "Position": {
+            "X": 194.56775,
+            "Y": 567.4998,
+            "Z": 250.93457
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
       "Sequence": 255,
       "Steps": [
+        {
+          "DataId": 1043864,
+          "Position": {
+            "X": 244.83093,
+            "Y": 564.8203,
+            "Z": 261.76843
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 960
+        },
         {
           "DataId": 1043417,
           "Position": {

@@ -1,7 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -30,6 +29,50 @@
     {
       "Sequence": 1,
       "Steps": [
+        {
+          "DataId": 1044567,
+          "Position": {
+            "X": -17.502136,
+            "Y": -47.192066,
+            "Z": -528.03845
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact",
+          "Fly": true
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1044568,
+          "Position": {
+            "X": -188.09796,
+            "Y": -49.14971,
+            "Z": -252.70471
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Emote",
+          "Emote": "dance",
+          "Fly": true
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1044568,
+          "Position": {
+            "X": -188.09796,
+            "Y": -49.14971,
+            "Z": -252.70471
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Emote",
+          "Emote": "dance"
+        }
       ]
     },
     {

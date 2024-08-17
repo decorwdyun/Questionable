@@ -121,7 +121,7 @@ internal static class Craft
                     if (addon != null)
                     {
                         logger.LogInformation("Closing crafting window");
-                        addon->Close(true);
+                        addon->FireCallbackInt(-1);
                         return ETaskResult.TaskComplete;
                     }
                 }

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using Microsoft.Extensions.Logging;
-using Questionable.Controller.Steps.Shared;
 using Questionable.Model;
 using Questionable.Model.Questing;
 
@@ -61,7 +59,7 @@ internal static class QuestWorkUtils
     }
 
     public static bool MatchesRequiredQuestWorkConfig(List<List<QuestWorkValue>?> requiredQuestVariables,
-        QuestProgressInfo questWork, ILogger<SkipCondition.CheckSkip> logger)
+        QuestProgressInfo questWork, ILogger logger)
     {
         if (requiredQuestVariables.Count != 6 || requiredQuestVariables.All(x => x == null || x.Count == 0))
         {

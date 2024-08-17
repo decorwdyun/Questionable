@@ -1,7 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -19,8 +18,150 @@
       ]
     },
     {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1044046,
+          "Position": {
+            "X": -585.3514,
+            "Y": 74.4431,
+            "Z": 238.33057
+          },
+          "StopDistance": 9,
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Ultima Thule - Reah Tahra",
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [
+              {
+                "High": 1
+              },
+              {
+                "High": 3
+              }
+            ],
+            null,
+            null,
+            null
+          ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ],
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "RequiredQuestVariablesNotMet": true
+            }
+          }
+        },
+        {
+          "DataId": 1044047,
+          "Position": {
+            "X": 36.66736,
+            "Y": 269.16718,
+            "Z": -627.83246
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Ultima Thule - Abode of the Ea",
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [
+              {
+                "High": 2
+              },
+              {
+                "High": 3
+              }
+            ],
+            null,
+            null,
+            null
+          ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ],
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "RequiredQuestVariablesNotMet": true
+            }
+          }
+        },
+        {
+          "DataId": 1044045,
+          "Position": {
+            "X": 510.64307,
+            "Y": 436.9999,
+            "Z": 332.41772
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Ultima Thule - Base Omicron",
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [
+              {
+                "High": 1
+              },
+              {
+                "High": 2
+              }
+            ],
+            null,
+            null,
+            null
+          ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
+        }
+      ]
+    },
+    {
       "Sequence": 255,
       "Steps": [
+        {
+          "DataId": 2013072,
+          "Position": {
+            "X": 456.65674,
+            "Y": 438.04077,
+            "Z": 310.2312
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 960,
+          "AetheryteShortcut": "Ultima Thule - Base Omicron",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": 489.2804,
+                  "Y": 437.5829,
+                  "Z": 333.63843
+                },
+                "MaximumDistance": 100
+              }
+            }
+          }
+        },
         {
           "DataId": 1043417,
           "Position": {

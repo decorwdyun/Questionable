@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Numerics;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Common;
+using Questionable.Controller.Utils;
 using Questionable.Data;
 using Questionable.Functions;
 using Questionable.Model;
@@ -25,13 +27,15 @@ internal static class AetheryteShortcut
                 return null;
 
             return serviceProvider.GetRequiredService<UseAetheryteShortcut>()
-                .With(step, step.AetheryteShortcut.Value, aetheryteData.TerritoryIds[step.AetheryteShortcut.Value]);
+                .With(step, quest.Id, step.AetheryteShortcut.Value,
+                    aetheryteData.TerritoryIds[step.AetheryteShortcut.Value]);
         }
     }
 
     internal sealed class UseAetheryteShortcut(
         ILogger<UseAetheryteShortcut> logger,
         AetheryteFunctions aetheryteFunctions,
+        QuestFunctions questFunctions,
         IClientState clientState,
         IChatGui chatGui,
         AetheryteData aetheryteData) : ISkippableTask
@@ -40,6 +44,7 @@ internal static class AetheryteShortcut
         private DateTime _continueAt;
 
         public QuestStep? Step { get; set; }
+        public ElementId? ElementId { get; set; }
         public EAetheryteLocation TargetAetheryte { get; set; }
 
         /// <summary>
@@ -48,9 +53,11 @@ internal static class AetheryteShortcut
         /// </summary>
         public ushort ExpectedTerritoryId { get; set; }
 
-        public ITask With(QuestStep? step, EAetheryteLocation targetAetheryte, ushort expectedTerritoryId)
+        public ITask With(QuestStep? step, ElementId? elementId, EAetheryteLocation targetAetheryte,
+            ushort expectedTerritoryId)
         {
             Step = step;
+            ElementId = elementId;
             TargetAetheryte = targetAetheryte;
             ExpectedTerritoryId = expectedTerritoryId;
             return this;
@@ -102,6 +109,30 @@ internal static class AetheryteShortcut
                         logger.LogInformation("Skipping aetheryte teleport due to SkipCondition (AetheryteUnlocked)");
                         return true;
                     }
+
+                    if (ElementId != null)
+                    {
+                        QuestProgressInfo? questWork = questFunctions.GetQuestProgressInfo(ElementId);
+                        if (skipConditions.RequiredQuestVariablesNotMet &&
+                            questWork != null &&
+                            !QuestWorkUtils.MatchesRequiredQuestWorkConfig(Step.RequiredQuestVariables, questWork,
+                                logger))
+                        {
+                            logger.LogInformation("Skipping aetheryte teleport, as required variables do not match");
+                            return true;
+                        }
+                    }
+
+
+
+                    if (skipConditions.NearPosition is { } nearPosition && clientState.TerritoryType == Step.TerritoryId)
+                    {
+                        if (Vector3.Distance(nearPosition.Position, clientState.LocalPlayer!.Position) <= nearPosition.MaximumDistance)
+                        {
+                            logger.LogInformation("Skipping aetheryte shortcut, as we're near the position");
+                            return true;
+                        }
+                    }
                 }
 
                 if (ExpectedTerritoryId == territoryType)
@@ -139,7 +170,6 @@ internal static class AetheryteShortcut
 
         private bool DoTeleport()
         {
-
             if (!aetheryteFunctions.CanTeleport(TargetAetheryte))
             {
                 if (!aetheryteFunctions.IsTeleportUnlocked())

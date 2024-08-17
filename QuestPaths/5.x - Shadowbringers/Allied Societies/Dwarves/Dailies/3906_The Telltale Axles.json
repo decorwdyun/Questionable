@@ -30,8 +30,37 @@
     {
       "Sequence": 1,
       "Steps": [
-
-
+        {
+          "DataId": 1033767,
+          "Position": {
+            "X": -608.6061,
+            "Y": 65.60222,
+            "Z": -431.81506
+          },
+          "TerritoryId": 813,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "TerritoryId": 813,
+          "InteractionType": "Craft",
+          "ItemId": 31153,
+          "ItemCount": 3
+        },
+        {
+          "DataId": 1034112,
+          "Position": {
+            "X": 115.983765,
+            "Y": 106.73271,
+            "Z": -551.7815
+          },
+          "TerritoryId": 813,
+          "InteractionType": "Interact"
+        }
       ]
     },
     {
@@ -45,6 +74,7 @@
           },
           "TerritoryId": 813,
           "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Lakeland - Ostall Imperative",
           "Fly": true
         },
         {

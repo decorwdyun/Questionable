@@ -30,6 +30,39 @@
     {
       "Sequence": 1,
       "Steps": [
+        {
+          "DataId": 1044573,
+          "Position": {
+            "X": 487.23572,
+            "Y": -163.52985,
+            "Z": -600.5188
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow",
+          "Fly": true
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "TerritoryId": 959,
+          "InteractionType": "Craft",
+          "ItemId": 38859,
+          "ItemCount": 3
+        },
+        {
+          "DataId": 1044573,
+          "Position": {
+            "X": 487.23572,
+            "Y": -163.52985,
+            "Z": -600.5188
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact"
+        }
       ]
     },
     {
@@ -42,7 +75,9 @@
             "Z": -273.68756
           },
           "TerritoryId": 959,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow",
+          "Fly": true
         },
         {
           "DataId": 1044403,

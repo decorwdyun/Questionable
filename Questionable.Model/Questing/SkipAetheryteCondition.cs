@@ -11,4 +11,5 @@ public sealed class SkipAetheryteCondition
     public EAetheryteLocation? AetheryteLocked { get; set; }
     public EAetheryteLocation? AetheryteUnlocked { get; set; }
     public bool RequiredQuestVariablesNotMet { get; set; }
+    public NearPositionCondition? NearPosition { get; set; }
 }

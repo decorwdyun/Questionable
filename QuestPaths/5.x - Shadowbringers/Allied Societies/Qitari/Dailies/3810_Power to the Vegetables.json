@@ -1,7 +1,6 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -15,6 +14,65 @@
           },
           "TerritoryId": 817,
           "InteractionType": "AcceptQuest"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 2010995,
+          "Position": {
+            "X": -73.99103,
+            "Y": -19.36377,
+            "Z": 298.8479
+          },
+          "TerritoryId": 817,
+          "InteractionType": "UseItem",
+          "ItemId": 2002977,
+          "AetheryteShortcut": "Rak'tika - Slitherbough",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
+        },
+        {
+          "DataId": 2010994,
+          "Position": {
+            "X": -69.13867,
+            "Y": -19.485779,
+            "Z": 294.14807
+          },
+          "TerritoryId": 817,
+          "InteractionType": "UseItem",
+          "ItemId": 2002977,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1027741,
+          "Position": {
+            "X": -80.338745,
+            "Y": -19.101032,
+            "Z": 299.82446
+          },
+          "TerritoryId": 817,
+          "InteractionType": "Interact"
         }
       ]
     },

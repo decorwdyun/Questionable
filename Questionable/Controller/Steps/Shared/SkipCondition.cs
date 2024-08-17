@@ -174,19 +174,17 @@ internal static class SkipCondition
                 return true;
             }
 
-            if (ElementId is QuestId || ElementId is LeveId)
+            QuestProgressInfo? questWork = questFunctions.GetQuestProgressInfo(ElementId);
+            if (questWork != null)
             {
-                QuestProgressInfo? questWork = questFunctions.GetQuestProgressInfo(ElementId);
-                if (QuestWorkUtils.HasCompletionFlags(Step.CompletionQuestVariablesFlags) && questWork != null)
+                if (QuestWorkUtils.HasCompletionFlags(Step.CompletionQuestVariablesFlags) &&
+                    QuestWorkUtils.MatchesQuestWork(Step.CompletionQuestVariablesFlags, questWork))
                 {
-                    if (QuestWorkUtils.MatchesQuestWork(Step.CompletionQuestVariablesFlags, questWork))
-                    {
-                        logger.LogInformation("Skipping step, as quest variables match (step is complete)");
-                        return true;
-                    }
+                    logger.LogInformation("Skipping step, as quest variables match (step is complete)");
+                    return true;
                 }
 
-                if (Step is { SkipConditions.StepIf: { } conditions } && questWork != null)
+                if (Step is { SkipConditions.StepIf: { } conditions })
                 {
                     if (QuestWorkUtils.MatchesQuestWork(conditions.CompletionQuestVariablesFlags, questWork))
                     {
@@ -195,7 +193,7 @@ internal static class SkipCondition
                     }
                 }
 
-                if (Step is { RequiredQuestVariables: { } requiredQuestVariables } && questWork != null)
+                if (Step is { RequiredQuestVariables: { } requiredQuestVariables })
                 {
                     if (!QuestWorkUtils.MatchesRequiredQuestWorkConfig(requiredQuestVariables, questWork, logger))
                     {
