@@ -5,7 +5,7 @@ namespace Questionable.Model;
 
 [SuppressMessage("Design", "CA1028", Justification = "Game type")]
 [UsedImplicitly(ImplicitUseTargetFlags.Members)]
-public enum EBeastTribe : byte
+public enum EAlliedSociety : byte
 {
     None = 0,
     Amaljaa = 1,

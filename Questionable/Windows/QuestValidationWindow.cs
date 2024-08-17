@@ -61,7 +61,7 @@ internal sealed class QuestValidationWindow : LWindow
             if (ImGui.TableNextColumn())
                 ImGui.TextUnformatted(validationIssue.ElementId != null
                     ? _questData.GetQuestInfo(validationIssue.ElementId).Name
-                    : validationIssue.BeastTribe.ToString());
+                    : validationIssue.AlliedSociety.ToString());
 
             if (ImGui.TableNextColumn())
                 ImGui.TextUnformatted(validationIssue.Sequence?.ToString(CultureInfo.InvariantCulture) ?? string.Empty);

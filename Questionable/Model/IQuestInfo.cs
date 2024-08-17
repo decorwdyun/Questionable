@@ -13,7 +13,7 @@ public interface IQuestInfo
     public uint IssuerDataId { get; }
     public bool IsRepeatable { get; }
     public ushort Level { get; }
-    public EBeastTribe BeastTribe { get; }
+    public EAlliedSociety AlliedSociety { get; }
     public uint? JournalGenre { get; }
     public ushort SortKey { get; }
     public bool IsMainScenarioQuest { get; }

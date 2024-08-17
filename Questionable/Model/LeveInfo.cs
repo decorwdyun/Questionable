@@ -24,7 +24,7 @@ internal sealed class LeveInfo : IQuestInfo
     public uint IssuerDataId { get; }
     public bool IsRepeatable => true;
     public ushort Level { get; }
-    public EBeastTribe BeastTribe => EBeastTribe.None;
+    public EAlliedSociety AlliedSociety => EAlliedSociety.None;
     public uint? JournalGenre { get; }
     public ushort SortKey { get; }
     public bool IsMainScenarioQuest => false;

@@ -44,7 +44,7 @@ internal sealed class QuestValidator
                 _validationIssues.Clear();
 
                 List<ValidationIssue> issues = [];
-                Dictionary<EBeastTribe, int> disabledTribeQuests = new();
+                Dictionary<EAlliedSociety, int> disabledTribeQuests = new();
                 foreach (var quest in quests)
                 {
                     foreach (var validator in _validators)
@@ -57,10 +57,10 @@ internal sealed class QuestValidator
                             _logger.Log(level,
                                 "Validation failed: {QuestId} ({QuestName}) / {QuestSequence} / {QuestStep} - {Description}",
                                 issue.ElementId, quest.Info.Name, issue.Sequence, issue.Step, issue.Description);
-                            if (issue.Type == EIssueType.QuestDisabled && quest.Info.BeastTribe != EBeastTribe.None)
+                            if (issue.Type == EIssueType.QuestDisabled && quest.Info.AlliedSociety != EAlliedSociety.None)
                             {
-                                disabledTribeQuests.TryAdd(quest.Info.BeastTribe, 0);
-                                disabledTribeQuests[quest.Info.BeastTribe]++;
+                                disabledTribeQuests.TryAdd(quest.Info.AlliedSociety, 0);
+                                disabledTribeQuests[quest.Info.AlliedSociety]++;
                             }
                             else
                                 issues.Add(issue);
@@ -89,7 +89,7 @@ internal sealed class QuestValidator
         }, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
     }
 
-    private static IEnumerable<ValidationIssue> DisabledTribesAsIssues(Dictionary<EBeastTribe, int> disabledTribeQuests)
+    private static IEnumerable<ValidationIssue> DisabledTribesAsIssues(Dictionary<EAlliedSociety, int> disabledTribeQuests)
     {
         return disabledTribeQuests
             .OrderBy(x => x.Key)
@@ -98,7 +98,7 @@ internal sealed class QuestValidator
                 ElementId = null,
                 Sequence = null,
                 Step = null,
-                BeastTribe = x.Key,
+                AlliedSociety = x.Key,
                 Type = EIssueType.QuestDisabled,
                 Severity = EIssueSeverity.None,
                 Description = $"{x.Value} disabled quest(s)",
