@@ -10,7 +10,6 @@ using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game.Event;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.UI;
-using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using LLib;
 using LLib.GameData;
@@ -25,12 +24,13 @@ using Questionable.Model.Common;
 using Questionable.Model.Gathering;
 using Questionable.Model.Questing;
 using AethernetShortcut = Questionable.Controller.Steps.Shared.AethernetShortcut;
+using EAetheryteLocationExtensions = Questionable.Model.Common.EAetheryteLocationExtensions;
 using Quest = Questionable.Model.Quest;
 using ValueType = FFXIVClientStructs.FFXIV.Component.GUI.ValueType;
 
-namespace Questionable.Controller;
+namespace Questionable.Controller.GameUi;
 
-internal sealed class GameUiController : IDisposable
+internal sealed class InteractionUiController : IDisposable
 {
     private readonly IAddonLifecycle _addonLifecycle;
     private readonly IDataManager _dataManager;
@@ -44,14 +44,13 @@ internal sealed class GameUiController : IDisposable
     private readonly QuestData _questData;
     private readonly IGameGui _gameGui;
     private readonly ITargetManager _targetManager;
-    private readonly IFramework _framework;
     private readonly IClientState _clientState;
-    private readonly ILogger<GameUiController> _logger;
+    private readonly ILogger<InteractionUiController> _logger;
     private readonly Regex _returnRegex;
 
     private bool _isInitialCheck;
 
-    public GameUiController(
+    public InteractionUiController(
         IAddonLifecycle addonLifecycle,
         IDataManager dataManager,
         QuestFunctions questFunctions,
@@ -67,7 +66,7 @@ internal sealed class GameUiController : IDisposable
         IFramework framework,
         IPluginLog pluginLog,
         IClientState clientState,
-        ILogger<GameUiController> logger)
+        ILogger<InteractionUiController> logger)
     {
         _addonLifecycle = addonLifecycle;
         _dataManager = dataManager;
@@ -81,7 +80,6 @@ internal sealed class GameUiController : IDisposable
         _questData = questData;
         _gameGui = gameGui;
         _targetManager = targetManager;
-        _framework = framework;
         _clientState = clientState;
         _logger = logger;
 
@@ -92,15 +90,7 @@ internal sealed class GameUiController : IDisposable
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "SelectIconString", SelectIconStringPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "SelectYesno", SelectYesnoPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "PointMenu", PointMenuPostSetup);
-        _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "CreditScroll", CreditScrollPostSetup);
-        _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "Credit", CreditPostSetup);
-        _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "CreditPlayer", CreditPlayerPostSetup);
-        _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "AkatsukiNote", UnendingCodexPostSetup);
-        _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "ContentsTutorial", ContentsTutorialPostSetup);
-        _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "MultipleHelpWindow", MultipleHelpWindowPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "HousingSelectBlock", HousingSelectBlockPostSetup);
-        _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "JournalResult", JournalResultPostSetup);
-        _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "GuildLeve", GuildLevePostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "TelepotTown", TeleportTownPostSetup);
     }
 
@@ -774,76 +764,6 @@ internal sealed class GameUiController : IDisposable
         currentQuest.IncreasePointMenuCounter();
     }
 
-    /// <summary>
-    /// ARR Credits.
-    /// </summary>
-    private unsafe void CreditScrollPostSetup(AddonEvent type, AddonArgs args)
-    {
-        _logger.LogInformation("Closing Credits sequence");
-        AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
-        addon->FireCallbackInt(-2);
-    }
-
-    /// <summary>
-    /// Credits for (possibly all?) expansions, not used for ARR.
-    /// </summary>
-    private unsafe void CreditPostSetup(AddonEvent type, AddonArgs args)
-    {
-        _logger.LogInformation("Closing Credits sequence");
-        AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
-        addon->FireCallbackInt(-2);
-    }
-
-    private unsafe void CreditPlayerPostSetup(AddonEvent type, AddonArgs args)
-    {
-        _logger.LogInformation("Closing CreditPlayer");
-        AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
-        addon->Close(true);
-    }
-
-    private unsafe void UnendingCodexPostSetup(AddonEvent type, AddonArgs args)
-    {
-        if (!ShouldHandleUiInteractions)
-            return;
-
-        if (_questController.StartedQuest?.Quest.Id.Value == 4526)
-        {
-            _logger.LogInformation("Closing Unending Codex");
-            AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
-            addon->FireCallbackInt(-2);
-        }
-    }
-
-    private unsafe void ContentsTutorialPostSetup(AddonEvent type, AddonArgs args)
-    {
-        if (!ShouldHandleUiInteractions)
-            return;
-
-        if (_questController.StartedQuest?.Quest.Id.Value == 245)
-        {
-            _logger.LogInformation("Closing ContentsTutorial");
-            AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
-            addon->FireCallbackInt(13);
-        }
-    }
-
-    /// <summary>
-    /// Opened e.g. the first time you open the duty finder window during Sastasha.
-    /// </summary>
-    private unsafe void MultipleHelpWindowPostSetup(AddonEvent type, AddonArgs args)
-    {
-        if (!ShouldHandleUiInteractions)
-            return;
-
-        if (_questController.StartedQuest?.Quest.Id.Value == 245)
-        {
-            _logger.LogInformation("Closing MultipleHelpWindow");
-            AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
-            addon->FireCallbackInt(-2);
-            addon->FireCallbackInt(-1);
-        }
-    }
-
     private unsafe void HousingSelectBlockPostSetup(AddonEvent type, AddonArgs args)
     {
         if (!ShouldHandleUiInteractions)
@@ -854,111 +774,11 @@ internal sealed class GameUiController : IDisposable
         addon->FireCallbackInt(0);
     }
 
-    private unsafe void JournalResultPostSetup(AddonEvent type, AddonArgs args)
-    {
-        if (!ShouldHandleUiInteractions)
-            return;
-
-        _logger.LogInformation("Checking for quest name of journal result");
-        AddonJournalResult* addon = (AddonJournalResult*)args.Addon;
-
-        string questName = addon->AtkTextNode250->NodeText.ToString();
-        if (_questController.CurrentQuest is { Quest.Id: LeveId } &&
-            GameFunctions.GameStringEquals(_questController.CurrentQuest.Quest.Info.Name, questName))
-        {
-            _logger.LogInformation("JournalResult has the current leve, auto-accepting it");
-            addon->FireCallbackInt(0);
-        }
-        else if (_targetManager.Target is { } target)
-        {
-            var issuedLeves = _questData.GetAllByIssuerDataId(target.DataId)
-                .Where(x => x.QuestId is LeveId)
-                .ToList();
-
-            if (issuedLeves.Any(x => GameFunctions.GameStringEquals(x.Name, questName)))
-            {
-                _logger.LogInformation(
-                    "JournalResult has a leve but not the one we're currently on, auto-declining it");
-                addon->FireCallbackInt(1);
-            }
-        }
-    }
-
-    private unsafe void GuildLevePostSetup(AddonEvent type, AddonArgs args)
-    {
-        var target = _targetManager.Target;
-        if (target == null)
-            return;
-
-        if (_questController is { IsRunning: true, NextQuest: { Quest.Id: LeveId } nextQuest } &&
-            _questFunctions.IsReadyToAcceptQuest(nextQuest.Quest.Id))
-        {
-            var addon = (AddonGuildLeve*)args.Addon;
-            /*
-            var atkValues = addon->AtkValues;
-
-            var availableLeves = _questData.GetAllByIssuerDataId(target.DataId);
-            List<(int, IQuestInfo)> offeredLeves = [];
-            for (int i = 0; i <= 20; ++i) // 3 leves per group, 1 label for group
-            {
-                string? leveName = atkValues[626 + i * 2].ReadAtkString();
-                if (leveName == null)
-                    continue;
-
-                var questInfo = availableLeves.FirstOrDefault(x => GameFunctions.GameStringEquals(x.Name, leveName));
-                if (questInfo == null)
-                    continue;
-
-                offeredLeves.Add((i, questInfo));
-
-            }
-
-            foreach (var (i, questInfo) in offeredLeves)
-                _logger.LogInformation("Leve {Index} = {Id}, {Name}", i, questInfo.QuestId, questInfo.Name);
-            */
-
-            _framework.RunOnTick(() => AcceptLeveOrWait(nextQuest), TimeSpan.FromMilliseconds(100));
-        }
-    }
-
-    private unsafe void AcceptLeveOrWait(QuestController.QuestProgress nextQuest, int counter = 0)
-    {
-        var agent = UIModule.Instance()->GetAgentModule()->GetAgentByInternalId(AgentId.LeveQuest);
-        if (agent->IsAgentActive() &&
-            _gameGui.TryGetAddonByName("GuildLeve", out AddonGuildLeve* addonGuildLeve) &&
-            LAddon.IsAddonReady(&addonGuildLeve->AtkUnitBase) &&
-            _gameGui.TryGetAddonByName("JournalDetail", out AtkUnitBase* addonJournalDetail) &&
-            LAddon.IsAddonReady(addonJournalDetail))
-        {
-            AcceptLeve(agent, addonGuildLeve, nextQuest);
-        }
-        else if (counter >= 10)
-            _logger.LogWarning("Unable to accept leve?");
-        else
-            _framework.RunOnTick(() => AcceptLeveOrWait(nextQuest, counter + 1), TimeSpan.FromMilliseconds(100));
-    }
-
-    private unsafe void AcceptLeve(AgentInterface* agent, AddonGuildLeve* addon,
-        QuestController.QuestProgress nextQuest)
-    {
-        _questController.SetPendingQuest(nextQuest);
-        _questController.SetNextQuest(null);
-
-        var returnValue = stackalloc AtkValue[1];
-        var selectQuest = stackalloc AtkValue[]
-        {
-            new() { Type = ValueType.Int, Int = 3 },
-            new() { Type = ValueType.UInt, UInt = nextQuest.Quest.Id.Value }
-        };
-        agent->ReceiveEvent(returnValue, selectQuest, 2, 0);
-        addon->Close(true);
-    }
-
     private void TeleportTownPostSetup(AddonEvent type, AddonArgs args)
     {
         if (ShouldHandleUiInteractions &&
             _questController.HasCurrentTaskMatching(out AethernetShortcut.UseAethernetShortcut? aethernetShortcut) &&
-            aethernetShortcut.From.IsFirmamentAetheryte())
+            EAetheryteLocationExtensions.IsFirmamentAetheryte(aethernetShortcut.From))
         {
             // this might be better via atkvalues; but this works for now
             uint toIndex = aethernetShortcut.To switch
@@ -1012,15 +832,7 @@ internal sealed class GameUiController : IDisposable
     public void Dispose()
     {
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "TelepotTown", TeleportTownPostSetup);
-        _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "GuildLeve", GuildLevePostSetup);
-        _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "JournalResult", JournalResultPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "HousingSelectBlock", HousingSelectBlockPostSetup);
-        _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "MultipleHelpWindow", MultipleHelpWindowPostSetup);
-        _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "ContentsTutorial", ContentsTutorialPostSetup);
-        _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "AkatsukiNote", UnendingCodexPostSetup);
-        _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "CreditPlayer", CreditPlayerPostSetup);
-        _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "Credit", CreditPostSetup);
-        _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "CreditScroll", CreditScrollPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "PointMenu", PointMenuPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "SelectYesno", SelectYesnoPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "SelectIconString", SelectIconStringPostSetup);

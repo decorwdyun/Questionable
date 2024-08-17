@@ -18,6 +18,25 @@
       ]
     },
     {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1047153,
+          "Position": {
+            "X": -270.4662,
+            "Y": 40.0732,
+            "Z": -12.253052
+          },
+          "TerritoryId": 1185,
+          "InteractionType": "Interact",
+          "AethernetShortcut": [
+            "[Tuliyollal] Wachumeqimeqi",
+            "[Tuliyollal] The Resplendent Quarter"
+          ]
+        }
+      ]
+    },
+    {
       "Sequence": 255,
       "Steps": [
         {
@@ -25,9 +44,8 @@
           "InteractionType": "None",
           "RequiredGatheredItems": [
             {
-              "ItemId": 43899,
-              "ItemCount": 6,
-              "Collectability": 600
+              "ItemId": 43913,
+              "ItemCount": 1
             }
           ],
           "AetheryteShortcut": "Tuliyollal",
@@ -45,7 +63,7 @@
           },
           "TerritoryId": 1185,
           "InteractionType": "CompleteQuest",
-          "NextQuestId": 4991
+          "NextQuestId": 4994
         }
       ]
     }

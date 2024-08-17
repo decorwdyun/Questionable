@@ -6,6 +6,7 @@ using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller;
+using Questionable.Controller.GameUi;
 using Questionable.Windows;
 
 namespace Questionable;
@@ -27,7 +28,7 @@ internal sealed class DalamudInitializer : IDisposable
         IFramework framework,
         QuestController questController,
         MovementController movementController,
-        GameUiController gameUiController,
+        InteractionUiController interactionUiController,
         WindowSystem windowSystem,
         QuestWindow questWindow,
         DebugOverlay debugOverlay,
@@ -59,7 +60,7 @@ internal sealed class DalamudInitializer : IDisposable
         _pluginInterface.UiBuilder.OpenMainUi += _questWindow.Toggle;
         _pluginInterface.UiBuilder.OpenConfigUi += _configWindow.Toggle;
         _framework.Update += FrameworkUpdate;
-        _framework.RunOnTick(gameUiController.HandleCurrentDialogueChoices, TimeSpan.FromMilliseconds(200));
+        _framework.RunOnTick(interactionUiController.HandleCurrentDialogueChoices, TimeSpan.FromMilliseconds(200));
         _toastGui.Toast += OnToast;
         _toastGui.ErrorToast += OnErrorToast;
         _toastGui.QuestToast += OnQuestToast;

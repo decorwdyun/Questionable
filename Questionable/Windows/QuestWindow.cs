@@ -7,6 +7,7 @@ using Dalamud.Plugin.Services;
 using ImGuiNET;
 using LLib.ImGui;
 using Questionable.Controller;
+using Questionable.Controller.GameUi;
 using Questionable.Data;
 using Questionable.Windows.QuestComponents;
 
@@ -27,7 +28,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
     private readonly QuickAccessButtonsComponent _quickAccessButtonsComponent;
     private readonly RemainingTasksComponent _remainingTasksComponent;
     private readonly IFramework _framework;
-    private readonly GameUiController _gameUiController;
+    private readonly InteractionUiController _interactionUiController;
     private readonly TitleBarButton _minimizeButton;
 
     public QuestWindow(IDalamudPluginInterface pluginInterface,
@@ -41,7 +42,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         QuickAccessButtonsComponent quickAccessButtonsComponent,
         RemainingTasksComponent remainingTasksComponent,
         IFramework framework,
-        GameUiController gameUiController)
+        InteractionUiController interactionUiController)
         : base($"Questionable v{PluginVersion.ToString(2)}###Questionable",
             ImGuiWindowFlags.AlwaysAutoResize)
     {
@@ -56,7 +57,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         _quickAccessButtonsComponent = quickAccessButtonsComponent;
         _remainingTasksComponent = remainingTasksComponent;
         _framework = framework;
-        _gameUiController = gameUiController;
+        _interactionUiController = interactionUiController;
 
 #if DEBUG
         IsOpen = true;
@@ -152,7 +153,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
     internal void Reload()
     {
         _questController.Reload();
-        _framework.RunOnTick(() => _gameUiController.HandleCurrentDialogueChoices(),
+        _framework.RunOnTick(() => _interactionUiController.HandleCurrentDialogueChoices(),
             TimeSpan.FromMilliseconds(200));
     }
 }

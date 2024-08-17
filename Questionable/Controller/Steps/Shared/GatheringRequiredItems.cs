@@ -68,7 +68,9 @@ internal static class GatheringRequiredItems
                     {
                         foreach (var task in serviceProvider.GetRequiredService<TaskCreator>()
                                      .CreateTasks(quest, gatheringSequence, gatheringStep))
-                            if (task is not WaitAtEnd.NextStep)
+                            if (task is WaitAtEnd.NextStep)
+                                yield return serviceProvider.GetRequiredService<SkipMarker>();
+                            else
                                 yield return task;
                     }
                 }
@@ -142,5 +144,14 @@ internal static class GatheringRequiredItems
                 return
                     $"Gather({_gatheredItem.ItemCount}x {_gatheredItem.ItemId} {SeIconChar.Collectible.ToIconString()} {_gatheredItem.Collectability})";
         }
+    }
+
+    /// <summary>
+    /// A task that does nothing, but if we're skipping a step, this will be the task next in queue to be executed (instead of progressing to the next step) if gathering.
+    /// </summary>
+    internal sealed class SkipMarker : ITask
+    {
+        public bool Start() => true;
+        public ETaskResult Update() => ETaskResult.TaskComplete;
     }
 }

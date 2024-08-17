@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller;
 using Questionable.Controller.CombatModules;
+using Questionable.Controller.GameUi;
 using Questionable.Controller.NavigationOverrides;
 using Questionable.Controller.Steps;
 using Questionable.Controller.Steps.Shared;
@@ -48,7 +49,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         IAddonLifecycle addonLifecycle,
         IKeyState keyState,
         IContextMenu contextMenu,
-        IToastGui toastGui)
+        IToastGui toastGui,
+        IGameInteropProvider gameInteropProvider)
     {
         ArgumentNullException.ThrowIfNull(pluginInterface);
         ArgumentNullException.ThrowIfNull(chatGui);
@@ -75,6 +77,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
             serviceCollection.AddSingleton(keyState);
             serviceCollection.AddSingleton(contextMenu);
             serviceCollection.AddSingleton(toastGui);
+            serviceCollection.AddSingleton(gameInteropProvider);
             serviceCollection.AddSingleton(new WindowSystem(nameof(Questionable)));
             serviceCollection.AddSingleton((Configuration?)pluginInterface.GetPluginConfig() ?? new Configuration());
 
@@ -131,7 +134,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         // task factories
         serviceCollection.AddTaskWithFactory<StepDisabled.Factory, StepDisabled.Task>();
         serviceCollection.AddSingleton<ITaskFactory, EquipRecommended.BeforeDutyOrInstance>();
-        serviceCollection.AddTaskWithFactory<GatheringRequiredItems.Factory, GatheringRequiredItems.StartGathering>();
+        serviceCollection.AddTaskWithFactory<GatheringRequiredItems.Factory, GatheringRequiredItems.StartGathering, GatheringRequiredItems.SkipMarker>();
         serviceCollection.AddTaskWithFactory<AetheryteShortcut.Factory, AetheryteShortcut.UseAetheryteShortcut>();
         serviceCollection.AddTaskWithFactory<SkipCondition.Factory, SkipCondition.CheckSkip>();
         serviceCollection.AddTaskWithFactory<AethernetShortcut.Factory, AethernetShortcut.UseAethernetShortcut>();
@@ -184,10 +187,15 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<GatheringPointRegistry>();
         serviceCollection.AddSingleton<QuestRegistry>();
         serviceCollection.AddSingleton<QuestController>();
-        serviceCollection.AddSingleton<GameUiController>();
         serviceCollection.AddSingleton<CombatController>();
         serviceCollection.AddSingleton<GatheringController>();
         serviceCollection.AddSingleton<ContextMenuController>();
+
+        serviceCollection.AddSingleton<CraftworksSupplyController>();
+        serviceCollection.AddSingleton<CreditsController>();
+        serviceCollection.AddSingleton<HelpUiController>();
+        serviceCollection.AddSingleton<InteractionUiController>();
+        serviceCollection.AddSingleton<LeveUiController>();
 
         serviceCollection.AddSingleton<ICombatModule, RotationSolverRebornModule>();
     }
@@ -231,6 +239,10 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceProvider.GetRequiredService<GatheringPointRegistry>().Reload();
         serviceProvider.GetRequiredService<CommandHandler>();
         serviceProvider.GetRequiredService<ContextMenuController>();
+        serviceProvider.GetRequiredService<CraftworksSupplyController>();
+        serviceProvider.GetRequiredService<CreditsController>();
+        serviceProvider.GetRequiredService<HelpUiController>();
+        serviceProvider.GetRequiredService<LeveUiController>();
         serviceProvider.GetRequiredService<DalamudInitializer>();
     }
 

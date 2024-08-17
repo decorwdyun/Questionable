@@ -25,7 +25,7 @@
           "InteractionType": "None",
           "RequiredGatheredItems": [
             {
-              "ItemId": 43899,
+              "ItemId": 43900,
               "ItemCount": 6,
               "Collectability": 600
             }
@@ -45,7 +45,7 @@
           },
           "TerritoryId": 1185,
           "InteractionType": "CompleteQuest",
-          "NextQuestId": 4991
+          "NextQuestId": 4992
         }
       ]
     }

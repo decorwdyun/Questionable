@@ -16,6 +16,7 @@ using ImGuiNET;
 using LLib.GameUI;
 using LLib.ImGui;
 using Questionable.Controller;
+using Questionable.Controller.GameUi;
 using Questionable.Data;
 using Questionable.Functions;
 using Questionable.Model;
@@ -88,7 +89,7 @@ internal sealed class QuestSelectionWindow : LWindow
             _quests = _questData.GetAllByIssuerDataId(targetId);
             if (_gameGui.TryGetAddonByName<AddonSelectIconString>("SelectIconString", out var addonSelectIconString))
             {
-                var answers = GameUiController.GetChoices(addonSelectIconString);
+                var answers = InteractionUiController.GetChoices(addonSelectIconString);
                 _offeredQuests = _quests
                     .Where(x => answers.Any(y => GameFunctions.GameStringEquals(x.Name, y)))
                     .ToList();
