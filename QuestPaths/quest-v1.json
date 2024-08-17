@@ -295,6 +295,9 @@
                 },
                 "AetheryteUnlocked": {
                   "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Aetheryte"
+                },
+                "RequiredQuestVariablesNotMet": {
+                  "type": "boolean"
                 }
               },
               "additionalProperties": false
