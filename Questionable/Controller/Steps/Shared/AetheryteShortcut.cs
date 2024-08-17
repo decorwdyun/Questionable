@@ -17,9 +17,9 @@ internal static class AetheryteShortcut
 {
     internal sealed class Factory(
         IServiceProvider serviceProvider,
-        AetheryteData aetheryteData) : ITaskFactory
+        AetheryteData aetheryteData) : SimpleTaskFactory
     {
-        public ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
+        public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
             if (step.AetheryteShortcut == null)
                 return null;

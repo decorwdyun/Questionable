@@ -9,11 +9,13 @@ internal sealed class ArtisanIpc
 {
     private readonly ILogger<ArtisanIpc> _logger;
     private readonly ICallGateSubscriber<ushort, int, object> _craftItem;
+    private readonly ICallGateSubscriber<bool> _getEnduranceStatus;
 
     public ArtisanIpc(IDalamudPluginInterface pluginInterface, ILogger<ArtisanIpc> logger)
     {
         _logger = logger;
         _craftItem = pluginInterface.GetIpcSubscriber<ushort, int, object>("Artisan.CraftItem");
+        _getEnduranceStatus = pluginInterface.GetIpcSubscriber<bool>("Artisan.GetEnduranceStatus");
     }
 
     public bool CraftItem(ushort recipeId, int quantity)
@@ -28,6 +30,22 @@ internal sealed class ArtisanIpc
         catch (IpcError e)
         {
             _logger.LogError(e, "Unable to craft items");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// This ignores crafting lists, but we can't create/use those.
+    /// </summary>
+    public bool IsCrafting()
+    {
+        try
+        {
+            return _getEnduranceStatus.InvokeFunc();
+        }
+        catch (IpcError e)
+        {
+            _logger.LogError(e, "Unable to check for Artisan endurance status");
             return false;
         }
     }

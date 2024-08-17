@@ -100,9 +100,6 @@ internal static class UseItem
             }
         }
 
-        public ITask CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
-            => throw new InvalidOperationException();
-
         private IEnumerable<ITask> CreateVesperBayFallbackTask()
         {
             logger.LogWarning("No vesper bay aetheryte tickets in inventory, navigating via ferry in Limsa instead");

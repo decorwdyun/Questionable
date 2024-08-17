@@ -10,9 +10,9 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class EquipRecommended
 {
-    internal sealed class Factory(IServiceProvider serviceProvider) : ITaskFactory
+    internal sealed class Factory(IServiceProvider serviceProvider) : SimpleTaskFactory
     {
-        public ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
+        public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
             if (step.InteractionType != EInteractionType.EquipRecommended)
                 return null;
@@ -21,9 +21,9 @@ internal static class EquipRecommended
         }
     }
 
-    internal sealed class BeforeDutyOrInstance(IServiceProvider serviceProvider) : ITaskFactory
+    internal sealed class BeforeDutyOrInstance(IServiceProvider serviceProvider) : SimpleTaskFactory
     {
-        public ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
+        public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
             if (step.InteractionType != EInteractionType.Duty &&
                 step.InteractionType != EInteractionType.SinglePlayerDuty &&

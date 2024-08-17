@@ -11,9 +11,9 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class AetherCurrent
 {
-    internal sealed class Factory(IServiceProvider serviceProvider, AetherCurrentData aetherCurrentData, IChatGui chatGui) : ITaskFactory
+    internal sealed class Factory(IServiceProvider serviceProvider, AetherCurrentData aetherCurrentData, IChatGui chatGui) : SimpleTaskFactory
     {
-        public ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
+        public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
             if (step.InteractionType != EInteractionType.AttuneAetherCurrent)
                 return null;

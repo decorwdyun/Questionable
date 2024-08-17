@@ -28,9 +28,6 @@ internal static class Say
             var task = serviceProvider.GetRequiredService<UseChat>().With(excelString);
             return [unmount, task];
         }
-
-        public ITask CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
-            => throw new InvalidOperationException();
     }
 
     internal sealed class UseChat(ChatFunctions chatFunctions) : AbstractDelayedTask

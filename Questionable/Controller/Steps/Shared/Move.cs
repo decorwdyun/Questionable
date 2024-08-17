@@ -59,9 +59,6 @@ internal static class Move
 
             return [];
         }
-
-        public ITask CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
-            => throw new InvalidOperationException();
     }
 
     internal sealed class MoveBuilder(

@@ -105,9 +105,6 @@ internal static class GatheringRequiredItems
                        minCollectability: (short)requiredGatheredItems.Collectability) >=
                    requiredGatheredItems.ItemCount;
         }
-
-        public ITask CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
-            => throw new NotImplementedException();
     }
 
     internal sealed class StartGathering(GatheringController gatheringController) : ITask

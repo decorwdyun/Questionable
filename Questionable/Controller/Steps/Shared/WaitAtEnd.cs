@@ -136,9 +136,6 @@ internal static class WaitAtEnd
             }
         }
 
-        public ITask CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
-            => throw new InvalidOperationException();
-
         private static NextStep Next(Quest quest, QuestSequence sequence)
         {
             return new NextStep(quest.Id, sequence.Sequence);

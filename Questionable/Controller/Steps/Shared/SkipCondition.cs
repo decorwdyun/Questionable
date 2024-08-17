@@ -20,9 +20,9 @@ namespace Questionable.Controller.Steps.Shared;
 
 internal static class SkipCondition
 {
-    internal sealed class Factory(IServiceProvider serviceProvider) : ITaskFactory
+    internal sealed class Factory(IServiceProvider serviceProvider) : SimpleTaskFactory
     {
-        public ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
+        public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
             var skipConditions = step.SkipConditions?.StepIf;
             if (skipConditions is { Never: true })

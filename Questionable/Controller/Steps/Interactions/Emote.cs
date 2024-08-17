@@ -36,9 +36,6 @@ internal static class Emote
                 return [unmount, task];
             }
         }
-
-        public ITask CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
-            => throw new InvalidOperationException();
     }
 
     internal sealed class UseOnObject(ChatFunctions chatFunctions) : AbstractDelayedTask

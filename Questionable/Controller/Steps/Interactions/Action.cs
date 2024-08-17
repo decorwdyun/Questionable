@@ -33,9 +33,6 @@ internal static class Action
                 return [unmount, task];
             }
         }
-
-        public ITask CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
-            => throw new InvalidOperationException();
     }
 
     internal sealed class UseOnObject(GameFunctions gameFunctions, ILogger<UseOnObject> logger) : ITask

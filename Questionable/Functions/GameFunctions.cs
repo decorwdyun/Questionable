@@ -401,6 +401,15 @@ internal sealed unsafe class GameFunctions
         if (IsLoadingScreenVisible())
             return true;
 
+        if (_condition[ConditionFlag.Crafting])
+        {
+            if (!AgentRecipeNote.Instance()->IsAgentActive())
+                return true;
+
+            if (!_condition[ConditionFlag.PreparingToCraft])
+                return true;
+        }
+
         return _condition[ConditionFlag.Occupied] || _condition[ConditionFlag.Occupied30] ||
                _condition[ConditionFlag.Occupied33] || _condition[ConditionFlag.Occupied38] ||
                _condition[ConditionFlag.Occupied39] || _condition[ConditionFlag.OccupiedInEvent] ||

@@ -42,9 +42,6 @@ internal static class Interact
                 .With(step.DataId.Value, quest, step.InteractionType,
                     step.TargetTerritoryId != null || quest.Id is SatisfactionSupplyNpcId);
         }
-
-        public ITask CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
-            => throw new InvalidOperationException();
     }
 
     internal sealed class DoInteract(GameFunctions gameFunctions, ICondition condition, ILogger<DoInteract> logger)

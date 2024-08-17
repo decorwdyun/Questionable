@@ -11,9 +11,9 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class Jump
 {
-    internal sealed class Factory(IServiceProvider serviceProvider) : ITaskFactory
+    internal sealed class Factory(IServiceProvider serviceProvider) : SimpleTaskFactory
     {
-        public ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
+        public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
             if (step.InteractionType != EInteractionType.Jump)
                 return null;

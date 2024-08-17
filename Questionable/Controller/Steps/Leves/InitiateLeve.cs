@@ -30,9 +30,6 @@ internal static class InitiateLeve
             yield return serviceProvider.GetRequiredService<SelectDifficulty>();
             yield return new WaitConditionTask(() => condition[ConditionFlag.BoundByDuty], "Wait(BoundByDuty)");
         }
-
-        public ITask CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
-            => throw new NotImplementedException();
     }
 
     internal sealed unsafe class SkipInitiateIfActive : ITask

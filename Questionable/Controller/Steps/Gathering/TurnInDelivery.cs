@@ -13,9 +13,9 @@ namespace Questionable.Controller.Steps.Gathering;
 
 internal static class TurnInDelivery
 {
-    internal sealed class Factory(IServiceProvider serviceProvider) : ITaskFactory
+    internal sealed class Factory(IServiceProvider serviceProvider) : SimpleTaskFactory
     {
-        public ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
+        public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
             if (quest.Id is not SatisfactionSupplyNpcId || sequence.Sequence != 1)
                 return null;
