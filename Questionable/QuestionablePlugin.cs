@@ -24,6 +24,7 @@ using Questionable.Functions;
 using Questionable.Validation;
 using Questionable.Validation.Validators;
 using Questionable.Windows;
+using Questionable.Windows.JournalComponents;
 using Questionable.Windows.QuestComponents;
 using Action = Questionable.Controller.Steps.Interactions.Action;
 
@@ -210,6 +211,9 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<QuestTooltipComponent>();
         serviceCollection.AddSingleton<QuickAccessButtonsComponent>();
         serviceCollection.AddSingleton<RemainingTasksComponent>();
+
+        serviceCollection.AddSingleton<QuestJournalComponent>();
+        serviceCollection.AddSingleton<GatheringJournalComponent>();
 
         serviceCollection.AddSingleton<QuestWindow>();
         serviceCollection.AddSingleton<ConfigWindow>();

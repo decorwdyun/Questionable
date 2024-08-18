@@ -24,4 +24,13 @@ public static class ExpansionData
             { EExpansionVersion.Endwalker, "6.x - Endwalker" },
             { EExpansionVersion.Dawntrail, "7.x - Dawntrail" }
         };
+
+    public static string ToFriendlyString(this EExpansionVersion expansionVersion)
+    {
+        return expansionVersion switch
+        {
+            EExpansionVersion.ARealmReborn => "A Realm Reborn",
+            _ => expansionVersion.ToString(),
+        };
+    }
 }
