@@ -81,13 +81,13 @@ internal sealed class DalamudInitializer : IDisposable
     }
 
     private void OnToast(ref SeString message, ref ToastOptions options, ref bool isHandled)
-        => _logger.LogInformation("Normal Toast: {Message}", message);
+        => _logger.LogTrace("Normal Toast: {Message}", message);
 
     private void OnErrorToast(ref SeString message, ref bool isHandled)
-        => _logger.LogInformation("Error Toast: {Message}", message);
+        => _logger.LogTrace("Error Toast: {Message}", message);
 
     private void OnQuestToast(ref SeString message, ref QuestToastOptions options, ref bool isHandled)
-        => _logger.LogInformation("Quest Toast: {Message}", message);
+        => _logger.LogTrace("Quest Toast: {Message}", message);
 
     public void Dispose()
     {

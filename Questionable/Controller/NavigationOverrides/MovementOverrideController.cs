@@ -70,6 +70,9 @@ internal sealed class MovementOverrideController
         // kholusia, random rocks
         new BlacklistedPoint(814, new(-324, 348.75f, -181.75f), new(-322.75076f, 347.0529f, -177.69328f), 3),
 
+        // labyrinthos, sharlayan hamlet aetheryte
+        new BlacklistedPoint(956, new(6.25f, -27.75f, -41.5f), new(5.0831127f, -28.213453f, -42.239136f)),
+
         // yak t'el, rock near cenote jayunja
         new BlacklistedPoint(1189, new(-115.75f, -213.75f, 336.5f), new(-112.40265f, -215.01514f, 339.0067f), 2),
 
