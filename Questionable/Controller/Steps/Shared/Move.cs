@@ -30,9 +30,8 @@ internal static class Move
         {
             if (step.Position != null)
             {
-                var builder = serviceProvider.GetRequiredService<MoveBuilder>();
-                builder.Step = step;
-                builder.Destination = step.Position.Value;
+                var builder = serviceProvider.GetRequiredService<MoveBuilder>()
+                    .With(quest.Id, step, step.Position.Value);
                 return builder.Build();
             }
             else if (step is { DataId: not null, StopDistance: not null })
@@ -44,16 +43,14 @@ internal static class Move
             }
             else if (step is { InteractionType: EInteractionType.AttuneAetheryte, Aetheryte: not null })
             {
-                var builder = serviceProvider.GetRequiredService<MoveBuilder>();
-                builder.Step = step;
-                builder.Destination = aetheryteData.Locations[step.Aetheryte.Value];
+                var builder = serviceProvider.GetRequiredService<MoveBuilder>()
+                    .With(quest.Id, step, aetheryteData.Locations[step.Aetheryte.Value]);
                 return builder.Build();
             }
             else if (step is { InteractionType: EInteractionType.AttuneAethernetShard, AethernetShard: not null })
             {
-                var builder = serviceProvider.GetRequiredService<MoveBuilder>();
-                builder.Step = step;
-                builder.Destination = aetheryteData.Locations[step.AethernetShard.Value];
+                var builder = serviceProvider.GetRequiredService<MoveBuilder>().With(quest.Id, step,
+                    aetheryteData.Locations[step.AethernetShard.Value]);
                 return builder.Build();
             }
 
@@ -70,30 +67,38 @@ internal static class Move
         TerritoryData territoryData,
         AetheryteData aetheryteData)
     {
-        public ElementId QuestId { get; set; } = null!;
-        public QuestStep Step { get; set; } = null!;
-        public Vector3 Destination { get; set; }
+        private ElementId _questId = null!;
+        private QuestStep _step = null!;
+        private Vector3 _destination;
+
+        public MoveBuilder With(ElementId questId, QuestStep step, Vector3 destination)
+        {
+            _questId = questId;
+            _step = step;
+            _destination = destination;
+            return this;
+        }
 
         public IEnumerable<ITask> Build()
         {
-            if (Step.InteractionType == EInteractionType.Jump && Step.JumpDestination != null &&
-                (clientState.LocalPlayer!.Position - Step.JumpDestination.Position).Length() <=
-                (Step.JumpDestination.StopDistance ?? 1f))
+            if (_step.InteractionType == EInteractionType.Jump && _step.JumpDestination != null &&
+                (clientState.LocalPlayer!.Position - _step.JumpDestination.Position).Length() <=
+                (_step.JumpDestination.StopDistance ?? 1f))
             {
                 logger.LogInformation("We're at the jump destination, skipping movement");
                 yield break;
             }
 
-            yield return new WaitConditionTask(() => clientState.TerritoryType == Step.TerritoryId,
-                $"Wait(territory: {territoryData.GetNameAndId(Step.TerritoryId)})");
+            yield return new WaitConditionTask(() => clientState.TerritoryType == _step.TerritoryId,
+                $"Wait(territory: {territoryData.GetNameAndId(_step.TerritoryId)})");
 
-            if (!Step.DisableNavmesh)
+            if (!_step.DisableNavmesh)
                 yield return new WaitConditionTask(() => movementController.IsNavmeshReady,
                     "Wait(navmesh ready)");
 
-            float stopDistance = Step.CalculateActualStopDistance();
+            float stopDistance = _step.CalculateActualStopDistance();
             Vector3? position = clientState.LocalPlayer?.Position;
-            float actualDistance = position == null ? float.MaxValue : Vector3.Distance(position.Value, Destination);
+            float actualDistance = position == null ? float.MaxValue : Vector3.Distance(position.Value, _destination);
 
             // if we teleport to a different zone, assume we always need to move; this is primarily relevant for cases
             // where you're e.g. in Lakeland, and the step navigates via Crystarium → Tesselation back into the same
@@ -102,43 +107,45 @@ internal static class Move
             // Side effects of this check being broken include:
             //   - mounting when near the target npc (if you spawn close enough for the next step)
             //   - trying to fly when near the target npc (if close enough where no movement is required)
-            if (Step.AetheryteShortcut != null &&
-                aetheryteData.TerritoryIds[Step.AetheryteShortcut.Value] != Step.TerritoryId)
+            if (_step.AetheryteShortcut != null &&
+                aetheryteData.TerritoryIds[_step.AetheryteShortcut.Value] != _step.TerritoryId)
             {
                 logger.LogDebug("Aetheryte: Changing distance to max, previous distance: {Distance}", actualDistance);
                 actualDistance = float.MaxValue;
             }
 
-            if (QuestId is SatisfactionSupplyNpcId)
+            // In particular, MoveBuilder is used so early that it'll have the position when you're starting gathering,
+            // not when you're finished.
+            if (_questId is SatisfactionSupplyNpcId)
             {
                 logger.LogDebug("SatisfactionSupply: Changing distance to max, previous distance: {Distance}",
                     actualDistance);
                 actualDistance = float.MaxValue;
             }
 
-            if (Step.Mount == true)
+            if (_step.Mount == true)
                 yield return serviceProvider.GetRequiredService<MountTask>()
-                    .With(Step.TerritoryId, MountTask.EMountIf.Always);
-            else if (Step.Mount == false)
+                    .With(_step.TerritoryId, MountTask.EMountIf.Always);
+            else if (_step.Mount == false)
                 yield return serviceProvider.GetRequiredService<UnmountTask>();
 
-            if (!Step.DisableNavmesh)
+            if (!_step.DisableNavmesh)
             {
-                if (Step.Mount == null)
+                if (_step.Mount == null)
                 {
                     MountTask.EMountIf mountIf =
-                        actualDistance > stopDistance && Step.Fly == true &&
-                        gameFunctions.IsFlyingUnlocked(Step.TerritoryId)
+                        actualDistance > stopDistance && _step.Fly == true &&
+                        gameFunctions.IsFlyingUnlocked(_step.TerritoryId)
                             ? MountTask.EMountIf.Always
                             : MountTask.EMountIf.AwayFromPosition;
                     yield return serviceProvider.GetRequiredService<MountTask>()
-                        .With(Step.TerritoryId, mountIf, Destination);
+                        .With(_step.TerritoryId, mountIf, _destination);
                 }
 
                 if (actualDistance > stopDistance)
                 {
                     yield return serviceProvider.GetRequiredService<MoveInternal>()
-                        .With(Step, Destination);
+                        .With(_step, _destination);
                 }
                 else
                     logger.LogInformation("Skipping move task, distance: {ActualDistance} < {StopDistance}",
@@ -150,14 +157,14 @@ internal static class Move
                 if (actualDistance > stopDistance)
                 {
                     yield return serviceProvider.GetRequiredService<MoveInternal>()
-                        .With(Step, Destination);
+                        .With(_step, _destination);
                 }
                 else
                     logger.LogInformation("Skipping move task, distance: {ActualDistance} < {StopDistance}",
                         actualDistance, stopDistance);
             }
 
-            if (Step.Fly == true && Step.Land == true)
+            if (_step.Fly == true && _step.Land == true)
                 yield return serviceProvider.GetRequiredService<Land>();
         }
     }
