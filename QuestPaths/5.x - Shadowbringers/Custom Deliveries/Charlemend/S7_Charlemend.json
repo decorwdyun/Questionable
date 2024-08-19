@@ -25,18 +25,28 @@
           }
         },
         {
+          "Position": {
+            "X": -113.51667,
+            "Y": 0,
+            "Z": -134.36552
+          },
+          "TerritoryId": 886,
+          "InteractionType": "WalkTo",
+          "AethernetShortcut": [
+            "[Firmament] The Mendicant's Court",
+            "[Firmament] Western Risensong Quarter"
+          ]
+        },
+        {
           "DataId": 1035211,
           "Position": {
             "X": -116.96039,
             "Y": 0,
             "Z": -133.95898
           },
+          "StopDistance": 7,
           "TerritoryId": 886,
           "InteractionType": "Interact",
-          "AethernetShortcut": [
-            "[Firmament] The Mendicant's Court",
-            "[Firmament] Western Risensong Quarter"
-          ],
           "DialogueChoices": [
             {
               "Type": "List",

@@ -52,8 +52,10 @@
                 "Y": 70.24178,
                 "Z": 19.50875
               },
-              "MinimumAngle": 120,
-              "MaximumAngle": 240
+              "MinimumAngle": 140,
+              "MaximumAngle": 215,
+              "MinimumDistance": 1.8,
+              "MaximumDistance": 3
             }
           ]
         }
