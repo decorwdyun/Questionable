@@ -176,7 +176,7 @@ public enum EAetheryteLocation
     RaktikaSlitherbough = 142,
     RaktikaFanow = 143,
     IlMhegLydhaLran = 144,
-    IlMhegPiaEnni = 145,
+    IlMhegPlaEnni = 145,
     IlMhegWolekdorf = 146,
     TempestOndoCups = 147,
     TempestMacarensesAngle = 148,

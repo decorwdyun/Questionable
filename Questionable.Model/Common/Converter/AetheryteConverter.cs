@@ -79,7 +79,7 @@ public sealed class AetheryteConverter() : EnumConverter<EAetheryteLocation>(Val
         { EAetheryteLocation.RaktikaSlitherbough, "Rak'tika - Slitherbough" },
         { EAetheryteLocation.RaktikaFanow, "Rak'tika - Fanow" },
         { EAetheryteLocation.IlMhegLydhaLran, "Il Mheg - Lydha Lran" },
-        { EAetheryteLocation.IlMhegPiaEnni, "Il Mheg - Pia Enni" },
+        { EAetheryteLocation.IlMhegPlaEnni, "Il Mheg - Pla Enni" },
         { EAetheryteLocation.IlMhegWolekdorf, "Il Mheg - Wolekdorf" },
         { EAetheryteLocation.TempestOndoCups, "Tempest - Ondo Cups" },
         { EAetheryteLocation.TempestMacarensesAngle, "Tempest - Macarenses Angle" },

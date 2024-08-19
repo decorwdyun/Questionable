@@ -210,7 +210,7 @@ internal sealed class AetheryteData
                 { EAetheryteLocation.RaktikaSlitherbough, new(-103.4104f, -19.333252f, 297.23047f) },
                 { EAetheryteLocation.RaktikaFanow, new(382.77246f, 21.042175f, -194.11005f) },
                 { EAetheryteLocation.IlMhegLydhaLran, new(-344.71655f, 48.722046f, 512.2606f) },
-                { EAetheryteLocation.IlMhegPiaEnni, new(-72.55664f, 103.95972f, -857.35864f) },
+                { EAetheryteLocation.IlMhegPlaEnni, new(-72.55664f, 103.95972f, -857.35864f) },
                 { EAetheryteLocation.IlMhegWolekdorf, new(380.51416f, 87.20532f, -687.2511f) },
                 { EAetheryteLocation.TempestOndoCups, new(561.76074f, 352.62073f, -199.17603f) },
                 { EAetheryteLocation.TempestMacarensesAngle, new(-141.74109f, -280.5371f, 218.00562f) },
