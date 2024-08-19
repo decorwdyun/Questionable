@@ -1,4 +1,5 @@
-﻿using Dalamud.Interface;
+﻿using Dalamud.Game.Text;
+using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Utility.Raii;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
@@ -44,6 +45,9 @@ internal sealed class QuestTooltipComponent
         using var tooltip = ImRaii.Tooltip();
         if (tooltip)
         {
+            ImGui.Text($"{SeIconChar.LevelEn.ToIconString()}{quest.Level}");
+            ImGui.SameLine();
+
             var (color, _, tooltipText) = _uiUtils.GetQuestStyle(quest.QuestId);
             ImGui.TextColored(color, tooltipText);
             if (quest.IsRepeatable)

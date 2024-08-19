@@ -20,7 +20,7 @@ internal sealed class UiUtils
         _pluginInterface = pluginInterface;
     }
 
-    public (Vector4 color, FontAwesomeIcon icon, string status) GetQuestStyle(ElementId elementId)
+    public (Vector4 Color, FontAwesomeIcon Icon, string Status) GetQuestStyle(ElementId elementId)
     {
         if (_questFunctions.IsQuestAccepted(elementId))
             return (ImGuiColors.DalamudYellow, FontAwesomeIcon.PersonWalkingArrowRight, "Active");
@@ -42,7 +42,7 @@ internal sealed class UiUtils
             return (ImGuiColors.DalamudRed, FontAwesomeIcon.Times);
     }
 
-    public bool ChecklistItem(string text, Vector4 color, FontAwesomeIcon icon)
+    public bool ChecklistItem(string text, Vector4 color, FontAwesomeIcon icon, float extraPadding = 0)
     {
         // ReSharper disable once UnusedVariable
         using (var font = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
@@ -53,6 +53,8 @@ internal sealed class UiUtils
         bool hover = ImGui.IsItemHovered();
 
         ImGui.SameLine();
+        if (extraPadding > 0)
+            ImGui.SetCursorPosX(ImGui.GetCursorPosX() + extraPadding);
         ImGui.TextUnformatted(text);
         return hover;
     }

@@ -208,6 +208,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<ActiveQuestComponent>();
         serviceCollection.AddSingleton<ARealmRebornComponent>();
         serviceCollection.AddSingleton<CreationUtilsComponent>();
+        serviceCollection.AddSingleton<EventInfoComponent>();
         serviceCollection.AddSingleton<QuestTooltipComponent>();
         serviceCollection.AddSingleton<QuickAccessButtonsComponent>();
         serviceCollection.AddSingleton<RemainingTasksComponent>();

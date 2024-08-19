@@ -25,6 +25,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
     private readonly ActiveQuestComponent _activeQuestComponent;
     private readonly ARealmRebornComponent _aRealmRebornComponent;
     private readonly CreationUtilsComponent _creationUtilsComponent;
+    private readonly EventInfoComponent _eventInfoComponent;
     private readonly QuickAccessButtonsComponent _quickAccessButtonsComponent;
     private readonly RemainingTasksComponent _remainingTasksComponent;
     private readonly IFramework _framework;
@@ -38,6 +39,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         TerritoryData territoryData,
         ActiveQuestComponent activeQuestComponent,
         ARealmRebornComponent aRealmRebornComponent,
+        EventInfoComponent eventInfoComponent,
         CreationUtilsComponent creationUtilsComponent,
         QuickAccessButtonsComponent quickAccessButtonsComponent,
         RemainingTasksComponent remainingTasksComponent,
@@ -53,6 +55,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         _territoryData = territoryData;
         _activeQuestComponent = activeQuestComponent;
         _aRealmRebornComponent = aRealmRebornComponent;
+        _eventInfoComponent = eventInfoComponent;
         _creationUtilsComponent = creationUtilsComponent;
         _quickAccessButtonsComponent = quickAccessButtonsComponent;
         _remainingTasksComponent = remainingTasksComponent;
@@ -132,6 +135,12 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
                 if (_aRealmRebornComponent.ShouldDraw)
                 {
                     _aRealmRebornComponent.Draw();
+                    ImGui.Separator();
+                }
+
+                if (_eventInfoComponent.ShouldDraw)
+                {
+                    _eventInfoComponent.Draw();
                     ImGui.Separator();
                 }
 

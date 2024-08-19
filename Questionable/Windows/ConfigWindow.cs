@@ -83,6 +83,13 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
                     Save();
                 }
 
+                bool showIncompleteSeasonalEvents = _configuration.General.ShowIncompleteSeasonalEvents;
+                if (ImGui.Checkbox("Show details for incomplete seasonal events", ref showIncompleteSeasonalEvents))
+                {
+                    _configuration.General.ShowIncompleteSeasonalEvents = showIncompleteSeasonalEvents;
+                    Save();
+                }
+
                 ImGui.EndTabItem();
             }
 
