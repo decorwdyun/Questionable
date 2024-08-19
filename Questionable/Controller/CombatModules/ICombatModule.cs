@@ -12,5 +12,5 @@ internal interface ICombatModule
 
     void Update(IGameObject nextTarget);
 
-    void SetTarget(IGameObject nextTarget);
+    void MoveToTarget(IGameObject nextTarget);
 }

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Numerics;
 using Dalamud.Game.ClientState.Conditions;
@@ -19,10 +20,12 @@ internal sealed class DebugOverlay : Window
     private readonly IClientState _clientState;
     private readonly ICondition _condition;
     private readonly AetheryteData _aetheryteData;
+    private readonly IObjectTable _objectTable;
+    private readonly CombatController _combatController;
     private readonly Configuration _configuration;
 
     public DebugOverlay(QuestController questController, QuestRegistry questRegistry, IGameGui gameGui,
-        IClientState clientState, ICondition condition, AetheryteData aetheryteData, Configuration configuration)
+        IClientState clientState, ICondition condition, AetheryteData aetheryteData, IObjectTable objectTable, CombatController combatController, Configuration configuration)
         : base("Questionable Debug Overlay###QuestionableDebugOverlay",
             ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoBackground |
             ImGuiWindowFlags.NoInputs | ImGuiWindowFlags.NoSavedSettings, true)
@@ -33,6 +36,8 @@ internal sealed class DebugOverlay : Window
         _clientState = clientState;
         _condition = condition;
         _aetheryteData = aetheryteData;
+        _objectTable = objectTable;
+        _combatController = combatController;
         _configuration = configuration;
 
         Position = Vector2.Zero;
@@ -61,6 +66,7 @@ internal sealed class DebugOverlay : Window
 
         DrawCurrentQuest();
         DrawHighlightedQuest();
+        DrawCombatTargets();
     }
 
     private void DrawCurrentQuest()
@@ -117,6 +123,19 @@ internal sealed class DebugOverlay : Window
         ImGui.GetWindowDrawList().AddCircleFilled(screenPos, 3f, color);
         ImGui.GetWindowDrawList().AddText(screenPos + new Vector2(10, -8), color,
             $"{counter}: {step.InteractionType}\n{position.ToString("G", CultureInfo.InvariantCulture)} [{(position - _clientState.LocalPlayer!.Position).Length():N2}]\n{step.Comment}");
+    }
+
+    [Conditional("false")]
+    private void DrawCombatTargets()
+    {
+        foreach (var x in _objectTable)
+        {
+            bool visible = _gameGui.WorldToScreen(x.Position, out Vector2 screenPos);
+            if (!visible)
+                continue;
+
+            ImGui.GetWindowDrawList() .AddText(screenPos + new Vector2(10, -8), 0xFFFFFFFF, $"{x.Name}/{x.GameObjectId:X}, {_combatController.GetKillPriority(x)}, {Vector3.Distance(x.Position, _clientState.LocalPlayer!.Position):N2}, {x.IsTargetable}");
+        }
     }
 
     private bool TryGetPosition(QuestStep step, [NotNullWhen(true)] out Vector3? position)

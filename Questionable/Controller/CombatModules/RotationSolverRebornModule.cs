@@ -77,7 +77,7 @@ internal sealed class RotationSolverRebornModule : ICombatModule, IDisposable
         }
     }
 
-    public void SetTarget(IGameObject gameObject)
+    public void MoveToTarget(IGameObject gameObject)
     {
         var player = _clientState.LocalPlayer;
         if (player == null)
@@ -114,7 +114,7 @@ internal sealed class RotationSolverRebornModule : ICombatModule, IDisposable
 
         if (DateTime.Now > _lastDistanceCheck.AddSeconds(10))
         {
-            SetTarget(gameObject);
+            MoveToTarget(gameObject);
             _lastDistanceCheck = DateTime.Now;
         }
     }

@@ -21,6 +21,9 @@ namespace Questionable.Controller;
 
 internal sealed class CombatController : IDisposable
 {
+    private const float MaxTargetRange = 55f;
+    private const float MaxNameplateRange = 50f;
+
     private readonly List<ICombatModule> _combatModules;
     private readonly MovementController _movementController;
     private readonly ITargetManager _targetManager;
@@ -83,7 +86,7 @@ internal sealed class CombatController : IDisposable
         if (_currentFight == null)
             return EStatus.Complete;
 
-        if (_movementController.IsPathfinding || _movementController.IsPathRunning)
+        if (_movementController.IsPathfinding || _movementController.IsPathRunning || _movementController.MovementStartedAt > DateTime.Now.AddSeconds(-1))
             return EStatus.Moving;
 
         var target = _targetManager.Target;
@@ -100,29 +103,16 @@ internal sealed class CombatController : IDisposable
             else if (nextTarget != null)
             {
                 if (nextTargetPriority > currentTargetPriority)
-                {
-                    _logger.LogInformation("Changing next target to {TargetName} ({TargetId:X8})",
-                        nextTarget.Name.ToString(), nextTarget.GameObjectId);
-                    _targetManager.Target = nextTarget;
-                    _currentFight.Module.SetTarget(nextTarget);
-                }
+                    SetTarget(nextTarget);
             }
             else
-            {
-                _logger.LogInformation("Resetting next target");
-                _targetManager.Target = null;
-            }
+                SetTarget(null);
         }
         else
         {
             var nextTarget = FindNextTarget();
             if (nextTarget is { IsDead: false })
-            {
-                _logger.LogInformation("Setting next target to {TargetName} ({TargetId:X8})",
-                    nextTarget.Name.ToString(), nextTarget.GameObjectId);
-                _targetManager.Target = nextTarget;
-                _currentFight.Module.SetTarget(nextTarget);
-            }
+                SetTarget(nextTarget);
         }
 
         if (_condition[ConditionFlag.InCombat])
@@ -197,7 +187,7 @@ internal sealed class CombatController : IDisposable
             .FirstOrDefault();
     }
 
-    private unsafe int GetKillPriority(IGameObject gameObject)
+    public unsafe int GetKillPriority(IGameObject gameObject)
     {
         if (gameObject is IBattleNpc battleNpc)
         {
@@ -257,7 +247,7 @@ internal sealed class CombatController : IDisposable
 
                     // for enemies that are very far away, their nameplate doesn't render but they're in the object table
                     if (_currentFight?.Data.SpawnType == EEnemySpawnType.OverworldEnemies &&
-                        Vector3.Distance(_clientState.LocalPlayer?.Position ?? Vector3.Zero, battleNpc.Position) > 45)
+                        Vector3.Distance(_clientState.LocalPlayer?.Position ?? Vector3.Zero, battleNpc.Position) > MaxNameplateRange)
                         return 25;
                 }
                 else
@@ -286,6 +276,29 @@ internal sealed class CombatController : IDisposable
         }
         else
             return 0;
+    }
+
+    private void SetTarget(IGameObject? target)
+    {
+        if (target == null)
+        {
+            if (_targetManager.Target != null)
+            {
+                _logger.LogInformation("Clearing target");
+                _targetManager.Target = null;
+            }
+        }
+        else if (Vector3.Distance(_clientState.LocalPlayer!.Position, target.Position) > MaxTargetRange)
+        {
+            _logger.LogInformation("Moving to target, distance: {Distance:N2}", Vector3.Distance(_clientState.LocalPlayer!.Position, target.Position));
+            _currentFight!.Module.MoveToTarget(target);
+        }
+        else
+        {
+            _logger.LogInformation("Setting target to {TargetName} ({TargetId:X8})", target.Name.ToString(), target.GameObjectId);
+            _targetManager.Target = target;
+            _currentFight!.Module.MoveToTarget(target);
+        }
     }
 
     public void Stop(string label)
