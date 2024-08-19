@@ -25,15 +25,18 @@ internal sealed class GatheringJournalComponent
     private readonly UiUtils _uiUtils;
     private readonly GatheringPointRegistry _gatheringPointRegistry;
     private readonly Dictionary<int, string> _gatheringItems;
-    private readonly List<ExpansionPoints> _gatheringPoints;
+    private readonly List<ExpansionPoints> _gatheringPointsByExpansion;
     private readonly List<ushort> _gatheredItems = [];
+
+    private List<FilteredExpansion> _filteredExpansions = [];
+    private string _searchText = string.Empty;
 
     private delegate byte GetIsGatheringItemGatheredDelegate(ushort item);
 
     [Signature("48 89 5C 24 ?? 57 48 83 EC 20 8B D9 8B F9")]
     private GetIsGatheringItemGatheredDelegate _getIsGatheringItemGathered = null!;
 
-    internal bool IsGatheringItemGathered(uint item) => _getIsGatheringItemGathered((ushort)item) != 0;
+    private bool IsGatheringItemGathered(uint item) => _getIsGatheringItemGathered((ushort)item) != 0;
 
     public GatheringJournalComponent(IDataManager dataManager, IDalamudPluginInterface pluginInterface, UiUtils uiUtils,
         IGameInteropProvider gameInteropProvider, GatheringPointRegistry gatheringPointRegistry)
@@ -41,6 +44,8 @@ internal sealed class GatheringJournalComponent
         _pluginInterface = pluginInterface;
         _uiUtils = uiUtils;
         _gatheringPointRegistry = gatheringPointRegistry;
+
+        // TODO some of the logic here would be better suited elsewhere, in particular the [item] → [gathering item] → [location] lookup
         var routeToGatheringPoint = dataManager.GetExcelSheet<GatheringLeveRoute>()!
             .Where(x => x.UnkData0[0].GatheringPoint != 0)
             .SelectMany(x => x.UnkData0
@@ -75,7 +80,7 @@ internal sealed class GatheringJournalComponent
                     LeveId = x.RowId,
                     LeveName = x.Name.ToString(),
                     TerritoryType = (ushort)territoryType.RowId,
-                    TerritoryName = territoryType.Name.ToString(),
+                    TerritoryName = territoryType.PlaceName.Value?.Name.ToString(),
                     GatheringLeve = gatheringLeveSheet.GetRow((uint)x.DataId),
                 };
             })
@@ -113,7 +118,7 @@ internal sealed class GatheringJournalComponent
             .Where(x => !string.IsNullOrEmpty(x.Name))
             .ToDictionary(x => x.GatheringItemId, x => x.Name!);
 
-        _gatheringPoints = dataManager.GetExcelSheet<GatheringPoint>()!
+        _gatheringPointsByExpansion = dataManager.GetExcelSheet<GatheringPoint>()!
             .Where(x => x.GatheringPointBase.Row != 0)
             .DistinctBy(x => x.GatheringPointBase.Row)
             .Select(x => new
@@ -144,10 +149,11 @@ internal sealed class GatheringJournalComponent
                         Expansion = EExpansionVersion.Shadowbringers,
                         TerritoryType = leve.TerritoryType,
                         TerritoryName = leve.TerritoryName,
-                        PlaceName = leve.LeveName,
+                        PlaceName = $"Leve: {leve.LeveName}",
                     };
                 }
-                else if (x.Point.TerritoryType == 1 && _gatheringPointRegistry.TryGetGatheringPoint(x.Point.Id, out GatheringRoot? gatheringRoot))
+                else if (x.Point.TerritoryType == 1 &&
+                         _gatheringPointRegistry.TryGetGatheringPoint(x.Point.Id, out GatheringRoot? gatheringRoot))
                 {
                     // for some reason the game doesn't know where this gathering location is
                     var territoryType = territoryTypeSheet.GetRow(gatheringRoot.Steps.Last().TerritoryId)!;
@@ -168,12 +174,13 @@ internal sealed class GatheringJournalComponent
                 .GroupBy(y => new
                 {
                     y.TerritoryType,
-                    TerritoryName = $"{(!string.IsNullOrEmpty(y.TerritoryName) ? y.TerritoryName : "???")} ({y.TerritoryType})"
+                    TerritoryName =
+                        $"{(!string.IsNullOrEmpty(y.TerritoryName) ? y.TerritoryName : "???")} ({y.TerritoryType})"
                 })
                 .Select(y => new TerritoryPoints(y.Key.TerritoryType, y.Key.TerritoryName, y.ToList()))
                 .Where(y => y.Points.Count > 0)
                 .ToList()))
-            .OrderBy(x => x.Expansion)
+            .OrderBy(x => x.ExpansionVersion)
             .ToList();
 
         gameInteropProvider.InitializeFromAttributes(this);
@@ -185,67 +192,77 @@ internal sealed class GatheringJournalComponent
         if (!tab)
             return;
 
-        using var table = ImRaii.Table("GatheringPoints", 3, ImGuiTableFlags.NoSavedSettings);
-        if (!table)
-            return;
+        ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
+        if (ImGui.InputTextWithHint(string.Empty, "Search areas, gathering points and items", ref _searchText, 256))
+            UpdateFilter();
 
-        ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.NoHide);
-        ImGui.TableSetupColumn("Supported", ImGuiTableColumnFlags.WidthFixed, 100 * ImGui.GetIO().FontGlobalScale);
-        ImGui.TableSetupColumn("Collected", ImGuiTableColumnFlags.WidthFixed, 100 * ImGui.GetIO().FontGlobalScale);
-        ImGui.TableHeadersRow();
+        if (_filteredExpansions.Count > 0)
+        {
+            using var table = ImRaii.Table("GatheringPoints", 3, ImGuiTableFlags.NoSavedSettings);
+            if (!table)
+                return;
 
-        foreach (var expansion in _gatheringPoints)
-            DrawExpansion(expansion);
+            ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.NoHide);
+            ImGui.TableSetupColumn("Supported", ImGuiTableColumnFlags.WidthFixed, 100 * ImGui.GetIO().FontGlobalScale);
+            ImGui.TableSetupColumn("Collected", ImGuiTableColumnFlags.WidthFixed, 100 * ImGui.GetIO().FontGlobalScale);
+            ImGui.TableHeadersRow();
+
+            foreach (var expansion in _filteredExpansions)
+                DrawExpansion(expansion);
+        }
+        else
+            ImGui.Text("No area, gathering point or item matches your search text.");
     }
 
-    private void DrawExpansion(ExpansionPoints expansion)
+    private void DrawExpansion(FilteredExpansion expansion)
     {
         ImGui.TableNextRow();
         ImGui.TableNextColumn();
 
-        bool open = ImGui.TreeNodeEx(expansion.Expansion.ToFriendlyString(), ImGuiTreeNodeFlags.SpanFullWidth);
+        bool open = ImGui.TreeNodeEx(expansion.Expansion.ExpansionVersion.ToFriendlyString(),
+            ImGuiTreeNodeFlags.SpanFullWidth);
 
         ImGui.TableNextColumn();
-        DrawCount(expansion.CompletedPoints, expansion.TotalPoints);
+        DrawCount(expansion.Expansion.CompletedPoints, expansion.Expansion.TotalPoints);
         ImGui.TableNextColumn();
-        DrawCount(expansion.CompletedItems, expansion.TotalItems);
+        DrawCount(expansion.Expansion.CompletedItems, expansion.Expansion.TotalItems);
 
         if (open)
         {
-            foreach (var territory in expansion.PointsByTerritories)
+            foreach (var territory in expansion.Territories)
                 DrawTerritory(territory);
 
             ImGui.TreePop();
         }
     }
 
-    private void DrawTerritory(TerritoryPoints territory)
+    private void DrawTerritory(FilteredTerritory territory)
     {
         ImGui.TableNextRow();
         ImGui.TableNextColumn();
 
-        bool open = ImGui.TreeNodeEx(territory.ToFriendlyString(), ImGuiTreeNodeFlags.SpanFullWidth);
+        bool open = ImGui.TreeNodeEx(territory.Territory.ToFriendlyString(), ImGuiTreeNodeFlags.SpanFullWidth);
 
         ImGui.TableNextColumn();
-        DrawCount(territory.CompletedPoints, territory.TotalPoints);
+        DrawCount(territory.Territory.CompletedPoints, territory.Territory.TotalPoints);
         ImGui.TableNextColumn();
-        DrawCount(territory.CompletedItems, territory.TotalItems);
+        DrawCount(territory.Territory.CompletedItems, territory.Territory.TotalItems);
 
         if (open)
         {
-            foreach (var point in territory.Points)
+            foreach (var point in territory.GatheringPoints)
                 DrawPoint(point);
 
             ImGui.TreePop();
         }
     }
 
-    private void DrawPoint(DefaultGatheringPoint point)
+    private void DrawPoint(FilteredGatheringPoint point)
     {
         ImGui.TableNextRow();
         ImGui.TableNextColumn();
 
-        bool open = ImGui.TreeNodeEx($"{point.PlaceName} ({point.ClassJob} Lv. {point.Level})",
+        bool open = ImGui.TreeNodeEx($"{point.Point.PlaceName} ({point.Point.ClassJob} Lv. {point.Point.Level})",
             ImGuiTreeNodeFlags.SpanFullWidth);
 
         ImGui.TableNextColumn();
@@ -257,10 +274,10 @@ internal sealed class GatheringJournalComponent
         }
 
         ImGui.SetCursorPosX(ImGui.GetCursorPosX() + spacing);
-        _uiUtils.ChecklistItem(string.Empty, point.IsComplete);
+        _uiUtils.ChecklistItem(string.Empty, point.Point.IsComplete);
 
         ImGui.TableNextColumn();
-        DrawCount(point.CompletedItems, point.TotalItems);
+        DrawCount(point.Point.CompletedItems, point.Point.TotalItems);
 
         if (open)
         {
@@ -310,6 +327,73 @@ internal sealed class GatheringJournalComponent
         ImGui.PopFont();
     }
 
+    public void UpdateFilter()
+    {
+        Predicate<string> match;
+        if (string.IsNullOrWhiteSpace(_searchText))
+            match = _ => true;
+        else
+            match = x => x.Contains(_searchText, StringComparison.CurrentCultureIgnoreCase);
+
+        _filteredExpansions = _gatheringPointsByExpansion
+            .Select(section => FilterExpansion(section, match))
+            .Where(x => x != null)
+            .Cast<FilteredExpansion>()
+            .ToList();
+    }
+
+    private FilteredExpansion? FilterExpansion(ExpansionPoints expansion, Predicate<string> match)
+    {
+        List<FilteredTerritory> filteredTerritories = expansion.PointsByTerritories
+            .Select(x => FilterTerritory(x, match))
+            .Where(x => x != null)
+            .Select(x => x!)
+            .ToList();
+        if (filteredTerritories.Count > 0)
+            return new FilteredExpansion(expansion, filteredTerritories);
+
+        return null;
+    }
+
+    private FilteredTerritory? FilterTerritory(TerritoryPoints territory, Predicate<string> match)
+    {
+        if (match(territory.TerritoryName))
+        {
+            return new FilteredTerritory(territory,
+                territory.Points
+                    .Select(x => FilterGatheringPoint(x, _ => true)!)
+                    .ToList());
+        }
+        else
+        {
+            List<FilteredGatheringPoint> filteredPoints = territory.Points
+                .Select(x => FilterGatheringPoint(x, match))
+                .Where(x => x != null)
+                .Select(x => x!)
+                .ToList();
+            if (filteredPoints.Count > 0)
+                return new FilteredTerritory(territory, filteredPoints);
+        }
+
+        return null;
+    }
+
+    private FilteredGatheringPoint? FilterGatheringPoint(DefaultGatheringPoint gatheringPoint,
+        Predicate<string> match)
+    {
+        if (match(gatheringPoint.PlaceName ?? string.Empty))
+            return new FilteredGatheringPoint(gatheringPoint, gatheringPoint.GatheringItemIds);
+        else
+        {
+            List<ushort> filteredItems = gatheringPoint.GatheringItemIds
+                .Where(x => match(_gatheringItems.GetValueOrDefault(x, string.Empty))).ToList();
+            if (filteredItems.Count > 0)
+                return new FilteredGatheringPoint(gatheringPoint, filteredItems);
+        }
+
+        return null;
+    }
+
     internal void RefreshCounts()
     {
         _gatheredItems.Clear();
@@ -319,7 +403,7 @@ internal sealed class GatheringJournalComponent
                 _gatheredItems.Add(key);
         }
 
-        foreach (var expansion in _gatheringPoints)
+        foreach (var expansion in _gatheringPointsByExpansion)
         {
             foreach (var territory in expansion.PointsByTerritories)
             {
@@ -342,7 +426,27 @@ internal sealed class GatheringJournalComponent
         }
     }
 
-    private sealed record ExpansionPoints(EExpansionVersion Expansion, List<TerritoryPoints> PointsByTerritories)
+    public void ClearCounts()
+    {
+        foreach (var expansion in _gatheringPointsByExpansion)
+        {
+            expansion.CompletedItems = 0;
+            expansion.CompletedPoints = 0;
+
+            foreach (var territory in expansion.PointsByTerritories)
+            {
+                territory.CompletedItems = 0;
+                territory.CompletedPoints = 0;
+
+                foreach (var point in territory.Points)
+                {
+                    point.IsComplete = false;
+                }
+            }
+        }
+    }
+
+    private sealed record ExpansionPoints(EExpansionVersion ExpansionVersion, List<TerritoryPoints> PointsByTerritories)
     {
         public int TotalItems { get; set; }
         public int TotalPoints { get; set; }
@@ -359,6 +463,7 @@ internal sealed class GatheringJournalComponent
         public int TotalPoints => Points.Count;
         public int CompletedItems { get; set; }
         public int CompletedPoints { get; set; }
+
         public string ToFriendlyString() =>
             !string.IsNullOrEmpty(TerritoryName) ? TerritoryName : $"??? ({TerritoryType})";
     }
@@ -377,4 +482,10 @@ internal sealed class GatheringJournalComponent
         public int CompletedItems { get; set; }
         public bool IsComplete { get; set; }
     }
+
+    private sealed record FilteredExpansion(ExpansionPoints Expansion, List<FilteredTerritory> Territories);
+
+    private sealed record FilteredTerritory(TerritoryPoints Territory, List<FilteredGatheringPoint> GatheringPoints);
+
+    private sealed record FilteredGatheringPoint(DefaultGatheringPoint Point, List<ushort> GatheringItemIds);
 }

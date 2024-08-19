@@ -1,21 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 using System.Numerics;
-using Dalamud.Interface;
-using Dalamud.Interface.Colors;
 using Dalamud.Interface.Utility.Raii;
-using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
-using ImGuiNET;
 using LLib.ImGui;
 using Questionable.Controller;
-using Questionable.Data;
-using Questionable.Functions;
-using Questionable.Model;
 using Questionable.Windows.JournalComponents;
-using Questionable.Windows.QuestComponents;
 
 namespace Questionable.Windows;
 
@@ -40,7 +29,8 @@ internal sealed class JournalProgressWindow : LWindow, IDisposable
 
         _clientState.Login += _questJournalComponent.RefreshCounts;
         _clientState.Login += _gatheringJournalComponent.RefreshCounts;
-        _clientState.Logout -= _questJournalComponent.ClearCounts;
+        _clientState.Logout += _questJournalComponent.ClearCounts;
+        _clientState.Logout += _gatheringJournalComponent.ClearCounts;
         _questRegistry.Reloaded += OnQuestsReloaded;
 
         SizeConstraints = new WindowSizeConstraints
@@ -59,6 +49,7 @@ internal sealed class JournalProgressWindow : LWindow, IDisposable
     {
         _questJournalComponent.UpdateFilter();
         _questJournalComponent.RefreshCounts();
+        _gatheringJournalComponent.UpdateFilter();
         _gatheringJournalComponent.RefreshCounts();
     }
 
@@ -75,6 +66,7 @@ internal sealed class JournalProgressWindow : LWindow, IDisposable
     public void Dispose()
     {
         _questRegistry.Reloaded -= OnQuestsReloaded;
+        _clientState.Logout -= _gatheringJournalComponent.ClearCounts;
         _clientState.Logout -= _questJournalComponent.ClearCounts;
         _clientState.Login -= _gatheringJournalComponent.RefreshCounts;
         _clientState.Login -= _questJournalComponent.RefreshCounts;

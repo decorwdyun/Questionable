@@ -260,8 +260,7 @@ internal sealed class QuestJournalComponent
         {
             return new FilteredCategory(category,
                 category.Genres
-                    .Select(x => FilterGenre(x, _ => true))
-                    .Cast<FilteredGenre>()
+                    .Select(x => FilterGenre(x, _ => true)!)
                     .ToList());
         }
         else
