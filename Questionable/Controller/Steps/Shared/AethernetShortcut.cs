@@ -7,6 +7,7 @@ using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Questionable.Controller.Steps.Common;
 using Questionable.Data;
 using Questionable.External;
 using Questionable.Functions;
@@ -14,20 +15,22 @@ using Questionable.Model;
 using Questionable.Model.Common;
 using Questionable.Model.Common.Converter;
 using Questionable.Model.Questing;
-using Questionable.Model.Questing.Converter;
 
 namespace Questionable.Controller.Steps.Shared;
 
 internal static class AethernetShortcut
 {
-    internal sealed class Factory(IServiceProvider serviceProvider) : SimpleTaskFactory
+    internal sealed class Factory(IServiceProvider serviceProvider, MovementController movementController)
+        : ITaskFactory
     {
-        public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
+        public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
             if (step.AethernetShortcut == null)
-                return null;
+                yield break;
 
-            return serviceProvider.GetRequiredService<UseAethernetShortcut>()
+            yield return new WaitConditionTask(() => movementController.IsNavmeshReady,
+                "Wait(navmesh ready)");
+            yield return serviceProvider.GetRequiredService<UseAethernetShortcut>()
                 .With(step.AethernetShortcut.From, step.AethernetShortcut.To, step.SkipConditions?.AethernetShortcutIf);
         }
     }
@@ -103,7 +106,8 @@ internal static class AethernetShortcut
                 if (aetheryteData.CalculateDistance(playerPosition, territoryType, From) <
                     aetheryteData.CalculateDistance(playerPosition, territoryType, To))
                 {
-                    if (aetheryteData.CalculateDistance(playerPosition, territoryType, From) < (From.IsFirmamentAetheryte() ? 11f : 4f))
+                    if (aetheryteData.CalculateDistance(playerPosition, territoryType, From) <
+                        (From.IsFirmamentAetheryte() ? 11f : 4f))
                     {
                         DoTeleport();
                         return true;
