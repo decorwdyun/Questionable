@@ -121,6 +121,7 @@ internal sealed class GatheringJournalComponent
 
         _gatheringPointsByExpansion = dataManager.GetExcelSheet<GatheringPoint>()!
             .Where(x => x.GatheringPointBase.Row != 0)
+            .Where(x => x.GatheringPointBase.Row is < 653 or > 680) // exclude ishgard restoration phase 1
             .DistinctBy(x => x.GatheringPointBase.Row)
             .Select(x => new
             {
@@ -170,6 +171,7 @@ internal sealed class GatheringJournalComponent
             })
             .Where(x => x.Expansion != (EExpansionVersion)byte.MaxValue)
             .Where(x => x.GatheringItemIds.Count > 0)
+            .Where(x => x.TerritoryType is not 901 and not 929) // exclude old diadem
             .GroupBy(x => x.Expansion)
             .Select(x => new ExpansionPoints(x.Key, x
                 .GroupBy(y => new
