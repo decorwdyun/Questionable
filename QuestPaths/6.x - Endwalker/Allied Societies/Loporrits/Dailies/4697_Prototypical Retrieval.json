@@ -1,7 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -30,6 +29,18 @@
     {
       "Sequence": 1,
       "Steps": [
+        {
+          "DataId": 2013259,
+          "Position": {
+            "X": 725.03235,
+            "Y": 150.92688,
+            "Z": 134.96594
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Mare Lamentorum - Sinus Lacrimarum",
+          "Fly": true
+        }
       ]
     },
     {
@@ -42,7 +53,9 @@
             "Z": -273.68756
           },
           "TerritoryId": 959,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow",
+          "Fly": true
         },
         {
           "DataId": 1044403,
