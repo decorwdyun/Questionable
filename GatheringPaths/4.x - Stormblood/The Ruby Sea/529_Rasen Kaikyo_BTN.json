@@ -3,9 +3,18 @@
   "Author": "liza",
   "Steps": [
     {
+      "Position": {
+        "X": 322.1539,
+        "Y": -121.22571,
+        "Z": -314.2446
+      },
       "TerritoryId": 613,
-      "InteractionType": "None",
-      "AetheryteShortcut": "Ruby Sea - Onokoro"
+      "InteractionType": "WalkTo",
+      "AetheryteShortcut": "Ruby Sea - Tamamizu"
+    },
+    {
+      "TerritoryId": 613,
+      "InteractionType": "None"
     }
   ],
   "Groups": [
