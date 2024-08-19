@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using Dalamud.Interface;
@@ -8,7 +7,6 @@ using Dalamud.Interface.Colors;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
-using Dalamud.Utility;
 using Dalamud.Utility.Signatures;
 using ImGuiNET;
 using LLib.GameData;
@@ -81,6 +79,7 @@ internal sealed class GatheringJournalComponent
                     LeveName = x.Name.ToString(),
                     TerritoryType = (ushort)territoryType.RowId,
                     TerritoryName = territoryType.PlaceName.Value?.Name.ToString(),
+                    Expansion = (EExpansionVersion)territoryType.ExVersion.Row,
                     GatheringLeve = gatheringLeveSheet.GetRow((uint)x.DataId),
                 };
             })
@@ -91,6 +90,7 @@ internal sealed class GatheringJournalComponent
                 x.LeveName,
                 x.TerritoryType,
                 x.TerritoryName,
+                x.Expansion,
                 GatheringPoints = x.GatheringLeve!.Route
                     .Where(y => y.Row != 0)
                     .SelectMany(y => routeToGatheringPoint[y.Row]),
@@ -101,6 +101,7 @@ internal sealed class GatheringJournalComponent
                 x.LeveName,
                 x.TerritoryType,
                 x.TerritoryName,
+                x.Expansion,
                 GatheringPointId = y
             }))
             .GroupBy(x => x.GatheringPointId)
@@ -146,7 +147,7 @@ internal sealed class GatheringJournalComponent
                     // it's a leve
                     return x.Point with
                     {
-                        Expansion = EExpansionVersion.Shadowbringers,
+                        Expansion = leve.Expansion,
                         TerritoryType = leve.TerritoryType,
                         TerritoryName = leve.TerritoryName,
                         PlaceName = $"Leve: {leve.LeveName}",
