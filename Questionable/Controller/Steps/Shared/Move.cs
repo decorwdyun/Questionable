@@ -70,6 +70,7 @@ internal static class Move
         TerritoryData territoryData,
         AetheryteData aetheryteData)
     {
+        public ElementId QuestId { get; set; } = null!;
         public QuestStep Step { get; set; } = null!;
         public Vector3 Destination { get; set; }
 
@@ -90,9 +91,9 @@ internal static class Move
                 yield return new WaitConditionTask(() => movementController.IsNavmeshReady,
                     "Wait(navmesh ready)");
 
-            float distance = Step.CalculateActualStopDistance();
-            var position = clientState.LocalPlayer?.Position ?? new Vector3();
-            float actualDistance = (position - Destination).Length();
+            float stopDistance = Step.CalculateActualStopDistance();
+            Vector3? position = clientState.LocalPlayer?.Position;
+            float actualDistance = position == null ? float.MaxValue : Vector3.Distance(position.Value, Destination);
 
             // if we teleport to a different zone, assume we always need to move; this is primarily relevant for cases
             // where you're e.g. in Lakeland, and the step navigates via Crystarium → Tesselation back into the same
@@ -101,8 +102,19 @@ internal static class Move
             // Side effects of this check being broken include:
             //   - mounting when near the target npc (if you spawn close enough for the next step)
             //   - trying to fly when near the target npc (if close enough where no movement is required)
-            if (Step.AetheryteShortcut != null && aetheryteData.TerritoryIds[Step.AetheryteShortcut.Value] != Step.TerritoryId)
+            if (Step.AetheryteShortcut != null &&
+                aetheryteData.TerritoryIds[Step.AetheryteShortcut.Value] != Step.TerritoryId)
+            {
+                logger.LogDebug("Aetheryte: Changing distance to max, previous distance: {Distance}", actualDistance);
                 actualDistance = float.MaxValue;
+            }
+
+            if (QuestId is SatisfactionSupplyNpcId)
+            {
+                logger.LogDebug("SatisfactionSupply: Changing distance to max, previous distance: {Distance}",
+                    actualDistance);
+                actualDistance = float.MaxValue;
+            }
 
             if (Step.Mount == true)
                 yield return serviceProvider.GetRequiredService<MountTask>()
@@ -115,7 +127,7 @@ internal static class Move
                 if (Step.Mount == null)
                 {
                     MountTask.EMountIf mountIf =
-                        actualDistance > distance && Step.Fly == true &&
+                        actualDistance > stopDistance && Step.Fly == true &&
                         gameFunctions.IsFlyingUnlocked(Step.TerritoryId)
                             ? MountTask.EMountIf.Always
                             : MountTask.EMountIf.AwayFromPosition;
@@ -123,20 +135,26 @@ internal static class Move
                         .With(Step.TerritoryId, mountIf, Destination);
                 }
 
-                if (actualDistance > distance)
+                if (actualDistance > stopDistance)
                 {
                     yield return serviceProvider.GetRequiredService<MoveInternal>()
                         .With(Step, Destination);
                 }
+                else
+                    logger.LogInformation("Skipping move task, distance: {ActualDistance} < {StopDistance}",
+                        actualDistance, stopDistance);
             }
             else
             {
                 // navmesh won't move close enough
-                if (actualDistance > distance)
+                if (actualDistance > stopDistance)
                 {
                     yield return serviceProvider.GetRequiredService<MoveInternal>()
                         .With(Step, Destination);
                 }
+                else
+                    logger.LogInformation("Skipping move task, distance: {ActualDistance} < {StopDistance}",
+                        actualDistance, stopDistance);
             }
 
             if (Step.Fly == true && Step.Land == true)

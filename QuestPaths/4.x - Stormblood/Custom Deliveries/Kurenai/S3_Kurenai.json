@@ -6,17 +6,6 @@
       "Sequence": 0,
       "Steps": [
         {
-          "Position": {
-            "X": 344.12048,
-            "Y": -120.3312,
-            "Z": -303.85397
-          },
-          "TerritoryId": 613,
-          "InteractionType": "WalkTo",
-          "AetheryteShortcut": "Ruby Sea - Tamamizu",
-          "RequiredGatheredItems": []
-        },
-        {
           "DataId": 1025878,
           "Position": {
             "X": 343.984,
@@ -25,6 +14,8 @@
           },
           "TerritoryId": 613,
           "InteractionType": "Interact",
+          "RequiredGatheredItems": [],
+          "AetheryteShortcut": "Ruby Sea - Tamamizu",
           "DialogueChoices": [
             {
               "Type": "List",
