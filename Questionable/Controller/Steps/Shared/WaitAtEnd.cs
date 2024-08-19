@@ -144,6 +144,12 @@ internal static class WaitAtEnd
 
     internal sealed class WaitDelay() : AbstractDelayedTask(TimeSpan.FromSeconds(1))
     {
+        public ITask With(TimeSpan delay)
+        {
+            Delay = delay;
+            return this;
+        }
+
         protected override bool StartInternal() => true;
 
         public override string ToString() => $"Wait(seconds: {Delay.TotalSeconds})";

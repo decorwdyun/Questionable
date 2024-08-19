@@ -19,16 +19,18 @@ internal static class AetheryteShortcut
 {
     internal sealed class Factory(
         IServiceProvider serviceProvider,
-        AetheryteData aetheryteData) : SimpleTaskFactory
+        AetheryteData aetheryteData) : ITaskFactory
     {
-        public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
+        public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
             if (step.AetheryteShortcut == null)
-                return null;
+                yield break;
 
-            return serviceProvider.GetRequiredService<UseAetheryteShortcut>()
+            yield return serviceProvider.GetRequiredService<UseAetheryteShortcut>()
                 .With(step, quest.Id, step.AetheryteShortcut.Value,
                     aetheryteData.TerritoryIds[step.AetheryteShortcut.Value]);
+            yield return serviceProvider.GetRequiredService<WaitAtEnd.WaitDelay>()
+                .With(TimeSpan.FromSeconds(0.5));
         }
     }
 
