@@ -63,7 +63,6 @@ internal sealed class InteractionUiController : IDisposable
         QuestData questData,
         IGameGui gameGui,
         ITargetManager targetManager,
-        IFramework framework,
         IPluginLog pluginLog,
         IClientState clientState,
         ILogger<InteractionUiController> logger)

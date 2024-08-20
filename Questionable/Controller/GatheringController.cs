@@ -39,7 +39,6 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
     private readonly GameFunctions _gameFunctions;
     private readonly NavmeshIpc _navmeshIpc;
     private readonly IObjectTable _objectTable;
-    private readonly IServiceProvider _serviceProvider;
     private readonly ICondition _condition;
     private readonly ILoggerFactory _loggerFactory;
     private readonly IGameGui _gameGui;
@@ -59,7 +58,6 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
         IObjectTable objectTable,
         IChatGui chatGui,
         ILogger<GatheringController> logger,
-        IServiceProvider serviceProvider,
         ICondition condition,
         IDataManager dataManager,
         ILoggerFactory loggerFactory,
@@ -76,7 +74,6 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
         _gameFunctions = gameFunctions;
         _navmeshIpc = navmeshIpc;
         _objectTable = objectTable;
-        _serviceProvider = serviceProvider;
         _condition = condition;
         _loggerFactory = loggerFactory;
         _gameGui = gameGui;

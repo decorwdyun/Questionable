@@ -238,8 +238,10 @@ public sealed class RendererPlugin : IDalamudPlugin
                                 maximumAngle = x.MaximumAngle.GetValueOrDefault();
                             }
 
+#if false
                             var a = GatheringMath.CalculateLandingLocation(x, 0, 0);
                             var b = GatheringMath.CalculateLandingLocation(x, 1, 1);
+#endif
                             return new List<Element>
                             {
                                 new Element(isCone

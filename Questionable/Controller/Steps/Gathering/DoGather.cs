@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Dalamud.Game.ClientState.Conditions;
-using Dalamud.Memory;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.UI;
@@ -140,9 +139,10 @@ internal sealed class DoGather(
         return slots;
     }
 
+    [SuppressMessage("ReSharper", "UnusedParameter.Local")]
     private Queue<EAction> GetNextActions(NodeCondition nodeCondition, List<SlotInfo> slots)
     {
-        uint gp = clientState.LocalPlayer!.CurrentGp;
+        //uint gp = clientState.LocalPlayer!.CurrentGp;
         Queue<EAction> actions = new();
 
         if (!gameFunctions.HasStatus(StatusGatheringRateUp))
@@ -236,8 +236,10 @@ internal sealed class DoGather(
 
     public override string ToString() => $"DoGather{(revisitRequired ? " if revist" : "")}";
 
+    [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local")]
     private sealed record SlotInfo(int Index, uint ItemId, int GatheringChance, int BoonChance, int Quantity);
 
+    [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local")]
     private sealed record NodeCondition(
         uint CurrentIntegrity,
         uint MaxIntegrity);

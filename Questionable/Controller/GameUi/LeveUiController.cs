@@ -76,7 +76,7 @@ internal sealed class LeveUiController : IDisposable
         }
     }
 
-    private unsafe void GuildLevePostSetup(AddonEvent type, AddonArgs args)
+    private void GuildLevePostSetup(AddonEvent type, AddonArgs args)
     {
         var target = _targetManager.Target;
         if (target == null)
@@ -85,8 +85,8 @@ internal sealed class LeveUiController : IDisposable
         if (_questController is { IsRunning: true, NextQuest: { Quest.Id: LeveId } nextQuest } &&
             _questFunctions.IsReadyToAcceptQuest(nextQuest.Quest.Id))
         {
-            var addon = (AddonGuildLeve*)args.Addon;
             /*
+            var addon = (AddonGuildLeve*)args.Addon;
             var atkValues = addon->AtkValues;
 
             var availableLeves = _questData.GetAllByIssuerDataId(target.DataId);
