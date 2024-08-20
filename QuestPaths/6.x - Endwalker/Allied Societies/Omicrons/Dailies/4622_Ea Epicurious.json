@@ -1,7 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -19,8 +18,49 @@
       ]
     },
     {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1044064,
+          "Position": {
+            "X": 86.503296,
+            "Y": 269.08234,
+            "Z": -515.0683
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Ultima Thule - Abode of the Ea",
+          "Fly": true,
+          "RequiredGatheredItems": [
+            {
+              "QuestAcceptedAsClass": "Miner",
+              "ItemId": 38290,
+              "ItemCount": 3
+            },
+            {
+              "QuestAcceptedAsClass": "Botanist",
+              "ItemId": 38314,
+              "ItemCount": 3
+            }
+          ]
+        }
+      ]
+    },
+    {
       "Sequence": 255,
       "Steps": [
+        {
+          "DataId": 2013072,
+          "Position": {
+            "X": 456.65674,
+            "Y": 438.04077,
+            "Z": 310.2312
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 960,
+          "AetheryteShortcut": "Ultima Thule - Base Omicron"
+        },
         {
           "DataId": 1043417,
           "Position": {

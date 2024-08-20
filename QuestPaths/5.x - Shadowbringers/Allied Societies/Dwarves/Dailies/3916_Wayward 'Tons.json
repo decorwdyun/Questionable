@@ -1,7 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -30,8 +29,154 @@
     {
       "Sequence": 1,
       "Steps": [
-
-
+        {
+          "DataId": 2011169,
+          "Position": {
+            "X": -95.903015,
+            "Y": 1.6326294,
+            "Z": 41.244995
+          },
+          "TerritoryId": 813,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            null,
+            [
+              {
+                "High": 1
+              },
+              {
+                "High": 4
+              },
+              {
+                "High": 5
+              }
+            ],
+            null,
+            null
+          ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
+        },
+        {
+          "DataId": 2011170,
+          "Position": {
+            "X": -84.916504,
+            "Y": 2.39563,
+            "Z": 36.850464
+          },
+          "TerritoryId": 813,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            null,
+            [
+              {
+                "High": 1
+              },
+              {
+                "High": 2
+              },
+              {
+                "High": 6
+              }
+            ],
+            null,
+            null
+          ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
+        },
+        {
+          "DataId": 2011171,
+          "Position": {
+            "X": -68.55884,
+            "Y": 2.5177002,
+            "Z": 38.04065
+          },
+          "TerritoryId": 813,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            null,
+            [
+              {
+                "High": 3
+              },
+              {
+                "High": 5
+              },
+              {
+                "High": 6
+              }
+            ],
+            null,
+            null
+          ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
+        },
+        {
+          "DataId": 2011172,
+          "Position": {
+            "X": -70.2984,
+            "Y": 1.449585,
+            "Z": 62.210938
+          },
+          "TerritoryId": 813,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            null,
+            [
+              {
+                "High": 2
+              },
+              {
+                "High": 3
+              },
+              {
+                "High": 4
+              }
+            ],
+            null,
+            null
+          ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            16
+          ]
+        }
       ]
     },
     {
@@ -45,6 +190,7 @@
           },
           "TerritoryId": 813,
           "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Lakeland - Ostall Imperative",
           "Fly": true
         },
         {

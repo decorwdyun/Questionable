@@ -9,12 +9,14 @@ public enum EAction
     Cure = 120,
     Esuna = 7568,
     Physick = 190,
-    Buffet = 4931,
+    BuffetSanuwa = 4931,
+    BuffetGriffin = 4583,
     Fumigate = 5872,
     SiphonSnout = 18187,
     RedGulal = 29382,
     YellowGulal = 29383,
     BlueGulal = 29384,
+    ElectrixFlux = 29718,
 
     CollectMiner = 240,
     ScourMiner = 22182,
@@ -39,11 +41,13 @@ public static class EActionExtensions
     public static bool RequiresMount(this EAction action)
     {
         return action
-            is EAction.Buffet
+            is EAction.BuffetSanuwa
+            or EAction.BuffetGriffin
             or EAction.Fumigate
             or EAction.SiphonSnout
             or EAction.RedGulal
             or EAction.YellowGulal
-            or EAction.BlueGulal;
+            or EAction.BlueGulal
+            or EAction.ElectrixFlux;
     }
 }

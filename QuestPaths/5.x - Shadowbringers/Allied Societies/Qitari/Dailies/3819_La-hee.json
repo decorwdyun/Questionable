@@ -1,7 +1,6 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -19,6 +18,25 @@
       ]
     },
     {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1032413,
+          "Position": {
+            "X": 144.36548,
+            "Y": -19.982845,
+            "Z": -459.8001
+          },
+          "TerritoryId": 817,
+          "InteractionType": "Say",
+          "ChatMessage": {
+            "Key": "TEXT_BANQIQ114_03819_SAYTODO_000_000"
+          },
+          "Fly": true
+        }
+      ]
+    },
+    {
       "Sequence": 255,
       "Steps": [
         {
@@ -30,12 +48,7 @@
           "TerritoryId": 817,
           "InteractionType": "WalkTo",
           "AetheryteShortcut": "Rak'tika - Fanow",
-          "Fly": true,
-          "RequiredGatheredItems": [
-
-
-
-          ]
+          "Fly": true
         },
         {
           "DataId": 1032643,
