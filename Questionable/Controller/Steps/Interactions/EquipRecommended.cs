@@ -10,18 +10,23 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class EquipRecommended
 {
-    internal sealed class Factory(IServiceProvider serviceProvider) : SimpleTaskFactory
+    internal sealed class Factory(IClientState clientState, IChatGui chatGui) : SimpleTaskFactory
     {
         public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
             if (step.InteractionType != EInteractionType.EquipRecommended)
                 return null;
 
-            return serviceProvider.GetRequiredService<DoEquipRecommended>();
+            return DoEquip();
+        }
+
+        public ITask DoEquip()
+        {
+            return new DoEquipRecommended(clientState, chatGui);
         }
     }
 
-    internal sealed class BeforeDutyOrInstance(IServiceProvider serviceProvider) : SimpleTaskFactory
+    internal sealed class BeforeDutyOrInstance(IClientState clientState, IChatGui chatGui) : SimpleTaskFactory
     {
         public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -30,11 +35,11 @@ internal static class EquipRecommended
                 step.InteractionType != EInteractionType.Combat)
                 return null;
 
-            return serviceProvider.GetRequiredService<DoEquipRecommended>();
+            return new DoEquipRecommended(clientState, chatGui);
         }
     }
 
-    internal sealed unsafe class DoEquipRecommended(IClientState clientState, IChatGui chatGui) : ITask
+    private sealed unsafe class DoEquipRecommended(IClientState clientState, IChatGui chatGui) : ITask
     {
         private bool _equipped;
 

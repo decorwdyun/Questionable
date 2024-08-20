@@ -6,19 +6,11 @@ using Questionable.Controller.Steps.Common;
 
 namespace Questionable.Controller.Steps.Shared;
 
-internal sealed class SwitchClassJob(IClientState clientState) : AbstractDelayedTask
+internal sealed class SwitchClassJob(EClassJob classJob, IClientState clientState) : AbstractDelayedTask
 {
-    private EClassJob _classJob;
-
-    public ITask With(EClassJob classJob)
-    {
-        _classJob = classJob;
-        return this;
-    }
-
     protected override unsafe bool StartInternal()
     {
-        if (clientState.LocalPlayer!.ClassJob.Id == (uint)_classJob)
+        if (clientState.LocalPlayer!.ClassJob.Id == (uint)classJob)
             return false;
 
         var gearsetModule = RaptureGearsetModule.Instance();
@@ -27,7 +19,7 @@ internal sealed class SwitchClassJob(IClientState clientState) : AbstractDelayed
             for (int i = 0; i < 100; ++i)
             {
                 var gearset = gearsetModule->GetGearset(i);
-                if (gearset->ClassJob == (byte)_classJob)
+                if (gearset->ClassJob == (byte)classJob)
                 {
                     gearsetModule->EquipGearset(gearset->Id, gearset->BannerIndex);
                     return true;
@@ -35,10 +27,10 @@ internal sealed class SwitchClassJob(IClientState clientState) : AbstractDelayed
             }
         }
 
-        throw new TaskException($"No gearset found for {_classJob}");
+        throw new TaskException($"No gearset found for {classJob}");
     }
 
     protected override ETaskResult UpdateInternal() => ETaskResult.TaskComplete;
 
-    public override string ToString() => $"SwitchJob({_classJob})";
+    public override string ToString() => $"SwitchJob({classJob})";
 }

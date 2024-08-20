@@ -5,9 +5,6 @@ using System.Linq;
 using System.Numerics;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Plugin.Services;
-using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
-using FFXIVClientStructs.FFXIV.Client.Game;
-using Microsoft.Extensions.DependencyInjection;
 using Questionable.Controller.Steps.Common;
 using Questionable.Controller.Utils;
 using Questionable.Data;
@@ -20,19 +17,20 @@ namespace Questionable.Controller.Steps.Shared;
 internal static class WaitAtEnd
 {
     internal sealed class Factory(
-        IServiceProvider serviceProvider,
         IClientState clientState,
         ICondition condition,
-        TerritoryData territoryData)
+        TerritoryData territoryData,
+        QuestFunctions questFunctions,
+        GameFunctions gameFunctions)
         : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
-            if (step.CompletionQuestVariablesFlags.Count == 6 && QuestWorkUtils.HasCompletionFlags(step.CompletionQuestVariablesFlags))
+            if (step.CompletionQuestVariablesFlags.Count == 6 &&
+                QuestWorkUtils.HasCompletionFlags(step.CompletionQuestVariablesFlags))
             {
-                var task = serviceProvider.GetRequiredService<WaitForCompletionFlags>()
-                    .With((QuestId)quest.Id, step);
-                var delay = serviceProvider.GetRequiredService<WaitDelay>();
+                var task = new WaitForCompletionFlags((QuestId)quest.Id, step, questFunctions);
+                var delay = new WaitDelay();
                 return [task, delay, Next(quest, sequence)];
             }
 
@@ -43,15 +41,15 @@ internal static class WaitAtEnd
                         new WaitConditionTask(() => !condition[ConditionFlag.InCombat], "Wait(not in combat)");
                     return
                     [
-                        serviceProvider.GetRequiredService<WaitDelay>(),
+                        new WaitDelay(),
                         notInCombat,
-                        serviceProvider.GetRequiredService<WaitDelay>(),
+                        new WaitDelay(),
                         Next(quest, sequence)
                     ];
 
                 case EInteractionType.WaitForManualProgress:
                 case EInteractionType.Instruction:
-                    return [serviceProvider.GetRequiredService<WaitNextStepOrSequence>()];
+                    return [new WaitNextStepOrSequence()];
 
                 case EInteractionType.Duty:
                 case EInteractionType.SinglePlayerDuty:
@@ -68,9 +66,9 @@ internal static class WaitAtEnd
 
                     return
                     [
-                        serviceProvider.GetRequiredService<WaitObjectAtPosition>()
-                            .With(step.DataId.Value, step.Position.Value, step.NpcWaitDistance ?? 0.05f),
-                        serviceProvider.GetRequiredService<WaitDelay>(),
+                        new WaitObjectAtPosition(step.DataId.Value, step.Position.Value, step.NpcWaitDistance ?? 0.05f,
+                            gameFunctions),
+                        new WaitDelay(),
                         Next(quest, sequence)
                     ];
 
@@ -104,15 +102,14 @@ internal static class WaitAtEnd
                     return
                     [
                         waitInteraction,
-                        serviceProvider.GetRequiredService<WaitDelay>(),
+                        new WaitDelay(),
                         Next(quest, sequence)
                     ];
 
                 case EInteractionType.AcceptQuest:
                 {
-                    var accept = serviceProvider.GetRequiredService<WaitQuestAccepted>()
-                        .With(step.PickUpQuestId ?? quest.Id);
-                    var delay = serviceProvider.GetRequiredService<WaitDelay>();
+                    var accept = new WaitQuestAccepted(step.PickUpQuestId ?? quest.Id, questFunctions);
+                    var delay = new WaitDelay();
                     if (step.PickUpQuestId != null)
                         return [accept, delay, Next(quest, sequence)];
                     else
@@ -121,9 +118,8 @@ internal static class WaitAtEnd
 
                 case EInteractionType.CompleteQuest:
                 {
-                    var complete = serviceProvider.GetRequiredService<WaitQuestCompleted>()
-                        .With(step.TurnInQuestId ?? quest.Id);
-                    var delay = serviceProvider.GetRequiredService<WaitDelay>();
+                    var complete = new WaitQuestCompleted(step.TurnInQuestId ?? quest.Id, questFunctions);
+                    var delay = new WaitDelay();
                     if (step.TurnInQuestId != null)
                         return [complete, delay, Next(quest, sequence)];
                     else
@@ -132,7 +128,7 @@ internal static class WaitAtEnd
 
                 case EInteractionType.Interact:
                 default:
-                    return [serviceProvider.GetRequiredService<WaitDelay>(), Next(quest, sequence)];
+                    return [new WaitDelay(), Next(quest, sequence)];
             }
         }
 
@@ -142,14 +138,8 @@ internal static class WaitAtEnd
         }
     }
 
-    internal sealed class WaitDelay() : AbstractDelayedTask(TimeSpan.FromSeconds(1))
+    internal sealed class WaitDelay(TimeSpan? delay = null) : AbstractDelayedTask(delay ?? TimeSpan.FromSeconds(1))
     {
-        public ITask With(TimeSpan delay)
-        {
-            Delay = delay;
-            return this;
-        }
-
         protected override bool StartInternal() => true;
 
         public override string ToString() => $"Wait(seconds: {Delay.TotalSeconds})";
@@ -164,100 +154,64 @@ internal static class WaitAtEnd
         public override string ToString() => "Wait(next step or sequence)";
     }
 
-    internal sealed class WaitForCompletionFlags(QuestFunctions questFunctions) : ITask
+    internal sealed class WaitForCompletionFlags(QuestId quest, QuestStep step, QuestFunctions questFunctions) : ITask
     {
-        public QuestId Quest { get; set; } = null!;
-        public QuestStep Step { get; set; } = null!;
-        public IList<QuestWorkValue?> Flags { get; set; } = null!;
-
-        public ITask With(QuestId quest, QuestStep step)
-        {
-            Quest = quest;
-            Step = step;
-            Flags = step.CompletionQuestVariablesFlags;
-            return this;
-        }
-
         public bool Start() => true;
 
         public ETaskResult Update()
         {
-            QuestProgressInfo? questWork = questFunctions.GetQuestProgressInfo(Quest);
+            QuestProgressInfo? questWork = questFunctions.GetQuestProgressInfo(quest);
             return questWork != null &&
-                   QuestWorkUtils.MatchesQuestWork(Step.CompletionQuestVariablesFlags, questWork)
+                   QuestWorkUtils.MatchesQuestWork(step.CompletionQuestVariablesFlags, questWork)
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
         }
 
         public override string ToString() =>
-            $"Wait(QW: {string.Join(", ", Flags.Select(x => x?.ToString() ?? "-"))})";
+            $"Wait(QW: {string.Join(", ", step.CompletionQuestVariablesFlags.Select(x => x?.ToString() ?? "-"))})";
     }
 
-    internal sealed class WaitObjectAtPosition(GameFunctions gameFunctions) : ITask
+    private sealed class WaitObjectAtPosition(
+        uint dataId,
+        Vector3 destination,
+        float distance,
+        GameFunctions gameFunctions) : ITask
     {
-        public uint DataId { get; set; }
-        public Vector3 Destination { get; set; }
-        public float Distance { get; set; }
-
-        public ITask With(uint dataId, Vector3 destination, float distance)
-        {
-            DataId = dataId;
-            Destination = destination;
-            Distance = distance;
-            return this;
-        }
-
         public bool Start() => true;
 
         public ETaskResult Update() =>
-            gameFunctions.IsObjectAtPosition(DataId, Destination, Distance)
+            gameFunctions.IsObjectAtPosition(dataId, destination, distance)
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
 
         public override string ToString() =>
-            $"WaitObj({DataId} at {Destination.ToString("G", CultureInfo.InvariantCulture)} < {Distance})";
+            $"WaitObj({dataId} at {destination.ToString("G", CultureInfo.InvariantCulture)} < {distance})";
     }
 
-    internal sealed class WaitQuestAccepted(QuestFunctions questFunctions) : ITask
+    internal sealed class WaitQuestAccepted(ElementId elementId, QuestFunctions questFunctions) : ITask
     {
-        public ElementId ElementId { get; set; } = null!;
-
-        public ITask With(ElementId elementId)
-        {
-            ElementId = elementId;
-            return this;
-        }
-
         public bool Start() => true;
 
         public ETaskResult Update()
         {
-            return questFunctions.IsQuestAccepted(ElementId)
+            return questFunctions.IsQuestAccepted(elementId)
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
         }
 
-        public override string ToString() => $"WaitQuestAccepted({ElementId})";
+        public override string ToString() => $"WaitQuestAccepted({elementId})";
     }
 
-    internal sealed class WaitQuestCompleted(QuestFunctions questFunctions) : ITask
+    internal sealed class WaitQuestCompleted(ElementId elementId, QuestFunctions questFunctions) : ITask
     {
-        public ElementId ElementId { get; set; } = null!;
-
-        public ITask With(ElementId elementId)
-        {
-            ElementId = elementId;
-            return this;
-        }
-
         public bool Start() => true;
 
         public ETaskResult Update()
         {
-            return questFunctions.IsQuestComplete(ElementId) ? ETaskResult.TaskComplete : ETaskResult.StillRunning;
+            return questFunctions.IsQuestComplete(elementId) ? ETaskResult.TaskComplete : ETaskResult.StillRunning;
         }
 
-        public override string ToString() => $"WaitQuestComplete({ElementId})";
+        public override string ToString() => $"WaitQuestComplete({elementId})";
     }
 
     internal sealed class NextStep(ElementId elementId, int sequence) : ILastTask

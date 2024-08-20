@@ -17,6 +17,9 @@ using Questionable.Model.Questing;
 namespace Questionable.Controller.Steps.Gathering;
 
 internal sealed class DoGather(
+    GatheringController.GatheringRequest currentRequest,
+    GatheringNode currentNode,
+    bool revisitRequired,
     GatheringController gatheringController,
     GameFunctions gameFunctions,
     IGameGui gameGui,
@@ -26,34 +29,22 @@ internal sealed class DoGather(
 {
     private const uint StatusGatheringRateUp = 218;
 
-    private GatheringController.GatheringRequest _currentRequest = null!;
-    private GatheringNode _currentNode = null!;
-    private bool _revisitRequired;
     private bool _revisitTriggered;
     private bool _wasGathering;
     private SlotInfo? _slotToGather;
     private Queue<EAction>? _actionQueue;
 
-    public ITask With(GatheringController.GatheringRequest currentRequest, GatheringNode currentNode,
-        bool revisitRequired)
-    {
-        _currentRequest = currentRequest;
-        _currentNode = currentNode;
-        _revisitRequired = revisitRequired;
-        return this;
-    }
-
     public bool Start() => true;
 
     public unsafe ETaskResult Update()
     {
-        if (_revisitRequired && !_revisitTriggered)
+        if (revisitRequired && !_revisitTriggered)
         {
             logger.LogInformation("No revisit");
             return ETaskResult.TaskComplete;
         }
 
-        if (gatheringController.HasNodeDisappeared(_currentNode))
+        if (gatheringController.HasNodeDisappeared(currentNode))
         {
             logger.LogInformation("Node disappeared");
             return ETaskResult.TaskComplete;
@@ -78,9 +69,9 @@ internal sealed class DoGather(
                 else
                 {
                     var slots = ReadSlots(addonGathering);
-                    if (_currentRequest.Collectability > 0)
+                    if (currentRequest.Collectability > 0)
                     {
-                        var slot = slots.Single(x => x.ItemId == _currentRequest.ItemId);
+                        var slot = slots.Single(x => x.ItemId == currentRequest.ItemId);
                         addonGathering->FireCallbackInt(slot.Index);
                     }
                     else
@@ -103,7 +94,7 @@ internal sealed class DoGather(
                         _actionQueue = GetNextActions(nodeCondition, slots);
                         if (_actionQueue.Count == 0)
                         {
-                            var slot = _slotToGather ?? slots.Single(x => x.ItemId == _currentRequest.ItemId);
+                            var slot = _slotToGather ?? slots.Single(x => x.ItemId == currentRequest.ItemId);
                             addonGathering->FireCallbackInt(slot.Index);
                         }
                     }
@@ -157,9 +148,9 @@ internal sealed class DoGather(
         if (!gameFunctions.HasStatus(StatusGatheringRateUp))
         {
             // do we have an alternative item? only happens for 'evaluation' leve quests
-            if (_currentRequest.AlternativeItemId != 0)
+            if (currentRequest.AlternativeItemId != 0)
             {
-                var alternativeSlot = slots.Single(x => x.ItemId == _currentRequest.AlternativeItemId);
+                var alternativeSlot = slots.Single(x => x.ItemId == currentRequest.AlternativeItemId);
 
                 if (alternativeSlot.GatheringChance == 100)
                 {
@@ -195,7 +186,7 @@ internal sealed class DoGather(
                 }
             }
 
-            var slot = slots.Single(x => x.ItemId == _currentRequest.ItemId);
+            var slot = slots.Single(x => x.ItemId == currentRequest.ItemId);
             if (slot.GatheringChance > 0 && slot.GatheringChance < 100)
             {
                 if (slot.GatheringChance >= 95 &&
@@ -243,7 +234,7 @@ internal sealed class DoGather(
         _revisitTriggered = true;
     }
 
-    public override string ToString() => $"DoGather{(_revisitRequired ? " if revist" : "")}";
+    public override string ToString() => $"DoGather{(revisitRequired ? " if revist" : "")}";
 
     private sealed record SlotInfo(int Index, uint ItemId, int GatheringChance, int BoonChance, int Quantity);
 

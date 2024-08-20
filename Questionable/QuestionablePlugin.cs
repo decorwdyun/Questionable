@@ -125,56 +125,42 @@ public sealed class QuestionablePlugin : IDalamudPlugin
     private static void AddTaskFactories(ServiceCollection serviceCollection)
     {
         // individual tasks
-        serviceCollection.AddTransient<MountTask>();
-        serviceCollection.AddTransient<UnmountTask>();
         serviceCollection.AddTransient<MoveToLandingLocation>();
         serviceCollection.AddTransient<DoGather>();
         serviceCollection.AddTransient<DoGatherCollectable>();
         serviceCollection.AddTransient<SwitchClassJob>();
+        serviceCollection.AddSingleton<Mount.Factory>();
 
         // task factories
-        serviceCollection.AddTaskWithFactory<StepDisabled.Factory, StepDisabled.Task>();
-        serviceCollection.AddSingleton<ITaskFactory, EquipRecommended.BeforeDutyOrInstance>();
-        serviceCollection.AddTaskWithFactory<GatheringRequiredItems.Factory, GatheringRequiredItems.StartGathering, GatheringRequiredItems.SkipMarker>();
-        serviceCollection.AddTaskWithFactory<AetheryteShortcut.Factory, AetheryteShortcut.UseAetheryteShortcut>();
-        serviceCollection.AddTaskWithFactory<SkipCondition.Factory, SkipCondition.CheckSkip>();
-        serviceCollection.AddTaskWithFactory<AethernetShortcut.Factory, AethernetShortcut.UseAethernetShortcut>();
-        serviceCollection.AddTaskWithFactory<WaitAtStart.Factory, WaitAtStart.WaitDelay>();
-        serviceCollection.AddTaskWithFactory<Move.Factory, Move.MoveInternal, Move.ExpectToBeNearDataId, Move.Land>();
-        serviceCollection.AddTransient<Move.MoveBuilder>();
+        serviceCollection.AddTaskFactory<StepDisabled.Factory>();
+        serviceCollection.AddTaskFactory<EquipRecommended.BeforeDutyOrInstance>();
+        serviceCollection.AddTaskFactory<GatheringRequiredItems.Factory>();
+        serviceCollection.AddTaskFactory<AetheryteShortcut.Factory>();
+        serviceCollection.AddTaskFactory<SkipCondition.Factory>();
+        serviceCollection.AddTaskFactory<AethernetShortcut.Factory>();
+        serviceCollection.AddTaskFactory<WaitAtStart.Factory>();
+        serviceCollection.AddTaskFactory<MoveTo.Factory>();
 
-        serviceCollection.AddTaskWithFactory<NextQuest.Factory, NextQuest.SetQuest>();
-        serviceCollection.AddTaskWithFactory<AetherCurrent.Factory, AetherCurrent.DoAttune>();
-        serviceCollection.AddTaskWithFactory<AethernetShard.Factory, AethernetShard.DoAttune>();
-        serviceCollection.AddTaskWithFactory<Aetheryte.Factory, Aetheryte.DoAttune>();
-        serviceCollection.AddTaskWithFactory<Combat.Factory, Combat.HandleCombat>();
-        serviceCollection.AddTaskWithFactory<Duty.Factory, Duty.OpenDutyFinder>();
-        serviceCollection.AddTaskWithFactory<Emote.Factory, Emote.UseOnObject, Emote.Use>();
-        serviceCollection.AddTaskWithFactory<Action.Factory, Action.UseOnObject>();
-        serviceCollection.AddTaskWithFactory<Interact.Factory, Interact.DoInteract>();
-        serviceCollection.AddTaskWithFactory<Jump.Factory, Jump.SingleJump, Jump.RepeatedJumps>();
-        serviceCollection.AddTaskWithFactory<Dive.Factory, Dive.DoDive>();
-        serviceCollection.AddTaskWithFactory<Say.Factory, Say.UseChat>();
-        serviceCollection
-            .AddTaskWithFactory<UseItem.Factory, UseItem.UseOnGround, UseItem.UseOnObject, UseItem.Use,
-                UseItem.UseOnPosition>();
-        serviceCollection.AddTaskWithFactory<EquipItem.Factory, EquipItem.DoEquip>();
-        serviceCollection.AddTaskWithFactory<EquipRecommended.Factory, EquipRecommended.DoEquipRecommended>();
-        serviceCollection.AddTaskWithFactory<Craft.Factory, Craft.DoCraft>();
-        serviceCollection.AddTaskWithFactory<TurnInDelivery.Factory, TurnInDelivery.SatisfactionSupplyTurnIn>();
-        serviceCollection
-            .AddTaskWithFactory<InitiateLeve.Factory,
-                InitiateLeve.SkipInitiateIfActive,
-                InitiateLeve.OpenJournal,
-                InitiateLeve.Initiate,
-                InitiateLeve.SelectDifficulty>();
+        serviceCollection.AddTaskFactory<NextQuest.Factory>();
+        serviceCollection.AddTaskFactory<AetherCurrent.Factory>();
+        serviceCollection.AddTaskFactory<AethernetShard.Factory>();
+        serviceCollection.AddTaskFactory<Aetheryte.Factory>();
+        serviceCollection.AddTaskFactory<Combat.Factory>();
+        serviceCollection.AddTaskFactory<Duty.Factory>();
+        serviceCollection.AddTaskFactory<Emote.Factory>();
+        serviceCollection.AddTaskFactory<Action.Factory>();
+        serviceCollection.AddTaskFactory<Interact.Factory>();
+        serviceCollection.AddTaskFactory<Jump.Factory>();
+        serviceCollection.AddTaskFactory<Dive.Factory>();
+        serviceCollection.AddTaskFactory<Say.Factory>();
+        serviceCollection.AddTaskFactory<UseItem.Factory>();
+        serviceCollection.AddTaskFactory<EquipItem.Factory>();
+        serviceCollection.AddTaskFactory<EquipRecommended.Factory>();
+        serviceCollection.AddTaskFactory<Craft.Factory>();
+        serviceCollection.AddTaskFactory<TurnInDelivery.Factory>();
+        serviceCollection.AddTaskFactory<InitiateLeve.Factory>();
 
-        serviceCollection
-            .AddTaskWithFactory<WaitAtEnd.Factory,
-                WaitAtEnd.WaitDelay,
-                WaitAtEnd.WaitNextStepOrSequence,
-                WaitAtEnd.WaitForCompletionFlags,
-                WaitAtEnd.WaitObjectAtPosition>();
+        serviceCollection.AddTaskFactory<WaitAtEnd.Factory>();
         serviceCollection.AddTransient<WaitAtEnd.WaitQuestAccepted>();
         serviceCollection.AddTransient<WaitAtEnd.WaitQuestCompleted>();
 

@@ -10,7 +10,7 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class Duty
 {
-    internal sealed class Factory(IServiceProvider serviceProvider) : SimpleTaskFactory
+    internal sealed class Factory(GameFunctions gameFunctions, ICondition condition) : SimpleTaskFactory
     {
         public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -18,33 +18,26 @@ internal static class Duty
                 return null;
 
             ArgumentNullException.ThrowIfNull(step.ContentFinderConditionId);
-
-            return serviceProvider.GetRequiredService<OpenDutyFinder>()
-                .With(step.ContentFinderConditionId.Value);
+            return new OpenDutyFinder(step.ContentFinderConditionId.Value, gameFunctions, condition);
         }
     }
 
-    internal sealed class OpenDutyFinder(GameFunctions gameFunctions, ICondition condition) : ITask
+    private sealed class OpenDutyFinder(
+        uint contentFinderConditionId,
+        GameFunctions gameFunctions,
+        ICondition condition) : ITask
     {
-        public uint ContentFinderConditionId { get; set; }
-
-        public ITask With(uint contentFinderConditionId)
-        {
-            ContentFinderConditionId = contentFinderConditionId;
-            return this;
-        }
-
         public bool Start()
         {
             if (condition[ConditionFlag.InDutyQueue])
                 return false;
 
-            gameFunctions.OpenDutyFinder(ContentFinderConditionId);
+            gameFunctions.OpenDutyFinder(contentFinderConditionId);
             return true;
         }
 
         public ETaskResult Update() => ETaskResult.TaskComplete;
 
-        public override string ToString() => $"OpenDutyFinder({ContentFinderConditionId})";
+        public override string ToString() => $"OpenDutyFinder({contentFinderConditionId})";
     }
 }

@@ -11,7 +11,11 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class Jump
 {
-    internal sealed class Factory(IServiceProvider serviceProvider) : SimpleTaskFactory
+    internal sealed class Factory(
+        MovementController movementController,
+        IClientState clientState,
+        IFramework framework,
+        ILoggerFactory loggerFactory) : SimpleTaskFactory
     {
         public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -21,43 +25,39 @@ internal static class Jump
             ArgumentNullException.ThrowIfNull(step.JumpDestination);
 
             if (step.JumpDestination.Type == EJumpType.SingleJump)
-            {
-                return serviceProvider.GetRequiredService<SingleJump>()
-                    .With(step.DataId, step.JumpDestination, step.Comment);
-            }
+                return SingleJump(step.DataId, step.JumpDestination, step.Comment);
             else
-            {
-                return serviceProvider.GetRequiredService<RepeatedJumps>()
-                    .With(step.DataId, step.JumpDestination, step.Comment);
-            }
+                return RepeatedJumps(step.DataId, step.JumpDestination, step.Comment);
+        }
+
+        public ITask SingleJump(uint? dataId, JumpDestination jumpDestination, string? comment)
+        {
+            return new DoSingleJump(dataId, jumpDestination, comment, movementController, clientState, framework);
+        }
+
+        public ITask RepeatedJumps(uint? dataId, JumpDestination jumpDestination, string? comment)
+        {
+            return new DoRepeatedJumps(dataId, jumpDestination, comment, movementController, clientState, framework,
+                loggerFactory.CreateLogger<DoRepeatedJumps>());
         }
     }
 
-    internal class SingleJump(
+    private class DoSingleJump(
+        uint? dataId,
+        JumpDestination jumpDestination,
+        string? comment,
         MovementController movementController,
         IClientState clientState,
         IFramework framework) : ITask
     {
-        public uint? DataId { get; set; }
-        public JumpDestination JumpDestination { get; set; } = null!;
-        public string? Comment { get; set; }
-
-        public ITask With(uint? dataId, JumpDestination jumpDestination, string? comment)
-        {
-            DataId = dataId;
-            JumpDestination = jumpDestination;
-            Comment = comment ?? string.Empty;
-            return this;
-        }
-
         public virtual bool Start()
         {
-            float stopDistance = JumpDestination.CalculateStopDistance();
-            if ((clientState.LocalPlayer!.Position - JumpDestination.Position).Length() <= stopDistance)
+            float stopDistance = jumpDestination.CalculateStopDistance();
+            if ((clientState.LocalPlayer!.Position - jumpDestination.Position).Length() <= stopDistance)
                 return false;
 
-            movementController.NavigateTo(EMovementType.Quest, DataId, [JumpDestination.Position], false, false,
-                JumpDestination.StopDistance ?? stopDistance);
+            movementController.NavigateTo(EMovementType.Quest, dataId, [jumpDestination.Position], false, false,
+                jumpDestination.StopDistance ?? stopDistance);
             framework.RunOnTick(() =>
                 {
                     unsafe
@@ -65,7 +65,7 @@ internal static class Jump
                         ActionManager.Instance()->UseAction(ActionType.GeneralAction, 2);
                     }
                 },
-                TimeSpan.FromSeconds(JumpDestination.DelaySeconds ?? 0.5f));
+                TimeSpan.FromSeconds(jumpDestination.DelaySeconds ?? 0.5f));
             return true;
         }
 
@@ -81,22 +81,28 @@ internal static class Jump
             return ETaskResult.TaskComplete;
         }
 
-        public override string ToString() => $"Jump({Comment})";
+        public override string ToString() => $"Jump({comment})";
     }
 
-    internal sealed class RepeatedJumps(
+    private sealed class DoRepeatedJumps(
+        uint? dataId,
+        JumpDestination jumpDestination,
+        string? comment,
         MovementController movementController,
         IClientState clientState,
         IFramework framework,
-        ILogger<RepeatedJumps> logger) : SingleJump(movementController, clientState, framework)
+        ILogger<DoRepeatedJumps> logger)
+        : DoSingleJump(dataId, jumpDestination, comment, movementController, clientState, framework)
     {
+        private readonly JumpDestination _jumpDestination = jumpDestination;
+        private readonly string? _comment = comment;
         private readonly IClientState _clientState = clientState;
         private DateTime _continueAt = DateTime.MinValue;
         private int _attempts;
 
         public override bool Start()
         {
-            _continueAt = DateTime.Now + TimeSpan.FromSeconds(2 * (JumpDestination.DelaySeconds ?? 0.5f));
+            _continueAt = DateTime.Now + TimeSpan.FromSeconds(2 * (_jumpDestination.DelaySeconds ?? 0.5f));
             return base.Start();
         }
 
@@ -105,13 +111,13 @@ internal static class Jump
             if (DateTime.Now < _continueAt)
                 return ETaskResult.StillRunning;
 
-            float stopDistance = JumpDestination.CalculateStopDistance();
-            if ((_clientState.LocalPlayer!.Position - JumpDestination.Position).Length() <= stopDistance ||
-                _clientState.LocalPlayer.Position.Y >= JumpDestination.Position.Y - 0.5f)
+            float stopDistance = _jumpDestination.CalculateStopDistance();
+            if ((_clientState.LocalPlayer!.Position - _jumpDestination.Position).Length() <= stopDistance ||
+                _clientState.LocalPlayer.Position.Y >= _jumpDestination.Position.Y - 0.5f)
                 return ETaskResult.TaskComplete;
 
             logger.LogTrace("Y-Heights for jumps: player={A}, target={B}", _clientState.LocalPlayer.Position.Y,
-                JumpDestination.Position.Y - 0.5f);
+                _jumpDestination.Position.Y - 0.5f);
             unsafe
             {
                 ActionManager.Instance()->UseAction(ActionType.GeneralAction, 2);
@@ -121,10 +127,10 @@ internal static class Jump
             if (_attempts >= 50)
                 throw new TaskException("Tried to jump too many times, didn't reach the target");
 
-            _continueAt = DateTime.Now + TimeSpan.FromSeconds(JumpDestination.DelaySeconds ?? 0.5f);
+            _continueAt = DateTime.Now + TimeSpan.FromSeconds(_jumpDestination.DelaySeconds ?? 0.5f);
             return ETaskResult.StillRunning;
         }
 
-        public override string ToString() => $"RepeatedJump({Comment})";
+        public override string ToString() => $"RepeatedJump({_comment})";
     }
 }

@@ -10,7 +10,10 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class Aetheryte
 {
-    internal sealed class Factory(IServiceProvider serviceProvider) : SimpleTaskFactory
+    internal sealed class Factory(
+        AetheryteFunctions aetheryteFunctions,
+        GameFunctions gameFunctions,
+        ILoggerFactory loggerFactory) : SimpleTaskFactory
     {
         public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -19,42 +22,35 @@ internal static class Aetheryte
 
             ArgumentNullException.ThrowIfNull(step.Aetheryte);
 
-            return serviceProvider.GetRequiredService<DoAttune>()
-                .With(step.Aetheryte.Value);
+            return new DoAttune(step.Aetheryte.Value, aetheryteFunctions, gameFunctions,
+                loggerFactory.CreateLogger<DoAttune>());
         }
     }
 
-    internal sealed class DoAttune(
+    private sealed class DoAttune(
+        EAetheryteLocation aetheryteLocation,
         AetheryteFunctions aetheryteFunctions,
         GameFunctions gameFunctions,
         ILogger<DoAttune> logger) : ITask
     {
-        public EAetheryteLocation AetheryteLocation { get; set; }
-
-        public ITask With(EAetheryteLocation aetheryteLocation)
-        {
-            AetheryteLocation = aetheryteLocation;
-            return this;
-        }
-
         public bool Start()
         {
-            if (!aetheryteFunctions.IsAetheryteUnlocked(AetheryteLocation))
+            if (!aetheryteFunctions.IsAetheryteUnlocked(aetheryteLocation))
             {
-                logger.LogInformation("Attuning to aetheryte {Aetheryte}", AetheryteLocation);
-                gameFunctions.InteractWith((uint)AetheryteLocation);
+                logger.LogInformation("Attuning to aetheryte {Aetheryte}", aetheryteLocation);
+                gameFunctions.InteractWith((uint)aetheryteLocation);
                 return true;
             }
 
-            logger.LogInformation("Already attuned to aetheryte {Aetheryte}", AetheryteLocation);
+            logger.LogInformation("Already attuned to aetheryte {Aetheryte}", aetheryteLocation);
             return false;
         }
 
         public ETaskResult Update() =>
-            aetheryteFunctions.IsAetheryteUnlocked(AetheryteLocation)
+            aetheryteFunctions.IsAetheryteUnlocked(aetheryteLocation)
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
 
-        public override string ToString() => $"AttuneAetheryte({AetheryteLocation})";
+        public override string ToString() => $"AttuneAetheryte({aetheryteLocation})";
     }
 }

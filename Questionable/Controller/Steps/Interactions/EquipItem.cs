@@ -16,7 +16,7 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class EquipItem
 {
-    internal sealed class Factory(IServiceProvider serviceProvider) : SimpleTaskFactory
+    internal sealed class Factory(IDataManager dataManager, ILoggerFactory loggerFactory) : SimpleTaskFactory
     {
         public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -24,14 +24,39 @@ internal static class EquipItem
                 return null;
 
             ArgumentNullException.ThrowIfNull(step.ItemId);
-            return serviceProvider.GetRequiredService<DoEquip>()
-                .With(step.ItemId.Value);
+            return Equip(step.ItemId.Value);
+        }
+
+        private DoEquip Equip(uint itemId)
+        {
+            var item = dataManager.GetExcelSheet<Item>()!.GetRow(itemId) ??
+                       throw new ArgumentOutOfRangeException(nameof(itemId));
+            var targetSlots = GetEquipSlot(item) ?? throw new InvalidOperationException("Not a piece of equipment");
+            return new DoEquip(itemId, item, targetSlots, dataManager, loggerFactory.CreateLogger<DoEquip>());
+        }
+
+        private static List<ushort>? GetEquipSlot(Item item)
+        {
+            return item.EquipSlotCategory.Row switch
+            {
+                >= 1 and <= 11 => [(ushort)(item.EquipSlotCategory.Row - 1)],
+                12 => [11, 12], // rings
+                13 => [0],
+                17 => [13], // soul crystal
+                _ => null
+            };
         }
     }
 
-    internal sealed class DoEquip(IDataManager dataManager, ILogger<DoEquip> logger) : ITask, IToastAware
+    private sealed class DoEquip(
+        uint itemId,
+        Item item,
+        List<ushort> targetSlots,
+        IDataManager dataManager,
+        ILogger<DoEquip> logger) : ITask, IToastAware
     {
         private const int MaxAttempts = 3;
+
         private static readonly IReadOnlyList<InventoryType> SourceInventoryTypes =
         [
             InventoryType.ArmoryMainHand,
@@ -55,21 +80,8 @@ internal static class EquipItem
             InventoryType.Inventory4,
         ];
 
-        private uint _itemId;
-        private Item _item = null!;
-        private List<ushort> _targetSlots = [];
         private int _attempts;
-
         private DateTime _continueAt = DateTime.MaxValue;
-
-        public ITask With(uint itemId)
-        {
-            _itemId = itemId;
-            _item = dataManager.GetExcelSheet<Item>()!.GetRow(itemId) ??
-                    throw new ArgumentOutOfRangeException(nameof(itemId));
-            _targetSlots = GetEquipSlot(_item) ?? throw new InvalidOperationException("Not a piece of equipment");
-            return this;
-        }
 
         public bool Start()
         {
@@ -87,10 +99,10 @@ internal static class EquipItem
             if (inventoryManager == null)
                 return ETaskResult.StillRunning;
 
-            foreach (ushort x in _targetSlots)
+            foreach (ushort x in targetSlots)
             {
                 var itemSlot = inventoryManager->GetInventorySlot(InventoryType.EquippedItems, x);
-                if (itemSlot != null && itemSlot->ItemId == _itemId)
+                if (itemSlot != null && itemSlot->ItemId == itemId)
                     return ETaskResult.TaskComplete;
             }
 
@@ -113,12 +125,12 @@ internal static class EquipItem
             if (equippedContainer == null)
                 return;
 
-            foreach (ushort slot in _targetSlots)
+            foreach (ushort slot in targetSlots)
             {
                 var itemSlot = equippedContainer->GetInventorySlot(slot);
-                if (itemSlot != null && itemSlot->ItemId == _itemId)
+                if (itemSlot != null && itemSlot->ItemId == itemId)
                 {
-                    logger.LogInformation("Already equipped {Item}, skipping step", _item.Name?.ToString());
+                    logger.LogInformation("Already equipped {Item}, skipping step", item.Name?.ToString());
                     return;
                 }
             }
@@ -129,24 +141,24 @@ internal static class EquipItem
                 if (sourceContainer == null)
                     continue;
 
-                if (inventoryManager->GetItemCountInContainer(_itemId, sourceInventoryType, true) == 0 &&
-                    inventoryManager->GetItemCountInContainer(_itemId, sourceInventoryType) == 0)
+                if (inventoryManager->GetItemCountInContainer(itemId, sourceInventoryType, true) == 0 &&
+                    inventoryManager->GetItemCountInContainer(itemId, sourceInventoryType) == 0)
                     continue;
 
                 for (ushort sourceSlot = 0; sourceSlot < sourceContainer->Size; sourceSlot++)
                 {
                     var sourceItem = sourceContainer->GetInventorySlot(sourceSlot);
-                    if (sourceItem == null || sourceItem->ItemId != _itemId)
+                    if (sourceItem == null || sourceItem->ItemId != itemId)
                         continue;
 
                     // Move the item to the first available slot
-                    ushort targetSlot = _targetSlots
+                    ushort targetSlot = targetSlots
                         .Where(x =>
                         {
                             var itemSlot = inventoryManager->GetInventorySlot(InventoryType.EquippedItems, x);
                             return itemSlot == null || itemSlot->ItemId == 0;
                         })
-                        .Concat(_targetSlots).First();
+                        .Concat(targetSlots).First();
 
                     logger.LogInformation(
                         "Equipping item from {SourceInventory}, {SourceSlot} to {TargetInventory}, {TargetSlot}",
@@ -160,19 +172,7 @@ internal static class EquipItem
             }
         }
 
-        private static List<ushort>? GetEquipSlot(Item item)
-        {
-            return item.EquipSlotCategory.Row switch
-            {
-                >= 1 and <= 11 => [(ushort)(item.EquipSlotCategory.Row - 1)],
-                12 => [11, 12], // rings
-                13 => [0],
-                17 => [13], // soul crystal
-                _ => null
-            };
-        }
-
-        public override string ToString() => $"Equip({_item.Name})";
+        public override string ToString() => $"Equip({item.Name})";
 
         public bool OnErrorToast(SeString message)
         {

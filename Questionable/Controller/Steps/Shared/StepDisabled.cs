@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Questionable.Model;
 using Questionable.Model.Questing;
 
@@ -8,14 +6,14 @@ namespace Questionable.Controller.Steps.Shared;
 
 internal static class StepDisabled
 {
-    internal sealed class Factory(IServiceProvider serviceProvider) : SimpleTaskFactory
+    internal sealed class Factory(ILoggerFactory loggerFactory) : SimpleTaskFactory
     {
         public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
             if (!step.Disabled)
                 return null;
 
-            return serviceProvider.GetRequiredService<Task>();
+            return new Task(loggerFactory.CreateLogger<Task>());
         }
     }
 

@@ -9,6 +9,7 @@ using FFXIVClientStructs.FFXIV.Component.GUI;
 using LLib.GameUI;
 using Microsoft.Extensions.DependencyInjection;
 using Questionable.Controller.Steps.Common;
+using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
 using ValueType = FFXIVClientStructs.FFXIV.Component.GUI.ValueType;
@@ -17,31 +18,23 @@ namespace Questionable.Controller.Steps.Leves;
 
 internal static class InitiateLeve
 {
-    internal sealed class Factory(IServiceProvider serviceProvider, ICondition condition) : ITaskFactory
+    internal sealed class Factory(IGameGui gameGui, ICondition condition) : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
             if (step.InteractionType != EInteractionType.InitiateLeve)
                 yield break;
 
-            yield return serviceProvider.GetRequiredService<SkipInitiateIfActive>().With(quest.Id);
-            yield return serviceProvider.GetRequiredService<OpenJournal>().With(quest.Id);
-            yield return serviceProvider.GetRequiredService<Initiate>().With(quest.Id);
-            yield return serviceProvider.GetRequiredService<SelectDifficulty>();
+            yield return new SkipInitiateIfActive(quest.Id);
+            yield return new OpenJournal(quest.Id);
+            yield return new Initiate(quest.Id, gameGui);
+            yield return new SelectDifficulty(gameGui);
             yield return new WaitConditionTask(() => condition[ConditionFlag.BoundByDuty], "Wait(BoundByDuty)");
         }
     }
 
-    internal sealed unsafe class SkipInitiateIfActive : ITask
+    internal sealed unsafe class SkipInitiateIfActive(ElementId elementId) : ITask
     {
-        private ElementId _elementId = null!;
-
-        public ITask With(ElementId elementId)
-        {
-            _elementId = elementId;
-            return this;
-        }
-
         public bool Start() => true;
 
         public ETaskResult Update()
@@ -50,31 +43,23 @@ internal static class InitiateLeve
             if (director != null &&
                 director->EventHandlerInfo != null &&
                 director->EventHandlerInfo->EventId.ContentId == EventHandlerType.GatheringLeveDirector &&
-                director->ContentId == _elementId.Value)
+                director->ContentId == elementId.Value)
                 return ETaskResult.SkipRemainingTasksForStep;
 
             return ETaskResult.TaskComplete;
         }
 
-        public override string ToString() => $"CheckIfAlreadyActive({_elementId})";
+        public override string ToString() => $"CheckIfAlreadyActive({elementId})";
     }
 
-    internal sealed unsafe class OpenJournal : ITask
+    internal sealed unsafe class OpenJournal(ElementId elementId) : ITask
     {
-        private ElementId _elementId = null!;
-        private uint _questType;
+        private readonly uint _questType = elementId is LeveId ? 2u : 1u;
         private DateTime _openedAt = DateTime.MinValue;
-
-        public ITask With(ElementId elementId)
-        {
-            _elementId = elementId;
-            _questType = _elementId is LeveId ? 2u : 1u;
-            return this;
-        }
 
         public bool Start()
         {
-            AgentQuestJournal.Instance()->OpenForQuest(_elementId.Value, _questType);
+            AgentQuestJournal.Instance()->OpenForQuest(elementId.Value, _questType);
             _openedAt = DateTime.Now;
             return true;
         }
@@ -83,32 +68,24 @@ internal static class InitiateLeve
         {
             AgentQuestJournal* agentQuestJournal = AgentQuestJournal.Instance();
             if (agentQuestJournal->IsAgentActive() &&
-                agentQuestJournal->SelectedQuestId == _elementId.Value &&
+                agentQuestJournal->SelectedQuestId == elementId.Value &&
                 agentQuestJournal->SelectedQuestType == _questType)
                 return ETaskResult.TaskComplete;
 
             if (DateTime.Now > _openedAt.AddSeconds(3))
             {
-                AgentQuestJournal.Instance()->OpenForQuest(_elementId.Value, _questType);
+                AgentQuestJournal.Instance()->OpenForQuest(elementId.Value, _questType);
                 _openedAt = DateTime.Now;
             }
 
             return ETaskResult.StillRunning;
         }
 
-        public override string ToString() => $"OpenJournal({_elementId})";
+        public override string ToString() => $"OpenJournal({elementId})";
     }
 
-    internal sealed unsafe class Initiate(IGameGui gameGui) : ITask
+    internal sealed unsafe class Initiate(ElementId elementId, IGameGui gameGui) : ITask
     {
-        private ElementId _elementId = null!;
-
-        public ITask With(ElementId elementId)
-        {
-            _elementId = elementId;
-            return this;
-        }
-
         public bool Start() => true;
 
         public ETaskResult Update()
@@ -118,7 +95,7 @@ internal static class InitiateLeve
                 var pickQuest = stackalloc AtkValue[]
                 {
                     new() { Type = ValueType.Int, Int = 4 },
-                    new() { Type = ValueType.UInt, Int = _elementId.Value }
+                    new() { Type = ValueType.UInt, Int = elementId.Value }
                 };
                 addonJournalDetail->FireCallback(2, pickQuest);
                 return ETaskResult.TaskComplete;
@@ -127,7 +104,7 @@ internal static class InitiateLeve
             return ETaskResult.StillRunning;
         }
 
-        public override string ToString() => $"InitiateLeve({_elementId})";
+        public override string ToString() => $"InitiateLeve({elementId})";
     }
 
     internal sealed unsafe class SelectDifficulty(IGameGui gameGui) : ITask

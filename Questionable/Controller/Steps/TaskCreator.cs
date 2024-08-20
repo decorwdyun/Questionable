@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Model;
 using Questionable.Model.Questing;
@@ -9,18 +10,19 @@ namespace Questionable.Controller.Steps;
 
 internal sealed class TaskCreator
 {
-    private readonly IReadOnlyList<ITaskFactory> _taskFactories;
+    private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<TaskCreator> _logger;
 
-    public TaskCreator(IEnumerable<ITaskFactory> taskFactories, ILogger<TaskCreator> logger)
+    public TaskCreator(IServiceProvider serviceProvider, ILogger<TaskCreator> logger)
     {
-        _taskFactories = taskFactories.ToList().AsReadOnly();
+        _serviceProvider = serviceProvider;
         _logger = logger;
     }
 
     public IReadOnlyList<ITask> CreateTasks(Quest quest, QuestSequence sequence, QuestStep step)
     {
-        var newTasks = _taskFactories
+        using var scope = _serviceProvider.CreateScope();
+        var newTasks = scope.ServiceProvider.GetRequiredService<IEnumerable<ITaskFactory>>()
             .SelectMany(x =>
             {
                 IList<ITask> tasks = x.CreateAllTasks(quest, sequence, step).ToList();

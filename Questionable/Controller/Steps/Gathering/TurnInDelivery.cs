@@ -13,18 +13,18 @@ namespace Questionable.Controller.Steps.Gathering;
 
 internal static class TurnInDelivery
 {
-    internal sealed class Factory(IServiceProvider serviceProvider) : SimpleTaskFactory
+    internal sealed class Factory(ILoggerFactory loggerFactory) : SimpleTaskFactory
     {
         public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
             if (quest.Id is not SatisfactionSupplyNpcId || sequence.Sequence != 1)
                 return null;
 
-            return serviceProvider.GetRequiredService<SatisfactionSupplyTurnIn>();
+            return new SatisfactionSupplyTurnIn(loggerFactory.CreateLogger<SatisfactionSupplyTurnIn>());
         }
     }
 
-    internal sealed class SatisfactionSupplyTurnIn(ILogger<SatisfactionSupplyTurnIn> logger) : ITask
+    private sealed class SatisfactionSupplyTurnIn(ILogger<SatisfactionSupplyTurnIn> logger) : ITask
     {
         private ushort? _remainingAllowances;
 

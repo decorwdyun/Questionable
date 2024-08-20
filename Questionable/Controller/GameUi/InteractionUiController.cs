@@ -92,6 +92,14 @@ internal sealed class InteractionUiController : IDisposable
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "PointMenu", PointMenuPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "HousingSelectBlock", HousingSelectBlockPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "TelepotTown", TeleportTownPostSetup);
+
+        unsafe
+        {
+            if (_gameGui.TryGetAddonByName("RhythmAction", out AtkUnitBase* addon))
+            {
+                addon->Close(true);
+            }
+        }
     }
 
     private bool ShouldHandleUiInteractions => _isInitialCheck || _questController.IsRunning;
@@ -778,7 +786,7 @@ internal sealed class InteractionUiController : IDisposable
     {
         if (ShouldHandleUiInteractions &&
             _questController.HasCurrentTaskMatching(out AethernetShortcut.UseAethernetShortcut? aethernetShortcut) &&
-            EAetheryteLocationExtensions.IsFirmamentAetheryte(aethernetShortcut.From))
+            aethernetShortcut.From.IsFirmamentAetheryte())
         {
             // this might be better via atkvalues; but this works for now
             uint toIndex = aethernetShortcut.To switch

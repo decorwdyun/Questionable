@@ -10,7 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Common;
 using Questionable.Data;
-using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Gathering;
 using Questionable.Model.Questing;
@@ -22,6 +21,7 @@ internal static class GatheringRequiredItems
     internal sealed class Factory(
         IServiceProvider serviceProvider,
         MovementController movementController,
+        GatheringController gatheringController,
         GatheringPointRegistry gatheringPointRegistry,
         IClientState clientState,
         GatheringData gatheringData,
@@ -50,8 +50,7 @@ internal static class GatheringRequiredItems
 
                 if (classJob != currentClassJob)
                 {
-                    yield return serviceProvider.GetRequiredService<SwitchClassJob>()
-                        .With(classJob);
+                    yield return new SwitchClassJob(classJob, clientState);
                 }
 
                 if (HasRequiredItems(requiredGatheredItems))
@@ -69,7 +68,7 @@ internal static class GatheringRequiredItems
                         foreach (var task in serviceProvider.GetRequiredService<TaskCreator>()
                                      .CreateTasks(quest, gatheringSequence, gatheringStep))
                             if (task is WaitAtEnd.NextStep)
-                                yield return serviceProvider.GetRequiredService<SkipMarker>();
+                                yield return CreateSkipMarkerTask();
                             else
                                 yield return task;
                     }
@@ -82,8 +81,7 @@ internal static class GatheringRequiredItems
                 yield return new WaitConditionTask(() => movementController.IsNavmeshReady,
                     "Wait(navmesh ready)");
 
-                yield return serviceProvider.GetRequiredService<StartGathering>()
-                    .With(gatheringPointId, requiredGatheredItems);
+                yield return CreateStartGatheringTask(gatheringPointId, requiredGatheredItems);
             }
         }
 
@@ -107,25 +105,28 @@ internal static class GatheringRequiredItems
                        minCollectability: (short)requiredGatheredItems.Collectability) >=
                    requiredGatheredItems.ItemCount;
         }
-    }
 
-    internal sealed class StartGathering(GatheringController gatheringController) : ITask
-    {
-        private GatheringPointId _gatheringPointId = null!;
-        private GatheredItem _gatheredItem = null!;
-
-        public ITask With(GatheringPointId gatheringPointId, GatheredItem gatheredItem)
+        private StartGathering CreateStartGatheringTask(GatheringPointId gatheringPointId, GatheredItem gatheredItem)
         {
-            _gatheringPointId = gatheringPointId;
-            _gatheredItem = gatheredItem;
-            return this;
+            return new StartGathering(gatheringPointId, gatheredItem, gatheringController);
         }
 
+        private static SkipMarker CreateSkipMarkerTask()
+        {
+            return new SkipMarker();
+        }
+    }
+
+    private sealed class StartGathering(
+        GatheringPointId gatheringPointId,
+        GatheredItem gatheredItem,
+        GatheringController gatheringController) : ITask
+    {
         public bool Start()
         {
-            return gatheringController.Start(new GatheringController.GatheringRequest(_gatheringPointId,
-                _gatheredItem.ItemId, _gatheredItem.AlternativeItemId, _gatheredItem.ItemCount,
-                _gatheredItem.Collectability));
+            return gatheringController.Start(new GatheringController.GatheringRequest(gatheringPointId,
+                gatheredItem.ItemId, gatheredItem.AlternativeItemId, gatheredItem.ItemCount,
+                gatheredItem.Collectability));
         }
 
         public ETaskResult Update()
@@ -138,11 +139,11 @@ internal static class GatheringRequiredItems
 
         public override string ToString()
         {
-            if (_gatheredItem.Collectability == 0)
-                return $"Gather({_gatheredItem.ItemCount}x {_gatheredItem.ItemId})";
+            if (gatheredItem.Collectability == 0)
+                return $"Gather({gatheredItem.ItemCount}x {gatheredItem.ItemId})";
             else
                 return
-                    $"Gather({_gatheredItem.ItemCount}x {_gatheredItem.ItemId} {SeIconChar.Collectible.ToIconString()} {_gatheredItem.Collectability})";
+                    $"Gather({gatheredItem.ItemCount}x {gatheredItem.ItemId} {SeIconChar.Collectible.ToIconString()} {gatheredItem.Collectability})";
         }
     }
 

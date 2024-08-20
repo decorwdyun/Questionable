@@ -15,7 +15,7 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class Interact
 {
-    internal sealed class Factory(IServiceProvider serviceProvider) : ITaskFactory
+    internal sealed class Factory(GameFunctions gameFunctions, ICondition condition, ILoggerFactory loggerFactory) : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -36,41 +36,46 @@ internal static class Interact
 
             // if we're fast enough, it is possible to get the smalltalk prompt
             if (sequence.Sequence == 0 && sequence.Steps.IndexOf(step) == 0)
-                yield return serviceProvider.GetRequiredService<WaitAtEnd.WaitDelay>();
+                yield return new WaitAtEnd.WaitDelay();
 
-            yield return serviceProvider.GetRequiredService<DoInteract>()
-                .With(step.DataId.Value, quest, step.InteractionType,
+            yield return Interact(step.DataId.Value, quest, step.InteractionType,
                     step.TargetTerritoryId != null || quest.Id is SatisfactionSupplyNpcId);
+        }
+
+        internal ITask Interact(uint dataId, Quest? quest, EInteractionType interactionType, bool skipMarkerCheck = false)
+        {
+            return new DoInteract(dataId, quest, interactionType, skipMarkerCheck, gameFunctions, condition,
+                loggerFactory.CreateLogger<DoInteract>());
         }
     }
 
-    internal sealed class DoInteract(GameFunctions gameFunctions, ICondition condition, ILogger<DoInteract> logger)
+    internal sealed class DoInteract(
+        uint dataId,
+        Quest? quest,
+        EInteractionType interactionType,
+        bool skipMarkerCheck,
+        GameFunctions gameFunctions,
+        ICondition condition,
+        ILogger<DoInteract> logger)
         : ITask, IConditionChangeAware
     {
         private bool _needsUnmount;
         private EInteractionState _interactionState = EInteractionState.None;
         private DateTime _continueAt = DateTime.MinValue;
 
-        private uint DataId { get; set; }
-        public Quest? Quest { get; private set; }
-        public EInteractionType InteractionType { get; set; }
-        private bool SkipMarkerCheck { get; set; }
-
-        public DoInteract With(uint dataId, Quest? quest, EInteractionType interactionType, bool skipMarkerCheck)
+        public Quest? Quest => quest;
+        public EInteractionType InteractionType
         {
-            DataId = dataId;
-            Quest = quest;
-            InteractionType = interactionType;
-            SkipMarkerCheck = skipMarkerCheck;
-            return this;
+            get => interactionType;
+            set => interactionType = value;
         }
 
         public bool Start()
         {
-            IGameObject? gameObject = gameFunctions.FindObjectByDataId(DataId);
+            IGameObject? gameObject = gameFunctions.FindObjectByDataId(dataId);
             if (gameObject == null)
             {
-                logger.LogWarning("No game object with dataId {DataId}", DataId);
+                logger.LogWarning("No game object with dataId {DataId}", dataId);
                 return false;
             }
 
@@ -78,7 +83,7 @@ internal static class Interact
             if (!gameObject.IsTargetable && condition[ConditionFlag.Mounted] &&
                 gameObject.ObjectKind != ObjectKind.GatheringPoint)
             {
-                logger.LogInformation("Preparing interaction for {DataId} by unmounting", DataId);
+                logger.LogInformation("Preparing interaction for {DataId} by unmounting", dataId);
                 _needsUnmount = true;
                 gameFunctions.Unmount();
                 _continueAt = DateTime.Now.AddSeconds(1);
@@ -117,10 +122,10 @@ internal static class Interact
             if (_interactionState == EInteractionState.InteractionConfirmed)
                 return ETaskResult.TaskComplete;
 
-            if (InteractionType == EInteractionType.InternalGather && condition[ConditionFlag.Gathering])
+            if (interactionType == EInteractionType.InternalGather && condition[ConditionFlag.Gathering])
                 return ETaskResult.TaskComplete;
 
-            IGameObject? gameObject = gameFunctions.FindObjectByDataId(DataId);
+            IGameObject? gameObject = gameFunctions.FindObjectByDataId(dataId);
             if (gameObject == null || !gameObject.IsTargetable || !HasAnyMarker(gameObject))
                 return ETaskResult.StillRunning;
 
@@ -133,14 +138,14 @@ internal static class Interact
 
         private unsafe bool HasAnyMarker(IGameObject gameObject)
         {
-            if (SkipMarkerCheck || gameObject.ObjectKind != ObjectKind.EventNpc)
+            if (skipMarkerCheck || gameObject.ObjectKind != ObjectKind.EventNpc)
                 return true;
 
             var gameObjectStruct = (FFXIVClientStructs.FFXIV.Client.Game.Object.GameObject*)gameObject.Address;
             return gameObjectStruct->NamePlateIconId != 0;
         }
 
-        public override string ToString() => $"Interact({DataId})";
+        public override string ToString() => $"Interact({dataId})";
 
         public void OnConditionChange(ConditionFlag flag, bool value)
         {

@@ -10,7 +10,10 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class Say
 {
-    internal sealed class Factory(IServiceProvider serviceProvider, ExcelFunctions excelFunctions) : ITaskFactory
+    internal sealed class Factory(
+        ChatFunctions chatFunctions,
+        Mount.Factory mountFactory,
+        ExcelFunctions excelFunctions) : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -21,31 +24,24 @@ internal static class Say
             ArgumentNullException.ThrowIfNull(step.ChatMessage);
 
             string? excelString =
-                excelFunctions.GetDialogueText(quest, step.ChatMessage.ExcelSheet, step.ChatMessage.Key, false).GetString();
+                excelFunctions.GetDialogueText(quest, step.ChatMessage.ExcelSheet, step.ChatMessage.Key, false)
+                    .GetString();
             ArgumentNullException.ThrowIfNull(excelString);
 
-            var unmount = serviceProvider.GetRequiredService<UnmountTask>();
-            var task = serviceProvider.GetRequiredService<UseChat>().With(excelString);
+            var unmount = mountFactory.Unmount();
+            var task = new UseChat(excelString, chatFunctions);
             return [unmount, task];
         }
     }
 
-    internal sealed class UseChat(ChatFunctions chatFunctions) : AbstractDelayedTask
+    private sealed class UseChat(string chatMessage, ChatFunctions chatFunctions) : AbstractDelayedTask
     {
-        public string ChatMessage { get; set; } = null!;
-
-        public ITask With(string chatMessage)
-        {
-            ChatMessage = chatMessage;
-            return this;
-        }
-
         protected override bool StartInternal()
         {
-            chatFunctions.ExecuteCommand($"/say {ChatMessage}");
+            chatFunctions.ExecuteCommand($"/say {chatMessage}");
             return true;
         }
 
-        public override string ToString() => $"Say({ChatMessage})";
+        public override string ToString() => $"Say({chatMessage})";
     }
 }

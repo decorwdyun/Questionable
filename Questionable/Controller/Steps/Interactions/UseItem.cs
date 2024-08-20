@@ -26,9 +26,17 @@ internal static class UseItem
     public const int VesperBayAetheryteTicket = 30362;
 
     internal sealed class Factory(
-        IServiceProvider serviceProvider,
+        Mount.Factory mountFactory,
+        MoveTo.Factory moveFactory,
+        Interact.Factory interactFactory,
+        AetheryteShortcut.Factory aetheryteShortcutFactory,
+        AethernetShortcut.Factory aethernetShortcutFactory,
+        GameFunctions gameFunctions,
+        QuestFunctions questFunctions,
+        ICondition condition,
         IClientState clientState,
         TerritoryData territoryData,
+        ILoggerFactory loggerFactory,
         ILogger<Factory> logger)
         : ITaskFactory
     {
@@ -48,8 +56,7 @@ internal static class UseItem
                         return CreateVesperBayFallbackTask();
                 }
 
-                var task = serviceProvider.GetRequiredService<Use>()
-                    .With(quest.Id, step.ItemId.Value, step.CompletionQuestVariablesFlags);
+                var task = OnSelf(quest.Id, step.ItemId.Value, step.CompletionQuestVariablesFlags);
 
                 int currentStepIndex = sequence.Steps.IndexOf(step);
                 QuestStep? nextStep = sequence.Steps.Skip(currentStepIndex + 1).FirstOrDefault();
@@ -59,45 +66,67 @@ internal static class UseItem
                     task,
                     new WaitConditionTask(() => clientState.TerritoryType == 140,
                         $"Wait(territory: {territoryData.GetNameAndId(140)})"),
-                    serviceProvider.GetRequiredService<MountTask>()
-                        .With(140,
-                            nextPosition != null ? MountTask.EMountIf.AwayFromPosition : MountTask.EMountIf.Always,
-                            nextPosition),
-                    serviceProvider.GetRequiredService<Move.MoveInternal>()
-                        .With(140, new(-408.92343f, 23.167036f, -351.16223f), 0.25f, dataId: null, disableNavMesh: true,
-                            sprint: false, fly: false)
+                    mountFactory.Mount(140,
+                        nextPosition != null ? Mount.EMountIf.AwayFromPosition : Mount.EMountIf.Always,
+                        nextPosition),
+                    moveFactory.Move(new MoveTo.MoveParams(140, new(-408.92343f, 23.167036f, -351.16223f), 0.25f,
+                        DataId: null, DisableNavMesh: true, Sprint: false, Fly: false))
                 ];
             }
 
-            var unmount = serviceProvider.GetRequiredService<UnmountTask>();
+            var unmount = mountFactory.Unmount();
             if (step.GroundTarget == true)
             {
                 ITask task;
                 if (step.DataId != null)
-                    task = serviceProvider.GetRequiredService<UseOnGround>()
-                        .With(quest.Id, step.DataId.Value, step.ItemId.Value, step.CompletionQuestVariablesFlags);
+                    task = OnGroundTarget(quest.Id, step.DataId.Value, step.ItemId.Value,
+                        step.CompletionQuestVariablesFlags);
                 else
                 {
                     ArgumentNullException.ThrowIfNull(step.Position);
-                    task = serviceProvider.GetRequiredService<UseOnPosition>()
-                        .With(quest.Id, step.Position.Value, step.ItemId.Value,
-                            step.CompletionQuestVariablesFlags);
+                    task = OnPosition(quest.Id, step.Position.Value, step.ItemId.Value,
+                        step.CompletionQuestVariablesFlags);
                 }
 
                 return [unmount, task];
             }
             else if (step.DataId != null)
             {
-                var task = serviceProvider.GetRequiredService<UseOnObject>()
-                    .With(quest.Id, step.DataId.Value, step.ItemId.Value, step.CompletionQuestVariablesFlags);
+                var task = OnObject(quest.Id, step.DataId.Value, step.ItemId.Value, step.CompletionQuestVariablesFlags);
                 return [unmount, task];
             }
             else
             {
-                var task = serviceProvider.GetRequiredService<Use>()
-                    .With(quest.Id, step.ItemId.Value, step.CompletionQuestVariablesFlags);
+                var task = OnSelf(quest.Id, step.ItemId.Value, step.CompletionQuestVariablesFlags);
                 return [unmount, task];
             }
+        }
+
+        public ITask OnGroundTarget(ElementId questId, uint dataId, uint itemId,
+            List<QuestWorkValue?> completionQuestVariablesFlags)
+        {
+            return new UseOnGround(questId, dataId, itemId, completionQuestVariablesFlags, gameFunctions,
+                questFunctions, condition, loggerFactory.CreateLogger<UseOnGround>());
+        }
+
+        public ITask OnPosition(ElementId questId, Vector3 position, uint itemId,
+            List<QuestWorkValue?> completionQuestVariablesFlags)
+        {
+            return new UseOnPosition(questId, position, itemId, completionQuestVariablesFlags, gameFunctions,
+                questFunctions, condition, loggerFactory.CreateLogger<UseOnPosition>());
+        }
+
+        public ITask OnObject(ElementId questId, uint dataId, uint itemId,
+            List<QuestWorkValue?> completionQuestVariablesFlags, bool startingCombat = false)
+        {
+            return new UseOnObject(questId, dataId, itemId, completionQuestVariablesFlags, startingCombat,
+                questFunctions, gameFunctions, condition, loggerFactory.CreateLogger<UseOnObject>());
+        }
+
+        public ITask OnSelf(ElementId questId, uint itemId, List<QuestWorkValue?> completionQuestVariablesFlags)
+        {
+            return new Use(questId, itemId, completionQuestVariablesFlags, gameFunctions, questFunctions, condition,
+                loggerFactory.CreateLogger<Use>());
         }
 
         private IEnumerable<ITask> CreateVesperBayFallbackTask()
@@ -107,28 +136,32 @@ internal static class UseItem
             uint npcId = 1003540;
             ushort territoryId = 129;
             Vector3 destination = new(-360.9217f, 8f, 38.92566f);
-            yield return serviceProvider.GetRequiredService<AetheryteShortcut.UseAetheryteShortcut>()
-                .With(null, null, EAetheryteLocation.Limsa, territoryId);
-            yield return serviceProvider.GetRequiredService<AethernetShortcut.UseAethernetShortcut>()
-                .With(EAetheryteLocation.Limsa, EAetheryteLocation.LimsaArcanist);
-            yield return serviceProvider.GetRequiredService<WaitAtEnd.WaitDelay>();
-            yield return serviceProvider.GetRequiredService<Move.MoveInternal>()
-                .With(territoryId, destination, dataId: npcId, sprint: false);
-            yield return serviceProvider.GetRequiredService<Interact.DoInteract>()
-                .With(npcId, null, EInteractionType.None, true);
+            yield return aetheryteShortcutFactory.Use(null, null, EAetheryteLocation.Limsa, territoryId);
+            yield return aethernetShortcutFactory.Use(EAetheryteLocation.Limsa, EAetheryteLocation.LimsaArcanist);
+            yield return new WaitAtEnd.WaitDelay();
+            yield return
+                moveFactory.Move(new MoveTo.MoveParams(territoryId, destination, DataId: npcId, Sprint: false));
+            yield return interactFactory.Interact(npcId, null, EInteractionType.None, true);
         }
     }
 
-    internal abstract class UseItemBase(QuestFunctions questFunctions, ICondition condition, ILogger logger) : ITask
+    private abstract class UseItemBase(
+        ElementId? questId,
+        uint itemId,
+        IList<QuestWorkValue?> completionQuestVariablesFlags,
+        bool startingCombat,
+        QuestFunctions questFunctions,
+        ICondition condition,
+        ILogger logger) : ITask
     {
         private bool _usedItem;
         private DateTime _continueAt;
         private int _itemCount;
 
-        public ElementId? QuestId { get; set; }
-        public uint ItemId { get; set; }
-        public IList<QuestWorkValue?> CompletionQuestVariablesFlags { get; set; } = new List<QuestWorkValue?>();
-        public bool StartingCombat { get; set; }
+        public ElementId? QuestId => questId;
+        public uint ItemId => itemId;
+        public IList<QuestWorkValue?> CompletionQuestVariablesFlags => completionQuestVariablesFlags;
+        public bool StartingCombat => startingCombat;
 
         protected abstract bool UseItem();
 
@@ -149,9 +182,9 @@ internal static class UseItem
 
         public unsafe ETaskResult Update()
         {
-            if (QuestId is QuestId questId && QuestWorkUtils.HasCompletionFlags(CompletionQuestVariablesFlags))
+            if (QuestId is QuestId realQuestId && QuestWorkUtils.HasCompletionFlags(CompletionQuestVariablesFlags))
             {
-                QuestProgressInfo? questWork = questFunctions.GetQuestProgressInfo(questId);
+                QuestProgressInfo? questWork = questFunctions.GetQuestProgressInfo(realQuestId);
                 if (questWork != null &&
                     QuestWorkUtils.MatchesQuestWork(CompletionQuestVariablesFlags, questWork))
                     return ETaskResult.TaskComplete;
@@ -203,96 +236,66 @@ internal static class UseItem
     }
 
 
-    internal sealed class UseOnGround(
+    private sealed class UseOnGround(
+        ElementId? questId,
+        uint dataId,
+        uint itemId,
+        IList<QuestWorkValue?> completionQuestVariablesFlags,
         GameFunctions gameFunctions,
         QuestFunctions questFunctions,
         ICondition condition,
         ILogger<UseOnGround> logger)
-        : UseItemBase(questFunctions, condition, logger)
+        : UseItemBase(questId, itemId, completionQuestVariablesFlags, false, questFunctions, condition, logger)
     {
-        public uint DataId { get; set; }
+        protected override bool UseItem() => gameFunctions.UseItemOnGround(dataId, ItemId);
 
-        public ITask With(ElementId? questId, uint dataId, uint itemId,
-            IList<QuestWorkValue?> completionQuestVariablesFlags)
-        {
-            QuestId = questId;
-            DataId = dataId;
-            ItemId = itemId;
-            CompletionQuestVariablesFlags = completionQuestVariablesFlags;
-            return this;
-        }
-
-        protected override bool UseItem() => gameFunctions.UseItemOnGround(DataId, ItemId);
-
-        public override string ToString() => $"UseItem({ItemId} on ground at {DataId})";
+        public override string ToString() => $"UseItem({ItemId} on ground at {dataId})";
     }
 
-    internal sealed class UseOnPosition(
+    private sealed class UseOnPosition(
+        ElementId? questId,
+        Vector3 position,
+        uint itemId,
+        IList<QuestWorkValue?> completionQuestVariablesFlags,
         GameFunctions gameFunctions,
         QuestFunctions questFunctions,
         ICondition condition,
         ILogger<UseOnPosition> logger)
-        : UseItemBase(questFunctions, condition, logger)
+        : UseItemBase(questId, itemId, completionQuestVariablesFlags, false, questFunctions, condition, logger)
     {
-        public Vector3 Position { get; set; }
-
-        public ITask With(ElementId? questId, Vector3 position, uint itemId,
-            IList<QuestWorkValue?> completionQuestVariablesFlags)
-        {
-            QuestId = questId;
-            Position = position;
-            ItemId = itemId;
-            CompletionQuestVariablesFlags = completionQuestVariablesFlags;
-            return this;
-        }
-
-        protected override bool UseItem() => gameFunctions.UseItemOnPosition(Position, ItemId);
+        protected override bool UseItem() => gameFunctions.UseItemOnPosition(position, ItemId);
 
         public override string ToString() =>
-            $"UseItem({ItemId} on ground at {Position.ToString("G", CultureInfo.InvariantCulture)})";
+            $"UseItem({ItemId} on ground at {position.ToString("G", CultureInfo.InvariantCulture)})";
     }
 
-    internal sealed class UseOnObject(
+    private sealed class UseOnObject(
+        ElementId? questId,
+        uint dataId,
+        uint itemId,
+        IList<QuestWorkValue?> completionQuestVariablesFlags,
+        bool startingCombat,
         QuestFunctions questFunctions,
         GameFunctions gameFunctions,
         ICondition condition,
         ILogger<UseOnObject> logger)
-        : UseItemBase(questFunctions, condition, logger)
+        : UseItemBase(questId, itemId, completionQuestVariablesFlags, startingCombat, questFunctions, condition, logger)
     {
-        public uint DataId { get; set; }
+        protected override bool UseItem() => gameFunctions.UseItem(dataId, ItemId);
 
-        public ITask With(ElementId? questId, uint dataId, uint itemId,
-            IList<QuestWorkValue?> completionQuestVariablesFlags,
-            bool startingCombat = false)
-        {
-            QuestId = questId;
-            DataId = dataId;
-            ItemId = itemId;
-            StartingCombat = startingCombat;
-            CompletionQuestVariablesFlags = completionQuestVariablesFlags;
-            return this;
-        }
-
-        protected override bool UseItem() => gameFunctions.UseItem(DataId, ItemId);
-
-        public override string ToString() => $"UseItem({ItemId} on {DataId})";
+        public override string ToString() => $"UseItem({ItemId} on {dataId})";
     }
 
-    internal sealed class Use(
+    private sealed class Use(
+        ElementId? questId,
+        uint itemId,
+        IList<QuestWorkValue?> completionQuestVariablesFlags,
         GameFunctions gameFunctions,
         QuestFunctions questFunctions,
         ICondition condition,
         ILogger<Use> logger)
-        : UseItemBase(questFunctions, condition, logger)
+        : UseItemBase(questId, itemId, completionQuestVariablesFlags, false, questFunctions, condition, logger)
     {
-        public ITask With(ElementId? questId, uint itemId, IList<QuestWorkValue?> completionQuestVariablesFlags)
-        {
-            QuestId = questId;
-            ItemId = itemId;
-            CompletionQuestVariablesFlags = completionQuestVariablesFlags;
-            return this;
-        }
-
         protected override bool UseItem() => gameFunctions.UseItem(ItemId);
 
         public override string ToString() => $"UseItem({ItemId})";

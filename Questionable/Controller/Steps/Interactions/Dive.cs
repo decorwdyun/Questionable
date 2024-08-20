@@ -18,18 +18,23 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class Dive
 {
-    internal sealed class Factory(IServiceProvider serviceProvider) : SimpleTaskFactory
+    internal sealed class Factory(ICondition condition, ILoggerFactory loggerFactory) : SimpleTaskFactory
     {
         public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
             if (step.InteractionType != EInteractionType.Dive)
                 return null;
 
-            return serviceProvider.GetRequiredService<DoDive>();
+            return Dive();
+        }
+
+        public ITask Dive()
+        {
+            return new DoDive(condition, loggerFactory.CreateLogger<DoDive>());
         }
     }
 
-    internal sealed class DoDive(ICondition condition, ILogger<DoDive> logger)
+    private sealed class DoDive(ICondition condition, ILogger<DoDive> logger)
         : AbstractDelayedTask(TimeSpan.FromSeconds(5))
     {
         private readonly Queue<(uint Type, nint Key)> _keysToPress = [];

@@ -7,18 +7,22 @@ using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using LLib.GameData;
 using Lumina.Excel.GeneratedSheets;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Questionable.Controller.Steps.Common;
 using Questionable.External;
 using Questionable.Model.Questing;
+using Mount = Questionable.Controller.Steps.Common.Mount;
 using Quest = Questionable.Model.Quest;
 
 namespace Questionable.Controller.Steps.Shared;
 
 internal static class Craft
 {
-    internal sealed class Factory(IServiceProvider serviceProvider) : ITaskFactory
+    internal sealed class Factory(
+        IDataManager dataManager,
+        IClientState clientState,
+        ArtisanIpc artisanIpc,
+        Mount.Factory mountFactory,
+        ILoggerFactory loggerFactory) : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -29,40 +33,34 @@ internal static class Craft
             ArgumentNullException.ThrowIfNull(step.ItemCount);
             return
             [
-                serviceProvider.GetRequiredService<UnmountTask>(),
-                serviceProvider.GetRequiredService<DoCraft>()
-                    .With(step.ItemId.Value, step.ItemCount.Value)
+                mountFactory.Unmount(),
+                Craft(step.ItemId.Value, step.ItemCount.Value)
             ];
         }
+
+        public ITask Craft(uint itemId, int itemCount) =>
+            new DoCraft(itemId, itemCount, dataManager, clientState, artisanIpc, loggerFactory.CreateLogger<DoCraft>());
     }
 
-    internal sealed class DoCraft(
+    private sealed class DoCraft(
+        uint itemId,
+        int itemCount,
         IDataManager dataManager,
         IClientState clientState,
         ArtisanIpc artisanIpc,
         ILogger<DoCraft> logger) : ITask
     {
-        private uint _itemId;
-        private int _itemCount;
-
-        public ITask With(uint itemId, int itemCount)
-        {
-            _itemId = itemId;
-            _itemCount = itemCount;
-            return this;
-        }
-
         public bool Start()
         {
             if (HasRequestedItems())
             {
-                logger.LogInformation("Already own {ItemCount}x {ItemId}", _itemCount, _itemId);
+                logger.LogInformation("Already own {ItemCount}x {ItemId}", itemCount, itemId);
                 return false;
             }
 
-            RecipeLookup? recipeLookup = dataManager.GetExcelSheet<RecipeLookup>()!.GetRow(_itemId);
+            RecipeLookup? recipeLookup = dataManager.GetExcelSheet<RecipeLookup>()!.GetRow(itemId);
             if (recipeLookup == null)
-                throw new TaskException($"Item {_itemId} is not craftable");
+                throw new TaskException($"Item {itemId} is not craftable");
 
             uint recipeId = (EClassJob)clientState.LocalPlayer!.ClassJob.Id switch
             {
@@ -94,12 +92,12 @@ internal static class Craft
             }
 
             if (recipeId == 0)
-                throw new TaskException($"Unable to determine recipe for item {_itemId}");
+                throw new TaskException($"Unable to determine recipe for item {itemId}");
 
-            int remainingItemCount = _itemCount - GetOwnedItemCount();
+            int remainingItemCount = itemCount - GetOwnedItemCount();
             logger.LogInformation(
                 "Starting craft for item {ItemId} with recipe {RecipeId} for {RemainingItemCount} items",
-                _itemId, recipeId, remainingItemCount);
+                itemId, recipeId, remainingItemCount);
             if (!artisanIpc.CraftItem((ushort)recipeId, remainingItemCount))
                 throw new TaskException($"Failed to start Artisan craft for recipe {recipeId}");
 
@@ -130,15 +128,15 @@ internal static class Craft
             return ETaskResult.StillRunning;
         }
 
-        private bool HasRequestedItems() => GetOwnedItemCount() >= _itemCount;
+        private bool HasRequestedItems() => GetOwnedItemCount() >= itemCount;
 
         private unsafe int GetOwnedItemCount()
         {
             InventoryManager* inventoryManager = InventoryManager.Instance();
-            return inventoryManager->GetInventoryItemCount(_itemId, isHq: false, checkEquipped: false)
-                   + inventoryManager->GetInventoryItemCount(_itemId, isHq: true, checkEquipped: false);
+            return inventoryManager->GetInventoryItemCount(itemId, isHq: false, checkEquipped: false)
+                   + inventoryManager->GetInventoryItemCount(itemId, isHq: true, checkEquipped: false);
         }
 
-        public override string ToString() => $"Craft {_itemCount}x {_itemId} (with Artisan)";
+        public override string ToString() => $"Craft {itemCount}x {itemId} (with Artisan)";
     }
 }

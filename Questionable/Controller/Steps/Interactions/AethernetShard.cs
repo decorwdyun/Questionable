@@ -11,7 +11,10 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class AethernetShard
 {
-    internal sealed class Factory(IServiceProvider serviceProvider) : SimpleTaskFactory
+    internal sealed class Factory(
+        AetheryteFunctions aetheryteFunctions,
+        GameFunctions gameFunctions,
+        ILoggerFactory loggerFactory) : SimpleTaskFactory
     {
         public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -20,42 +23,35 @@ internal static class AethernetShard
 
             ArgumentNullException.ThrowIfNull(step.AethernetShard);
 
-            return serviceProvider.GetRequiredService<DoAttune>()
-                .With(step.AethernetShard.Value);
+            return new DoAttune(step.AethernetShard.Value, aetheryteFunctions, gameFunctions,
+                loggerFactory.CreateLogger<DoAttune>());
         }
     }
 
-    internal sealed class DoAttune(
+    private sealed class DoAttune(
+        EAetheryteLocation aetheryteLocation,
         AetheryteFunctions aetheryteFunctions,
         GameFunctions gameFunctions,
         ILogger<DoAttune> logger) : ITask
     {
-        public EAetheryteLocation AetheryteLocation { get; set; }
-
-        public ITask With(EAetheryteLocation aetheryteLocation)
-        {
-            AetheryteLocation = aetheryteLocation;
-            return this;
-        }
-
         public bool Start()
         {
-            if (!aetheryteFunctions.IsAetheryteUnlocked(AetheryteLocation))
+            if (!aetheryteFunctions.IsAetheryteUnlocked(aetheryteLocation))
             {
-                logger.LogInformation("Attuning to aethernet shard {AethernetShard}", AetheryteLocation);
-                gameFunctions.InteractWith((uint)AetheryteLocation, ObjectKind.Aetheryte);
+                logger.LogInformation("Attuning to aethernet shard {AethernetShard}", aetheryteLocation);
+                gameFunctions.InteractWith((uint)aetheryteLocation, ObjectKind.Aetheryte);
                 return true;
             }
 
-            logger.LogInformation("Already attuned to aethernet shard {AethernetShard}", AetheryteLocation);
+            logger.LogInformation("Already attuned to aethernet shard {AethernetShard}", aetheryteLocation);
             return false;
         }
 
         public ETaskResult Update() =>
-            aetheryteFunctions.IsAetheryteUnlocked(AetheryteLocation)
+            aetheryteFunctions.IsAetheryteUnlocked(aetheryteLocation)
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
 
-        public override string ToString() => $"AttuneAethernetShard({AetheryteLocation})";
+        public override string ToString() => $"AttuneAethernetShard({aetheryteLocation})";
     }
 }

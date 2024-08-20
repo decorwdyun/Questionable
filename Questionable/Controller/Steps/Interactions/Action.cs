@@ -14,7 +14,8 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class Action
 {
-    internal sealed class Factory(IServiceProvider serviceProvider) : ITaskFactory
+    internal sealed class Factory(GameFunctions gameFunctions, Mount.Factory mountFactory, ILoggerFactory loggerFactory)
+        : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -23,54 +24,45 @@ internal static class Action
 
             ArgumentNullException.ThrowIfNull(step.Action);
 
-            var task = serviceProvider.GetRequiredService<UseOnObject>()
-                .With(step.DataId, step.Action.Value);
+            var task = new UseOnObject(step.DataId, step.Action.Value, gameFunctions,
+                loggerFactory.CreateLogger<UseOnObject>());
             if (step.Action.Value.RequiresMount())
                 return [task];
             else
-            {
-                var unmount = serviceProvider.GetRequiredService<UnmountTask>();
-                return [unmount, task];
-            }
+                return [mountFactory.Unmount(), task];
         }
     }
 
-    internal sealed class UseOnObject(GameFunctions gameFunctions, ILogger<UseOnObject> logger) : ITask
+    private sealed class UseOnObject(
+        uint? dataId,
+        EAction action,
+        GameFunctions gameFunctions,
+        ILogger<UseOnObject> logger) : ITask
     {
         private bool _usedAction;
         private DateTime _continueAt = DateTime.MinValue;
 
-        public uint? DataId { get; set; }
-        public EAction Action { get; set; }
-
-        public ITask With(uint? dataId, EAction action)
-        {
-            DataId = dataId;
-            Action = action;
-            return this;
-        }
-
         public bool Start()
         {
-            if (DataId != null)
+            if (dataId != null)
             {
-                IGameObject? gameObject = gameFunctions.FindObjectByDataId(DataId.Value);
+                IGameObject? gameObject = gameFunctions.FindObjectByDataId(dataId.Value);
                 if (gameObject == null)
                 {
-                    logger.LogWarning("No game object with dataId {DataId}", DataId);
+                    logger.LogWarning("No game object with dataId {DataId}", dataId);
                     return false;
                 }
 
                 if (gameObject.IsTargetable)
                 {
-                    _usedAction = gameFunctions.UseAction(gameObject, Action);
+                    _usedAction = gameFunctions.UseAction(gameObject, action);
                     _continueAt = DateTime.Now.AddSeconds(0.5);
                     return true;
                 }
             }
             else
             {
-                _usedAction = gameFunctions.UseAction(Action);
+                _usedAction = gameFunctions.UseAction(action);
                 _continueAt = DateTime.Now.AddSeconds(0.5);
                 return true;
             }
@@ -85,18 +77,18 @@ internal static class Action
 
             if (!_usedAction)
             {
-                if (DataId != null)
+                if (dataId != null)
                 {
-                    IGameObject? gameObject = gameFunctions.FindObjectByDataId(DataId.Value);
+                    IGameObject? gameObject = gameFunctions.FindObjectByDataId(dataId.Value);
                     if (gameObject == null || !gameObject.IsTargetable)
                         return ETaskResult.StillRunning;
 
-                    _usedAction = gameFunctions.UseAction(gameObject, Action);
+                    _usedAction = gameFunctions.UseAction(gameObject, action);
                     _continueAt = DateTime.Now.AddSeconds(0.5);
                 }
                 else
                 {
-                    _usedAction = gameFunctions.UseAction(Action);
+                    _usedAction = gameFunctions.UseAction(action);
                     _continueAt = DateTime.Now.AddSeconds(0.5);
                 }
 
@@ -106,6 +98,6 @@ internal static class Action
             return ETaskResult.TaskComplete;
         }
 
-        public override string ToString() => $"Action({Action})";
+        public override string ToString() => $"Action({action})";
     }
 }

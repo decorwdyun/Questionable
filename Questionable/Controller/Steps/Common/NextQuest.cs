@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
@@ -9,7 +7,7 @@ namespace Questionable.Controller.Steps.Common;
 
 internal static class NextQuest
 {
-    internal sealed class Factory(IServiceProvider serviceProvider) : SimpleTaskFactory
+    internal sealed class Factory(QuestRegistry questRegistry, QuestController questController, QuestFunctions questFunctions, ILoggerFactory loggerFactory) : SimpleTaskFactory
     {
         public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -22,37 +20,26 @@ internal static class NextQuest
             if (step.NextQuestId == quest.Id)
                 return null;
 
-            return serviceProvider.GetRequiredService<SetQuest>()
-                .With(step.NextQuestId, quest.Id);
+            return new SetQuest(step.NextQuestId, quest.Id, questRegistry, questController, questFunctions, loggerFactory.CreateLogger<SetQuest>());
         }
     }
 
-    internal sealed class SetQuest(QuestRegistry questRegistry, QuestController questController, QuestFunctions questFunctions, ILogger<SetQuest> logger) : ITask
+    private sealed class SetQuest(ElementId nextQuestId, ElementId currentQuestId, QuestRegistry questRegistry, QuestController questController, QuestFunctions questFunctions, ILogger<SetQuest> logger) : ITask
     {
-        public ElementId NextQuestId { get; set; } = null!;
-        public ElementId CurrentQuestId { get; set; } = null!;
-
-        public ITask With(ElementId nextQuestId, ElementId currentQuestId)
-        {
-            NextQuestId = nextQuestId;
-            CurrentQuestId = currentQuestId;
-            return this;
-        }
-
         public bool Start()
         {
-            if (questFunctions.IsQuestLocked(NextQuestId, CurrentQuestId))
+            if (questFunctions.IsQuestLocked(nextQuestId, currentQuestId))
             {
-                logger.LogInformation("Can't set next quest to {QuestId}, quest is locked", NextQuestId);
+                logger.LogInformation("Can't set next quest to {QuestId}, quest is locked", nextQuestId);
             }
-            else if (questRegistry.TryGetQuest(NextQuestId, out Quest? quest))
+            else if (questRegistry.TryGetQuest(nextQuestId, out Quest? quest))
             {
-                logger.LogInformation("Setting next quest to {QuestId}: '{QuestName}'", NextQuestId, quest.Info.Name);
+                logger.LogInformation("Setting next quest to {QuestId}: '{QuestName}'", nextQuestId, quest.Info.Name);
                 questController.SetNextQuest(quest);
             }
             else
             {
-                logger.LogInformation("Next quest with id {QuestId} not found", NextQuestId);
+                logger.LogInformation("Next quest with id {QuestId} not found", nextQuestId);
                 questController.SetNextQuest(null);
             }
 
@@ -61,6 +48,6 @@ internal static class NextQuest
 
         public ETaskResult Update() => ETaskResult.TaskComplete;
 
-        public override string ToString() => $"SetNextQuest({NextQuestId})";
+        public override string ToString() => $"SetNextQuest({nextQuestId})";
     }
 }

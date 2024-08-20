@@ -25,24 +25,34 @@ using Questionable.Functions;
 using Questionable.GatheringPaths;
 using Questionable.Model.Gathering;
 using Questionable.Model.Questing;
+using Mount = Questionable.Controller.Steps.Common.Mount;
 
 namespace Questionable.Controller;
 
 internal sealed unsafe class GatheringController : MiniTaskController<GatheringController>
 {
     private readonly MovementController _movementController;
+    private readonly MoveTo.Factory _moveFactory;
+    private readonly Mount.Factory _mountFactory;
+    private readonly Interact.Factory _interactFactory;
     private readonly GatheringPointRegistry _gatheringPointRegistry;
     private readonly GameFunctions _gameFunctions;
     private readonly NavmeshIpc _navmeshIpc;
     private readonly IObjectTable _objectTable;
     private readonly IServiceProvider _serviceProvider;
     private readonly ICondition _condition;
+    private readonly ILoggerFactory _loggerFactory;
+    private readonly IGameGui _gameGui;
+    private readonly IClientState _clientState;
     private readonly Regex _revisitRegex;
 
     private CurrentRequest? _currentRequest;
 
     public GatheringController(
         MovementController movementController,
+        MoveTo.Factory moveFactory,
+        Mount.Factory mountFactory,
+        Interact.Factory interactFactory,
         GatheringPointRegistry gatheringPointRegistry,
         GameFunctions gameFunctions,
         NavmeshIpc navmeshIpc,
@@ -52,16 +62,25 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
         IServiceProvider serviceProvider,
         ICondition condition,
         IDataManager dataManager,
+        ILoggerFactory loggerFactory,
+        IGameGui gameGui,
+        IClientState clientState,
         IPluginLog pluginLog)
         : base(chatGui, logger)
     {
         _movementController = movementController;
+        _moveFactory = moveFactory;
+        _mountFactory = mountFactory;
+        _interactFactory = interactFactory;
         _gatheringPointRegistry = gatheringPointRegistry;
         _gameFunctions = gameFunctions;
         _navmeshIpc = navmeshIpc;
         _objectTable = objectTable;
         _serviceProvider = serviceProvider;
         _condition = condition;
+        _loggerFactory = loggerFactory;
+        _gameGui = gameGui;
+        _clientState = clientState;
 
         _revisitRegex = dataManager.GetRegex<LogMessage>(5574, x => x.Text, pluginLog)
                         ?? throw new InvalidDataException("No regex found for revisit message");
@@ -152,8 +171,7 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
             return;
 
         ushort territoryId = _currentRequest.Root.Steps.Last().TerritoryId;
-        _taskQueue.Enqueue(_serviceProvider.GetRequiredService<MountTask>()
-            .With(territoryId, MountTask.EMountIf.Always));
+        _taskQueue.Enqueue(_mountFactory.Mount(territoryId, Mount.EMountIf.Always));
 
         bool fly = currentNode.Fly.GetValueOrDefault(_currentRequest.Root.FlyBetweenNodes.GetValueOrDefault(true)) &&
                    _gameFunctions.IsFlyingUnlocked(territoryId);
@@ -170,24 +188,28 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
             if (pointOnFloor != null)
                 pointOnFloor = pointOnFloor.Value with { Y = pointOnFloor.Value.Y + (fly ? 3f : 0f) };
 
-            _taskQueue.Enqueue(_serviceProvider.GetRequiredService<Move.MoveInternal>()
-                .With(territoryId, pointOnFloor ?? averagePosition, 50f, fly: fly,
-                    ignoreDistanceToObject: true));
+            _taskQueue.Enqueue(_moveFactory.Move(new MoveTo.MoveParams(territoryId, pointOnFloor ?? averagePosition,
+                50f,
+                Fly: fly, IgnoreDistanceToObject: true)));
         }
 
-        _taskQueue.Enqueue(_serviceProvider.GetRequiredService<MoveToLandingLocation>()
-            .With(territoryId, fly, currentNode));
-        _taskQueue.Enqueue(_serviceProvider.GetRequiredService<Interact.DoInteract>()
-            .With(currentNode.DataId, null, EInteractionType.InternalGather, true));
+        _taskQueue.Enqueue(new MoveToLandingLocation(territoryId, fly, currentNode, _moveFactory, _gameFunctions,
+            _objectTable, _loggerFactory.CreateLogger<MoveToLandingLocation>()));
+        _taskQueue.Enqueue(_interactFactory.Interact(currentNode.DataId, null, EInteractionType.InternalGather, true));
 
+        QueueGatherNode(currentNode);
+    }
+
+    private void QueueGatherNode(GatheringNode currentNode)
+    {
         foreach (bool revisitRequired in new[] { false, true })
         {
-            _taskQueue.Enqueue(_serviceProvider.GetRequiredService<DoGather>()
-                .With(_currentRequest.Data, currentNode, revisitRequired));
+            _taskQueue.Enqueue(new DoGather(_currentRequest!.Data, currentNode, revisitRequired, this, _gameFunctions,
+                _gameGui, _clientState, _condition, _loggerFactory.CreateLogger<DoGather>()));
             if (_currentRequest.Data.Collectability > 0)
             {
-                _taskQueue.Enqueue(_serviceProvider.GetRequiredService<DoGatherCollectable>()
-                    .With(_currentRequest.Data, currentNode, revisitRequired));
+                _taskQueue.Enqueue(new DoGatherCollectable(_currentRequest.Data, currentNode, revisitRequired, this,
+                    _gameFunctions, _clientState, _gameGui, _loggerFactory.CreateLogger<DoGatherCollectable>()));
             }
         }
     }

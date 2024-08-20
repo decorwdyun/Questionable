@@ -13,7 +13,12 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class Combat
 {
-    internal sealed class Factory(IServiceProvider serviceProvider) : ITaskFactory
+    internal sealed class Factory(
+        CombatController combatController,
+        Interact.Factory interactFactory,
+        Mount.Factory mountFactory,
+        UseItem.Factory useItemFactory,
+        QuestFunctions questFunctions) : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -22,12 +27,11 @@ internal static class Combat
 
             ArgumentNullException.ThrowIfNull(step.EnemySpawnType);
 
-            yield return serviceProvider.GetRequiredService<UnmountTask>();
+            yield return mountFactory.Unmount();
 
             if (step.CombatDelaySecondsAtStart != null)
             {
-                yield return serviceProvider.GetRequiredService<WaitAtStart.WaitDelay>()
-                    .With(TimeSpan.FromSeconds(step.CombatDelaySecondsAtStart.Value));
+                yield return new WaitAtStart.WaitDelay(TimeSpan.FromSeconds(step.CombatDelaySecondsAtStart.Value));
             }
 
             switch (step.EnemySpawnType)
@@ -36,8 +40,7 @@ internal static class Combat
                 {
                     ArgumentNullException.ThrowIfNull(step.DataId);
 
-                    yield return serviceProvider.GetRequiredService<Interact.DoInteract>()
-                        .With(step.DataId.Value, quest, EInteractionType.None, true);
+                    yield return interactFactory.Interact(step.DataId.Value, quest, EInteractionType.None, true);
                     yield return CreateTask(quest, sequence, step);
                     break;
                 }
@@ -47,9 +50,8 @@ internal static class Combat
                     ArgumentNullException.ThrowIfNull(step.DataId);
                     ArgumentNullException.ThrowIfNull(step.ItemId);
 
-                    yield return serviceProvider.GetRequiredService<UseItem.UseOnObject>()
-                        .With(quest.Id, step.DataId.Value, step.ItemId.Value, step.CompletionQuestVariablesFlags,
-                            true);
+                    yield return useItemFactory.OnObject(quest.Id, step.DataId.Value, step.ItemId.Value,
+                        step.CompletionQuestVariablesFlags, true);
                     yield return CreateTask(quest, sequence, step);
                     break;
                 }
@@ -73,34 +75,32 @@ internal static class Combat
             ArgumentNullException.ThrowIfNull(step.EnemySpawnType);
 
             bool isLastStep = sequence.Steps.Last() == step;
-            return serviceProvider.GetRequiredService<HandleCombat>()
-                .With(quest.Id, isLastStep, step.EnemySpawnType.Value, step.KillEnemyDataIds,
-                    step.CompletionQuestVariablesFlags, step.ComplexCombatData);
+            return CreateTask(quest.Id, isLastStep, step.EnemySpawnType.Value, step.KillEnemyDataIds,
+                step.CompletionQuestVariablesFlags, step.ComplexCombatData);
         }
-    }
 
-    internal sealed class HandleCombat(CombatController combatController, QuestFunctions questFunctions) : ITask
-    {
-        private bool _isLastStep;
-        private CombatController.CombatData _combatData = null!;
-        private IList<QuestWorkValue?> _completionQuestVariableFlags = null!;
-
-        public ITask With(ElementId elementId, bool isLastStep, EEnemySpawnType enemySpawnType, IList<uint> killEnemyDataIds,
-            IList<QuestWorkValue?> completionQuestVariablesFlags, IList<ComplexCombatData> complexCombatData)
+        private HandleCombat CreateTask(ElementId elementId, bool isLastStep, EEnemySpawnType enemySpawnType,
+            IList<uint> killEnemyDataIds, IList<QuestWorkValue?> completionQuestVariablesFlags,
+            IList<ComplexCombatData> complexCombatData)
         {
-            _isLastStep = isLastStep;
-            _combatData = new CombatController.CombatData
+            return new HandleCombat(isLastStep, new CombatController.CombatData
             {
                 ElementId = elementId,
                 SpawnType = enemySpawnType,
                 KillEnemyDataIds = killEnemyDataIds.ToList(),
                 ComplexCombatDatas = complexCombatData.ToList(),
-            };
-            _completionQuestVariableFlags = completionQuestVariablesFlags;
-            return this;
+            }, completionQuestVariablesFlags, combatController, questFunctions);
         }
+    }
 
-        public bool Start() => combatController.Start(_combatData);
+    private sealed class HandleCombat(
+        bool isLastStep,
+        CombatController.CombatData combatData,
+        IList<QuestWorkValue?> completionQuestVariableFlags,
+        CombatController combatController,
+        QuestFunctions questFunctions) : ITask
+    {
+        public bool Start() => combatController.Start(combatData);
 
         public ETaskResult Update()
         {
@@ -108,13 +108,14 @@ internal static class Combat
                 return ETaskResult.StillRunning;
 
             // if our quest step has any completion flags, we need to check if they are set
-            if (QuestWorkUtils.HasCompletionFlags(_completionQuestVariableFlags) && _combatData.ElementId is QuestId questId)
+            if (QuestWorkUtils.HasCompletionFlags(completionQuestVariableFlags) &&
+                combatData.ElementId is QuestId questId)
             {
                 var questWork = questFunctions.GetQuestProgressInfo(questId);
                 if (questWork == null)
                     return ETaskResult.StillRunning;
 
-                if (QuestWorkUtils.MatchesQuestWork(_completionQuestVariableFlags, questWork))
+                if (QuestWorkUtils.MatchesQuestWork(completionQuestVariableFlags, questWork))
                     return ETaskResult.TaskComplete;
                 else
                     return ETaskResult.StillRunning;
@@ -122,7 +123,7 @@ internal static class Combat
 
             // the last step, by definition, can only be progressed by the game recognizing we're in a new sequence,
             // so this is an indefinite wait
-            if (_isLastStep)
+            if (isLastStep)
                 return ETaskResult.StillRunning;
             else
             {
@@ -133,9 +134,9 @@ internal static class Combat
 
         public override string ToString()
         {
-            if (QuestWorkUtils.HasCompletionFlags(_completionQuestVariableFlags))
+            if (QuestWorkUtils.HasCompletionFlags(completionQuestVariableFlags))
                 return "HandleCombat(wait: QW flags)";
-            else if (_isLastStep)
+            else if (isLastStep)
                 return "HandleCombat(wait: next sequence)";
             else
                 return "HandleCombat(wait: not in combat)";

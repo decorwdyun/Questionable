@@ -14,40 +14,31 @@ using Questionable.Model.Questing;
 namespace Questionable.Controller.Steps.Gathering;
 
 internal sealed class DoGatherCollectable(
+    GatheringController.GatheringRequest currentRequest,
+    GatheringNode currentNode,
+    bool revisitRequired,
     GatheringController gatheringController,
     GameFunctions gameFunctions,
     IClientState clientState,
     IGameGui gameGui,
     ILogger<DoGatherCollectable> logger) : ITask, IRevisitAware
 {
-    private GatheringController.GatheringRequest _currentRequest = null!;
-    private GatheringNode _currentNode = null!;
-    private bool _revisitRequired;
     private bool _revisitTriggered;
     private Queue<EAction>? _actionQueue;
 
     private bool? _expectedScrutiny;
 
-    public ITask With(GatheringController.GatheringRequest currentRequest, GatheringNode currentNode,
-        bool revisitRequired)
-    {
-        _currentRequest = currentRequest;
-        _currentNode = currentNode;
-        _revisitRequired = revisitRequired;
-        return this;
-    }
-
     public bool Start() => true;
 
     public unsafe ETaskResult Update()
     {
-        if (_revisitRequired && !_revisitTriggered)
+        if (revisitRequired && !_revisitTriggered)
         {
             logger.LogInformation("No revisit");
             return ETaskResult.TaskComplete;
         }
 
-        if (gatheringController.HasNodeDisappeared(_currentNode))
+        if (gatheringController.HasNodeDisappeared(currentNode))
         {
             logger.LogInformation("Node disappeared");
             return ETaskResult.TaskComplete;
@@ -103,7 +94,7 @@ internal sealed class DoGatherCollectable(
             return ETaskResult.StillRunning;
         }
 
-        if (nodeCondition.CollectabilityToGoal(_currentRequest.Collectability) > 0)
+        if (nodeCondition.CollectabilityToGoal(currentRequest.Collectability) > 0)
         {
             _actionQueue = GetNextActions(nodeCondition);
             if (_actionQueue != null)
@@ -147,7 +138,7 @@ internal sealed class DoGatherCollectable(
 
         Queue<EAction> actions = new();
 
-        uint neededCollectability = nodeCondition.CollectabilityToGoal(_currentRequest.Collectability);
+        uint neededCollectability = nodeCondition.CollectabilityToGoal(currentRequest.Collectability);
         if (neededCollectability <= nodeCondition.CollectabilityFromMeticulous)
         {
             logger.LogTrace("Can get all needed {NeededCollectability} from {Collectability}~ meticulous",
@@ -203,7 +194,7 @@ internal sealed class DoGatherCollectable(
     }
 
     public override string ToString() =>
-        $"DoGatherCollectable({SeIconChar.Collectible.ToIconString()}/{_expectedScrutiny} {_currentRequest.Collectability}){(_revisitRequired ? " if revist" : "")}";
+        $"DoGatherCollectable({SeIconChar.Collectible.ToIconString()}/{_expectedScrutiny} {currentRequest.Collectability}){(revisitRequired ? " if revist" : "")}";
 
     [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local")]
     private sealed record NodeCondition(
