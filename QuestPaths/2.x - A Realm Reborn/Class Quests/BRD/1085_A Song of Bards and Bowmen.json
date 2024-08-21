@@ -96,7 +96,7 @@
             "Y": 2.8651512,
             "Z": 25.295788
           },
-          "InteractionType": "",
+          "InteractionType": "WalkTo",
           "TerritoryId": 153,
           "Fly": true
         },

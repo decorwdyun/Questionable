@@ -68,6 +68,7 @@
           },
           "TerritoryId": 138,
           "Fly": true,
+          "InteractionType": "WalkTo",
           "AetheryteShortcut": "Western La Noscea - Aleport"
         },
         {
