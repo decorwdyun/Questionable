@@ -1,0 +1,69 @@
+﻿{
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+  "Author": "liza",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1030625,
+          "Position": {
+            "X": 218.73804,
+            "Y": 7.1558266,
+            "Z": -249.1341
+          },
+          "TerritoryId": 815,
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Amh Araeng - Mord Souq",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": 218.73804,
+                  "Y": 7.1558266,
+                  "Z": -249.1341
+                },
+                "MaximumDistance": 100
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1030636,
+          "Position": {
+            "X": 342.8855,
+            "Y": -35.843185,
+            "Z": 76.58496
+          },
+          "TerritoryId": 815,
+          "InteractionType": "SinglePlayerDuty",
+          "AetheryteShortcut": "Amh Araeng - Inn at Journey's Head",
+          "Fly": true
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1030625,
+          "Position": {
+            "X": 218.73804,
+            "Y": 7.1558266,
+            "Z": -249.1341
+          },
+          "TerritoryId": 815,
+          "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Amh Araeng - Mord Souq",
+          "Fly": true,
+          "NextQuestId": 3627
+        }
+      ]
+    }
+  ]
+}

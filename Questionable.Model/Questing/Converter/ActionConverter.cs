@@ -10,11 +10,13 @@ public sealed class ActionConverter() : EnumConverter<EAction>(Values)
         { EAction.Cure, "Cure" },
         { EAction.Esuna, "Esuna" },
         { EAction.Physick, "Physick" },
-        { EAction.Buffet, "Buffet" },
+        { EAction.BuffetSanuwa, "Buffet (Sanuwa)" },
+        { EAction.BuffetGriffin, "Buffet (Griffin)" },
         { EAction.Fumigate, "Fumigate" },
         { EAction.SiphonSnout, "Siphon Snout" },
         { EAction.RedGulal, "Red Gulal" },
         { EAction.YellowGulal, "Yellow Gulal" },
         { EAction.BlueGulal, "Blue Gulal" },
+        { EAction.ElectrixFlux, "Electric Flux" },
     };
 }

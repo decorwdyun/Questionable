@@ -1,7 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -22,7 +21,20 @@
     {
       "Sequence": 1,
       "Steps": [
-
+        {
+          "Position": {
+            "X": -50.436653,
+            "Y": 41.158955,
+            "Z": -264.4358
+          },
+          "TerritoryId": 612,
+          "InteractionType": "Instruction",
+          "Comment": "Use item on enemy, then kill it",
+          "EnemySpawnType": "AutoOnEnterArea",
+          "KillEnemyDataIds": [
+            7030
+          ]
+        }
       ]
     },
     {

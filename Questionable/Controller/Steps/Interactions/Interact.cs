@@ -151,7 +151,8 @@ internal static class Interact
         {
             logger.LogDebug("Condition change: {Flag} = {Value}", flag, value);
             if (_interactionState == EInteractionState.InteractionTriggered &&
-                flag == ConditionFlag.OccupiedInQuestEvent && value)
+                flag is ConditionFlag.OccupiedInQuestEvent or ConditionFlag.OccupiedInEvent &&
+                value)
             {
                 logger.LogInformation("Interaction was most likely triggered");
                 _interactionState = EInteractionState.InteractionConfirmed;

@@ -1,7 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -30,6 +29,52 @@
     {
       "Sequence": 1,
       "Steps": [
+        {
+          "DataId": 1045113,
+          "Position": {
+            "X": -315.66345,
+            "Y": -144,
+            "Z": -492.0272
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact",
+          "Fly": true
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1044585,
+          "Position": {
+            "X": -496.14713,
+            "Y": -154.93994,
+            "Z": -484.88593
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Say",
+          "Fly": true,
+          "ChatMessage": {
+            "Key": "TEXT_BANLOP114_04700_SAYTODO_000_050"
+          }
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1045113,
+          "Position": {
+            "X": -315.66345,
+            "Y": -144,
+            "Z": -492.0272
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact",
+          "Fly": true
+        }
       ]
     },
     {
@@ -42,7 +87,8 @@
             "Z": -273.68756
           },
           "TerritoryId": 959,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "Fly": true
         },
         {
           "DataId": 1044403,

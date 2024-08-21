@@ -21,7 +21,7 @@ internal sealed class SwitchClassJob(EClassJob classJob, IClientState clientStat
                 var gearset = gearsetModule->GetGearset(i);
                 if (gearset->ClassJob == (byte)classJob)
                 {
-                    gearsetModule->EquipGearset(gearset->Id, gearset->BannerIndex);
+                    gearsetModule->EquipGearset(gearset->Id);
                     return true;
                 }
             }
