@@ -115,15 +115,6 @@ internal static class MoveTo
                 actualDistance = float.MaxValue;
             }
 
-            // In particular, MoveBuilder is used so early that it'll have the position when you're starting gathering,
-            // not when you're finished.
-            if (questId is SatisfactionSupplyNpcId)
-            {
-                logger.LogDebug("SatisfactionSupply: Changing distance to max, previous distance: {Distance}",
-                    actualDistance);
-                actualDistance = float.MaxValue;
-            }
-
             if (step.Mount == true)
                 yield return mountFactory.Mount(step.TerritoryId, Mount.EMountIf.Always);
             else if (step.Mount == false)

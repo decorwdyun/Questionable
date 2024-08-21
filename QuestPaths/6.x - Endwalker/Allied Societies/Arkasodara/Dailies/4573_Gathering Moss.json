@@ -43,16 +43,6 @@
           }
         },
         {
-          "Position": {
-            "X": 103.41005,
-            "Y": -23.878786,
-            "Z": 187.79831
-          },
-          "TerritoryId": 957,
-          "InteractionType": "WalkTo",
-          "DisableNavmesh": true
-        },
-        {
           "DataId": 2012907,
           "Position": {
             "X": 95.140015,
@@ -61,6 +51,7 @@
           },
           "TerritoryId": 957,
           "InteractionType": "Interact",
+          "DisableNavmesh": true,
           "CompletionQuestVariablesFlags": [
             null,
             null,
