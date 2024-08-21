@@ -17,9 +17,25 @@
         }
       ]
     },
+
+
+    
     {
       "Sequence": 1,
       "Steps": [
+
+        {
+"DataId": 353,
+"Position": {
+    "X": 112.41321,
+    "Y": 28.93967,
+    "Z": -37.277832
+},
+"TerritoryId": 141,
+"InteractionType": "Combat",
+"EnemySpawnType": "OverworldEnemies",
+"KillEnemyDataIds": [352,353]
+},
         {
           "Position": {
             "X": 125.61467,
