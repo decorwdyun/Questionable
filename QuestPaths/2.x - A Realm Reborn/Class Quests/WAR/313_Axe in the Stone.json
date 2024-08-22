@@ -283,7 +283,18 @@
           },
           "StopDistance": 0.5,
           "TerritoryId": 135,
-          "InteractionType": "SinglePlayerDuty"
+          "InteractionType": "WalkTo"
+        },
+        {
+          "Position": {
+            "X": 157.25027,
+            "Y": 33.93623,
+            "Z": 91.90441
+          },
+          "StopDistance": 0.5,
+          "TerritoryId": 135,
+          "InteractionType": "SinglePlayerDuty",
+          "Mount": false
         }
       ]
     },
