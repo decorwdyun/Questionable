@@ -838,6 +838,7 @@
                 "description": "The action to use",
                 "enum": [
                   "Heavy Swing",
+                  "Heavy Shot",
                   "Cure",
                   "Esuna",
                   "Physick",
