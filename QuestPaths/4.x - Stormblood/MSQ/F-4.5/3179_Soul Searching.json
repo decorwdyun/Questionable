@@ -1,0 +1,63 @@
+{
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+  "Author": "JerryWester",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1025549,
+          "Position": {
+            "X": 1.4800415,
+            "Y": -1.1041565E-05,
+            "Z": -11.734253
+          },
+          "TerritoryId": 351,
+          "InteractionType": "AcceptQuest"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "Position": {
+            "X": 71.86769,
+            "Y": 204.99998,
+            "Z": 145.98666
+          },
+          "TerritoryId": 478,
+          "InteractionType": "WalkTo",
+          "TargetTerritoryId": 399,
+          "AetheryteShortcut": "Idyllshire"
+        },
+        {
+          "DataId": 1026781,
+          "Position": {
+            "X": -478.41614,
+            "Y": 137.42972,
+            "Z": 696.9557
+          },
+          "TerritoryId": 399,
+          "InteractionType": "Interact",
+          "Fly": true
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1026781,
+          "Position": {
+            "X": -478.41614,
+            "Y": 137.42972,
+            "Z": 696.9557
+          },
+          "TerritoryId": 399,
+          "InteractionType": "CompleteQuest"
+        }
+      ]
+    }
+  ]
+}
