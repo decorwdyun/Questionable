@@ -19,7 +19,6 @@
     },
     {
       "Sequence": 1,
-      "Comment": "TODO Figure out quest flags if picking up egg first OR doing the combat first",
       "Steps": [
         {
           "DataId": 2000010,
@@ -29,7 +28,15 @@
             "Z": -49.729187
           },
           "TerritoryId": 148,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "Position": {
@@ -43,7 +50,17 @@
           "KillEnemyDataIds": [
             142
           ],
-          "Comment": "Depending on how many enemies you fought on the way to the egg, this step could be optional"
+          "Comment": "Depending on how many enemies you fought on the way to the egg, this step could be optional",
+          "CompletionQuestVariablesFlags": [
+            null,
+            {
+              "High": 3
+            },
+            null,
+            null,
+            null,
+            null
+          ]
         }
       ]
     },
