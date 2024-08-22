@@ -44,6 +44,8 @@ internal static class QuestStepExtensions
                             Assignment(nameof(QuestStep.DelaySecondsAtStart), step.DelaySecondsAtStart,
                                     emptyStep.DelaySecondsAtStart)
                                 .AsSyntaxNodeOrToken(),
+                            Assignment(nameof(QuestStep.PickUpItemId), step.PickUpItemId, emptyStep.PickUpItemId)
+                                .AsSyntaxNodeOrToken(),
                             Assignment(nameof(QuestStep.Disabled), step.Disabled, emptyStep.Disabled)
                                 .AsSyntaxNodeOrToken(),
                             Assignment(nameof(QuestStep.DisableNavmesh), step.DisableNavmesh,

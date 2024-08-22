@@ -29,7 +29,8 @@
           },
           "TerritoryId": 134,
           "InteractionType": "Interact",
-          "Comment": "Technically triggers combat, but can be ignored"
+          "Comment": "Technically triggers combat, but can be ignored",
+          "PickUpItemId": 2000342
         }
       ]
     },

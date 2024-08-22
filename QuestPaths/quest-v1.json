@@ -440,6 +440,11 @@
             }
           },
           "then": {
+            "properties": {
+              "PickUpItemId": {
+                "type": "number"
+              }
+            },
             "required": [
               "DataId"
             ]
