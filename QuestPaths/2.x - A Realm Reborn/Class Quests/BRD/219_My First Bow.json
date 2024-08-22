@@ -1,0 +1,179 @@
+{
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+  "Author": "Cacahuetes",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1000200,
+          "Position": {
+            "X": 209.55212,
+            "Y": 0.9999819,
+            "Z": 35.01941
+          },
+          "TerritoryId": 132,
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Gridania",
+          "AethernetShortcut": [
+            "[Gridania] Aetheryte Plaza",
+            "[Gridania] Archers' Guild"
+          ],
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true,
+              "InTerritory": [
+                132
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "Position": {
+            "X": 117.47766,
+            "Y": 17.661993,
+            "Z": -247.24017
+          },
+          "TerritoryId": 148,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "OverworldEnemies",
+          "ComplexCombatData": [
+            {
+              "DataId": 37,
+              "MinimumKillCount": 3,
+              "$": "Slay ground squirrels as an archer"
+            },
+            {
+              "DataId": 49,
+              "MinimumKillCount": 3,
+              "$": "Slay little ladybugs as an archer"
+            }
+          ],
+          "AetheryteShortcut": "Gridania",
+          "AethernetShortcut": [
+            "[Gridania] Archers' Guild",
+            "[Gridania] Blue Badger Gate (Central Shroud)"
+          ],
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true,
+              "InTerritory": [
+                132,
+                148
+              ]
+            }
+          }
+        },
+        {
+          "Position": {
+            "X": 72.74856,
+            "Y": 14.679733,
+            "Z": -257.5843
+          },
+          "TerritoryId": 148,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "OverworldEnemies",
+          "ComplexCombatData": [
+            {
+              "DataId": 37,
+              "MinimumKillCount": 3,
+              "$": "Slay ground squirrels as an archer"
+            },
+            {
+              "DataId": 49,
+              "MinimumKillCount": 3,
+              "$": "Slay little ladybugs as an archer"
+            }
+          ],
+          "CompletionQuestVariablesFlags": [
+            {
+              "Low": 3
+            },
+            32,
+            null,
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "Position": {
+            "X": 92.364235,
+            "Y": 3.463302,
+            "Z": -193.49184
+          },
+          "TerritoryId": 148,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "OverworldEnemies",
+          "ComplexCombatData": [
+            {
+              "DataId": 47,
+              "MinimumKillCount": 3,
+              "$": "Slay forest funguars as an archer"
+            }
+          ]
+        },
+        {
+          "Position": {
+            "X": 126.943115,
+            "Y": 2.910592,
+            "Z": -180.54787
+          },
+          "TerritoryId": 148,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "OverworldEnemies",
+          "ComplexCombatData": [
+            {
+              "DataId": 47,
+              "MinimumKillCount": 3,
+              "$": "Slay forest funguars as an archer"
+            }
+          ],
+          "CompletionQuestVariablesFlags": [
+            16,
+            {
+              "Low": 3
+            },
+            null,
+            null,
+            null,
+            null
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1000200,
+          "Position": {
+            "X": 209.55212,
+            "Y": 0.9999819,
+            "Z": 35.01941
+          },
+          "TerritoryId": 132,
+          "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Gridania",
+          "AethernetShortcut": [
+            "[Gridania] Aetheryte Plaza",
+            "[Gridania] Archers' Guild"
+          ],
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true,
+              "InTerritory": [
+                132
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
