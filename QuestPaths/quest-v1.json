@@ -837,6 +837,7 @@
                 "type": "string",
                 "description": "The action to use",
                 "enum": [
+                  "Heavy Swing",
                   "Cure",
                   "Esuna",
                   "Physick",
