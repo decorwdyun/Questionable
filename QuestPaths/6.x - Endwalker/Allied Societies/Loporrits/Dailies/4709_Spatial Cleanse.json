@@ -1,7 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -30,6 +29,84 @@
     {
       "Sequence": 1,
       "Steps": [
+        {
+          "DataId": 2013264,
+          "Position": {
+            "X": 47.01306,
+            "Y": -132.86035,
+            "Z": -504.08182
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
+        },
+        {
+          "DataId": 2013266,
+          "Position": {
+            "X": 64.65234,
+            "Y": -132.61621,
+            "Z": -451.133
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
+        },
+        {
+          "Position": {
+            "X": 17.153883,
+            "Y": -132.7894,
+            "Z": -444.4903
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo",
+          "Fly": true,
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                64
+              ]
+            }
+          }
+        },
+        {
+          "DataId": 2013265,
+          "Position": {
+            "X": 15.060608,
+            "Y": -131.27338,
+            "Z": -444.0528
+          },
+          "TerritoryId": 959,
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
+        }
       ]
     },
     {
@@ -42,7 +119,8 @@
             "Z": -273.68756
           },
           "TerritoryId": 959,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "Fly": true
         },
         {
           "DataId": 1044403,

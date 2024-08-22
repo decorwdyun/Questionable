@@ -14,10 +14,12 @@ public enum EAction
     BuffetGriffin = 4583,
     Fumigate = 5872,
     SiphonSnout = 18187,
+    Cannonfire = 20121,
     RedGulal = 29382,
     YellowGulal = 29383,
     BlueGulal = 29384,
     ElectrixFlux = 29718,
+    HopStep = 31116,
 
     CollectMiner = 240,
     ScourMiner = 22182,
@@ -46,9 +48,11 @@ public static class EActionExtensions
             or EAction.BuffetGriffin
             or EAction.Fumigate
             or EAction.SiphonSnout
+            or EAction.Cannonfire
             or EAction.RedGulal
             or EAction.YellowGulal
             or EAction.BlueGulal
-            or EAction.ElectrixFlux;
+            or EAction.ElectrixFlux
+            or EAction.HopStep;
     }
 }
