@@ -12,6 +12,7 @@ using Questionable.Controller;
 using Questionable.Data;
 using Questionable.Functions;
 using Questionable.Model;
+using Questionable.Model.Questing;
 using Questionable.Windows.QuestComponents;
 
 namespace Questionable.Windows.JournalComponents;
@@ -28,6 +29,7 @@ internal sealed class QuestJournalComponent
     private readonly UiUtils _uiUtils;
     private readonly QuestTooltipComponent _questTooltipComponent;
     private readonly IDalamudPluginInterface _pluginInterface;
+    private readonly QuestController _questController;
     private readonly ICommandManager _commandManager;
 
     private List<FilteredSection> _filteredSections = [];
@@ -35,7 +37,7 @@ internal sealed class QuestJournalComponent
 
     public QuestJournalComponent(JournalData journalData, QuestRegistry questRegistry, QuestFunctions questFunctions,
         UiUtils uiUtils, QuestTooltipComponent questTooltipComponent, IDalamudPluginInterface pluginInterface,
-        ICommandManager commandManager)
+        QuestController questController, ICommandManager commandManager)
     {
         _journalData = journalData;
         _questRegistry = questRegistry;
@@ -43,6 +45,7 @@ internal sealed class QuestJournalComponent
         _uiUtils = uiUtils;
         _questTooltipComponent = questTooltipComponent;
         _pluginInterface = pluginInterface;
+        _questController = questController;
         _commandManager = commandManager;
     }
 
@@ -171,18 +174,29 @@ internal sealed class QuestJournalComponent
 
         ImGui.TableNextRow();
         ImGui.TableNextColumn();
-        ImGui.TreeNodeEx(questInfo.Name,
+        ImGui.TreeNodeEx($"{questInfo.Name} ({questInfo.QuestId})",
             ImGuiTreeNodeFlags.Leaf | ImGuiTreeNodeFlags.NoTreePushOnOpen | ImGuiTreeNodeFlags.SpanFullWidth);
 
 
-        if (questInfo is QuestInfo && ImGui.IsItemClicked() &&
-            _commandManager.Commands.TryGetValue("/questinfo", out var commandInfo))
-        {
-            _commandManager.DispatchCommand("/questinfo", questInfo.QuestId.ToString() ?? string.Empty, commandInfo);
-        }
-
         if (ImGui.IsItemHovered())
             _questTooltipComponent.Draw(questInfo);
+
+        if (ImGui.BeginPopupContextItem($"##QuestPopup{questInfo.QuestId}", ImGuiPopupFlags.MouseButtonRight))
+        {
+            if (ImGui.MenuItem("Start as next quest", _questFunctions.IsReadyToAcceptQuest(questInfo.QuestId)))
+            {
+                _questController.SetNextQuest(quest);
+                _questController.Start("SeasonalEventSelection");
+            }
+
+            bool openInQuestMap = _commandManager.Commands.TryGetValue("/questinfo", out var commandInfo);
+            if (ImGui.MenuItem("View in Quest Map", questInfo.QuestId is QuestId && openInQuestMap))
+            {
+                _commandManager.DispatchCommand("/questinfo", questInfo.QuestId.ToString() ?? string.Empty, commandInfo!);
+            }
+
+            ImGui.EndPopup();
+        }
 
         ImGui.TableNextColumn();
         float spacing;
