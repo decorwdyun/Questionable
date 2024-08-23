@@ -102,38 +102,38 @@ internal sealed class QuestData
 
             // ARR
             EClassJob.Gladiator => [63],
-            EClassJob.Paladin => [72, 73, 74, 75],
+            EClassJob.Paladin => [72, 73, 74],
             EClassJob.Marauder => [64],
-            EClassJob.Warrior => [76, 77, 78, 79],
+            EClassJob.Warrior => [76, 77, 78],
             EClassJob.Conjurer => [65],
-            EClassJob.WhiteMage => [86, 87, 88, 89],
+            EClassJob.WhiteMage => [86, 87, 88],
             EClassJob.Arcanist => [66],
-            EClassJob.Summoner => [127, 128, 129, 130],
-            EClassJob.Scholar => [90, 91, 92, 93],
+            EClassJob.Summoner => [127, 128, 129],
+            EClassJob.Scholar => [90, 91, 92],
             EClassJob.Pugilist => [67],
-            EClassJob.Monk => [98, 99, 100, 101],
+            EClassJob.Monk => [98, 99, 100],
             EClassJob.Lancer => [68],
-            EClassJob.Dragoon => [102, 103, 104, 105],
+            EClassJob.Dragoon => [102, 103, 104],
             EClassJob.Rogue => [69],
-            EClassJob.Ninja => [106, 107, 108, 109],
+            EClassJob.Ninja => [106, 107, 108],
             EClassJob.Archer => [70],
-            EClassJob.Bard => [113, 114, 115, 116],
+            EClassJob.Bard => [113, 114, 115],
             EClassJob.Thaumaturge => [71],
-            EClassJob.BlackMage => [123, 124, 125, 126],
+            EClassJob.BlackMage => [123, 124, 125],
 
             // HW
-            EClassJob.DarkKnight => [80, 81, 82, 83],
-            EClassJob.Astrologian => [94, 95, 96, 97],
-            EClassJob.Machinist => [117, 118, 119, 120],
+            EClassJob.DarkKnight => [80, 81, 82],
+            EClassJob.Astrologian => [94, 95, 96],
+            EClassJob.Machinist => [117, 118, 119],
 
             // SB
-            EClassJob.Samurai => [110, 111, 112],
-            EClassJob.RedMage => [131, 132, 133],
-            EClassJob.BlueMage => [134, 135, 146, 170],
+            EClassJob.Samurai => [110, 111],
+            EClassJob.RedMage => [131, 132],
+            EClassJob.BlueMage => [134, 135, 146],
 
             // ShB
-            EClassJob.Gunbreaker => [84, 85],
-            EClassJob.Dancer => [121, 122],
+            EClassJob.Gunbreaker => [84],
+            EClassJob.Dancer => [121],
 
             // EW
             EClassJob.Sage => [152],
