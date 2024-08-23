@@ -24,13 +24,8 @@ internal sealed class HelpUiController : IDisposable
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "MultipleHelpWindow", MultipleHelpWindowPostSetup);
     }
 
-    private bool ShouldHandleUiInteractions => _questController.IsRunning;
-
     private unsafe void UnendingCodexPostSetup(AddonEvent type, AddonArgs args)
     {
-        if (!ShouldHandleUiInteractions)
-            return;
-
         if (_questController.StartedQuest?.Quest.Id.Value == 4526)
         {
             _logger.LogInformation("Closing Unending Codex");
@@ -41,9 +36,6 @@ internal sealed class HelpUiController : IDisposable
 
     private unsafe void ContentsTutorialPostSetup(AddonEvent type, AddonArgs args)
     {
-        if (!ShouldHandleUiInteractions)
-            return;
-
         if (_questController.StartedQuest?.Quest.Id.Value == 245)
         {
             _logger.LogInformation("Closing ContentsTutorial");
@@ -57,9 +49,6 @@ internal sealed class HelpUiController : IDisposable
     /// </summary>
     private unsafe void MultipleHelpWindowPostSetup(AddonEvent type, AddonArgs args)
     {
-        if (!ShouldHandleUiInteractions)
-            return;
-
         if (_questController.StartedQuest?.Quest.Id.Value == 245)
         {
             _logger.LogInformation("Closing MultipleHelpWindow");
