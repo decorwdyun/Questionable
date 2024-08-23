@@ -54,6 +54,7 @@ public sealed class AethernetShardConverter() : EnumConverter<EAetheryteLocation
         { EAetheryteLocation.GoldSaucerCactpotBoard, "[Gold Saucer] Cactpot Board" },
         { EAetheryteLocation.GoldSaucerRoundSquare, "[Gold Saucer] Round Square" },
         { EAetheryteLocation.GoldSaucerChocoboSquare, "[Gold Saucer] Chocobo Square" },
+        { EAetheryteLocation.GoldSaucerMinionSquare, "[Gold Saucer] Minion Square" },
 
         { EAetheryteLocation.Ishgard, "[Ishgard] Aetheryte Plaza" },
         { EAetheryteLocation.IshgardForgottenKnight, "[Ishgard] The Forgotten Knight" },

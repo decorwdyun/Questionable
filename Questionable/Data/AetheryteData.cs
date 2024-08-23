@@ -126,8 +126,17 @@ internal sealed class AetheryteData
 
                 { EAetheryteLocation.CoerthasCentralHighlandsCampDragonhead, new(223.98718f, 315.7854f, -234.85168f) },
                 { EAetheryteLocation.MorDhona, new(40.024292f, 24.002441f, -668.0247f) },
-                { EAetheryteLocation.GoldSaucer, new(-0.015319824f, 3.4942627f, -0.015319824f) },
                 { EAetheryteLocation.WolvesDenPier, new(40.93994f, 5.4779663f, -14.816589f) },
+
+                { EAetheryteLocation.GoldSaucer, new(-0.015319824f, 3.4942627f, -0.015319824f) },
+                { EAetheryteLocation.GoldSaucerEntranceCardSquares, new(-64.74408f, 2.8839111f, 54.33728f) },
+                { EAetheryteLocation.GoldSaucerWonderSquareEast, new(59.067627f, 23.88031f, 63.035034f) },
+                { EAetheryteLocation.GoldSaucerWonderSquareWest, new(-0.38153076f, 23.88031f, 58.609863f) },
+                { EAetheryteLocation.GoldSaucerEventSquare, new(95.47571f, -2.1210327f, -72.3125f) },
+                { EAetheryteLocation.GoldSaucerCactpotBoard, new(114.42737f, 13.595764f, -38.864807f) },
+                { EAetheryteLocation.GoldSaucerRoundSquare, new(-24.765442f, 6.1798096f, -85.67944f) },
+                { EAetheryteLocation.GoldSaucerChocoboSquare, new(-16.037292f, 2.8839111f, -33.432617f) },
+                { EAetheryteLocation.GoldSaucerMinionSquare, new(50.736206f, 2.8839111f, 19.912964f) },
 
                 { EAetheryteLocation.Ishgard, new(-63.98114f, 11.154297f, 43.9917f) },
                 { EAetheryteLocation.IshgardForgottenKnight, new(45.792236f, 24.551636f, 0.99176025f) },

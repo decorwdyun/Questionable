@@ -82,6 +82,7 @@ public enum EAetheryteLocation
     GoldSaucerCactpotBoard = 67,
     GoldSaucerRoundSquare = 68,
     GoldSaucerChocoboSquare = 69,
+    GoldSaucerMinionSquare = 89,
 
     Ishgard = 70,
     IshgardForgottenKnight = 80,
