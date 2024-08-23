@@ -46,6 +46,15 @@ public sealed class AethernetShardConverter() : EnumConverter<EAetheryteLocation
         { EAetheryteLocation.LimsaTempestGate, "[Limsa Lominsa] Tempest Gate (Lower La Noscea)" },
         { EAetheryteLocation.LimsaAirship, "[Limsa Lominsa] Airship Landing" },
 
+        { EAetheryteLocation.GoldSaucer, "[Gold Saucer] Aetheryte Plaza" },
+        { EAetheryteLocation.GoldSaucerEntranceCardSquares, "[Gold Saucer] Entrance & Card Squares" },
+        { EAetheryteLocation.GoldSaucerWonderSquareEast, "[Gold Saucer] Wonder Square East" },
+        { EAetheryteLocation.GoldSaucerWonderSquareWest, "[Gold Saucer] Wonder Square West" },
+        { EAetheryteLocation.GoldSaucerEventSquare, "[Gold Saucer] Event Square" },
+        { EAetheryteLocation.GoldSaucerCactpotBoard, "[Gold Saucer] Cactpot Board" },
+        { EAetheryteLocation.GoldSaucerRoundSquare, "[Gold Saucer] Round Square" },
+        { EAetheryteLocation.GoldSaucerChocoboSquare, "[Gold Saucer] Chocobo Square" },
+
         { EAetheryteLocation.Ishgard, "[Ishgard] Aetheryte Plaza" },
         { EAetheryteLocation.IshgardForgottenKnight, "[Ishgard] The Forgotten Knight" },
         { EAetheryteLocation.IshgardSkysteelManufactory, "[Ishgard] Skysteel Manufactory" },

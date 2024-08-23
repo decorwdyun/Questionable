@@ -72,8 +72,16 @@ public enum EAetheryteLocation
 
     CoerthasCentralHighlandsCampDragonhead = 23,
     MorDhona = 24,
-    GoldSaucer = 62,
     WolvesDenPier = 55,
+
+    GoldSaucer = 62,
+    GoldSaucerEntranceCardSquares = 63,
+    GoldSaucerWonderSquareEast = 64,
+    GoldSaucerWonderSquareWest = 65,
+    GoldSaucerEventSquare = 66,
+    GoldSaucerCactpotBoard = 67,
+    GoldSaucerRoundSquare = 68,
+    GoldSaucerChocoboSquare = 69,
 
     Ishgard = 70,
     IshgardForgottenKnight = 80,
