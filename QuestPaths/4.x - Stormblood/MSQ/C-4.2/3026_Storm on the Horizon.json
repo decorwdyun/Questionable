@@ -50,6 +50,7 @@
             "Y": 1.7862457,
             "Z": 738.9486
           },
+          "StopDistance": 5,
           "TerritoryId": 614,
           "InteractionType": "Interact"
         }
@@ -86,42 +87,24 @@
           "TargetTerritoryId": 759
         },
         {
-          "DataId": 162,
-          "Position": {
-            "X": 96.269165,
-            "Y": -3.4332886,
-            "Z": 81.01013
-          },
           "TerritoryId": 759,
-          "InteractionType": "Interact",
-          "Comment": "Aethernet Attunement: [Doman Enclave] Ferry Docks"
+          "InteractionType": "AttuneAethernetShard",
+          "AethernetShard": "[Doman Enclave] Ferry Docks"
         },
         {
-          "DataId": 130,
-          "Position": {
-            "X": -61.57019,
-            "Y": 0.77819824,
-            "Z": 90.684326
-          },
           "TerritoryId": 759,
-          "InteractionType": "Interact",
-          "Comment": "Aethernet Attunement: [Doman Enclave] The Southern Enclave"
-        },
-        {
-          "DataId": 129,
-          "Position": {
-            "X": 8.987488,
-            "Y": 0.8086548,
-            "Z": -105.85187
-          },
-          "TerritoryId": 759,
-          "InteractionType": "Interact",
-          "Comment": "Aethernet Attunement: [Doman Enclave] The Northern Enclave"
+          "InteractionType": "AttuneAethernetShard",
+          "AethernetShard": "[Doman Enclave] The Southern Enclave"
         },
         {
           "TerritoryId": 759,
           "InteractionType": "AttuneAetheryte",
           "Aetheryte": "Doman Enclave"
+        },
+        {
+          "TerritoryId": 759,
+          "InteractionType": "AttuneAethernetShard",
+          "AethernetShard": "[Doman Enclave] The Northern Enclave"
         },
         {
           "DataId": 1024970,
@@ -132,6 +115,10 @@
           },
           "TerritoryId": 759,
           "InteractionType": "Interact",
+          "AethernetShortcut": [
+            "[Doman Enclave] The Northern Enclave",
+            "[Doman Enclave] Aetheryte Plaza"
+          ],
           "DialogueChoices": [
             {
               "Type": "List",
@@ -178,6 +165,7 @@
             "Y": 0.19999999,
             "Z": -4.837158
           },
+          "StopDistance": 7,
           "TerritoryId": 744,
           "InteractionType": "Interact"
         }

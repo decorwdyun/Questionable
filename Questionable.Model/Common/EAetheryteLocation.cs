@@ -156,6 +156,7 @@ public enum EAetheryteLocation
     DomanEnclaveSouthern = 130,
     DomanEnclaveOneRiver = 131,
     DomanEnclaveDocks = 162,
+    DomanEnclaveGangos = 163,
 
     Crystarium = 133,
     CrystariumMarkets = 149,

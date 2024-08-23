@@ -27,6 +27,22 @@
       "Sequence": 1,
       "Steps": [
         {
+          "TerritoryId": 131,
+          "InteractionType": "None",
+          "AetheryteShortcut": "Ul'dah"
+        },
+        {
+          "DataId": 1011565,
+          "Position": {
+            "X": -78.8739,
+            "Y": 4,
+            "Z": -110.429565
+          },
+          "TerritoryId": 130,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 434
+        },
+        {
           "DataId": 1001821,
           "Position": {
             "X": -24.124573,
@@ -39,7 +55,12 @@
           "AethernetShortcut": [
             "[Ul'dah] Aetheryte Plaza",
             "[Ul'dah] The Chamber of Rule"
-          ]
+          ],
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
+          }
         }
       ]
     },

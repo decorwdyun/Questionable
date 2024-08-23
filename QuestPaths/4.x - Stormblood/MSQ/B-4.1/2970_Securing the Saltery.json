@@ -12,6 +12,7 @@
             "Y": -2.0000012,
             "Z": -17.166443
           },
+          "StopDistance": 5,
           "TerritoryId": 212,
           "InteractionType": "AcceptQuest"
         }
@@ -45,7 +46,8 @@
           },
           "TerritoryId": 621,
           "InteractionType": "Interact",
-          "Fly": true
+          "Fly": true,
+          "AetheryteShortcut": "Lochs - Porta Praetoria"
         }
       ]
     },
@@ -60,8 +62,9 @@
             "Z": 196.55139
           },
           "TerritoryId": 621,
-          "InteractionType": "Interact",
-          "Comment": "Aim at jaw"
+          "InteractionType": "Instruction",
+          "Comment": "Aim at jaw",
+          "Fly": true
         }
       ]
     },
@@ -75,6 +78,7 @@
             "Y": -0.3,
             "Z": 207.6294
           },
+          "StopDistance": 5,
           "TerritoryId": 621,
           "InteractionType": "Interact"
         }
@@ -91,7 +95,7 @@
             "Z": 282.7954
           },
           "TerritoryId": 621,
-          "InteractionType": "Interact",
+          "InteractionType": "Instruction",
           "Fly": true,
           "Comment": "Aim at nearest eye"
         }
@@ -107,6 +111,7 @@
             "Y": 3.1742485,
             "Z": 249.34766
           },
+          "StopDistance": 6,
           "TerritoryId": 621,
           "InteractionType": "Interact"
         }

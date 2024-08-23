@@ -74,7 +74,10 @@
           },
           "TerritoryId": 759,
           "InteractionType": "CompleteQuest",
-          "Comment": "AethernetShortcut: [Doman Enclave] Aetheryte Plaza -> [Doman Enclave] Ferry Docks"
+          "AethernetShortcut": [
+            "[Doman Enclave] Aetheryte Plaza",
+            "[Doman Enclave] Ferry Docks"
+          ]
         }
       ]
     }

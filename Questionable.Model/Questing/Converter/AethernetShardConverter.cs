@@ -100,6 +100,13 @@ public sealed class AethernetShardConverter() : EnumConverter<EAetheryteLocation
         { EAetheryteLocation.KuganeRubyPrice, "[Kugane] The Ruby Price" },
         { EAetheryteLocation.KuganeAirship, "[Kugane] Airship Landing" },
 
+        { EAetheryteLocation.DomanEnclave, "[Doman Enclave] Aetheryte Plaza" },
+        { EAetheryteLocation.DomanEnclaveNorthern, "[Doman Enclave] The Northern Enclave" },
+        { EAetheryteLocation.DomanEnclaveSouthern, "[Doman Enclave] The Southern Enclave" },
+        { EAetheryteLocation.DomanEnclaveDocks, "[Doman Enclave] Ferry Docks" },
+        { EAetheryteLocation.DomanEnclaveOneRiver, "[Doman Enclave] The One River" },
+        { EAetheryteLocation.DomanEnclaveGangos, "[Doman Enclave] Gangos" },
+
         { EAetheryteLocation.Crystarium, "[Crystarium] Aetheryte Plaza" },
         { EAetheryteLocation.CrystariumMarkets, "[Crystarium] Musica Universalis Markets" },
         { EAetheryteLocation.CrystariumTemenosRookery, "[Crystarium] Temenos Rookery" },
