@@ -13,8 +13,7 @@
             "Z": -110.429565
           },
           "TerritoryId": 130,
-          "InteractionType": "AcceptQuest",
-          "PickUpQuestId": 434
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
