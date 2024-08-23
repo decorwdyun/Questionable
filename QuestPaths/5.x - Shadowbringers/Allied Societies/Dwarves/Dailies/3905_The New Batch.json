@@ -30,6 +30,40 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 2011179,
+          "Position": {
+            "X": -304.036,
+            "Y": 19.860376,
+            "Z": -244.1596
+          },
+          "TerritoryId": 813,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [
+              {
+                "Low": 2
+              },
+              {
+                "Low": 3
+              }
+            ],
+            null,
+            null,
+            null
+          ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
+        },
+        {
           "DataId": 2011178,
           "Position": {
             "X": -267.5365,
@@ -39,6 +73,21 @@
           "TerritoryId": 813,
           "InteractionType": "Interact",
           "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [
+              {
+                "Low": 1
+              },
+              {
+                "Low": 2
+              }
+            ],
+            null,
+            null,
+            null
+          ],
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -58,6 +107,21 @@
           "TerritoryId": 813,
           "InteractionType": "Interact",
           "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [
+              {
+                "Low": 1
+              },
+              {
+                "Low": 3
+              }
+            ],
+            null,
+            null,
+            null
+          ],
           "CompletionQuestVariablesFlags": [
             null,
             null,

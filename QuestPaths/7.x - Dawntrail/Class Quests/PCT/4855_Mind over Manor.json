@@ -84,7 +84,30 @@
           "AethernetShortcut": [
             "[Gridania] Conjurers' Guild",
             "[Gridania] Lancers' Guild"
+          ],
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_KINGBB202_04855_Q1_000_000",
+              "Answer": "TEXT_KINGBB202_04855_A1_000_001"
+            }
           ]
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1049796,
+          "Position": {
+            "X": 27.695068,
+            "Y": 16.16987,
+            "Z": -339.13184
+          },
+          "StopDistance": 5,
+          "TerritoryId": 133,
+          "InteractionType": "CompleteQuest"
         }
       ]
     }
