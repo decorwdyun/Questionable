@@ -12,7 +12,6 @@ using FFXIVClientStructs.FFXIV.Component.GUI;
 using LLib.GameData;
 using LLib.GameUI;
 using Lumina.Excel.GeneratedSheets;
-using Microsoft.Extensions.Logging;
 using Questionable.Controller;
 using Questionable.Controller.Steps.Interactions;
 using Questionable.Data;
@@ -32,7 +31,6 @@ internal sealed unsafe class QuestFunctions
     private readonly IDataManager _dataManager;
     private readonly IClientState _clientState;
     private readonly IGameGui _gameGui;
-    private readonly ILogger<QuestFunctions> _logger;
 
     public QuestFunctions(
         QuestRegistry questRegistry,
@@ -41,8 +39,7 @@ internal sealed unsafe class QuestFunctions
         Configuration configuration,
         IDataManager dataManager,
         IClientState clientState,
-        IGameGui gameGui,
-        ILogger<QuestFunctions> logger)
+        IGameGui gameGui)
     {
         _questRegistry = questRegistry;
         _questData = questData;
@@ -51,7 +48,6 @@ internal sealed unsafe class QuestFunctions
         _dataManager = dataManager;
         _clientState = clientState;
         _gameGui = gameGui;
-        _logger = logger;
     }
 
     public (ElementId? CurrentQuest, byte Sequence) GetCurrentQuest()
@@ -309,13 +305,10 @@ internal sealed unsafe class QuestFunctions
 
     private static int EstimateTeleportCosts(Quest quest)
     {
-        /*
         if (quest.Info.Expansion == EExpansionVersion.ARealmReborn)
             return 300 * quest.AllSteps().Count(x => x.Step.AetheryteShortcut != null);
         else
             return 1000 * quest.AllSteps().Count(x => x.Step.AetheryteShortcut != null);
-            */
-        return 0;
     }
 
     private List<ElementId> GetPriorityQuestsThatCanBeAccepted()
