@@ -20,7 +20,7 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
     private readonly string[] _mountNames;
 
     private readonly string[] _grandCompanyNames =
-        ["None (manually pick quest)", "Maelstrom", "Twin Adder" /*, "Immortal Flames"*/];
+        ["None (manually pick quest)", "Maelstrom", "Twin Adder", "Immortal Flames"];
 
     [SuppressMessage("Performance", "CA1861", Justification = "One time initialization")]
     public ConfigWindow(IDalamudPluginInterface pluginInterface, Configuration configuration, IDataManager dataManager)

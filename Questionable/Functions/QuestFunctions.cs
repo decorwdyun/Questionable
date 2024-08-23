@@ -80,6 +80,7 @@ internal sealed unsafe class QuestFunctions
             {
                 GrandCompany.TwinAdder => (new QuestId(680), 0),
                 GrandCompany.Maelstrom => (new QuestId(681), 0),
+                GrandCompany.ImmortalFlames => (new QuestId(682), 0),
                 _ => default
             };
         }
@@ -89,6 +90,7 @@ internal sealed unsafe class QuestFunctions
             {
                 GrandCompany.TwinAdder => 700,
                 GrandCompany.Maelstrom => 701,
+                GrandCompany.ImmortalFlames => 702,
                 _ => 0
             };
 
