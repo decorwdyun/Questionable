@@ -12,6 +12,7 @@
             "Y": -4.178714,
             "Z": 87.296875
           },
+          "StopDistance": 7,
           "TerritoryId": 759,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Doman Enclave",
@@ -43,7 +44,10 @@
             }
           ],
           "TargetTerritoryId": 744,
-          "Comment": "AethernetShortcut: [Doman Enclave] Ferry Docks -> [Doman Enclave] Aetheryte Plaza"
+          "AethernetShortcut": [
+            "[Doman Enclave] Ferry Docks",
+            "[Doman Enclave] Aetheryte Plaza"
+          ]
         }
       ]
     },
@@ -57,6 +61,7 @@
             "Y": 0.021091362,
             "Z": -3.0060425
           },
+          "StopDistance": 7,
           "TerritoryId": 744,
           "InteractionType": "Interact"
         }
@@ -85,7 +90,10 @@
           },
           "TerritoryId": 759,
           "InteractionType": "Interact",
-          "Comment": "AethernetShortcut: [Doman Enclave] Aetheryte Plaza -> [Doman Enclave] Ferry Docks"
+          "AethernetShortcut": [
+            "[Doman Enclave] Aetheryte Plaza",
+            "[Doman Enclave] Ferry Docks"
+          ]
         }
       ]
     },
@@ -109,7 +117,10 @@
             }
           ],
           "TargetTerritoryId": 744,
-          "Comment": "AethernetShortcut: [Doman Enclave] Ferry Docks -> [Doman Enclave] Aetheryte Plaza"
+          "AethernetShortcut": [
+            "[Doman Enclave] Ferry Docks",
+            "[Doman Enclave] Aetheryte Plaza"
+          ]
         },
         {
           "DataId": 1025597,
