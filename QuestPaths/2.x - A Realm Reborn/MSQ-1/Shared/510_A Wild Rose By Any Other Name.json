@@ -44,14 +44,32 @@
       "Sequence": 255,
       "Steps": [
         {
+          "Position": {
+            "X": -64.84354,
+            "Y": -3.6581912,
+            "Z": 186.08156
+          },
           "TerritoryId": 141,
-          "InteractionType": "AttuneAetheryte",
-          "Aetheryte": "Central Thanalan - Black Brush Station",
+          "InteractionType": "WalkTo",
           "AetheryteShortcut": "Ul'dah",
           "AethernetShortcut": [
             "[Ul'dah] Aetheryte Plaza",
             "[Ul'dah] Gate of Nald (Central Thanalan)"
           ]
+        },
+        {
+          "Position": {
+            "X": -62.2836,
+            "Y": -3.6582258,
+            "Z": 144.35869
+          },
+          "TerritoryId": 141,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "TerritoryId": 141,
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Central Thanalan - Black Brush Station"
         },
         {
           "Position": {
