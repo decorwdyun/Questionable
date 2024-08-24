@@ -157,9 +157,7 @@ internal sealed partial class ActiveQuestComponent
                 if (_configuration.Advanced.AdditionalStatusInformation && _questController.IsInterruptible())
                 {
                     ImGui.SameLine();
-                    ImGui.PushFont(UiBuilder.IconFont);
-                    ImGui.TextColored(ImGuiColors.DalamudYellow, FontAwesomeIcon.Pause.ToIconString());
-                    ImGui.PopFont();
+                    ImGui.TextColored(ImGuiColors.DalamudYellow, SeIconChar.Hyadelyn.ToIconString());
                 }
             }
 
