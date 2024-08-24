@@ -719,6 +719,9 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
         if (type != ECurrentQuestType.Normal)
             return false;
 
+        if (currentQuest.Quest.Info.AlliedSociety != EAlliedSociety.None)
+            return false;
+
         QuestSequence? currentSequence = currentQuest.Quest.FindSequence(currentQuest.Sequence);
         if (currentQuest.Step > 0)
             return false;
