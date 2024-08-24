@@ -450,6 +450,18 @@ internal sealed unsafe class QuestFunctions
 
     public bool IsQuestLocked(QuestId questId, ElementId? extraCompletedQuest = null)
     {
+        if (IsQuestUnobtainable(questId, extraCompletedQuest))
+            return true;
+
+        var questInfo = (QuestInfo)_questData.GetQuestInfo(questId);
+        if (questInfo.GrandCompany != GrandCompany.None && questInfo.GrandCompany != GetGrandCompany())
+            return true;
+
+        return !HasCompletedPreviousQuests(questInfo, extraCompletedQuest) || !HasCompletedPreviousInstances(questInfo);
+    }
+
+    public bool IsQuestUnobtainable(QuestId questId, ElementId? extraCompletedQuest = null)
+    {
         var questInfo = (QuestInfo)_questData.GetQuestInfo(questId);
         if (questInfo.QuestLocks.Count > 0)
         {
@@ -460,13 +472,10 @@ internal sealed unsafe class QuestFunctions
                 return true;
         }
 
-        if (questInfo.GrandCompany != GrandCompany.None && questInfo.GrandCompany != GetGrandCompany())
-            return true;
-
         if (_questData.GetLockedClassQuests().Contains(questId))
             return true;
 
-        return !HasCompletedPreviousQuests(questInfo, extraCompletedQuest) || !HasCompletedPreviousInstances(questInfo);
+        return false;
     }
 
     public bool IsQuestLocked(LeveId leveId)

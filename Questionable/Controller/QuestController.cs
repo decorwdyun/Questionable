@@ -138,6 +138,8 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
     /// </summary>
     public QuestProgress? PendingQuest => _pendingQuest;
 
+    public List<Quest> ManualPriorityQuests { get; } = [];
+
     public string? DebugState { get; private set; }
 
     public void Reload()
@@ -291,7 +293,13 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
             }
             else
             {
-                (ElementId? currentQuestId, currentSequence) = _questFunctions.GetCurrentQuest();
+                (ElementId? currentQuestId, currentSequence) =
+                    ManualPriorityQuests
+                        .Where(x => _questFunctions.IsReadyToAcceptQuest(x.Id) || _questFunctions.IsQuestAccepted(x.Id))
+                        .Select(x =>
+                            ((ElementId?, byte)?)(x.Id, _questFunctions.GetQuestProgressInfo(x.Id)?.Sequence ?? 0))
+                        .FirstOrDefault() ??
+                    _questFunctions.GetCurrentQuest();
                 if (currentQuestId == null || currentQuestId.Value == 0)
                 {
                     if (_startedQuest != null)

@@ -208,6 +208,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<QuestSelectionWindow>();
         serviceCollection.AddSingleton<QuestValidationWindow>();
         serviceCollection.AddSingleton<JournalProgressWindow>();
+        serviceCollection.AddSingleton<PriorityWindow>();
     }
 
     private static void AddQuestValidators(ServiceCollection serviceCollection)

@@ -31,6 +31,7 @@ internal sealed partial class ActiveQuestComponent
     private readonly ICommandManager _commandManager;
     private readonly Configuration _configuration;
     private readonly QuestRegistry _questRegistry;
+    private readonly PriorityWindow _priorityWindow;
     private readonly IChatGui _chatGui;
 
     public ActiveQuestComponent(
@@ -42,6 +43,7 @@ internal sealed partial class ActiveQuestComponent
         ICommandManager commandManager,
         Configuration configuration,
         QuestRegistry questRegistry,
+        PriorityWindow priorityWindow,
         IChatGui chatGui)
     {
         _questController = questController;
@@ -52,6 +54,7 @@ internal sealed partial class ActiveQuestComponent
         _commandManager = commandManager;
         _configuration = configuration;
         _questRegistry = questRegistry;
+        _priorityWindow = priorityWindow;
         _chatGui = chatGui;
     }
 
@@ -111,6 +114,10 @@ internal sealed partial class ActiveQuestComponent
                 _questController.Stop("Manual (no active quest)");
                 _gatheringController.Stop("Manual (no active quest)");
             }
+
+            ImGui.SameLine();
+            if (ImGuiComponents.IconButton(FontAwesomeIcon.SortAmountDown))
+                _priorityWindow.Toggle();
         }
     }
 
@@ -292,6 +299,10 @@ internal sealed partial class ActiveQuestComponent
             if (colored)
                 ImGui.PopStyleColor();
             ImGui.EndDisabled();
+
+            ImGui.SameLine();
+            if (ImGuiComponents.IconButton(FontAwesomeIcon.SortAmountDown))
+                _priorityWindow.Toggle();
 
             if (_commandManager.Commands.TryGetValue("/questinfo", out var commandInfo))
             {
