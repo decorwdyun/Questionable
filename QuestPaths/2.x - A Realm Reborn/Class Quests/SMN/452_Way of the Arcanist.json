@@ -5,11 +5,11 @@
       {
         "Sequence": 0,
         "Steps": [
-          { "DataId": 1009944,
+          { "DataId": 1000895,
 "Position": {
-    "X": -152.66656,
-    "Y": 2.8562405,
-    "Z": 243.18298
+    "X": -335.74432,
+    "Y": 12.899764,
+    "Z": 1.3884888
 },
 "TerritoryId": 129,
 "InteractionType": "AcceptQuest"}
@@ -18,30 +18,22 @@
       {
         "Sequence": 255,
         "Steps": [
-            { "DataId": 1009944,
+          { "DataId": 1000909,
 "Position": {
-    "X": -152.66656,
-    "Y": 2.8562405,
-    "Z": 243.18298
-},
-"TerritoryId": 129,
-"InteractionType": "Interact"
-},
-          { "DataId": 1009943,
-"Position": {
-    "X": -153.36847,
-    "Y": -129.4397,
-    "Z": 265.88843
+    "X": -326.37524,
+    "Y": 12.899658,
+    "Z": 9.994568
 },
 "TerritoryId": 129,
 "InteractionType": "CompleteQuest",
   "DialogueChoices": [
                           {
                               "Type": "YesNo",
-                              "Prompt": "TEXT_CLSROG011_00102_Q1_000_030",
+                              "Prompt": "TEXT_CLSACN011_00452_Q1_000_000",
                               "Yes": true
                           }
-                      ]
+                      ],
+  "NextQuestId": 454
   }
         ]
       }

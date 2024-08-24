@@ -1,42 +1,44 @@
 {
-    "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-    "Author": "Cacahuetes",
-    "QuestSequence": [
-      {
-        "Sequence": 0,
-        "Steps": [
-          { "DataId": 1000294,
-"Position": {
-    "X": -238.05603,
-    "Y": 8,
-    "Z": -142.93127
-},
-"TerritoryId": 133,
-"InteractionType": "AcceptQuest"}
-        ]
-      },
-      {
-        "Sequence": 255,
-        "Steps": [
-          { "DataId": 1000815,
-"Position": {
-    "X": -233.9361,
-    "Y": 6.668152,
-    "Z": -171.03839
-},
-"TerritoryId": 133,
-"InteractionType": "CompleteQuest",
-  "DialogueChoices": [
-                          {
-                              "Type": "YesNo",
-                              "Prompt": "TEXT_CLSHRV001_00003_Q1_000_1",
-                              "Yes": true
-                          }
-                      ],
-  "NextQuestId": 3
-  }
-        ]
-      }
-    ]
-  }
-  
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+  "Author": "Cacahuetes",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1000294,
+          "Position": {
+            "X": -238.05603,
+            "Y": 8,
+            "Z": -142.93127
+          },
+          "TerritoryId": 133,
+          "InteractionType": "AcceptQuest"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1000815,
+          "Position": {
+            "X": -233.9361,
+            "Y": 6.668152,
+            "Z": -171.03839
+          },
+          "TerritoryId": 133,
+          "InteractionType": "CompleteQuest",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_CLSHRV001_00003_Q1_000_1",
+              "Yes": true
+            }
+          ],
+          "NextQuestId": 3
+        }
+      ]
+    }
+  ]
+}

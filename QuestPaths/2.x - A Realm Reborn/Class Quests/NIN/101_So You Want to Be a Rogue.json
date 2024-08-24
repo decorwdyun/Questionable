@@ -1,28 +1,27 @@
 {
-    "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-    "Author": "Cacahuetes",
-    "QuestSequence": [
-      {
-        "Sequence": 255,
-        "Steps": [
-          { "DataId": 1009944,
-"Position": {
-    "X": -152.66656,
-    "Y": 2.8562405,
-    "Z": 243.18298
-},
-"TerritoryId": 129,
-"InteractionType": "AcceptQuest",
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+  "Author": "Cacahuetes",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1009944,
+          "Position": {
+            "X": -152.66656,
+            "Y": 2.8562405,
+            "Z": 243.18298
+          },
+          "TerritoryId": 129,
+          "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Limsa Lominsa",
           "AethernetShortcut": [
-            "[Limsa Lominsa] Aetheryte Plaza","[Limsa Lominsa] Fishermens' Guild"
+            "[Limsa Lominsa] Aetheryte Plaza",
+            "[Limsa Lominsa] Fishermens' Guild"
           ],
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true,
-              "InTerritory": [
-                129
-              ]
+              "InSameTerritory": true
             }
           },
           "DialogueChoices": [
@@ -32,10 +31,9 @@
               "Yes": true
             }
           ],
-          "NextQuestID": 102
+          "NextQuestId": 102
         }
-    ]
-  }
-    ]
-  }
-  
+      ]
+    }
+  ]
+}

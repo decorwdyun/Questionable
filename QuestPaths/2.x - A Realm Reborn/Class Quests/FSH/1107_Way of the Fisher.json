@@ -1,57 +1,63 @@
 {
-    "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-    "Author": "Cacahuetes",
-    "QuestSequence": [
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+  "Author": "Cacahuetes",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
         {
-            "Sequence": 0,
-            "Steps": [
-                {
-                    "DataId": 1000859,
-"Position": {
-    "X": -166.76587,
-    "Y": 4.5496645,
-    "Z": 150.04187
-},
-"TerritoryId": 129,
-"InteractionType": "Interact",
-"AetheryteShortcut": "Limsa Lominsa",
-"AethernetShortcut": [
-                        "[Limsa Lominsa] Aetheryte Plaza",
-                        "[Limsa Lominsa] Fishermens' Guild"
-                    ],
-                    "SkipConditions": {
+          "DataId": 1000859,
+          "Position": {
+            "X": -166.76587,
+            "Y": 4.5496645,
+            "Z": 150.04187
+          },
+          "TerritoryId": 129,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Limsa Lominsa",
+          "AethernetShortcut": [
+            "[Limsa Lominsa] Aetheryte Plaza",
+            "[Limsa Lominsa] Fishermens' Guild"
+          ],
+          "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true,
-              "InTerritory": [
-                129
-              ]
+              "InSameTerritory": true
             }
           }
-                }
-            ]
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "Position": {
+            "X": -167.60791,
+            "Y": 4.550005,
+            "Z": 165.35986
+          },
+          "TerritoryId": 129,
+          "InteractionType": "WalkTo"
         },
         {
-            "Sequence": 255,
-            "Steps": [
-                {
-                    "DataId": 1000857,
-"Position": {
-    "X": -165.27051,
-    "Y": 5.2500057,
-    "Z": 164.29382
-},
-"TerritoryId": 129,
-"DialogueChoices": [
-                        {
-                            "Type": "YesNo",
-                            "Prompt": "TEXT_CLSFSH011_01107_Q1_000_001",
-                            "Yes": true
-                        }
-                    ],
-"InteractionType": "CompleteQuest",
-"NextQuestId": 1108
-                }
-            ]
+          "DataId": 1000857,
+          "Position": {
+            "X": -165.27051,
+            "Y": 5.2500057,
+            "Z": 164.29382
+          },
+          "TerritoryId": 129,
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_CLSFSH011_01107_Q1_000_001",
+              "Yes": true
+            }
+          ],
+          "InteractionType": "CompleteQuest",
+          "NextQuestId": 1108
         }
-    ]
+      ]
+    }
+  ]
 }

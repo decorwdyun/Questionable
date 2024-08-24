@@ -1,31 +1,9 @@
-﻿{
+{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
   "QuestSequence": [
     {
       "Sequence": 0,
-      "Steps": [
-        {
-          "DataId": 1002277,
-          "Position": {
-            "X": -97.550964,
-            "Y": 7.05,
-            "Z": 23.605652
-          },
-          "TerritoryId": 131,
-          "InteractionType": "AcceptQuest",
-          "DialogueChoices": [
-            {
-              "Type": "YesNo",
-              "Prompt": "TEXT_CLSGLA020_00253_Q1_000_1",
-              "Yes": true
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "Sequence": 1,
       "Steps": [
         {
           "DataId": 1001739,
@@ -35,19 +13,12 @@
             "Z": 39.81079
           },
           "TerritoryId": 131,
-          "InteractionType": "Interact",
-          "DialogueChoices": [
-            {
-              "Type": "YesNo",
-              "Prompt": "TEXT_CLSGLA020_00253_Q2_000_1",
-              "Yes": true
-            }
-          ]
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
     {
-      "Sequence": 2,
+      "Sequence": 1,
       "Steps": [
         {
           "Position": {
@@ -163,22 +134,6 @@
       "Sequence": 255,
       "Steps": [
         {
-          "Position": {
-            "X": -118.17538,
-            "Y": 18.35357,
-            "Z": 341.3039
-          },
-          "TerritoryId": 141,
-          "InteractionType": "WalkTo",
-          "SkipConditions": {
-            "StepIf": {
-              "NotInTerritory": [
-                141
-              ]
-            }
-          }
-        },
-        {
           "DataId": 1001739,
           "Position": {
             "X": -94.529724,
@@ -187,11 +142,11 @@
           },
           "TerritoryId": 131,
           "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Ul'dah",
           "AethernetShortcut": [
-            "[Ul'dah] Adventurers' Guild",
+            "[Ul'dah] Aetheryte Plaza",
             "[Ul'dah] Gladiators' Guild"
-          ],
-          "NextQuestId": 256
+          ]
         }
       ]
     }

@@ -1,18 +1,19 @@
 {
-    "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-    "Author": "Cacahuetes",
-    "QuestSequence": [
-      {
-        "Sequence": 0,
-        "Steps": [
-          { "DataId": 1000926,
-"Position": {
-    "X": -10.055725,
-    "Y": 44.999794,
-    "Z": -245.80762
-},
-"TerritoryId": 128,
-"InteractionType": "Interact",
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+  "Author": "Cacahuetes",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1000926,
+          "Position": {
+            "X": -10.055725,
+            "Y": 44.999794,
+            "Z": -245.80762
+          },
+          "TerritoryId": 128,
+          "InteractionType": "Interact",
           "AetheryteShortcut": "Limsa Lominsa",
           "AethernetShortcut": [
             "[Limsa Lominsa] Aetheryte Plaza",
@@ -22,7 +23,7 @@
             "AetheryteShortcutIf": {
               "InSameTerritory": true,
               "InTerritory": [
-                129, 128
+                128
               ]
             }
           },
@@ -32,9 +33,9 @@
               "Prompt": "TEXT_CLSEXC001_00179_Q1_000_1",
               "Yes": true
             }
-          ]}
-        ]
-      }
-    ]
-  }
-  
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -13,13 +13,13 @@
             "Z": 39.81079
           },
           "TerritoryId": 131,
-"InteractionType": "AcceptQuest",
-"AetheryteShortcut": "Ul'dah",
-"AethernetShortcut": [
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Ul'dah",
+          "AethernetShortcut": [
             "[Ul'dah] Aetheryte Plaza",
             "[Ul'dah] Gladiators' Guild"
-            ],
-        "SkipConditions": {
+          ],
+          "SkipConditions": {
             "AetheryteShortcutIf": {
               "InSameTerritory": true,
               "InTerritory": [
@@ -34,17 +34,19 @@
       "Sequence": 1,
       "Steps": [
         {
-         "DataId": 1004224,
-"Position": {
-    "X": -220.93542,
-    "Y": -38.407475,
-    "Z": 63.91992
-},
-"TerritoryId": 145,
-"InteractionType": "Combat",
-"AetheryteShortcut": "Eastern Thanalan - Camp Drybone",
-"EnemySpawnType":"AfterInteraction",
-"KillEnemyDataIds":[1244]
+          "DataId": 1004224,
+          "Position": {
+            "X": -220.93542,
+            "Y": -38.407475,
+            "Z": 63.91992
+          },
+          "TerritoryId": 145,
+          "InteractionType": "Combat",
+          "AetheryteShortcut": "Eastern Thanalan - Camp Drybone",
+          "EnemySpawnType": "AfterInteraction",
+          "KillEnemyDataIds": [
+            1244
+          ]
         }
       ]
     },
@@ -53,13 +55,13 @@
       "Steps": [
         {
           "DataId": 1004224,
-"Position": {
-    "X": -220.93542,
-    "Y": -38.407475,
-    "Z": 63.91992
-},
-"TerritoryId": 145,
-"InteractionType": "Interact"
+          "Position": {
+            "X": -220.93542,
+            "Y": -38.407475,
+            "Z": 63.91992
+          },
+          "TerritoryId": 145,
+          "InteractionType": "Interact"
         }
       ]
     },
@@ -74,13 +76,13 @@
             "Z": 39.81079
           },
           "TerritoryId": 131,
-"InteractionType": "Interact",
-"AetheryteShortcut": "Ul'dah",
-"AethernetShortcut": [
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Ul'dah",
+          "AethernetShortcut": [
             "[Ul'dah] Aetheryte Plaza",
             "[Ul'dah] Gladiators' Guild"
-            ],
-        "SkipConditions": {
+          ],
+          "SkipConditions": {
             "AetheryteShortcutIf": {
               "InSameTerritory": true,
               "InTerritory": [
@@ -90,43 +92,45 @@
           }
         }
       ]
-    }, 
+    },
     {
-        "Sequence": 4,
-        "Steps": [
-          {
-           "DataId": 1004091,
-"Position": {
-    "X": 24.12439,
-    "Y": 7.1999984,
-    "Z": -102.76953
-},
-"TerritoryId": 130,
-"InteractionType": "SinglePlayerDuty",
-  "AethernetShortcut": [
-              "[Ul'dah] Gladiators' Guild",
-              "[Ul'dah] Adventurers' Guild"
-            ]
-          }
-        ]
-      },
-    { "Sequence": 255,
-    "Steps": [
+      "Sequence": 4,
+      "Steps": [
         {
-            "DataId": 1001739,
+          "DataId": 1004091,
+          "Position": {
+            "X": 24.12439,
+            "Y": 7.1999984,
+            "Z": -102.76953
+          },
+          "TerritoryId": 130,
+          "InteractionType": "SinglePlayerDuty",
+          "AethernetShortcut": [
+            "[Ul'dah] Gladiators' Guild",
+            "[Ul'dah] Adventurers' Guild"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1001739,
           "Position": {
             "X": -94.529724,
             "Y": 6.4999976,
             "Z": 39.81079
           },
           "TerritoryId": 131,
-"InteractionType": "CompleteQuest",
-"AethernetShortcut": [
-            "[Ul'dah] Aetheryte Plaza",
+          "InteractionType": "CompleteQuest",
+          "AethernetShortcut": [
+            "[Ul'dah] Adventurers' Guild",
             "[Ul'dah] Gladiators' Guild"
-            ],
-            "NextQuestId": 263
+          ],
+          "NextQuestId": 263
         }
-    ]}
+      ]
+    }
   ]
 }

@@ -1,18 +1,19 @@
 {
-    "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-    "Author": "Cacahuetes",
-    "QuestSequence": [
-      {
-        "Sequence": 0,
-        "Steps": [
-          { "DataId": 1000352,
-"Position": {
-    "X": 65.69006,
-    "Y": 8,
-    "Z": -147.41742
-},
-"TerritoryId": 133,
-"InteractionType": "Interact",
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+  "Author": "Cacahuetes",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1000352,
+          "Position": {
+            "X": 65.69006,
+            "Y": 8,
+            "Z": -147.41742
+          },
+          "TerritoryId": 133,
+          "InteractionType": "Interact",
           "AetheryteShortcut": "Gridania",
           "AethernetShortcut": [
             "[Gridania] Aetheryte Plaza",
@@ -32,9 +33,9 @@
               "Prompt": "TEXT_CLSTAN999_00188_Q1_000_1",
               "Yes": true
             }
-          ]}
-        ]
-      }
-    ]
-  }
-  
+          ]
+        }
+      ]
+    }
+  ]
+}
