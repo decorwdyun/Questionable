@@ -5,18 +5,19 @@
       {
         "Sequence": 0,
         "Steps": [
-          { "DataId": 1000148,
+          { "DataId": 1000294,
 "Position": {
-    "X": -20.279297,
-    "Y": -3.25,
-    "Z": 45.97534
+    "X": -238.05603,
+    "Y": 8,
+    "Z": -142.93127
 },
-"TerritoryId": 132,
-  "AetheryteShortcut": "Gridania",
+"TerritoryId": 133,
+"AetheryteShortcut": "Gridania",
+"AethernetShortcut": ["[Gridania] Aetheryte Plaza", "[Gridania] Botanists' Guild"],
   "DialogueChoices": [
                           {
                               "Type": "YesNo",
-                              "Prompt": "TEXT_CLSWDK999_00184_Q1_000_1",
+                              "Prompt": "TEXT_CLSHRV999_00193_Q1_000_1",
                               "Yes": true
                           }
                       ],
@@ -25,11 +26,12 @@
             "AetheryteShortcutIf": {
               "InSameTerritory": true,
               "InTerritory": [
-                132
+                132,133
               ]
             }
           }
-                  }
+                  
+}
         ]
       }
     ]
