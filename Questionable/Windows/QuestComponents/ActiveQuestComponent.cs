@@ -142,7 +142,8 @@ internal sealed partial class ActiveQuestComponent
                     ImGui.SameLine(0);
 
                     if (ImGui.IsItemHovered())
-                        ImGui.SetTooltip("This quest is loaded from your 'pluginConfigs\\Questionable\\Quests' directory.\nThis gets loaded even if Questionable ships with a newer/different version of the quest.");
+                        ImGui.SetTooltip(
+                            "This quest is loaded from your 'pluginConfigs\\Questionable\\Quests' directory.\nThis gets loaded even if Questionable ships with a newer/different version of the quest.");
                 }
 
                 ImGui.TextUnformatted(
@@ -158,6 +159,9 @@ internal sealed partial class ActiveQuestComponent
                 {
                     ImGui.SameLine();
                     ImGui.TextColored(ImGuiColors.DalamudYellow, SeIconChar.Hyadelyn.ToIconString());
+                    if (ImGui.IsItemHovered())
+                        ImGui.SetTooltip(
+                            "This quest sequence starts with a teleport to an Aetheryte.\nCertain priority quest (e.g. class quests) may be started/completed by the plugin prior to continuing with this quest.");
                 }
             }
 
