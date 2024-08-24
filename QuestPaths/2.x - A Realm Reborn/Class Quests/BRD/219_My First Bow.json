@@ -21,10 +21,7 @@
           ],
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true,
-              "InTerritory": [
-                132
-              ]
+              "InSameTerritory": true
             }
           }
         }
@@ -46,11 +43,31 @@
             {
               "DataId": 37,
               "MinimumKillCount": 3,
-              "$": "Slay ground squirrels as an archer"
+              "$": "Slay ground squirrels as an archer",
+              "CompletionQuestVariablesFlags": [
+                {
+                  "Low": 3
+                },
+                null,
+                null,
+                null,
+                null,
+                null
+              ]
             },
             {
               "DataId": 49,
               "MinimumKillCount": 3,
+              "CompletionQuestVariablesFlags": [
+                null,
+                {
+                  "High": 3
+                },
+                null,
+                null,
+                null,
+                null
+              ],
               "$": "Slay little ladybugs as an archer"
             }
           ],
@@ -63,59 +80,21 @@
             "AetheryteShortcutIf": {
               "InSameTerritory": true,
               "InTerritory": [
-                132,
                 148
               ]
             }
-          }
-        },
-        {
-          "Position": {
-            "X": 72.74856,
-            "Y": 14.679733,
-            "Z": -257.5843
           },
-          "TerritoryId": 148,
-          "InteractionType": "Combat",
-          "EnemySpawnType": "OverworldEnemies",
-          "ComplexCombatData": [
-            {
-              "DataId": 37,
-              "MinimumKillCount": 3,
-              "$": "Slay ground squirrels as an archer"
-            },
-            {
-              "DataId": 49,
-              "MinimumKillCount": 3,
-              "$": "Slay little ladybugs as an archer"
-            }
-          ],
           "CompletionQuestVariablesFlags": [
             {
               "Low": 3
             },
-            32,
+            {
+              "High": 3
+            },
             null,
             null,
             null,
             null
-          ]
-        },
-        {
-          "Position": {
-            "X": 92.364235,
-            "Y": 3.463302,
-            "Z": -193.49184
-          },
-          "TerritoryId": 148,
-          "InteractionType": "Combat",
-          "EnemySpawnType": "OverworldEnemies",
-          "ComplexCombatData": [
-            {
-              "DataId": 47,
-              "MinimumKillCount": 3,
-              "$": "Slay forest funguars as an archer"
-            }
           ]
         },
         {
@@ -135,7 +114,7 @@
             }
           ],
           "CompletionQuestVariablesFlags": [
-            16,
+            null,
             {
               "Low": 3
             },
@@ -157,6 +136,7 @@
             "Y": 0.9999819,
             "Z": 35.01941
           },
+          "StopDistance": 7,
           "TerritoryId": 132,
           "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Gridania",
@@ -166,12 +146,10 @@
           ],
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true,
-              "InTerritory": [
-                132
-              ]
+              "InSameTerritory": true
             }
-          }
+          },
+          "NextQuestId": 46
         }
       ]
     }

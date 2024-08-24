@@ -18,10 +18,7 @@
           "Fly": true,
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true,
-              "InTerritory": [
-                153
-              ]
+              "InSameTerritory": true
             }
           },
           "DialogueChoices": [
@@ -46,7 +43,15 @@
           },
           "TerritoryId": 153,
           "InteractionType": "Interact",
-          "Fly": true
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 2002530,
@@ -58,7 +63,15 @@
           "TerritoryId": 152,
           "InteractionType": "Interact",
           "Fly": true,
-          "AetheryteShortcut": "East Shroud - Hawthorne Hut"
+          "AetheryteShortcut": "East Shroud - Hawthorne Hut",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            16
+          ]
         },
         {
           "Position": {
@@ -80,7 +93,15 @@
           },
           "TerritoryId": 138,
           "InteractionType": "Interact",
-          "Fly": false
+          "Fly": false,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 2002529,
@@ -92,7 +113,15 @@
           "TerritoryId": 147,
           "InteractionType": "Interact",
           "Fly": true,
-          "AetheryteShortcut": "Northern Thanalan - Ceruleum Processing Plant"
+          "AetheryteShortcut": "Northern Thanalan - Ceruleum Processing Plant",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         }
       ]
     },
@@ -112,12 +141,10 @@
           "Fly": true,
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true,
-              "InTerritory": [
-                153
-              ]
+              "InSameTerritory": true
             }
-          }
+          },
+          "NextQuestId": 1090
         }
       ]
     }

@@ -12,6 +12,7 @@
             "Y": 0.9999819,
             "Z": 35.01941
           },
+          "StopDistance": 7,
           "TerritoryId": 132,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Gridania",
@@ -21,10 +22,7 @@
           ],
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true,
-              "InTerritory": [
-                132
-              ]
+              "InSameTerritory": true
             }
           }
         }
@@ -46,10 +44,7 @@
           "Fly": true,
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true,
-              "InTerritory": [
-                153
-              ]
+              "InSameTerritory": true
             }
           }
         }
@@ -107,6 +102,7 @@
             "Y": 2.147105,
             "Z": 21.86615
           },
+          "StopDistance": 7,
           "TerritoryId": 153,
           "InteractionType": "Interact",
           "Fly": false
@@ -125,7 +121,8 @@
           },
           "TerritoryId": 153,
           "InteractionType": "CompleteQuest",
-          "Fly": true
+          "Fly": true,
+          "NextQuestId": 1085
         }
       ]
     }

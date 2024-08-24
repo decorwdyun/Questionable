@@ -1,7 +1,6 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "pot0to",
-  "Comment": "Need to enable some way of doing single player duty first?",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -19,10 +18,7 @@
           "Fly": true,
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true,
-              "InTerritory": [
-                153
-              ]
+              "InSameTerritory": true
             }
           }
         }
@@ -46,12 +42,10 @@
           "Fly": true,
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true,
-              "InTerritory": [
-                137
-              ]
+              "InSameTerritory": true
             }
-          }
+          },
+          "$": "Actually a SinglePlayerDuty"
         }
       ]
     },
@@ -71,10 +65,7 @@
           "Fly": true,
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true,
-              "InTerritory": [
-                153
-              ]
+              "InSameTerritory": true
             }
           },
           "NextQuestId": 1089

@@ -12,6 +12,7 @@
             "Y": 0.9999819,
             "Z": 35.01941
           },
+          "StopDistance": 7,
           "TerritoryId": 132,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Gridania",
@@ -21,10 +22,7 @@
           ],
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true,
-              "InTerritory": [
-                132
-              ]
+              "InSameTerritory": true
             }
           }
         }
@@ -73,6 +71,7 @@
           "TerritoryId": 153,
           "InteractionType": "Interact",
           "AetheryteShortcut": "South Shroud - Quarrymill",
+          "Fly": true,
           "DialogueChoices": [
             {
               "Type": "List",
@@ -87,6 +86,21 @@
       "Sequence": 4,
       "Steps": [
         {
+          "Position": {
+            "X": 60.130726,
+            "Y": -5.9999475,
+            "Z": 63.516415
+          },
+          "TerritoryId": 148,
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Central Shroud - Bentbranch Meadows",
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
+        },
+        {
           "DataId": 1000534,
           "Position": {
             "X": 134.47766,
@@ -95,7 +109,7 @@
           },
           "TerritoryId": 148,
           "InteractionType": "SinglePlayerDuty",
-          "AetheryteShortcut": "Central Shroud - Bentbranch Meadows"
+          "Fly": true
         }
       ]
     },
@@ -109,13 +123,15 @@
             "Y": 0.9999819,
             "Z": 35.01941
           },
+          "StopDistance": 7,
           "TerritoryId": 132,
           "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Gridania",
           "AethernetShortcut": [
             "[Gridania] Aetheryte Plaza",
             "[Gridania] Archers' Guild"
-          ]
+          ],
+          "NextQuestId": 76
         }
       ]
     }

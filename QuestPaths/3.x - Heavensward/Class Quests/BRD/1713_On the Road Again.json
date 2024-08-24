@@ -18,10 +18,7 @@
           "Fly": true,
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true,
-              "InTerritory": [
-                153
-              ]
+              "InSameTerritory": true
             }
           }
         }
@@ -46,10 +43,7 @@
           ],
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true,
-              "InTerritory": [
-                132
-              ]
+              "InSameTerritory": true
             }
           }
         }
@@ -148,6 +142,7 @@
             "Y": 6.386869,
             "Z": 414.9386
           },
+          "StopDistance": 7,
           "TerritoryId": 152,
           "InteractionType": "Interact"
         }
@@ -172,10 +167,7 @@
           ],
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true,
-              "InTerritory": [
-                132
-              ]
+              "InSameTerritory": true
             }
           }
         }
@@ -191,15 +183,13 @@
             "Y": 8.059147,
             "Z": 31.72351
           },
+          "StopDistance": 7,
           "TerritoryId": 418,
           "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Ishgard",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true,
-              "InTerritory": [
-                418
-              ]
+              "InSameTerritory": true
             }
           }
         }

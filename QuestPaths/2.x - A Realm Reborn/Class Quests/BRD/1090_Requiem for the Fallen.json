@@ -18,10 +18,7 @@
           "Fly": true,
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true,
-              "InTerritory": [
-                153
-              ]
+              "InSameTerritory": true
             }
           }
         }
@@ -42,7 +39,8 @@
           "ItemId": 2000953,
           "EnemySpawnType": "AutoOnEnterArea",
           "AetheryteShortcut": "Coerthas Central Highlands - Camp Dragonhead",
-          "Fly": true
+          "Fly": true,
+          "$": "Actually a SinglePlayerDuty"
         }
       ]
     },
@@ -57,7 +55,8 @@
             "Z": 381.30762
           },
           "TerritoryId": 155,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "NextQuestId": 1713
         }
       ]
     }

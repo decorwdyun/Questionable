@@ -6,6 +6,15 @@
       "Sequence": 0,
       "Steps": [
         {
+          "TerritoryId": 153,
+          "InteractionType": "EquipItem",
+          "ItemId": 4546
+        },
+        {
+          "TerritoryId": 153,
+          "InteractionType": "EquipRecommended"
+        },
+        {
           "DataId": 1006750,
           "Position": {
             "X": 16.464417,
@@ -18,10 +27,7 @@
           "Fly": true,
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true,
-              "InTerritory": [
-                153
-              ]
+              "InSameTerritory": true
             }
           }
         }
@@ -37,6 +43,7 @@
             "Y": 68.192505,
             "Z": 586.1448
           },
+          "StopDistance": 0.5,
           "TerritoryId": 137,
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterInteraction",
@@ -47,10 +54,7 @@
           "Fly": true,
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true,
-              "InTerritory": [
-                137
-              ]
+              "InSameTerritory": true
             }
           }
         }
@@ -72,12 +76,10 @@
           "Fly": true,
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true,
-              "InTerritory": [
-                153
-              ]
+              "InSameTerritory": true
             }
-          }
+          },
+          "NextQuestId": 1087
         }
       ]
     }

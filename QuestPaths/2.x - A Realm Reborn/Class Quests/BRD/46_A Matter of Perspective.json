@@ -12,6 +12,7 @@
             "Y": 0.9999819,
             "Z": 35.01941
           },
+          "StopDistance": 7,
           "TerritoryId": 132,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Gridania",
@@ -21,10 +22,7 @@
           ],
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true,
-              "InTerritory": [
-                132
-              ]
+              "InSameTerritory": true
             }
           }
         }
@@ -43,7 +41,15 @@
           "TerritoryId": 132,
           "StopDistance": 15,
           "InteractionType": "Action",
-          "Action": "Heavy Shot"
+          "Action": "Heavy Shot",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "Position": {
@@ -52,7 +58,19 @@
             "Z": 57.230045
           },
           "TerritoryId": 132,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                64
+              ]
+            }
+          }
         },
         {
           "DataId": 2000926,
@@ -64,7 +82,15 @@
           "TerritoryId": 132,
           "StopDistance": 20,
           "InteractionType": "Action",
-          "Action": "Heavy Shot"
+          "Action": "Heavy Shot",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "Position": {
@@ -73,7 +99,19 @@
             "Z": 15.033528
           },
           "TerritoryId": 132,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                2
+              ]
+            }
+          }
         },
         {
           "DataId": 2000931,
@@ -85,7 +123,15 @@
           "TerritoryId": 132,
           "StopDistance": 20,
           "InteractionType": "Action",
-          "Action": "Heavy Shot"
+          "Action": "Heavy Shot",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            2
+          ]
         },
         {
           "Position": {
@@ -94,7 +140,19 @@
             "Z": 21.23782
           },
           "TerritoryId": 132,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                8
+              ]
+            }
+          }
         },
         {
           "DataId": 2000929,
@@ -106,7 +164,15 @@
           "TerritoryId": 132,
           "StopDistance": 20,
           "InteractionType": "Action",
-          "Action": "Heavy Shot"
+          "Action": "Heavy Shot",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            8
+          ]
         },
         {
           "Position": {
@@ -115,7 +181,19 @@
             "Z": 60.44494
           },
           "TerritoryId": 132,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                16
+              ]
+            }
+          }
         },
         {
           "DataId": 2000928,
@@ -127,7 +205,15 @@
           "TerritoryId": 132,
           "StopDistance": 20,
           "InteractionType": "Action",
-          "Action": "Heavy Shot"
+          "Action": "Heavy Shot",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            16
+          ]
         },
         {
           "Position": {
@@ -136,7 +222,19 @@
             "Z": 88.24835
           },
           "TerritoryId": 132,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                32
+              ]
+            }
+          }
         },
         {
           "DataId": 2000930,
@@ -148,7 +246,15 @@
           "TerritoryId": 132,
           "StopDistance": 20,
           "InteractionType": "Action",
-          "Action": "Heavy Shot"
+          "Action": "Heavy Shot",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         }
       ]
     },
@@ -164,19 +270,10 @@
           },
           "TerritoryId": 132,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "Gridania",
           "AethernetShortcut": [
             "[Gridania] Aetheryte Plaza",
             "[Gridania] Archers' Guild"
-          ],
-          "SkipConditions": {
-            "AetheryteShortcutIf": {
-              "InSameTerritory": true,
-              "InTerritory": [
-                132
-              ]
-            }
-          }
+          ]
         }
       ]
     },
@@ -189,6 +286,7 @@
             "Y": -21.916101,
             "Z": 210.33368
           },
+          "StopDistance": 0.5,
           "TerritoryId": 154,
           "AethernetShortcut": [
             "[Gridania] Archers' Guild",
@@ -202,24 +300,8 @@
               "MinimumKillCount": 8,
               "$": "Slay opo-opos."
             }
-          ]
-        },
-        {
-          "Position": {
-            "X": 316.9498,
-            "Y": -16.625727,
-            "Z": 190.52563
-          },
-          "TerritoryId": 154,
-          "InteractionType": "Combat",
-          "EnemySpawnType": "OverworldEnemies",
-          "ComplexCombatData": [
-            {
-              "DataId": 5,
-              "MinimumKillCount": 8,
-              "$": "Slay opo-opos."
-            }
           ],
+          "Fly": true,
           "CompletionQuestVariablesFlags": [
             {
               "Low": 8
@@ -237,40 +319,7 @@
             "Y": -11.9244995,
             "Z": 40.554157
           },
-          "TerritoryId": 154,
-          "InteractionType": "Combat",
-          "EnemySpawnType": "OverworldEnemies",
-          "ComplexCombatData": [
-            {
-              "DataId": 32,
-              "MinimumKillCount": 8,
-              "$": "Slay microchus."
-            }
-          ]
-        },
-        {
-          "Position": {
-            "X": 315.33475,
-            "Y": -8.230231,
-            "Z": -6.9168186
-          },
-          "TerritoryId": 154,
-          "InteractionType": "Combat",
-          "EnemySpawnType": "OverworldEnemies",
-          "ComplexCombatData": [
-            {
-              "DataId": 32,
-              "MinimumKillCount": 8,
-              "$": "Slay microchus."
-            }
-          ]
-        },
-        {
-          "Position": {
-            "X": 276.26797,
-            "Y": -6.927437,
-            "Z": -31.987146
-          },
+          "StopDistance": 0.5,
           "TerritoryId": 154,
           "InteractionType": "Combat",
           "EnemySpawnType": "OverworldEnemies",
@@ -281,6 +330,7 @@
               "$": "Slay microchus."
             }
           ],
+          "Fly": true,
           "CompletionQuestVariablesFlags": [
             null,
             {
@@ -304,6 +354,7 @@
             "Y": 0.9999819,
             "Z": 35.01941
           },
+          "StopDistance": 7,
           "TerritoryId": 132,
           "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Gridania",
@@ -313,12 +364,10 @@
           ],
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true,
-              "InTerritory": [
-                132
-              ]
+              "InSameTerritory": true
             }
-          }
+          },
+          "NextQuestId": 134
         }
       ]
     }

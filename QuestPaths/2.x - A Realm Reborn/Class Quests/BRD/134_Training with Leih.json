@@ -12,6 +12,7 @@
             "Y": 0.9999819,
             "Z": 35.01941
           },
+          "StopDistance": 7,
           "TerritoryId": 132,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Gridania",
@@ -21,10 +22,7 @@
           ],
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true,
-              "InTerritory": [
-                132
-              ]
+              "InSameTerritory": true
             }
           }
         }
@@ -56,7 +54,8 @@
           },
           "TerritoryId": 148,
           "InteractionType": "WalkTo",
-          "AetheryteShortcut": "Central Shroud - Bentbranch Meadows"
+          "AetheryteShortcut": "Central Shroud - Bentbranch Meadows",
+          "Fly": true
         },
         {
           "DataId": 2001177,
@@ -68,7 +67,15 @@
           "TerritoryId": 148,
           "StopDistance": 15,
           "InteractionType": "Action",
-          "Action": "Heavy Shot"
+          "Action": "Heavy Shot",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            2
+          ]
         },
         {
           "Position": {
@@ -77,7 +84,19 @@
             "Z": -61.20561
           },
           "TerritoryId": 148,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                4
+              ]
+            }
+          }
         },
         {
           "DataId": 2001175,
@@ -89,7 +108,15 @@
           "TerritoryId": 148,
           "StopDistance": 15,
           "InteractionType": "Action",
-          "Action": "Heavy Shot"
+          "Action": "Heavy Shot",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            4
+          ]
         },
         {
           "Position": {
@@ -98,7 +125,19 @@
             "Z": -69.45994
           },
           "TerritoryId": 148,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                8
+              ]
+            }
+          }
         },
         {
           "DataId": 2000959,
@@ -110,7 +149,15 @@
           "TerritoryId": 148,
           "StopDistance": 15,
           "InteractionType": "Action",
-          "Action": "Heavy Shot"
+          "Action": "Heavy Shot",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            8
+          ]
         },
         {
           "Position": {
@@ -119,7 +166,19 @@
             "Z": -132.85217
           },
           "TerritoryId": 148,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                16
+              ]
+            }
+          }
         },
         {
           "DataId": 2000958,
@@ -131,7 +190,15 @@
           "TerritoryId": 148,
           "StopDistance": 15,
           "InteractionType": "Action",
-          "Action": "Heavy Shot"
+          "Action": "Heavy Shot",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            16
+          ]
         },
         {
           "Position": {
@@ -140,7 +207,19 @@
             "Z": -173.19547
           },
           "TerritoryId": 148,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                32
+              ]
+            }
+          }
         },
         {
           "DataId": 2000957,
@@ -152,7 +231,15 @@
           "TerritoryId": 148,
           "StopDistance": 15,
           "InteractionType": "Action",
-          "Action": "Heavy Shot"
+          "Action": "Heavy Shot",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "Position": {
@@ -202,55 +289,11 @@
       "Steps": [
         {
           "Position": {
-            "X": -353.36465,
-            "Y": 4.1194496,
-            "Z": 288.19882
-          },
-          "TerritoryId": 152,
-          "AetheryteShortcut": "East Shroud - Hawthorne Hut",
-          "InteractionType": "Combat",
-          "EnemySpawnType": "OverworldEnemies",
-          "ComplexCombatData": [
-            {
-              "DataId": 5,
-              "MinimumKillCount": 8,
-              "$": "Slay northern vultures."
-            },
-            {
-              "DataId": 39,
-              "MinimumKillCount": 8,
-              "$": "Slay tree slugs."
-            }
-          ]
-        },
-        {
-          "Position": {
-            "X": -424.11658,
-            "Y": 7.2559156,
-            "Z": 277.93048
-          },
-          "TerritoryId": 152,
-          "InteractionType": "Combat",
-          "EnemySpawnType": "OverworldEnemies",
-          "ComplexCombatData": [
-            {
-              "DataId": 5,
-              "MinimumKillCount": 8,
-              "$": "Slay northern vultures."
-            },
-            {
-              "DataId": 39,
-              "MinimumKillCount": 8,
-              "$": "Slay tree slugs."
-            }
-          ]
-        },
-        {
-          "Position": {
             "X": -431.09494,
             "Y": 2.9039853,
             "Z": 239.26413
           },
+          "StopDistance": 0.5,
           "TerritoryId": 152,
           "InteractionType": "Combat",
           "EnemySpawnType": "OverworldEnemies",
@@ -258,43 +301,41 @@
             {
               "DataId": 5,
               "MinimumKillCount": 8,
-              "$": "Slay northern vultures."
+              "$": "Slay northern vultures.",
+              "CompletionQuestVariablesFlags": [
+                null,
+                {
+                  "High": 8
+                },
+                null,
+                null,
+                null,
+                null
+              ]
             },
             {
               "DataId": 39,
               "MinimumKillCount": 8,
-              "$": "Slay tree slugs."
-            }
-          ]
-        },
-        {
-          "Position": {
-            "X": -380.5414,
-            "Y": 1.1250772,
-            "Z": 236.78247
-          },
-          "TerritoryId": 152,
-          "InteractionType": "Combat",
-          "EnemySpawnType": "OverworldEnemies",
-          "ComplexCombatData": [
-            {
-              "DataId": 5,
-              "MinimumKillCount": 8,
-              "$": "Slay northern vultures."
+              "$": "Slay tree slugs.",
+              "CompletionQuestVariablesFlags": [
+                {
+                  "Low": 8
+                },
+                null,
+                null,
+                null,
+                null,
+                null
+              ]
             }
           ],
-          "CompletionQuestVariablesFlags": [
-            {
-              "Low": 8
-            },
-            {
-              "High": 8
-            },
-            null,
-            null,
-            null,
-            null
-          ]
+          "AetheryteShortcut": "East Shroud - Hawthorne Hut",
+          "Fly": true,
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
+          }
         }
       ]
     },
@@ -328,6 +369,7 @@
             "Y": 0.9999819,
             "Z": 35.01941
           },
+          "StopDistance": 7,
           "TerritoryId": 132,
           "InteractionType": "CompleteQuest",
           "DialogueChoices": [
@@ -336,7 +378,8 @@
               "Prompt": "TEXT_CLSARC997_00134_Q1_000_1",
               "Yes": true
             }
-          ]
+          ],
+          "NextQuestId": 68
         }
       ]
     }
