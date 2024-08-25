@@ -7,6 +7,7 @@ namespace Questionable.Model.Questing;
 public enum EAction
 {
     HeavySwing = 31,
+    Bootshine = 53,
     HeavyShot = 97,
     Cure = 120,
     Cure2 = 135,
