@@ -431,7 +431,8 @@ internal sealed unsafe class GameFunctions
         if (!AgentSatisfactionSupply.Instance()->IsAgentActive())
             return false;
 
-        var flags = _condition.AsReadOnlySet();
+        var flags = _condition.AsReadOnlySet().ToHashSet();
+        flags.Remove(ConditionFlag.InDutyQueue); // irrelevant
         return flags.Count == 2 &&
                flags.Contains(ConditionFlag.NormalConditions) &&
                flags.Contains(ConditionFlag.OccupiedInQuestEvent);
