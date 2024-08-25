@@ -41,6 +41,7 @@ internal static class Combat
                     ArgumentNullException.ThrowIfNull(step.DataId);
 
                     yield return interactFactory.Interact(step.DataId.Value, quest, EInteractionType.None, true);
+                    yield return new WaitAtEnd.WaitDelay(TimeSpan.FromSeconds(2));
                     yield return CreateTask(quest, sequence, step);
                     break;
                 }
@@ -52,11 +53,15 @@ internal static class Combat
 
                     yield return useItemFactory.OnObject(quest.Id, step.DataId.Value, step.ItemId.Value,
                         step.CompletionQuestVariablesFlags, true);
+                    yield return new WaitAtEnd.WaitDelay(TimeSpan.FromSeconds(2));
                     yield return CreateTask(quest, sequence, step);
                     break;
                 }
 
                 case EEnemySpawnType.AutoOnEnterArea:
+                    if (step.CombatDelaySecondsAtStart == null)
+                        yield return new WaitAtEnd.WaitDelay(TimeSpan.FromSeconds(2));
+
                     // automatically triggered when entering area, i.e. only unmount
                     yield return CreateTask(quest, sequence, step);
                     break;
