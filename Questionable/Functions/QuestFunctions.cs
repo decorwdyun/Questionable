@@ -494,7 +494,8 @@ internal sealed unsafe class QuestFunctions
         if (questInfo.PreviousQuests.Count == 0)
             return true;
 
-        var completedQuests = questInfo.PreviousQuests.Count(x => IsQuestComplete(x) || x.Equals(extraCompletedQuest));
+        var completedQuests = questInfo.PreviousQuests.Count(x =>
+            HasEnoughProgressOnPreviousQuest(x) || x.QuestId.Equals(extraCompletedQuest));
         if (questInfo.PreviousQuestJoin == QuestInfo.QuestJoin.All &&
             questInfo.PreviousQuests.Count == completedQuests)
             return true;
@@ -502,6 +503,20 @@ internal sealed unsafe class QuestFunctions
             return true;
         else
             return false;
+    }
+
+    private bool HasEnoughProgressOnPreviousQuest(QuestInfo.PreviousQuestInfo previousQuestInfo)
+    {
+        if (IsQuestComplete(previousQuestInfo.QuestId))
+            return true;
+
+        if (previousQuestInfo.Sequence != 0 && IsQuestAccepted(previousQuestInfo.QuestId))
+        {
+            var progress = GetQuestProgressInfo(previousQuestInfo.QuestId);
+            return progress != null && progress.Sequence >= previousQuestInfo.Sequence;
+        }
+
+        return false;
     }
 
     private static bool HasCompletedPreviousInstances(QuestInfo questInfo)

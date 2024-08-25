@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using LLib.GameData;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.GeneratedSheets2;
 
 namespace Questionable.Model;
 
@@ -57,8 +57,8 @@ internal static class QuestInfoUtils
                 { EClassJob.Dancer, classJobCategory.DNC },
                 { EClassJob.Reaper, classJobCategory.RPR },
                 { EClassJob.Sage, classJobCategory.SGE },
-                { EClassJob.Viper, classJobCategory.VPR },
-                { EClassJob.Pictomancer, classJobCategory.PCT }
+                { EClassJob.Viper, classJobCategory.Unknown1 },
+                { EClassJob.Pictomancer, classJobCategory.Unknown2 }
             }
             .Where(y => y.Value)
             .Select(y => y.Key)

@@ -8,7 +8,8 @@ using LLib.GameData;
 using Lumina.Excel.GeneratedSheets;
 using Questionable.Model;
 using Questionable.Model.Questing;
-using Quest = Lumina.Excel.GeneratedSheets.Quest;
+using Leve = Lumina.Excel.GeneratedSheets2.Leve;
+using Quest = Lumina.Excel.GeneratedSheets2.Quest;
 
 namespace Questionable.Data;
 
@@ -62,7 +63,7 @@ internal sealed class QuestData
 
         // workaround because the game doesn't require completion of the CT questline through normal means
         QuestInfo aTimeToEveryPurpose = (QuestInfo)_quests[new QuestId(425)];
-        aTimeToEveryPurpose.AddPreviousQuest(new QuestId(495));
+        aTimeToEveryPurpose.AddPreviousQuest(new QuestInfo.PreviousQuestInfo(new QuestId(495)));
     }
 
     public IQuestInfo GetQuestInfo(ElementId elementId)
