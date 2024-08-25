@@ -24,7 +24,7 @@
               "Yes": true
             }
           ],
-          "InteractionType": "Interact"
+          "InteractionType": "AcceptQuest"
         }
       ]
     }

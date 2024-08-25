@@ -13,7 +13,7 @@
             "Z": 98.039185
           },
           "TerritoryId": 131,
-          "InteractionType": "Interact",
+          "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Ul'dah",
           "AethernetShortcut": [
             "[Ul'dah] Aetheryte Plaza",

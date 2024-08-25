@@ -13,7 +13,7 @@
             "Z": 150.04187
           },
           "TerritoryId": 129,
-          "InteractionType": "Interact",
+          "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Limsa Lominsa",
           "AethernetShortcut": [
             "[Limsa Lominsa] Aetheryte Plaza",
