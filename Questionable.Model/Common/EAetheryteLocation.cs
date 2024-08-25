@@ -72,8 +72,17 @@ public enum EAetheryteLocation
 
     CoerthasCentralHighlandsCampDragonhead = 23,
     MorDhona = 24,
-    GoldSaucer = 62,
     WolvesDenPier = 55,
+
+    GoldSaucer = 62,
+    GoldSaucerEntranceCardSquares = 63,
+    GoldSaucerWonderSquareEast = 64,
+    GoldSaucerWonderSquareWest = 65,
+    GoldSaucerEventSquare = 66,
+    GoldSaucerCactpotBoard = 67,
+    GoldSaucerRoundSquare = 68,
+    GoldSaucerChocoboSquare = 69,
+    GoldSaucerMinionSquare = 89,
 
     Ishgard = 70,
     IshgardForgottenKnight = 80,
@@ -147,6 +156,7 @@ public enum EAetheryteLocation
     DomanEnclaveSouthern = 130,
     DomanEnclaveOneRiver = 131,
     DomanEnclaveDocks = 162,
+    DomanEnclaveGangos = 163,
 
     Crystarium = 133,
     CrystariumMarkets = 149,

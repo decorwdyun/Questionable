@@ -1,6 +1,6 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "liza",
+  "Author": "Cacahuetes",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -13,14 +13,20 @@
             "Z": 45.97534
           },
           "TerritoryId": 132,
-          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Gridania",
           "DialogueChoices": [
             {
               "Type": "YesNo",
               "Prompt": "TEXT_CLSWDK999_00184_Q1_000_1",
               "Yes": true
             }
-          ]
+          ],
+          "InteractionType": "AcceptQuest",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
+          }
         }
       ]
     }

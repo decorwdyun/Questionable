@@ -1,7 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "liza",
-  "Disabled": true,
+  "Author": "plogon_enjoyer",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -21,6 +20,36 @@
     {
       "Sequence": 255,
       "Steps": [
+        {
+          "TerritoryId": 960,
+          "InteractionType": "None",
+          "RequiredGatheredItems": [
+            {
+              "QuestAcceptedAsClass": "Miner",
+              "ItemId": 38286,
+              "ItemCount": 3
+            },
+            {
+              "QuestAcceptedAsClass": "Botanist",
+              "ItemId": 38310,
+              "ItemCount": 3
+            }
+          ],
+          "Fly": true
+        },
+        {
+          "DataId": 2013072,
+          "Position": {
+            "X": 456.65674,
+            "Y": 438.04077,
+            "Z": 310.2312
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Ultima Thule - Base Omicron",
+          "Mount": true,
+          "TargetTerritoryId": 960
+        },
         {
           "DataId": 1043417,
           "Position": {

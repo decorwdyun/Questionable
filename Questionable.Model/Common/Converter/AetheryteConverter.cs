@@ -35,8 +35,8 @@ public sealed class AetheryteConverter() : EnumConverter<EAetheryteLocation>(Val
 
         { EAetheryteLocation.CoerthasCentralHighlandsCampDragonhead, "Coerthas Central Highlands - Camp Dragonhead" },
         { EAetheryteLocation.MorDhona, "Mor Dhona" },
-        { EAetheryteLocation.GoldSaucer, "Gold Saucer" },
         { EAetheryteLocation.WolvesDenPier, "Wolves' Den Pier" },
+        { EAetheryteLocation.GoldSaucer, "Gold Saucer" },
 
         { EAetheryteLocation.Ishgard, "Ishgard" },
         { EAetheryteLocation.Idyllshire, "Idyllshire" },

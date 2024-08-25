@@ -22,9 +22,7 @@
           "SkipConditions": {
             "AetheryteShortcutIf": {
               "InSameTerritory": true,
-              "InTerritory": [
-                133
-              ]
+              "InTerritory": [133]
             }
           }
         }
@@ -45,12 +43,7 @@
           ],
           "TerritoryId": 154,
           "InteractionType": "WalkTo",
-          "Fly": true,
-          "SkipConditions": {
-            "StepIf": {
-              "Flying": "Locked"
-            }
-          }
+          "Fly": true
         },
         {
           "DataId": 1000764,
@@ -77,9 +70,7 @@
           "TerritoryId": 154,
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterInteraction",
-          "KillEnemyDataIds": [
-            294
-          ],
+          "KillEnemyDataIds": [294],
           "Fly": true
         }
       ]

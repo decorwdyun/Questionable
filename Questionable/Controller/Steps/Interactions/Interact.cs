@@ -4,6 +4,7 @@ using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Shared;
@@ -15,7 +16,8 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class Interact
 {
-    internal sealed class Factory(GameFunctions gameFunctions, ICondition condition, ILoggerFactory loggerFactory) : ITaskFactory
+    internal sealed class Factory(GameFunctions gameFunctions, ICondition condition, ILoggerFactory loggerFactory)
+        : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -39,13 +41,14 @@ internal static class Interact
                 yield return new WaitAtEnd.WaitDelay();
 
             yield return Interact(step.DataId.Value, quest, step.InteractionType,
-                    step.TargetTerritoryId != null || quest.Id is SatisfactionSupplyNpcId);
+                step.TargetTerritoryId != null || quest.Id is SatisfactionSupplyNpcId, step.PickUpItemId);
         }
 
-        internal ITask Interact(uint dataId, Quest? quest, EInteractionType interactionType, bool skipMarkerCheck = false)
+        internal ITask Interact(uint dataId, Quest? quest, EInteractionType interactionType,
+            bool skipMarkerCheck = false, uint? pickUpItemId = null)
         {
-            return new DoInteract(dataId, quest, interactionType, skipMarkerCheck, gameFunctions, condition,
-                loggerFactory.CreateLogger<DoInteract>());
+            return new DoInteract(dataId, quest, interactionType, skipMarkerCheck, pickUpItemId, gameFunctions,
+                condition, loggerFactory.CreateLogger<DoInteract>());
         }
     }
 
@@ -54,6 +57,7 @@ internal static class Interact
         Quest? quest,
         EInteractionType interactionType,
         bool skipMarkerCheck,
+        uint? pickUpItemId,
         GameFunctions gameFunctions,
         ICondition condition,
         ILogger<DoInteract> logger)
@@ -64,6 +68,7 @@ internal static class Interact
         private DateTime _continueAt = DateTime.MinValue;
 
         public Quest? Quest => quest;
+
         public EInteractionType InteractionType
         {
             get => interactionType;
@@ -119,11 +124,23 @@ internal static class Interact
                     _needsUnmount = false;
             }
 
-            if (_interactionState == EInteractionState.InteractionConfirmed)
-                return ETaskResult.TaskComplete;
+            if (pickUpItemId != null)
+            {
+                unsafe
+                {
+                    InventoryManager* inventoryManager = InventoryManager.Instance();
+                    if (inventoryManager->GetInventoryItemCount(pickUpItemId.Value) > 0)
+                        return ETaskResult.TaskComplete;
+                }
+            }
+            else
+            {
+                if (_interactionState == EInteractionState.InteractionConfirmed)
+                    return ETaskResult.TaskComplete;
 
-            if (interactionType == EInteractionType.InternalGather && condition[ConditionFlag.Gathering])
-                return ETaskResult.TaskComplete;
+                if (interactionType == EInteractionType.InternalGather && condition[ConditionFlag.Gathering])
+                    return ETaskResult.TaskComplete;
+            }
 
             IGameObject? gameObject = gameFunctions.FindObjectByDataId(dataId);
             if (gameObject == null || !gameObject.IsTargetable || !HasAnyMarker(gameObject))

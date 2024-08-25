@@ -1,7 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "liza",
-  "Disabled": true,
+  "Author": "plogon_enjoyer",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -19,8 +18,98 @@
       ]
     },
     {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1044051,
+          "Position": {
+            "X": -543.20593,
+            "Y": 72.39467,
+            "Z": 298.146
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "RequiredQuestVariables": [null, null, null, [1], null, null],
+          "Fly": true
+        },
+        {
+          "DataId": 1044052,
+          "Position": {
+            "X": -110.27698,
+            "Y": 53.589848,
+            "Z": 538.41455
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "RequiredQuestVariables": [null, null, null, [1], null, null],
+          "Fly": true
+        },
+        {
+          "DataId": 1044054,
+          "Position": {
+            "X": 83.69568,
+            "Y": 269.0921,
+            "Z": -483.0854
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "RequiredQuestVariables": [null, null, null, [2], null, null],
+          "Fly": true
+        },
+        {
+          "DataId": 1044053,
+          "Position": {
+            "X": -225.66571,
+            "Y": 271.7499,
+            "Z": -308.6748
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "RequiredQuestVariables": [null, null, null, [2], null, null],
+          "Fly": true
+        },
+        {
+          "DataId": 1044056,
+          "Position": {
+            "X": 582.7573,
+            "Y": 441.71567,
+            "Z": 427.9392
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "RequiredQuestVariables": [null, null, null, [3], null, null],
+          "Fly": true
+        },
+        {
+          "DataId": 1044055,
+          "Position": {
+            "X": 636.59106,
+            "Y": 438.6276,
+            "Z": 271.5343
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "RequiredQuestVariables": [null, null, null, [3], null, null],
+          "Fly": true
+        }
+      ]
+    },
+    {
       "Sequence": 255,
       "Steps": [
+        {
+          "DataId": 2013072,
+          "Position": {
+            "X": 456.65674,
+            "Y": 438.04077,
+            "Z": 310.2312
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Ultima Thule - Base Omicron",
+          "TargetTerritoryId": 960,
+          "Mount": true
+        },
         {
           "DataId": 1043417,
           "Position": {

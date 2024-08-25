@@ -84,8 +84,7 @@
               "MinimumKillCount": 3,
               "CompletionQuestVariablesFlags": [
                 {
-                  "Low": 3,
-                  "Mode": "Exact"
+                  "Low": 3
                 },
                 null,
                 null,
@@ -100,8 +99,7 @@
               "CompletionQuestVariablesFlags": [
                 null,
                 {
-                  "High": 3,
-                  "Mode": "Exact"
+                  "High": 3
                 },
                 null,
                 null,
@@ -112,12 +110,10 @@
           ],
           "CompletionQuestVariablesFlags": [
             {
-              "Low": 3,
-              "Mode": "Exact"
+              "Low": 3
             },
             {
-              "High": 3,
-              "Mode": "Exact"
+              "High": 3
             },
             null,
             null,
@@ -141,8 +137,7 @@
               "CompletionQuestVariablesFlags": [
                 null,
                 {
-                  "Low": 3,
-                  "Mode": "Exact"
+                  "Low": 3
                 },
                 null,
                 null,
@@ -154,8 +149,7 @@
           "CompletionQuestVariablesFlags": [
             null,
             {
-              "Low": 3,
-              "Mode": "Exact"
+              "Low": 3
             },
             null,
             null,

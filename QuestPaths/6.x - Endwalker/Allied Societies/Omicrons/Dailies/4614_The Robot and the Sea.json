@@ -1,7 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "liza",
-  "Disabled": true,
+  "Author": "plogon_enjoyer",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -19,8 +18,64 @@
       ]
     },
     {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 2013074,
+          "Position": {
+            "X": 304.3412,
+            "Y": 483.48206,
+            "Z": 143.11438
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 1073
+        },
+        {
+          "TerritoryId": 1073,
+          "InteractionType": "None",
+          "RequiredGatheredItems": [
+            {
+              "QuestAcceptedAsClass": "Miner",
+              "ItemId": 38285,
+              "ItemCount": 3
+            },
+            {
+              "QuestAcceptedAsClass": "Botanist",
+              "ItemId": 38309,
+              "ItemCount": 3
+            }
+          ]
+        },
+        {
+          "DataId": 1044050,
+          "Position": {
+            "X": 472.03772,
+            "Y": 437.00162,
+            "Z": 336.6598
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Ultima Thule - Base Omicron",
+          "Mount": true
+        }
+      ]
+    },
+    {
       "Sequence": 255,
       "Steps": [
+        {
+          "DataId": 2013072,
+          "Position": {
+            "X": 456.65674,
+            "Y": 438.04077,
+            "Z": 310.2312
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 960,
+          "Mount": true
+        },
         {
           "DataId": 1043417,
           "Position": {

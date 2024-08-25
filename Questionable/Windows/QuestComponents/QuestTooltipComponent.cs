@@ -62,7 +62,14 @@ internal sealed class QuestTooltipComponent
                 ImGui.TextUnformatted("Instant");
             }
 
-            if (!_questRegistry.IsKnownQuest(quest.QuestId))
+            if (_questRegistry.TryGetQuest(quest.QuestId, out Quest? knownQuest))
+            {
+                if (knownQuest.Root.Author.Count == 1)
+                    ImGui.Text($"Author: {knownQuest.Root.Author[0]}");
+                else
+                    ImGui.Text($"Authors: {string.Join(", ", knownQuest.Root.Author)}");
+            }
+            else
             {
                 ImGui.SameLine();
                 ImGui.TextUnformatted("NoQuestPath");

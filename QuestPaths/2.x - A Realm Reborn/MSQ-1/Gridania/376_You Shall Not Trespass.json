@@ -61,10 +61,21 @@
           "TerritoryId": 148,
           "InteractionType": "Combat",
           "EnemySpawnType": "OverworldEnemies",
-          "KillEnemyDataIds": [
-            771
-          ],
-          "Comment": "Kill Qiqirn manually"
+          "ComplexCombatData": [
+            {
+              "DataId": 771,
+              "CompletionQuestVariablesFlags": [
+                {
+                  "Low": 4
+                },
+                null,
+                null,
+                null,
+                null,
+                null
+              ]
+            }
+          ]
         }
       ]
     },

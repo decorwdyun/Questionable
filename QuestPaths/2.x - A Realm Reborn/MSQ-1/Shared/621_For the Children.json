@@ -41,6 +41,7 @@
             "Y": -0.48849356,
             "Z": -278.41507
           },
+          "StopDistance": 0.5,
           "TerritoryId": 145,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",

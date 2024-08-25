@@ -1,7 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -30,8 +29,38 @@
     {
       "Sequence": 1,
       "Steps": [
+        {
+          "DataId": 1033767,
+          "Position": {
+            "X": -608.6061,
+            "Y": 65.60222,
+            "Z": -431.81506
+          },
+          "TerritoryId": 813,
+          "InteractionType": "Interact"
+        }
 
-
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "TerritoryId": 813,
+          "InteractionType": "Craft",
+          "ItemId": 31177,
+          "ItemCount": 1
+        },
+        {
+          "DataId": 1034070,
+          "Position": {
+            "X": -796.47516,
+            "Y": 69.28625,
+            "Z": 117.29602
+          },
+          "TerritoryId": 813,
+          "InteractionType": "Interact"
+        }
       ]
     },
     {

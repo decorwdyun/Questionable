@@ -440,6 +440,11 @@
             }
           },
           "then": {
+            "properties": {
+              "PickUpItemId": {
+                "type": "number"
+              }
+            },
             "required": [
               "DataId"
             ]
@@ -832,6 +837,8 @@
                 "type": "string",
                 "description": "The action to use",
                 "enum": [
+                  "Heavy Swing",
+                  "Heavy Shot",
                   "Cure",
                   "Esuna",
                   "Physick",
@@ -839,10 +846,12 @@
                   "Buffet (Griffin)",
                   "Fumigate",
                   "Siphon Snout",
+                  "Cannonfire",
                   "Red Gulal",
                   "Yellow Gulal",
                   "Blue Gulal",
-                  "Electric Flux"
+                  "Electric Flux",
+                  "Hop-step"
                 ]
               }
             },

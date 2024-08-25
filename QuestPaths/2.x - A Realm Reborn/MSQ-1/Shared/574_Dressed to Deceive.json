@@ -191,6 +191,10 @@
           "TargetTerritoryId": 140
         },
         {
+          "TerritoryId": 140,
+          "InteractionType": "EquipRecommended"
+        },
+        {
           "Position": {
             "X": -492.96475,
             "Y": 20.999884,
