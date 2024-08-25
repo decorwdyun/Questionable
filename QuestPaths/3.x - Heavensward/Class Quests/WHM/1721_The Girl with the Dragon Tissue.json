@@ -103,13 +103,7 @@
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [4677]
-        }
-      ]
-    },
-
-    {
-      "Sequence": 5,
-      "Steps": [
+        },
         {
           "DataId": 2005855,
           "Position": {
