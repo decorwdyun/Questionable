@@ -128,6 +128,10 @@ internal static class SkipConditionsExtensions
                                 skipAetheryteCondition.InSameTerritory, emptyAetheryte.InSameTerritory),
                             AssignmentList(nameof(SkipAetheryteCondition.InTerritory),
                                 skipAetheryteCondition.InTerritory),
+                            AssignmentList(nameof(SkipAetheryteCondition.QuestsAccepted),
+                                skipAetheryteCondition.QuestsAccepted),
+                            AssignmentList(nameof(skipAetheryteCondition.QuestsCompleted),
+                                skipAetheryteCondition.QuestsCompleted),
                             Assignment(nameof(SkipAetheryteCondition.AetheryteLocked),
                                     skipAetheryteCondition.AetheryteLocked, emptyAetheryte.AetheryteLocked)
                                 .AsSyntaxNodeOrToken(),

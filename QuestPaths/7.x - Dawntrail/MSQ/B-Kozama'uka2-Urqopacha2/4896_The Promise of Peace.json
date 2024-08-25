@@ -22,6 +22,30 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1051207,
+          "Position": {
+            "X": 425.07043,
+            "Y": 118.935005,
+            "Z": 606.13403
+          },
+          "StopDistance": 5,
+          "TerritoryId": 1187,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 5055
+        },
+        {
+          "DataId": 1048730,
+          "Position": {
+            "X": 399.0692,
+            "Y": 122.53533,
+            "Z": 542.9922
+          },
+          "StopDistance": 5,
+          "TerritoryId": 1187,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 5047
+        },
+        {
           "DataId": 1046926,
           "Position": {
             "X": -163.95825,

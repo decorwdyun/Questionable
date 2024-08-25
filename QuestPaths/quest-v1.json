@@ -234,13 +234,13 @@
                 "QuestsAccepted": {
                   "type": "array",
                   "items": {
-                    "type": "number"
+                    "type": ["number", "string"]
                   }
                 },
                 "QuestsCompleted": {
                   "type": "array",
                   "items": {
-                    "type": "number"
+                    "type": ["number", "string"]
                   }
                 },
                 "AetheryteLocked": {
@@ -288,6 +288,18 @@
                   "type": "array",
                   "items": {
                     "type": "integer"
+                  }
+                },
+                "QuestsAccepted": {
+                  "type": "array",
+                  "items": {
+                    "type": ["number", "string"]
+                  }
+                },
+                "QuestsCompleted": {
+                  "type": "array",
+                  "items": {
+                    "type": ["number", "string"]
                   }
                 },
                 "AetheryteLocked": {
