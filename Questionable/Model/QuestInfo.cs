@@ -39,7 +39,7 @@ internal sealed class QuestInfo : IQuestInfo
                 {
                     new(new QuestId((ushort)(quest.PreviousQuest[0].Row & 0xFFFF)), quest.Unknown7),
                     new(new QuestId((ushort)(quest.PreviousQuest[1].Row & 0xFFFF))),
-                    new(new QuestId((ushort)(quest.PreviousQuest[1].Row & 0xFFFF)))
+                    new(new QuestId((ushort)(quest.PreviousQuest[2].Row & 0xFFFF)))
                 }
                 .Where(x => x.QuestId.Value != 0)
                 .ToImmutableList();
