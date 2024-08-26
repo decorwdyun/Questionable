@@ -142,10 +142,10 @@ internal static class AethernetShortcut
                         logger.LogInformation("Moving to S9 aetheryte");
                         List<Vector3> nearbyPoints =
                         [
-                            new(7.225532f, 8.467899f, -7.1670876f),
-                            new(7.177844f, 8.467899f, 7.2216787f),
-                            new(-7.0762224f, 8.467898f, 7.1924725f),
-                            new(-7.1289554f, 8.467898f, -7.0594683f)
+                            new(0, 8.442986f, 9),
+                            new(9, 8.442986f, 0),
+                            new(-9, 8.442986f, 0),
+                            new(0, 8.442986f, -9),
                         ];
 
                         Vector3 closestPoint = nearbyPoints.MinBy(x => (playerPosition - x).Length());
