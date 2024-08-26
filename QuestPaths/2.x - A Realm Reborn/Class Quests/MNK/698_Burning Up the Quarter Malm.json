@@ -1,5 +1,5 @@
 ﻿{
-  "$schema": "https://git.carvel.li/plogon_enjoyer/Questionable/raw/branch/monk_class_quest/QuestPaths/quest-v1.json",
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "plogon_enjoyer",
   "QuestSequence": [
     {
