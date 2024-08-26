@@ -200,7 +200,7 @@ internal sealed class QuestTooltipComponent
         if (questInfo.IsMainScenarioQuest)
             name += $" ({questInfo.QuestId}, MSQ)";
         else
-            name += $" {questInfo.Name} ({questInfo.QuestId})";
+            name += $" ({questInfo.QuestId})";
 
         return name;
     }
