@@ -735,7 +735,9 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
             return false;
 
         QuestStep? currentStep = currentSequence?.FindStep(currentQuest.Step);
-        return currentStep?.AetheryteShortcut != null;
+        return currentStep?.AetheryteShortcut != null &&
+               (currentStep.SkipConditions?.AetheryteShortcutIf?.QuestsCompleted.Count ?? 0) == 0 &&
+               (currentStep.SkipConditions?.AetheryteShortcutIf?.QuestsAccepted.Count ?? 0) == 0;
     }
 
     public bool TryPickPriorityQuest()
