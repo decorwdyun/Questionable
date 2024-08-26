@@ -42,6 +42,7 @@ internal sealed class InteractionUiController : IDisposable
     private readonly GatheringPointRegistry _gatheringPointRegistry;
     private readonly QuestRegistry _questRegistry;
     private readonly QuestData _questData;
+    private readonly TerritoryData _territoryData;
     private readonly IGameGui _gameGui;
     private readonly ITargetManager _targetManager;
     private readonly IClientState _clientState;
@@ -61,6 +62,7 @@ internal sealed class InteractionUiController : IDisposable
         GatheringPointRegistry gatheringPointRegistry,
         QuestRegistry questRegistry,
         QuestData questData,
+        TerritoryData territoryData,
         IGameGui gameGui,
         ITargetManager targetManager,
         IPluginLog pluginLog,
@@ -77,6 +79,7 @@ internal sealed class InteractionUiController : IDisposable
         _gatheringPointRegistry = gatheringPointRegistry;
         _questRegistry = questRegistry;
         _questData = questData;
+        _territoryData = territoryData;
         _gameGui = gameGui;
         _targetManager = targetManager;
         _clientState = clientState;
@@ -101,7 +104,9 @@ internal sealed class InteractionUiController : IDisposable
         }
     }
 
-    private bool ShouldHandleUiInteractions => _isInitialCheck || _questController.IsRunning;
+    private bool ShouldHandleUiInteractions => _isInitialCheck ||
+                                               _questController.IsRunning ||
+                                               _territoryData.IsQuestBattleInstance(_clientState.TerritoryType);
 
     internal unsafe void HandleCurrentDialogueChoices()
     {
