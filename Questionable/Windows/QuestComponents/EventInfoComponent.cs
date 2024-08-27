@@ -20,8 +20,7 @@ internal sealed class EventInfoComponent
 {
     private readonly List<EventQuest> _eventQuests =
     [
-        new EventQuest("Moonfire Faire", [new(5182), new(5183)],
-            new DateTime(new DateOnly(2024, 8, 26), new TimeOnly(14, 59), DateTimeKind.Utc)),
+        new("The Rising", [new(5015), new(5016)], AtDailyReset(new(2024, 9, 11))),
     ];
 
     private readonly QuestData _questData;
@@ -45,6 +44,11 @@ internal sealed class EventInfoComponent
         _questTooltipComponent = questTooltipComponent;
         _configuration = configuration;
         _pluginInterface = pluginInterface;
+    }
+
+    private static DateTime AtDailyReset(DateOnly date)
+    {
+        return new DateTime(date, new TimeOnly(14, 59), DateTimeKind.Utc);
     }
 
     public bool ShouldDraw => _configuration.General.ShowIncompleteSeasonalEvents && _eventQuests.Any(IsIncomplete);
@@ -75,10 +79,10 @@ internal sealed class EventInfoComponent
             width -= ImGui.CalcTextSize(FontAwesomeIcon.Check.ToIconString()).X;
 
         List<QuestId> startableQuests = eventQuest.QuestIds.Where(x =>
-            _questRegistry.IsKnownQuest(x) &&
-            _questFunctions.IsReadyToAcceptQuest(x) &&
-            x != _questController.StartedQuest?.Quest.Id &&
-            x != _questController.NextQuest?.Quest.Id)
+                _questRegistry.IsKnownQuest(x) &&
+                _questFunctions.IsReadyToAcceptQuest(x) &&
+                x != _questController.StartedQuest?.Quest.Id &&
+                x != _questController.NextQuest?.Quest.Id)
             .ToList();
         if (startableQuests.Count == 0)
             width = 0;
