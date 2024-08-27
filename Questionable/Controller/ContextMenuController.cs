@@ -99,7 +99,7 @@ internal sealed class ContextMenuController : IDisposable
             if (agentSatisfactionSupply->IsAgentActive())
             {
                 int maxTurnIns = agentSatisfactionSupply->NpcInfo.SatisfactionRank == 1 ? 3 : 6;
-                quantityToGather = Math.Min(agentSatisfactionSupply->RemainingAllowances,
+                quantityToGather = Math.Min(agentSatisfactionSupply->NpcData.RemainingAllowances,
                     ((AgentSatisfactionSupply2*)agentSatisfactionSupply)->CalculateTurnInsToNextRank(maxTurnIns));
             }
         }
