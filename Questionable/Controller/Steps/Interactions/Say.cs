@@ -17,7 +17,12 @@ internal static class Say
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
-            if (step.InteractionType != EInteractionType.Say)
+            if (step.InteractionType is EInteractionType.AcceptQuest or EInteractionType.CompleteQuest)
+            {
+                if (step.ChatMessage == null)
+                    return [];
+            }
+            else if (step.InteractionType != EInteractionType.Say)
                 return [];
 
 

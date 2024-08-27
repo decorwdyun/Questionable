@@ -28,6 +28,9 @@ internal static class Interact
                 if (step.Emote != null)
                     yield break;
 
+                if (step.ChatMessage != null)
+                    yield break;
+
                 if (step.DataId == null)
                     yield break;
             }
