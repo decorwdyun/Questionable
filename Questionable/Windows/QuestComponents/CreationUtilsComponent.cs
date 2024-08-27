@@ -111,6 +111,18 @@ internal sealed class CreationUtilsComponent
 #endif
 
 #if false
+        var questManager = QuestManager.Instance();
+        if (questManager != null)
+        {
+            for (int i = 0; i < questManager->DailyQuests.Length; ++i)
+            {
+                var dailyQuest = questManager->DailyQuests[i];
+                ImGui.Text($"Daily Quest {i}: {dailyQuest.QuestId}, {dailyQuest.IsCompleted}");
+            }
+        }
+#endif
+
+#if false
         var director = UIState.Instance()->DirectorTodo.Director;
         if (director != null)
         {

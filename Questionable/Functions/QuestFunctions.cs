@@ -360,6 +360,9 @@ internal sealed unsafe class QuestFunctions
         {
             if (IsQuestAccepted(questId))
                 return false;
+
+            if (QuestManager.Instance()->IsDailyQuestCompleted(questId.Value))
+                return false;
         }
         else
         {
