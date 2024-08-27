@@ -165,7 +165,8 @@
           },
           "TerritoryId": 130,
           "AetheryteShortcut": "Ul'dah",
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "NextQuestId": 562
         }
       ]
     }
