@@ -113,7 +113,14 @@
           },
           "StopDistance": 7,
           "TerritoryId": 128,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_FESANX002_05016_Q52_000_082",
+              "Yes": true
+            }
+          ]
         }
       ]
     }

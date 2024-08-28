@@ -179,7 +179,8 @@
           "AethernetShortcut": [
             "[Limsa Lominsa] Arcanists' Guild",
             "[Limsa Lominsa] The Aftcastle"
-          ]
+          ],
+          "NextQuestId": 5016
         }
       ]
     }
