@@ -28,7 +28,8 @@
           },
           "TerritoryId": 613,
           "InteractionType": "WalkTo",
-          "$": "Sui-no-Sato, NE inside"
+          "$": "Sui-no-Sato, NE inside",
+          "RestartNavigationIfCancelled": false
         },
         {
           "DataId": 1019978,

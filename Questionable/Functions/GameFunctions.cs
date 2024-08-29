@@ -398,7 +398,7 @@ internal sealed unsafe class GameFunctions
         if (!_clientState.IsLoggedIn || _clientState.LocalPlayer == null)
             return true;
 
-        if (IsLoadingScreenVisible(true))
+        if (IsLoadingScreenVisible())
             return true;
 
         if (_condition[ConditionFlag.Crafting])
@@ -438,19 +438,16 @@ internal sealed unsafe class GameFunctions
                flags.Contains(ConditionFlag.OccupiedInQuestEvent);
     }
 
-    public bool IsLoadingScreenVisible(bool all)
+    public bool IsLoadingScreenVisible()
     {
         if (_gameGui.TryGetAddonByName("FadeMiddle", out AtkUnitBase* fade) && LAddon.IsAddonReady(fade) && fade->IsVisible)
             return true;
 
-        if (all)
-        {
-            if (_gameGui.TryGetAddonByName("FadeBack", out fade) && LAddon.IsAddonReady(fade) && fade->IsVisible)
-                return true;
+        if (_gameGui.TryGetAddonByName("FadeBack", out fade) && LAddon.IsAddonReady(fade) && fade->IsVisible)
+            return true;
 
-            if (_gameGui.TryGetAddonByName("NowLoading", out fade) && LAddon.IsAddonReady(fade) && fade->IsVisible)
-                return true;
-        }
+        if (_gameGui.TryGetAddonByName("NowLoading", out fade) && LAddon.IsAddonReady(fade) && fade->IsVisible)
+            return true;
 
         return false;
     }

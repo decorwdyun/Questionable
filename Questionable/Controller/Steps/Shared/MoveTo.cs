@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Numerics;
 using Dalamud.Game.ClientState.Conditions;
@@ -67,7 +68,7 @@ internal static class MoveTo
         public ITask Move(MoveParams moveParams)
         {
             return new MoveInternal(moveParams, movementController, gameFunctions,
-                loggerFactory.CreateLogger<MoveInternal>(), condition, dataManager);
+                loggerFactory.CreateLogger<MoveInternal>(), condition, clientState, dataManager);
         }
 
         public ITask Land()
@@ -163,20 +164,24 @@ internal static class MoveTo
         private readonly MovementController _movementController;
         private readonly ILogger<MoveInternal> _logger;
         private readonly ICondition _condition;
+        private readonly IClientState _clientState;
 
         private readonly Action _startAction;
         private readonly Vector3 _destination;
+        private readonly MoveParams _moveParams;
 
         public MoveInternal(MoveParams moveParams,
             MovementController movementController,
             GameFunctions gameFunctions,
             ILogger<MoveInternal> logger,
             ICondition condition,
+            IClientState clientState,
             IDataManager dataManager)
         {
             _movementController = movementController;
             _logger = logger;
             _condition = condition;
+            _clientState = clientState;
             _cannotExecuteAtThisTime = dataManager.GetString<LogMessage>(579, x => x.Text)!;
 
             _destination = moveParams.Destination;
@@ -206,6 +211,8 @@ internal static class MoveTo
                         ignoreDistanceToObject: moveParams.IgnoreDistanceToObject,
                         land: moveParams.Land);
             }
+
+            _moveParams = moveParams;
         }
 
         public bool Start()
@@ -223,6 +230,15 @@ internal static class MoveTo
             DateTime movementStartedAt = _movementController.MovementStartedAt;
             if (movementStartedAt == DateTime.MaxValue || movementStartedAt.AddSeconds(2) >= DateTime.Now)
                 return ETaskResult.StillRunning;
+
+            if (_moveParams.RestartNavigation &&
+                Vector3.Distance(_clientState.LocalPlayer!.Position, _destination) >
+                (_moveParams.StopDistance ?? QuestStep.DefaultStopDistance) + 5f)
+            {
+                _logger.LogInformation("Looks like movement was interrupted, re-attempting to move");
+                _startAction();
+                return ETaskResult.StillRunning;
+            }
 
             return ETaskResult.TaskComplete;
         }
@@ -248,7 +264,8 @@ internal static class MoveTo
         bool Sprint = true,
         bool Fly = false,
         bool Land = false,
-        bool IgnoreDistanceToObject = false)
+        bool IgnoreDistanceToObject = false,
+        bool RestartNavigation = true)
     {
         public MoveParams(QuestStep step, Vector3 destination)
             : this(step.TerritoryId,
@@ -259,7 +276,8 @@ internal static class MoveTo
                 step.Sprint != false,
                 step.Fly == true,
                 step.Land == true,
-                step.IgnoreDistanceToObject == true)
+                step.IgnoreDistanceToObject == true,
+                step.RestartNavigationIfCancelled != false)
         {
         }
     }

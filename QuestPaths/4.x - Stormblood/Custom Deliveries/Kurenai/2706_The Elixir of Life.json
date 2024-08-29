@@ -91,6 +91,7 @@
           "TerritoryId": 613,
           "InteractionType": "WalkTo",
           "$": "Exile, outside",
+          "RestartNavigationIfCancelled": false,
           "Fly": true
         },
         {
@@ -164,6 +165,7 @@
           "TerritoryId": 613,
           "InteractionType": "WalkTo",
           "$": "Sui-no-Sato, SW outside",
+          "RestartNavigationIfCancelled": false,
           "Fly": true
         },
         {
