@@ -106,6 +106,7 @@
             "Y": 37.43559,
             "Z": 611.50525
           },
+          "StopDistance": 1,
           "TerritoryId": 814,
           "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Kholusia - Wright",
