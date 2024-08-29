@@ -1,7 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "liza",
-  "Disabled": true,
+  "Author": "plogon_enjoyer",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -22,7 +21,30 @@
     {
       "Sequence": 1,
       "Steps": [
-
+        {
+          "DataId": 1025063,
+          "Position": {
+            "X": 291.73718,
+            "Y": 73.622604,
+            "Z": -496.87955
+          },
+          "TerritoryId": 612,
+          "InteractionType": "Emote",
+          "Emote": "soothe",
+          "Fly": true
+        },
+        {
+          "DataId": 1025065,
+          "Position": {
+            "X": -73.04492,
+            "Y": 62.044453,
+            "Z": -878.78235
+          },
+          "TerritoryId": 612,
+          "InteractionType": "Emote",
+          "Emote": "rally",
+          "Fly": true
+        }
       ]
     },
     {
