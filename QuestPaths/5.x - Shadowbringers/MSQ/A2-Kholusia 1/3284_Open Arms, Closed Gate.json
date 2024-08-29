@@ -44,12 +44,26 @@
           },
           "StopDistance": 1,
           "TerritoryId": 814,
+          "InteractionType": "WalkTo"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "Position": {
+            "X": 338.49463,
+            "Y": 31.93622,
+            "Z": 203.53125
+          },
+          "StopDistance": 1,
+          "TerritoryId": 814,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
             10859
-          ],
-          "Comment": "TODO Either this step is incorrect OR the next one is missing"
+          ]
         }
       ]
     },
