@@ -99,7 +99,8 @@
           },
           "TerritoryId": 152,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "East Shroud - Hawthorne Hut"
+          "AetheryteShortcut": "East Shroud - Hawthorne Hut",
+          "Fly": true
         }
       ]
     },
@@ -130,7 +131,8 @@
             "Z": -291.52362
           },
           "TerritoryId": 612,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },

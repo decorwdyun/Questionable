@@ -34,7 +34,8 @@
             "Z": 86.96118
           },
           "TerritoryId": 612,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
@@ -49,7 +50,8 @@
             "Z": 186.08374
           },
           "TerritoryId": 612,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
@@ -64,7 +66,8 @@
             "Z": 451.16345
           },
           "TerritoryId": 612,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
@@ -79,7 +82,8 @@
             "Z": 374.92932
           },
           "TerritoryId": 612,
-          "InteractionType": "SinglePlayerDuty"
+          "InteractionType": "SinglePlayerDuty",
+          "Fly": true
         }
       ]
     },

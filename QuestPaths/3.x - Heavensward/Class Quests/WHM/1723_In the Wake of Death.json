@@ -52,7 +52,15 @@
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [4691, 4692],
-          "Fly": true
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            4,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
         },
         {
           "DataId": 2005859,

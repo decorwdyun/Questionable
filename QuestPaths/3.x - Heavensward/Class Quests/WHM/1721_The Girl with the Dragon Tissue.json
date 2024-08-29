@@ -50,7 +50,15 @@
             "Z": 792.4772
           },
           "TerritoryId": 397,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 1011237,
@@ -60,7 +68,15 @@
             "Z": 725.00183
           },
           "TerritoryId": 397,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         }
       ]
     },
@@ -92,7 +108,12 @@
           "TerritoryId": 397,
           "InteractionType": "Interact",
           "Fly": true
-        },
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
         {
           "Position": {
             "X": -336.4157,
@@ -102,24 +123,19 @@
           "TerritoryId": 397,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
-          "KillEnemyDataIds": [4677]
+          "KillEnemyDataIds": [
+            4677
+          ],
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            2,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
         },
-        {
-          "DataId": 2005855,
-          "Position": {
-            "X": -336.4157,
-            "Y": 89.00586,
-            "Z": -586.5721
-          },
-          "TerritoryId": 397,
-          "InteractionType": "Interact"
-        }
-      ]
-    },
-
-    {
-      "Sequence": 5,
-      "Steps": [
         {
           "DataId": 2005855,
           "Position": {
@@ -143,7 +159,8 @@
             "Z": -688.53284
           },
           "TerritoryId": 397,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },

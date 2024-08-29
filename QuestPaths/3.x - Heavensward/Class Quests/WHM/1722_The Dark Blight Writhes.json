@@ -49,9 +49,10 @@
             "Y": 125.596924,
             "Z": -11.215393
           },
+          "StopDistance": 5,
           "TerritoryId": 397,
-          "InteractionType": "WaitForManualProgress",
-          "$": "Cure II needs to be added to list of actions"
+          "InteractionType": "Action",
+          "Action": "Cure II"
         }
       ]
     },
@@ -68,7 +69,16 @@
           "TerritoryId": 397,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
-          "KillEnemyDataIds": [4690]
+          "KillEnemyDataIds": [4690],
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            4,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
         },
         {
           "DataId": 2005857,

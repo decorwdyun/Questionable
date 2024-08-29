@@ -96,7 +96,15 @@
           },
           "TerritoryId": 154,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "North Shroud - Fallgourd Float"
+          "AetheryteShortcut": "North Shroud - Fallgourd Float",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 1007092,
@@ -106,7 +114,15 @@
             "Z": 232.62378
           },
           "TerritoryId": 154,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 1002804,
@@ -116,7 +132,15 @@
             "Z": 172.74731
           },
           "TerritoryId": 154,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         }
       ]
     },
@@ -133,7 +157,15 @@
           "TerritoryId": 154,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
-          "KillEnemyDataIds": [4683]
+          "KillEnemyDataIds": [4683],
+          "CompletionQuestVariablesFlags": [
+            2,
+            null,
+            null,
+            null,
+            null,
+            null
+          ]
         },
         {
           "DataId": 1013605,
