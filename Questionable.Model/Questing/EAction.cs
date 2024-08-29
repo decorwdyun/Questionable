@@ -9,6 +9,7 @@ public enum EAction
     HeavySwing = 31,
     HeavyShot = 97,
     Cure = 120,
+    Cure2 = 135,
     Esuna = 7568,
     Physick = 190,
     BuffetSanuwa = 4931,
