@@ -13,9 +13,8 @@
             "Z": -597.1008
           },
           "TerritoryId": 814,
-          "InteractionType": "CompleteQuest",
+          "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Kholusia - Tomra",
-          "NextQuestId": 3272,
           "SkipConditions": {
             "AethernetShortcutIf": { "InSameTerritory": true }
           }
@@ -35,7 +34,8 @@
           "TerritoryId": 814,
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterInteraction",
-          "KillEnemyDataIds": [10870]
+          "KillEnemyDataIds": [10870],
+          "Fly": true
         }
       ]
     },
@@ -52,7 +52,8 @@
           "TerritoryId": 814,
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterInteraction",
-          "KillEnemyDataIds": [10871]
+          "KillEnemyDataIds": [10871],
+          "Fly": true
         }
       ]
     },
@@ -67,7 +68,8 @@
             "Z": -129.01508
           },
           "TerritoryId": 814,
-          "InteractionType": "SinglePlayerDuty"
+          "InteractionType": "SinglePlayerDuty",
+          "Fly": true
         }
       ]
     },

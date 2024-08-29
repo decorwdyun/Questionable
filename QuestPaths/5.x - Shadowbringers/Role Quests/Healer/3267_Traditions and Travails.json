@@ -37,7 +37,8 @@
           },
           "TerritoryId": 813,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "Lakeland - Fort Jobb"
+          "AetheryteShortcut": "Lakeland - Fort Jobb",
+          "Fly": true
         }
       ]
     },

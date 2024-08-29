@@ -54,7 +54,8 @@
           "TerritoryId": 814,
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterInteraction",
-          "KillEnemyDataIds": [10866]
+          "KillEnemyDataIds": [10866],
+          "Fly": true
         }
       ]
     },
@@ -71,7 +72,8 @@
           "TerritoryId": 814,
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterInteraction",
-          "KillEnemyDataIds": [10867]
+          "KillEnemyDataIds": [10867],
+          "Fly": true
         }
       ]
     },
@@ -86,7 +88,8 @@
             "Z": 177.47766
           },
           "TerritoryId": 814,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
