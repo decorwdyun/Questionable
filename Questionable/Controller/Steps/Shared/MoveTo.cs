@@ -169,6 +169,8 @@ internal static class MoveTo
         private readonly Action _startAction;
         private readonly Vector3 _destination;
         private readonly MoveParams _moveParams;
+        private readonly bool _isUnderwaterInitially;
+        private bool _canRestart;
 
         public MoveInternal(MoveParams moveParams,
             MovementController movementController,
@@ -213,6 +215,7 @@ internal static class MoveTo
             }
 
             _moveParams = moveParams;
+            _canRestart = moveParams.RestartNavigation;
         }
 
         public bool Start()
@@ -231,13 +234,20 @@ internal static class MoveTo
             if (movementStartedAt == DateTime.MaxValue || movementStartedAt.AddSeconds(2) >= DateTime.Now)
                 return ETaskResult.StillRunning;
 
-            if (_moveParams.RestartNavigation &&
+            if (_canRestart &&
                 Vector3.Distance(_clientState.LocalPlayer!.Position, _destination) >
                 (_moveParams.StopDistance ?? QuestStep.DefaultStopDistance) + 5f)
             {
-                _logger.LogInformation("Looks like movement was interrupted, re-attempting to move");
-                _startAction();
-                return ETaskResult.StillRunning;
+                _canRestart = false;
+                if (_clientState.TerritoryType == _moveParams.TerritoryId)
+                {
+                    _logger.LogInformation("Looks like movement was interrupted, re-attempting to move");
+                    _startAction();
+                    return ETaskResult.StillRunning;
+                }
+                else
+                    _logger.LogInformation(
+                        "Looks like movement was interrupted, do nothing since we're in a different territory now");
             }
 
             return ETaskResult.TaskComplete;
