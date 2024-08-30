@@ -68,7 +68,7 @@ internal static class MoveTo
         public ITask Move(MoveParams moveParams)
         {
             return new MoveInternal(moveParams, movementController, gameFunctions,
-                loggerFactory.CreateLogger<MoveInternal>(), condition, clientState, dataManager);
+                loggerFactory.CreateLogger<MoveInternal>(), clientState, dataManager);
         }
 
         public ITask Land()
@@ -163,26 +163,22 @@ internal static class MoveTo
         private readonly string _cannotExecuteAtThisTime;
         private readonly MovementController _movementController;
         private readonly ILogger<MoveInternal> _logger;
-        private readonly ICondition _condition;
         private readonly IClientState _clientState;
 
         private readonly Action _startAction;
         private readonly Vector3 _destination;
         private readonly MoveParams _moveParams;
-        private readonly bool _isUnderwaterInitially;
         private bool _canRestart;
 
         public MoveInternal(MoveParams moveParams,
             MovementController movementController,
             GameFunctions gameFunctions,
             ILogger<MoveInternal> logger,
-            ICondition condition,
             IClientState clientState,
             IDataManager dataManager)
         {
             _movementController = movementController;
             _logger = logger;
-            _condition = condition;
             _clientState = clientState;
             _cannotExecuteAtThisTime = dataManager.GetString<LogMessage>(579, x => x.Text)!;
 
@@ -257,8 +253,7 @@ internal static class MoveTo
 
         public bool OnErrorToast(SeString message)
         {
-            if (GameFunctions.GameStringEquals(_cannotExecuteAtThisTime, message.TextValue) &&
-                _condition[ConditionFlag.Diving])
+            if (GameFunctions.GameStringEquals(_cannotExecuteAtThisTime, message.TextValue))
                 return true;
 
             return false;
