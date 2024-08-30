@@ -62,6 +62,9 @@ internal static class QuestStepExtensions
                             Assignment(nameof(QuestStep.IgnoreDistanceToObject),
                                     step.IgnoreDistanceToObject, emptyStep.IgnoreDistanceToObject)
                                 .AsSyntaxNodeOrToken(),
+                            Assignment(nameof(QuestStep.RestartNavigationIfCancelled),
+                                    step.RestartNavigationIfCancelled, emptyStep.RestartNavigationIfCancelled)
+                                .AsSyntaxNodeOrToken(),
                             Assignment(nameof(QuestStep.Comment), step.Comment, emptyStep.Comment)
                                 .AsSyntaxNodeOrToken(),
                             Assignment(nameof(QuestStep.Aetheryte), step.Aetheryte, emptyStep.Aetheryte)
