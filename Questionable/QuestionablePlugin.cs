@@ -120,6 +120,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<LifestreamIpc>();
         serviceCollection.AddSingleton<YesAlreadyIpc>();
         serviceCollection.AddSingleton<ArtisanIpc>();
+        serviceCollection.AddSingleton<QuestionableIpc>();
     }
 
     private static void AddTaskFactories(ServiceCollection serviceCollection)
@@ -235,6 +236,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceProvider.GetRequiredService<CreditsController>();
         serviceProvider.GetRequiredService<HelpUiController>();
         serviceProvider.GetRequiredService<LeveUiController>();
+        serviceProvider.GetRequiredService<QuestionableIpc>();
         serviceProvider.GetRequiredService<DalamudInitializer>();
     }
 
