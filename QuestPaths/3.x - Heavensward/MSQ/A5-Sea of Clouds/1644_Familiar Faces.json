@@ -38,7 +38,7 @@
             "Z": 113.54166
           },
           "TerritoryId": 401,
-          "InteractionType": "SinglePlayerDuty",
+          "InteractionType": "Emote",
           "Emote": "lookout",
           "StopDistance": 0.25
         }
@@ -54,10 +54,9 @@
             "Z": 77.39858
           },
           "TerritoryId": 401,
-          "InteractionType": "Emote",
+          "InteractionType": "SinglePlayerDuty",
           "Emote": "lookout",
-          "StopDistance": 0.25,
-          "Comment": "Solo Duty triggered by emoting?"
+          "StopDistance": 0.25
         }
       ]
     },

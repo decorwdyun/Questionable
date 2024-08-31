@@ -84,6 +84,15 @@
           ]
         },
         {
+          "Position": {
+            "X": -368.08698,
+            "Y": -185.05266,
+            "Z": 792.836
+          },
+          "TerritoryId": 401,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 1012360,
           "Position": {
             "X": -337.75842,

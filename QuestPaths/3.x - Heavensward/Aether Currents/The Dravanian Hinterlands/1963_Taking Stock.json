@@ -31,6 +31,17 @@
           "TargetTerritoryId": 399
         },
         {
+          "DataId": 2006210,
+          "Position": {
+            "X": -487.48004,
+            "Y": 144.64026,
+            "Z": -285.359
+          },
+          "TerritoryId": 399,
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818088
+        },
+        {
           "DataId": 1013651,
           "Position": {
             "X": -475.76105,

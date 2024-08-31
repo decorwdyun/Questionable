@@ -59,6 +59,25 @@
       "Sequence": 255,
       "Steps": [
         {
+          "DataId": 1012285,
+          "Position": {
+            "X": 247.11987,
+            "Y": -42.33362,
+            "Z": 565.3314
+          },
+          "TerritoryId": 400,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 1823,
+          "AetheryteShortcut": "The Churning Mists - Moghome",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "QuestsCompleted": [
+                1823
+              ]
+            }
+          }
+        },
+        {
           "DataId": 1013202,
           "Position": {
             "X": -79.88104,

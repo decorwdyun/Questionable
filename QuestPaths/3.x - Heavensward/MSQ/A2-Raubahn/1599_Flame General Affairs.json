@@ -21,6 +21,23 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1011952,
+          "Position": {
+            "X": -277.63788,
+            "Y": -184.59735,
+            "Z": 741.60376
+          },
+          "TerritoryId": 401,
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "The Sea of Clouds - Camp Cloudtop",
+          "PickUpQuestId": 1748,
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
+          }
+        },
+        {
           "DataId": 1001029,
           "Position": {
             "X": 9.170593,

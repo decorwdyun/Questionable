@@ -12,7 +12,7 @@
             "Y": -69.42934,
             "Z": 693.5072
           },
-          "StopDistance": 5,
+          "StopDistance": 7,
           "TerritoryId": 400,
           "InteractionType": "AcceptQuest"
         }
