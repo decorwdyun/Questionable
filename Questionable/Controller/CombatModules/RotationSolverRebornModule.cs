@@ -85,7 +85,7 @@ internal sealed class RotationSolverRebornModule : ICombatModule, IDisposable
 
         float hitboxOffset = player.HitboxRadius + gameObject.HitboxRadius;
         float actualDistance = Vector3.Distance(player.Position, gameObject.Position);
-        float maxDistance = player.ClassJob.GameData?.Role is 3 or 4 ? 20f : 3f;
+        float maxDistance = player.ClassJob.GameData?.Role is 3 or 4 ? 20f : 2.9f;
         if (actualDistance - hitboxOffset >= maxDistance)
         {
             if (actualDistance - hitboxOffset <= 5)
