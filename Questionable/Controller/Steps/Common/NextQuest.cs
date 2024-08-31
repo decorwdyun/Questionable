@@ -20,6 +20,10 @@ internal static class NextQuest
             if (step.NextQuestId == quest.Id)
                 return null;
 
+            // probably irrelevant, since pick up is handled elsewhere (and, in particular, checks for aetherytes and stuff)
+            if (questFunctions.GetPriorityQuests().Contains(step.NextQuestId))
+                return null;
+
             return new SetQuest(step.NextQuestId, quest.Id, questRegistry, questController, questFunctions, loggerFactory.CreateLogger<SetQuest>());
         }
     }

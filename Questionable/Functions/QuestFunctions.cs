@@ -254,7 +254,8 @@ internal sealed unsafe class QuestFunctions
         InventoryManager* inventoryManager = InventoryManager.Instance();
         int gil = inventoryManager->GetItemCountInContainer(1, InventoryType.Currency);
 
-        return GetPriorityQuestsThatCanBeAccepted()
+        return GetPriorityQuests()
+            .Where(IsReadyToAcceptQuest)
             .Where(x =>
             {
                 if (!_questRegistry.TryGetQuest(x, out Quest? quest))
@@ -311,7 +312,7 @@ internal sealed unsafe class QuestFunctions
             return 1000 * quest.AllSteps().Count(x => x.Step.AetheryteShortcut != null);
     }
 
-    private List<ElementId> GetPriorityQuestsThatCanBeAccepted()
+    public List<ElementId> GetPriorityQuests()
     {
         List<ElementId> priorityQuests =
         [
@@ -349,7 +350,6 @@ internal sealed unsafe class QuestFunctions
 
         return priorityQuests
             .Where(_questRegistry.IsKnownQuest)
-            .Where(IsReadyToAcceptQuest)
             .ToList();
     }
 
