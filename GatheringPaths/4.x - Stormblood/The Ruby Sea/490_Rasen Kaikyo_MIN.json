@@ -10,7 +10,8 @@
       },
       "TerritoryId": 613,
       "InteractionType": "WalkTo",
-      "AetheryteShortcut": "Ruby Sea - Tamamizu"
+      "AetheryteShortcut": "Ruby Sea - Tamamizu",
+      "RestartNavigationIfCancelled": false
     },
     {
       "TerritoryId": 613,

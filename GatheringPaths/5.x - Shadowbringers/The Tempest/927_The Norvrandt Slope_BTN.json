@@ -4,7 +4,8 @@
   "Steps": [
     {
       "TerritoryId": 818,
-      "InteractionType": "None"
+      "InteractionType": "None",
+      "AetheryteShortcut": "Tempest - Ondo Cups"
     }
   ],
   "Groups": [
