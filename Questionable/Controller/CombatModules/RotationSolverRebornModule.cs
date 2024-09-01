@@ -119,6 +119,8 @@ internal sealed class RotationSolverRebornModule : ICombatModule, IDisposable
         }
     }
 
+    public bool CanAttack(IBattleNpc target) => true;
+
     public void Dispose() => Stop();
 
     [PublicAPI]

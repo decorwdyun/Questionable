@@ -15,6 +15,8 @@ public enum EAction
     BuffetSanuwa = 4931,
     BuffetGriffin = 4583,
     Fumigate = 5872,
+    MagitekPulse = 8624,
+    MagitekThunder = 8625,
     SiphonSnout = 18187,
     Cannonfire = 20121,
     RedGulal = 29382,

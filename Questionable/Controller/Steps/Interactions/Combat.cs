@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
+using Questionable.Controller.CombatModules;
 using Questionable.Controller.Steps.Common;
 using Questionable.Controller.Steps.Shared;
 using Questionable.Controller.Utils;
@@ -19,7 +19,8 @@ internal static class Combat
         Mount.Factory mountFactory,
         UseItem.Factory useItemFactory,
         Action.Factory actionFactory,
-        QuestFunctions questFunctions) : ITaskFactory
+        QuestFunctions questFunctions,
+        GameFunctions gameFunctions) : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -28,7 +29,8 @@ internal static class Combat
 
             ArgumentNullException.ThrowIfNull(step.EnemySpawnType);
 
-            yield return mountFactory.Unmount();
+            if (gameFunctions.GetMountId() != Mount128Module.MountId)
+                yield return mountFactory.Unmount();
 
             if (step.CombatDelaySecondsAtStart != null)
             {
@@ -70,7 +72,7 @@ internal static class Combat
                     yield return new WaitAtEnd.WaitDelay(TimeSpan.FromSeconds(1));
                     yield return CreateTask(quest, sequence, step);
                     break;
-                } ;
+                }
 
                 case EEnemySpawnType.AutoOnEnterArea:
                     if (step.CombatDelaySecondsAtStart == null)

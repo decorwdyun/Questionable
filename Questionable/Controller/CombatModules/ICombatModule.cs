@@ -13,4 +13,6 @@ internal interface ICombatModule
     void Update(IGameObject nextTarget);
 
     void MoveToTarget(IGameObject nextTarget);
+
+    bool CanAttack(IBattleNpc target);
 }

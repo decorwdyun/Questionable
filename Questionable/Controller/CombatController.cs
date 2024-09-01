@@ -191,6 +191,9 @@ internal sealed class CombatController : IDisposable
     {
         if (gameObject is IBattleNpc battleNpc)
         {
+            if (_currentFight != null && !_currentFight.Module.CanAttack(battleNpc))
+                return 0;
+
             // TODO this works as somewhat of a delay between killing enemies if certain items/flags are checked
             // but also delays killing the next enemy a little
             if (_currentFight == null || _currentFight.Data.SpawnType != EEnemySpawnType.OverworldEnemies ||
