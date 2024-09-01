@@ -45,6 +45,8 @@ internal sealed class DebugOverlay : Window
         Size = ImGui.GetIO().DisplaySize;
         SizeCondition = ImGuiCond.Always;
         IsOpen = true;
+        ShowCloseButton = false;
+        RespectCloseHotkey = false;
     }
 
     public ElementId? HighlightedQuest { get; set; }
