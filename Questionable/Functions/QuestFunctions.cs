@@ -135,17 +135,14 @@ internal sealed unsafe class QuestFunctions
                         currentQuest = new QuestId(questManager->NormalQuests[trackedQuest.Index].QuestId);
                         if (_questRegistry.IsKnownQuest(currentQuest))
                             return (currentQuest, QuestManager.GetQuestSequence(currentQuest.Value));
-                        break;
+                        continue;
 
                     case 2: // leve
                         currentQuest = new LeveId(questManager->LeveQuests[trackedQuest.Index].LeveId);
                         if (_questRegistry.IsKnownQuest(currentQuest))
                             return (currentQuest, questManager->GetLeveQuestById(currentQuest.Value)->Sequence);
-                        break;
+                        continue;
                 }
-
-                if (_questRegistry.IsKnownQuest(currentQuest))
-                    return (currentQuest, QuestManager.GetQuestSequence(currentQuest.Value));
             }
 
             ElementId? priorityQuest = GetNextPriorityQuestThatCanBeAccepted();
