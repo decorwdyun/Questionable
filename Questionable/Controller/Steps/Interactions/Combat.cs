@@ -18,6 +18,7 @@ internal static class Combat
         Interact.Factory interactFactory,
         Mount.Factory mountFactory,
         UseItem.Factory useItemFactory,
+        Action.Factory actionFactory,
         QuestFunctions questFunctions) : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
@@ -57,6 +58,19 @@ internal static class Combat
                     yield return CreateTask(quest, sequence, step);
                     break;
                 }
+
+                case EEnemySpawnType.AfterAction:
+                {
+                    ArgumentNullException.ThrowIfNull(step.DataId);
+                    ArgumentNullException.ThrowIfNull(step.Action);
+
+                    if (!step.Action.Value.RequiresMount())
+                        yield return mountFactory.Unmount();
+                    yield return actionFactory.OnObject(step.DataId.Value, step.Action.Value);
+                    yield return new WaitAtEnd.WaitDelay(TimeSpan.FromSeconds(1));
+                    yield return CreateTask(quest, sequence, step);
+                    break;
+                } ;
 
                 case EEnemySpawnType.AutoOnEnterArea:
                     if (step.CombatDelaySecondsAtStart == null)

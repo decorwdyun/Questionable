@@ -584,6 +584,7 @@
                   "AutoOnEnterArea",
                   "AfterInteraction",
                   "AfterItemUse",
+                  "AfterAction",
                   "OverworldEnemies"
                 ]
               },

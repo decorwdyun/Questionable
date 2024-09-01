@@ -24,12 +24,17 @@ internal static class Action
 
             ArgumentNullException.ThrowIfNull(step.Action);
 
-            var task = new UseOnObject(step.DataId, step.Action.Value, gameFunctions,
-                loggerFactory.CreateLogger<UseOnObject>());
+            var task = OnObject(step.DataId, step.Action.Value);
             if (step.Action.Value.RequiresMount())
                 return [task];
             else
                 return [mountFactory.Unmount(), task];
+        }
+
+        public ITask OnObject(uint? dataId, EAction action)
+        {
+            return new UseOnObject(dataId, action, gameFunctions,
+                loggerFactory.CreateLogger<UseOnObject>());
         }
     }
 
