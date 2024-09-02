@@ -33,8 +33,12 @@
           },
           "TerritoryId": 1192,
           "InteractionType": "WalkTo",
-          "AetheryteShortcut": "Living Memory - Leynode Mnemo",
-          "$": "Leynode Mnemo to Meso Terminal waypoint"
+          "$": "Leynode Mnemo to Meso Terminal waypoint",
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
         },
         {
           "DataId": 1048014,
@@ -44,7 +48,8 @@
             "Z": 363.05774
           },
           "TerritoryId": 1192,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },

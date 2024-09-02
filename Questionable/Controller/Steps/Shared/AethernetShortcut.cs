@@ -24,6 +24,7 @@ internal static class AethernetShortcut
         MovementController movementController,
         AetheryteFunctions aetheryteFunctions,
         GameFunctions gameFunctions,
+        QuestFunctions questFunctions,
         IClientState clientState,
         AetheryteData aetheryteData,
         TerritoryData territoryData,
@@ -46,8 +47,8 @@ internal static class AethernetShortcut
         public ITask Use(EAetheryteLocation from, EAetheryteLocation to, SkipAetheryteCondition? skipConditions = null)
         {
             return new UseAethernetShortcut(from, to, skipConditions ?? new(),
-                loggerFactory.CreateLogger<UseAethernetShortcut>(), aetheryteFunctions, gameFunctions, clientState,
-                aetheryteData, territoryData, lifestreamIpc, movementController, condition);
+                loggerFactory.CreateLogger<UseAethernetShortcut>(), aetheryteFunctions, gameFunctions, questFunctions,
+                clientState, aetheryteData, territoryData, lifestreamIpc, movementController, condition);
         }
     }
 
@@ -58,6 +59,7 @@ internal static class AethernetShortcut
         ILogger<UseAethernetShortcut> logger,
         AetheryteFunctions aetheryteFunctions,
         GameFunctions gameFunctions,
+        QuestFunctions questFunctions,
         IClientState clientState,
         AetheryteData aetheryteData,
         TerritoryData territoryData,
@@ -88,6 +90,20 @@ internal static class AethernetShortcut
                     logger.LogInformation(
                         "Skipping aethernet shortcut because the target is in the specified territory");
                     return false;
+                }
+
+                if (skipConditions.QuestsCompleted.Count > 0 &&
+                    skipConditions.QuestsCompleted.All(questFunctions.IsQuestComplete))
+                {
+                    logger.LogInformation("Skipping aethernet shortcut, all prequisite quests are complete");
+                    return true;
+                }
+
+                if (skipConditions.QuestsAccepted.Count > 0 &&
+                    skipConditions.QuestsAccepted.All(questFunctions.IsQuestAccepted))
+                {
+                    logger.LogInformation("Skipping aethernet shortcut, all prequisite quests are accepted");
+                    return true;
                 }
 
                 if (skipConditions.AetheryteLocked != null &&
@@ -126,10 +142,10 @@ internal static class AethernetShortcut
                         logger.LogInformation("Moving to S9 aetheryte");
                         List<Vector3> nearbyPoints =
                         [
-                            new(7.225532f, 8.467899f, -7.1670876f),
-                            new(7.177844f, 8.467899f, 7.2216787f),
-                            new(-7.0762224f, 8.467898f, 7.1924725f),
-                            new(-7.1289554f, 8.467898f, -7.0594683f)
+                            new(0, 8.442986f, 9),
+                            new(9, 8.442986f, 0),
+                            new(-9, 8.442986f, 0),
+                            new(0, 8.442986f, -9),
                         ];
 
                         Vector3 closestPoint = nearbyPoints.MinBy(x => (playerPosition - x).Length());

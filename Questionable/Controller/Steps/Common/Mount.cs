@@ -29,7 +29,7 @@ internal static class Mount
 
         public ITask Unmount()
         {
-            return new UnmountTask(condition, loggerFactory.CreateLogger<UnmountTask>(), gameFunctions);
+            return new UnmountTask(condition, loggerFactory.CreateLogger<UnmountTask>(), gameFunctions, clientState);
         }
     }
 
@@ -119,7 +119,11 @@ internal static class Mount
         public override string ToString() => "Mount";
     }
 
-    private sealed class UnmountTask(ICondition condition, ILogger<UnmountTask> logger, GameFunctions gameFunctions)
+    private sealed class UnmountTask(
+        ICondition condition,
+        ILogger<UnmountTask> logger,
+        GameFunctions gameFunctions,
+        IClientState clientState)
         : ITask
     {
         private bool _unmountTriggered;
@@ -148,6 +152,9 @@ internal static class Mount
             if (_continueAt >= DateTime.Now)
                 return ETaskResult.StillRunning;
 
+            if (IsUnmounting())
+                return ETaskResult.StillRunning;
+
             if (!_unmountTriggered)
             {
                 // if still flying, we still need to land
@@ -171,6 +178,8 @@ internal static class Mount
                 ? ETaskResult.StillRunning
                 : ETaskResult.TaskComplete;
         }
+
+        private unsafe bool IsUnmounting() => **(byte**)(clientState.LocalPlayer!.Address + 1432) == 1;
 
         public override string ToString() => "Unmount";
     }

@@ -151,7 +151,7 @@ internal sealed class MovementController : IDisposable
 
         if (IsPathRunning && Destination != null)
         {
-            if (_gameFunctions.IsLoadingScreenVisible(false))
+            if (_gameFunctions.IsLoadingScreenVisible())
             {
                 _logger.LogInformation("Stopping movement, loading screen visible");
                 Stop();

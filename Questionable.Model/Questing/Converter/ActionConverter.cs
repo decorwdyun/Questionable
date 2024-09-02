@@ -10,6 +10,7 @@ public sealed class ActionConverter() : EnumConverter<EAction>(Values)
         { EAction.HeavySwing, "Heavy Swing" },
         { EAction.HeavyShot, "Heavy Shot" },
         { EAction.Cure, "Cure" },
+        { EAction.Cure2, "Cure II" },
         { EAction.Esuna, "Esuna" },
         { EAction.Physick, "Physick" },
         { EAction.BuffetSanuwa, "Buffet (Sanuwa)" },

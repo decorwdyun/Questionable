@@ -82,6 +82,7 @@ internal static class GatheringRequiredItems
                     "Wait(navmesh ready)");
 
                 yield return CreateStartGatheringTask(gatheringPointId, requiredGatheredItems);
+                yield return new WaitAtEnd.WaitDelay();
             }
         }
 

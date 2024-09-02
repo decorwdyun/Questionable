@@ -42,14 +42,18 @@
                 "X": 419.309,
                 "Y": -10.25133,
                 "Z": -784.8259
-              }
+              },
+              "MinimumAngle": -25,
+              "MaximumAngle": 85
             },
             {
               "Position": {
                 "X": 410.6989,
                 "Y": -10.9656,
                 "Z": -790.8315
-              }
+              },
+              "MinimumAngle": -20,
+              "MaximumAngle": 95
             }
           ]
         }

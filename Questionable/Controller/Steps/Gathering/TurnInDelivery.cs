@@ -44,7 +44,7 @@ internal static class TurnInDelivery
             if (addon == null || !LAddon.IsAddonReady(addon))
                 return ETaskResult.StillRunning;
 
-            ushort remainingAllowances = agentSatisfactionSupply->RemainingAllowances;
+            ushort remainingAllowances = agentSatisfactionSupply->NpcData.RemainingAllowances;
             if (remainingAllowances == 0)
             {
                 logger.LogInformation("No remaining weekly allowances");

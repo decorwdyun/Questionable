@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
+using Questionable.Controller.CombatModules;
 using Questionable.Controller.Steps.Common;
 using Questionable.Controller.Steps.Shared;
 using Questionable.Controller.Utils;
@@ -18,7 +18,9 @@ internal static class Combat
         Interact.Factory interactFactory,
         Mount.Factory mountFactory,
         UseItem.Factory useItemFactory,
-        QuestFunctions questFunctions) : ITaskFactory
+        Action.Factory actionFactory,
+        QuestFunctions questFunctions,
+        GameFunctions gameFunctions) : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -27,7 +29,8 @@ internal static class Combat
 
             ArgumentNullException.ThrowIfNull(step.EnemySpawnType);
 
-            yield return mountFactory.Unmount();
+            if (gameFunctions.GetMountId() != Mount128Module.MountId)
+                yield return mountFactory.Unmount();
 
             if (step.CombatDelaySecondsAtStart != null)
             {
@@ -41,6 +44,7 @@ internal static class Combat
                     ArgumentNullException.ThrowIfNull(step.DataId);
 
                     yield return interactFactory.Interact(step.DataId.Value, quest, EInteractionType.None, true);
+                    yield return new WaitAtEnd.WaitDelay(TimeSpan.FromSeconds(1));
                     yield return CreateTask(quest, sequence, step);
                     break;
                 }
@@ -52,11 +56,28 @@ internal static class Combat
 
                     yield return useItemFactory.OnObject(quest.Id, step.DataId.Value, step.ItemId.Value,
                         step.CompletionQuestVariablesFlags, true);
+                    yield return new WaitAtEnd.WaitDelay(TimeSpan.FromSeconds(1));
+                    yield return CreateTask(quest, sequence, step);
+                    break;
+                }
+
+                case EEnemySpawnType.AfterAction:
+                {
+                    ArgumentNullException.ThrowIfNull(step.DataId);
+                    ArgumentNullException.ThrowIfNull(step.Action);
+
+                    if (!step.Action.Value.RequiresMount())
+                        yield return mountFactory.Unmount();
+                    yield return actionFactory.OnObject(step.DataId.Value, step.Action.Value);
+                    yield return new WaitAtEnd.WaitDelay(TimeSpan.FromSeconds(1));
                     yield return CreateTask(quest, sequence, step);
                     break;
                 }
 
                 case EEnemySpawnType.AutoOnEnterArea:
+                    if (step.CombatDelaySecondsAtStart == null)
+                        yield return new WaitAtEnd.WaitDelay(TimeSpan.FromSeconds(1));
+
                     // automatically triggered when entering area, i.e. only unmount
                     yield return CreateTask(quest, sequence, step);
                     break;

@@ -22,6 +22,11 @@
       "Sequence": 1,
       "Steps": [
         {
+          "TerritoryId": 1187,
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Urqopacha - Wachunpelo"
+        },
+        {
           "DataId": 1046557,
           "Position": {
             "X": 353.07837,
@@ -38,11 +43,6 @@
             null,
             128
           ]
-        },
-        {
-          "TerritoryId": 1187,
-          "InteractionType": "AttuneAetheryte",
-          "Aetheryte": "Urqopacha - Wachunpelo"
         },
         {
           "DataId": 1046559,

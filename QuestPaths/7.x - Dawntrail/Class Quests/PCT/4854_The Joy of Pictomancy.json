@@ -20,7 +20,20 @@
               "Prompt": "TEXT_KINGBB201_04854_Q1_000_000",
               "Answer": "TEXT_KINGBB201_04854_A1_000_002"
             }
-          ]
+          ],
+          "AetheryteShortcut": "Gridania",
+          "AethernetShortcut": [
+            "[Gridania] Aetheryte Plaza",
+            "[Gridania] Conjurers' Guild"
+          ],
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true,
+              "InTerritory": [
+                133
+              ]
+            }
+          }
         }
       ]
     },

@@ -47,6 +47,25 @@
       "Sequence": 2,
       "Steps": [
         {
+          "DataId": 1020841,
+          "Position": {
+            "X": 146.01355,
+            "Y": 118.1921,
+            "Z": -730.4951
+          },
+          "TerritoryId": 620,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 2655,
+          "AetheryteShortcut": "Peaks - Ala Gannha",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "QuestsCompleted": [
+                2655
+              ]
+            }
+          }
+        },
+        {
           "DataId": 1020432,
           "Position": {
             "X": -612.3904,

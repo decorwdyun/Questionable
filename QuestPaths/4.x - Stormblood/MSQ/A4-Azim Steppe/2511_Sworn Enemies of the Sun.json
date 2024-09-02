@@ -42,15 +42,15 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 1019424,
+          "DataId": 1023348,
           "Position": {
-            "X": 66.056274,
-            "Y": 114.904976,
-            "Z": -8.377258
+            "X": 79.24011,
+            "Y": 114.90497,
+            "Z": 95.994385
           },
           "TerritoryId": 622,
-          "InteractionType": "Interact",
-          "TargetTerritoryId": 622
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 2782
         },
         {
           "Position": {
@@ -61,7 +61,8 @@
           "TerritoryId": 622,
           "InteractionType": "Emote",
           "Emote": "lookout",
-          "StopDistance": 0.25
+          "StopDistance": 0.25,
+          "AetheryteShortcut": "Azim Steppe - Reunion"
         }
       ]
     },

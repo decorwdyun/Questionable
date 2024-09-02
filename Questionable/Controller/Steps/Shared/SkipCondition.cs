@@ -204,7 +204,7 @@ internal static class SkipCondition
                 }
             }
 
-            if (skipConditions.NearPosition is { } nearPosition && clientState.TerritoryType == step.TerritoryId)
+            if (skipConditions.NearPosition is { } nearPosition && clientState.TerritoryType == nearPosition.TerritoryId)
             {
                 if (Vector3.Distance(nearPosition.Position, clientState.LocalPlayer!.Position) <=
                     nearPosition.MaximumDistance)

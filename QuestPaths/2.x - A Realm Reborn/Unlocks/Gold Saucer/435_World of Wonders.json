@@ -1,6 +1,9 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": ["liza", "JerryWester"],
+  "Author": [
+    "liza",
+    "JerryWester"
+  ],
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -95,13 +98,18 @@
           "AethernetShard": "[Gold Saucer] Chocobo Square"
         },
         {
-          "TerritoryId": 144,
-          "InteractionType": "AttuneAetheryte",
-          "Aetheryte": "Gold Saucer",
+          "TerritoryId": 388,
+          "InteractionType": "None",
           "AethernetShortcut": [
             "[Gold Saucer] Chocobo Square",
             "[Gold Saucer] Entrance & Card Squares"
           ]
+        },
+        {
+          "TerritoryId": 144,
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Gold Saucer",
+          "DelaySecondsAtStart": 3
         },
         {
           "DataId": 1011080,
@@ -156,7 +164,8 @@
         {
           "TerritoryId": 144,
           "InteractionType": "AttuneAethernetShard",
-          "AethernetShard": "[Gold Saucer] Event Square"
+          "AethernetShard": "[Gold Saucer] Event Square",
+          "DelaySecondsAtStart": 3
         },
         {
           "Position": {
@@ -183,6 +192,15 @@
           "DelaySecondsAtStart": 3
         },
         {
+          "Position": {
+            "X": 111.36922,
+            "Y": 13.000123,
+            "Z": -24.209782
+          },
+          "TerritoryId": 144,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 1011079,
           "Position": {
             "X": 125.078125,
@@ -199,6 +217,23 @@
       "Sequence": 6,
       "Steps": [
         {
+          "Position": {
+            "X": 111.36922,
+            "Y": 13.000123,
+            "Z": -24.209782
+          },
+          "TerritoryId": 144,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "TerritoryId": 144,
+          "InteractionType": "None",
+          "AethernetShortcut": [
+            "[Gold Saucer] Cactpot Board",
+            "[Gold Saucer] Aetheryte Plaza"
+          ]
+        },
+        {
           "DataId": 1011084,
           "Position": {
             "X": -12.527649,
@@ -207,10 +242,7 @@
           },
           "TerritoryId": 144,
           "InteractionType": "Interact",
-          "AethernetShortcut": [
-            "[Gold Saucer] Cactpot Board",
-            "[Gold Saucer] Aetheryte Plaza"
-          ]
+          "DelaySecondsAtStart": 3
         }
       ]
     },
@@ -223,6 +255,14 @@
           "AethernetShard": "[Gold Saucer] Round Square"
         },
         {
+          "TerritoryId": 144,
+          "InteractionType": "None",
+          "AethernetShortcut": [
+            "[Gold Saucer] Round Square",
+            "[Gold Saucer] Entrance & Card Squares"
+          ]
+        },
+        {
           "DataId": 1010448,
           "Position": {
             "X": -54.00177,
@@ -232,10 +272,7 @@
           "StopDistance": 5,
           "TerritoryId": 144,
           "InteractionType": "CompleteQuest",
-          "AethernetShortcut": [
-            "[Gold Saucer] Round Square",
-            "[Gold Saucer] Entrance & Card Squares"
-          ]
+          "DelaySecondsAtStart": 3
         }
       ]
     }

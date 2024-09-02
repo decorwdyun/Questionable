@@ -29,7 +29,8 @@
           },
           "TerritoryId": 613,
           "InteractionType": "WalkTo",
-          "TargetTerritoryId": 614
+          "TargetTerritoryId": 614,
+          "Fly": true
         }
       ]
     },

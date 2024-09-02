@@ -135,17 +135,14 @@ internal sealed unsafe class QuestFunctions
                         currentQuest = new QuestId(questManager->NormalQuests[trackedQuest.Index].QuestId);
                         if (_questRegistry.IsKnownQuest(currentQuest))
                             return (currentQuest, QuestManager.GetQuestSequence(currentQuest.Value));
-                        break;
+                        continue;
 
                     case 2: // leve
                         currentQuest = new LeveId(questManager->LeveQuests[trackedQuest.Index].LeveId);
                         if (_questRegistry.IsKnownQuest(currentQuest))
                             return (currentQuest, questManager->GetLeveQuestById(currentQuest.Value)->Sequence);
-                        break;
+                        continue;
                 }
-
-                if (_questRegistry.IsKnownQuest(currentQuest))
-                    return (currentQuest, QuestManager.GetQuestSequence(currentQuest.Value));
             }
 
             ElementId? priorityQuest = GetNextPriorityQuestThatCanBeAccepted();
@@ -254,7 +251,8 @@ internal sealed unsafe class QuestFunctions
         InventoryManager* inventoryManager = InventoryManager.Instance();
         int gil = inventoryManager->GetItemCountInContainer(1, InventoryType.Currency);
 
-        return GetPriorityQuestsThatCanBeAccepted()
+        return GetPriorityQuests()
+            .Where(IsReadyToAcceptQuest)
             .Where(x =>
             {
                 if (!_questRegistry.TryGetQuest(x, out Quest? quest))
@@ -264,14 +262,7 @@ internal sealed unsafe class QuestFunctions
                 if (firstStep == null)
                     return false;
 
-                if (firstStep.AetheryteShortcut != null)
-                    return true;
-
-                if (firstStep is
-                    { InteractionType: EInteractionType.UseItem, ItemId: UseItem.VesperBayAetheryteTicket })
-                    return true;
-
-                return false;
+                return firstStep.IsTeleportableForPriorityQuests();
             })
             .FirstOrDefault(x =>
             {
@@ -311,7 +302,7 @@ internal sealed unsafe class QuestFunctions
             return 1000 * quest.AllSteps().Count(x => x.Step.AetheryteShortcut != null);
     }
 
-    private List<ElementId> GetPriorityQuestsThatCanBeAccepted()
+    public List<ElementId> GetPriorityQuests()
     {
         List<ElementId> priorityQuests =
         [
@@ -349,7 +340,6 @@ internal sealed unsafe class QuestFunctions
 
         return priorityQuests
             .Where(_questRegistry.IsKnownQuest)
-            .Where(IsReadyToAcceptQuest)
             .ToList();
     }
 
@@ -359,6 +349,9 @@ internal sealed unsafe class QuestFunctions
         if (quest is { Info.IsRepeatable: true })
         {
             if (IsQuestAccepted(questId))
+                return false;
+
+            if (QuestManager.Instance()->IsDailyQuestCompleted(questId.Value))
                 return false;
         }
         else
@@ -494,7 +487,8 @@ internal sealed unsafe class QuestFunctions
         if (questInfo.PreviousQuests.Count == 0)
             return true;
 
-        var completedQuests = questInfo.PreviousQuests.Count(x => IsQuestComplete(x) || x.Equals(extraCompletedQuest));
+        var completedQuests = questInfo.PreviousQuests.Count(x =>
+            HasEnoughProgressOnPreviousQuest(x) || x.QuestId.Equals(extraCompletedQuest));
         if (questInfo.PreviousQuestJoin == QuestInfo.QuestJoin.All &&
             questInfo.PreviousQuests.Count == completedQuests)
             return true;
@@ -502,6 +496,20 @@ internal sealed unsafe class QuestFunctions
             return true;
         else
             return false;
+    }
+
+    private bool HasEnoughProgressOnPreviousQuest(QuestInfo.PreviousQuestInfo previousQuestInfo)
+    {
+        if (IsQuestComplete(previousQuestInfo.QuestId))
+            return true;
+
+        if (previousQuestInfo.Sequence != 0 && IsQuestAccepted(previousQuestInfo.QuestId))
+        {
+            var progress = GetQuestProgressInfo(previousQuestInfo.QuestId);
+            return progress != null && progress.Sequence >= previousQuestInfo.Sequence;
+        }
+
+        return false;
     }
 
     private static bool HasCompletedPreviousInstances(QuestInfo questInfo)

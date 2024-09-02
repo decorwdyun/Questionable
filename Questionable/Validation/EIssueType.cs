@@ -17,4 +17,5 @@ public enum EIssueType
     UnexpectedCompleteQuestStep,
     InvalidAethernetShortcut,
     InvalidExcelRef,
+    ClassQuestWithoutAetheryteShortcut,
 }

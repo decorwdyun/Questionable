@@ -120,6 +120,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<LifestreamIpc>();
         serviceCollection.AddSingleton<YesAlreadyIpc>();
         serviceCollection.AddSingleton<ArtisanIpc>();
+        serviceCollection.AddSingleton<QuestionableIpc>();
     }
 
     private static void AddTaskFactories(ServiceCollection serviceCollection)
@@ -184,6 +185,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<InteractionUiController>();
         serviceCollection.AddSingleton<LeveUiController>();
 
+        serviceCollection.AddSingleton<ICombatModule, Mount128Module>();
         serviceCollection.AddSingleton<ICombatModule, RotationSolverRebornModule>();
     }
 
@@ -221,6 +223,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<IQuestValidator, CompletionFlagsValidator>();
         serviceCollection.AddSingleton<IQuestValidator, AethernetShortcutValidator>();
         serviceCollection.AddSingleton<IQuestValidator, DialogueChoiceValidator>();
+        serviceCollection.AddSingleton<IQuestValidator, ClassQuestShouldHaveShortcutValidator>();
         serviceCollection.AddSingleton<JsonSchemaValidator>();
         serviceCollection.AddSingleton<IQuestValidator>(sp => sp.GetRequiredService<JsonSchemaValidator>());
     }
@@ -235,6 +238,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceProvider.GetRequiredService<CreditsController>();
         serviceProvider.GetRequiredService<HelpUiController>();
         serviceProvider.GetRequiredService<LeveUiController>();
+        serviceProvider.GetRequiredService<QuestionableIpc>();
         serviceProvider.GetRequiredService<DalamudInitializer>();
     }
 

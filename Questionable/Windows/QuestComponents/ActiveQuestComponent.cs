@@ -177,7 +177,7 @@ internal sealed partial class ActiveQuestComponent
             {
                 using var _ = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
                 ImGui.TextUnformatted(
-                    $"Next Quest: {Shorten(currentQuest.Quest.Info.Name)} / {currentQuest.Sequence} / {currentQuest.Step}");
+                    $"Next Quest: {Shorten(nextQuest.Quest.Info.Name)} / {nextQuest.Sequence} / {nextQuest.Step}");
             }
         }
     }

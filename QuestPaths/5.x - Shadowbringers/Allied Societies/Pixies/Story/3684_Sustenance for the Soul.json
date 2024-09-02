@@ -88,7 +88,14 @@
           "TerritoryId": 814,
           "InteractionType": "Interact",
           "AetheryteShortcut": "Kholusia - Wright",
-          "Fly": true
+          "Fly": true,
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_BANPIX002_03684_Q1_000_000",
+              "Answer": "TEXT_BANPIX002_03684_A1_000_001"
+            }
+          ]
         }
       ]
     },

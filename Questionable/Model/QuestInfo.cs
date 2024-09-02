@@ -5,7 +5,7 @@ using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using JetBrains.Annotations;
 using LLib.GameData;
 using Questionable.Model.Questing;
-using ExcelQuest = Lumina.Excel.GeneratedSheets.Quest;
+using ExcelQuest = Lumina.Excel.GeneratedSheets2.Quest;
 
 namespace Questionable.Model;
 
@@ -31,13 +31,18 @@ internal sealed class QuestInfo : IQuestInfo
         };
 
         Name = $"{quest.Name}{suffix}";
-        Level = quest.ClassJobLevel0;
-        IssuerDataId = quest.IssuerStart;
+        Level = quest.ClassJobLevel[0];
+        IssuerDataId = quest.IssuerStart.Row;
         IsRepeatable = quest.IsRepeatable;
-        PreviousQuests = quest.PreviousQuest
-            .Select(x => new QuestId((ushort)(x.Row & 0xFFFF)))
-            .Where(x => x.Value != 0)
-            .ToImmutableList();
+        PreviousQuests =
+            new List<PreviousQuestInfo>
+                {
+                    new(new QuestId((ushort)(quest.PreviousQuest[0].Row & 0xFFFF)), quest.Unknown7),
+                    new(new QuestId((ushort)(quest.PreviousQuest[1].Row & 0xFFFF))),
+                    new(new QuestId((ushort)(quest.PreviousQuest[2].Row & 0xFFFF)))
+                }
+                .Where(x => x.QuestId.Value != 0)
+                .ToImmutableList();
         PreviousQuestJoin = (QuestJoin)quest.PreviousQuestJoin;
         QuestLocks = quest.QuestLock
             .Select(x => new QuestId((ushort)(x.Row & 0xFFFFF)))
@@ -47,7 +52,7 @@ internal sealed class QuestInfo : IQuestInfo
         JournalGenre = quest.JournalGenre?.Row;
         SortKey = quest.SortKey;
         IsMainScenarioQuest = quest.JournalGenre?.Value?.JournalCategory?.Value?.JournalSection?.Row is 0 or 1;
-        CompletesInstantly = quest.ToDoCompleteSeq[0] == 0;
+        CompletesInstantly = quest.TodoParams[0].ToDoCompleteSeq == 0;
         PreviousInstanceContent = quest.InstanceContent.Select(x => (ushort)x.Row).Where(x => x != 0).ToList();
         PreviousInstanceContentJoin = (QuestJoin)quest.InstanceContentJoin;
         GrandCompany = (GrandCompany)quest.GrandCompany.Row;
@@ -64,7 +69,7 @@ internal sealed class QuestInfo : IQuestInfo
     public ushort Level { get; }
     public uint IssuerDataId { get; }
     public bool IsRepeatable { get; }
-    public ImmutableList<QuestId> PreviousQuests { get; set; }
+    public ImmutableList<PreviousQuestInfo> PreviousQuests { get; set; }
     public QuestJoin PreviousQuestJoin { get; }
     public ImmutableList<QuestId> QuestLocks { get; }
     public QuestJoin QuestLockJoin { get; }
@@ -89,8 +94,10 @@ internal sealed class QuestInfo : IQuestInfo
         AtLeastOne = 2,
     }
 
-    public void AddPreviousQuest(QuestId questId)
+    public void AddPreviousQuest(PreviousQuestInfo questId)
     {
         PreviousQuests = [..PreviousQuests, questId];
     }
+
+    public sealed record PreviousQuestInfo(QuestId QuestId, byte Sequence = 0);
 }

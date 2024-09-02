@@ -1,7 +1,6 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -19,6 +18,54 @@
       ]
     },
     {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1032830,
+          "Position": {
+            "X": -134.02002,
+            "Y": -18.460577,
+            "Z": 303.5476
+          },
+          "TerritoryId": 817,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Rak'tika - Slitherbough"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1032831,
+          "Position": {
+            "X": -54.795166,
+            "Y": 0.7328947,
+            "Z": 217.09009
+          },
+          "TerritoryId": 817,
+          "InteractionType": "UseItem",
+          "ItemId": 2002980,
+          "Fly": true
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1032830,
+          "Position": {
+            "X": -134.02002,
+            "Y": -18.460577,
+            "Z": 303.5476
+          },
+          "TerritoryId": 817,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
       "Sequence": 255,
       "Steps": [
         {
@@ -30,12 +77,7 @@
           "TerritoryId": 817,
           "InteractionType": "WalkTo",
           "AetheryteShortcut": "Rak'tika - Fanow",
-          "Fly": true,
-          "RequiredGatheredItems": [
-
-
-
-          ]
+          "Fly": true
         },
         {
           "DataId": 1032643,

@@ -30,7 +30,7 @@
           "DialogueChoices": [
             {
               "Type": "YesNo",
-              "Prompt": "TEXT_CLSBSM001_00185_Q1_000_1",
+              "Prompt": "TEXT_CLSBSM011_00291_Q1_000_1",
               "Yes": true
             }
           ]

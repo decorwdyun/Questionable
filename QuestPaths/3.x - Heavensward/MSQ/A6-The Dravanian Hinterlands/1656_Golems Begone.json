@@ -27,6 +27,7 @@
             "Y": 205.62819,
             "Z": 26.901611
           },
+          "StopDistance": 7,
           "TerritoryId": 478,
           "InteractionType": "Interact"
         }
@@ -47,7 +48,15 @@
           "$": "0 0 0 0 0 0 -> 1 0 0 0 0 64",
           "ChatMessage": {
             "Key": "TEXT_HEAVNA607_01656_SAYTODO_000"
-          }
+          },
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 1012413,
@@ -60,7 +69,15 @@
           "InteractionType": "Say",
           "ChatMessage": {
             "Key": "TEXT_HEAVNA607_01656_SAYTODO_000"
-          }
+          },
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         }
       ]
     },

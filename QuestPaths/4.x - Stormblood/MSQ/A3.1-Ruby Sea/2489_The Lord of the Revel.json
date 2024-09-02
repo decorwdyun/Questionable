@@ -65,7 +65,8 @@
           },
           "TerritoryId": 613,
           "InteractionType": "WalkTo",
-          "DisableNavmesh": true
+          "DisableNavmesh": true,
+          "RestartNavigationIfCancelled": false
         },
         {
           "DataId": 1019987,

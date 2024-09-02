@@ -1,7 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "liza",
-  "Disabled": true,
+  "Author": "plogon_enjoyer",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -22,7 +21,94 @@
     {
       "Sequence": 1,
       "Steps": [
-
+        {
+          "DataId": 1025062,
+          "Position": {
+            "X": -345.7237,
+            "Y": 43.09622,
+            "Z": 177.84387
+          },
+          "TerritoryId": 612,
+          "InteractionType": "Combat",
+          "Fly": true,
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_BANANA402_03051_Q1_000_000",
+              "Answer": "TEXT_BANANA402_03051_A1_000_002"
+            }
+          ],
+          "EnemySpawnType": "AfterInteraction",
+          "KillEnemyDataIds": [8587]
+        },
+        {
+          "DataId": 1025061,
+          "Position": {
+            "X": -488.18192,
+            "Y": 81.128265,
+            "Z": -191.33289
+          },
+          "TerritoryId": 612,
+          "InteractionType": "Combat",
+          "SkipConditions": {
+            "StepIf": {
+              "NotTargetable": true
+            }
+          },
+          "Fly": true,
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_BANANA402_03051_Q1_000_000",
+              "Answer": "TEXT_BANANA402_03051_A1_000_002"
+            }
+          ],
+          "EnemySpawnType": "AfterInteraction",
+          "KillEnemyDataIds": [8586],
+          "$": "This NPC will become an enemy"
+        },
+        {
+          "DataId": 1025119,
+          "Position": {
+            "X": -488.18192,
+            "Y": 81.128265,
+            "Z": -191.33289
+          },
+          "TerritoryId": 612,
+          "InteractionType": "Interact",
+          "SkipConditions": {
+            "StepIf": {
+              "NotTargetable": true
+            }
+          },
+          "Fly": true,
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_BANANA402_03051_Q1_000_000",
+              "Answer": "TEXT_BANANA402_03051_A1_000_001"
+            }
+          ],
+          "$": "This NPC will not become an enemy"
+        },
+        {
+          "DataId": 1025118,
+          "Position": {
+            "X": -572.96106,
+            "Y": 112.436066,
+            "Z": -229.29736
+          },
+          "TerritoryId": 612,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_BANANA402_03051_Q1_000_000",
+              "Answer": "TEXT_BANANA402_03051_A1_000_001"
+            }
+          ]
+        }
       ]
     },
     {

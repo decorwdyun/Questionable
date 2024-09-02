@@ -19,19 +19,22 @@ internal sealed class QuestTooltipComponent
     private readonly TerritoryData _territoryData;
     private readonly QuestFunctions _questFunctions;
     private readonly UiUtils _uiUtils;
+    private readonly Configuration _configuration;
 
     public QuestTooltipComponent(
         QuestRegistry questRegistry,
         QuestData questData,
         TerritoryData territoryData,
         QuestFunctions questFunctions,
-        UiUtils uiUtils)
+        UiUtils uiUtils,
+        Configuration configuration)
     {
         _questRegistry = questRegistry;
         _questData = questData;
         _territoryData = territoryData;
         _questFunctions = questFunctions;
         _uiUtils = uiUtils;
+        _configuration = configuration;
     }
 
     public void Draw(IQuestInfo quest)
@@ -105,13 +108,13 @@ internal sealed class QuestTooltipComponent
 
             foreach (var q in quest.PreviousQuests)
             {
-                if (_questData.TryGetQuestInfo(q, out var qInfo))
+                if (_questData.TryGetQuestInfo(q.QuestId, out var qInfo))
                 {
-                    var (iconColor, icon, _) = _uiUtils.GetQuestStyle(q);
+                    var (iconColor, icon, _) = _uiUtils.GetQuestStyle(q.QuestId);
                     if (!_questRegistry.IsKnownQuest(qInfo.QuestId))
                         iconColor = ImGuiColors.DalamudGrey;
 
-                    _uiUtils.ChecklistItem(FormatQuestUnlockName(qInfo), iconColor, icon);
+                    _uiUtils.ChecklistItem(FormatQuestUnlockName(qInfo, _questFunctions.IsQuestComplete(q.QuestId) ? byte.MinValue : q.Sequence), iconColor, icon);
 
                     if (qInfo is QuestInfo qstInfo && (counter <= 2 || icon != FontAwesomeIcon.Check))
                         DrawQuestUnlocks(qstInfo, counter + 1);
@@ -188,11 +191,17 @@ internal sealed class QuestTooltipComponent
             ImGui.Unindent();
     }
 
-    private static string FormatQuestUnlockName(IQuestInfo questInfo)
+    private string FormatQuestUnlockName(IQuestInfo questInfo, byte sequence = 0)
     {
+        string name = questInfo.Name;
+        if (_configuration.Advanced.AdditionalStatusInformation && sequence != 0)
+            name += $" {SeIconChar.ItemLevel.ToIconString()}";
+
         if (questInfo.IsMainScenarioQuest)
-            return $"{questInfo.Name} ({questInfo.QuestId}, MSQ)";
+            name += $" ({questInfo.QuestId}, MSQ)";
         else
-            return $"{questInfo.Name} ({questInfo.QuestId})";
+            name += $" ({questInfo.QuestId})";
+
+        return name;
     }
 }

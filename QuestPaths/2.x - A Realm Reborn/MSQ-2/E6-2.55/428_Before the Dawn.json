@@ -35,6 +35,7 @@
           },
           "TerritoryId": 155,
           "InteractionType": "CompleteQuest",
+          "Mount": true,
           "DialogueChoices": [
             {
               "Type": "YesNo",

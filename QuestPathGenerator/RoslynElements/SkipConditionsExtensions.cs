@@ -109,6 +109,9 @@ internal static class SkipConditionsExtensions
                                 .AsSyntaxNodeOrToken(),
                             Assignment(nameof(NearPositionCondition.MaximumDistance),
                                     nearPositionCondition.MaximumDistance, emptyCondition.MaximumDistance)
+                                .AsSyntaxNodeOrToken(),
+                            Assignment(nameof(NearPositionCondition.TerritoryId),
+                                    nearPositionCondition.TerritoryId, emptyCondition.TerritoryId)
                                 .AsSyntaxNodeOrToken()))));
     }
 
@@ -128,6 +131,10 @@ internal static class SkipConditionsExtensions
                                 skipAetheryteCondition.InSameTerritory, emptyAetheryte.InSameTerritory),
                             AssignmentList(nameof(SkipAetheryteCondition.InTerritory),
                                 skipAetheryteCondition.InTerritory),
+                            AssignmentList(nameof(SkipAetheryteCondition.QuestsAccepted),
+                                skipAetheryteCondition.QuestsAccepted),
+                            AssignmentList(nameof(skipAetheryteCondition.QuestsCompleted),
+                                skipAetheryteCondition.QuestsCompleted),
                             Assignment(nameof(SkipAetheryteCondition.AetheryteLocked),
                                     skipAetheryteCondition.AetheryteLocked, emptyAetheryte.AetheryteLocked)
                                 .AsSyntaxNodeOrToken(),

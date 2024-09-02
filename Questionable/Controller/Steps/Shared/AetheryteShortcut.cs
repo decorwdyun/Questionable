@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
@@ -93,6 +94,20 @@ internal static class AetheryteShortcut
                         return true;
                     }
 
+                    if (skipConditions.QuestsCompleted.Count > 0 &&
+                        skipConditions.QuestsCompleted.All(questFunctions.IsQuestComplete))
+                    {
+                        logger.LogInformation("Skipping aetheryte, all prequisite quests are complete");
+                        return true;
+                    }
+
+                    if (skipConditions.QuestsAccepted.Count > 0 &&
+                        skipConditions.QuestsAccepted.All(questFunctions.IsQuestAccepted))
+                    {
+                        logger.LogInformation("Skipping aetheryte, all prequisite quests are accepted");
+                        return true;
+                    }
+
                     if (skipConditions.AetheryteLocked != null &&
                         !aetheryteFunctions.IsAetheryteUnlocked(skipConditions.AetheryteLocked.Value))
                     {
@@ -122,7 +137,7 @@ internal static class AetheryteShortcut
 
 
                     if (skipConditions.NearPosition is { } nearPosition &&
-                        clientState.TerritoryType == step.TerritoryId)
+                        clientState.TerritoryType == nearPosition.TerritoryId)
                     {
                         if (Vector3.Distance(nearPosition.Position, clientState.LocalPlayer!.Position) <=
                             nearPosition.MaximumDistance)

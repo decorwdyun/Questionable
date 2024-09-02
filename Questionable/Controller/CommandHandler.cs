@@ -3,16 +3,20 @@ using System.Linq;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.Command;
 using Dalamud.Plugin.Services;
+using Lumina.Excel.GeneratedSheets;
 using Questionable.Functions;
-using Questionable.Model;
 using Questionable.Model.Questing;
 using Questionable.Windows;
 using Questionable.Windows.QuestComponents;
+using Quest = Questionable.Model.Quest;
 
 namespace Questionable.Controller;
 
 internal sealed class CommandHandler : IDisposable
 {
+    private const string MessageTag = "Questionable";
+    private const ushort TagColor = 576;
+
     private readonly ICommandManager _commandManager;
     private readonly IChatGui _chatGui;
     private readonly QuestController _questController;
@@ -24,6 +28,8 @@ internal sealed class CommandHandler : IDisposable
     private readonly QuestSelectionWindow _questSelectionWindow;
     private readonly ITargetManager _targetManager;
     private readonly QuestFunctions _questFunctions;
+    private readonly GameFunctions _gameFunctions;
+    private readonly IDataManager _dataManager;
 
     public CommandHandler(
         ICommandManager commandManager,
@@ -36,7 +42,9 @@ internal sealed class CommandHandler : IDisposable
         QuestWindow questWindow,
         QuestSelectionWindow questSelectionWindow,
         ITargetManager targetManager,
-        QuestFunctions questFunctions)
+        QuestFunctions questFunctions,
+        GameFunctions gameFunctions,
+        IDataManager dataManager)
     {
         _commandManager = commandManager;
         _chatGui = chatGui;
@@ -49,6 +57,8 @@ internal sealed class CommandHandler : IDisposable
         _questSelectionWindow = questSelectionWindow;
         _targetManager = targetManager;
         _questFunctions = questFunctions;
+        _gameFunctions = gameFunctions;
+        _dataManager = dataManager;
 
         _commandManager.AddHandler("/qst", new CommandInfo(ProcessCommand)
         {
@@ -108,12 +118,16 @@ internal sealed class CommandHandler : IDisposable
                 _questSelectionWindow.OpenForCurrentZone();
                 break;
 
+            case "mountid":
+                PrintMountId();
+                break;
+
             case "":
                 _questWindow.Toggle();
                 break;
 
             default:
-                _chatGui.PrintError($"Unknown subcommand {parts[0]}", "Questionable");
+                _chatGui.PrintError($"Unknown subcommand {parts[0]}", MessageTag, TagColor);
                 break;
         }
     }
@@ -122,7 +136,7 @@ internal sealed class CommandHandler : IDisposable
     {
         if (!_debugOverlay.DrawConditions())
         {
-            _chatGui.PrintError("[Questionable] You don't have the debug overlay enabled.");
+            _chatGui.PrintError("You don't have the debug overlay enabled.", MessageTag, TagColor);
             return;
         }
 
@@ -131,15 +145,15 @@ internal sealed class CommandHandler : IDisposable
             if (_questRegistry.TryGetQuest(questId, out Quest? quest))
             {
                 _debugOverlay.HighlightedQuest = quest.Id;
-                _chatGui.Print($"[Questionable] Set highlighted quest to {questId} ({quest.Info.Name}).");
+                _chatGui.Print($"Set highlighted quest to {questId} ({quest.Info.Name}).", MessageTag, TagColor);
             }
             else
-                _chatGui.PrintError($"[Questionable] Unknown quest {questId}.");
+                _chatGui.PrintError($"Unknown quest {questId}.", MessageTag, TagColor);
         }
         else
         {
             _debugOverlay.HighlightedQuest = null;
-            _chatGui.Print("[Questionable] Cleared highlighted quest.");
+            _chatGui.Print("Cleared highlighted quest.", MessageTag, TagColor);
         }
     }
 
@@ -148,21 +162,21 @@ internal sealed class CommandHandler : IDisposable
         if (arguments.Length >= 1 && ElementId.TryFromString(arguments[0], out ElementId? questId) && questId != null)
         {
             if (_questFunctions.IsQuestLocked(questId))
-                _chatGui.PrintError($"[Questionable] Quest {questId} is locked.");
+                _chatGui.PrintError($"Quest {questId} is locked.", MessageTag, TagColor);
             else if (_questRegistry.TryGetQuest(questId, out Quest? quest))
             {
                 _questController.SetNextQuest(quest);
-                _chatGui.Print($"[Questionable] Set next quest to {questId} ({quest.Info.Name}).");
+                _chatGui.Print($"Set next quest to {questId} ({quest.Info.Name}).", MessageTag, TagColor);
             }
             else
             {
-                _chatGui.PrintError($"[Questionable] Unknown quest {questId}.");
+                _chatGui.PrintError($"Unknown quest {questId}.", MessageTag, TagColor);
             }
         }
         else
         {
             _questController.SetNextQuest(null);
-            _chatGui.Print("[Questionable] Cleared next quest.");
+            _chatGui.Print("Cleared next quest.", MessageTag, TagColor);
         }
     }
 
@@ -173,16 +187,30 @@ internal sealed class CommandHandler : IDisposable
             if (_questRegistry.TryGetQuest(questId, out Quest? quest))
             {
                 _questController.SimulateQuest(quest);
-                _chatGui.Print($"[Questionable] Simulating quest {questId} ({quest.Info.Name}).");
+                _chatGui.Print($"Simulating quest {questId} ({quest.Info.Name}).", MessageTag, TagColor);
             }
             else
-                _chatGui.PrintError($"[Questionable] Unknown quest {questId}.");
+                _chatGui.PrintError($"Unknown quest {questId}.", MessageTag, TagColor);
         }
         else
         {
             _questController.SimulateQuest(null);
-            _chatGui.Print("[Questionable] Cleared simulated quest.");
+            _chatGui.Print("Cleared simulated quest.", MessageTag, TagColor);
         }
+    }
+
+    private void PrintMountId()
+    {
+        ushort? mountId = _gameFunctions.GetMountId();
+        if (mountId != null)
+        {
+            var row = _dataManager.GetExcelSheet<Mount>()!.GetRow(mountId.Value);
+            _chatGui.Print(
+                $"Mount ID: {mountId}, Name: {row?.Singular}, Obtainable: {(row?.Order == -1 ? "No" : "Yes")}",
+                MessageTag, TagColor);
+        }
+        else
+            _chatGui.Print("You are not mounted.", MessageTag, TagColor);
     }
 
     public void Dispose()

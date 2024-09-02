@@ -12,7 +12,13 @@
             "Z": 4.017052
           },
           "TerritoryId": 129,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Limsa Lominsa",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
+          }
         },
         {
           "DataId": 1000895,

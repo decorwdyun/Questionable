@@ -724,7 +724,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
             return false;
 
         var (currentQuest, type) = details.Value;
-        if (type != ECurrentQuestType.Normal)
+        if (type != ECurrentQuestType.Normal || currentQuest.Sequence == 0)
             return false;
 
         if (currentQuest.Quest.Info.AlliedSociety != EAlliedSociety.None)
@@ -735,7 +735,9 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
             return false;
 
         QuestStep? currentStep = currentSequence?.FindStep(currentQuest.Step);
-        return currentStep?.AetheryteShortcut != null;
+        return currentStep?.AetheryteShortcut != null &&
+               (currentStep.SkipConditions?.AetheryteShortcutIf?.QuestsCompleted.Count ?? 0) == 0 &&
+               (currentStep.SkipConditions?.AetheryteShortcutIf?.QuestsAccepted.Count ?? 0) == 0;
     }
 
     public bool TryPickPriorityQuest()

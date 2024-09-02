@@ -136,6 +136,20 @@
       "Sequence": 3,
       "Steps": [
         {
+          "Position": {
+            "X": 423.53406,
+            "Y": -26.253891,
+            "Z": -550.60297
+          },
+          "TerritoryId": 398,
+          "InteractionType": "WalkTo",
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
+        },
+        {
           "DataId": 2005573,
           "Position": {
             "X": 441.94702,
@@ -177,7 +191,8 @@
             "StepIf": {
               "Flying": "Unlocked"
             }
-          }
+          },
+          "DisableNavmesh": true
         }
       ]
     },

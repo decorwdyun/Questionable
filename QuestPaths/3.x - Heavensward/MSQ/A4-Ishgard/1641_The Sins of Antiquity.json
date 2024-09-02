@@ -22,6 +22,18 @@
       "Sequence": 255,
       "Steps": [
         {
+          "DataId": 1014720,
+          "Position": {
+            "X": 13.809326,
+            "Y": 15.96505,
+            "Z": -13.870483
+          },
+          "StopDistance": 7,
+          "TerritoryId": 419,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 1874
+        },
+        {
           "DataId": 1011223,
           "Position": {
             "X": 114.579956,
@@ -37,8 +49,9 @@
               "Yes": true
             }
           ],
+          "AetheryteShortcut": "Ishgard",
           "AethernetShortcut": [
-            "[Ishgard] The Last Vigil",
+            "[Ishgard] Aetheryte Plaza",
             "[Ishgard] The Forgotten Knight"
           ]
         },

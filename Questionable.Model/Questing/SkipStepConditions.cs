@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using Questionable.Model.Common;
+using Questionable.Model.Questing.Converter;
 
 namespace Questionable.Model.Questing;
 
@@ -14,8 +16,13 @@ public sealed class SkipStepConditions
     public List<ushort> InTerritory { get; set; } = new();
     public List<ushort> NotInTerritory { get; set; } = new();
     public SkipItemConditions? Item { get; set; }
+
+    [JsonConverter(typeof(ElementIdListConverter))]
     public List<ElementId> QuestsAccepted { get; set; } = new();
+
+    [JsonConverter(typeof(ElementIdListConverter))]
     public List<ElementId> QuestsCompleted { get; set; } = new();
+
     public EAetheryteLocation? AetheryteLocked { get; set; }
     public EAetheryteLocation? AetheryteUnlocked { get; set; }
     public NearPositionCondition? NearPosition { get; set; }

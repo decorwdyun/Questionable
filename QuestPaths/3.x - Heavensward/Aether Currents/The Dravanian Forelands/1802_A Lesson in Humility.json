@@ -152,7 +152,8 @@
             "Z": 22.9953
           },
           "TerritoryId": 398,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "The Dravanian Forelands - Anyx Trine"
         }
       ]
     }

@@ -28,6 +28,9 @@ internal static class Interact
                 if (step.Emote != null)
                     yield break;
 
+                if (step.ChatMessage != null)
+                    yield break;
+
                 if (step.DataId == null)
                     yield break;
             }
@@ -172,6 +175,14 @@ internal static class Interact
                 value)
             {
                 logger.LogInformation("Interaction was most likely triggered");
+                _interactionState = EInteractionState.InteractionConfirmed;
+            }
+            else if (dataId is >= 1047901 and <= 1047905 &&
+                     condition[ConditionFlag.Disguised] &&
+                     flag == ConditionFlag.Mounting71 && // why the fuck is this the flag that's used, instead of OccupiedIn[Quest]Event
+                     value)
+            {
+                logger.LogInformation("(A Knight of Alexandria) Interaction was most likely triggered");
                 _interactionState = EInteractionState.InteractionConfirmed;
             }
         }

@@ -28,7 +28,7 @@
             "Z": -255.8786
           },
           "TerritoryId": 128,
-          "InteractionType": "AcceptQuest",
+          "InteractionType": "CompleteQuest",
           "DialogueChoices": [
             {
               "Type": "YesNo",

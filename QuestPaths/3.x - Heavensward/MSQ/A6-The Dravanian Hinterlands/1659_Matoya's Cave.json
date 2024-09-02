@@ -22,6 +22,17 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1012133,
+          "Position": {
+            "X": -26.840637,
+            "Y": 206.49944,
+            "Z": 28.67163
+          },
+          "TerritoryId": 478,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 1963
+        },
+        {
           "Position": {
             "X": 71.86769,
             "Y": 204.99998,
@@ -29,18 +40,15 @@
           },
           "TerritoryId": 478,
           "InteractionType": "WalkTo",
-          "TargetTerritoryId": 399
-        },
-        {
-          "DataId": 2006210,
-          "Position": {
-            "X": -487.48004,
-            "Y": 144.64026,
-            "Z": -285.359
+          "TargetTerritoryId": 399,
+          "SkipConditions": {
+            "StepIf": {
+              "InTerritory": [
+                399
+              ]
+            }
           },
-          "TerritoryId": 399,
-          "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818088
+          "$": "Skipped if already in the Hinterlands, since 'Taking Stock' already leaves you closer to the entrance to Matoya's cave"
         },
         {
           "DataId": 2006214,

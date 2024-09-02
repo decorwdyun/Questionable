@@ -151,13 +151,21 @@
       "Steps": [
         {
           "Position": {
-            "X": -510.96463,
-            "Y": -0.47684515,
-            "Z": -305.96155
+            "X": -510.37933,
+            "Y": -0.39999998,
+            "Z": -277.78192
           },
           "TerritoryId": 1188,
-          "InteractionType": "WalkTo",
-          "Comment": "Waypoint after swimming through the river"
+          "InteractionType": "WalkTo"
+        },
+        {
+          "Position": {
+            "X": -521.0261,
+            "Y": -0.40000004,
+            "Z": -329.19336
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "WalkTo"
         },
         {
           "DataId": 2013936,
