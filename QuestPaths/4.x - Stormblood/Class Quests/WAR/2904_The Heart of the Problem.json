@@ -13,7 +13,21 @@
             "Z": 403.3722
           },
           "TerritoryId": 622,
-          "InteractionType": "AcceptQuest"
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Azim Steppe - Reunion",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": 525.10876,
+                  "Y": -19.50681,
+                  "Z": 403.3722
+                },
+                "MaximumDistance": 100,
+                "TerritoryId": 622
+              }
+            }
+          }
         }
       ]
     },

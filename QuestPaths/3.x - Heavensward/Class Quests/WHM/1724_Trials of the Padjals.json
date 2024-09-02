@@ -56,7 +56,8 @@
                   "Y": 8.712891,
                   "Z": 281.69678
                 },
-                "MaximumDistance": 3
+                "MaximumDistance": 3,
+                "TerritoryId": 153
               }
             }
           }

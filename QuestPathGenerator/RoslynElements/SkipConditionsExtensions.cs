@@ -109,6 +109,9 @@ internal static class SkipConditionsExtensions
                                 .AsSyntaxNodeOrToken(),
                             Assignment(nameof(NearPositionCondition.MaximumDistance),
                                     nearPositionCondition.MaximumDistance, emptyCondition.MaximumDistance)
+                                .AsSyntaxNodeOrToken(),
+                            Assignment(nameof(NearPositionCondition.TerritoryId),
+                                    nearPositionCondition.TerritoryId, emptyCondition.TerritoryId)
                                 .AsSyntaxNodeOrToken()))));
     }
 

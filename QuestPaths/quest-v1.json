@@ -261,11 +261,15 @@
                     },
                     "MaximumDistance": {
                       "type": "number"
+                    },
+                    "TerritoryId": {
+                      "type": "number"
                     }
                   },
                   "required": [
                     "Position",
-                    "MaximumDistance"
+                    "MaximumDistance",
+                    "TerritoryId"
                   ],
                   "additionalProperties": false
                 },
@@ -323,11 +327,15 @@
                     },
                     "MaximumDistance": {
                       "type": "number"
+                    },
+                    "TerritoryId": {
+                      "type": "number"
                     }
                   },
                   "required": [
                     "Position",
-                    "MaximumDistance"
+                    "MaximumDistance",
+                    "TerritoryId"
                   ],
                   "additionalProperties": false
                 }
