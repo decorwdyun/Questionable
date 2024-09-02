@@ -8,7 +8,14 @@
         {
           "TerritoryId": 153,
           "InteractionType": "EquipItem",
-          "ItemId": 4546
+          "ItemId": 4546,
+          "AetheryteShortcut": "South Shroud - Quarrymill",
+          "Fly": true,
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
+          }
         },
         {
           "TerritoryId": 153,
@@ -22,14 +29,7 @@
             "Z": -7.3396606
           },
           "TerritoryId": 153,
-          "InteractionType": "AcceptQuest",
-          "AetheryteShortcut": "South Shroud - Quarrymill",
-          "Fly": true,
-          "SkipConditions": {
-            "AetheryteShortcutIf": {
-              "InSameTerritory": true
-            }
-          }
+          "InteractionType": "AcceptQuest"
         }
       ]
     },

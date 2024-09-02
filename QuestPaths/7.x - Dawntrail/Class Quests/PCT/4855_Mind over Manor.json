@@ -14,11 +14,15 @@
           "TerritoryId": 132,
           "InteractionType": "UseItem",
           "ItemId": 43538,
+          "AetheryteShortcut": "Gridania",
           "SkipConditions": {
             "StepIf": {
               "Item": {
                 "NotInInventory": true
               }
+            },
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
             }
           }
         },

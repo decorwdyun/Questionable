@@ -23,8 +23,6 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class UseItem
 {
-    public const int VesperBayAetheryteTicket = 30362;
-
     internal sealed class Factory(
         Mount.Factory mountFactory,
         MoveTo.Factory moveFactory,
@@ -47,7 +45,7 @@ internal static class UseItem
 
             ArgumentNullException.ThrowIfNull(step.ItemId);
 
-            if (step.ItemId == VesperBayAetheryteTicket)
+            if (step.ItemId == QuestStep.VesperBayAetheryteTicket)
             {
                 unsafe
                 {
@@ -196,7 +194,7 @@ internal static class UseItem
             if (StartingCombat && condition[ConditionFlag.InCombat])
                 return ETaskResult.TaskComplete;
 
-            if (ItemId == VesperBayAetheryteTicket && _usedItem)
+            if (ItemId == QuestStep.VesperBayAetheryteTicket && _usedItem)
             {
                 InventoryManager* inventoryManager = InventoryManager.Instance();
                 if (inventoryManager == null)
@@ -228,7 +226,7 @@ internal static class UseItem
 
         private TimeSpan GetRetryDelay()
         {
-            if (ItemId == VesperBayAetheryteTicket)
+            if (ItemId == QuestStep.VesperBayAetheryteTicket)
                 return TimeSpan.FromSeconds(11);
             else
                 return TimeSpan.FromSeconds(5);

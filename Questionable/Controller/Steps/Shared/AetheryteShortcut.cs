@@ -137,7 +137,7 @@ internal static class AetheryteShortcut
 
 
                     if (skipConditions.NearPosition is { } nearPosition &&
-                        clientState.TerritoryType == step.TerritoryId)
+                        clientState.TerritoryType == nearPosition.TerritoryId)
                     {
                         if (Vector3.Distance(nearPosition.Position, clientState.LocalPlayer!.Position) <=
                             nearPosition.MaximumDistance)

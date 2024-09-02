@@ -262,14 +262,7 @@ internal sealed unsafe class QuestFunctions
                 if (firstStep == null)
                     return false;
 
-                if (firstStep.AetheryteShortcut != null)
-                    return true;
-
-                if (firstStep is
-                    { InteractionType: EInteractionType.UseItem, ItemId: UseItem.VesperBayAetheryteTicket })
-                    return true;
-
-                return false;
+                return firstStep.IsTeleportableForPriorityQuests();
             })
             .FirstOrDefault(x =>
             {
