@@ -27,6 +27,17 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1023357,
+          "Position": {
+            "X": 565.0873,
+            "Y": -62.272896,
+            "Z": -147.84473
+          },
+          "TerritoryId": 613,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 2693
+        },
+        {
           "DataId": 1019969,
           "Position": {
             "X": 322.56042,
@@ -34,7 +45,8 @@
             "Z": -300.5265
           },
           "TerritoryId": 613,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Ruby Sea - Tamamizu"
         }
       ]
     },

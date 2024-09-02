@@ -56,7 +56,15 @@
             6676
           ],
           "ItemId": 2002093,
-          "$": "0 2 0 0 0 0 -> 16 17 0 0 0 128"
+          "$": "0 2 0 0 0 0 -> 16 17 0 0 0 128",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 2007913,
@@ -71,7 +79,15 @@
           "KillEnemyDataIds": [
             6676
           ],
-          "ItemId": 2002093
+          "ItemId": 2002093,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         }
       ]
     },
@@ -103,6 +119,7 @@
             "Y": 9.2068815,
             "Z": -661.21924
           },
+          "StopDistance": 7,
           "TerritoryId": 613,
           "InteractionType": "Interact"
         }

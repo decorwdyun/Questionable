@@ -21,10 +21,6 @@
       "Sequence": 1,
       "Steps": [
         {
-          "TerritoryId": 614,
-          "InteractionType": "EquipRecommended"
-        },
-        {
           "DataId": 2008011,
           "Position": {
             "X": 457.51123,
@@ -34,6 +30,15 @@
           "TerritoryId": 614,
           "InteractionType": "AttuneAetherCurrent",
           "AetherCurrentId": 2818199
+        },
+        {
+          "Position": {
+            "X": 453.69717,
+            "Y": 14.463846,
+            "Z": 663.386
+          },
+          "TerritoryId": 614,
+          "InteractionType": "WalkTo"
         },
         {
           "DataId": 1020047,
@@ -172,7 +177,8 @@
           "TerritoryId": 614,
           "InteractionType": "WalkTo",
           "Fly": true,
-          "StopDistance": 0.25
+          "StopDistance": 0.25,
+          "RestartNavigationIfCancelled": false
         },
         {
           "DataId": 1023787,

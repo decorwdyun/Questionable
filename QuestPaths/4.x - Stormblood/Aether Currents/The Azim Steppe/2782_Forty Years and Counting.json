@@ -50,18 +50,15 @@
           },
           "TerritoryId": 622,
           "InteractionType": "Interact",
-          "$": "QW: 0 0    0 0    0 0 -> QW: 1 16    0 0    0 128"
-        },
-        {
-          "DataId": 2008926,
-          "Position": {
-            "X": 27.634033,
-            "Y": 115.464966,
-            "Z": -48.05072
-          },
-          "TerritoryId": 622,
-          "InteractionType": "Interact",
-          "$": "QW: 1 16    0 0    0 128 -> QW: 2 32    0 0    0 192"
+          "$": "QW: 0 0    0 0    0 0 -> QW: 1 16    0 0    0 128",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 2008927,
@@ -71,7 +68,35 @@
             "Z": -49.5766
           },
           "TerritoryId": 622,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
+        },
+        {
+          "DataId": 2008926,
+          "Position": {
+            "X": 27.634033,
+            "Y": 115.464966,
+            "Z": -48.05072
+          },
+          "StopDistance": 4,
+          "TerritoryId": 622,
+          "InteractionType": "Interact",
+          "$": "QW: 1 16    0 0    0 128 -> QW: 2 32    0 0    0 192",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         }
       ]
     },

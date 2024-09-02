@@ -144,8 +144,9 @@
           },
           "TerritoryId": 635,
           "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Rhalgr's Reach",
           "AethernetShortcut": [
-            "[Rhalgr's Reach] Northeastern Rhalgr's Reach",
+            "[Rhalgr's Reach] Aetheryte Plaza",
             "[Rhalgr's Reach] Western Rhalgr's Reach"
           ]
         }

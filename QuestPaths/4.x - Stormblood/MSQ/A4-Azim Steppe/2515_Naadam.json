@@ -21,6 +21,25 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1019386,
+          "Position": {
+            "X": 501.21313,
+            "Y": 40.836082,
+            "Z": -505.9129
+          },
+          "StopDistance": 7,
+          "TerritoryId": 622,
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
+        },
+        {
           "DataId": 1019388,
           "Position": {
             "X": 508.04907,
@@ -89,24 +108,6 @@
             null,
             null,
             16
-          ]
-        },
-        {
-          "DataId": 1019386,
-          "Position": {
-            "X": 501.21313,
-            "Y": 40.836082,
-            "Z": -505.9129
-          },
-          "TerritoryId": 622,
-          "InteractionType": "Interact",
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            128
           ]
         }
       ]
