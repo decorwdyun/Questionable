@@ -14,6 +14,7 @@ public enum EAction
     Physick = 190,
     BuffetSanuwa = 4931,
     BuffetGriffin = 4583,
+    Trample = 4585,
     Fumigate = 5872,
     SiphonSnout = 18187,
     Cannonfire = 20121,
@@ -48,6 +49,7 @@ public static class EActionExtensions
         return action
             is EAction.BuffetSanuwa
             or EAction.BuffetGriffin
+            or EAction.Trample
             or EAction.Fumigate
             or EAction.SiphonSnout
             or EAction.Cannonfire
