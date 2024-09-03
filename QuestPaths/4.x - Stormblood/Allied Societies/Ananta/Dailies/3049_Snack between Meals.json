@@ -1,7 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "liza",
-  "Disabled": true,
+  "Author": "plogon_enjoyer",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -22,7 +21,48 @@
     {
       "Sequence": 1,
       "Steps": [
-
+        {
+          "DataId": 2009337,
+          "Position": {
+            "X": 94.95691,
+            "Y": 49.05774,
+            "Z": 575.2803
+          },
+          "TerritoryId": 612,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
+          "KillEnemyDataIds": [8584],
+          "RequiredQuestVariables": [null, null, [1, 2], null, null, null],
+          "Fly": true
+        },
+        {
+          "DataId": 2009338,
+          "Position": {
+            "X": 180.07166,
+            "Y": 47.470703,
+            "Z": 546.1051
+          },
+          "TerritoryId": 612,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
+          "KillEnemyDataIds": [8584],
+          "RequiredQuestVariables": [null, null, [3, 17], null, null, null],
+          "Fly": true
+        },
+        {
+          "DataId": 2009339,
+          "Position": {
+            "X": 291.21838,
+            "Y": 47.501343,
+            "Z": 496.75732
+          },
+          "TerritoryId": 612,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
+          "KillEnemyDataIds": [8584],
+          "RequiredQuestVariables": [null, null, [18, 19], null, null, null],
+          "Fly": true
+        }
       ]
     },
     {
