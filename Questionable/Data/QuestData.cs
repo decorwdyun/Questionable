@@ -62,8 +62,100 @@ internal sealed class QuestData
         _quests = quests.ToDictionary(x => x.QuestId, x => x);
 
         // workaround because the game doesn't require completion of the CT questline through normal means
-        QuestInfo aTimeToEveryPurpose = (QuestInfo)_quests[new QuestId(425)];
-        aTimeToEveryPurpose.AddPreviousQuest(new QuestInfo.PreviousQuestInfo(new QuestId(495)));
+        AddPreviousQuest(new QuestId(425), new QuestId(495));
+
+        // "In order to undertake this quest" [...]
+        const int mountaintopDiplomacy = 1619;
+        const int inscrutableTastes = 2095;
+        const int tideGoesIn = 2490;
+        const int firstOfMany = 2534;
+        const int achtIaOrmhInn = 3320;
+        AddPreviousQuest(new QuestId(1480), new QuestId(2373));
+        AddPreviousQuest(new QuestId(1717), new QuestId(mountaintopDiplomacy));
+        AddPreviousQuest(new QuestId(2088), new QuestId(mountaintopDiplomacy));
+        AddPreviousQuest(new QuestId(2062), new QuestId(1617));
+        AddPreviousQuest(new QuestId(2063), new QuestId(mountaintopDiplomacy));
+        AddPreviousQuest(new QuestId(2257), new QuestId(1655));
+        AddPreviousQuest(new QuestId(2608), new QuestId(firstOfMany));
+        AddPreviousQuest(new QuestId(2600), new QuestId(2466));
+        AddPreviousQuest(new QuestId(2622), new QuestId(tideGoesIn));
+        AddPreviousQuest(new QuestId(2624), new QuestId(firstOfMany));
+        AddPreviousQuest(new QuestId(2898), new QuestId(tideGoesIn));
+        AddPreviousQuest(new QuestId(2974), new QuestId(2491));
+        AddPreviousQuest(new QuestId(2975), new QuestId(2630));
+        AddPreviousQuest(new QuestId(2912), new QuestId(tideGoesIn));
+        AddPreviousQuest(new QuestId(2914), new QuestId(2537));
+        AddPreviousQuest(new QuestId(2919), new QuestId(2455));
+        AddPreviousQuest(new QuestId(2952), new QuestId(2518));
+        AddPreviousQuest(new QuestId(2904), new QuestId(2503));
+        AddPreviousQuest(new QuestId(3038), new QuestId(firstOfMany));
+        AddPreviousQuest(new QuestId(3087), new QuestId(100));
+        AddPreviousQuest(new QuestId(3246), new QuestId(3314));
+        AddPreviousQuest(new QuestId(3247), new QuestId(achtIaOrmhInn));
+        AddPreviousQuest(new QuestId(3270), new QuestId(3333));
+        AddPreviousQuest(new QuestId(3271), new QuestId(3634));
+        AddPreviousQuest(new QuestId(3264), new QuestId(2247));
+        AddPreviousQuest(new QuestId(3253), new QuestId(2247));
+        AddPreviousQuest(new QuestId(3254), new QuestId(2537));
+        AddPreviousQuest(new QuestId(3228), new QuestId(achtIaOrmhInn));
+        AddPreviousQuest(new QuestId(3234), new QuestId(achtIaOrmhInn));
+        AddPreviousQuest(new QuestId(3237), new QuestId(achtIaOrmhInn));
+        AddPreviousQuest(new QuestId(3238), new QuestId(3634));
+        AddPreviousQuest(new QuestId(3240), new QuestId(achtIaOrmhInn));
+        AddPreviousQuest(new QuestId(3241), new QuestId(3648));
+        AddPreviousQuest(new QuestId(3628), new QuestId(3301));
+        AddPreviousQuest(new QuestId(3655), new QuestId(inscrutableTastes));
+        AddPreviousQuest(new QuestId(3771), new QuestId(495));
+        AddPreviousQuest(new QuestId(4068), new QuestId(1658));
+        AddPreviousQuest(new QuestId(4078), new QuestId(1583));
+        AddPreviousQuest(new QuestId(4150), new QuestId(4417));
+        AddPreviousQuest(new QuestId(4155), new QuestId(4383));
+        AddPreviousQuest(new QuestId(4156), new QuestId(3326));
+        AddPreviousQuest(new QuestId(4158), new QuestId(4434));
+        AddPreviousQuest(new QuestId(4159), new QuestId(4464));
+        AddPreviousQuest(new QuestId(4163), new QuestId(4398));
+        AddPreviousQuest(new QuestId(4165), new QuestId(4438));
+        AddPreviousQuest(new QuestId(4473), new QuestId(inscrutableTastes));
+        AddPreviousQuest(new QuestId(4650), new QuestId(2374));
+        AddPreviousQuest(new QuestId(4662), new QuestId(3166));
+        AddPreviousQuest(new QuestId(4761), new QuestId(4032));
+        AddPreviousQuest(new QuestId(4812), new QuestId(4750));
+        AddPreviousQuest(new QuestId(4851), new QuestId(2446));
+        AddPreviousQuest(new QuestId(4856), new QuestId(1669));
+        AddPreviousQuest(new QuestId(4857), new QuestId(2553));
+        AddPreviousQuest(new QuestId(4979), new QuestId(4896));
+        AddPreviousQuest(new QuestId(4980), new QuestId(4911));
+        AddPreviousQuest(new QuestId(4985), new QuestId(4903));
+        AddPreviousQuest(new QuestId(4987), new QuestId(4912));
+        AddPreviousQuest(new QuestId(4988), new QuestId(4942));
+        AddPreviousQuest(new QuestId(4992), new QuestId(4912));
+        AddPreviousQuest(new QuestId(4999), new QuestId(4908));
+        AddPreviousQuest(new QuestId(4966), new QuestId(inscrutableTastes));
+        AddPreviousQuest(new QuestId(5000), new QuestId(4908));
+        AddPreviousQuest(new QuestId(5001), new QuestId(4912));
+
+        // "In order to proceed with this quest" [...]
+        /* my little chocobo
+        AddPreviousQuest(new QuestId(1036), new QuestId());
+        AddPreviousQuest(new QuestId(1663), new QuestId());
+        AddPreviousQuest(new QuestId(3771), new QuestId());
+        AddPreviousQuest(new QuestId(4521), new QuestId());
+        */
+        /* only applicable for fishers
+        const int spearfishing = 2922;
+        AddPreviousQuest(new QuestId(3811), new QuestId(spearfishing));
+        AddPreviousQuest(new QuestId(3812), new QuestId(spearfishing));
+        AddPreviousQuest(new QuestId(3817), new QuestId(spearfishing));
+        AddPreviousQuest(new QuestId(3818), new QuestId(spearfishing));
+        AddPreviousQuest(new QuestId(3821), new QuestId(spearfishing));
+        AddPreviousQuest(new QuestId(3833), new QuestId(spearfishing));
+        */
+    }
+
+    private void AddPreviousQuest(QuestId questToUpdate, QuestId requiredQuestId)
+    {
+        QuestInfo quest = (QuestInfo)_quests[questToUpdate];
+        quest.AddPreviousQuest(new QuestInfo.PreviousQuestInfo(requiredQuestId));
     }
 
     public IQuestInfo GetQuestInfo(ElementId elementId)
