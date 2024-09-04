@@ -120,7 +120,8 @@ internal sealed class MovementController : IDisposable
                     {
                         Destination.NavmeshCalculations++;
                         Destination.PartialRoute.AddRange(navPoints);
-                        _logger.LogInformation("Running navmesh recalculation with fudged point ({From} to {To})", navPoints.Last(), Destination.Position);
+                        _logger.LogInformation("Running navmesh recalculation with fudged point ({From} to {To})",
+                            navPoints.Last(), Destination.Position);
 
                         _cancellationTokenSource = new();
                         _cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(30));
@@ -161,20 +162,12 @@ internal sealed class MovementController : IDisposable
             if (Destination is { IsFlying: true } && _condition[ConditionFlag.Swimming])
             {
                 _logger.LogInformation("Flying but swimming, restarting as non-flying path...");
-                var dest = Destination;
-                Stop();
-
-                if (dest.UseNavmesh)
-                {
-                    NavigateTo(EMovementType.None, dest.DataId, dest.Position, false, false, dest.StopDistance,
-                        dest.IgnoreDistanceToObject);
-                }
-                else
-                {
-                    NavigateTo(EMovementType.None, dest.DataId, [dest.Position], false, false, dest.StopDistance,
-                        dest.IgnoreDistanceToObject);
-                }
-
+                Restart(Destination);
+            }
+            else if (Destination is { IsFlying: true } && !_condition[ConditionFlag.Mounted])
+            {
+                _logger.LogInformation("Flying but not mounted, restarting as non-flying path...");
+                Restart(Destination);
                 return;
             }
 
@@ -257,6 +250,22 @@ internal sealed class MovementController : IDisposable
                     }
                 }
             }
+        }
+    }
+
+    private void Restart(DestinationData destination)
+    {
+        Stop();
+
+        if (destination.UseNavmesh)
+        {
+            NavigateTo(EMovementType.None, destination.DataId, destination.Position, false, false,
+                destination.StopDistance, destination.IgnoreDistanceToObject);
+        }
+        else
+        {
+            NavigateTo(EMovementType.None, destination.DataId, [destination.Position], false, false,
+                destination.StopDistance, destination.IgnoreDistanceToObject);
         }
     }
 
