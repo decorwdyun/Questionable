@@ -13,7 +13,10 @@
             "Z": -2.7619019
           },
           "TerritoryId": 744,
-          "InteractionType": "AcceptQuest"
+          "InteractionType": "AcceptQuest",
+          "DelaySecondsAtStart": 3,
+          "StopDistance": 1,
+          "$": "This may skip movement as the game thinks we're close enough at the start; unsure if delay helps"
         }
       ]
     },

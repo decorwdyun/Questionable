@@ -28,6 +28,18 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1023048,
+          "Position": {
+            "X": 497.76453,
+            "Y": 69.99941,
+            "Z": 583.7339
+          },
+          "TerritoryId": 621,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 621,
+          "Fly": true
+        },
+        {
           "DataId": 1024134,
           "Position": {
             "X": 207.84314,
@@ -100,7 +112,7 @@
             "Y": 70,
             "Z": 576.0128
           },
-          "StopDistance": 5,
+          "StopDistance": 6,
           "TerritoryId": 621,
           "InteractionType": "CompleteQuest"
         }

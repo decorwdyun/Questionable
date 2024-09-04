@@ -12,6 +12,7 @@
             "Y": 45.410225,
             "Z": 766.47595
           },
+          "StopDistance": 5,
           "TerritoryId": 621,
           "InteractionType": "AcceptQuest"
         }
@@ -99,7 +100,8 @@
           },
           "TerritoryId": 621,
           "InteractionType": "WalkTo",
-          "StopDistance": 0.25
+          "StopDistance": 0.25,
+          "RestartNavigationIfCancelled": false
         },
         {
           "Position": {

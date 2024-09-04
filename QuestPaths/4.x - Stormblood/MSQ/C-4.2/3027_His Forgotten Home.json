@@ -60,6 +60,16 @@
       "Sequence": 3,
       "Steps": [
         {
+          "Position": {
+            "X": -347.07507,
+            "Y": 1.2300062,
+            "Z": -345.90344
+          },
+          "TerritoryId": 614,
+          "InteractionType": "WalkTo",
+          "Fly": true
+        },
+        {
           "DataId": 1024986,
           "Position": {
             "X": -348.9281,
@@ -67,8 +77,7 @@
             "Z": -344.13672
           },
           "TerritoryId": 614,
-          "InteractionType": "SinglePlayerDuty",
-          "Fly": true
+          "InteractionType": "SinglePlayerDuty"
         }
       ]
     },
@@ -82,6 +91,7 @@
             "Y": 17.720512,
             "Z": 301.59448
           },
+          "StopDistance": 5,
           "TerritoryId": 614,
           "InteractionType": "CompleteQuest"
         }

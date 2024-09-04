@@ -12,7 +12,7 @@
             "Y": 10.503965,
             "Z": -213.76367
           },
-          "StopDistance": 4,
+          "StopDistance": 5,
           "TerritoryId": 628,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Kugane",

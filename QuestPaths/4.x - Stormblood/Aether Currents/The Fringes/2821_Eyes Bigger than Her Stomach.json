@@ -28,9 +28,9 @@
       "Steps": [
         {
           "Position": {
-            "X": 370.87048,
-            "Y": 73.22009,
-            "Z": 118.791504
+            "X": 385.1642,
+            "Y": 74.01643,
+            "Z": 135.44316
           },
           "TerritoryId": 612,
           "InteractionType": "WaitForManualProgress",

@@ -21,9 +21,15 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1020807,
+          "Position": {
+            "X": 433.9818,
+            "Y": 114.48304,
+            "Z": 233.29517
+          },
           "TerritoryId": 612,
-          "InteractionType": "AttuneAetheryte",
-          "Aetheryte": "Fringes - Peering Stones"
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 2821
         },
         {
           "DataId": 2007971,
@@ -44,7 +50,8 @@
           },
           "TerritoryId": 612,
           "InteractionType": "WalkTo",
-          "DisableNavmesh": true
+          "DisableNavmesh": true,
+          "Mount": true
         },
         {
           "DataId": 1020817,

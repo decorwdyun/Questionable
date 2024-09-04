@@ -34,6 +34,7 @@
           "StopDistance": 7,
           "TerritoryId": 621,
           "InteractionType": "Interact",
+          "TargetTerritoryId": 829,
           "DialogueChoices": [
             {
               "Type": "YesNo",

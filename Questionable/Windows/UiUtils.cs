@@ -56,6 +56,7 @@ internal sealed class UiUtils
         if (extraPadding > 0)
             ImGui.SetCursorPosX(ImGui.GetCursorPosX() + extraPadding);
         ImGui.TextUnformatted(text);
+        hover |= ImGui.IsItemHovered();
         return hover;
     }
 

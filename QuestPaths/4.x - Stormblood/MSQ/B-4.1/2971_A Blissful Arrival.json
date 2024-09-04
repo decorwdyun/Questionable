@@ -29,7 +29,8 @@
           },
           "TerritoryId": 621,
           "InteractionType": "WalkTo",
-          "Fly": true
+          "Fly": true,
+          "AetheryteShortcut": "Lochs - Ala Mhigan Quarter"
         },
         {
           "DataId": 2009047,
@@ -40,8 +41,7 @@
           },
           "StopDistance": 4,
           "TerritoryId": 621,
-          "InteractionType": "Interact",
-          "AetheryteShortcut": "Lochs - Ala Mhigan Quarter"
+          "InteractionType": "Interact"
         }
       ]
     },
@@ -64,6 +64,22 @@
     {
       "Sequence": 255,
       "Steps": [
+        {
+          "DataId": 1023048,
+          "Position": {
+            "X": 497.76453,
+            "Y": 69.99941,
+            "Z": 583.7339
+          },
+          "TerritoryId": 621,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 621,
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
+        },
         {
           "DataId": 1024057,
           "Position": {
