@@ -66,7 +66,7 @@ internal static class WaitAtEnd
 
                     return
                     [
-                        new WaitObjectAtPosition(step.DataId.Value, step.Position.Value, step.NpcWaitDistance ?? 0.05f,
+                        new WaitObjectAtPosition(step.DataId.Value, step.Position.Value, step.NpcWaitDistance ?? 0.5f,
                             gameFunctions),
                         new WaitDelay(),
                         Next(quest, sequence)
