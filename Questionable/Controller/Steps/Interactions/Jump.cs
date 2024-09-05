@@ -1,4 +1,5 @@
 ﻿using System;
+using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,6 +16,7 @@ internal static class Jump
         MovementController movementController,
         IClientState clientState,
         IFramework framework,
+        ICondition condition,
         ILoggerFactory loggerFactory) : SimpleTaskFactory
     {
         public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
@@ -38,7 +40,7 @@ internal static class Jump
         public ITask RepeatedJumps(uint? dataId, JumpDestination jumpDestination, string? comment)
         {
             return new DoRepeatedJumps(dataId, jumpDestination, comment, movementController, clientState, framework,
-                loggerFactory.CreateLogger<DoRepeatedJumps>());
+                condition, loggerFactory.CreateLogger<DoRepeatedJumps>());
         }
     }
 
@@ -91,6 +93,7 @@ internal static class Jump
         MovementController movementController,
         IClientState clientState,
         IFramework framework,
+        ICondition condition,
         ILogger<DoRepeatedJumps> logger)
         : DoSingleJump(dataId, jumpDestination, comment, movementController, clientState, framework)
     {
@@ -108,7 +111,7 @@ internal static class Jump
 
         public override ETaskResult Update()
         {
-            if (DateTime.Now < _continueAt)
+            if (DateTime.Now < _continueAt || condition[ConditionFlag.Jumping])
                 return ETaskResult.StillRunning;
 
             float stopDistance = _jumpDestination.CalculateStopDistance();
@@ -120,10 +123,10 @@ internal static class Jump
                 _jumpDestination.Position.Y - 0.5f);
             unsafe
             {
-                ActionManager.Instance()->UseAction(ActionType.GeneralAction, 2);
+                if (ActionManager.Instance()->UseAction(ActionType.GeneralAction, 2))
+                    ++_attempts;
             }
 
-            ++_attempts;
             if (_attempts >= 50)
                 throw new TaskException("Tried to jump too many times, didn't reach the target");
 
