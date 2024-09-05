@@ -38,6 +38,7 @@ internal sealed class CreationUtilsComponent
     private readonly ITargetManager _targetManager;
     private readonly ICondition _condition;
     private readonly IGameGui _gameGui;
+    private readonly Configuration _configuration;
     private readonly ILogger<CreationUtilsComponent> _logger;
 
     public CreationUtilsComponent(
@@ -51,6 +52,7 @@ internal sealed class CreationUtilsComponent
         ITargetManager targetManager,
         ICondition condition,
         IGameGui gameGui,
+        Configuration configuration,
         ILogger<CreationUtilsComponent> logger)
     {
         _movementController = movementController;
@@ -63,6 +65,7 @@ internal sealed class CreationUtilsComponent
         _targetManager = targetManager;
         _condition = condition;
         _gameGui = gameGui;
+        _configuration = configuration;
         _logger = logger;
     }
 
@@ -79,8 +82,11 @@ internal sealed class CreationUtilsComponent
             ImGui.Text(SeIconChar.BotanistSprout.ToIconString());
         }
 
-        var q = _questFunctions.GetCurrentQuest();
-        ImGui.Text($"Current Quest: {q.CurrentQuest} → {q.Sequence}");
+        if (_configuration.Advanced.AdditionalStatusInformation)
+        {
+            var q = _questFunctions.GetCurrentQuest();
+            ImGui.Text($"Current Quest: {q.CurrentQuest} → {q.Sequence}");
+        }
 
 #if false
         var questManager = QuestManager.Instance();

@@ -40,7 +40,12 @@ internal static class UseItem
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
-            if (step.InteractionType != EInteractionType.UseItem)
+            if (step.InteractionType is EInteractionType.SinglePlayerDuty)
+            {
+                if (step.ItemId == null)
+                    return [];
+            }
+            else if (step.InteractionType != EInteractionType.UseItem)
                 return [];
 
             ArgumentNullException.ThrowIfNull(step.ItemId);
