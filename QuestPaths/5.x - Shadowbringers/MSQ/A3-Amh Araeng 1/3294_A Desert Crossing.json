@@ -21,6 +21,17 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1027872,
+          "Position": {
+            "X": 268.4519,
+            "Y": 4.0296993,
+            "Z": -144.1825
+          },
+          "TerritoryId": 815,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 3375
+        },
+        {
           "DataId": 1030606,
           "Position": {
             "X": 347.15796,
@@ -28,7 +39,8 @@
             "Z": -117.93707
           },
           "TerritoryId": 815,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Amh Araeng - Mord Souq"
         }
       ]
     },

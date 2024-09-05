@@ -24,6 +24,17 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1030419,
+          "Position": {
+            "X": -506.6148,
+            "Y": 45.614502,
+            "Z": -194.50684
+          },
+          "TerritoryId": 815,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 3525
+        },
+        {
           "DataId": 1029768,
           "Position": {
             "X": 7.9804688,
@@ -31,7 +42,8 @@
             "Z": -583.7339
           },
           "TerritoryId": 815,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Amh Araeng - Twine"
         }
       ]
     },

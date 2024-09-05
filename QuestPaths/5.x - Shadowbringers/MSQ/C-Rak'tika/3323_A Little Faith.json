@@ -48,8 +48,27 @@
           },
           "TerritoryId": 813,
           "InteractionType": "WalkTo",
+          "DisableNavmesh": true,
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
+        },
+        {
+          "Position": {
+            "X": 731.32855,
+            "Y": 13.078317,
+            "Z": -147.50694
+          },
+          "TerritoryId": 813,
+          "InteractionType": "WalkTo",
           "Fly": true,
-          "DisableNavmesh": true
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Locked"
+            }
+          }
         },
         {
           "Position": {

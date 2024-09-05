@@ -130,6 +130,14 @@
       "Sequence": 255,
       "Steps": [
         {
+          "TerritoryId": 819,
+          "InteractionType": "None",
+          "AethernetShortcut": [
+            "[Crystarium] The Amaro Launch",
+            "[Crystarium] Tessellation (Lakeland)"
+          ]
+        },
+        {
           "Position": {
             "X": 608.7031,
             "Y": 12.602462,
@@ -137,10 +145,6 @@
           },
           "TerritoryId": 813,
           "InteractionType": "WalkTo",
-          "AethernetShortcut": [
-            "[Crystarium] The Amaro Launch",
-            "[Crystarium] Tessellation (Lakeland)"
-          ],
           "Fly": true,
           "SkipConditions": {
             "StepIf": {

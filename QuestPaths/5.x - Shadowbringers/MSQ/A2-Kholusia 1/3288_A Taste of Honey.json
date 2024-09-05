@@ -43,13 +43,22 @@
             "Z": -70.08472
           },
           "TerritoryId": 820,
-          "InteractionType": "Instruction",
-          "Comment": "Win first game",
+          "InteractionType": "Interact",
           "DialogueChoices": [
             {
               "Type": "List",
               "Prompt": "TEXT_LUCKMA207_03288_Q1_000_041",
               "Answer": "TEXT_LUCKMA207_03288_A1_000_042"
+            },
+            {
+              "Type": "List",
+              "Prompt": "TEXT_LUCKMA207_03288_Q2_000_052",
+              "Answer": "TEXT_LUCKMA207_03288_A2_000_054"
+            },
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_LUCKMA207_03288_TISTABIE_000_060",
+              "Yes": true
             }
           ]
         }
@@ -66,13 +75,22 @@
             "Z": -70.08472
           },
           "TerritoryId": 820,
-          "InteractionType": "Instruction",
-          "Comment": "Win second game",
+          "InteractionType": "Interact",
           "DialogueChoices": [
             {
               "Type": "List",
               "Prompt": "TEXT_LUCKMA207_03288_Q1_000_041",
               "Answer": "TEXT_LUCKMA207_03288_A1_000_042"
+            },
+            {
+              "Type": "List",
+              "Prompt": "TEXT_LUCKMA207_03288_Q2_000_052",
+              "Answer": "TEXT_LUCKMA207_03288_A2_000_054"
+            },
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_LUCKMA207_03288_TISTABIE_000_060",
+              "Yes": true
             }
           ]
         }

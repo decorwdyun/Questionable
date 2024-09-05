@@ -21,6 +21,39 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1027778,
+          "Position": {
+            "X": -713.28296,
+            "Y": -245.368,
+            "Z": 498.49683
+          },
+          "TerritoryId": 818,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 3593
+        },
+        {
+          "DataId": 1030477,
+          "Position": {
+            "X": -594.6593,
+            "Y": -266.7698,
+            "Z": 338.70447
+          },
+          "TerritoryId": 818,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 3594
+        },
+        {
+          "DataId": 1027775,
+          "Position": {
+            "X": -390.85986,
+            "Y": -260.17664,
+            "Z": 308.46106
+          },
+          "TerritoryId": 818,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 3592
+        },
+        {
           "TerritoryId": 818,
           "InteractionType": "AttuneAetheryte",
           "Aetheryte": "Tempest - Macarenses Angle"
@@ -162,7 +195,8 @@
             "Z": 444.7069
           },
           "TerritoryId": 818,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Tempest - Macarenses Angle"
         },
         {
           "DataId": 1030558,

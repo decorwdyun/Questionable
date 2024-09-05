@@ -37,6 +37,25 @@
       "Sequence": 2,
       "Steps": [
         {
+          "DataId": 1030776,
+          "Position": {
+            "X": -450.85834,
+            "Y": 417.1344,
+            "Z": -610.8644
+          },
+          "TerritoryId": 814,
+          "InteractionType": "AcceptQuest",
+          "DialogueChoices": [
+            {
+              "ExcelSheet": "quest/035/LucKzi101_03556",
+              "Type": "List",
+              "Prompt": "TEXT_LUCKZI101_03556_Q1_000_000",
+              "Answer": "TEXT_LUCKZI101_03556_A1_000_001"
+            }
+          ],
+          "PickUpQuestId": 3556
+        },
+        {
           "DataId": 1030292,
           "Position": {
             "X": -463.73694,

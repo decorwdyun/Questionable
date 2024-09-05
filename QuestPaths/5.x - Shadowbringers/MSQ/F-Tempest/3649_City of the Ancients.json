@@ -21,6 +21,17 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1031015,
+          "Position": {
+            "X": 530.51025,
+            "Y": 353.54364,
+            "Z": -244.00702
+          },
+          "TerritoryId": 818,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 3588
+        },
+        {
           "DataId": 1030518,
           "Position": {
             "X": 400.38135,
@@ -55,15 +66,33 @@
           ]
         },
         {
+          "Position": {
+            "X": 324.9114,
+            "Y": 353.76694,
+            "Z": -475.44562
+          },
+          "TerritoryId": 818,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 2010142,
           "Position": {
             "X": 326.8329,
             "Y": 355.79456,
             "Z": -477.53113
           },
+          "StopDistance": 4,
           "TerritoryId": 818,
           "InteractionType": "UseItem",
-          "ItemId": 2002673
+          "ItemId": 2002673,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         }
       ]
     },

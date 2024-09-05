@@ -62,7 +62,7 @@
         {
           "TerritoryId": 820,
           "InteractionType": "AttuneAethernetShard",
-          "AethernetShard": "[Eulmore] Nightsoil Pots",
+          "AethernetShard": "[Eulmore] Southeast Derelicts",
           "AethernetShortcut": [
             "[Eulmore] The Mainstay",
             "[Eulmore] The Glory Gate"
@@ -83,6 +83,11 @@
     {
       "Sequence": 3,
       "Steps": [
+        {
+          "TerritoryId": 820,
+          "InteractionType": "AttuneAethernetShard",
+          "AethernetShard": "[Eulmore] Nightsoil Pots"
+        },
         {
           "DataId": 1029838,
           "Position": {

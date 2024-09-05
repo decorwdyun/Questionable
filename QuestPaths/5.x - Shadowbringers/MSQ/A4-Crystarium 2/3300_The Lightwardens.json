@@ -86,6 +86,15 @@
           "Aetheryte": "Lakeland - Fort Jobb"
         },
         {
+          "Position": {
+            "X": 601.42426,
+            "Y": 23.210327,
+            "Z": -223.36815
+          },
+          "TerritoryId": 813,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 2010028,
           "Position": {
             "X": 613.24475,
