@@ -87,7 +87,8 @@
           "TerritoryId": 146,
           "Mount": false,
           "InteractionType": "CompleteQuest",
-          "StopDistance": 5
+          "StopDistance": 5,
+          "IgnoreDistanceToObject": true
         }
       ]
     }
