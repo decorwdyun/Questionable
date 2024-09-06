@@ -453,6 +453,14 @@ internal sealed unsafe class QuestFunctions
         return !HasCompletedPreviousQuests(questInfo, extraCompletedQuest) || !HasCompletedPreviousInstances(questInfo);
     }
 
+    public bool IsQuestUnobtainable(ElementId elementId, ElementId? extraCompletedQuest = null)
+    {
+        if (elementId is QuestId questId)
+            return IsQuestUnobtainable(questId, extraCompletedQuest);
+        else
+            return false;
+    }
+
     public bool IsQuestUnobtainable(QuestId questId, ElementId? extraCompletedQuest = null)
     {
         var questInfo = (QuestInfo)_questData.GetQuestInfo(questId);
@@ -467,6 +475,36 @@ internal sealed unsafe class QuestFunctions
 
         if (_questData.GetLockedClassQuests().Contains(questId))
             return true;
+
+        unsafe
+        {
+            var startingCity = PlayerState.Instance()->StartTown;
+            if (questInfo.StartingCity > 0 && questInfo.StartingCity != startingCity)
+                return true;
+
+            if (questId.Value == 674 && startingCity == 3)
+                return true;
+            if (questId.Value == 673 && startingCity != 3)
+                return true;
+
+            Dictionary<ushort, EClassJob> closeToHomeQuests = new()
+            {
+                { 108, EClassJob.Marauder },
+                { 109, EClassJob.Arcanist },
+                { 85, EClassJob.Lancer },
+                { 123, EClassJob.Archer },
+                { 124, EClassJob.Conjurer },
+                { 568, EClassJob.Gladiator },
+                { 569, EClassJob.Pugilist },
+                { 570, EClassJob.Thaumaturge }
+            };
+            if (closeToHomeQuests.TryGetValue(questId.Value, out EClassJob neededStartingClass))
+            {
+                EClassJob actualStartingClass = (EClassJob)PlayerState.Instance()->FirstClass;
+                if (actualStartingClass != neededStartingClass)
+                    return true;
+            }
+        }
 
         return false;
     }

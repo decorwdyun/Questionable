@@ -26,6 +26,8 @@ internal sealed class UiUtils
             return (ImGuiColors.DalamudYellow, FontAwesomeIcon.PersonWalkingArrowRight, "Active");
         else if (_questFunctions.IsQuestAcceptedOrComplete(elementId))
             return (ImGuiColors.ParsedGreen, FontAwesomeIcon.Check, "Complete");
+        else if (_questFunctions.IsQuestUnobtainable(elementId))
+            return (ImGuiColors.DalamudGrey, FontAwesomeIcon.Minus, "Unobtainable");
         else if (_questFunctions.IsQuestLocked(elementId))
             return (ImGuiColors.DalamudRed, FontAwesomeIcon.Times, "Locked");
         else

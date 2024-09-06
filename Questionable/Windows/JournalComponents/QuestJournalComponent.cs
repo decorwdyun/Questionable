@@ -19,9 +19,13 @@ namespace Questionable.Windows.JournalComponents;
 
 internal sealed class QuestJournalComponent
 {
-    private readonly Dictionary<JournalData.Genre, (int Available, int Completed)> _genreCounts = new();
-    private readonly Dictionary<JournalData.Category, (int Available, int Completed)> _categoryCounts = new();
-    private readonly Dictionary<JournalData.Section, (int Available, int Completed)> _sectionCounts = new();
+    private readonly Dictionary<JournalData.Genre, (int Available, int Obtainable, int Completed)> _genreCounts = [];
+
+    private readonly Dictionary<JournalData.Category, (int Available, int Obtainable, int Completed)> _categoryCounts =
+        [];
+
+    private readonly Dictionary<JournalData.Section, (int Available, int Obtainable, int Completed)> _sectionCounts =
+        [];
 
     private readonly JournalData _journalData;
     private readonly QuestRegistry _questRegistry;
@@ -95,7 +99,7 @@ internal sealed class QuestJournalComponent
         if (filter.Section.QuestCount == 0)
             return;
 
-        (int supported, int completed) = _sectionCounts.GetValueOrDefault(filter.Section);
+        (int available, int obtainable, int completed) = _sectionCounts.GetValueOrDefault(filter.Section);
 
         ImGui.TableNextRow();
         ImGui.TableNextColumn();
@@ -103,9 +107,9 @@ internal sealed class QuestJournalComponent
         bool open = ImGui.TreeNodeEx(filter.Section.Name, ImGuiTreeNodeFlags.SpanFullWidth);
 
         ImGui.TableNextColumn();
-        DrawCount(supported, filter.Section.QuestCount);
+        DrawCount(available, filter.Section.QuestCount);
         ImGui.TableNextColumn();
-        DrawCount(completed, filter.Section.QuestCount);
+        DrawCount(completed, obtainable);
 
         if (open)
         {
@@ -121,7 +125,7 @@ internal sealed class QuestJournalComponent
         if (filter.Category.QuestCount == 0)
             return;
 
-        (int supported, int completed) = _categoryCounts.GetValueOrDefault(filter.Category);
+        (int available, int obtainable, int completed) = _categoryCounts.GetValueOrDefault(filter.Category);
 
         ImGui.TableNextRow();
         ImGui.TableNextColumn();
@@ -129,9 +133,9 @@ internal sealed class QuestJournalComponent
         bool open = ImGui.TreeNodeEx(filter.Category.Name, ImGuiTreeNodeFlags.SpanFullWidth);
 
         ImGui.TableNextColumn();
-        DrawCount(supported, filter.Category.QuestCount);
+        DrawCount(available, filter.Category.QuestCount);
         ImGui.TableNextColumn();
-        DrawCount(completed, filter.Category.QuestCount);
+        DrawCount(completed, obtainable);
 
         if (open)
         {
@@ -147,7 +151,7 @@ internal sealed class QuestJournalComponent
         if (filter.Genre.QuestCount == 0)
             return;
 
-        (int supported, int completed) = _genreCounts.GetValueOrDefault(filter.Genre);
+        (int supported, int obtainable, int completed) = _genreCounts.GetValueOrDefault(filter.Genre);
 
         ImGui.TableNextRow();
         ImGui.TableNextColumn();
@@ -157,7 +161,7 @@ internal sealed class QuestJournalComponent
         ImGui.TableNextColumn();
         DrawCount(supported, filter.Genre.QuestCount);
         ImGui.TableNextColumn();
-        DrawCount(completed, filter.Genre.QuestCount);
+        DrawCount(completed, obtainable);
 
         if (open)
         {
@@ -192,7 +196,8 @@ internal sealed class QuestJournalComponent
             bool openInQuestMap = _commandManager.Commands.TryGetValue("/questinfo", out var commandInfo);
             if (ImGui.MenuItem("View in Quest Map", questInfo.QuestId is QuestId && openInQuestMap))
             {
-                _commandManager.DispatchCommand("/questinfo", questInfo.QuestId.ToString() ?? string.Empty, commandInfo!);
+                _commandManager.DispatchCommand("/questinfo", questInfo.QuestId.ToString() ?? string.Empty,
+                    commandInfo!);
             }
 
             ImGui.EndPopup();
@@ -317,8 +322,9 @@ internal sealed class QuestJournalComponent
         {
             int available = genre.Quests.Count(x =>
                 _questRegistry.TryGetQuest(x.QuestId, out var quest) && !quest.Root.Disabled);
+            int obtainable = genre.Quests.Count(x => !_questFunctions.IsQuestUnobtainable(x.QuestId));
             int completed = genre.Quests.Count(x => _questFunctions.IsQuestComplete(x.QuestId));
-            _genreCounts[genre] = (available, completed);
+            _genreCounts[genre] = (available, obtainable, completed);
         }
 
         foreach (var category in _journalData.Categories)
@@ -328,8 +334,9 @@ internal sealed class QuestJournalComponent
                 .Select(x => x.Value)
                 .ToList();
             int available = counts.Sum(x => x.Available);
+            int obtainable = counts.Sum(x => x.Obtainable);
             int completed = counts.Sum(x => x.Completed);
-            _categoryCounts[category] = (available, completed);
+            _categoryCounts[category] = (available, obtainable, completed);
         }
 
         foreach (var section in _journalData.Sections)
@@ -339,21 +346,22 @@ internal sealed class QuestJournalComponent
                 .Select(x => x.Value)
                 .ToList();
             int available = counts.Sum(x => x.Available);
+            int obtainable = counts.Sum(x => x.Obtainable);
             int completed = counts.Sum(x => x.Completed);
-            _sectionCounts[section] = (available, completed);
+            _sectionCounts[section] = (available, obtainable, completed);
         }
     }
 
     internal void ClearCounts()
     {
         foreach (var genreCount in _genreCounts.ToList())
-            _genreCounts[genreCount.Key] = (genreCount.Value.Available, 0);
+            _genreCounts[genreCount.Key] = (genreCount.Value.Available, genreCount.Value.Available, 0);
 
         foreach (var categoryCount in _categoryCounts.ToList())
-            _categoryCounts[categoryCount.Key] = (categoryCount.Value.Available, 0);
+            _categoryCounts[categoryCount.Key] = (categoryCount.Value.Available, categoryCount.Value.Available, 0);
 
         foreach (var sectionCount in _sectionCounts.ToList())
-            _sectionCounts[sectionCount.Key] = (sectionCount.Value.Available, 0);
+            _sectionCounts[sectionCount.Key] = (sectionCount.Value.Available, sectionCount.Value.Available, 0);
     }
 
     private sealed record FilteredSection(JournalData.Section Section, List<FilteredCategory> Categories);

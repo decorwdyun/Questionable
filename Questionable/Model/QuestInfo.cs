@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
@@ -11,7 +12,7 @@ namespace Questionable.Model;
 
 internal sealed class QuestInfo : IQuestInfo
 {
-    public QuestInfo(ExcelQuest quest, ushort newGamePlusChapter)
+    public QuestInfo(ExcelQuest quest, ushort newGamePlusChapter, byte startingCity)
     {
         QuestId = new QuestId((ushort)(quest.RowId & 0xFFFF));
 
@@ -60,6 +61,7 @@ internal sealed class QuestInfo : IQuestInfo
         ClassJobs = QuestInfoUtils.AsList(quest.ClassJobCategory0.Value!);
         IsSeasonalEvent = quest.Festival.Row != 0;
         NewGamePlusChapter = newGamePlusChapter;
+        StartingCity = startingCity;
         Expansion = (EExpansionVersion)quest.Expansion.Row;
     }
 
@@ -69,10 +71,10 @@ internal sealed class QuestInfo : IQuestInfo
     public ushort Level { get; }
     public uint IssuerDataId { get; }
     public bool IsRepeatable { get; }
-    public ImmutableList<PreviousQuestInfo> PreviousQuests { get; set; }
+    public ImmutableList<PreviousQuestInfo> PreviousQuests { get; private set; }
     public QuestJoin PreviousQuestJoin { get; }
-    public ImmutableList<QuestId> QuestLocks { get; }
-    public QuestJoin QuestLockJoin { get; }
+    public ImmutableList<QuestId> QuestLocks { get; private set; }
+    public QuestJoin QuestLockJoin { get; private set; }
     public List<ushort> PreviousInstanceContent { get; }
     public QuestJoin PreviousInstanceContentJoin { get; }
     public uint? JournalGenre { get; }
@@ -84,6 +86,7 @@ internal sealed class QuestInfo : IQuestInfo
     public IReadOnlyList<EClassJob> ClassJobs { get; }
     public bool IsSeasonalEvent { get; }
     public ushort NewGamePlusChapter { get; }
+    public byte StartingCity { get; set; }
     public EExpansionVersion Expansion { get; }
 
     [UsedImplicitly(ImplicitUseKindFlags.Assign, ImplicitUseTargetFlags.Members)]
@@ -97,6 +100,15 @@ internal sealed class QuestInfo : IQuestInfo
     public void AddPreviousQuest(PreviousQuestInfo questId)
     {
         PreviousQuests = [..PreviousQuests, questId];
+    }
+
+    public void AddQuestLocks(QuestJoin questJoin, params QuestId[] questId)
+    {
+        if (QuestLocks.Count > 0 && QuestLockJoin != questJoin)
+            throw new InvalidOperationException();
+
+        QuestLockJoin = questJoin;
+        QuestLocks = [..QuestLocks, ..questId];
     }
 
     public sealed record PreviousQuestInfo(QuestId QuestId, byte Sequence = 0);

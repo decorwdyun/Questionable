@@ -45,12 +45,21 @@ internal sealed class QuestData
                 .Where(x => x.RowId > 0 && x.Quest.Row > 0)
                 .ToDictionary(x => x.Quest.Row, x => x.Redo);
 
+        Dictionary<uint, byte> startingCities = new();
+        for (byte redoChapter = 1; redoChapter <= 3; ++redoChapter)
+        {
+            var questRedo = dataManager.GetExcelSheet<QuestRedo>()!.GetRow(redoChapter)!;
+            foreach (var quest in questRedo.Quest.Where(x => x.Row > 0))
+                startingCities[quest.Row] = redoChapter;
+        }
+
         List<IQuestInfo> quests =
         [
             ..dataManager.GetExcelSheet<Quest>()!
                 .Where(x => x.RowId > 0)
                 .Where(x => x.IssuerLocation.Row > 0)
-                .Select(x => new QuestInfo(x, questChapters.GetValueOrDefault(x.RowId))),
+                .Select(x => new QuestInfo(x, questChapters.GetValueOrDefault(x.RowId),
+                    startingCities.GetValueOrDefault(x.RowId))),
             ..dataManager.GetExcelSheet<SatisfactionNpc>()!
                 .Where(x => x.RowId > 0)
                 .Select(x => new SatisfactionSupplyInfo(x)),
@@ -150,12 +159,30 @@ internal sealed class QuestData
         AddPreviousQuest(new QuestId(3821), new QuestId(spearfishing));
         AddPreviousQuest(new QuestId(3833), new QuestId(spearfishing));
         */
+
+        // initial city quests are side quests
+        ((QuestInfo)_quests[new QuestId(107)]).StartingCity = 1;
+        ((QuestInfo)_quests[new QuestId(39)]).StartingCity = 2;
+        ((QuestInfo)_quests[new QuestId(594)]).StartingCity = 3;
+
+        // follow-up quests to picking a GC
+        AddGcFollowUpQuests();
     }
 
     private void AddPreviousQuest(QuestId questToUpdate, QuestId requiredQuestId)
     {
         QuestInfo quest = (QuestInfo)_quests[questToUpdate];
         quest.AddPreviousQuest(new QuestInfo.PreviousQuestInfo(requiredQuestId));
+    }
+
+    private void AddGcFollowUpQuests()
+    {
+        QuestId[] questIds = [new(683), new(684), new(685)];
+        foreach (QuestId questId in questIds)
+        {
+            QuestInfo quest = (QuestInfo)_quests[questId];
+            quest.AddQuestLocks(QuestInfo.QuestJoin.AtLeastOne, questIds.Where(x => x != questId).ToArray());
+        }
     }
 
     public IQuestInfo GetQuestInfo(ElementId elementId)
