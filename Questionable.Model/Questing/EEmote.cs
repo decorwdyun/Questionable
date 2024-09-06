@@ -33,4 +33,5 @@ public enum EEmote
     Uchiwasshoi = 278,
     Clap = 7,
     VictoryPose = 122,
+    Comfort = 9,
 }
