@@ -28,18 +28,51 @@
             "Z": 509.72766
           },
           "TerritoryId": 961,
-          "InteractionType": "WaitForManualProgress",
-          "Comment": "Follow"
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1041141,
+          "Position": {
+            "X": -655.5854,
+            "Y": -22.394821,
+            "Z": 498.91443
+          },
+          "StopDistance": 1,
+          "TerritoryId": 961,
+          "InteractionType": "WaitForNpcAtPosition",
+          "Mount": true
+        },
+        {
+          "DataId": 1041141,
+          "Position": {
+            "X": -686.881,
+            "Y": -25.994936,
+            "Z": 443.804
+          },
+          "StopDistance": 1,
+          "TerritoryId": 961,
+          "InteractionType": "WaitForNpcAtPosition"
+        },
+        {
+          "DataId": 1041141,
+          "Position": {
+            "X": -738.11304,
+            "Y": -25.933691,
+            "Z": 487.78436
+          },
+          "StopDistance": 1,
+          "TerritoryId": 961,
+          "InteractionType": "WaitForNpcAtPosition"
         },
         {
           "Position": {
-            "X": -838.7837,
-            "Y": -39.605896,
-            "Z": 518.9479
+            "X": -819.6994,
+            "Y": -38.65795,
+            "Z": 506.43152
           },
+          "StopDistance": 1,
           "TerritoryId": 961,
-          "InteractionType": "WalkTo",
-          "Comment": "Unsure if this is sequence 1"
+          "InteractionType": "WalkTo"
         }
       ]
     },
