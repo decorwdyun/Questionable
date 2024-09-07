@@ -34,4 +34,5 @@ public enum EEmote
     Clap = 7,
     VictoryPose = 122,
     Comfort = 9,
+    BattleStance = 121,
 }

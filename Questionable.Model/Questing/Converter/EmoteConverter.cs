@@ -33,5 +33,6 @@ public sealed class EmoteConverter() : EnumConverter<EEmote>(Values)
         { EEmote.Clap, "clap" },
         { EEmote.VictoryPose, "victorypose" },
         { EEmote.Comfort, "comfort" },
+        { EEmote.BattleStance, "battlestance" },
     };
 }
