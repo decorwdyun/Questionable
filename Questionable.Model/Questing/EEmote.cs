@@ -35,4 +35,5 @@ public enum EEmote
     VictoryPose = 122,
     Comfort = 9,
     BattleStance = 121,
+    Doze = 13,
 }

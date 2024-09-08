@@ -47,7 +47,8 @@ internal static class Interact
                 yield return new WaitAtEnd.WaitDelay();
 
             yield return Interact(step.DataId.Value, quest, step.InteractionType,
-                step.TargetTerritoryId != null || quest.Id is SatisfactionSupplyNpcId, step.PickUpItemId);
+                step.TargetTerritoryId != null || quest.Id is SatisfactionSupplyNpcId ||
+                step.SkipConditions is { StepIf.Never: true }, step.PickUpItemId);
         }
 
         internal ITask Interact(uint dataId, Quest? quest, EInteractionType interactionType,
@@ -182,7 +183,8 @@ internal static class Interact
             }
             else if (dataId is >= 1047901 and <= 1047905 &&
                      condition[ConditionFlag.Disguised] &&
-                     flag == ConditionFlag.Mounting71 && // why the fuck is this the flag that's used, instead of OccupiedIn[Quest]Event
+                     flag == ConditionFlag
+                         .Mounting71 && // why the fuck is this the flag that's used, instead of OccupiedIn[Quest]Event
                      value)
             {
                 logger.LogInformation("(A Knight of Alexandria) Interaction was most likely triggered");
