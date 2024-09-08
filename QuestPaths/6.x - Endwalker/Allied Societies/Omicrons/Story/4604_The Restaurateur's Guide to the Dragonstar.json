@@ -6,24 +6,6 @@
       "Sequence": 0,
       "Steps": [
         {
-          "DataId": 2013072,
-          "Position": {
-            "X": 456.65674,
-            "Y": 438.04077,
-            "Z": 310.2312
-          },
-          "TerritoryId": 960,
-          "InteractionType": "Interact",
-          "TargetTerritoryId": 960,
-          "Mount": true,
-          "AetheryteShortcut": "Ultima Thule - Base Omicron",
-          "SkipConditions": {
-            "AetheryteShortcutIf": {
-              "InSameTerritory": true
-            }
-          }
-        },
-        {
           "DataId": 1043951,
           "Position": {
             "X": 303.8529,
@@ -31,8 +13,7 @@
             "Z": 154.83325
           },
           "TerritoryId": 960,
-          "InteractionType": "AcceptQuest",
-          "Fly": true
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
