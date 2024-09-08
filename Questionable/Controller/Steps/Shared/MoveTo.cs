@@ -116,6 +116,15 @@ internal static class MoveTo
                 actualDistance = float.MaxValue;
             }
 
+            // Fixes a case where you're initiating the gathering step when standing next to the NPC already
+            // TODO maybe this should be delayed up until starting movement
+            if (questId is SatisfactionSupplyNpcId)
+            {
+                logger.LogDebug("SatisfactionSupply: Changing distance to max, previous distance: {Distance}",
+                    actualDistance);
+                actualDistance = float.MaxValue;
+            }
+
             if (step.Mount == true)
                 yield return mountFactory.Mount(step.TerritoryId, Mount.EMountIf.Always);
             else if (step.Mount == false)
