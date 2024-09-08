@@ -318,16 +318,24 @@ internal sealed class QuestData
         if (startingClass == EClassJob.Adventurer)
             return [];
 
-        return
+        // If you start the game as another class, you get:
+        // - "So you want to be a XX"
+        // - "Way of the XX" (depends on "So you want to be a XX")
+        // - "My First XX"
+        // If you start the game with this class, you get:
+        // - "Way of the XX" (no preconditions)
+        // In both cases, the level 10 quests are different
+        List<List<ushort>> startingClassQuests =
         [
-            startingClass == EClassJob.Gladiator ? new(177) : new(253),
-            startingClass == EClassJob.Pugilist ? new(178) : new(533),
-            startingClass == EClassJob.Marauder ? new(179) : new(311),
-            startingClass == EClassJob.Lancer ? new(180) : new(23),
-            startingClass == EClassJob.Archer ? new(181) : new(21),
-            startingClass == EClassJob.Conjurer ? new(182) : new(22),
-            startingClass == EClassJob.Thaumaturge ? new(183) : new(345),
-            startingClass == EClassJob.Arcanist ? new(451) : new(453),
+            startingClass == EClassJob.Gladiator ? [177, 285, 286, 288] : [253, 261],
+            startingClass == EClassJob.Pugilist ? [178, 532, 553, 698] : [533, 555],
+            startingClass == EClassJob.Marauder ? [179, 310, 312, 315] : [311, 314],
+            startingClass == EClassJob.Lancer ? [180, 132, 218, 143] : [23, 35],
+            startingClass == EClassJob.Archer ? [181, 131, 219, 134] : [21, 67],
+            startingClass == EClassJob.Conjurer ? [182, 133, 211, 147] : [22, 91],
+            startingClass == EClassJob.Thaumaturge ? [183, 344, 346, 349] : [345, 348],
+            startingClass == EClassJob.Arcanist ? [451, 452, 454, 457] : [453, 456],
         ];
+        return startingClassQuests.SelectMany(x => x).Select(x => new QuestId(x)).ToList();
     }
 }
