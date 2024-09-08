@@ -13,7 +13,14 @@
             "Z": 315.81592
           },
           "TerritoryId": 960,
-          "InteractionType": "AcceptQuest"
+          "InteractionType": "AcceptQuest",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKZK001_04354_Q1_000_100",
+              "Answer": "TEXT_AKTKZK001_04354_A2_000_100"
+            }
+          ]
         }
       ]
     },
@@ -32,8 +39,7 @@
           "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
             14044
-          ],
-          "Comment": "Can maybe be automated to use item depending on quest vars??"
+          ]
         }
       ]
     },

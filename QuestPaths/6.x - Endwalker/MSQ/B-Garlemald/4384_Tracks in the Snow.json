@@ -329,7 +329,8 @@
           },
           "TerritoryId": 958,
           "InteractionType": "WalkTo",
-          "Mount": false
+          "Mount": false,
+          "RestartNavigationIfCancelled": false
         }
       ]
     },

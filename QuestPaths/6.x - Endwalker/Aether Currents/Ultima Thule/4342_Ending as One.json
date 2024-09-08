@@ -29,9 +29,33 @@
           "TerritoryId": 960,
           "InteractionType": "Combat",
           "EnemySpawnType": "OverworldEnemies",
-          "KillEnemyDataIds": [
-            13315,
-            14097
+          "ComplexCombatData": [
+            {
+              "DataId": 13315,
+              "MinimumKillCount": 2,
+              "CompletionQuestVariablesFlags": [
+                null,
+                32,
+                null,
+                null,
+                null,
+                null
+              ]
+            },
+            {
+              "DataId": 14097,
+              "MinimumKillCount": 1,
+              "CompletionQuestVariablesFlags": [
+                null,
+                {
+                  "High": 3
+                },
+                null,
+                null,
+                null,
+                null
+              ]
+            }
           ],
           "$": "QuestVariables: 0 0-16-32 0 0 0 0"
         }

@@ -22,6 +22,55 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1041129,
+          "Position": {
+            "X": -23.575256,
+            "Y": -31.53021,
+            "Z": 1.8463135
+          },
+          "TerritoryId": 956,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 4329
+        },
+        {
+          "DataId": 1041683,
+          "Position": {
+            "X": -29.984009,
+            "Y": -31.53043,
+            "Z": -23.758362
+          },
+          "TerritoryId": 956,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 4484,
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "ExcelSheet": "quest/044/AktKzi101_04484",
+              "Prompt": "TEXT_AKTKZI101_04484_Q1_000_000",
+              "Answer": "TEXT_AKTKZI101_04484_A1_000_002"
+            }
+          ]
+        },
+        {
+          "DataId": 1041313,
+          "Position": {
+            "X": 89.28052,
+            "Y": -17.530382,
+            "Z": -74.906555
+          },
+          "TerritoryId": 956,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 4320,
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "ExcelSheet": "quest/043/AktKzi005_04320",
+              "Prompt": "TEXT_AKTKZI005_04320_Q1_000_000",
+              "Answer": "TEXT_AKTKZI005_04320_A1_000_003"
+            }
+          ]
+        },
+        {
           "DataId": 1040444,
           "Position": {
             "X": -424.24664,

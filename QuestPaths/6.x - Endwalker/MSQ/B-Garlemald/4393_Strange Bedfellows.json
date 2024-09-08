@@ -21,6 +21,17 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1041753,
+          "Position": {
+            "X": -321.49237,
+            "Y": 22.009079,
+            "Z": 424.00232
+          },
+          "TerritoryId": 958,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 4498
+        },
+        {
           "DataId": 1039917,
           "Position": {
             "X": 495.50623,
@@ -121,9 +132,29 @@
                 null,
                 null,
                 64
-              ]
+              ],
+              "NearPosition": {
+                "Position": {
+                  "X": 496.94043,
+                  "Y": 10.887661,
+                  "Z": -418.57025
+                },
+                "TerritoryId": 958,
+                "MaximumDistance": 30
+              }
             }
           }
+        },
+        {
+          "DataId": 1040633,
+          "Position": {
+            "X": 496.94043,
+            "Y": 10.887661,
+            "Z": -418.57025
+          },
+          "TerritoryId": 958,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 4232
         },
         {
           "DataId": 2012111,

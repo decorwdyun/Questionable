@@ -223,7 +223,8 @@
           "InteractionType": "WalkTo",
           "Sprint": false,
           "Mount": false,
-          "DelaySecondsAtStart": 5
+          "DelaySecondsAtStart": 5,
+          "RestartNavigationIfCancelled": false
         }
       ]
     },

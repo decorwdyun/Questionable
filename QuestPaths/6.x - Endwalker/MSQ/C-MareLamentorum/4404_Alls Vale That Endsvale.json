@@ -21,25 +21,34 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1037867,
           "Position": {
-            "X": 68.93551,
-            "Y": -48.912445,
-            "Z": -683.716
+            "X": -301.62512,
+            "Y": -144.00002,
+            "Z": -491.14215
           },
           "TerritoryId": 959,
-          "InteractionType": "WalkTo",
-          "DisableNavmesh": true,
-          "Mount": true
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 4240,
+          "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "QuestsCompleted": [
+                4240
+              ]
+            }
+          }
         },
         {
+          "DataId": 1039520,
           "Position": {
-            "X": 86.32549,
-            "Y": -137.4167,
-            "Z": -619.77936
+            "X": -287.8615,
+            "Y": -143.50005,
+            "Z": -520.28687
           },
           "TerritoryId": 959,
-          "InteractionType": "WalkTo",
-          "DisableNavmesh": true
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 4241
         },
         {
           "DataId": 1038928,
@@ -49,7 +58,8 @@
             "Z": -504.26492
           },
           "TerritoryId": 959,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow"
         }
       ]
     },
