@@ -8,6 +8,7 @@ public sealed class ActionConverter() : EnumConverter<EAction>(Values)
     private static readonly Dictionary<EAction, string> Values = new()
     {
         { EAction.HeavySwing, "Heavy Swing" },
+        { EAction.Bootshine, "Bootshine" },
         { EAction.HeavyShot, "Heavy Shot" },
         { EAction.Cure, "Cure" },
         { EAction.Cure2, "Cure II" },

@@ -866,6 +866,7 @@
                 "description": "The action to use",
                 "enum": [
                   "Heavy Swing",
+                  "Bootshine",
                   "Heavy Shot",
                   "Cure",
                   "Cure II",
