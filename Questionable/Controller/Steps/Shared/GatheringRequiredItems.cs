@@ -155,5 +155,6 @@ internal static class GatheringRequiredItems
     {
         public bool Start() => true;
         public ETaskResult Update() => ETaskResult.TaskComplete;
+        public override string ToString() => "Gather/SkipMarker";
     }
 }

@@ -4,7 +4,8 @@
   "Steps": [
     {
       "TerritoryId": 961,
-      "InteractionType": "None"
+      "InteractionType": "None",
+      "AetheryteShortcut": "Elpis - Poieten Oikos"
     }
   ],
   "Groups": [
