@@ -96,7 +96,12 @@
           },
           "TerritoryId": 146,
           "InteractionType": "WalkTo",
-          "Fly": true
+          "Fly": true,
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Locked"
+            }
+          }
         },
         {
           "Position": {
@@ -106,7 +111,7 @@
           },
           "TerritoryId": 146,
           "InteractionType": "WalkTo",
-          "Land": true
+          "Fly": true
         },
         {
           "DataId": 2002548,

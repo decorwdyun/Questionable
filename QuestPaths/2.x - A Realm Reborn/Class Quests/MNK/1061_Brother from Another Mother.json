@@ -46,6 +46,20 @@
       "Sequence": 2,
       "Steps": [
         {
+          "Position": {
+            "X": -231.99818,
+            "Y": -28.997791,
+            "Z": 123.01078
+          },
+          "TerritoryId": 141,
+          "InteractionType": "WalkTo",
+          "AethernetShortcut": [
+            "[Ul'dah] Goldsmiths' Guild",
+            "[Ul'dah] Gate of Nald (Central Thanalan)"
+          ],
+          "Fly": true
+        },
+        {
           "DataId": 2002439,
           "Position": {
             "X": -232.80695,
@@ -53,13 +67,8 @@
             "Z": 125.29175
           },
           "TerritoryId": 141,
-          "InteractionType": "UseItem",
-          "ItemId": 2000951,
-          "AethernetShortcut": [
-            "[Ul'dah] Goldsmiths' Guild",
-            "[Ul'dah] Gate of Nald (Central Thanalan)"
-          ],
-          "Fly": true
+          "InteractionType": "SinglePlayerDuty",
+          "ItemId": 2000951
         }
       ]
     },

@@ -68,7 +68,14 @@
           "TerritoryId": 146,
           "InteractionType": "UseItem",
           "ItemId": 2000409,
-          "RequiredQuestVariables": [[0], null, null, null, null, null]
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            16
+          ]
         },
         {
           "Position": {
@@ -100,7 +107,14 @@
           "TerritoryId": 146,
           "InteractionType": "UseItem",
           "ItemId": 2000409,
-          "RequiredQuestVariables": [[16], null, null, null, null, null]
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 2001524,
@@ -112,7 +126,14 @@
           "TerritoryId": 146,
           "InteractionType": "UseItem",
           "ItemId": 2000409,
-          "RequiredQuestVariables": [[32], null, null, null, null, null],
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ],
           "Fly": true
         },
         {
@@ -125,7 +146,15 @@
           "TerritoryId": 146,
           "InteractionType": "UseItem",
           "ItemId": 2000409,
-          "Fly": true
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         }
       ]
     },

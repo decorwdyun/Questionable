@@ -6,14 +6,9 @@
       "Sequence": 0,
       "Steps": [
         {
-          "DataId": 1006749,
-          "Position": {
-            "X": -30.47229,
-            "Y": 13.599918,
-            "Z": 95.26196
-          },
           "TerritoryId": 131,
-          "InteractionType": "AcceptQuest",
+          "InteractionType": "EquipItem",
+          "ItemId": 4543,
           "AetheryteShortcut": "Ul'dah",
           "AethernetShortcut": [
             "[Ul'dah] Aetheryte Plaza",
@@ -27,6 +22,16 @@
               "InSameTerritory": true
             }
           }
+        },
+        {
+          "DataId": 1006749,
+          "Position": {
+            "X": -30.47229,
+            "Y": 13.599918,
+            "Z": 95.26196
+          },
+          "TerritoryId": 131,
+          "InteractionType": "AcceptQuest"
         }
       ]
     },

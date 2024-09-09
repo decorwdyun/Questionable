@@ -44,7 +44,15 @@
             "Z": -59.55603
           },
           "TerritoryId": 130,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            8
+          ]
         },
         {
           "DataId": 2001282,
@@ -54,7 +62,15 @@
             "Z": -78.50769
           },
           "TerritoryId": 130,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 2001283,
@@ -64,7 +80,15 @@
             "Z": -98.8938
           },
           "TerritoryId": 130,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            16
+          ]
         },
         {
           "DataId": 2001280,
@@ -78,6 +102,14 @@
           "AethernetShortcut": [
             "[Ul'dah] Adventurers' Guild",
             "[Ul'dah] Thaumaturges' Guild"
+          ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
           ]
         },
         {
@@ -88,7 +120,15 @@
             "Z": 67.33801
           },
           "TerritoryId": 130,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         }
       ]
     },
