@@ -16,7 +16,8 @@ internal sealed class QuestionableIpc : IDisposable
     public QuestionableIpc(QuestController questController, IDalamudPluginInterface pluginInterface)
     {
         _isRunning = pluginInterface.GetIpcProvider<bool>(IpcIsRunning);
-        _isRunning.RegisterFunc(() => questController.IsRunning);
+        _isRunning.RegisterFunc(() =>
+            questController.AutomationType != QuestController.EAutomationType.Manual || questController.IsRunning);
 
         _getCurrentQuestId = pluginInterface.GetIpcProvider<string?>(IpcGetCurrentQuestId);
         _getCurrentQuestId.RegisterFunc(() => questController.CurrentQuest?.Quest.Id.ToString());
