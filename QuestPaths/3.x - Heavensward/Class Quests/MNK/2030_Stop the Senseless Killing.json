@@ -27,6 +27,17 @@
       "Sequence": 1,
       "Steps": [
         {
+          "Position": {
+            "X": 873.8737,
+            "Y": -3.1452856,
+            "Z": 352.47165
+          },
+          "TerritoryId": 398,
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "The Dravanian Forelands - Tailfeather",
+          "Fly": true
+        },
+        {
           "DataId": 1014005,
           "Position": {
             "X": -631.22,
@@ -35,7 +46,6 @@
           },
           "TerritoryId": 397,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "Coerthas Western Highlands - Falcon's Nest",
           "Fly": true
         }
       ]
