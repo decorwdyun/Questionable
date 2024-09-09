@@ -727,6 +727,9 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
         if (type != ECurrentQuestType.Normal || currentQuest.Sequence == 0)
             return false;
 
+        if (ManualPriorityQuests.Contains(currentQuest.Quest))
+            return false;
+
         if (currentQuest.Quest.Info.AlliedSociety != EAlliedSociety.None)
             return false;
 
