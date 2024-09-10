@@ -318,7 +318,8 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
                         _logger.LogInformation("New quest: {QuestName}", quest.Info.Name);
                         _startedQuest = new QuestProgress(quest, currentSequence);
 
-                        if (_clientState.LocalPlayer!.Level < quest.Info.Level)
+                        if (_clientState.LocalPlayer != null &&
+                            _clientState.LocalPlayer.Level < quest.Info.Level)
                         {
                             _logger.LogInformation(
                                 "Stopping automation, player level ({PlayerLevel}) < quest level ({QuestLevel}",
