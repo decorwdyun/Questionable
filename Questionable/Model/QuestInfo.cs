@@ -28,6 +28,9 @@ internal sealed class QuestInfo : IQuestInfo
             570 => " (Thaumaturge)",
             673 => " (Ul'dah)",
             674 => " (Limsa/Gridania)",
+            1432 => " (Gridania)",
+            1433 => " (Limsa)",
+            1434 => " (Ul'dah)",
             _ => "",
         };
 
