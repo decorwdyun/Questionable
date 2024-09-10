@@ -476,34 +476,40 @@ internal sealed unsafe class QuestFunctions
         if (_questData.GetLockedClassQuests().Contains(questId))
             return true;
 
-        unsafe
+        var startingCity = PlayerState.Instance()->StartTown;
+        if (questInfo.StartingCity > 0 && questInfo.StartingCity != startingCity)
+            return true;
+
+        if (questId.Value == 674 && startingCity == 3)
+            return true;
+        if (questId.Value == 673 && startingCity != 3)
+            return true;
+
+        Dictionary<ushort, EClassJob> closeToHomeQuests = new()
         {
-            var startingCity = PlayerState.Instance()->StartTown;
-            if (questInfo.StartingCity > 0 && questInfo.StartingCity != startingCity)
-                return true;
+            { 108, EClassJob.Marauder },
+            { 109, EClassJob.Arcanist },
+            { 85, EClassJob.Lancer },
+            { 123, EClassJob.Archer },
+            { 124, EClassJob.Conjurer },
+            { 568, EClassJob.Gladiator },
+            { 569, EClassJob.Pugilist },
+            { 570, EClassJob.Thaumaturge }
+        };
 
-            if (questId.Value == 674 && startingCity == 3)
+        // The starting class experience is a bit confusing. If you start in Gridania, the MSQ next quest data will
+        // always select 'Close to Home (Lancer)' even if starting as Conjurer/Archer. However, if we always mark the
+        // Lancer quest as unobtainable, it'll not get picked up as Conjurer/Archer, and thus will stop questing.
+        //
+        // While the NPC offers all 3 quests, there's no manual selection, and interacting will automatically select the
+        // quest for your current class, then switch you from a dead-ish intro zone to the actual starting city
+        // (so that you can't come back later to pick up another quest).
+        if (closeToHomeQuests.TryGetValue(questId.Value, out EClassJob neededStartingClass) &&
+            closeToHomeQuests.Any(x => IsQuestAcceptedOrComplete(new QuestId(x.Key))))
+        {
+            EClassJob actualStartingClass = (EClassJob)PlayerState.Instance()->FirstClass;
+            if (actualStartingClass != neededStartingClass)
                 return true;
-            if (questId.Value == 673 && startingCity != 3)
-                return true;
-
-            Dictionary<ushort, EClassJob> closeToHomeQuests = new()
-            {
-                { 108, EClassJob.Marauder },
-                { 109, EClassJob.Arcanist },
-                { 85, EClassJob.Lancer },
-                { 123, EClassJob.Archer },
-                { 124, EClassJob.Conjurer },
-                { 568, EClassJob.Gladiator },
-                { 569, EClassJob.Pugilist },
-                { 570, EClassJob.Thaumaturge }
-            };
-            if (closeToHomeQuests.TryGetValue(questId.Value, out EClassJob neededStartingClass))
-            {
-                EClassJob actualStartingClass = (EClassJob)PlayerState.Instance()->FirstClass;
-                if (actualStartingClass != neededStartingClass)
-                    return true;
-            }
         }
 
         return false;
