@@ -36,7 +36,17 @@
           },
           "TerritoryId": 612,
           "InteractionType": "Interact",
-          "RequiredQuestVariables": [null, null, null, [2, 4], null, null],
+          "RequiredQuestVariables": [
+            null,
+            null,
+            null,
+            [
+              2,
+              4
+            ],
+            null,
+            null
+          ],
           "Fly": true,
           "DialogueChoices": [
             {
@@ -55,7 +65,18 @@
           },
           "TerritoryId": 612,
           "InteractionType": "Combat",
-          "RequiredQuestVariables": [null, null, null, [1, 3, 5], null, null],
+          "RequiredQuestVariables": [
+            null,
+            null,
+            null,
+            [
+              1,
+              3,
+              5
+            ],
+            null,
+            null
+          ],
           "Fly": true,
           "DialogueChoices": [
             {
@@ -65,7 +86,9 @@
             }
           ],
           "EnemySpawnType": "AfterInteraction",
-          "KillEnemyDataIds": [8587]
+          "KillEnemyDataIds": [
+            8587
+          ]
         },
         {
           "DataId": 1025119,
@@ -76,7 +99,18 @@
           },
           "TerritoryId": 612,
           "InteractionType": "Interact",
-          "RequiredQuestVariables": [null, null, null, [1, 2, 5], null, null],
+          "RequiredQuestVariables": [
+            null,
+            null,
+            null,
+            [
+              1,
+              2,
+              5
+            ],
+            null,
+            null
+          ],
           "Fly": true,
           "DialogueChoices": [
             {
@@ -95,7 +129,17 @@
           },
           "TerritoryId": 612,
           "InteractionType": "Combat",
-          "RequiredQuestVariables": [null, null, null, [3, 4], null, null],
+          "RequiredQuestVariables": [
+            null,
+            null,
+            null,
+            [
+              3,
+              4
+            ],
+            null,
+            null
+          ],
           "Fly": true,
           "DialogueChoices": [
             {
@@ -105,7 +149,9 @@
             }
           ],
           "EnemySpawnType": "AfterInteraction",
-          "KillEnemyDataIds": [8586]
+          "KillEnemyDataIds": [
+            8586
+          ]
         },
         {
           "DataId": 1025060,
@@ -116,7 +162,17 @@
           },
           "TerritoryId": 612,
           "InteractionType": "Combat",
-          "RequiredQuestVariables": [null, null, null, [2, 4], null, null],
+          "RequiredQuestVariables": [
+            null,
+            null,
+            null,
+            [
+              2,
+              4
+            ],
+            null,
+            null
+          ],
           "Fly": true,
           "DialogueChoices": [
             {
@@ -126,7 +182,9 @@
             }
           ],
           "EnemySpawnType": "AfterInteraction",
-          "KillEnemyDataIds": [8585]
+          "KillEnemyDataIds": [
+            8585
+          ]
         },
         {
           "DataId": 1025118,
@@ -137,7 +195,18 @@
           },
           "TerritoryId": 612,
           "InteractionType": "Interact",
-          "RequiredQuestVariables": [null, null, null, [1, 3, 5], null, null],
+          "RequiredQuestVariables": [
+            null,
+            null,
+            null,
+            [
+              1,
+              3,
+              5
+            ],
+            null,
+            null
+          ],
           "Fly": true,
           "DialogueChoices": [
             {

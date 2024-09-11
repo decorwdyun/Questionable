@@ -110,7 +110,9 @@
           "TerritoryId": 141,
           "InteractionType": "Combat",
           "EnemySpawnType": "OverworldEnemies",
-          "KillEnemyDataIds": [771],
+          "KillEnemyDataIds": [
+            771
+          ],
           "Fly": true,
           "AetheryteShortcut": "Central Thanalan - Black Brush Station",
           "CombatDelaySecondsAtStart": 0,

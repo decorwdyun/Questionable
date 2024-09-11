@@ -53,7 +53,9 @@
           "TerritoryId": 154,
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterInteraction",
-          "KillEnemyDataIds": [5043],
+          "KillEnemyDataIds": [
+            5043
+          ],
           "Fly": true
         }
       ]

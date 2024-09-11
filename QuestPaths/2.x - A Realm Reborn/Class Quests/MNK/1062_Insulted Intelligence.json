@@ -16,7 +16,10 @@
           ],
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InTerritory": [130, 131]
+              "InTerritory": [
+                130,
+                131
+              ]
             },
             "AethernetShortcutIf": {
               "InSameTerritory": true
@@ -49,7 +52,9 @@
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterItemUse",
           "ItemId": 2000817,
-          "KillEnemyDataIds": [1925],
+          "KillEnemyDataIds": [
+            1925
+          ],
           "AetheryteShortcut": "Eastern La Noscea - Costa Del Sol",
           "Fly": true
         }

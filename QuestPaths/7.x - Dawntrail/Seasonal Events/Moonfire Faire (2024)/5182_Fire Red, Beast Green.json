@@ -49,7 +49,9 @@
           "SkipConditions": {
             "StepIf": {
               "AetheryteUnlocked": "Eastern La Noscea - Costa Del Sol",
-              "InTerritory": [137]
+              "InTerritory": [
+                137
+              ]
             },
             "AethernetShortcutIf": {
               "AetheryteUnlocked": "Eastern La Noscea - Costa Del Sol"

@@ -16,7 +16,9 @@
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Kholusia - Tomra",
           "SkipConditions": {
-            "AethernetShortcutIf": { "InSameTerritory": true }
+            "AethernetShortcutIf": {
+              "InSameTerritory": true
+            }
           }
         }
       ]
@@ -34,7 +36,9 @@
           "TerritoryId": 814,
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterInteraction",
-          "KillEnemyDataIds": [10870],
+          "KillEnemyDataIds": [
+            10870
+          ],
           "Fly": true
         }
       ]
@@ -52,7 +56,9 @@
           "TerritoryId": 814,
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterInteraction",
-          "KillEnemyDataIds": [10871],
+          "KillEnemyDataIds": [
+            10871
+          ],
           "Fly": true
         }
       ]
@@ -121,7 +127,9 @@
             "[Crystarium] Musica Universalis Markets"
           ],
           "SkipConditions": {
-            "AetheryteShortcutIf": { "InSameTerritory": true }
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
           }
         }
       ]

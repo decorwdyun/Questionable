@@ -21,7 +21,10 @@
           ],
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InTerritory": [130, 131]
+              "InTerritory": [
+                130,
+                131
+              ]
             },
             "AethernetShortcutIf": {
               "InSameTerritory": true
@@ -73,7 +76,9 @@
           "InteractionType": "Combat",
           "EnemySpawnType": "OverworldEnemies",
           "DelaySecondsAtStart": 0,
-          "KillEnemyDataIds": [1926]
+          "KillEnemyDataIds": [
+            1926
+          ]
         }
       ]
     },

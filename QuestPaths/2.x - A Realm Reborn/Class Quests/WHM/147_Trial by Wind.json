@@ -1,6 +1,9 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": ["Cacahuetes", "liza"],
+  "Author": [
+    "Cacahuetes",
+    "liza"
+  ],
   "QuestSequence": [
     {
       "Sequence": 0,

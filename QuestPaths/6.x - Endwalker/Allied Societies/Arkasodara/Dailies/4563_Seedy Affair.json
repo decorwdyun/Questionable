@@ -34,7 +34,9 @@
           "AetheryteShortcut": "Thavnair - Palaka's Stand",
           "RequiredQuestVariables": [
             null,
-            [19],
+            [
+              19
+            ],
             null,
             null,
             null,
@@ -54,7 +56,9 @@
           "Fly": true,
           "RequiredQuestVariables": [
             null,
-            [18],
+            [
+              18
+            ],
             null,
             null,
             null,
@@ -74,7 +78,9 @@
           "Fly": true,
           "RequiredQuestVariables": [
             null,
-            [17],
+            [
+              17
+            ],
             null,
             null,
             null,
@@ -98,7 +104,9 @@
           "RequiredQuestVariables": [
             null,
             null,
-            [0],
+            [
+              0
+            ],
             null,
             null,
             null
@@ -116,7 +124,9 @@
           "RequiredQuestVariables": [
             null,
             null,
-            [64],
+            [
+              64
+            ],
             null,
             null,
             null
@@ -134,7 +144,9 @@
           "RequiredQuestVariables": [
             null,
             null,
-            [128],
+            [
+              128
+            ],
             null,
             null,
             null

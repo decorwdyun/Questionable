@@ -76,7 +76,9 @@
           "TerritoryId": 813,
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterInteraction",
-          "KillEnemyDataIds": [10872]
+          "KillEnemyDataIds": [
+            10872
+          ]
         }
       ]
     },

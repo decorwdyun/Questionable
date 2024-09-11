@@ -69,7 +69,9 @@
           "TerritoryId": 397,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
-          "KillEnemyDataIds": [4690],
+          "KillEnemyDataIds": [
+            4690
+          ],
           "Fly": true,
           "CompletionQuestVariablesFlags": [
             4,

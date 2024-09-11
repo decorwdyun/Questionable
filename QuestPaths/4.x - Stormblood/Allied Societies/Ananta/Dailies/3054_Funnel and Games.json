@@ -30,10 +30,21 @@
           "TerritoryId": 612,
           "InteractionType": "Combat",
           "EnemySpawnType": "OverworldEnemies",
-          "KillEnemyDataIds": [8589],
+          "KillEnemyDataIds": [
+            8589
+          ],
           "Fly": true,
           "Land": true,
-          "RequiredQuestVariables": [null, null, [16], null, null, null],
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [
+              16
+            ],
+            null,
+            null,
+            null
+          ],
           "CombatDelaySecondsAtStart": 1
         },
         {
@@ -45,10 +56,21 @@
           "TerritoryId": 612,
           "InteractionType": "Combat",
           "EnemySpawnType": "OverworldEnemies",
-          "KillEnemyDataIds": [8589],
+          "KillEnemyDataIds": [
+            8589
+          ],
           "Fly": true,
           "Land": true,
-          "RequiredQuestVariables": [null, null, [32], null, null, null],
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [
+              32
+            ],
+            null,
+            null,
+            null
+          ],
           "CombatDelaySecondsAtStart": 1
         },
         {
@@ -60,10 +82,21 @@
           "TerritoryId": 612,
           "InteractionType": "Combat",
           "EnemySpawnType": "OverworldEnemies",
-          "KillEnemyDataIds": [8589],
+          "KillEnemyDataIds": [
+            8589
+          ],
           "Fly": true,
           "Land": true,
-          "RequiredQuestVariables": [null, null, [48], null, null, null],
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [
+              48
+            ],
+            null,
+            null,
+            null
+          ],
           "CombatDelaySecondsAtStart": 1
         }
       ]

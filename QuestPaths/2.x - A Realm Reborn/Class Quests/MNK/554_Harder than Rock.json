@@ -179,7 +179,9 @@
           "TerritoryId": 140,
           "InteractionType": "Combat",
           "EnemySpawnType": "OverworldEnemies",
-          "KillEnemyDataIds": [131],
+          "KillEnemyDataIds": [
+            131
+          ],
           "CombatDelaySecondsAtStart": 1
         },
         {
@@ -203,7 +205,9 @@
           "TerritoryId": 140,
           "InteractionType": "Combat",
           "EnemySpawnType": "OverworldEnemies",
-          "KillEnemyDataIds": [131],
+          "KillEnemyDataIds": [
+            131
+          ],
           "CombatDelaySecondsAtStart": 1
         },
         {
@@ -227,7 +231,9 @@
           "TerritoryId": 140,
           "InteractionType": "Combat",
           "EnemySpawnType": "OverworldEnemies",
-          "KillEnemyDataIds": [131],
+          "KillEnemyDataIds": [
+            131
+          ],
           "CombatDelaySecondsAtStart": 1
         },
         {
@@ -251,7 +257,9 @@
           "TerritoryId": 140,
           "InteractionType": "Combat",
           "EnemySpawnType": "OverworldEnemies",
-          "KillEnemyDataIds": [131],
+          "KillEnemyDataIds": [
+            131
+          ],
           "CombatDelaySecondsAtStart": 1
         }
       ]

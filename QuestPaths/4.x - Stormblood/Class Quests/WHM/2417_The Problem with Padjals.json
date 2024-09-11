@@ -51,7 +51,9 @@
           "TerritoryId": 612,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
-          "KillEnemyDataIds": [7215],
+          "KillEnemyDataIds": [
+            7215
+          ],
           "AetheryteShortcut": "Fringes - Castrum Oriens",
           "Fly": true
         },

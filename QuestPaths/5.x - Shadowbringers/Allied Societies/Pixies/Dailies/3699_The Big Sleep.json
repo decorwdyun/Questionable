@@ -34,7 +34,9 @@
           "RequiredQuestVariables": [
             null,
             null,
-            [16],
+            [
+              16
+            ],
             null,
             null,
             null
@@ -53,7 +55,9 @@
           "RequiredQuestVariables": [
             null,
             null,
-            [32],
+            [
+              32
+            ],
             null,
             null,
             null
@@ -72,7 +76,9 @@
           "RequiredQuestVariables": [
             null,
             null,
-            [48],
+            [
+              48
+            ],
             null,
             null,
             null

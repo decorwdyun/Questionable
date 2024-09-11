@@ -42,7 +42,9 @@
           "DisableNavmesh": true,
           "RequiredQuestVariables": [
             null,
-            [2],
+            [
+              2
+            ],
             null,
             null,
             null,
@@ -61,7 +63,9 @@
           "DisableNavmesh": true,
           "RequiredQuestVariables": [
             null,
-            [3],
+            [
+              3
+            ],
             null,
             null,
             null,
@@ -80,7 +84,9 @@
           "DisableNavmesh": true,
           "RequiredQuestVariables": [
             null,
-            [1],
+            [
+              1
+            ],
             null,
             null,
             null,

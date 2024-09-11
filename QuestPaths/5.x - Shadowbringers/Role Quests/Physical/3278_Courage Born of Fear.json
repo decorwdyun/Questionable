@@ -80,7 +80,10 @@
         }
       ]
     },
-    { "Sequence": 4, "Steps": [] },
+    {
+      "Sequence": 4,
+      "Steps": []
+    },
     {
       "Sequence": 5,
       "Steps": [

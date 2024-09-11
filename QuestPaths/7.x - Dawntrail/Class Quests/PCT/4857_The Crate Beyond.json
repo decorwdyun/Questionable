@@ -38,7 +38,10 @@
           "InteractionType": "UseItem",
           "ItemId": 2003500,
           "AetheryteShortcut": "Kugane",
-          "AethernetShortcut": ["[Kugane] Aetheryte Plaza", "[Kugane] Sekiseigumi Barracks"]
+          "AethernetShortcut": [
+            "[Kugane] Aetheryte Plaza",
+            "[Kugane] Sekiseigumi Barracks"
+          ]
         }
       ]
     },

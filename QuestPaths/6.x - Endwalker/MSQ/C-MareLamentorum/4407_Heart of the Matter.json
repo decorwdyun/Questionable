@@ -34,7 +34,9 @@
           "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "QuestsCompleted": [4516]
+              "QuestsCompleted": [
+                4516
+              ]
             }
           }
         },

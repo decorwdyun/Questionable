@@ -158,7 +158,9 @@
           "TerritoryId": 154,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
-          "KillEnemyDataIds": [4683],
+          "KillEnemyDataIds": [
+            4683
+          ],
           "CompletionQuestVariablesFlags": [
             2,
             null,

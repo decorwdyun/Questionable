@@ -20,7 +20,9 @@
             "[Crystarium] Musica Universalis Markets"
           ],
           "SkipConditions": {
-            "AetheryteShortcutIf": { "InSameTerritory": true }
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
           }
         }
       ]

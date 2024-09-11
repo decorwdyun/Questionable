@@ -20,7 +20,9 @@
             "[Crystarium] Musica Universalis Markets"
           ],
           "SkipConditions": {
-            "AetheryteShortcutIf": { "InSameTerritory": true }
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
           }
         }
       ]
@@ -54,7 +56,9 @@
           "TerritoryId": 813,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
-          "KillEnemyDataIds": [10865]
+          "KillEnemyDataIds": [
+            10865
+          ]
         }
       ]
     },
@@ -91,7 +95,9 @@
             "[Crystarium] Musica Universalis Markets"
           ],
           "SkipConditions": {
-            "AetheryteShortcutIf": { "InSameTerritory": true }
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
           },
           "NextQuestId": 3268
         }

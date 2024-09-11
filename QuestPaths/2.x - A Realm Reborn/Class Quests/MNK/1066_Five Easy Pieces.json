@@ -21,7 +21,10 @@
           ],
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InTerritory": [130, 131]
+              "InTerritory": [
+                130,
+                131
+              ]
             },
             "AethernetShortcutIf": {
               "InSameTerritory": true

@@ -127,7 +127,9 @@
           "TerritoryId": 815,
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterInteraction",
-          "KillEnemyDataIds": [10883],
+          "KillEnemyDataIds": [
+            10883
+          ],
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -147,7 +149,9 @@
           "TerritoryId": 815,
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterInteraction",
-          "KillEnemyDataIds": [10883],
+          "KillEnemyDataIds": [
+            10883
+          ],
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -167,7 +171,9 @@
           "TerritoryId": 815,
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterInteraction",
-          "KillEnemyDataIds": [10883],
+          "KillEnemyDataIds": [
+            10883
+          ],
           "CompletionQuestVariablesFlags": [
             null,
             null,

@@ -134,7 +134,9 @@
           "TerritoryId": 141,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
-          "KillEnemyDataIds": [10849],
+          "KillEnemyDataIds": [
+            10849
+          ],
           "Fly": true
         }
       ]

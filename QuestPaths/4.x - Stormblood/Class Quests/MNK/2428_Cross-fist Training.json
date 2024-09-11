@@ -100,7 +100,9 @@
           "TerritoryId": 612,
           "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
-          "KillEnemyDataIds": [7217],
+          "KillEnemyDataIds": [
+            7217
+          ],
           "CombatDelaySecondsAtStart": 0,
           "Mount": false
         },
