@@ -20,7 +20,6 @@ internal sealed class EventInfoComponent
 {
     private readonly List<EventQuest> _eventQuests =
     [
-        new("The Rising", [new(5015), new(5016)], AtDailyReset(new(2024, 9, 11))),
     ];
 
     private readonly QuestData _questData;
