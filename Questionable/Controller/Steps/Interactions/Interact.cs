@@ -16,7 +16,8 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class Interact
 {
-    internal sealed class Factory(GameFunctions gameFunctions, ICondition condition, ILoggerFactory loggerFactory)
+    internal sealed class Factory(GameFunctions gameFunctions, Configuration configuration, ICondition condition,
+        ILoggerFactory loggerFactory)
         : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
@@ -35,6 +36,11 @@ internal static class Interact
                     yield break;
 
                 if (step.DataId == null)
+                    yield break;
+            }
+            else if (step.InteractionType == EInteractionType.Snipe)
+            {
+                if (!configuration.General.AutomaticallyCompleteSnipeTasks)
                     yield break;
             }
             else if (step.InteractionType != EInteractionType.Interact)

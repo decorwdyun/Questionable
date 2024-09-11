@@ -28,7 +28,7 @@
             "Z": 25.680908
           },
           "TerritoryId": 1185,
-          "InteractionType": "WaitForManualProgress",
+          "InteractionType": "Snipe",
           "Comment": "Inspect Helm, Corpse, Weapon"
         }
       ]

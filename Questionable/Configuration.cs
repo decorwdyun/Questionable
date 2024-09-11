@@ -19,6 +19,7 @@ internal sealed class Configuration : IPluginConfiguration
         public bool HideInAllInstances { get; set; } = true;
         public bool UseEscToCancelQuesting { get; set; } = true;
         public bool ShowIncompleteSeasonalEvents { get; set; } = true;
+        public bool AutomaticallyCompleteSnipeTasks { get; set; }
     }
 
     internal sealed class AdvancedConfiguration

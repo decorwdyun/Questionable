@@ -84,7 +84,7 @@ internal sealed partial class ActiveQuestComponent
             if (!isMinimized)
             {
                 bool colored = currentStep is
-                    { InteractionType: EInteractionType.Instruction or EInteractionType.WaitForManualProgress };
+                    { InteractionType: EInteractionType.Instruction or EInteractionType.WaitForManualProgress or EInteractionType.Snipe };
                 if (colored)
                     ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudOrange);
                 ImGui.TextUnformatted(currentStep?.Comment ??

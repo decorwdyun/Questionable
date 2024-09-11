@@ -62,7 +62,7 @@
             "Z": 196.55139
           },
           "TerritoryId": 621,
-          "InteractionType": "Instruction",
+          "InteractionType": "Snipe",
           "Comment": "Aim at jaw",
           "Fly": true
         }
@@ -95,7 +95,7 @@
             "Z": 282.7954
           },
           "TerritoryId": 621,
-          "InteractionType": "Instruction",
+          "InteractionType": "Snipe",
           "Fly": true,
           "Comment": "Aim at nearest eye"
         }

@@ -28,7 +28,7 @@
             "Z": 755.58093
           },
           "TerritoryId": 816,
-          "InteractionType": "Instruction",
+          "InteractionType": "Snipe",
           "Fly": true,
           "Comment": "Throw Porxies at Beavers"
         }

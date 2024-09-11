@@ -111,7 +111,7 @@
             "Z": 147.23425
           },
           "TerritoryId": 614,
-          "InteractionType": "Instruction",
+          "InteractionType": "Snipe",
           "Comment": "Snipe soldiers"
         }
       ]
@@ -127,7 +127,7 @@
             "Z": 237.04883
           },
           "TerritoryId": 614,
-          "InteractionType": "Instruction",
+          "InteractionType": "Snipe",
           "Comment": "Snipe soldiers"
         }
       ]
@@ -158,7 +158,7 @@
             "Z": 603.2959
           },
           "TerritoryId": 614,
-          "InteractionType": "Instruction",
+          "InteractionType": "Snipe",
           "Comment": "Snipe soldiers"
         }
       ]

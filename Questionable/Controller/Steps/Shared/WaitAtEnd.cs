@@ -49,6 +49,7 @@ internal static class WaitAtEnd
 
                 case EInteractionType.WaitForManualProgress:
                 case EInteractionType.Instruction:
+                case EInteractionType.Snipe:
                     return [new WaitNextStepOrSequence()];
 
                 case EInteractionType.Duty:

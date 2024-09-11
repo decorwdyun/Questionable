@@ -90,6 +90,16 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
                     Save();
                 }
 
+                if (ImGui.CollapsingHeader("Cheats"))
+                {
+                    bool automaticallyCompleteSnipeTasks = _configuration.General.AutomaticallyCompleteSnipeTasks;
+                    if (ImGui.Checkbox("Automatically complete snipe tasks", ref automaticallyCompleteSnipeTasks))
+                    {
+                        _configuration.General.AutomaticallyCompleteSnipeTasks = automaticallyCompleteSnipeTasks;
+                        Save();
+                    }
+                }
+
                 ImGui.EndTabItem();
             }
 

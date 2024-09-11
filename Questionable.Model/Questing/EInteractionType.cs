@@ -26,6 +26,7 @@ public enum EInteractionType
     Jump,
     Dive,
     Craft,
+    Snipe,
 
     /// <summary>
     /// Needs to be manually continued.

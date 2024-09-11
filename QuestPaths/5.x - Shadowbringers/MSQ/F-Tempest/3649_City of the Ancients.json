@@ -54,7 +54,7 @@
             "Z": -414.38928
           },
           "TerritoryId": 818,
-          "InteractionType": "WaitForManualProgress",
+          "InteractionType": "Snipe",
           "Comment": "Click top left (broken) window",
           "CompletionQuestVariablesFlags": [
             null,

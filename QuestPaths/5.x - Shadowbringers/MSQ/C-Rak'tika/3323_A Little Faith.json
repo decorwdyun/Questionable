@@ -104,7 +104,7 @@
             "Z": -92.97333
           },
           "TerritoryId": 813,
-          "InteractionType": "WaitForManualProgress",
+          "InteractionType": "Snipe",
           "Comment": "Tablet is on the right middle shelf of the table"
         }
       ]
