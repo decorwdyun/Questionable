@@ -172,7 +172,7 @@ internal sealed class QuestData
     private void AddPreviousQuest(QuestId questToUpdate, QuestId requiredQuestId)
     {
         QuestInfo quest = (QuestInfo)_quests[questToUpdate];
-        quest.AddPreviousQuest(new QuestInfo.PreviousQuestInfo(requiredQuestId));
+        quest.AddPreviousQuest(new PreviousQuestInfo(requiredQuestId));
     }
 
     private void AddGcFollowUpQuests()
@@ -181,7 +181,7 @@ internal sealed class QuestData
         foreach (QuestId questId in questIds)
         {
             QuestInfo quest = (QuestInfo)_quests[questId];
-            quest.AddQuestLocks(QuestInfo.QuestJoin.AtLeastOne, questIds.Where(x => x != questId).ToArray());
+            quest.AddQuestLocks(EQuestJoin.AtLeastOne, questIds.Where(x => x != questId).ToArray());
         }
     }
 

@@ -8,7 +8,6 @@ using Questionable.Controller;
 using Questionable.Data;
 using Questionable.Functions;
 using Questionable.Model;
-using Questionable.Model.Questing;
 
 namespace Questionable.Windows.QuestComponents;
 
@@ -37,40 +36,34 @@ internal sealed class QuestTooltipComponent
         _configuration = configuration;
     }
 
-    public void Draw(IQuestInfo quest)
-    {
-        if (quest is QuestInfo questInfo)
-            Draw(questInfo);
-    }
-
-    public void Draw(QuestInfo quest)
+    public void Draw(IQuestInfo questInfo)
     {
         using var tooltip = ImRaii.Tooltip();
         if (tooltip)
         {
-            ImGui.Text($"{SeIconChar.LevelEn.ToIconString()}{quest.Level}");
+            ImGui.Text($"{SeIconChar.LevelEn.ToIconString()}{questInfo.Level}");
             ImGui.SameLine();
 
-            var (color, _, tooltipText) = _uiUtils.GetQuestStyle(quest.QuestId);
+            var (color, _, tooltipText) = _uiUtils.GetQuestStyle(questInfo.QuestId);
             ImGui.TextColored(color, tooltipText);
-            if (quest.IsRepeatable)
+            if (questInfo.IsRepeatable)
             {
                 ImGui.SameLine();
                 ImGui.TextUnformatted("Repeatable");
             }
 
-            if (quest.CompletesInstantly)
+            if (questInfo is QuestInfo { CompletesInstantly: true })
             {
                 ImGui.SameLine();
                 ImGui.TextUnformatted("Instant");
             }
 
-            if (_questRegistry.TryGetQuest(quest.QuestId, out Quest? knownQuest))
+            if (_questRegistry.TryGetQuest(questInfo.QuestId, out Quest? quest))
             {
-                if (knownQuest.Root.Author.Count == 1)
-                    ImGui.Text($"Author: {knownQuest.Root.Author[0]}");
+                if (quest.Root.Author.Count == 1)
+                    ImGui.Text($"Author: {quest.Root.Author[0]}");
                 else
-                    ImGui.Text($"Authors: {string.Join(", ", knownQuest.Root.Author)}");
+                    ImGui.Text($"Authors: {string.Join(", ", quest.Root.Author)}");
             }
             else
             {
@@ -78,35 +71,35 @@ internal sealed class QuestTooltipComponent
                 ImGui.TextUnformatted("NoQuestPath");
             }
 
-            DrawQuestUnlocks(quest, 0);
+            DrawQuestUnlocks(questInfo, 0);
         }
     }
 
-    private void DrawQuestUnlocks(QuestInfo quest, int counter)
+    private void DrawQuestUnlocks(IQuestInfo questInfo, int counter)
     {
         if (counter >= 10)
             return;
 
-        if (counter != 0 && quest.IsMainScenarioQuest)
+        if (counter != 0 && questInfo.IsMainScenarioQuest)
             return;
 
         if (counter > 0)
             ImGui.Indent();
 
-        if (quest.PreviousQuests.Count > 0)
+        if (questInfo.PreviousQuests.Count > 0)
         {
             if (counter == 0)
                 ImGui.Separator();
 
-            if (quest.PreviousQuests.Count > 1)
+            if (questInfo.PreviousQuests.Count > 1)
             {
-                if (quest.PreviousQuestJoin == QuestInfo.QuestJoin.All)
+                if (questInfo.PreviousQuestJoin == EQuestJoin.All)
                     ImGui.Text("Requires all:");
-                else if (quest.PreviousQuestJoin == QuestInfo.QuestJoin.AtLeastOne)
+                else if (questInfo.PreviousQuestJoin == EQuestJoin.AtLeastOne)
                     ImGui.Text("Requires one:");
             }
 
-            foreach (var q in quest.PreviousQuests)
+            foreach (var q in questInfo.PreviousQuests)
             {
                 if (_questData.TryGetQuestInfo(q.QuestId, out var qInfo))
                 {
@@ -114,7 +107,9 @@ internal sealed class QuestTooltipComponent
                     if (!_questRegistry.IsKnownQuest(qInfo.QuestId))
                         iconColor = ImGuiColors.DalamudGrey;
 
-                    _uiUtils.ChecklistItem(FormatQuestUnlockName(qInfo, _questFunctions.IsQuestComplete(q.QuestId) ? byte.MinValue : q.Sequence), iconColor, icon);
+                    _uiUtils.ChecklistItem(
+                        FormatQuestUnlockName(qInfo,
+                            _questFunctions.IsQuestComplete(q.QuestId) ? byte.MinValue : q.Sequence), iconColor, icon);
 
                     if (qInfo is QuestInfo qstInfo && (counter <= 2 || icon != FontAwesomeIcon.Check))
                         DrawQuestUnlocks(qstInfo, counter + 1);
@@ -127,64 +122,67 @@ internal sealed class QuestTooltipComponent
             }
         }
 
-        if (counter == 0 && quest.QuestLocks.Count > 0)
+        if (questInfo is QuestInfo actualQuestInfo)
         {
-            ImGui.Separator();
-            if (quest.QuestLocks.Count > 1)
+            if (counter == 0 && actualQuestInfo.QuestLocks.Count > 0)
             {
-                if (quest.QuestLockJoin == QuestInfo.QuestJoin.All)
-                    ImGui.Text("Blocked by (if all completed):");
-                else if (quest.QuestLockJoin == QuestInfo.QuestJoin.AtLeastOne)
-                    ImGui.Text("Blocked by (if at least completed):");
+                ImGui.Separator();
+                if (actualQuestInfo.QuestLocks.Count > 1)
+                {
+                    if (actualQuestInfo.QuestLockJoin == EQuestJoin.All)
+                        ImGui.Text("Blocked by (if all completed):");
+                    else if (actualQuestInfo.QuestLockJoin == EQuestJoin.AtLeastOne)
+                        ImGui.Text("Blocked by (if at least completed):");
+                }
+                else
+                    ImGui.Text("Blocked by (if completed):");
+
+                foreach (var q in actualQuestInfo.QuestLocks)
+                {
+                    var qInfo = _questData.GetQuestInfo(q);
+                    var (iconColor, icon, _) = _uiUtils.GetQuestStyle(q);
+                    if (!_questRegistry.IsKnownQuest(qInfo.QuestId))
+                        iconColor = ImGuiColors.DalamudGrey;
+
+                    _uiUtils.ChecklistItem(FormatQuestUnlockName(qInfo), iconColor, icon);
+                }
             }
-            else
-                ImGui.Text("Blocked by (if completed):");
 
-            foreach (var q in quest.QuestLocks)
+            if (counter == 0 && actualQuestInfo.PreviousInstanceContent.Count > 0)
             {
-                var qInfo = _questData.GetQuestInfo(q);
-                var (iconColor, icon, _) = _uiUtils.GetQuestStyle(q);
-                if (!_questRegistry.IsKnownQuest(qInfo.QuestId))
-                    iconColor = ImGuiColors.DalamudGrey;
+                ImGui.Separator();
+                if (actualQuestInfo.PreviousInstanceContent.Count > 1)
+                {
+                    if (questInfo.PreviousQuestJoin == EQuestJoin.All)
+                        ImGui.Text("Requires all:");
+                    else if (questInfo.PreviousQuestJoin == EQuestJoin.AtLeastOne)
+                        ImGui.Text("Requires one:");
+                }
+                else
+                    ImGui.Text("Requires:");
 
-                _uiUtils.ChecklistItem(FormatQuestUnlockName(qInfo), iconColor, icon);
+                foreach (var instanceId in actualQuestInfo.PreviousInstanceContent)
+                {
+                    string instanceName = _territoryData.GetInstanceName(instanceId) ?? "?";
+                    var (iconColor, icon) = UiUtils.GetInstanceStyle(instanceId);
+                    _uiUtils.ChecklistItem(instanceName, iconColor, icon);
+                }
             }
-        }
 
-        if (counter == 0 && quest.PreviousInstanceContent.Count > 0)
-        {
-            ImGui.Separator();
-            if (quest.PreviousInstanceContent.Count > 1)
+            if (counter == 0 && actualQuestInfo.GrandCompany != GrandCompany.None)
             {
-                if (quest.PreviousQuestJoin == QuestInfo.QuestJoin.All)
-                    ImGui.Text("Requires all:");
-                else if (quest.PreviousQuestJoin == QuestInfo.QuestJoin.AtLeastOne)
-                    ImGui.Text("Requires one:");
+                ImGui.Separator();
+                string gcName = actualQuestInfo.GrandCompany switch
+                {
+                    GrandCompany.Maelstrom => "Maelstrom",
+                    GrandCompany.TwinAdder => "Twin Adder",
+                    GrandCompany.ImmortalFlames => "Immortal Flames",
+                    _ => "None",
+                };
+
+                GrandCompany currentGrandCompany = ~_questFunctions.GetGrandCompany();
+                _uiUtils.ChecklistItem($"Grand Company: {gcName}", actualQuestInfo.GrandCompany == currentGrandCompany);
             }
-            else
-                ImGui.Text("Requires:");
-
-            foreach (var instanceId in quest.PreviousInstanceContent)
-            {
-                string instanceName = _territoryData.GetInstanceName(instanceId) ?? "?";
-                var (iconColor, icon) = UiUtils.GetInstanceStyle(instanceId);
-                _uiUtils.ChecklistItem(instanceName, iconColor, icon);
-            }
-        }
-
-        if (counter == 0 && quest.GrandCompany != GrandCompany.None)
-        {
-            ImGui.Separator();
-            string gcName = quest.GrandCompany switch
-            {
-                GrandCompany.Maelstrom => "Maelstrom",
-                GrandCompany.TwinAdder => "Twin Adder",
-                GrandCompany.ImmortalFlames => "Immortal Flames",
-                _ => "None",
-            };
-
-            GrandCompany currentGrandCompany = ~_questFunctions.GetGrandCompany();
-            _uiUtils.ChecklistItem($"Grand Company: {gcName}", quest.GrandCompany == currentGrandCompany);
         }
 
         if (counter > 0)

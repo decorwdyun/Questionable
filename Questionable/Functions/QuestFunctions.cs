@@ -435,13 +435,13 @@ internal sealed unsafe class QuestFunctions
             return IsQuestLocked(questId, extraCompletedQuest);
         else if (elementId is LeveId leveId)
             return IsQuestLocked(leveId);
-        else if (elementId is SatisfactionSupplyNpcId)
-            return false;
+        else if (elementId is SatisfactionSupplyNpcId satisfactionSupplyNpcId)
+            return IsQuestLocked(satisfactionSupplyNpcId);
         else
             throw new ArgumentOutOfRangeException(nameof(elementId));
     }
 
-    public bool IsQuestLocked(QuestId questId, ElementId? extraCompletedQuest = null)
+    private bool IsQuestLocked(QuestId questId, ElementId? extraCompletedQuest = null)
     {
         if (IsQuestUnobtainable(questId, extraCompletedQuest))
             return true;
@@ -453,7 +453,7 @@ internal sealed unsafe class QuestFunctions
         return !HasCompletedPreviousQuests(questInfo, extraCompletedQuest) || !HasCompletedPreviousInstances(questInfo);
     }
 
-    public bool IsQuestLocked(LeveId leveId)
+    private bool IsQuestLocked(LeveId leveId)
     {
         if (IsQuestUnobtainable(leveId))
             return true;
@@ -465,6 +465,12 @@ internal sealed unsafe class QuestFunctions
             return true;
 
         return !IsQuestAccepted(leveId) && QuestManager.Instance()->NumLeveAllowances == 0;
+    }
+
+    private bool IsQuestLocked(SatisfactionSupplyNpcId satisfactionSupplyNpcId)
+    {
+        SatisfactionSupplyInfo questInfo = (SatisfactionSupplyInfo)_questData.GetQuestInfo(satisfactionSupplyNpcId);
+        return !HasCompletedPreviousQuests(questInfo, null);
     }
 
     public bool IsQuestUnobtainable(ElementId elementId, ElementId? extraCompletedQuest = null)
@@ -486,9 +492,9 @@ internal sealed unsafe class QuestFunctions
         if (questInfo.QuestLocks.Count > 0)
         {
             var completedQuests = questInfo.QuestLocks.Count(x => IsQuestComplete(x) || x.Equals(extraCompletedQuest));
-            if (questInfo.QuestLockJoin == QuestInfo.QuestJoin.All && questInfo.QuestLocks.Count == completedQuests)
+            if (questInfo.QuestLockJoin == EQuestJoin.All && questInfo.QuestLocks.Count == completedQuests)
                 return true;
-            else if (questInfo.QuestLockJoin == QuestInfo.QuestJoin.AtLeastOne && completedQuests > 0)
+            else if (questInfo.QuestLockJoin == EQuestJoin.AtLeastOne && completedQuests > 0)
                 return true;
         }
 
@@ -543,23 +549,23 @@ internal sealed unsafe class QuestFunctions
         return false;
     }
 
-    private bool HasCompletedPreviousQuests(QuestInfo questInfo, ElementId? extraCompletedQuest)
+    private bool HasCompletedPreviousQuests(IQuestInfo questInfo, ElementId? extraCompletedQuest)
     {
         if (questInfo.PreviousQuests.Count == 0)
             return true;
 
         var completedQuests = questInfo.PreviousQuests.Count(x =>
             HasEnoughProgressOnPreviousQuest(x) || x.QuestId.Equals(extraCompletedQuest));
-        if (questInfo.PreviousQuestJoin == QuestInfo.QuestJoin.All &&
+        if (questInfo.PreviousQuestJoin == EQuestJoin.All &&
             questInfo.PreviousQuests.Count == completedQuests)
             return true;
-        else if (questInfo.PreviousQuestJoin == QuestInfo.QuestJoin.AtLeastOne && completedQuests > 0)
+        else if (questInfo.PreviousQuestJoin == EQuestJoin.AtLeastOne && completedQuests > 0)
             return true;
         else
             return false;
     }
 
-    private bool HasEnoughProgressOnPreviousQuest(QuestInfo.PreviousQuestInfo previousQuestInfo)
+    private bool HasEnoughProgressOnPreviousQuest(PreviousQuestInfo previousQuestInfo)
     {
         if (IsQuestComplete(previousQuestInfo.QuestId))
             return true;
@@ -579,10 +585,10 @@ internal sealed unsafe class QuestFunctions
             return true;
 
         var completedInstances = questInfo.PreviousInstanceContent.Count(x => UIState.IsInstanceContentCompleted(x));
-        if (questInfo.PreviousInstanceContentJoin == QuestInfo.QuestJoin.All &&
+        if (questInfo.PreviousInstanceContentJoin == EQuestJoin.All &&
             questInfo.PreviousInstanceContent.Count == completedInstances)
             return true;
-        else if (questInfo.PreviousInstanceContentJoin == QuestInfo.QuestJoin.AtLeastOne && completedInstances > 0)
+        else if (questInfo.PreviousInstanceContentJoin == EQuestJoin.AtLeastOne && completedInstances > 0)
             return true;
         else
             return false;
