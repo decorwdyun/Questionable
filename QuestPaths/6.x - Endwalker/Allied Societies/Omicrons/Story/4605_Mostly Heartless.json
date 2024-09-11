@@ -29,11 +29,10 @@
           },
           "TerritoryId": 960,
           "InteractionType": "Interact",
-          "Mount": true,
           "TargetTerritoryId": 960,
           "DialogueChoices": [
             {
-              "Prompt": "TEXT_BANOMI004_04604_Q5_000_000",
+              "Prompt": "TEXT_BANOMI005_04605_Q5_000_000",
               "Type": "YesNo",
               "Yes": true
             }
@@ -56,16 +55,27 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 1043559,
+          "DataId": 1043530,
           "Position": {
-            "X": -573.3883,
-            "Y": 73.033104,
-            "Z": 212.78699
+            "X": 475.0896,
+            "Y": 437.00183,
+            "Z": 319.53918
           },
           "TerritoryId": 960,
           "InteractionType": "Interact",
           "Fly": true,
-          "AetheryteShortcut": "Ultima Thule - Reah Tahra"
+          "AetheryteShortcut": "Ultima Thule - Base Omicron"
+        },
+        {
+          "DataId": 1043529,
+          "Position": {
+            "X": 504.90576,
+            "Y": 436.9996,
+            "Z": 341.5122
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
@@ -73,16 +83,15 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 1011935,
+          "DataId": 1043584,
           "Position": {
-            "X": -285.63367,
-            "Y": 39.04305,
-            "Z": 53.72693
+            "X": 803.7993,
+            "Y": 478.7742,
+            "Z": 200.73242
           },
-          "TerritoryId": 398,
+          "TerritoryId": 960,
           "InteractionType": "Interact",
-          "Fly": true,
-          "AetheryteShortcut": "The Dravanian Forelands - Anyx Trine"
+          "Fly": true
         }
       ]
     },
@@ -90,17 +99,73 @@
       "Sequence": 4,
       "Steps": [
         {
-          "TerritoryId": 398,
+          "DataId": 2013072,
+          "Position": {
+            "X": 456.65674,
+            "Y": 438.04077,
+            "Z": 310.2312
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 960,
+          "Mount": true,
+          "AetheryteShortcut": "Ultima Thule - Base Omicron"
+        },
+        {
+          "DataId": 1043865,
+          "Position": {
+            "X": 301.8081,
+            "Y": 482.13644,
+            "Z": 165.02625
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 960,
+          "Fly": true
+        },
+        {
+          "DataId": 1043586,
+          "Position": {
+            "X": 205.3711,
+            "Y": 567.4998,
+            "Z": 246.72314
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "Fly": true
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "DataId": 2013033,
+          "Position": {
+            "X": 203.50952,
+            "Y": 567.4983,
+            "Z": 244.2511
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 6,
+      "Steps": [
+        {
+          "TerritoryId": 1073,
           "InteractionType": "None",
           "RequiredGatheredItems": [
             {
               "QuestAcceptedAsClass": "Miner",
-              "ItemId": 38279,
+              "ItemId": 38280,
               "ItemCount": 3
             },
             {
               "QuestAcceptedAsClass": "Botanist",
-              "ItemId": 38303,
+              "ItemId": 38304,
               "ItemCount": 3
             }
           ]
@@ -116,12 +181,7 @@
           "InteractionType": "Interact",
           "TargetTerritoryId": 960,
           "Mount": true,
-          "AetheryteShortcut": "Ultima Thule - Base Omicron",
-          "SkipConditions": {
-            "AetheryteShortcutIf": {
-              "InSameTerritory": true
-            }
-          }
+          "AetheryteShortcut": "Ultima Thule - Base Omicron"
         },
         {
           "DataId": 1043865,
@@ -136,11 +196,11 @@
           "TargetTerritoryId": 960
         },
         {
-          "DataId": 1043585,
+          "DataId": 1043586,
           "Position": {
-            "X": 203.84521,
+            "X": 205.3711,
             "Y": 567.4998,
-            "Z": 246.87573
+            "Z": 246.72314
           },
           "TerritoryId": 960,
           "InteractionType": "Interact",
@@ -160,22 +220,22 @@
           },
           "TerritoryId": 960,
           "InteractionType": "Interact",
-          "Fly": true,
           "TargetTerritoryId": 960,
           "DialogueChoices": [
             {
-              "Prompt": "TEXT_BANOMI004_04604_Q4_000_000",
+              "Prompt": "TEXT_BANOMI005_04605_Q6_000_000",
               "Type": "YesNo",
               "Yes": true
             }
-          ]
+          ],
+          "Fly": true
         },
         {
-          "DataId": 1043951,
+          "DataId": 1043515,
           "Position": {
-            "X": 303.8529,
+            "X": 303.39502,
             "Y": 481.99442,
-            "Z": 154.83325
+            "Z": 152.81909
           },
           "TerritoryId": 960,
           "InteractionType": "CompleteQuest"

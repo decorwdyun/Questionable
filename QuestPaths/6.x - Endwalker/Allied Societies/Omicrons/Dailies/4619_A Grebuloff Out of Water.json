@@ -1,7 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "liza",
-  "Disabled": true,
+  "Author": "plogon_enjoyer",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -19,8 +18,39 @@
       ]
     },
     {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1044058,
+          "Position": {
+            "X": 371.9386,
+            "Y": 288.95316,
+            "Z": -627.7409
+          },
+          "TerritoryId": 960,
+          "InteractionType": "UseItem",
+          "ItemId": 2003441,
+          "Fly": true,
+          "AetheryteShortcut": "Ultima Thule - Abode of the Ea"
+        }
+      ]
+    },
+    {
       "Sequence": 255,
       "Steps": [
+        {
+          "DataId": 2013072,
+          "Position": {
+            "X": 456.65674,
+            "Y": 438.04077,
+            "Z": 310.2312
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 960,
+          "AetheryteShortcut": "Ultima Thule - Base Omicron",
+          "Mount": true
+        },
         {
           "DataId": 1043417,
           "Position": {
@@ -29,7 +59,8 @@
             "Z": 148.11926
           },
           "TerritoryId": 960,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "Fly": true
         }
       ]
     }
