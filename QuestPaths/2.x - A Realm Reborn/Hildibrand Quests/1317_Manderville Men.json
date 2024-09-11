@@ -36,9 +36,13 @@
       "Sequence": 2,
       "Steps": [
         {
-          "AetheryteShortcut": "Western Thanalan - Horizon",
+          "TerritoryId": 145,
+          "InteractionType": "UseItem",
+          "ItemId": 30362,
+          "TargetTerritoryId": 140
+        },
+        {
           "Mount": true,
-          "Fly": true,
           "DataId": 1008730,
           "Position": {
             "X": -431.26575,
@@ -61,7 +65,8 @@
             "Z": -367.17786
           },
           "TerritoryId": 140,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "NextQuestId": 1318
         }
       ]
     }

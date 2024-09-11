@@ -594,7 +594,8 @@
                   "AfterInteraction",
                   "AfterItemUse",
                   "AfterAction",
-                  "OverworldEnemies"
+                  "OverworldEnemies",
+                  "FateEnemies"
                 ]
               },
               "KillEnemyDataIds": {
@@ -1020,6 +1021,9 @@
                               "integer"
                             ]
                           },
+                          "PromptIsRegularExpression": {
+                            "type": "boolean"
+                          },
                           "Yes": {
                             "type": "boolean",
                             "default": true
@@ -1048,11 +1052,17 @@
                               "null"
                             ]
                           },
+                          "PromptIsRegularExpression": {
+                            "type": "boolean"
+                          },
                           "Answer": {
                             "type": [
                               "string",
                               "integer"
                             ]
+                          },
+                          "AnswerIsRegularExpression": {
+                            "type": "boolean"
                           }
                         },
                         "required": [

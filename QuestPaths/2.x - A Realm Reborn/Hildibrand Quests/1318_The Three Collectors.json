@@ -12,6 +12,7 @@
             "Y": 23.113976,
             "Z": -367.8188
           },
+          "StopDistance": 5,
           "TerritoryId": 140,
           "InteractionType": "AcceptQuest"
         }
@@ -77,7 +78,8 @@
             "Z": 378.80518
           },
           "TerritoryId": 155,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
@@ -93,23 +95,14 @@
             "Z": 479.69775
           },
           "TerritoryId": 155,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
     {
       "Sequence": 6,
       "Steps": [
-        {
-          "DataId": 2003671,
-          "Position": {
-            "X": 489.181,
-            "Y": 206.8937,
-            "Z": 479.662
-          },
-          "TerritoryId": 155,
-          "InteractionType": "Interact"
-        },
         {
           "TerritoryId": 155,
           "InteractionType": "Duty",
@@ -127,6 +120,7 @@
             "Y": 207.33582,
             "Z": 475.33374
           },
+          "StopDistance": 7,
           "TerritoryId": 155,
           "InteractionType": "Interact"
         }
@@ -136,7 +130,12 @@
       "Sequence": 255,
       "Steps": [
         {
-          "AetheryteShortcut": "Western Thanalan - Horizon",
+          "TerritoryId": 145,
+          "InteractionType": "UseItem",
+          "ItemId": 30362,
+          "TargetTerritoryId": 140
+        },
+        {
           "Mount": true,
           "Fly": true,
           "DataId": 1008788,
@@ -146,7 +145,8 @@
             "Z": -367.57465
           },
           "TerritoryId": 140,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "NextQuestId": 1438
         }
       ]
     }

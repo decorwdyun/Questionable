@@ -21,6 +21,15 @@
       "Sequence": 1,
       "Steps": [
         {
+          "Position": {
+            "X": -153.18225,
+            "Y": 14.005,
+            "Z": 43.458076
+          },
+          "TerritoryId": 130,
+          "InteractionType": "WalkTo"
+        },
+        {
           "AethernetShortcut": [
             "[Ul'dah] Thaumaturges' Guild",
             "[Ul'dah] Gladiators' Guild"
@@ -69,7 +78,24 @@
             "Z": 8.255066
           },
           "TerritoryId": 131,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
+        },
+        {
+          "Position": {
+            "X": 109.42333,
+            "Y": 8,
+            "Z": 8.92655
+          },
+          "TerritoryId": 131,
+          "InteractionType": "WalkTo"
         },
         {
           "DataId": 2004900,
@@ -79,7 +105,15 @@
             "Z": -35.233154
           },
           "TerritoryId": 131,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 2004899,
@@ -89,7 +123,15 @@
             "Z": -74.05206
           },
           "TerritoryId": 131,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         }
       ]
     },
@@ -120,14 +162,25 @@
             "[Ul'dah] Gladiators' Guild",
             "[Ul'dah] Sapphire Avenue Exchange"
           ],
+          "Position": {
+            "X": 137.68585,
+            "Y": 3.9999998,
+            "Z": -58.555218
+          },
+          "TerritoryId": 131,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 1001679,
           "Position": {
             "X": 140.48975,
             "Y": 4.0099983,
             "Z": -59.80017
           },
+          "StopDistance": 5,
           "TerritoryId": 131,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "NextQuestId": 204
         }
       ]
     }

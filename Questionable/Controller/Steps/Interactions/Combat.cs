@@ -83,6 +83,7 @@ internal static class Combat
                     break;
 
                 case EEnemySpawnType.OverworldEnemies:
+                case EEnemySpawnType.FateEnemies:
                     yield return CreateTask(quest, sequence, step);
                     break;
 

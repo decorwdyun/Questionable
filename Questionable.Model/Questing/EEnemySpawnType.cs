@@ -12,4 +12,5 @@ public enum EEnemySpawnType
     AfterAction,
     AutoOnEnterArea,
     OverworldEnemies,
+    FateEnemies,
 }

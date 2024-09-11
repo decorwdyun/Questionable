@@ -196,8 +196,9 @@ internal sealed class CombatController : IDisposable
 
             // TODO this works as somewhat of a delay between killing enemies if certain items/flags are checked
             // but also delays killing the next enemy a little
-            if (_currentFight == null || _currentFight.Data.SpawnType != EEnemySpawnType.OverworldEnemies ||
-                _currentFight.Data.ComplexCombatDatas.Count == 0)
+            if (_currentFight == null ||
+                _currentFight.Data.SpawnType == EEnemySpawnType.OverworldEnemies ||
+                (_currentFight.Data.SpawnType != EEnemySpawnType.FateEnemies && _currentFight.Data.KillEnemyDataIds.Count > 0))
             {
                 if (battleNpc.IsDead)
                     return 0;
@@ -260,6 +261,13 @@ internal sealed class CombatController : IDisposable
                     if (gameObjectStruct->NamePlateIconId != 0)
                         return 29;
                 }
+            }
+
+            if (_currentFight?.Data.SpawnType == EEnemySpawnType.FateEnemies)
+            {
+                var gameObjectStruct = (GameObject*)gameObject.Address;
+                if (gameObjectStruct->FateId != 0)
+                    return 15;
             }
 
             // stuff trying to kill us

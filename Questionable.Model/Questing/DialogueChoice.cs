@@ -16,6 +16,7 @@ public sealed class DialogueChoice
 
     [JsonConverter(typeof(ExcelRefConverter))]
     public ExcelRef? Answer { get; set; }
+    public bool PromptIsRegularExpression { get; set; }
     public bool AnswerIsRegularExpression { get; set; }
 
     /// <summary>

@@ -104,6 +104,15 @@
             "[Ul'dah] Aetheryte Plaza",
             "[Ul'dah] Gladiators' Guild"
           ],
+          "Position": {
+            "X": -71.1609,
+            "Y": 6.9845705,
+            "Z": 9.066199
+          },
+          "TerritoryId": 131,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 1010281,
           "Position": {
             "X": -70.96979,
@@ -111,7 +120,8 @@
             "Z": 3.982544
           },
           "TerritoryId": 131,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DisableNavmesh": true
         }
       ]
     },
@@ -130,7 +140,8 @@
             "Z": -3.9215698
           },
           "TerritoryId": 130,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "NextQuestId": 202
         }
       ]
     }

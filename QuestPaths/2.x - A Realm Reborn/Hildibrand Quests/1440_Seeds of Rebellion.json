@@ -37,7 +37,15 @@
             "Z": 425.58936
           },
           "TerritoryId": 138,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 2004325,
@@ -47,7 +55,15 @@
             "Z": 514.7324
           },
           "TerritoryId": 138,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 2004326,
@@ -57,7 +73,15 @@
             "Z": 596.765
           },
           "TerritoryId": 138,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         }
       ]
     },
@@ -73,7 +97,16 @@
             "Z": 684.1992
           },
           "TerritoryId": 138,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "ExcelSheet": "Addon",
+              "Prompt": 102445,
+              "PromptIsRegularExpression": true,
+              "Yes": true
+            }
+          ]
         },
         {
           "Comment": "Fight some Mandragoras",
@@ -84,7 +117,7 @@
           },
           "TerritoryId": 138,
           "InteractionType": "Combat",
-          "EnemySpawnType": "OverworldEnemies",
+          "EnemySpawnType": "FateEnemies",
           "KillEnemyDataIds": [
             2950,
             2951,
@@ -100,8 +133,16 @@
       "Steps": [
         {
           "AetheryteShortcut": "Eastern La Noscea - Costa Del Sol",
-          "Mount": true,
           "Fly": true,
+          "Position": {
+            "X": 581.46533,
+            "Y": 14.587067,
+            "Z": 393.86594
+          },
+          "TerritoryId": 137,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 1009319,
           "Position": {
             "X": 581.3534,
@@ -142,7 +183,8 @@
             "Z": 10.879639
           },
           "TerritoryId": 137,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "NextQuestId": 1441
         }
       ]
     }

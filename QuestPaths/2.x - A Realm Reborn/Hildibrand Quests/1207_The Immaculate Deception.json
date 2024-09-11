@@ -18,6 +18,7 @@
             "Y": 12,
             "Z": -5.5390625
           },
+          "StopDistance": 4,
           "TerritoryId": 130,
           "InteractionType": "AcceptQuest"
         }
@@ -54,7 +55,15 @@
             "Z": -221.27112
           },
           "TerritoryId": 145,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 1003940,
@@ -64,7 +73,15 @@
             "Z": -241.07733
           },
           "TerritoryId": 145,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 1003939,
@@ -73,8 +90,17 @@
             "Y": 4.137387,
             "Z": -240.98578
           },
+          "StopDistance": 4,
           "TerritoryId": 145,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         }
       ]
     },
@@ -205,7 +231,15 @@
             "Z": 151.87305
           },
           "TerritoryId": 145,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 2003005,
@@ -215,7 +249,15 @@
             "Z": 166.0028
           },
           "TerritoryId": 145,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 2003004,
@@ -225,7 +267,15 @@
             "Z": 187.36548
           },
           "TerritoryId": 145,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         }
       ]
     },
@@ -248,8 +298,16 @@
       "Sequence": 255,
       "Steps": [
         {
-          "Mount": true,
-          "Fly": true,
+          "Position": {
+            "X": -535.8004,
+            "Y": 5.3931885,
+            "Z": -252.96324
+          },
+          "TerritoryId": 145,
+          "InteractionType": "WalkTo",
+          "Fly": true
+        },
+        {
           "DataId": 1005731,
           "Position": {
             "X": -526.8788,
@@ -257,7 +315,8 @@
             "Z": -246.50952
           },
           "TerritoryId": 145,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "NextQuestId": 1315
         }
       ]
     }

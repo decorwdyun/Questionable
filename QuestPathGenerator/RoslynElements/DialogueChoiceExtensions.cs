@@ -32,6 +32,10 @@ internal static class DialogueChoiceExtensions
                             Assignment(nameof(DialogueChoice.Answer), dialogueChoice.Answer,
                                     emptyChoice.Answer)
                                 .AsSyntaxNodeOrToken(),
+                            Assignment(nameof(DialogueChoice.PromptIsRegularExpression),
+                                    dialogueChoice.PromptIsRegularExpression,
+                                    emptyChoice.PromptIsRegularExpression)
+                                .AsSyntaxNodeOrToken(),
                             Assignment(nameof(DialogueChoice.AnswerIsRegularExpression),
                                     dialogueChoice.AnswerIsRegularExpression,
                                     emptyChoice.AnswerIsRegularExpression)

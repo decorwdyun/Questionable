@@ -21,6 +21,15 @@
       "Sequence": 1,
       "Steps": [
         {
+          "Position": {
+            "X": -153.18225,
+            "Y": 14.005,
+            "Z": 43.458076
+          },
+          "TerritoryId": 130,
+          "InteractionType": "WalkTo"
+        },
+        {
           "AethernetShortcut": [
             "[Ul'dah] Thaumaturges' Guild",
             "[Ul'dah] Gladiators' Guild"
@@ -83,7 +92,12 @@
             "Z": 260.57825
           },
           "TerritoryId": 141,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Ul'dah",
+          "AethernetShortcut": [
+            "[Ul'dah] Aetheryte Plaza",
+            "[Ul'dah] Gate of Nald (Central Thanalan)"
+          ]
         }
       ]
     },
@@ -103,7 +117,8 @@
             "Z": -5.661133
           },
           "TerritoryId": 130,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "NextQuestId": 203
         }
       ]
     }

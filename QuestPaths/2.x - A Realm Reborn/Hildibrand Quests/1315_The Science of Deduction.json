@@ -18,6 +18,7 @@
             "Y": 5.4049973,
             "Z": -249.25616
           },
+          "StopDistance": 4,
           "TerritoryId": 145,
           "InteractionType": "AcceptQuest"
         }
@@ -43,7 +44,12 @@
       "Sequence": 2,
       "Steps": [
         {
-          "AetheryteShortcut": "Western Thanalan - Horizon",
+          "TerritoryId": 145,
+          "InteractionType": "UseItem",
+          "ItemId": 30362,
+          "TargetTerritoryId": 140
+        },
+        {
           "Mount": true,
           "DataId": 1008709,
           "Position": {
@@ -70,7 +76,15 @@
             "Z": 12.191956
           },
           "TerritoryId": 140,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "Mount": true,
@@ -82,7 +96,15 @@
             "Z": 65.384766
           },
           "TerritoryId": 140,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "Mount": true,
@@ -94,7 +116,15 @@
             "Z": 158.73962
           },
           "TerritoryId": 140,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         }
       ]
     },
@@ -124,7 +154,15 @@
             "Z": 155.9624
           },
           "TerritoryId": 140,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 2003656,
@@ -134,7 +172,15 @@
             "Z": 159.19727
           },
           "TerritoryId": 140,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 2003659,
@@ -144,7 +190,15 @@
             "Z": 155.90137
           },
           "TerritoryId": 140,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            16
+          ]
         },
         {
           "DataId": 2003657,
@@ -154,7 +208,15 @@
             "Z": 158.12915
           },
           "TerritoryId": 140,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         }
       ]
     },
@@ -169,7 +231,8 @@
             "Z": 157.5188
           },
           "TerritoryId": 140,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "NextQuestId": 1316
         }
       ]
     }

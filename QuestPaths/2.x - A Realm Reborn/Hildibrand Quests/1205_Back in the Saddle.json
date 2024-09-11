@@ -28,8 +28,17 @@
             "Y": 4.0131226,
             "Z": -98.95477
           },
+          "StopDistance": 7,
           "TerritoryId": 130,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 1004331,
@@ -39,7 +48,15 @@
             "Z": -133.22656
           },
           "TerritoryId": 130,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 1001313,
@@ -49,7 +66,15 @@
             "Z": -106.21808
           },
           "TerritoryId": 130,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         }
       ]
     },
@@ -64,7 +89,8 @@
             "Z": -126.51257
           },
           "TerritoryId": 130,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "NextQuestId": 1206
         }
       ]
     }

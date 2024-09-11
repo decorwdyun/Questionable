@@ -428,19 +428,19 @@ internal sealed class InteractionUiController : IDisposable
                 continue;
             }
 
-            string? excelPrompt = ResolveReference(quest, dialogueChoice.ExcelSheet, dialogueChoice.Prompt, false)
-                ?.GetString();
+            StringOrRegex? excelPrompt = ResolveReference(quest, dialogueChoice.ExcelSheet, dialogueChoice.Prompt,
+                    dialogueChoice.PromptIsRegularExpression);
             StringOrRegex? excelAnswer = ResolveReference(quest, dialogueChoice.ExcelSheet, dialogueChoice.Answer,
                 dialogueChoice.AnswerIsRegularExpression);
 
-            if (actualPrompt == null && !string.IsNullOrEmpty(excelPrompt))
+            if (actualPrompt == null && excelPrompt != null)
             {
                 _logger.LogInformation("Unexpected excelPrompt: {ExcelPrompt}", excelPrompt);
                 continue;
             }
 
             if (actualPrompt != null &&
-                (excelPrompt == null || !GameFunctions.GameStringEquals(actualPrompt, excelPrompt)))
+                (excelPrompt == null || !IsMatch(actualPrompt, excelPrompt)))
             {
                 _logger.LogInformation("Unexpected excelPrompt: {ExcelPrompt}, actualPrompt: {ActualPrompt}",
                     excelPrompt, actualPrompt);
@@ -597,9 +597,9 @@ internal sealed class InteractionUiController : IDisposable
                 continue;
             }
 
-            string? excelPrompt = ResolveReference(quest, dialogueChoice.ExcelSheet, dialogueChoice.Prompt, false)
-                ?.GetString();
-            if (excelPrompt == null || !GameFunctions.GameStringEquals(actualPrompt, excelPrompt))
+            StringOrRegex? excelPrompt = ResolveReference(quest, dialogueChoice.ExcelSheet, dialogueChoice.Prompt,
+                    dialogueChoice.PromptIsRegularExpression);
+            if (excelPrompt == null || !IsMatch(actualPrompt, excelPrompt))
             {
                 _logger.LogInformation("Unexpected excelPrompt: {ExcelPrompt}, actualPrompt: {ActualPrompt}",
                     excelPrompt, actualPrompt);

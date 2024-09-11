@@ -62,8 +62,10 @@
           },
           "TerritoryId": 146,
           "InteractionType": "Combat",
-          "EnemySpawnType": "OverworldEnemies",
-          "KillEnemyDataIds": []
+          "EnemySpawnType": "FateEnemies",
+          "KillEnemyDataIds": [
+            2390
+          ]
         }
       ]
     },
@@ -106,7 +108,8 @@
               "Prompt": "TEXT_CHRHDB101_01204_Q2_000_1",
               "Answer": "TEXT_CHRHDB101_01204_Q2A2_000_2"
             }
-          ]
+          ],
+          "NextQuestId": 1205
         }
       ]
     }
