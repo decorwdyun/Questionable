@@ -80,6 +80,7 @@ internal sealed class PriorityWindow : LWindow
             if (!string.IsNullOrEmpty(_searchString))
             {
                 foundQuests = _questRegistry.AllQuests
+                    .Where(x => x.Id is not SatisfactionSupplyNpcId)
                     .Where(x => x.Info.Name.Contains(_searchString, StringComparison.CurrentCultureIgnoreCase))
                     .Where(x => !_questFunctions.IsQuestUnobtainable(x.Id));
             }
