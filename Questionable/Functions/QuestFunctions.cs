@@ -453,10 +453,26 @@ internal sealed unsafe class QuestFunctions
         return !HasCompletedPreviousQuests(questInfo, extraCompletedQuest) || !HasCompletedPreviousInstances(questInfo);
     }
 
+    public bool IsQuestLocked(LeveId leveId)
+    {
+        if (IsQuestUnobtainable(leveId))
+            return true;
+
+        // this only checks for the current class
+        IQuestInfo questInfo = _questData.GetQuestInfo(leveId);
+        if (!questInfo.ClassJobs.Contains((EClassJob)_clientState.LocalPlayer!.ClassJob.Id) ||
+            questInfo.Level > _clientState.LocalPlayer.Level)
+            return true;
+
+        return !IsQuestAccepted(leveId) && QuestManager.Instance()->NumLeveAllowances == 0;
+    }
+
     public bool IsQuestUnobtainable(ElementId elementId, ElementId? extraCompletedQuest = null)
     {
         if (elementId is QuestId questId)
             return IsQuestUnobtainable(questId, extraCompletedQuest);
+        else if (elementId is LeveId leveId)
+            return IsQuestUnobtainable(leveId);
         else
             return false;
     }
@@ -464,6 +480,9 @@ internal sealed unsafe class QuestFunctions
     public bool IsQuestUnobtainable(QuestId questId, ElementId? extraCompletedQuest = null)
     {
         var questInfo = (QuestInfo)_questData.GetQuestInfo(questId);
+        if (questInfo.Expansion > (EExpansionVersion)PlayerState.Instance()->MaxExpansion)
+            return true;
+
         if (questInfo.QuestLocks.Count > 0)
         {
             var completedQuests = questInfo.QuestLocks.Count(x => IsQuestComplete(x) || x.Equals(extraCompletedQuest));
@@ -515,15 +534,13 @@ internal sealed unsafe class QuestFunctions
         return false;
     }
 
-    public bool IsQuestLocked(LeveId leveId)
+    private bool IsQuestUnobtainable(LeveId leveId)
     {
-        // this only checks for the current class
         IQuestInfo questInfo = _questData.GetQuestInfo(leveId);
-        if (!questInfo.ClassJobs.Contains((EClassJob)_clientState.LocalPlayer!.ClassJob.Id) ||
-            questInfo.Level > _clientState.LocalPlayer.Level)
+        if (questInfo.Expansion > (EExpansionVersion)PlayerState.Instance()->MaxExpansion)
             return true;
 
-        return !IsQuestAccepted(leveId) && QuestManager.Instance()->NumLeveAllowances == 0;
+        return false;
     }
 
     private bool HasCompletedPreviousQuests(QuestInfo questInfo, ElementId? extraCompletedQuest)

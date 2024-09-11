@@ -81,7 +81,7 @@ internal sealed class PriorityWindow : LWindow
             {
                 foundQuests = _questRegistry.AllQuests
                     .Where(x => x.Info.Name.Contains(_searchString, StringComparison.CurrentCultureIgnoreCase))
-                    .Where(x => x.Id is not QuestId questId || !_questFunctions.IsQuestUnobtainable(questId));
+                    .Where(x => !_questFunctions.IsQuestUnobtainable(x.Id));
             }
             else
             {

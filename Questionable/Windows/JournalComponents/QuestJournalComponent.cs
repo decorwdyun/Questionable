@@ -224,12 +224,17 @@ internal sealed class QuestJournalComponent
         string len = 9999.ToString(CultureInfo.CurrentCulture);
         ImGui.PushFont(UiBuilder.MonoFont);
 
-        string text =
-            $"{count.ToString(CultureInfo.CurrentCulture).PadLeft(len.Length)} / {total.ToString(CultureInfo.CurrentCulture).PadLeft(len.Length)}";
-        if (count == total)
-            ImGui.TextColored(ImGuiColors.ParsedGreen, text);
+        if (total == 0)
+            ImGui.TextColored(ImGuiColors.DalamudGrey, $"{"-".PadLeft(len.Length)} / {"-".PadLeft(len.Length)}");
         else
-            ImGui.TextUnformatted(text);
+        {
+            string text =
+                $"{count.ToString(CultureInfo.CurrentCulture).PadLeft(len.Length)} / {total.ToString(CultureInfo.CurrentCulture).PadLeft(len.Length)}";
+            if (count == total)
+                ImGui.TextColored(ImGuiColors.ParsedGreen, text);
+            else
+                ImGui.TextUnformatted(text);
+        }
 
         ImGui.PopFont();
     }
