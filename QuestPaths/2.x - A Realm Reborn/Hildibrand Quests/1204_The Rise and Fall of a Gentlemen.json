@@ -35,7 +35,6 @@
       "Steps": [
         {
           "AetheryteShortcut": "Eastern Thanalan - Camp Drybone",
-          "Mount": true,
           "Fly": true,
           "DataId": 1005709,
           "Position": {
@@ -53,7 +52,6 @@
       "Steps": [
         {
           "AetheryteShortcut": "Southern Thanalan - Forgotten Springs",
-          "Mount": true,
           "Fly": true,
           "Position": {
             "X": -273.9414,
@@ -63,8 +61,13 @@
           "TerritoryId": 146,
           "InteractionType": "Combat",
           "EnemySpawnType": "FateEnemies",
-          "KillEnemyDataIds": [
-            2390
+          "ComplexCombatData": [
+            {
+              "DataId": 2390
+            },
+            {
+              "DataId": 2391
+            }
           ]
         }
       ]
@@ -74,7 +77,6 @@
       "Steps": [
         {
           "AetheryteShortcut": "Eastern Thanalan - Camp Drybone",
-          "Mount": true,
           "Fly": true,
           "DataId": 1005709,
           "Position": {
@@ -92,7 +94,6 @@
       "Steps": [
         {
           "AetheryteShortcut": "Southern Thanalan - Forgotten Springs",
-          "Mount": true,
           "Fly": true,
           "DataId": 1005710,
           "Position": {

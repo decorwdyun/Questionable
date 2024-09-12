@@ -23,7 +23,6 @@
       "Steps": [
         {
           "AetheryteShortcut": "Coerthas Central Highlands - Camp Dragonhead",
-          "Mount": true,
           "Fly": true,
           "DataId": 1008739,
           "Position": {
@@ -70,7 +69,6 @@
       "Sequence": 4,
       "Steps": [
         {
-          "Mount": true,
           "DataId": 2003741,
           "Position": {
             "X": 394.7965,
@@ -87,7 +85,6 @@
       "Sequence": 5,
       "Steps": [
         {
-          "Mount": true,
           "DataId": 1008752,
           "Position": {
             "X": 487.81555,
@@ -136,7 +133,6 @@
           "TargetTerritoryId": 140
         },
         {
-          "Mount": true,
           "Fly": true,
           "DataId": 1008788,
           "Position": {

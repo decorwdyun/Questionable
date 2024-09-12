@@ -185,13 +185,16 @@ internal static class AethernetShortcut
         {
             logger.LogInformation("Moving to aethernet shortcut");
             _moving = true;
+            float distance = from switch
+            {
+                _ when from.IsFirmamentAetheryte() => 4.4f,
+                EAetheryteLocation.UldahChamberOfRule => 5f,
+                _ when AetheryteConverter.IsLargeAetheryte(from) => 10.9f,
+                _ => 6.9f,
+            };
             movementController.NavigateTo(EMovementType.Quest, (uint)from, aetheryteData.Locations[from],
                 false, true,
-                from.IsFirmamentAetheryte()
-                    ? 4.4f
-                    : AetheryteConverter.IsLargeAetheryte(from)
-                        ? 10.9f
-                        : 6.9f);
+                distance);
         }
 
         private void DoTeleport()

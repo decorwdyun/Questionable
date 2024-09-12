@@ -28,7 +28,6 @@
       "Steps": [
         {
           "AetheryteShortcut": "Eastern La Noscea - Costa Del Sol",
-          "Mount": true,
           "Fly": true,
           "DataId": 1009305,
           "Position": {
@@ -64,7 +63,8 @@
               "Prompt": "TEXT_CHRHDB301_01438_Q2_000_000",
               "Answer": "TEXT_CHRHDB301_01438_A2_000_030"
             }
-          ]
+          ],
+          "Fly": true
         }
       ]
     },
@@ -72,7 +72,6 @@
       "Sequence": 3,
       "Steps": [
         {
-          "Mount": true,
           "Fly": true,
           "DataId": 1009310,
           "Position": {
@@ -97,7 +96,8 @@
             "Z": 421.01147
           },
           "TerritoryId": 137,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
@@ -119,6 +119,16 @@
     {
       "Sequence": 6,
       "Steps": [
+        {
+          "Position": {
+            "X": 582.44116,
+            "Y": 14.587065,
+            "Z": 394.23407
+          },
+          "TerritoryId": 137,
+          "InteractionType": "WalkTo",
+          "Fly": true
+        },
         {
           "DataId": 1009317,
           "Position": {
@@ -143,6 +153,7 @@
           },
           "TerritoryId": 137,
           "InteractionType": "CompleteQuest",
+          "Fly": true,
           "NextQuestId": 1439
         }
       ]

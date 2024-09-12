@@ -22,7 +22,6 @@
       "Steps": [
         {
           "AetheryteShortcut": "Central Thanalan - Black Brush Station",
-          "Mount": true,
           "Fly": true,
           "DataId": 1011714,
           "Position": {
@@ -46,14 +45,10 @@
             "Z": 43.9917
           },
           "TerritoryId": 141,
-          "InteractionType": "Interact"
-        },
-        {
+          "InteractionType": "Say",
           "ChatMessage": {
             "Key": "TEXT_CHRHDB505_00502_SAYTODO_000_000"
-          },
-          "TerritoryId": 141,
-          "InteractionType": "Say"
+          }
         }
       ]
     },
@@ -61,9 +56,17 @@
       "Sequence": 3,
       "Steps": [
         {
+          "Position": {
+            "X": 159.84998,
+            "Y": 37.381317,
+            "Z": 174.60776
+          },
+          "TerritoryId": 153,
+          "InteractionType": "WalkTo",
           "AetheryteShortcut": "South Shroud - Quarrymill",
-          "Mount": true,
-          "Fly": true,
+          "Fly": true
+        },
+        {
           "DataId": 1011722,
           "Position": {
             "X": 159.68555,

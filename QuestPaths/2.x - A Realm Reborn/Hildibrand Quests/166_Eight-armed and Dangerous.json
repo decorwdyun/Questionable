@@ -18,6 +18,7 @@
             "Y": 17.44805,
             "Z": 448.69153
           },
+          "StopDistance": 7,
           "TerritoryId": 137,
           "InteractionType": "AcceptQuest"
         }
@@ -32,6 +33,15 @@
             "[Ul'dah] Aetheryte Plaza",
             "[Ul'dah] Thaumaturges' Guild"
           ],
+          "Position": {
+            "X": -153.18225,
+            "Y": 14.005,
+            "Z": 43.458076
+          },
+          "TerritoryId": 130,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 1010160,
           "Position": {
             "X": -144.64032,
@@ -46,6 +56,15 @@
     {
       "Sequence": 2,
       "Steps": [
+        {
+          "Position": {
+            "X": -153.18225,
+            "Y": 14.005,
+            "Z": 43.458076
+          },
+          "TerritoryId": 130,
+          "InteractionType": "WalkTo"
+        },
         {
           "AethernetShortcut": [
             "[Ul'dah] Thaumaturges' Guild",
@@ -70,6 +89,15 @@
             "[Ul'dah] Gladiators' Guild",
             "[Ul'dah] Thaumaturges' Guild"
           ],
+          "Position": {
+            "X": -153.18225,
+            "Y": 14.005,
+            "Z": 43.458076
+          },
+          "TerritoryId": 130,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 1010160,
           "Position": {
             "X": -144.64032,
@@ -84,6 +112,15 @@
     {
       "Sequence": 4,
       "Steps": [
+        {
+          "Position": {
+            "X": -127.24249,
+            "Y": 7.999999,
+            "Z": -55.6639
+          },
+          "TerritoryId": 130,
+          "InteractionType": "WalkTo"
+        },
         {
           "DataId": 1010188,
           "Position": {
@@ -100,14 +137,23 @@
       "Sequence": 5,
       "Steps": [
         {
+          "Position": {
+            "X": -123.05803,
+            "Y": 1.363661,
+            "Z": -142.65125
+          },
+          "TerritoryId": 130,
+          "InteractionType": "WalkTo"
+        },
+        {
           "AethernetShortcut": [
             "[Ul'dah] Aetheryte Plaza",
             "[Ul'dah] Gladiators' Guild"
           ],
           "Position": {
-            "X": -71.1609,
-            "Y": 6.9845705,
-            "Z": 9.066199
+            "X": -72.12142,
+            "Y": 6.9845715,
+            "Z": 8.82207
           },
           "TerritoryId": 131,
           "InteractionType": "WalkTo"
@@ -119,6 +165,7 @@
             "Y": 6.9839683,
             "Z": 3.982544
           },
+          "StopDistance": 7,
           "TerritoryId": 131,
           "InteractionType": "Interact",
           "DisableNavmesh": true
@@ -133,6 +180,15 @@
             "[Ul'dah] Gladiators' Guild",
             "[Ul'dah] Thaumaturges' Guild"
           ],
+          "Position": {
+            "X": -153.18225,
+            "Y": 14.005,
+            "Z": 43.458076
+          },
+          "TerritoryId": 130,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 1010287,
           "Position": {
             "X": -142.71765,

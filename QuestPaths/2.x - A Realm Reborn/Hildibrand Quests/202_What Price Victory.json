@@ -49,8 +49,17 @@
       "Sequence": 2,
       "Steps": [
         {
-          "Mount": true,
           "AetheryteShortcut": "Central Thanalan - Black Brush Station",
+          "Position": {
+            "X": -60.649715,
+            "Y": -11.872707,
+            "Z": -61.934204
+          },
+          "TerritoryId": 141,
+          "InteractionType": "WalkTo",
+          "Fly": true
+        },
+        {
           "DataId": 1010293,
           "Position": {
             "X": -61.387024,
@@ -66,7 +75,6 @@
       "Sequence": 3,
       "Steps": [
         {
-          "Mount": true,
           "Fly": true,
           "DataId": 1010298,
           "Position": {
@@ -83,7 +91,6 @@
       "Sequence": 4,
       "Steps": [
         {
-          "Mount": true,
           "Fly": true,
           "DataId": 1010310,
           "Position": {
@@ -110,6 +117,15 @@
             "[Ul'dah] Aetheryte Plaza",
             "[Ul'dah] Thaumaturges' Guild"
           ],
+          "Position": {
+            "X": -153.18225,
+            "Y": 14.005,
+            "Z": 43.458076
+          },
+          "TerritoryId": 130,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 1010290,
           "Position": {
             "X": -144.73187,

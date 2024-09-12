@@ -26,6 +26,15 @@
             "[Ul'dah] Aetheryte Plaza",
             "[Ul'dah] Thaumaturges' Guild"
           ],
+          "Position": {
+            "X": -171.53638,
+            "Y": 17.999998,
+            "Z": 66.511505
+          },
+          "TerritoryId": 130,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 1011681,
           "Position": {
             "X": -182.29956,
@@ -33,7 +42,15 @@
             "Z": 56.90088
           },
           "TerritoryId": 130,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            16
+          ]
         },
         {
           "DataId": 1003897,
@@ -43,7 +60,15 @@
             "Z": 60.53247
           },
           "TerritoryId": 130,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 1001294,
@@ -53,7 +78,15 @@
             "Z": 72.129395
           },
           "TerritoryId": 130,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 1001708,
@@ -63,7 +96,15 @@
             "Z": 80.88806
           },
           "TerritoryId": 130,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         }
       ]
     },
@@ -102,14 +143,14 @@
       "Sequence": 4,
       "Steps": [
         {
-          "Mount": true,
           "Position": {
             "X": -345.65482,
             "Y": 23,
             "Z": -352.02484
           },
           "TerritoryId": 140,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "Fly": true
         }
       ]
     },

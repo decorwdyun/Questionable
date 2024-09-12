@@ -18,7 +18,7 @@
             "Y": 5.4049973,
             "Z": -249.25616
           },
-          "StopDistance": 4,
+          "StopDistance": 5,
           "TerritoryId": 145,
           "InteractionType": "AcceptQuest"
         }
@@ -50,7 +50,6 @@
           "TargetTerritoryId": 140
         },
         {
-          "Mount": true,
           "DataId": 1008709,
           "Position": {
             "X": -431.7846,
@@ -67,7 +66,6 @@
       "Steps": [
         {
           "AetheryteShortcut": "Western Thanalan - Horizon",
-          "Mount": true,
           "Fly": true,
           "DataId": 1008713,
           "Position": {
@@ -87,7 +85,6 @@
           ]
         },
         {
-          "Mount": true,
           "Fly": true,
           "DataId": 1002022,
           "Position": {
@@ -107,7 +104,6 @@
           ]
         },
         {
-          "Mount": true,
           "Fly": true,
           "DataId": 1008715,
           "Position": {
@@ -171,6 +167,7 @@
             "Y": 13.504211,
             "Z": 159.19727
           },
+          "StopDistance": 4.5,
           "TerritoryId": 140,
           "InteractionType": "Interact",
           "CompletionQuestVariablesFlags": [
@@ -180,6 +177,25 @@
             null,
             null,
             128
+          ]
+        },
+        {
+          "DataId": 2003657,
+          "Position": {
+            "X": -80.18622,
+            "Y": 13.412659,
+            "Z": 158.12915
+          },
+          "StopDistance": 4.5,
+          "TerritoryId": 140,
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
           ]
         },
         {
@@ -198,24 +214,6 @@
             null,
             null,
             16
-          ]
-        },
-        {
-          "DataId": 2003657,
-          "Position": {
-            "X": -80.18622,
-            "Y": 13.412659,
-            "Z": 158.12915
-          },
-          "TerritoryId": 140,
-          "InteractionType": "Interact",
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            64
           ]
         }
       ]

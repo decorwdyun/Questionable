@@ -65,6 +65,15 @@
       "Sequence": 3,
       "Steps": [
         {
+          "Position": {
+            "X": -147.13564,
+            "Y": 11.999999,
+            "Z": -5.086131
+          },
+          "TerritoryId": 130,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 1005716,
           "Position": {
             "X": -144.76239,
@@ -117,7 +126,7 @@
             "Y": 12,
             "Z": 0.99176025
           },
-          "StopDistance": 4,
+          "StopDistance": 7,
           "TerritoryId": 130,
           "InteractionType": "CompleteQuest",
           "NextQuestId": 1207

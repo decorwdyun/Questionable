@@ -44,7 +44,8 @@
             "Z": 375.17358
           },
           "TerritoryId": 137,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
@@ -59,7 +60,8 @@
             "Z": 350.3623
           },
           "TerritoryId": 137,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
@@ -74,7 +76,8 @@
             "Z": 447.13513
           },
           "TerritoryId": 137,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },

@@ -21,6 +21,15 @@
       "Sequence": 1,
       "Steps": [
         {
+          "Position": {
+            "X": 44.860275,
+            "Y": 34.02289,
+            "Z": -12.268097
+          },
+          "TerritoryId": 131,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 2005164,
           "Position": {
             "X": 43.07617,
@@ -35,6 +44,25 @@
     {
       "Sequence": 2,
       "Steps": [
+        {
+          "Position": {
+            "X": 45.576427,
+            "Y": 34,
+            "Z": -23.220316
+          },
+          "TerritoryId": 131,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "Position": {
+            "X": 49.565746,
+            "Y": 33.999992,
+            "Z": -25.594622
+          },
+          "TerritoryId": 131,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true
+        },
         {
           "DataId": 2005165,
           "Position": {
@@ -51,6 +79,25 @@
       "Sequence": 3,
       "Steps": [
         {
+          "Position": {
+            "X": 53.15642,
+            "Y": 33.999992,
+            "Z": -25.133741
+          },
+          "TerritoryId": 131,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "Position": {
+            "X": 62.437984,
+            "Y": 28.992012,
+            "Z": -34.336155
+          },
+          "TerritoryId": 131,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true
+        },
+        {
           "DataId": 2005166,
           "Position": {
             "X": 74.96753,
@@ -65,6 +112,25 @@
     {
       "Sequence": 4,
       "Steps": [
+        {
+          "Position": {
+            "X": 62.437984,
+            "Y": 28.992012,
+            "Z": -34.336155
+          },
+          "TerritoryId": 131,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "Position": {
+            "X": 45.576427,
+            "Y": 34,
+            "Z": -23.220316
+          },
+          "TerritoryId": 131,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true
+        },
         {
           "DataId": 1011697,
           "Position": {
@@ -87,8 +153,17 @@
             "Y": 34,
             "Z": 29.984009
           },
+          "StopDistance": 7,
           "TerritoryId": 131,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 1011694,
@@ -97,8 +172,17 @@
             "Y": 33.999992,
             "Z": 29.43457
           },
+          "StopDistance": 7,
           "TerritoryId": 131,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 1011695,
@@ -107,8 +191,17 @@
             "Y": 33.999992,
             "Z": 30.044922
           },
+          "StopDistance": 7,
           "TerritoryId": 131,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         }
       ]
     },

@@ -26,9 +26,9 @@
             "[Ul'dah] Gladiators' Guild"
           ],
           "Position": {
-            "X": -71.1609,
-            "Y": 6.9845705,
-            "Z": 9.066199
+            "X": -72.12142,
+            "Y": 6.9845715,
+            "Z": 8.82207
           },
           "TerritoryId": 131,
           "InteractionType": "WalkTo"
@@ -74,7 +74,6 @@
       "Steps": [
         {
           "AetheryteShortcut": "Eastern Thanalan - Camp Drybone",
-          "Mount": true,
           "Fly": true,
           "DataId": 1010161,
           "Position": {
@@ -121,6 +120,15 @@
             "[Ul'dah] Aetheryte Plaza",
             "[Ul'dah] Gladiators' Guild"
           ],
+          "Position": {
+            "X": -72.12142,
+            "Y": 6.9845715,
+            "Z": 8.82207
+          },
+          "TerritoryId": 131,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 1010330,
           "Position": {
             "X": -69.5354,
@@ -129,6 +137,7 @@
           },
           "TerritoryId": 131,
           "InteractionType": "CompleteQuest",
+          "DisableNavmesh": true,
           "NextQuestId": 490
         }
       ]
