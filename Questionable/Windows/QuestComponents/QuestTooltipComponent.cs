@@ -117,7 +117,7 @@ internal sealed class QuestTooltipComponent
                 else
                 {
                     using var _ = ImRaii.Disabled();
-                    _uiUtils.ChecklistItem($"Unknown Quest ({q})", ImGuiColors.DalamudGrey, FontAwesomeIcon.Question);
+                    _uiUtils.ChecklistItem($"Unknown Quest ({q.QuestId})", ImGuiColors.DalamudGrey, FontAwesomeIcon.Question);
                 }
             }
         }
@@ -180,7 +180,7 @@ internal sealed class QuestTooltipComponent
                     _ => "None",
                 };
 
-                GrandCompany currentGrandCompany = ~_questFunctions.GetGrandCompany();
+                GrandCompany currentGrandCompany = _questFunctions.GetGrandCompany();
                 _uiUtils.ChecklistItem($"Grand Company: {gcName}", actualQuestInfo.GrandCompany == currentGrandCompany);
             }
         }

@@ -46,7 +46,18 @@
           },
           "TerritoryId": 928,
           "InteractionType": "WalkTo",
-          "RestartNavigationIfCancelled": false
+          "RestartNavigationIfCancelled": false,
+          "DelaySecondsAtStart": 2
+        },
+        {
+          "Position": {
+            "X": -234.40671,
+            "Y": 30,
+            "Z": 168.78214
+          },
+          "TerritoryId": 928,
+          "InteractionType": "WalkTo",
+          "DelaySecondsAtStart": 2
         },
         {
           "Position": {
@@ -106,7 +117,8 @@
           },
           "TerritoryId": 928,
           "InteractionType": "WalkTo",
-          "DisableNavmesh": true
+          "DisableNavmesh": true,
+          "DelaySecondsAtStart": 2
         },
         {
           "Position": {
@@ -116,7 +128,8 @@
           },
           "TerritoryId": 928,
           "InteractionType": "WalkTo",
-          "RestartNavigationIfCancelled": false
+          "RestartNavigationIfCancelled": false,
+          "DelaySecondsAtStart": 2
         },
         {
           "Position": {
@@ -126,7 +139,8 @@
           },
           "TerritoryId": 928,
           "InteractionType": "WalkTo",
-          "RestartNavigationIfCancelled": false
+          "RestartNavigationIfCancelled": false,
+          "DelaySecondsAtStart": 2
         },
         {
           "Position": {
@@ -144,7 +158,8 @@
               "Y": -249.74661,
               "Z": -301.74612
             }
-          }
+          },
+          "DelaySecondsAtStart": 2
         },
         {
           "DataId": 2011269,

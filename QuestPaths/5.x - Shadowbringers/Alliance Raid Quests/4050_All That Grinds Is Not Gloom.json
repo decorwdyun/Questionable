@@ -26,6 +26,11 @@
               "Type": "List",
               "Prompt": "TEXT_LUCKTA521_04050_Q1_000_000",
               "Answer": "TEXT_LUCKTA521_04050_A1_000_002"
+            },
+            {
+              "Type": "List",
+              "Prompt": "TEXT_LUCKTA521_04050_Q2_000_000",
+              "Answer": "TEXT_LUCKTA521_04050_A2_000_001"
             }
           ]
         }
@@ -43,7 +48,8 @@
           },
           "TerritoryId": 814,
           "InteractionType": "Interact",
-          "TargetTerritoryId": 895
+          "TargetTerritoryId": 895,
+          "Fly": true
         },
         {
           "DataId": 2010830,
@@ -93,6 +99,7 @@
           },
           "TerritoryId": 896,
           "InteractionType": "Interact",
+          "DelaySecondsAtStart": 2,
           "CompletionQuestVariablesFlags": [
             null,
             null,

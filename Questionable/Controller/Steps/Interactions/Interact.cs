@@ -16,7 +16,10 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class Interact
 {
-    internal sealed class Factory(GameFunctions gameFunctions, Configuration configuration, ICondition condition,
+    internal sealed class Factory(
+        GameFunctions gameFunctions,
+        Configuration configuration,
+        ICondition condition,
         ILoggerFactory loggerFactory)
         : ITaskFactory
     {
@@ -54,14 +57,14 @@ internal static class Interact
 
             yield return Interact(step.DataId.Value, quest, step.InteractionType,
                 step.TargetTerritoryId != null || quest.Id is SatisfactionSupplyNpcId ||
-                step.SkipConditions is { StepIf.Never: true }, step.PickUpItemId);
+                step.SkipConditions is { StepIf.Never: true }, step.PickUpItemId, step.SkipConditions?.StepIf);
         }
 
         internal ITask Interact(uint dataId, Quest? quest, EInteractionType interactionType,
-            bool skipMarkerCheck = false, uint? pickUpItemId = null)
+            bool skipMarkerCheck = false, uint? pickUpItemId = null, SkipStepConditions? skipConditions = null)
         {
-            return new DoInteract(dataId, quest, interactionType, skipMarkerCheck, pickUpItemId, gameFunctions,
-                condition, loggerFactory.CreateLogger<DoInteract>());
+            return new DoInteract(dataId, quest, interactionType, skipMarkerCheck, pickUpItemId, skipConditions,
+                gameFunctions, condition, loggerFactory.CreateLogger<DoInteract>());
         }
     }
 
@@ -71,6 +74,7 @@ internal static class Interact
         EInteractionType interactionType,
         bool skipMarkerCheck,
         uint? pickUpItemId,
+        SkipStepConditions? skipConditions,
         GameFunctions gameFunctions,
         ICondition condition,
         ILogger<DoInteract> logger)
@@ -94,6 +98,13 @@ internal static class Interact
             if (gameObject == null)
             {
                 logger.LogWarning("No game object with dataId {DataId}", dataId);
+                return false;
+            }
+
+            if (!gameObject.IsTargetable && skipConditions is { Never: false, NotTargetable: true })
+            {
+                logger.LogInformation("Not interacting with {DataId} because it is not targetable (but skippable)",
+                    dataId);
                 return false;
             }
 

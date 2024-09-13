@@ -174,7 +174,8 @@
           "InteractionType": "Say",
           "ChatMessage": {
             "Key": "TEXT_LUCKTA301_03952_SAYTODO_000_220"
-          }
+          },
+          "DelaySecondsAtStart": 5
         }
       ]
     },
