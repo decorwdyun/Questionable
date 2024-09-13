@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using Dalamud.Interface;
@@ -18,6 +19,7 @@ namespace Questionable.Windows.QuestComponents;
 
 internal sealed class EventInfoComponent
 {
+    [SuppressMessage("ReSharper", "CollectionNeverUpdated.Local")]
     private readonly List<EventQuest> _eventQuests =
     [
     ];
@@ -45,6 +47,7 @@ internal sealed class EventInfoComponent
         _pluginInterface = pluginInterface;
     }
 
+    [SuppressMessage("ReSharper", "UnusedMember.Local")]
     private static DateTime AtDailyReset(DateOnly date)
     {
         return new DateTime(date, new TimeOnly(14, 59), DateTimeKind.Utc);

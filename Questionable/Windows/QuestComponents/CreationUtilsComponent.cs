@@ -70,7 +70,7 @@ internal sealed class CreationUtilsComponent
         _logger = logger;
     }
 
-    public unsafe void Draw()
+    public void Draw()
     {
         Debug.Assert(_clientState.LocalPlayer != null, "_clientState.LocalPlayer != null");
 
@@ -90,58 +90,64 @@ internal sealed class CreationUtilsComponent
         }
 
 #if false
-        var questManager = QuestManager.Instance();
-        if (questManager != null)
-        {
-            for (int i = questManager->TrackedQuests.Length - 1; i >= 0; --i)
+        unsafe {
+            var questManager = QuestManager.Instance();
+            if (questManager != null)
             {
-                var trackedQuest = questManager->TrackedQuests[i];
-                switch (trackedQuest.QuestType)
+                for (int i = questManager->TrackedQuests.Length - 1; i >= 0; --i)
                 {
-                    default:
-                        ImGui.Text($"Tracked quest {i}: {trackedQuest.QuestType}, {trackedQuest.Index}");
-                        break;
+                    var trackedQuest = questManager->TrackedQuests[i];
+                    switch (trackedQuest.QuestType)
+                    {
+                        default:
+                            ImGui.Text($"Tracked quest {i}: {trackedQuest.QuestType}, {trackedQuest.Index}");
+                            break;
 
-                    case 1:
-                        //_questRegistry.TryGetQuest(questManager->NormalQuests[trackedQuest.Index].QuestId,
-                        //    out var quest);
-                        ImGui.Text(
-                            $"Quest: {questManager->NormalQuests[trackedQuest.Index].QuestId}, {trackedQuest.Index}");
-                        break;
+                        case 1:
+                            //_questRegistry.TryGetQuest(questManager->NormalQuests[trackedQuest.Index].QuestId,
+                            //    out var quest);
+                            ImGui.Text(
+                                $"Quest: {questManager->NormalQuests[trackedQuest.Index].QuestId}, {trackedQuest.Index}");
+                            break;
 
-                    case 2:
-                        ImGui.Text($"Leve: {questManager->LeveQuests[trackedQuest.Index].LeveId}, {trackedQuest.Index}");
-                        break;
+                        case 2:
+                            ImGui.Text($"Leve: {questManager->LeveQuests[trackedQuest.Index].LeveId}, {trackedQuest.Index}");
+                            break;
+                    }
                 }
             }
         }
 #endif
 
 #if false
-        var questManager = QuestManager.Instance();
-        if (questManager != null)
-        {
-            for (int i = 0; i < questManager->DailyQuests.Length; ++i)
+        unsafe {
+            var questManager = QuestManager.Instance();
+            if (questManager != null)
             {
-                var dailyQuest = questManager->DailyQuests[i];
-                ImGui.Text($"Daily Quest {i}: {dailyQuest.QuestId}, {dailyQuest.IsCompleted}");
+                for (int i = 0; i < questManager->DailyQuests.Length; ++i)
+                {
+                    var dailyQuest = questManager->DailyQuests[i];
+                    ImGui.Text($"Daily Quest {i}: {dailyQuest.QuestId}, {dailyQuest.IsCompleted}");
+                }
             }
         }
 #endif
 
 #if false
-        var director = UIState.Instance()->DirectorTodo.Director;
-        if (director != null)
-        {
-            ImGui.Text($"Director: {director->ContentId}");
-            ImGui.Text($"Seq: {director->Sequence}");
-            ImGui.Text($"Ico: {director->IconId}");
-            if (director->EventHandlerInfo != null)
+        unsafe {
+            var director = UIState.Instance()->DirectorTodo.Director;
+            if (director != null)
             {
-                ImGui.Text($"  EHI CI: {director->EventHandlerInfo->EventId.ContentId}");
-                ImGui.Text($"  EHI EI: {director->EventHandlerInfo->EventId.Id}");
-                ImGui.Text($"  EHI EEI: {director->EventHandlerInfo->EventId.EntryId}");
-                ImGui.Text($"  EHI F: {director->EventHandlerInfo->Flags}");
+                ImGui.Text($"Director: {director->ContentId}");
+                ImGui.Text($"Seq: {director->Sequence}");
+                ImGui.Text($"Ico: {director->IconId}");
+                if (director->EventHandlerInfo != null)
+                {
+                    ImGui.Text($"  EHI CI: {director->EventHandlerInfo->EventId.ContentId}");
+                    ImGui.Text($"  EHI EI: {director->EventHandlerInfo->EventId.Id}");
+                    ImGui.Text($"  EHI EEI: {director->EventHandlerInfo->EventId.EntryId}");
+                    ImGui.Text($"  EHI F: {director->EventHandlerInfo->Flags}");
+                }
             }
         }
 #endif
