@@ -59,7 +59,8 @@ internal sealed class QuestData
                 .Where(x => x.RowId > 0)
                 .Where(x => x.IssuerLocation.Row > 0)
                 .Select(x => new QuestInfo(x, questChapters.GetValueOrDefault(x.RowId),
-                    startingCities.GetValueOrDefault(x.RowId))),
+                    startingCities.GetValueOrDefault(x.RowId)))
+                .Where(x => x.QuestId.Value != 1428),
             ..dataManager.GetExcelSheet<SatisfactionNpc>()!
                 .Where(x => x.RowId > 0)
                 .Select(x => new SatisfactionSupplyInfo(x)),
@@ -161,9 +162,22 @@ internal sealed class QuestData
         */
 
         // initial city quests are side quests
-        ((QuestInfo)_quests[new QuestId(107)]).StartingCity = 1;
-        ((QuestInfo)_quests[new QuestId(39)]).StartingCity = 2;
-        ((QuestInfo)_quests[new QuestId(594)]).StartingCity = 3;
+        // unclear if 470 can be started as the required quest isn't available anymore
+        ushort[] limsaSideQuests =
+            [107, 111, 112, 122, 663, 475, 472, 476, 470, 473, 474, 477, 486, 478, 479, 487, 59, 400, 401, 693, 405];
+        foreach (var questId in limsaSideQuests)
+            ((QuestInfo)_quests[new QuestId(questId)]).StartingCity = 1;
+
+        ushort[] gridaniaQuests =
+            [39, 1, 32, 34, 37, 172, 127, 130, 60, 220, 378];
+        foreach (var questId in gridaniaQuests)
+            ((QuestInfo)_quests[new QuestId(questId)]).StartingCity = 2;
+
+        ushort[] uldahSideQuests =
+            [594, 389, 390, 321, 304, 322, 388, 308, 326, 1429, 58, 687, 341, 504, 531, 506, 530, 573, 342, 505];
+        foreach (var questId in uldahSideQuests)
+            ((QuestInfo)_quests[new QuestId(questId)]).StartingCity = 3;
+
 
         // follow-up quests to picking a GC
         AddGcFollowUpQuests();
