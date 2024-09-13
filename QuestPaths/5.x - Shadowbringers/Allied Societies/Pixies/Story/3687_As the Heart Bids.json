@@ -151,10 +151,12 @@
             "Z": 586.48047
           },
           "TerritoryId": 816,
-          "InteractionType": "SinglePlayerDuty",
-          "$": "Sequence 7 is the duty itself"
+          "InteractionType": "SinglePlayerDuty"
         }
       ]
+    },
+    {
+      "Sequence": 7
     },
     {
       "Sequence": 8,
