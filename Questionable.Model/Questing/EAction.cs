@@ -16,6 +16,7 @@ public enum EAction
     Cure2 = 135,
     Esuna = 7568,
     Physick = 190,
+    AspectedBenefic = 3595,
     FormShift = 4262,
     BuffetSanuwa = 4931,
     BuffetGriffin = 4583,
