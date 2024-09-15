@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects.Types;
-using FFXIVClientStructs.FFXIV.Client.Game;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Common;
 using Questionable.Functions;
@@ -60,6 +57,21 @@ internal static class Action
 
                 if (gameObject.IsTargetable)
                 {
+                    if (action == EAction.Diagnosis)
+                    {
+                        uint eukrasiaAura = 2606;
+                        // If SGE have Eukrasia status, we need to remove it.
+                        if (gameFunctions.HasStatus(eukrasiaAura))
+                        {
+                            if (GameFunctions.RemoveStatus(eukrasiaAura))
+                            {
+                                // Introduce a delay of 2 seconds before using the next action (otherwise it will try and use Eukrasia Diagnosis)
+                                _continueAt = DateTime.Now.AddSeconds(2);
+                                return true; 
+                            }
+                        }
+                    }
+                    
                     _usedAction = gameFunctions.UseAction(gameObject, action);
                     _continueAt = DateTime.Now.AddSeconds(0.5);
                     return true;
