@@ -59,6 +59,20 @@
       "Sequence": 3,
       "Steps": [
         {
+          "Position": {
+            "X": -27.96634,
+            "Y": 41.707367,
+            "Z": -482.99057
+          },
+          "TerritoryId": 815,
+          "InteractionType": "WalkTo",
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
+        },
+        {
           "DataId": 2010811,
           "Position": {
             "X": -16.922302,

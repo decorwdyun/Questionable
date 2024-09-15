@@ -60,6 +60,7 @@ internal sealed class MovementOverrideController
 
         // leaving Idyllshire through the west gate attempts to run into this wall
         new BlacklistedPoint(399, new(-514.4851f, 149.63762f, -480.58087f), new(-528.78656f, 151.17374f, -473.07077f), 5, true),
+        new BlacklistedPoint(399, new(-534.5f, 153, -476.75f), new(-528.78656f, 151.17374f, -473.07077f), 5, true),
 
         // Idyllshire: random rocks in the north, passable one way only
         new BlacklistedPoint(478, new(14.5f, 215.25f, -101.5f), new(18.133032f, 215.44998f, -107.83075f), 5),
