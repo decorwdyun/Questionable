@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Dalamud.Game.ClientState.Objects.Types;
 using Microsoft.Extensions.Logging;
