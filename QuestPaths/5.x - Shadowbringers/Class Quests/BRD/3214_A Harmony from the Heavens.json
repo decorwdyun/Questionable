@@ -109,6 +109,7 @@
             "Y": -18.800003,
             "Z": 95.26196
           },
+          "StopDistance": 7,
           "TerritoryId": 132,
           "InteractionType": "Interact",
           "AetheryteShortcut": "Gridania",
@@ -129,6 +130,7 @@
             "Y": -18.800003,
             "Z": 95.26196
           },
+          "StopDistance": 7,
           "TerritoryId": 132,
           "InteractionType": "CompleteQuest"
         }

@@ -35,17 +35,6 @@
       "Sequence": 1,
       "Steps": [
         {
-          "Position": {
-            "X": 219.98953,
-            "Y": 7.9999647,
-            "Z": 683.2227
-          },
-          "TerritoryId": 135,
-          "InteractionType": "WalkTo",
-          "AetheryteShortcut": "Lower La Noscea - Moraby Drydocks",
-          "Fly": true
-        },
-        {
           "DataId": 1023885,
           "Position": {
             "X": 217.30359,
@@ -53,7 +42,8 @@
             "Z": 686.427
           },
           "TerritoryId": 135,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Lower La Noscea - Moraby Drydocks"
         }
       ]
     },
@@ -96,7 +86,15 @@
           "TerritoryId": 135,
           "InteractionType": "Action",
           "Action": "Heavy Swing",
-          "Fly": true
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 2010150,
@@ -108,7 +106,15 @@
           "TerritoryId": 135,
           "InteractionType": "Action",
           "Action": "Heavy Swing",
-          "Fly": true
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 2010151,
@@ -120,7 +126,15 @@
           "TerritoryId": 135,
           "InteractionType": "Action",
           "Action": "Heavy Swing",
-          "Fly": true
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         }
       ]
     },

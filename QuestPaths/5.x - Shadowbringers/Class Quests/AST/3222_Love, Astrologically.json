@@ -1,5 +1,5 @@
 {
-  "$schema": "https://git.carvel.li/plogon_enjoyer/Questionable/raw/branch/temp/QuestPaths/quest-v1.json",
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "plogon_enjoyer",
   "QuestSequence": [
     {
@@ -102,6 +102,18 @@
       "Sequence": 5,
       "Steps": [
         {
+          "Position": {
+            "X": 243.48306,
+            "Y": 324.1,
+            "Z": -301.10074
+          },
+          "TerritoryId": 155,
+          "InteractionType": "WalkTo",
+          "Fly": true,
+          "AetheryteShortcut": "Coerthas Central Highlands - Camp Dragonhead",
+          "$": "Y is slightly off the ground; else vnav would pathfind -through- the ground"
+        },
+        {
           "DataId": 1028390,
           "Position": {
             "X": 244.64783,
@@ -109,9 +121,7 @@
             "Z": -303.3036
           },
           "TerritoryId": 155,
-          "InteractionType": "Interact",
-          "Fly": true,
-          "AetheryteShortcut": "Coerthas Central Highlands - Camp Dragonhead"
+          "InteractionType": "Interact"
         }
       ]
     },
