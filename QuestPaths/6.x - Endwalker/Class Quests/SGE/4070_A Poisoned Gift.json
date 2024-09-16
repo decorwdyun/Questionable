@@ -77,6 +77,7 @@
             "Y": -24.721268,
             "Z": 205.34058
           },
+          "StopDistance": 6,
           "TerritoryId": 138,
           "InteractionType": "Action",
           "AetheryteShortcut": "Western La Noscea - Aleport",
@@ -99,6 +100,7 @@
             "Y": -24.724764,
             "Z": 205.24902
           },
+          "StopDistance": 6,
           "TerritoryId": 138,
           "InteractionType": "Interact",
           "AetheryteShortcut": "Western La Noscea - Aleport",

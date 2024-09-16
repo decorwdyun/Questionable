@@ -122,6 +122,7 @@
             "Z": -215.22852
           },
           "TerritoryId": 141,
+          "Fly": true,
           "InteractionType": "Interact",
           "AetheryteShortcut": "Central Thanalan - Black Brush Station",
           "SkipConditions": {

@@ -121,6 +121,7 @@
             "Y": 213.03185,
             "Z": -110.7348
           },
+          "StopDistance": 7,
           "TerritoryId": 478,
           "InteractionType": "Interact",
           "AetheryteShortcut": "Idyllshire",
@@ -142,6 +143,7 @@
             "Y": 212.84532,
             "Z": -109.9718
           },
+          "StopDistance": 5,
           "TerritoryId": 478,
           "InteractionType": "Interact",
           "AetheryteShortcut": "Idyllshire",
@@ -195,7 +197,6 @@
           "StopDistance": 5,
           "TerritoryId": 399,
           "InteractionType": "SinglePlayerDuty",
-          "Fly": true,
           "AetheryteShortcut": "Idyllshire",
           "AethernetShortcut": [
             "[Idyllshire] Aetheryte Plaza",
@@ -214,6 +215,9 @@
       ]
     },
     {
+      "Sequence": 7
+    },
+    {
       "Sequence": 8,
       "Steps": [
         {
@@ -226,7 +230,6 @@
           "TerritoryId": 399,
           "InteractionType": "Interact",
           "StopDistance": 5,
-          "Fly": true,
           "AetheryteShortcut": "Idyllshire",
           "AethernetShortcut": [
             "[Idyllshire] Aetheryte Plaza",

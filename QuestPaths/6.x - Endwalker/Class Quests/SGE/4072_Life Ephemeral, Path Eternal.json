@@ -68,6 +68,21 @@
       ]
     },
     {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1039288,
+          "Position": {
+            "X": 212.9701,
+            "Y": 52.213486,
+            "Z": -787.50287
+          },
+          "TerritoryId": 398,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
       "Sequence": 255,
       "Steps": [
         {
