@@ -1,7 +1,6 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "liza",
-  "Disabled": true,
+  "Author": "plogon_enjoyer",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -30,7 +29,19 @@
           "TerritoryId": 817,
           "InteractionType": "WalkTo",
           "AetheryteShortcut": "Rak'tika - Fanow",
-          "Fly": true
+          "Fly": true,
+          "RequiredGatheredItems": [
+            {
+              "QuestAcceptedAsClass": "Miner",
+              "ItemId": 29526,
+              "ItemCount": 3
+            },
+            {
+              "QuestAcceptedAsClass": "Botanist",
+              "ItemId": 29552,
+              "ItemCount": 3
+            }
+          ]
         },
         {
           "DataId": 1032643,
