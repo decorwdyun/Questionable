@@ -86,6 +86,11 @@
       "Sequence": 5,
       "Steps": [
         {
+          "TerritoryId": 963,
+          "InteractionType": "AttuneAethernetShard",
+          "AethernetShard": "[Radz-at-Han] The High Crucible of Al-Kimiya"
+        },
+        {
           "DataId": 1040276,
           "Position": {
             "X": -99.076904,

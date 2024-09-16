@@ -50,12 +50,6 @@
       "Sequence": 255,
       "Steps": [
         {
-          "TerritoryId": 963,
-          "InteractionType": "AttuneAethernetShard",
-          "AethernetShard": "[Radz-at-Han] The High Crucible of Al-Kimiya",
-          "$": "TODO This happens in Post-EW MSQ only; should maybe move this to when we're around the alchemist area earlier"
-        },
-        {
           "Position": {
             "X": -21.53136,
             "Y": 1.7999926,
