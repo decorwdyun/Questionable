@@ -6,6 +6,11 @@
       "Sequence": 0,
       "Steps": [
         {
+          "TerritoryId": 962,
+          "InteractionType": "Gather",
+          "ItemsToGather": []
+        },
+        {
           "DataId": 1042241,
           "Position": {
             "X": 222.85791,
@@ -14,7 +19,6 @@
           },
           "TerritoryId": 962,
           "InteractionType": "Interact",
-          "RequiredGatheredItems": [],
           "AetheryteShortcut": "Old Sharlayan",
           "AethernetShortcut": [
             "[Old Sharlayan] Aetheryte Plaza",

@@ -658,9 +658,9 @@ internal sealed class InteractionUiController : IDisposable
                 step.TargetTerritoryId);
 
         if (step != null && (step.TerritoryId != _clientState.TerritoryType || step.TargetTerritoryId == null) &&
-            step.RequiredGatheredItems.Count > 0)
+            step.InteractionType == EInteractionType.Gather)
         {
-            if (_gatheringData.TryGetGatheringPointId(step.RequiredGatheredItems[0].ItemId,
+            if (_gatheringData.TryGetGatheringPointId(step.ItemsToGather[0].ItemId,
                     (EClassJob?)_clientState.LocalPlayer?.ClassJob.Id ?? EClassJob.Adventurer,
                     out GatheringPointId? gatheringPointId) &&
                 _gatheringPointRegistry.TryGetGatheringPoint(gatheringPointId, out GatheringRoot? root))

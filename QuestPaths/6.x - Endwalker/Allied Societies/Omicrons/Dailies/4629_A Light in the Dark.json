@@ -21,16 +21,9 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 1044074,
-          "Position": {
-            "X": -585.90063,
-            "Y": 75.22713,
-            "Z": 256.67188
-          },
           "TerritoryId": 960,
-          "InteractionType": "Interact",
-          "AetheryteShortcut": "Ultima Thule - Reah Tahra",
-          "RequiredGatheredItems": [
+          "InteractionType": "Gather",
+          "ItemsToGather": [
             {
               "QuestAcceptedAsClass": "Miner",
               "ItemId": 38295,
@@ -42,6 +35,17 @@
               "ItemCount": 3
             }
           ]
+        },
+        {
+          "DataId": 1044074,
+          "Position": {
+            "X": -585.90063,
+            "Y": 75.22713,
+            "Z": 256.67188
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Ultima Thule - Reah Tahra"
         }
       ]
     },

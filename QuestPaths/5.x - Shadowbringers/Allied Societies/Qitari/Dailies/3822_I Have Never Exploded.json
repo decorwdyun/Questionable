@@ -21,16 +21,9 @@
       "Sequence": 255,
       "Steps": [
         {
-          "Position": {
-            "X": 788.1569,
-            "Y": -45.82557,
-            "Z": -212.9306
-          },
           "TerritoryId": 817,
-          "InteractionType": "WalkTo",
-          "AetheryteShortcut": "Rak'tika - Fanow",
-          "Fly": true,
-          "RequiredGatheredItems": [
+          "InteractionType": "Gather",
+          "ItemsToGather": [
             {
               "QuestAcceptedAsClass": "Miner",
               "ItemId": 29530,
@@ -42,6 +35,17 @@
               "ItemCount": 3
             }
           ]
+        },
+        {
+          "Position": {
+            "X": 788.1569,
+            "Y": -45.82557,
+            "Z": -212.9306
+          },
+          "TerritoryId": 817,
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Rak'tika - Fanow",
+          "Fly": true
         },
         {
           "DataId": 1032643,

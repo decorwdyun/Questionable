@@ -88,9 +88,7 @@
           "TerritoryId": 817,
           "InteractionType": "WalkTo",
           "AetheryteShortcut": "Rak'tika - Fanow",
-          "Fly": true,
-          "RequiredGatheredItems": [
-          ]
+          "Fly": true
         },
         {
           "DataId": 1032643,

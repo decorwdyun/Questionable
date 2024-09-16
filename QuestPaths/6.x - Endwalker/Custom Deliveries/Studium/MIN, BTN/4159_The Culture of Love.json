@@ -21,6 +21,16 @@
       "Sequence": 1,
       "Steps": [
         {
+          "TerritoryId": 962,
+          "InteractionType": "Gather",
+          "ItemsToGather": [
+            {
+              "ItemId": 35848,
+              "ItemCount": 1
+            }
+          ]
+        },
+        {
           "DataId": 1038503,
           "Position": {
             "X": -367.0863,
@@ -33,12 +43,6 @@
           "AethernetShortcut": [
             "[Old Sharlayan] Aetheryte Plaza",
             "[Old Sharlayan] The Studium"
-          ],
-          "RequiredGatheredItems": [
-            {
-              "ItemId": 35848,
-              "ItemCount": 1
-            }
           ]
         }
       ]

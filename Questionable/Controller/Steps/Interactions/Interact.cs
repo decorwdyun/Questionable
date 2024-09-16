@@ -162,7 +162,7 @@ internal static class Interact
                 if (_interactionState == EInteractionState.InteractionConfirmed)
                     return ETaskResult.TaskComplete;
 
-                if (interactionType == EInteractionType.InternalGather && condition[ConditionFlag.Gathering])
+                if (interactionType == EInteractionType.Gather && condition[ConditionFlag.Gathering])
                     return ETaskResult.TaskComplete;
             }
 

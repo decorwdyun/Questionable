@@ -41,17 +41,12 @@
       "Steps": [
         {
           "TerritoryId": 1185,
-          "InteractionType": "None",
-          "RequiredGatheredItems": [
+          "InteractionType": "Gather",
+          "ItemsToGather": [
             {
               "ItemId": 43913,
               "ItemCount": 1
             }
-          ],
-          "AetheryteShortcut": "Tuliyollal",
-          "AethernetShortcut": [
-            "[Tuliyollal] Aetheryte Plaza",
-            "[Tuliyollal] Wachumeqimeqi"
           ]
         },
         {
@@ -63,7 +58,12 @@
           },
           "TerritoryId": 1185,
           "InteractionType": "CompleteQuest",
-          "NextQuestId": 4994
+          "NextQuestId": 4994,
+          "AetheryteShortcut": "Tuliyollal",
+          "AethernetShortcut": [
+            "[Tuliyollal] Aetheryte Plaza",
+            "[Tuliyollal] Wachumeqimeqi"
+          ]
         }
       ]
     }

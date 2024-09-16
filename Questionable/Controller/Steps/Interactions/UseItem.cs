@@ -72,7 +72,7 @@ internal static class UseItem
                     mountFactory.Mount(140,
                         nextPosition != null ? Mount.EMountIf.AwayFromPosition : Mount.EMountIf.Always,
                         nextPosition),
-                    moveFactory.Move(new MoveTo.MoveParams(140, new(-408.92343f, 23.167036f, -351.16223f), 0.25f,
+                    moveFactory.Move(new MoveTo.MoveParams(140, new(-408.92343f, 23.167036f, -351.16223f), null, 0.25f,
                         DataId: null, DisableNavMesh: true, Sprint: false, Fly: false))
                 ];
             }

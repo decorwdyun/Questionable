@@ -34,8 +34,8 @@
         },
         {
           "TerritoryId": 1073,
-          "InteractionType": "None",
-          "RequiredGatheredItems": [
+          "InteractionType": "Gather",
+          "ItemsToGather": [
             {
               "QuestAcceptedAsClass": "Miner",
               "ItemId": 38287,

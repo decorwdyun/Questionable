@@ -130,6 +130,7 @@
             "Jump",
             "Dive",
             "Craft",
+            "Gather",
             "Snipe",
             "Instruction",
             "AcceptQuest",
@@ -239,13 +240,19 @@
                 "QuestsAccepted": {
                   "type": "array",
                   "items": {
-                    "type": ["number", "string"]
+                    "type": [
+                      "number",
+                      "string"
+                    ]
                   }
                 },
                 "QuestsCompleted": {
                   "type": "array",
                   "items": {
-                    "type": ["number", "string"]
+                    "type": [
+                      "number",
+                      "string"
+                    ]
                   }
                 },
                 "AetheryteLocked": {
@@ -302,13 +309,19 @@
                 "QuestsAccepted": {
                   "type": "array",
                   "items": {
-                    "type": ["number", "string"]
+                    "type": [
+                      "number",
+                      "string"
+                    ]
                   }
                 },
                 "QuestsCompleted": {
                   "type": "array",
                   "items": {
-                    "type": ["number", "string"]
+                    "type": [
+                      "number",
+                      "string"
+                    ]
                   }
                 },
                 "AetheryteLocked": {
@@ -403,41 +416,6 @@
               "minimum": 0,
               "maximum": 255
             }
-          }
-        },
-        "RequiredGatheredItems": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "ItemId": {
-                "type": "number"
-              },
-              "AlternativeItemId": {
-                "description": "For leves that allow you to gather two items with different chance percentage, this is the preferred item if the gathering chance is 100% (after buffs)",
-                "type": "number"
-              },
-              "ItemCount": {
-                "type": "number",
-                "exclusiveMinimum": 0
-              },
-              "Collectability": {
-                "type": "number",
-                "minimum": 0,
-                "maximum": 1000
-              },
-              "QuestAcceptedAsClass": {
-                "type": "string",
-                "enum": [
-                  "Miner",
-                  "Botanist"
-                ]
-              }
-            },
-            "required": [
-              "ItemId",
-              "ItemCount"
-            ]
           }
         },
         "DelaySecondsAtStart": {
@@ -1203,17 +1181,60 @@
               "ItemCount"
             ]
           }
-        }
-      ],
-      "not": {
-        "anyOf": [
-          {
+        },
+        {
+          "if": {
+            "properties": {
+              "InteractionType": {
+                "const": "Gather"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "ItemsToGather": {
+                "type": "array",
+                "description": "Unlike crafting steps, which will always craft a single item id regardless of class, this allows for gathering different items depending on whether you've picked the quest up as miner or botanist",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "ItemId": {
+                      "type": "number"
+                    },
+                    "AlternativeItemId": {
+                      "description": "For leves that allow you to gather two items with different chance percentage, this is the preferred item if the gathering chance is 100% (after buffs)",
+                      "type": "number"
+                    },
+                    "ItemCount": {
+                      "type": "number",
+                      "exclusiveMinimum": 0
+                    },
+                    "Collectability": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1000
+                    },
+                    "QuestAcceptedAsClass": {
+                      "type": "string",
+                      "enum": [
+                        "Miner",
+                        "Botanist"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ItemId",
+                    "ItemCount"
+                  ]
+                }
+              }
+            },
             "required": [
-              "SkipIf"
+              "ItemsToGather"
             ]
           }
-        ]
-      }
+        }
+      ]
     }
   }
 }

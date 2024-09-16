@@ -34,6 +34,16 @@
       "Sequence": 255,
       "Steps": [
         {
+          "TerritoryId": 131,
+          "InteractionType": "Gather",
+          "ItemsToGather": [
+            {
+              "ItemId": 5432,
+              "ItemCount": 10
+            }
+          ]
+        },
+        {
           "DataId": 1002298,
           "Position": {
             "X": -18.997498,
@@ -54,13 +64,7 @@
                 131
               ]
             }
-          },
-          "RequiredGatheredItems": [
-            {
-              "ItemId": 5432,
-              "ItemCount": 10
-            }
-          ]
+          }
         }
       ]
     }

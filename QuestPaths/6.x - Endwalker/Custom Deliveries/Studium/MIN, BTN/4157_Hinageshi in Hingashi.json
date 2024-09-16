@@ -98,6 +98,16 @@
       "Sequence": 5,
       "Steps": [
         {
+          "TerritoryId": 628,
+          "InteractionType": "Gather",
+          "ItemsToGather": [
+            {
+              "ItemId": 35847,
+              "ItemCount": 1
+            }
+          ]
+        },
+        {
           "DataId": 1038508,
           "Position": {
             "X": 114.70203,
@@ -110,12 +120,6 @@
           "AethernetShortcut": [
             "[Kugane] Aetheryte Plaza",
             "[Kugane] The Ruby Bazaar"
-          ],
-          "RequiredGatheredItems": [
-            {
-              "ItemId": 35847,
-              "ItemCount": 1
-            }
           ]
         }
       ]

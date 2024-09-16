@@ -21,16 +21,9 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 2013072,
-          "Position": {
-            "X": 456.65674,
-            "Y": 438.04077,
-            "Z": 310.2312
-          },
           "TerritoryId": 960,
-          "InteractionType": "Interact",
-          "TargetTerritoryId": 960,
-          "RequiredGatheredItems": [
+          "InteractionType": "Gather",
+          "ItemsToGather": [
             {
               "QuestAcceptedAsClass": "Miner",
               "ItemId": 38282,
@@ -41,8 +34,19 @@
               "ItemId": 38306,
               "ItemCount": 3
             }
-          ],
-          "AetheryteShortcut": "Ultima Thule - Base Omicron"
+          ]
+        },
+        {
+          "DataId": 2013072,
+          "Position": {
+            "X": 456.65674,
+            "Y": 438.04077,
+            "Z": 310.2312
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Ultima Thule - Base Omicron",
+          "TargetTerritoryId": 960
         },
         {
           "DataId": 1043417,

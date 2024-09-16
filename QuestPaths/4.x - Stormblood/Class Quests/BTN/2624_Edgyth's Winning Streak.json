@@ -157,6 +157,16 @@
       "Sequence": 255,
       "Steps": [
         {
+          "TerritoryId": 478,
+          "InteractionType": "Gather",
+          "ItemsToGather": [
+            {
+              "ItemId": 17948,
+              "ItemCount": 5
+            }
+          ]
+        },
+        {
           "DataId": 1021349,
           "Position": {
             "X": -43.930786,
@@ -170,13 +180,7 @@
             "[Idyllshire] Aetheryte Plaza",
             "[Idyllshire] West Idyllshire"
           ],
-          "Comment": "Eorzean Time: 4:00-5:59 AM/PM",
-          "RequiredGatheredItems": [
-            {
-              "ItemId": 17948,
-              "ItemCount": 5
-            }
-          ]
+          "Comment": "Eorzean Time: 4:00-5:59 AM/PM"
         }
       ]
     }

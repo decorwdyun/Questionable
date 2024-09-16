@@ -186,14 +186,13 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
                 pointOnFloor = pointOnFloor.Value with { Y = pointOnFloor.Value.Y + (fly ? 3f : 0f) };
 
             _taskQueue.Enqueue(_moveFactory.Move(new MoveTo.MoveParams(territoryId, pointOnFloor ?? averagePosition,
-                50f,
-                Fly: fly, IgnoreDistanceToObject: true)));
+                null, 50f, Fly: fly, IgnoreDistanceToObject: true)));
         }
 
         _taskQueue.Enqueue(new MoveToLandingLocation(territoryId, fly, currentNode, _moveFactory, _gameFunctions,
             _objectTable, _loggerFactory.CreateLogger<MoveToLandingLocation>()));
         _taskQueue.Enqueue(_mountFactory.Unmount());
-        _taskQueue.Enqueue(_interactFactory.Interact(currentNode.DataId, null, EInteractionType.InternalGather, true));
+        _taskQueue.Enqueue(_interactFactory.Interact(currentNode.DataId, null, EInteractionType.Gather, true));
 
         QueueGatherNode(currentNode);
     }

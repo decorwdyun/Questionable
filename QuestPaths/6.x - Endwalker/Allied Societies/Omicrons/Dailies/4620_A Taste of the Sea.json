@@ -47,15 +47,9 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 1044059,
-          "Position": {
-            "X": -15.304871,
-            "Y": 494.9991,
-            "Z": -68.16211
-          },
           "TerritoryId": 1073,
-          "InteractionType": "Interact",
-          "RequiredGatheredItems": [
+          "InteractionType": "Gather",
+          "ItemsToGather": [
             {
               "QuestAcceptedAsClass": "Miner",
               "ItemId": 38289,
@@ -67,6 +61,16 @@
               "ItemCount": 3
             }
           ]
+        },
+        {
+          "DataId": 1044059,
+          "Position": {
+            "X": -15.304871,
+            "Y": 494.9991,
+            "Z": -68.16211
+          },
+          "TerritoryId": 1073,
+          "InteractionType": "Interact"
         }
       ]
     },

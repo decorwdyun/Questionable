@@ -134,8 +134,8 @@ internal sealed class ContextMenuController : IDisposable
             .Single(x => x is SatisfactionSupplyInfo);
         if (_questRegistry.TryGetQuest(info.QuestId, out Quest? quest))
         {
-            var step = quest.FindSequence(0)!.FindStep(0)!;
-            step.RequiredGatheredItems =
+            var step = quest.FindSequence(0)!.Steps.Single(x => x.InteractionType == EInteractionType.Gather);
+            step.ItemsToGather =
             [
                 new GatheredItem
                 {

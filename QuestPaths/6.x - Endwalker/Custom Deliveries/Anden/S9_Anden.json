@@ -6,6 +6,11 @@
       "Sequence": 0,
       "Steps": [
         {
+          "TerritoryId": 816,
+          "InteractionType": "Gather",
+          "ItemsToGather": []
+        },
+        {
           "DataId": 1044547,
           "Position": {
             "X": -241.68768,
@@ -14,7 +19,6 @@
           },
           "TerritoryId": 816,
           "InteractionType": "Interact",
-          "RequiredGatheredItems": [],
           "AetheryteShortcut": "Il Mheg - Lydha Lran",
           "Fly": true,
           "DialogueChoices": [

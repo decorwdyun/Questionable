@@ -137,7 +137,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         // task factories
         serviceCollection.AddTaskFactory<StepDisabled.Factory>();
         serviceCollection.AddTaskFactory<EquipRecommended.BeforeDutyOrInstance>();
-        serviceCollection.AddTaskFactory<GatheringRequiredItems.Factory>();
+        serviceCollection.AddTaskFactory<Gather.Factory>();
         serviceCollection.AddTaskFactory<AetheryteShortcut.Factory>();
         serviceCollection.AddTaskFactory<SkipCondition.Factory>();
         serviceCollection.AddTaskFactory<AethernetShortcut.Factory>();

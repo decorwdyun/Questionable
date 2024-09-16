@@ -6,6 +6,11 @@
       "Sequence": 0,
       "Steps": [
         {
+          "TerritoryId": 478,
+          "InteractionType": "Gather",
+          "ItemsToGather": []
+        },
+        {
           "DataId": 1018393,
           "Position": {
             "X": -60.380005,
@@ -14,7 +19,6 @@
           },
           "TerritoryId": 478,
           "InteractionType": "Interact",
-          "RequiredGatheredItems": [],
           "AetheryteShortcut": "Idyllshire",
           "DialogueChoices": [
             {

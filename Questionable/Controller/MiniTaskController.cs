@@ -81,7 +81,7 @@ internal abstract class MiniTaskController<T>
 
                 while (_taskQueue.TryDequeue(out ITask? nextTask))
                 {
-                    if (nextTask is ILastTask or GatheringRequiredItems.SkipMarker)
+                    if (nextTask is ILastTask or Gather.SkipMarker)
                     {
                         _currentTask = nextTask;
                         return;

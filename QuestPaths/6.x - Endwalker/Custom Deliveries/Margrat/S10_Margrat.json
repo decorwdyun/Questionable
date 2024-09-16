@@ -6,6 +6,11 @@
       "Sequence": 0,
       "Steps": [
         {
+          "TerritoryId": 956,
+          "InteractionType": "Gather",
+          "ItemsToGather": []
+        },
+        {
           "Position": {
             "X": -44.066154,
             "Y": -29.530005,
@@ -14,7 +19,6 @@
           "TerritoryId": 956,
           "InteractionType": "WalkTo",
           "AetheryteShortcut": "Labyrinthos - Sharlayan Hamlet",
-          "RequiredGatheredItems": [],
           "Fly": true
         },
         {

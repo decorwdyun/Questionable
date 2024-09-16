@@ -114,6 +114,22 @@
       "Sequence": 4,
       "Steps": [
         {
+          "TerritoryId": 960,
+          "InteractionType": "Gather",
+          "ItemsToGather": [
+            {
+              "QuestAcceptedAsClass": "Miner",
+              "ItemId": 38276,
+              "ItemCount": 3
+            },
+            {
+              "QuestAcceptedAsClass": "Botanist",
+              "ItemId": 38300,
+              "ItemCount": 3
+            }
+          ]
+        },
+        {
           "DataId": 2013072,
           "Position": {
             "X": 456.65674,
@@ -128,18 +144,6 @@
               "Type": "YesNo",
               "Prompt": "TEXT_BANOMI001_04601_Q5_000_000",
               "Yes": true
-            }
-          ],
-          "RequiredGatheredItems": [
-            {
-              "QuestAcceptedAsClass": "Miner",
-              "ItemId": 38276,
-              "ItemCount": 3
-            },
-            {
-              "QuestAcceptedAsClass": "Botanist",
-              "ItemId": 38300,
-              "ItemCount": 3
             }
           ]
         },

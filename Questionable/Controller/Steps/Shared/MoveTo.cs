@@ -67,7 +67,7 @@ internal static class MoveTo
 
         public ITask Move(MoveParams moveParams)
         {
-            return new MoveInternal(moveParams, movementController, gameFunctions,
+            return new MoveInternal(moveParams, movementController, mountFactory, gameFunctions,
                 loggerFactory.CreateLogger<MoveInternal>(), clientState, dataManager);
         }
 
@@ -95,74 +95,18 @@ internal static class MoveTo
                 $"Wait(territory: {territoryData.GetNameAndId(step.TerritoryId)})");
 
             if (!step.DisableNavmesh)
+            {
                 yield return new WaitConditionTask(() => movementController.IsNavmeshReady,
                     "Wait(navmesh ready)");
 
-            float stopDistance = step.CalculateActualStopDistance();
-            Vector3? position = clientState.LocalPlayer?.Position;
-            float actualDistance = position == null ? float.MaxValue : Vector3.Distance(position.Value, destination);
-
-            // if we teleport to a different zone, assume we always need to move; this is primarily relevant for cases
-            // where you're e.g. in Lakeland, and the step navigates via Crystarium → Tesselation back into the same
-            // zone.
-            //
-            // Side effects of this check being broken include:
-            //   - mounting when near the target npc (if you spawn close enough for the next step)
-            //   - trying to fly when near the target npc (if close enough where no movement is required)
-            if (step.AetheryteShortcut != null &&
-                aetheryteData.TerritoryIds[step.AetheryteShortcut.Value] != step.TerritoryId)
-            {
-                logger.LogDebug("Aetheryte: Changing distance to max, previous distance: {Distance}", actualDistance);
-                actualDistance = float.MaxValue;
-            }
-
-            // Fixes a case where you're initiating the gathering step when standing next to the NPC already
-            // TODO maybe this should be delayed up until starting movement
-            if (questId is SatisfactionSupplyNpcId)
-            {
-                logger.LogDebug("SatisfactionSupply: Changing distance to max, previous distance: {Distance}",
-                    actualDistance);
-                actualDistance = float.MaxValue;
-            }
-
-            if (step.Mount == true)
-                yield return mountFactory.Mount(step.TerritoryId, Mount.EMountIf.Always);
-            else if (step.Mount == false)
-                yield return mountFactory.Unmount();
-
-            if (!step.DisableNavmesh)
-            {
-                if (step.Mount == null)
-                {
-                    Mount.EMountIf mountIf =
-                        actualDistance > stopDistance && step.Fly == true &&
-                        gameFunctions.IsFlyingUnlocked(step.TerritoryId)
-                            ? Mount.EMountIf.Always
-                            : Mount.EMountIf.AwayFromPosition;
-                    yield return mountFactory.Mount(step.TerritoryId, mountIf, destination);
-                }
-
-                if (actualDistance > stopDistance)
-                {
-                    yield return Move(step, destination);
-                }
-                else
-                    logger.LogInformation("Skipping move task, distance: {ActualDistance} < {StopDistance}",
-                        actualDistance, stopDistance);
+                yield return Move(step, destination);
             }
             else
             {
-                // navmesh won't move close enough
-                if (actualDistance > stopDistance)
-                {
-                    yield return Move(step, destination);
-                }
-                else
-                    logger.LogInformation("Skipping move task, distance: {ActualDistance} < {StopDistance}",
-                        actualDistance, stopDistance);
+                yield return Move(step, destination);
             }
 
-            if (step.Fly == true && step.Land == true)
+            if (step is { Fly: true, Land: true })
                 yield return Land();
         }
     }
@@ -171,6 +115,8 @@ internal static class MoveTo
     {
         private readonly string _cannotExecuteAtThisTime;
         private readonly MovementController _movementController;
+        private readonly Mount.Factory _mountFactory;
+        private readonly GameFunctions _gameFunctions;
         private readonly ILogger<MoveInternal> _logger;
         private readonly IClientState _clientState;
 
@@ -178,15 +124,19 @@ internal static class MoveTo
         private readonly Vector3 _destination;
         private readonly MoveParams _moveParams;
         private bool _canRestart;
+        private ITask? _mountTask;
 
         public MoveInternal(MoveParams moveParams,
             MovementController movementController,
+            Mount.Factory mountFactory,
             GameFunctions gameFunctions,
             ILogger<MoveInternal> logger,
             IClientState clientState,
             IDataManager dataManager)
         {
             _movementController = movementController;
+            _mountFactory = mountFactory;
+            _gameFunctions = gameFunctions;
             _logger = logger;
             _clientState = clientState;
             _cannotExecuteAtThisTime = dataManager.GetString<LogMessage>(579, x => x.Text)!;
@@ -225,13 +175,65 @@ internal static class MoveTo
 
         public bool Start()
         {
-            _logger.LogInformation("Moving to {Destination}", _destination.ToString("G", CultureInfo.InvariantCulture));
-            _startAction();
+            float stopDistance = _moveParams.StopDistance ?? QuestStep.DefaultStopDistance;
+            Vector3? position = _clientState.LocalPlayer?.Position;
+            float actualDistance = position == null ? float.MaxValue : Vector3.Distance(position.Value, _destination);
+
+            if (_moveParams.Mount == true)
+            {
+                var mountTask = _mountFactory.Mount(_moveParams.TerritoryId, Mount.EMountIf.Always);
+                if (mountTask.Start())
+                {
+                    _mountTask = mountTask;
+                    return true;
+                }
+            }
+            else if (_moveParams.Mount == false)
+            {
+                var mountTask = _mountFactory.Unmount();
+                if (mountTask.Start())
+                {
+                    _mountTask = mountTask;
+                    return true;
+                }
+            }
+
+            if (!_moveParams.DisableNavMesh)
+            {
+                if (_moveParams.Mount == null)
+                {
+                    Mount.EMountIf mountIf =
+                        actualDistance > stopDistance && _moveParams.Fly &&
+                        _gameFunctions.IsFlyingUnlocked(_moveParams.TerritoryId)
+                            ? Mount.EMountIf.Always
+                            : Mount.EMountIf.AwayFromPosition;
+                    var mountTask = _mountFactory.Mount(_moveParams.TerritoryId, mountIf, _destination);
+                    if (mountTask.Start())
+                    {
+                        _mountTask = mountTask;
+                        return true;
+                    }
+                }
+            }
+
+            _mountTask = new NoOpTask();
             return true;
         }
 
         public ETaskResult Update()
         {
+            if (_mountTask != null)
+            {
+                if (_mountTask.Update() == ETaskResult.TaskComplete)
+                {
+                    _mountTask = null;
+
+                    _logger.LogInformation("Moving to {Destination}", _destination.ToString("G", CultureInfo.InvariantCulture));
+                    _startAction();
+                }
+                return ETaskResult.StillRunning;
+            }
+
             if (_movementController.IsPathfinding || _movementController.IsPathRunning)
                 return ETaskResult.StillRunning;
 
@@ -269,9 +271,17 @@ internal static class MoveTo
         }
     }
 
+    private sealed class NoOpTask : ITask
+    {
+        public bool Start() => true;
+
+        public ETaskResult Update() => ETaskResult.TaskComplete;
+    }
+
     internal sealed record MoveParams(
         ushort TerritoryId,
         Vector3 Destination,
+        bool? Mount = null,
         float? StopDistance = null,
         uint? DataId = null,
         bool DisableNavMesh = false,
@@ -284,6 +294,7 @@ internal static class MoveTo
         public MoveParams(QuestStep step, Vector3 destination)
             : this(step.TerritoryId,
                 destination,
+                step.Mount,
                 step.CalculateActualStopDistance(),
                 step.DataId,
                 step.DisableNavmesh,

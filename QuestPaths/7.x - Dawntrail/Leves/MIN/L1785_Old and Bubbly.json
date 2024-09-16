@@ -23,8 +23,8 @@
         },
         {
           "TerritoryId": 1187,
-          "InteractionType": "None",
-          "RequiredGatheredItems": [
+          "InteractionType": "Gather",
+          "ItemsToGather": [
             {
               "ItemId": 2003539,
               "AlternativeItemId": 2003540,

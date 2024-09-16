@@ -26,6 +26,7 @@ public enum EInteractionType
     Jump,
     Dive,
     Craft,
+    Gather,
     Snipe,
 
     /// <summary>
@@ -38,7 +39,4 @@ public enum EInteractionType
     AcceptLeve,
     InitiateLeve,
     CompleteLeve,
-
-    // unmapped extra types below
-    InternalGather,
 }

@@ -41,8 +41,8 @@ internal sealed class MoveToLandingLocation(
             target.ToString("G", CultureInfo.InvariantCulture), degrees, range);
 
         bool fly = flyBetweenNodes && gameFunctions.IsFlyingUnlocked(territoryId);
-        _moveTask = moveFactory.Move(new MoveTo.MoveParams(territoryId, target, 0.25f, DataId: gatheringNode.DataId,
-            Fly: fly, IgnoreDistanceToObject: true));
+        _moveTask = moveFactory.Move(new MoveTo.MoveParams(territoryId, target, null, 0.25f,
+            DataId: gatheringNode.DataId, Fly: fly, IgnoreDistanceToObject: true));
         return _moveTask.Start();
     }
 

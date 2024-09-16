@@ -16,7 +16,7 @@ using Questionable.Model.Questing;
 
 namespace Questionable.Controller.Steps.Shared;
 
-internal static class GatheringRequiredItems
+internal static class Gather
 {
     internal sealed class Factory(
         IServiceProvider serviceProvider,
@@ -30,20 +30,23 @@ internal static class GatheringRequiredItems
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
-            foreach (var requiredGatheredItems in step.RequiredGatheredItems)
+            if (step.InteractionType != EInteractionType.Gather)
+                yield break;
+
+            foreach (var itemToGather in step.ItemsToGather)
             {
                 EClassJob currentClassJob = (EClassJob)clientState.LocalPlayer!.ClassJob.Id;
                 EClassJob classJob = currentClassJob;
-                if (requiredGatheredItems.QuestAcceptedAsClass != null)
+                if (itemToGather.QuestAcceptedAsClass != null)
                 {
-                    classJob = (EClassJob)requiredGatheredItems.QuestAcceptedAsClass.Value;
+                    classJob = (EClassJob)itemToGather.QuestAcceptedAsClass.Value;
                     if (!IsClassJobQuestWasAcceptedWith(quest.Id, classJob))
                         continue;
                 }
 
-                if (!gatheringData.TryGetGatheringPointId(requiredGatheredItems.ItemId, classJob,
+                if (!gatheringData.TryGetGatheringPointId(itemToGather.ItemId, classJob,
                         out GatheringPointId? gatheringPointId))
-                    throw new TaskException($"No gathering point found for item {requiredGatheredItems.ItemId}");
+                    throw new TaskException($"No gathering point found for item {itemToGather.ItemId}");
 
                 if (!gatheringPointRegistry.TryGetGatheringPoint(gatheringPointId, out GatheringRoot? gatheringRoot))
                     throw new TaskException($"No path found for gathering point {gatheringPointId}");
@@ -53,7 +56,7 @@ internal static class GatheringRequiredItems
                     yield return new SwitchClassJob(classJob, clientState);
                 }
 
-                if (HasRequiredItems(requiredGatheredItems))
+                if (HasRequiredItems(itemToGather))
                     continue;
 
                 using (var _ = logger.BeginScope("Gathering(inner)"))
@@ -81,7 +84,7 @@ internal static class GatheringRequiredItems
                 yield return new WaitConditionTask(() => movementController.IsNavmeshReady,
                     "Wait(navmesh ready)");
 
-                yield return CreateStartGatheringTask(gatheringPointId, requiredGatheredItems);
+                yield return CreateStartGatheringTask(gatheringPointId, itemToGather);
                 yield return new WaitAtEnd.WaitDelay();
             }
         }
@@ -98,13 +101,13 @@ internal static class GatheringRequiredItems
             return true;
         }
 
-        private unsafe bool HasRequiredItems(GatheredItem requiredGatheredItems)
+        private unsafe bool HasRequiredItems(GatheredItem itemToGather)
         {
             InventoryManager* inventoryManager = InventoryManager.Instance();
             return inventoryManager != null &&
-                   inventoryManager->GetInventoryItemCount(requiredGatheredItems.ItemId,
-                       minCollectability: (short)requiredGatheredItems.Collectability) >=
-                   requiredGatheredItems.ItemCount;
+                   inventoryManager->GetInventoryItemCount(itemToGather.ItemId,
+                       minCollectability: (short)itemToGather.Collectability) >=
+                   itemToGather.ItemCount;
         }
 
         private StartGathering CreateStartGatheringTask(GatheringPointId gatheringPointId, GatheredItem gatheredItem)
