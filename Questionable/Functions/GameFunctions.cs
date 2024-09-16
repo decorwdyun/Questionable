@@ -308,6 +308,11 @@ internal sealed unsafe class GameFunctions
         StatusManager* statusManager = battleChara->GetStatusManager();
         return statusManager->HasStatus(statusId);
     }
+    
+    public static bool RemoveStatus(uint statusId)
+    {
+        return StatusManager.ExecuteStatusOff(statusId);
+    }
 
     public bool Mount()
     {
