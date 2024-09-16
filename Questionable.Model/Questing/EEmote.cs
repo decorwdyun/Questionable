@@ -36,4 +36,5 @@ public enum EEmote
     Comfort = 9,
     BattleStance = 121,
     Doze = 13,
+    Box = 166,
 }
