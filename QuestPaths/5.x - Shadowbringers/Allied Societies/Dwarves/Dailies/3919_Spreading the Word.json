@@ -1,7 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -30,6 +29,34 @@
     {
       "Sequence": 1,
       "Steps": [
+        {
+          "DataId": 1033697,
+          "Position": {
+            "X": 705.2262,
+            "Y": 20.93061,
+            "Z": 29.007324
+          },
+          "TerritoryId": 813,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Lakeland - Fort Jobb",
+          "Fly": true
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1033697,
+          "Position": {
+            "X": 705.2262,
+            "Y": 20.93061,
+            "Z": 29.007324
+          },
+          "TerritoryId": 813,
+          "InteractionType": "Emote",
+          "Emote": "psych"
+        }
       ]
     },
     {
@@ -43,6 +70,7 @@
           },
           "TerritoryId": 813,
           "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Lakeland - Ostall Imperative",
           "Fly": true
         },
         {

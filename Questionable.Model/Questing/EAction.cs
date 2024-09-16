@@ -28,6 +28,7 @@ public enum EAction
     MagitekPulse = 8624,
     MagitekThunder = 8625,
     SiphonSnout = 18187,
+    PeculiarLight = 20030,
     Cannonfire = 20121,
     RedGulal = 29382,
     YellowGulal = 29383,
@@ -63,6 +64,7 @@ public static class EActionExtensions
             or EAction.Trample
             or EAction.Fumigate
             or EAction.SiphonSnout
+            or EAction.PeculiarLight
             or EAction.Cannonfire
             or EAction.RedGulal
             or EAction.YellowGulal
