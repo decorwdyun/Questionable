@@ -78,10 +78,10 @@ internal static class Interact
         GameFunctions gameFunctions,
         ICondition condition,
         ILogger<DoInteract> logger)
-        : ITask, IConditionChangeAware
+        : ITask
     {
         private bool _needsUnmount;
-        private EInteractionState _interactionState = EInteractionState.None;
+        private InteractionProgressContext? _progressContext;
         private DateTime _continueAt = DateTime.MinValue;
 
         public Quest? Quest => quest;
@@ -91,6 +91,8 @@ internal static class Interact
             get => interactionType;
             set => interactionType = value;
         }
+
+        public InteractionProgressContext? ProgressContext() => _progressContext;
 
         public bool Start()
         {
@@ -121,9 +123,8 @@ internal static class Interact
 
             if (gameObject.IsTargetable && HasAnyMarker(gameObject))
             {
-                _interactionState = gameFunctions.InteractWith(gameObject)
-                    ? EInteractionState.InteractionTriggered
-                    : EInteractionState.None;
+                _progressContext =
+                    InteractionProgressContext.FromActionUseOrDefault(() => gameFunctions.InteractWith(gameObject));
                 _continueAt = DateTime.Now.AddSeconds(0.5);
                 return true;
             }
@@ -159,7 +160,7 @@ internal static class Interact
             }
             else
             {
-                if (_interactionState == EInteractionState.InteractionConfirmed)
+                if (_progressContext != null && _progressContext.WasSuccessful())
                     return ETaskResult.TaskComplete;
 
                 if (interactionType == EInteractionType.Gather && condition[ConditionFlag.Gathering])
@@ -170,9 +171,8 @@ internal static class Interact
             if (gameObject == null || !gameObject.IsTargetable || !HasAnyMarker(gameObject))
                 return ETaskResult.StillRunning;
 
-            _interactionState = gameFunctions.InteractWith(gameObject)
-                ? EInteractionState.InteractionTriggered
-                : EInteractionState.None;
+            _progressContext =
+                InteractionProgressContext.FromActionUseOrDefault(() => gameFunctions.InteractWith(gameObject));
             _continueAt = DateTime.Now.AddSeconds(0.5);
             return ETaskResult.StillRunning;
         }
@@ -187,33 +187,5 @@ internal static class Interact
         }
 
         public override string ToString() => $"Interact({dataId})";
-
-        public void OnConditionChange(ConditionFlag flag, bool value)
-        {
-            logger.LogDebug("Condition change: {Flag} = {Value}", flag, value);
-            if (_interactionState == EInteractionState.InteractionTriggered &&
-                flag is ConditionFlag.OccupiedInQuestEvent or ConditionFlag.OccupiedInEvent &&
-                value)
-            {
-                logger.LogInformation("Interaction was most likely triggered");
-                _interactionState = EInteractionState.InteractionConfirmed;
-            }
-            else if (dataId is >= 1047901 and <= 1047905 &&
-                     condition[ConditionFlag.Disguised] &&
-                     flag == ConditionFlag
-                         .Mounting71 && // why the fuck is this the flag that's used, instead of OccupiedIn[Quest]Event
-                     value)
-            {
-                logger.LogInformation("(A Knight of Alexandria) Interaction was most likely triggered");
-                _interactionState = EInteractionState.InteractionConfirmed;
-            }
-        }
-
-        private enum EInteractionState
-        {
-            None,
-            InteractionTriggered,
-            InteractionConfirmed,
-        }
     }
 }

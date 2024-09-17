@@ -114,8 +114,6 @@ internal sealed class CombatController : IDisposable
         else
         {
             var nextTarget = FindNextTarget();
-            _logger.LogInformation("NT → {NT}", nextTarget);
-
             if (nextTarget is { IsDead: false })
                 SetTarget(nextTarget);
         }

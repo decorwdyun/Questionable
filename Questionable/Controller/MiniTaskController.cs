@@ -1,23 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps;
+using Questionable.Controller.Steps.Common;
+using Questionable.Controller.Steps.Interactions;
 using Questionable.Controller.Steps.Shared;
+using Questionable.Model.Questing;
 
 namespace Questionable.Controller;
 
 internal abstract class MiniTaskController<T>
 {
-    protected readonly IChatGui _chatGui;
-    protected readonly ILogger<T> _logger;
     protected readonly TaskQueue _taskQueue = new();
 
-    protected MiniTaskController(IChatGui chatGui, ILogger<T> logger)
+    private readonly IChatGui _chatGui;
+    private readonly Mount.Factory _mountFactory;
+    private readonly Combat.Factory _combatFactory;
+    private readonly ICondition _condition;
+    private readonly ILogger<T> _logger;
+
+    protected MiniTaskController(IChatGui chatGui, Mount.Factory mountFactory, Combat.Factory combatFactory,
+        ICondition condition, ILogger<T> logger)
     {
         _chatGui = chatGui;
         _logger = logger;
+        _mountFactory = mountFactory;
+        _combatFactory = combatFactory;
+        _condition = condition;
     }
 
     protected virtual void UpdateCurrentTask()
@@ -56,6 +68,12 @@ internal abstract class MiniTaskController<T>
         ETaskResult result;
         try
         {
+            if (_taskQueue.CurrentTask.WasInterrupted())
+            {
+                InterruptQueueWithCombat();
+                return;
+            }
+
             result = _taskQueue.CurrentTask.Update();
         }
         catch (Exception e)
@@ -122,11 +140,27 @@ internal abstract class MiniTaskController<T>
 
     protected virtual void OnNextStep(ILastTask task)
     {
-
     }
 
     public abstract void Stop(string label);
 
     public virtual IList<string> GetRemainingTaskNames() =>
         _taskQueue.RemainingTasks.Select(x => x.ToString() ?? "?").ToList();
+
+    public void InterruptQueueWithCombat()
+    {
+        _logger.LogWarning("Interrupted, attempting to resolve (if in combat)");
+        if (_condition[ConditionFlag.InCombat])
+        {
+            List<ITask> tasks = [];
+            if (_condition[ConditionFlag.Mounted])
+                tasks.Add(_mountFactory.Unmount());
+
+            tasks.Add(_combatFactory.CreateTask(null, false, EEnemySpawnType.QuestInterruption, [], [], []));
+            tasks.Add(new WaitAtEnd.WaitDelay());
+            _taskQueue.InterruptWith(tasks);
+        }
+        else
+            _taskQueue.InterruptWith([new WaitAtEnd.WaitDelay()]);
+    }
 }

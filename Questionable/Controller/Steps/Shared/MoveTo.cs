@@ -173,6 +173,8 @@ internal static class MoveTo
             _canRestart = moveParams.RestartNavigation;
         }
 
+        public InteractionProgressContext? ProgressContext() => _mountTask?.ProgressContext();
+
         public bool ShouldRedoOnInterrupt() => true;
 
         public bool Start()

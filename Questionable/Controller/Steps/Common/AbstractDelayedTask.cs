@@ -18,6 +18,8 @@ internal abstract class AbstractDelayedTask : ITask
     {
     }
 
+    public virtual InteractionProgressContext? ProgressContext() => null;
+
     public bool Start()
     {
         _continueAt = DateTime.Now.Add(Delay);

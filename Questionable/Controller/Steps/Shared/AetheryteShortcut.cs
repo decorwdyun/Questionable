@@ -60,6 +60,9 @@ internal static class AetheryteShortcut
     {
         private bool _teleported;
         private DateTime _continueAt;
+        private InteractionProgressContext? _progressContext;
+
+        public InteractionProgressContext? ProgressContext() => _progressContext;
 
         public bool Start() => !ShouldSkipTeleport();
 
@@ -200,15 +203,21 @@ internal static class AetheryteShortcut
                 chatGui.PrintError($"[Questionable] Aetheryte {targetAetheryte} is not unlocked.");
                 throw new TaskException("Aetheryte is not unlocked");
             }
-            else if (aetheryteFunctions.TeleportAetheryte(targetAetheryte))
-            {
-                logger.LogInformation("Travelling via aetheryte...");
-                return true;
-            }
             else
             {
-                chatGui.Print("[Questionable] Unable to teleport to aetheryte.");
-                throw new TaskException("Unable to teleport to aetheryte");
+                _progressContext =
+                    InteractionProgressContext.FromActionUseOrDefault(() => aetheryteFunctions.TeleportAetheryte(targetAetheryte));
+                logger.LogInformation("Ctx = {C}", _progressContext);
+                if (_progressContext != null)
+                {
+                    logger.LogInformation("Travelling via aetheryte...");
+                    return true;
+                }
+                else
+                {
+                    chatGui.Print("[Questionable] Unable to teleport to aetheryte.");
+                    throw new TaskException("Unable to teleport to aetheryte");
+                }
             }
         }
 

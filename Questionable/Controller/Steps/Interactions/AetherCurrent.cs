@@ -32,19 +32,29 @@ internal static class AetherCurrent
                 return null;
             }
 
-            return new DoAttune(step.DataId.Value, step.AetherCurrentId.Value, gameFunctions, loggerFactory.CreateLogger<DoAttune>());
+            return new DoAttune(step.DataId.Value, step.AetherCurrentId.Value, gameFunctions,
+                loggerFactory.CreateLogger<DoAttune>());
         }
     }
 
-    private sealed class DoAttune(uint dataId, uint aetherCurrentId, GameFunctions gameFunctions, ILogger<DoAttune> logger) : ITask
+    private sealed class DoAttune(
+        uint dataId,
+        uint aetherCurrentId,
+        GameFunctions gameFunctions,
+        ILogger<DoAttune> logger) : ITask
     {
+        private InteractionProgressContext? _progressContext;
+
+        public InteractionProgressContext? ProgressContext() => _progressContext;
+
         public bool Start()
         {
             if (!gameFunctions.IsAetherCurrentUnlocked(aetherCurrentId))
             {
                 logger.LogInformation("Attuning to aether current {AetherCurrentId} / {DataId}", aetherCurrentId,
                     dataId);
-                gameFunctions.InteractWith(dataId);
+                _progressContext =
+                    InteractionProgressContext.FromActionUseOrDefault(() => gameFunctions.InteractWith(dataId));
                 return true;
             }
 

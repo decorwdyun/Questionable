@@ -35,13 +35,13 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
     private readonly GatheringController _gatheringController;
     private readonly QuestRegistry _questRegistry;
     private readonly IKeyState _keyState;
+    private readonly IChatGui _chatGui;
     private readonly ICondition _condition;
     private readonly IToastGui _toastGui;
     private readonly Configuration _configuration;
     private readonly YesAlreadyIpc _yesAlreadyIpc;
     private readonly TaskCreator _taskCreator;
-    private readonly Mount.Factory _mountFactory;
-    private readonly Combat.Factory _combatFactory;
+    private readonly ILogger<QuestController> _logger;
 
     private readonly string _actionCanceledText;
 
@@ -85,7 +85,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
         Mount.Factory mountFactory,
         Combat.Factory combatFactory,
         IDataManager dataManager)
-        : base(chatGui, logger)
+        : base(chatGui, mountFactory, combatFactory, condition, logger)
     {
         _clientState = clientState;
         _gameFunctions = gameFunctions;
@@ -95,13 +95,13 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
         _gatheringController = gatheringController;
         _questRegistry = questRegistry;
         _keyState = keyState;
+        _chatGui = chatGui;
         _condition = condition;
         _toastGui = toastGui;
         _configuration = configuration;
         _yesAlreadyIpc = yesAlreadyIpc;
         _taskCreator = taskCreator;
-        _mountFactory = mountFactory;
-        _combatFactory = combatFactory;
+        _logger = logger;
 
         _condition.ConditionChange += OnConditionChange;
         _toastGui.Toast += OnNormalToast;
@@ -659,6 +659,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
     }
 
     public bool IsRunning => !_taskQueue.AllTasksComplete;
+    public TaskQueue TaskQueue => _taskQueue;
 
     public sealed class QuestProgress
     {
@@ -811,18 +812,6 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
                 !_condition[ConditionFlag.InFlight])
                 InterruptQueueWithCombat();
         }
-    }
-
-    public void InterruptQueueWithCombat()
-    {
-        _logger.LogWarning("Interrupted with action canceled message, attempting to resolve");
-        List<ITask> tasks = [];
-        if (_condition[ConditionFlag.Mounted])
-            tasks.Add(_mountFactory.Unmount());
-
-        tasks.Add(_combatFactory.CreateTask(null, false, EEnemySpawnType.QuestInterruption, [], [], []));
-        tasks.Add(new WaitAtEnd.WaitDelay());
-        _taskQueue.InterruptWith(tasks);
     }
 
     public void Dispose()

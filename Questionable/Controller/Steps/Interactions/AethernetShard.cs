@@ -34,12 +34,17 @@ internal static class AethernetShard
         GameFunctions gameFunctions,
         ILogger<DoAttune> logger) : ITask
     {
+        private InteractionProgressContext? _progressContext;
+
+        public InteractionProgressContext? ProgressContext() => _progressContext;
+
         public bool Start()
         {
             if (!aetheryteFunctions.IsAetheryteUnlocked(aetheryteLocation))
             {
                 logger.LogInformation("Attuning to aethernet shard {AethernetShard}", aetheryteLocation);
-                gameFunctions.InteractWith((uint)aetheryteLocation, ObjectKind.Aetheryte);
+                _progressContext = InteractionProgressContext.FromActionUseOrDefault(() =>
+                    gameFunctions.InteractWith((uint)aetheryteLocation, ObjectKind.Aetheryte));
                 return true;
             }
 

@@ -33,12 +33,18 @@ internal static class Aetheryte
         GameFunctions gameFunctions,
         ILogger<DoAttune> logger) : ITask
     {
+        private InteractionProgressContext? _progressContext;
+
+        public InteractionProgressContext? ProgressContext() => _progressContext;
+
         public bool Start()
         {
             if (!aetheryteFunctions.IsAetheryteUnlocked(aetheryteLocation))
             {
                 logger.LogInformation("Attuning to aetheryte {Aetheryte}", aetheryteLocation);
-                gameFunctions.InteractWith((uint)aetheryteLocation);
+                _progressContext =
+                    InteractionProgressContext.FromActionUseOrDefault(() =>
+                        gameFunctions.InteractWith((uint)aetheryteLocation));
                 return true;
             }
 

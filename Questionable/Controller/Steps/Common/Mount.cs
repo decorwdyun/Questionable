@@ -44,7 +44,10 @@ internal static class Mount
         ILogger<MountTask> logger) : ITask
     {
         private bool _mountTriggered;
+        private InteractionProgressContext? _progressContext;
         private DateTime _retryAt = DateTime.MinValue;
+
+        public InteractionProgressContext? ProgressContext() => _progressContext;
 
         public bool ShouldRedoOnInterrupt() => true;
 
@@ -108,7 +111,8 @@ internal static class Mount
                     return ETaskResult.TaskComplete;
                 }
 
-                _mountTriggered = gameFunctions.Mount();
+                _progressContext = InteractionProgressContext.FromActionUse(() => _mountTriggered = gameFunctions.Mount());
+
                 _retryAt = DateTime.Now.AddSeconds(5);
                 return ETaskResult.StillRunning;
             }

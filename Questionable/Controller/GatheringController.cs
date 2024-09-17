@@ -43,6 +43,7 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
     private readonly ILoggerFactory _loggerFactory;
     private readonly IGameGui _gameGui;
     private readonly IClientState _clientState;
+    private readonly ILogger<GatheringController> _logger;
     private readonly Regex _revisitRegex;
 
     private CurrentRequest? _currentRequest;
@@ -51,6 +52,7 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
         MovementController movementController,
         MoveTo.Factory moveFactory,
         Mount.Factory mountFactory,
+        Combat.Factory combatFactory,
         Interact.Factory interactFactory,
         GatheringPointRegistry gatheringPointRegistry,
         GameFunctions gameFunctions,
@@ -64,7 +66,7 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
         IGameGui gameGui,
         IClientState clientState,
         IPluginLog pluginLog)
-        : base(chatGui, logger)
+        : base(chatGui, mountFactory, combatFactory, condition, logger)
     {
         _movementController = movementController;
         _moveFactory = moveFactory;
@@ -78,6 +80,7 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
         _loggerFactory = loggerFactory;
         _gameGui = gameGui;
         _clientState = clientState;
+        _logger = logger;
 
         _revisitRegex = dataManager.GetRegex<LogMessage>(5574, x => x.Text, pluginLog)
                         ?? throw new InvalidDataException("No regex found for revisit message");

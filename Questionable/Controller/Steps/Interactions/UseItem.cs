@@ -160,6 +160,9 @@ internal static class UseItem
         private bool _usedItem;
         private DateTime _continueAt;
         private int _itemCount;
+        private InteractionProgressContext? _progressContext;
+
+        public InteractionProgressContext? ProgressContext() => _progressContext;
 
         public ElementId? QuestId => questId;
         public uint ItemId => itemId;
@@ -178,7 +181,7 @@ internal static class UseItem
             if (_itemCount == 0)
                 throw new TaskException($"Don't have any {ItemId} in inventory (checks NQ only)");
 
-            _usedItem = UseItem();
+            _progressContext = InteractionProgressContext.FromActionUseOrDefault(() => _usedItem = UseItem());
             _continueAt = DateTime.Now.Add(GetRetryDelay());
             return true;
         }
@@ -221,7 +224,7 @@ internal static class UseItem
 
             if (!_usedItem)
             {
-                _usedItem = UseItem();
+                _progressContext = InteractionProgressContext.FromActionUseOrDefault(() => _usedItem = UseItem());
                 _continueAt = DateTime.Now.Add(GetRetryDelay());
                 return ETaskResult.StillRunning;
             }
