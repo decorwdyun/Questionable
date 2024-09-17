@@ -46,6 +46,8 @@ internal static class Mount
         private bool _mountTriggered;
         private DateTime _retryAt = DateTime.MinValue;
 
+        public bool ShouldRedoOnInterrupt() => true;
+
         public bool Start()
         {
             if (condition[ConditionFlag.Mounted])
@@ -128,6 +130,8 @@ internal static class Mount
     {
         private bool _unmountTriggered;
         private DateTime _continueAt = DateTime.MinValue;
+
+        public bool ShouldRedoOnInterrupt() => true;
 
         public bool Start()
         {

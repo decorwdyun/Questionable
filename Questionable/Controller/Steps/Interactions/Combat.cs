@@ -101,7 +101,7 @@ internal static class Combat
                 step.CompletionQuestVariablesFlags, step.ComplexCombatData);
         }
 
-        private HandleCombat CreateTask(ElementId elementId, bool isLastStep, EEnemySpawnType enemySpawnType,
+        internal HandleCombat CreateTask(ElementId? elementId, bool isLastStep, EEnemySpawnType enemySpawnType,
             IList<uint> killEnemyDataIds, IList<QuestWorkValue?> completionQuestVariablesFlags,
             IList<ComplexCombatData> complexCombatData)
         {
@@ -115,18 +115,21 @@ internal static class Combat
         }
     }
 
-    private sealed class HandleCombat(
+    internal sealed class HandleCombat(
         bool isLastStep,
         CombatController.CombatData combatData,
         IList<QuestWorkValue?> completionQuestVariableFlags,
         CombatController combatController,
         QuestFunctions questFunctions) : ITask
     {
+        private CombatController.EStatus _status = CombatController.EStatus.NotStarted;
+
         public bool Start() => combatController.Start(combatData);
 
         public ETaskResult Update()
         {
-            if (combatController.Update() != CombatController.EStatus.Complete)
+            _status = combatController.Update();
+            if (_status != CombatController.EStatus.Complete)
                 return ETaskResult.StillRunning;
 
             // if our quest step has any completion flags, we need to check if they are set
@@ -157,11 +160,11 @@ internal static class Combat
         public override string ToString()
         {
             if (QuestWorkUtils.HasCompletionFlags(completionQuestVariableFlags))
-                return "HandleCombat(wait: QW flags)";
+                return $"HandleCombat(wait: QW flags, s: {_status})";
             else if (isLastStep)
-                return "HandleCombat(wait: next sequence)";
+                return $"HandleCombat(wait: next sequence, s: {_status})";
             else
-                return "HandleCombat(wait: not in combat)";
+                return $"HandleCombat(wait: not in combat, s: {_status})";
         }
     }
 }

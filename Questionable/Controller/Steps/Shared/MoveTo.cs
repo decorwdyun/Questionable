@@ -173,6 +173,8 @@ internal static class MoveTo
             _canRestart = moveParams.RestartNavigation;
         }
 
+        public bool ShouldRedoOnInterrupt() => true;
+
         public bool Start()
         {
             float stopDistance = _moveParams.StopDistance ?? QuestStep.DefaultStopDistance;
@@ -313,6 +315,8 @@ internal static class MoveTo
         GameFunctions gameFunctions,
         IClientState clientState) : ITask
     {
+        public bool ShouldRedoOnInterrupt() => true;
+
         public bool Start() => true;
 
         public ETaskResult Update()
@@ -332,6 +336,8 @@ internal static class MoveTo
     {
         private bool _landing;
         private DateTime _continueAt;
+
+        public bool ShouldRedoOnInterrupt() => true;
 
         public bool Start()
         {

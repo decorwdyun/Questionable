@@ -12,11 +12,9 @@ internal abstract class MiniTaskController<T>
 {
     protected readonly IChatGui _chatGui;
     protected readonly ILogger<T> _logger;
+    protected readonly TaskQueue _taskQueue = new();
 
-    protected readonly Queue<ITask> _taskQueue = new();
-    protected ITask? _currentTask;
-
-    public MiniTaskController(IChatGui chatGui, ILogger<T> logger)
+    protected MiniTaskController(IChatGui chatGui, ILogger<T> logger)
     {
         _chatGui = chatGui;
         _logger = logger;
@@ -24,7 +22,7 @@ internal abstract class MiniTaskController<T>
 
     protected virtual void UpdateCurrentTask()
     {
-        if (_currentTask == null)
+        if (_taskQueue.CurrentTask == null)
         {
             if (_taskQueue.TryDequeue(out ITask? upcomingTask))
             {
@@ -33,7 +31,7 @@ internal abstract class MiniTaskController<T>
                     _logger.LogInformation("Starting task {TaskName}", upcomingTask.ToString());
                     if (upcomingTask.Start())
                     {
-                        _currentTask = upcomingTask;
+                        _taskQueue.CurrentTask = upcomingTask;
                         return;
                     }
                     else
@@ -58,13 +56,13 @@ internal abstract class MiniTaskController<T>
         ETaskResult result;
         try
         {
-            result = _currentTask.Update();
+            result = _taskQueue.CurrentTask.Update();
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Failed to update task {TaskName}", _currentTask.ToString());
+            _logger.LogError(e, "Failed to update task {TaskName}", _taskQueue.CurrentTask.ToString());
             _chatGui.PrintError(
-                $"[Questionable] Failed to update task '{_currentTask}', please check /xllog for details.");
+                $"[Questionable] Failed to update task '{_taskQueue.CurrentTask}', please check /xllog for details.");
             Stop("Task failed to update");
             return;
         }
@@ -76,14 +74,14 @@ internal abstract class MiniTaskController<T>
 
             case ETaskResult.SkipRemainingTasksForStep:
                 _logger.LogInformation("{Task} → {Result}, skipping remaining tasks for step",
-                    _currentTask, result);
-                _currentTask = null;
+                    _taskQueue.CurrentTask, result);
+                _taskQueue.CurrentTask = null;
 
                 while (_taskQueue.TryDequeue(out ITask? nextTask))
                 {
                     if (nextTask is ILastTask or Gather.SkipMarker)
                     {
-                        _currentTask = nextTask;
+                        _taskQueue.CurrentTask = nextTask;
                         return;
                     }
                 }
@@ -92,27 +90,27 @@ internal abstract class MiniTaskController<T>
 
             case ETaskResult.TaskComplete:
                 _logger.LogInformation("{Task} → {Result}, remaining tasks: {RemainingTaskCount}",
-                    _currentTask, result, _taskQueue.Count);
+                    _taskQueue.CurrentTask, result, _taskQueue.RemainingTasks.Count());
 
-                OnTaskComplete(_currentTask);
+                OnTaskComplete(_taskQueue.CurrentTask);
 
-                _currentTask = null;
+                _taskQueue.CurrentTask = null;
 
                 // handled in next update
                 return;
 
             case ETaskResult.NextStep:
-                _logger.LogInformation("{Task} → {Result}", _currentTask, result);
+                _logger.LogInformation("{Task} → {Result}", _taskQueue.CurrentTask, result);
 
-                var lastTask = (ILastTask)_currentTask;
-                _currentTask = null;
+                var lastTask = (ILastTask)_taskQueue.CurrentTask;
+                _taskQueue.CurrentTask = null;
 
                 OnNextStep(lastTask);
                 return;
 
             case ETaskResult.End:
-                _logger.LogInformation("{Task} → {Result}", _currentTask, result);
-                _currentTask = null;
+                _logger.LogInformation("{Task} → {Result}", _taskQueue.CurrentTask, result);
+                _taskQueue.CurrentTask = null;
                 Stop("Task end");
                 return;
         }
@@ -130,5 +128,5 @@ internal abstract class MiniTaskController<T>
     public abstract void Stop(string label);
 
     public virtual IList<string> GetRemainingTaskNames() =>
-        _taskQueue.Select(x => x.ToString() ?? "?").ToList();
+        _taskQueue.RemainingTasks.Select(x => x.ToString() ?? "?").ToList();
 }

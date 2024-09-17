@@ -122,6 +122,10 @@ internal sealed class CommandHandler : IDisposable
                 PrintMountId();
                 break;
 
+            case "handle-interrupt":
+                _questController.InterruptQueueWithCombat();
+                break;
+
             case "":
                 _questWindow.Toggle();
                 break;

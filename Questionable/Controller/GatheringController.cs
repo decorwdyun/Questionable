@@ -129,7 +129,7 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
             return EStatus.Complete;
         }
 
-        if (_currentTask == null && _taskQueue.Count == 0)
+        if (_taskQueue.AllTasksComplete)
             GoToNextNode();
 
         UpdateCurrentTask();
@@ -141,8 +141,7 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
     public override void Stop(string label)
     {
         _currentRequest = null;
-        _currentTask = null;
-        _taskQueue.Clear();
+        _taskQueue.Reset();
     }
 
     private void GoToNextNode()
@@ -150,7 +149,7 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
         if (_currentRequest == null)
             return;
 
-        if (_taskQueue.Count > 0)
+        if (!_taskQueue.AllTasksComplete)
             return;
 
         var director = UIState.Instance()->DirectorTodo.Director;
@@ -267,8 +266,8 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
 
     public override IList<string> GetRemainingTaskNames()
     {
-        if (_currentTask != null)
-            return [_currentTask.ToString() ?? "?", .. base.GetRemainingTaskNames()];
+        if (_taskQueue.CurrentTask is {} currentTask)
+            return [currentTask.ToString() ?? "?", .. base.GetRemainingTaskNames()];
         else
             return base.GetRemainingTaskNames();
     }
@@ -277,10 +276,10 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
     {
         if (_revisitRegex.IsMatch(message.TextValue))
         {
-            if (_currentTask is IRevisitAware currentTaskRevisitAware)
+            if (_taskQueue.CurrentTask is IRevisitAware currentTaskRevisitAware)
                 currentTaskRevisitAware.OnRevisit();
 
-            foreach (ITask task in _taskQueue)
+            foreach (ITask task in _taskQueue.RemainingTasks)
             {
                 if (task is IRevisitAware taskRevisitAware)
                     taskRevisitAware.OnRevisit();

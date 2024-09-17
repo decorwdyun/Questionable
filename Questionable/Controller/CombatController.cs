@@ -75,6 +75,7 @@ internal sealed class CombatController : IDisposable
                 Module = combatModule,
                 Data = combatData,
             };
+            _wasInCombat = combatData.SpawnType == EEnemySpawnType.QuestInterruption;
             return true;
         }
         else
@@ -86,7 +87,9 @@ internal sealed class CombatController : IDisposable
         if (_currentFight == null)
             return EStatus.Complete;
 
-        if (_movementController.IsPathfinding || _movementController.IsPathRunning || _movementController.MovementStartedAt > DateTime.Now.AddSeconds(-1))
+        if (_movementController.IsPathfinding ||
+            _movementController.IsPathRunning ||
+            _movementController.MovementStartedAt > DateTime.Now.AddSeconds(-1))
             return EStatus.Moving;
 
         var target = _targetManager.Target;
@@ -111,6 +114,8 @@ internal sealed class CombatController : IDisposable
         else
         {
             var nextTarget = FindNextTarget();
+            _logger.LogInformation("NT → {NT}", nextTarget);
+
             if (nextTarget is { IsDead: false })
                 SetTarget(nextTarget);
         }
@@ -335,7 +340,7 @@ internal sealed class CombatController : IDisposable
 
     public sealed class CombatData
     {
-        public required ElementId ElementId { get; init; }
+        public required ElementId? ElementId { get; init; }
         public required EEnemySpawnType SpawnType { get; init; }
         public required List<uint> KillEnemyDataIds { get; init; }
         public required List<ComplexCombatData> ComplexCombatDatas { get; init; }
@@ -345,6 +350,7 @@ internal sealed class CombatController : IDisposable
 
     public enum EStatus
     {
+        NotStarted,
         InCombat,
         Moving,
         Complete,
