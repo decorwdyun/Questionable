@@ -10,23 +10,18 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class EquipRecommended
 {
-    internal sealed class Factory(IClientState clientState, IChatGui chatGui) : SimpleTaskFactory
+    internal sealed class Factory : SimpleTaskFactory
     {
         public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
             if (step.InteractionType != EInteractionType.EquipRecommended)
                 return null;
 
-            return DoEquip();
-        }
-
-        public ITask DoEquip()
-        {
-            return new DoEquipRecommended(clientState, chatGui);
+            return new EquipTask();
         }
     }
 
-    internal sealed class BeforeDutyOrInstance(IClientState clientState, IChatGui chatGui) : SimpleTaskFactory
+    internal sealed class BeforeDutyOrInstance : SimpleTaskFactory
     {
         public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -35,21 +30,26 @@ internal static class EquipRecommended
                 step.InteractionType != EInteractionType.Combat)
                 return null;
 
-            return new DoEquipRecommended(clientState, chatGui);
+            return new EquipTask();
         }
     }
 
-    private sealed unsafe class DoEquipRecommended(IClientState clientState, IChatGui chatGui) : ITask
+    internal sealed class EquipTask : ITask
+    {
+        public override string ToString() => "EquipRecommended";
+    }
+
+    internal sealed unsafe class DoEquipRecommended(IClientState clientState, IChatGui chatGui) : TaskExecutor<EquipTask>
     {
         private bool _equipped;
 
-        public bool Start()
+        protected override bool Start()
         {
             RecommendEquipModule.Instance()->SetupForClassJob((byte)clientState.LocalPlayer!.ClassJob.Id);
             return true;
         }
 
-        public ETaskResult Update()
+        public override ETaskResult Update()
         {
             var recommendedEquipModule = RecommendEquipModule.Instance();
             if (recommendedEquipModule->IsUpdating)
@@ -94,7 +94,5 @@ internal static class EquipRecommended
 
             return ETaskResult.TaskComplete;
         }
-
-        public override string ToString() => "EquipRecommended";
     }
 }

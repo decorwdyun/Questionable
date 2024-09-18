@@ -121,7 +121,7 @@ public sealed class RendererPlugin : IDalamudPlugin
         if (!directory.Exists)
             return;
 
-        _pluginLog.Information($"Loading locations from {directory}");
+        //_pluginLog.Information($"Loading locations from {directory}");
         foreach (FileInfo fileInfo in directory.GetFiles("*.json"))
         {
             try

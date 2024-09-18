@@ -5,7 +5,6 @@ using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Shared;
 using Questionable.Functions;
@@ -16,12 +15,7 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class Interact
 {
-    internal sealed class Factory(
-        GameFunctions gameFunctions,
-        Configuration configuration,
-        ICondition condition,
-        ILoggerFactory loggerFactory)
-        : ITaskFactory
+    internal sealed class Factory(Configuration configuration) : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -55,58 +49,50 @@ internal static class Interact
             if (sequence.Sequence == 0 && sequence.Steps.IndexOf(step) == 0)
                 yield return new WaitAtEnd.WaitDelay();
 
-            yield return Interact(step.DataId.Value, quest, step.InteractionType,
+            yield return new Task(step.DataId.Value, quest, step.InteractionType,
                 step.TargetTerritoryId != null || quest.Id is SatisfactionSupplyNpcId ||
                 step.SkipConditions is { StepIf.Never: true }, step.PickUpItemId, step.SkipConditions?.StepIf);
         }
+    }
 
-        internal ITask Interact(uint dataId, Quest? quest, EInteractionType interactionType,
-            bool skipMarkerCheck = false, uint? pickUpItemId = null, SkipStepConditions? skipConditions = null)
-        {
-            return new DoInteract(dataId, quest, interactionType, skipMarkerCheck, pickUpItemId, skipConditions,
-                gameFunctions, condition, loggerFactory.CreateLogger<DoInteract>());
-        }
+    internal sealed record Task(
+        uint DataId,
+        Quest? Quest,
+        EInteractionType InteractionType,
+        bool SkipMarkerCheck = false,
+        uint? PickUpItemId = null,
+        SkipStepConditions? SkipConditions = null) : ITask
+    {
+        public override string ToString() => $"Interact({DataId})";
     }
 
     internal sealed class DoInteract(
-        uint dataId,
-        Quest? quest,
-        EInteractionType interactionType,
-        bool skipMarkerCheck,
-        uint? pickUpItemId,
-        SkipStepConditions? skipConditions,
         GameFunctions gameFunctions,
         ICondition condition,
         ILogger<DoInteract> logger)
-        : ITask
+        : TaskExecutor<Task>
     {
         private bool _needsUnmount;
-        private InteractionProgressContext? _progressContext;
         private DateTime _continueAt = DateTime.MinValue;
 
-        public Quest? Quest => quest;
+        public Quest? Quest => Task.Quest;
+        public EInteractionType InteractionType { get; set; }
 
-        public EInteractionType InteractionType
+        protected override bool Start()
         {
-            get => interactionType;
-            set => interactionType = value;
-        }
+            InteractionType = Task.InteractionType;
 
-        public InteractionProgressContext? ProgressContext() => _progressContext;
-
-        public bool Start()
-        {
-            IGameObject? gameObject = gameFunctions.FindObjectByDataId(dataId);
+            IGameObject? gameObject = gameFunctions.FindObjectByDataId(Task.DataId);
             if (gameObject == null)
             {
-                logger.LogWarning("No game object with dataId {DataId}", dataId);
+                logger.LogWarning("No game object with dataId {DataId}", Task.DataId);
                 return false;
             }
 
-            if (!gameObject.IsTargetable && skipConditions is { Never: false, NotTargetable: true })
+            if (!gameObject.IsTargetable && Task.SkipConditions is { Never: false, NotTargetable: true })
             {
                 logger.LogInformation("Not interacting with {DataId} because it is not targetable (but skippable)",
-                    dataId);
+                    Task.DataId);
                 return false;
             }
 
@@ -114,7 +100,7 @@ internal static class Interact
             if (!gameObject.IsTargetable && condition[ConditionFlag.Mounted] &&
                 gameObject.ObjectKind != ObjectKind.GatheringPoint)
             {
-                logger.LogInformation("Preparing interaction for {DataId} by unmounting", dataId);
+                logger.LogInformation("Preparing interaction for {DataId} by unmounting", Task.DataId);
                 _needsUnmount = true;
                 gameFunctions.Unmount();
                 _continueAt = DateTime.Now.AddSeconds(1);
@@ -123,7 +109,7 @@ internal static class Interact
 
             if (gameObject.IsTargetable && HasAnyMarker(gameObject))
             {
-                _progressContext =
+                ProgressContext =
                     InteractionProgressContext.FromActionUseOrDefault(() => gameFunctions.InteractWith(gameObject));
                 _continueAt = DateTime.Now.AddSeconds(0.5);
                 return true;
@@ -132,7 +118,7 @@ internal static class Interact
             return true;
         }
 
-        public ETaskResult Update()
+        public override ETaskResult Update()
         {
             if (DateTime.Now <= _continueAt)
                 return ETaskResult.StillRunning;
@@ -149,29 +135,29 @@ internal static class Interact
                     _needsUnmount = false;
             }
 
-            if (pickUpItemId != null)
+            if (Task.PickUpItemId != null)
             {
                 unsafe
                 {
                     InventoryManager* inventoryManager = InventoryManager.Instance();
-                    if (inventoryManager->GetInventoryItemCount(pickUpItemId.Value) > 0)
+                    if (inventoryManager->GetInventoryItemCount(Task.PickUpItemId.Value) > 0)
                         return ETaskResult.TaskComplete;
                 }
             }
             else
             {
-                if (_progressContext != null && _progressContext.WasSuccessful())
+                if (ProgressContext != null && ProgressContext.WasSuccessful())
                     return ETaskResult.TaskComplete;
 
-                if (interactionType == EInteractionType.Gather && condition[ConditionFlag.Gathering])
+                if (InteractionType == EInteractionType.Gather && condition[ConditionFlag.Gathering])
                     return ETaskResult.TaskComplete;
             }
 
-            IGameObject? gameObject = gameFunctions.FindObjectByDataId(dataId);
+            IGameObject? gameObject = gameFunctions.FindObjectByDataId(Task.DataId);
             if (gameObject == null || !gameObject.IsTargetable || !HasAnyMarker(gameObject))
                 return ETaskResult.StillRunning;
 
-            _progressContext =
+            ProgressContext =
                 InteractionProgressContext.FromActionUseOrDefault(() => gameFunctions.InteractWith(gameObject));
             _continueAt = DateTime.Now.AddSeconds(0.5);
             return ETaskResult.StillRunning;
@@ -179,13 +165,11 @@ internal static class Interact
 
         private unsafe bool HasAnyMarker(IGameObject gameObject)
         {
-            if (skipMarkerCheck || gameObject.ObjectKind != ObjectKind.EventNpc)
+            if (Task.SkipMarkerCheck || gameObject.ObjectKind != ObjectKind.EventNpc)
                 return true;
 
             var gameObjectStruct = (FFXIVClientStructs.FFXIV.Client.Game.Object.GameObject*)gameObject.Address;
             return gameObjectStruct->NamePlateIconId != 0;
         }
-
-        public override string ToString() => $"Interact({dataId})";
     }
 }

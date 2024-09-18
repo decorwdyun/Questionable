@@ -11,7 +11,6 @@ using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Character;
 using LLib;
 using Lumina.Excel.GeneratedSheets;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Common;
 using Questionable.Data;
@@ -28,14 +27,9 @@ internal static class MoveTo
 {
     internal sealed class Factory(
         MovementController movementController,
-        GameFunctions gameFunctions,
-        ICondition condition,
-        IDataManager dataManager,
         IClientState clientState,
         AetheryteData aetheryteData,
         TerritoryData territoryData,
-        ILoggerFactory loggerFactory,
-        Mount.Factory mountFactory,
         ILogger<Factory> logger) : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
@@ -46,7 +40,7 @@ internal static class MoveTo
             }
             else if (step is { DataId: not null, StopDistance: not null })
             {
-                return [ExpectToBeNearDataId(step.DataId.Value, step.StopDistance.Value)];
+                return [new WaitForNearDataId(step.DataId.Value, step.StopDistance.Value)];
             }
             else if (step is { InteractionType: EInteractionType.AttuneAetheryte, Aetheryte: not null })
             {
@@ -60,27 +54,6 @@ internal static class MoveTo
             return [];
         }
 
-        public ITask Move(QuestStep step, Vector3 destination)
-        {
-            return Move(new MoveParams(step, destination));
-        }
-
-        public ITask Move(MoveParams moveParams)
-        {
-            return new MoveInternal(moveParams, movementController, mountFactory, gameFunctions,
-                loggerFactory.CreateLogger<MoveInternal>(), clientState, dataManager);
-        }
-
-        public ITask Land()
-        {
-            return new LandTask(clientState, condition, loggerFactory.CreateLogger<LandTask>());
-        }
-
-        public ITask ExpectToBeNearDataId(uint dataId, float stopDistance)
-        {
-            return new WaitForNearDataId(dataId, stopDistance, gameFunctions, clientState);
-        }
-
         public IEnumerable<ITask> CreateMountTasks(ElementId questId, QuestStep step, Vector3 destination)
         {
             if (step.InteractionType == EInteractionType.Jump && step.JumpDestination != null &&
@@ -91,146 +64,149 @@ internal static class MoveTo
                 yield break;
             }
 
-            yield return new WaitConditionTask(() => clientState.TerritoryType == step.TerritoryId,
+            yield return new WaitCondition.Task(() => clientState.TerritoryType == step.TerritoryId,
                 $"Wait(territory: {territoryData.GetNameAndId(step.TerritoryId)})");
 
             if (!step.DisableNavmesh)
             {
-                yield return new WaitConditionTask(() => movementController.IsNavmeshReady,
+                yield return new WaitCondition.Task(() => movementController.IsNavmeshReady,
                     "Wait(navmesh ready)");
 
-                yield return Move(step, destination);
+                yield return new MoveTask(step, destination);
             }
             else
             {
-                yield return Move(step, destination);
+                yield return new MoveTask(step, destination);
             }
 
             if (step is { Fly: true, Land: true })
-                yield return Land();
+                yield return new LandTask();
         }
     }
 
-    private sealed class MoveInternal : ITask, IToastAware
+    internal sealed class MoveExecutor : TaskExecutor<MoveTask>, IToastAware
     {
         private readonly string _cannotExecuteAtThisTime;
         private readonly MovementController _movementController;
-        private readonly Mount.Factory _mountFactory;
         private readonly GameFunctions _gameFunctions;
-        private readonly ILogger<MoveInternal> _logger;
+        private readonly ILogger<MoveExecutor> _logger;
         private readonly IClientState _clientState;
+        private readonly Mount.MountExecutor _mountExecutor;
+        private readonly Mount.UnmountExecutor _unmountExecutor;
 
-        private readonly Action _startAction;
-        private readonly Vector3 _destination;
-        private readonly MoveParams _moveParams;
+        private Action _startAction = null!;
+        private Vector3 _destination;
         private bool _canRestart;
-        private ITask? _mountTask;
+        private ITaskExecutor? _nestedExecutor;
 
-        public MoveInternal(MoveParams moveParams,
+        public MoveExecutor(
             MovementController movementController,
-            Mount.Factory mountFactory,
             GameFunctions gameFunctions,
-            ILogger<MoveInternal> logger,
+            ILogger<MoveExecutor> logger,
             IClientState clientState,
-            IDataManager dataManager)
+            IDataManager dataManager,
+            Mount.MountExecutor mountExecutor,
+            Mount.UnmountExecutor unmountExecutor)
         {
             _movementController = movementController;
-            _mountFactory = mountFactory;
             _gameFunctions = gameFunctions;
             _logger = logger;
             _clientState = clientState;
+            _mountExecutor = mountExecutor;
+            _unmountExecutor = unmountExecutor;
             _cannotExecuteAtThisTime = dataManager.GetString<LogMessage>(579, x => x.Text)!;
 
-            _destination = moveParams.Destination;
+        }
 
-            if (!gameFunctions.IsFlyingUnlocked(moveParams.TerritoryId))
+        private void Initialize()
+        {
+            _destination = Task.Destination;
+
+            if (!_gameFunctions.IsFlyingUnlocked(Task.TerritoryId))
             {
-                moveParams = moveParams with { Fly = false, Land = false };
+                Task = Task with { Fly = false, Land = false };
             }
 
-            if (!moveParams.DisableNavMesh)
+            if (!Task.DisableNavmesh)
             {
                 _startAction = () =>
-                    _movementController.NavigateTo(EMovementType.Quest, moveParams.DataId, _destination,
-                        fly: moveParams.Fly,
-                        sprint: moveParams.Sprint,
-                        stopDistance: moveParams.StopDistance,
-                        ignoreDistanceToObject: moveParams.IgnoreDistanceToObject,
-                        land: moveParams.Land);
+                    _movementController.NavigateTo(EMovementType.Quest, Task.DataId, _destination,
+                        fly: Task.Fly,
+                        sprint: Task.Sprint,
+                        stopDistance: Task.StopDistance,
+                        ignoreDistanceToObject: Task.IgnoreDistanceToObject,
+                        land: Task.Land);
             }
             else
             {
                 _startAction = () =>
-                    _movementController.NavigateTo(EMovementType.Quest, moveParams.DataId, [_destination],
-                        fly: moveParams.Fly,
-                        sprint: moveParams.Sprint,
-                        stopDistance: moveParams.StopDistance,
-                        ignoreDistanceToObject: moveParams.IgnoreDistanceToObject,
-                        land: moveParams.Land);
+                    _movementController.NavigateTo(EMovementType.Quest, Task.DataId, [_destination],
+                        fly: Task.Fly,
+                        sprint: Task.Sprint,
+                        stopDistance: Task.StopDistance,
+                        ignoreDistanceToObject: Task.IgnoreDistanceToObject,
+                        land: Task.Land);
             }
 
-            _moveParams = moveParams;
-            _canRestart = moveParams.RestartNavigation;
+            _canRestart = Task.RestartNavigation;
         }
 
-        public InteractionProgressContext? ProgressContext() => _mountTask?.ProgressContext();
-
-        public bool ShouldRedoOnInterrupt() => true;
-
-        public bool Start()
+        protected override bool Start()
         {
-            float stopDistance = _moveParams.StopDistance ?? QuestStep.DefaultStopDistance;
+            Initialize();
+
+            float stopDistance = Task.StopDistance ?? QuestStep.DefaultStopDistance;
             Vector3? position = _clientState.LocalPlayer?.Position;
             float actualDistance = position == null ? float.MaxValue : Vector3.Distance(position.Value, _destination);
 
-            if (_moveParams.Mount == true)
+            if (Task.Mount == true)
             {
-                var mountTask = _mountFactory.Mount(_moveParams.TerritoryId, Mount.EMountIf.Always);
-                if (mountTask.Start())
+                var mountTask = new Mount.MountTask(Task.TerritoryId, Mount.EMountIf.Always);
+                if (_mountExecutor.Start(mountTask))
                 {
-                    _mountTask = mountTask;
+                    _nestedExecutor = _mountExecutor;
                     return true;
                 }
             }
-            else if (_moveParams.Mount == false)
+            else if (Task.Mount == false)
             {
-                var mountTask = _mountFactory.Unmount();
-                if (mountTask.Start())
+                var mountTask = new Mount.UnmountTask();
+                if (_unmountExecutor.Start(mountTask))
                 {
-                    _mountTask = mountTask;
+                    _nestedExecutor = _unmountExecutor;
                     return true;
                 }
             }
 
-            if (!_moveParams.DisableNavMesh)
+            if (!Task.DisableNavmesh)
             {
-                if (_moveParams.Mount == null)
+                if (Task.Mount == null)
                 {
                     Mount.EMountIf mountIf =
-                        actualDistance > stopDistance && _moveParams.Fly &&
-                        _gameFunctions.IsFlyingUnlocked(_moveParams.TerritoryId)
+                        actualDistance > stopDistance && Task.Fly &&
+                        _gameFunctions.IsFlyingUnlocked(Task.TerritoryId)
                             ? Mount.EMountIf.Always
                             : Mount.EMountIf.AwayFromPosition;
-                    var mountTask = _mountFactory.Mount(_moveParams.TerritoryId, mountIf, _destination);
-                    if (mountTask.Start())
+                    var mountTask = new Mount.MountTask(Task.TerritoryId, mountIf, _destination);
+                    if (_mountExecutor.Start(mountTask))
                     {
-                        _mountTask = mountTask;
+                        _nestedExecutor = _mountExecutor;
                         return true;
                     }
                 }
             }
 
-            _mountTask = new NoOpTask();
+            _nestedExecutor = new NoOpTaskExecutor();
             return true;
         }
 
-        public ETaskResult Update()
+        public override ETaskResult Update()
         {
-            if (_mountTask != null)
+            if (_nestedExecutor != null)
             {
-                if (_mountTask.Update() == ETaskResult.TaskComplete)
+                if (_nestedExecutor.Update() == ETaskResult.TaskComplete)
                 {
-                    _mountTask = null;
+                    _nestedExecutor = null;
 
                     _logger.LogInformation("Moving to {Destination}", _destination.ToString("G", CultureInfo.InvariantCulture));
                     _startAction();
@@ -247,10 +223,10 @@ internal static class MoveTo
 
             if (_canRestart &&
                 Vector3.Distance(_clientState.LocalPlayer!.Position, _destination) >
-                (_moveParams.StopDistance ?? QuestStep.DefaultStopDistance) + 5f)
+                (Task.StopDistance ?? QuestStep.DefaultStopDistance) + 5f)
             {
                 _canRestart = false;
-                if (_clientState.TerritoryType == _moveParams.TerritoryId)
+                if (_clientState.TerritoryType == Task.TerritoryId)
                 {
                     _logger.LogInformation("Looks like movement was interrupted, re-attempting to move");
                     _startAction();
@@ -264,7 +240,6 @@ internal static class MoveTo
             return ETaskResult.TaskComplete;
         }
 
-        public override string ToString() => $"MoveTo({_destination.ToString("G", CultureInfo.InvariantCulture)})";
 
         public bool OnErrorToast(SeString message)
         {
@@ -275,27 +250,27 @@ internal static class MoveTo
         }
     }
 
-    private sealed class NoOpTask : ITask
+    private sealed class NoOpTaskExecutor : TaskExecutor<ITask>
     {
-        public bool Start() => true;
+        protected override bool Start() => true;
 
-        public ETaskResult Update() => ETaskResult.TaskComplete;
+        public override ETaskResult Update() => ETaskResult.TaskComplete;
     }
 
-    internal sealed record MoveParams(
+    internal sealed record MoveTask(
         ushort TerritoryId,
         Vector3 Destination,
         bool? Mount = null,
         float? StopDistance = null,
         uint? DataId = null,
-        bool DisableNavMesh = false,
+        bool DisableNavmesh = false,
         bool Sprint = true,
         bool Fly = false,
         bool Land = false,
         bool IgnoreDistanceToObject = false,
-        bool RestartNavigation = true)
+        bool RestartNavigation = true) : ITask
     {
-        public MoveParams(QuestStep step, Vector3 destination)
+        public MoveTask(QuestStep step, Vector3 destination)
             : this(step.TerritoryId,
                 destination,
                 step.Mount,
@@ -309,23 +284,27 @@ internal static class MoveTo
                 step.RestartNavigationIfCancelled != false)
         {
         }
+
+        public override string ToString() => $"MoveTo({Destination.ToString("G", CultureInfo.InvariantCulture)})";
     }
 
-    private sealed class WaitForNearDataId(
-        uint dataId,
-        float stopDistance,
-        GameFunctions gameFunctions,
-        IClientState clientState) : ITask
+    internal sealed record WaitForNearDataId(uint DataId, float StopDistance) : ITask
     {
         public bool ShouldRedoOnInterrupt() => true;
+    }
 
-        public bool Start() => true;
+    internal sealed class WaitForNearDataIdExecutor(
+        GameFunctions gameFunctions,
+        IClientState clientState) : TaskExecutor<WaitForNearDataId>
+    {
 
-        public ETaskResult Update()
+        protected override bool Start() => true;
+
+        public override ETaskResult Update()
         {
-            IGameObject? gameObject = gameFunctions.FindObjectByDataId(dataId);
+            IGameObject? gameObject = gameFunctions.FindObjectByDataId(Task.DataId);
             if (gameObject == null ||
-                (gameObject.Position - clientState.LocalPlayer!.Position).Length() > stopDistance)
+                (gameObject.Position - clientState.LocalPlayer!.Position).Length() > Task.StopDistance)
             {
                 throw new TaskException("Object not found or too far away, no position so we can't move");
             }
@@ -334,14 +313,17 @@ internal static class MoveTo
         }
     }
 
-    private sealed class LandTask(IClientState clientState, ICondition condition, ILogger<LandTask> logger) : ITask
+    internal sealed class LandTask : ITask
+    {
+        public bool ShouldRedoOnInterrupt() => true;
+    }
+
+    internal sealed class LandExecutor(IClientState clientState, ICondition condition, ILogger<LandExecutor> logger) : TaskExecutor<LandTask>
     {
         private bool _landing;
         private DateTime _continueAt;
 
-        public bool ShouldRedoOnInterrupt() => true;
-
-        public bool Start()
+        protected override bool Start()
         {
             if (!condition[ConditionFlag.InFlight])
             {
@@ -354,7 +336,7 @@ internal static class MoveTo
             return true;
         }
 
-        public ETaskResult Update()
+        public override ETaskResult Update()
         {
             if (DateTime.Now < _continueAt)
                 return ETaskResult.StillRunning;

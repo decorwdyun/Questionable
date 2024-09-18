@@ -285,7 +285,7 @@ internal sealed class InteractionUiController : IDisposable
         List<DialogueChoiceInfo> dialogueChoices = [];
 
         // levequest choices have some vague sort of priority
-        if (_questController.HasCurrentTaskMatching<Interact.DoInteract>(out var interact) &&
+        if (_questController.HasCurrentTaskExecutorMatching<Interact.DoInteract>(out var interact) &&
             interact.Quest != null &&
             interact.InteractionType is EInteractionType.AcceptLeve or EInteractionType.CompleteLeve)
         {
@@ -799,7 +799,7 @@ internal sealed class InteractionUiController : IDisposable
     private void TeleportTownPostSetup(AddonEvent type, AddonArgs args)
     {
         if (ShouldHandleUiInteractions &&
-            _questController.HasCurrentTaskMatching(out AethernetShortcut.UseAethernetShortcut? aethernetShortcut) &&
+            _questController.HasCurrentTaskMatching(out AethernetShortcut.Task? aethernetShortcut) &&
             aethernetShortcut.From.IsFirmamentAetheryte())
         {
             // this might be better via atkvalues; but this works for now

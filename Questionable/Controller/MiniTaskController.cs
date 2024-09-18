@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Plugin.Services;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps;
 using Questionable.Controller.Steps.Common;
@@ -17,33 +18,33 @@ internal abstract class MiniTaskController<T>
     protected readonly TaskQueue _taskQueue = new();
 
     private readonly IChatGui _chatGui;
-    private readonly Mount.Factory _mountFactory;
-    private readonly Combat.Factory _combatFactory;
     private readonly ICondition _condition;
+    private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<T> _logger;
 
-    protected MiniTaskController(IChatGui chatGui, Mount.Factory mountFactory, Combat.Factory combatFactory,
-        ICondition condition, ILogger<T> logger)
+    protected MiniTaskController(IChatGui chatGui, ICondition condition, IServiceProvider serviceProvider,
+        ILogger<T> logger)
     {
         _chatGui = chatGui;
         _logger = logger;
-        _mountFactory = mountFactory;
-        _combatFactory = combatFactory;
+        _serviceProvider = serviceProvider;
         _condition = condition;
     }
 
     protected virtual void UpdateCurrentTask()
     {
-        if (_taskQueue.CurrentTask == null)
+        if (_taskQueue.CurrentTaskExecutor == null)
         {
             if (_taskQueue.TryDequeue(out ITask? upcomingTask))
             {
                 try
                 {
                     _logger.LogInformation("Starting task {TaskName}", upcomingTask.ToString());
-                    if (upcomingTask.Start())
+                    ITaskExecutor taskExecutor =
+                        _serviceProvider.GetRequiredKeyedService<ITaskExecutor>(upcomingTask.GetType());
+                    if (taskExecutor.Start(upcomingTask))
                     {
-                        _taskQueue.CurrentTask = upcomingTask;
+                        _taskQueue.CurrentTaskExecutor = taskExecutor;
                         return;
                     }
                     else
@@ -68,19 +69,20 @@ internal abstract class MiniTaskController<T>
         ETaskResult result;
         try
         {
-            if (_taskQueue.CurrentTask.WasInterrupted())
+            if (_taskQueue.CurrentTaskExecutor.WasInterrupted())
             {
                 InterruptQueueWithCombat();
                 return;
             }
 
-            result = _taskQueue.CurrentTask.Update();
+            result = _taskQueue.CurrentTaskExecutor.Update();
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Failed to update task {TaskName}", _taskQueue.CurrentTask.ToString());
+            _logger.LogError(e, "Failed to update task {TaskName}",
+                _taskQueue.CurrentTaskExecutor.CurrentTask.ToString());
             _chatGui.PrintError(
-                $"[Questionable] Failed to update task '{_taskQueue.CurrentTask}', please check /xllog for details.");
+                $"[Questionable] Failed to update task '{_taskQueue.CurrentTaskExecutor.CurrentTask}', please check /xllog for details.");
             Stop("Task failed to update");
             return;
         }
@@ -92,14 +94,16 @@ internal abstract class MiniTaskController<T>
 
             case ETaskResult.SkipRemainingTasksForStep:
                 _logger.LogInformation("{Task} → {Result}, skipping remaining tasks for step",
-                    _taskQueue.CurrentTask, result);
-                _taskQueue.CurrentTask = null;
+                    _taskQueue.CurrentTaskExecutor.CurrentTask, result);
+                _taskQueue.CurrentTaskExecutor = null;
 
                 while (_taskQueue.TryDequeue(out ITask? nextTask))
                 {
                     if (nextTask is ILastTask or Gather.SkipMarker)
                     {
-                        _taskQueue.CurrentTask = nextTask;
+                        ITaskExecutor taskExecutor =
+                            _serviceProvider.GetRequiredKeyedService<ITaskExecutor>(nextTask.GetType());
+                        _taskQueue.CurrentTaskExecutor = taskExecutor;
                         return;
                     }
                 }
@@ -108,27 +112,27 @@ internal abstract class MiniTaskController<T>
 
             case ETaskResult.TaskComplete:
                 _logger.LogInformation("{Task} → {Result}, remaining tasks: {RemainingTaskCount}",
-                    _taskQueue.CurrentTask, result, _taskQueue.RemainingTasks.Count());
+                    _taskQueue.CurrentTaskExecutor.CurrentTask, result, _taskQueue.RemainingTasks.Count());
 
-                OnTaskComplete(_taskQueue.CurrentTask);
+                OnTaskComplete(_taskQueue.CurrentTaskExecutor.CurrentTask);
 
-                _taskQueue.CurrentTask = null;
+                _taskQueue.CurrentTaskExecutor = null;
 
                 // handled in next update
                 return;
 
             case ETaskResult.NextStep:
-                _logger.LogInformation("{Task} → {Result}", _taskQueue.CurrentTask, result);
+                _logger.LogInformation("{Task} → {Result}", _taskQueue.CurrentTaskExecutor.CurrentTask, result);
 
-                var lastTask = (ILastTask)_taskQueue.CurrentTask;
-                _taskQueue.CurrentTask = null;
+                var lastTask = (ILastTask)_taskQueue.CurrentTaskExecutor.CurrentTask;
+                _taskQueue.CurrentTaskExecutor = null;
 
                 OnNextStep(lastTask);
                 return;
 
             case ETaskResult.End:
-                _logger.LogInformation("{Task} → {Result}", _taskQueue.CurrentTask, result);
-                _taskQueue.CurrentTask = null;
+                _logger.LogInformation("{Task} → {Result}", _taskQueue.CurrentTaskExecutor.CurrentTask, result);
+                _taskQueue.CurrentTaskExecutor = null;
                 Stop("Task end");
                 return;
         }
@@ -154,9 +158,9 @@ internal abstract class MiniTaskController<T>
         {
             List<ITask> tasks = [];
             if (_condition[ConditionFlag.Mounted])
-                tasks.Add(_mountFactory.Unmount());
+                tasks.Add(new Mount.UnmountTask());
 
-            tasks.Add(_combatFactory.CreateTask(null, false, EEnemySpawnType.QuestInterruption, [], [], []));
+            tasks.Add(Combat.Factory.CreateTask(null, false, EEnemySpawnType.QuestInterruption, [], [], []));
             tasks.Add(new WaitAtEnd.WaitDelay());
             _taskQueue.InterruptWith(tasks);
         }

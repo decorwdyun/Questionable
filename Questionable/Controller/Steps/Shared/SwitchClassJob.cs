@@ -6,31 +6,37 @@ using Questionable.Controller.Steps.Common;
 
 namespace Questionable.Controller.Steps.Shared;
 
-internal sealed class SwitchClassJob(EClassJob classJob, IClientState clientState) : AbstractDelayedTask
+internal static class SwitchClassJob
 {
-    protected override unsafe bool StartInternal()
+    internal sealed record Task(EClassJob ClassJob) : ITask
     {
-        if (clientState.LocalPlayer!.ClassJob.Id == (uint)classJob)
-            return false;
-
-        var gearsetModule = RaptureGearsetModule.Instance();
-        if (gearsetModule != null)
-        {
-            for (int i = 0; i < 100; ++i)
-            {
-                var gearset = gearsetModule->GetGearset(i);
-                if (gearset->ClassJob == (byte)classJob)
-                {
-                    gearsetModule->EquipGearset(gearset->Id);
-                    return true;
-                }
-            }
-        }
-
-        throw new TaskException($"No gearset found for {classJob}");
+        public override string ToString() => $"SwitchJob({ClassJob})";
     }
 
-    protected override ETaskResult UpdateInternal() => ETaskResult.TaskComplete;
+    internal sealed class Executor(IClientState clientState) : AbstractDelayedTaskExecutor<Task>
+    {
+        protected override unsafe bool StartInternal()
+        {
+            if (clientState.LocalPlayer!.ClassJob.Id == (uint)Task.ClassJob)
+                return false;
 
-    public override string ToString() => $"SwitchJob({classJob})";
+            var gearsetModule = RaptureGearsetModule.Instance();
+            if (gearsetModule != null)
+            {
+                for (int i = 0; i < 100; ++i)
+                {
+                    var gearset = gearsetModule->GetGearset(i);
+                    if (gearset->ClassJob == (byte)Task.ClassJob)
+                    {
+                        gearsetModule->EquipGearset(gearset->Id);
+                        return true;
+                    }
+                }
+            }
+
+            throw new TaskException($"No gearset found for {Task.ClassJob}");
+        }
+
+        protected override ETaskResult UpdateInternal() => ETaskResult.TaskComplete;
+    }
 }

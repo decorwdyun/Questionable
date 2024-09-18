@@ -2,7 +2,7 @@
 
 namespace Questionable.Controller.Steps;
 
-public interface IToastAware
+internal interface IToastAware : ITaskExecutor
 {
     bool OnErrorToast(SeString message);
 }

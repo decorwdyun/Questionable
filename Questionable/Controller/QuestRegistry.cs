@@ -142,7 +142,8 @@ internal sealed class QuestRegistry
 
     private void LoadQuestFromStream(string fileName, Stream stream, Quest.ESource source)
     {
-        _logger.LogTrace("Loading quest from '{FileName}'", fileName);
+        if (source == Quest.ESource.UserDirectory)
+            _logger.LogTrace("Loading quest from '{FileName}'", fileName);
         ElementId? questId = ExtractQuestIdFromName(fileName);
         if (questId == null)
             return;
@@ -173,7 +174,8 @@ internal sealed class QuestRegistry
             return;
         }
 
-        _logger.Log(logLevel, "Loading quests from {DirectoryName}", directory);
+        if (source == Quest.ESource.UserDirectory)
+            _logger.Log(logLevel, "Loading quests from {DirectoryName}", directory);
         foreach (FileInfo fileInfo in directory.GetFiles("*.json"))
         {
             try

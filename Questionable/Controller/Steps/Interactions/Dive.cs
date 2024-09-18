@@ -18,24 +18,25 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class Dive
 {
-    internal sealed class Factory(ICondition condition, ILoggerFactory loggerFactory) : SimpleTaskFactory
+    internal sealed class Factory : SimpleTaskFactory
     {
         public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
             if (step.InteractionType != EInteractionType.Dive)
                 return null;
 
-            return Dive();
-        }
-
-        public ITask Dive()
-        {
-            return new DoDive(condition, loggerFactory.CreateLogger<DoDive>());
+            return new Task();
         }
     }
 
-    private sealed class DoDive(ICondition condition, ILogger<DoDive> logger)
-        : AbstractDelayedTask(TimeSpan.FromSeconds(5))
+    internal sealed class Task : ITask
+    {
+
+        public override string ToString() => "Dive";
+    }
+
+    internal sealed class DoDive(ICondition condition, ILogger<DoDive> logger)
+        : AbstractDelayedTaskExecutor<Task>(TimeSpan.FromSeconds(5))
     {
         private readonly Queue<(uint Type, nint Key)> _keysToPress = [];
         private int _attempts;
@@ -114,8 +115,6 @@ internal static class Dive
             foreach (var key in realKeys)
                 _keysToPress.Enqueue((NativeMethods.WM_KEYUP, key));
         }
-
-        public override string ToString() => "Dive";
     }
 
     private static List<nint>? GetKeysToPress(SeVirtualKey key, ModifierFlag modifier)

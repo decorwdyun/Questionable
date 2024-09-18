@@ -82,10 +82,9 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
         Configuration configuration,
         YesAlreadyIpc yesAlreadyIpc,
         TaskCreator taskCreator,
-        Mount.Factory mountFactory,
-        Combat.Factory combatFactory,
+        IServiceProvider serviceProvider,
         IDataManager dataManager)
-        : base(chatGui, mountFactory, combatFactory, condition, logger)
+        : base(chatGui, condition, serviceProvider, logger)
     {
         _clientState = clientState;
         _gameFunctions = gameFunctions;
@@ -219,7 +218,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
             return;
 
         if (AutomationType == EAutomationType.Automatic &&
-            (_taskQueue.AllTasksComplete || _taskQueue.CurrentTask is WaitAtEnd.WaitQuestAccepted)
+            (_taskQueue.AllTasksComplete || _taskQueue.CurrentTaskExecutor?.CurrentTask is WaitAtEnd.WaitQuestAccepted)
             && CurrentQuest is { Sequence: 0, Step: 0 } or { Sequence: 0, Step: 255 }
             && DateTime.Now >= CurrentQuest.StepProgress.StartedAt.AddSeconds(15))
         {
@@ -638,15 +637,30 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
 
     public string ToStatString()
     {
-        return _taskQueue.CurrentTask is { } currentTask
+        return _taskQueue.CurrentTaskExecutor?.CurrentTask is { } currentTask
             ? $"{currentTask} (+{_taskQueue.RemainingTasks.Count()})"
             : $"- (+{_taskQueue.RemainingTasks.Count()})";
+    }
+
+    public bool HasCurrentTaskExecutorMatching<T>([NotNullWhen(true)] out T? task)
+        where T : class, ITaskExecutor
+    {
+        if (_taskQueue.CurrentTaskExecutor is T t)
+        {
+            task = t;
+            return true;
+        }
+        else
+        {
+            task = null;
+            return false;
+        }
     }
 
     public bool HasCurrentTaskMatching<T>([NotNullWhen(true)] out T? task)
         where T : class, ITask
     {
-        if (_taskQueue.CurrentTask is T t)
+        if (_taskQueue.CurrentTaskExecutor?.CurrentTask is T t)
         {
             task = t;
             return true;
@@ -699,11 +713,11 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
     {
         lock (_progressLock)
         {
-            if (_taskQueue.CurrentTask is ISkippableTask)
-                _taskQueue.CurrentTask = null;
-            else if (_taskQueue.CurrentTask != null)
+            if (_taskQueue.CurrentTaskExecutor?.CurrentTask is ISkippableTask)
+                _taskQueue.CurrentTaskExecutor = null;
+            else if (_taskQueue.CurrentTaskExecutor != null)
             {
-                _taskQueue.CurrentTask = null;
+                _taskQueue.CurrentTaskExecutor = null;
                 while (_taskQueue.TryPeek(out ITask? task))
                 {
                     _taskQueue.TryDequeue(out _);
@@ -727,7 +741,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
 
     public void SkipSimulatedTask()
     {
-        _taskQueue.CurrentTask = null;
+        _taskQueue.CurrentTaskExecutor = null;
     }
 
     public bool IsInterruptible()
@@ -786,7 +800,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
 
     private void OnConditionChange(ConditionFlag flag, bool value)
     {
-        if (_taskQueue.CurrentTask is IConditionChangeAware conditionChangeAware)
+        if (_taskQueue.CurrentTaskExecutor is IConditionChangeAware conditionChangeAware)
             conditionChangeAware.OnConditionChange(flag, value);
     }
 
@@ -798,7 +812,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
     private void OnErrorToast(ref SeString message, ref bool isHandled)
     {
         _logger.LogWarning("XXX {A} → {B} XXX", _actionCanceledText, message.TextValue);
-        if (_taskQueue.CurrentTask is IToastAware toastAware)
+        if (_taskQueue.CurrentTaskExecutor is IToastAware toastAware)
         {
             if (toastAware.OnErrorToast(message))
             {

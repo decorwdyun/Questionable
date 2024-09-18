@@ -2,22 +2,28 @@
 
 namespace Questionable.Controller.Steps.Common;
 
-internal sealed class WaitConditionTask(Func<bool> predicate, string description) : ITask
+internal static class WaitCondition
 {
-    private DateTime _continueAt = DateTime.MaxValue;
-
-    public bool Start() => !predicate();
-
-    public ETaskResult Update()
+    internal sealed record Task(Func<bool> Predicate, string Description) : ITask
     {
-        if (_continueAt == DateTime.MaxValue)
-        {
-            if (predicate())
-                _continueAt = DateTime.Now.AddSeconds(0.5);
-        }
-
-        return DateTime.Now >= _continueAt ? ETaskResult.TaskComplete : ETaskResult.StillRunning;
+        public override string ToString() => Description;
     }
 
-    public override string ToString() => description;
+    internal sealed class Executor : TaskExecutor<Task>
+    {
+        private DateTime _continueAt = DateTime.MaxValue;
+
+        protected override bool Start() => !Task.Predicate();
+
+        public override ETaskResult Update()
+        {
+            if (_continueAt == DateTime.MaxValue)
+            {
+                if (Task.Predicate())
+                    _continueAt = DateTime.Now.AddSeconds(0.5);
+            }
+
+            return DateTime.Now >= _continueAt ? ETaskResult.TaskComplete : ETaskResult.StillRunning;
+        }
+    }
 }

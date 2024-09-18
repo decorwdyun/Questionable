@@ -1,9 +1,7 @@
-﻿using System;
-using FFXIVClientStructs.FFXIV.Client.Game;
+﻿using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using LLib.GameUI;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Model;
 using Questionable.Model.Questing;
@@ -13,24 +11,29 @@ namespace Questionable.Controller.Steps.Gathering;
 
 internal static class TurnInDelivery
 {
-    internal sealed class Factory(ILoggerFactory loggerFactory) : SimpleTaskFactory
+    internal sealed class Factory : SimpleTaskFactory
     {
         public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
             if (quest.Id is not SatisfactionSupplyNpcId || sequence.Sequence != 1)
                 return null;
 
-            return new SatisfactionSupplyTurnIn(loggerFactory.CreateLogger<SatisfactionSupplyTurnIn>());
+            return new Task();
         }
     }
 
-    private sealed class SatisfactionSupplyTurnIn(ILogger<SatisfactionSupplyTurnIn> logger) : ITask
+    internal sealed record Task : ITask
+    {
+        public override string ToString() => "WeeklyDeliveryTurnIn";
+    }
+
+    internal sealed class SatisfactionSupplyTurnIn(ILogger<SatisfactionSupplyTurnIn> logger) : TaskExecutor<Task>
     {
         private ushort? _remainingAllowances;
 
-        public bool Start() => true;
+        protected override bool Start() => true;
 
-        public unsafe ETaskResult Update()
+        public override unsafe ETaskResult Update()
         {
             AgentSatisfactionSupply* agentSatisfactionSupply = AgentSatisfactionSupply.Instance();
             if (agentSatisfactionSupply == null || !agentSatisfactionSupply->IsAgentActive())
@@ -77,7 +80,5 @@ internal static class TurnInDelivery
             addon->FireCallback(2, pickGatheringItem);
             return ETaskResult.StillRunning;
         }
-
-        public override string ToString() => "WeeklyDeliveryTurnIn";
     }
 }

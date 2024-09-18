@@ -21,7 +21,6 @@ internal static class Gather
     internal sealed class Factory(
         IServiceProvider serviceProvider,
         MovementController movementController,
-        GatheringController gatheringController,
         GatheringPointRegistry gatheringPointRegistry,
         IClientState clientState,
         GatheringData gatheringData,
@@ -53,7 +52,7 @@ internal static class Gather
 
                 if (classJob != currentClassJob)
                 {
-                    yield return new SwitchClassJob(classJob, clientState);
+                    yield return new SwitchClassJob.Task(classJob);
                 }
 
                 if (HasRequiredItems(itemToGather))
@@ -71,20 +70,20 @@ internal static class Gather
                         foreach (var task in serviceProvider.GetRequiredService<TaskCreator>()
                                      .CreateTasks(quest, gatheringSequence, gatheringStep))
                             if (task is WaitAtEnd.NextStep)
-                                yield return CreateSkipMarkerTask();
+                                yield return new SkipMarker();
                             else
                                 yield return task;
                     }
                 }
 
                 ushort territoryId = gatheringRoot.Steps.Last().TerritoryId;
-                yield return new WaitConditionTask(() => clientState.TerritoryType == territoryId,
+                yield return new WaitCondition.Task(() => clientState.TerritoryType == territoryId,
                     $"Wait(territory: {territoryData.GetNameAndId(territoryId)})");
 
-                yield return new WaitConditionTask(() => movementController.IsNavmeshReady,
+                yield return new WaitCondition.Task(() => movementController.IsNavmeshReady,
                     "Wait(navmesh ready)");
 
-                yield return CreateStartGatheringTask(gatheringPointId, itemToGather);
+                yield return new GatheringTask(gatheringPointId, itemToGather);
                 yield return new WaitAtEnd.WaitDelay();
             }
         }
@@ -109,38 +108,12 @@ internal static class Gather
                        minCollectability: (short)itemToGather.Collectability) >=
                    itemToGather.ItemCount;
         }
-
-        private StartGathering CreateStartGatheringTask(GatheringPointId gatheringPointId, GatheredItem gatheredItem)
-        {
-            return new StartGathering(gatheringPointId, gatheredItem, gatheringController);
-        }
-
-        private static SkipMarker CreateSkipMarkerTask()
-        {
-            return new SkipMarker();
-        }
     }
 
-    private sealed class StartGathering(
+    internal sealed record GatheringTask(
         GatheringPointId gatheringPointId,
-        GatheredItem gatheredItem,
-        GatheringController gatheringController) : ITask
+        GatheredItem gatheredItem) : ITask
     {
-        public bool Start()
-        {
-            return gatheringController.Start(new GatheringController.GatheringRequest(gatheringPointId,
-                gatheredItem.ItemId, gatheredItem.AlternativeItemId, gatheredItem.ItemCount,
-                gatheredItem.Collectability));
-        }
-
-        public ETaskResult Update()
-        {
-            if (gatheringController.Update() == GatheringController.EStatus.Complete)
-                return ETaskResult.TaskComplete;
-
-            return ETaskResult.StillRunning;
-        }
-
         public override string ToString()
         {
             if (gatheredItem.Collectability == 0)
@@ -151,13 +124,35 @@ internal static class Gather
         }
     }
 
+    internal sealed class StartGathering(GatheringController gatheringController) : TaskExecutor<GatheringTask>
+    {
+        protected override bool Start()
+        {
+            return gatheringController.Start(new GatheringController.GatheringRequest(Task.gatheringPointId,
+                Task.gatheredItem.ItemId, Task.gatheredItem.AlternativeItemId, Task.gatheredItem.ItemCount,
+                Task.gatheredItem.Collectability));
+        }
+
+        public override ETaskResult Update()
+        {
+            if (gatheringController.Update() == GatheringController.EStatus.Complete)
+                return ETaskResult.TaskComplete;
+
+            return ETaskResult.StillRunning;
+        }
+    }
+
     /// <summary>
     /// A task that does nothing, but if we're skipping a step, this will be the task next in queue to be executed (instead of progressing to the next step) if gathering.
     /// </summary>
     internal sealed class SkipMarker : ITask
     {
-        public bool Start() => true;
-        public ETaskResult Update() => ETaskResult.TaskComplete;
         public override string ToString() => "Gather/SkipMarker";
+    }
+
+    internal sealed class DoSkip : TaskExecutor<SkipMarker>
+    {
+        protected override bool Start() => true;
+        public override ETaskResult Update() => ETaskResult.TaskComplete;
     }
 }

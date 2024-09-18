@@ -8,10 +8,10 @@ internal sealed class TaskQueue
 {
     private readonly List<ITask> _completedTasks = [];
     private readonly List<ITask> _tasks = [];
-    public ITask? CurrentTask { get; set; }
+    public ITaskExecutor? CurrentTaskExecutor { get; set; }
 
     public IEnumerable<ITask> RemainingTasks => _tasks;
-    public bool AllTasksComplete => CurrentTask == null && _tasks.Count == 0;
+    public bool AllTasksComplete => CurrentTaskExecutor == null && _tasks.Count == 0;
 
     public void Enqueue(ITask task)
     {
@@ -41,7 +41,7 @@ internal sealed class TaskQueue
     {
         _tasks.Clear();
         _completedTasks.Clear();
-        CurrentTask = null;
+        CurrentTaskExecutor = null;
     }
 
     public void InterruptWith(List<ITask> interruptionTasks)
@@ -49,8 +49,8 @@ internal sealed class TaskQueue
         List<ITask?> newTasks =
         [
             ..interruptionTasks,
-            .._completedTasks.Where(x => !ReferenceEquals(x, CurrentTask)).ToList(),
-            CurrentTask,
+            .._completedTasks.Where(x => !ReferenceEquals(x, CurrentTaskExecutor?.CurrentTask)).ToList(),
+            CurrentTaskExecutor?.CurrentTask,
             .._tasks
         ];
         Reset();

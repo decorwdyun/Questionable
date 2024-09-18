@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Extensions.DependencyInjection;
 using Questionable.Controller.Steps.Common;
 using Questionable.Functions;
 using Questionable.Model;
@@ -10,7 +9,7 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class Emote
 {
-    internal sealed class Factory(ChatFunctions chatFunctions, Mount.Factory mountFactory) : ITaskFactory
+    internal sealed class Factory : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -25,39 +24,46 @@ internal static class Emote
 
             ArgumentNullException.ThrowIfNull(step.Emote);
 
-            var unmount = mountFactory.Unmount();
+            var unmount = new Mount.UnmountTask();
             if (step.DataId != null)
             {
-                var task = new UseOnObject(step.Emote.Value, step.DataId.Value, chatFunctions);
+                var task = new UseOnObject(step.Emote.Value, step.DataId.Value);
                 return [unmount, task];
             }
             else
             {
-                var task = new UseOnSelf(step.Emote.Value, chatFunctions);
+                var task = new UseOnSelf(step.Emote.Value);
                 return [unmount, task];
             }
         }
     }
 
-    private sealed class UseOnObject(EEmote emote, uint dataId, ChatFunctions chatFunctions) : AbstractDelayedTask
+    internal sealed record UseOnObject(EEmote Emote, uint DataId) : ITask
     {
-        protected override bool StartInternal()
-        {
-            chatFunctions.UseEmote(dataId, emote);
-            return true;
-        }
-
-        public override string ToString() => $"Emote({emote} on {dataId})";
+        public override string ToString() => $"Emote({Emote} on {DataId})";
     }
 
-    private sealed class UseOnSelf(EEmote emote, ChatFunctions chatFunctions) : AbstractDelayedTask
+    internal sealed class UseOnObjectExecutor(ChatFunctions chatFunctions)
+        : AbstractDelayedTaskExecutor<UseOnObject>
     {
         protected override bool StartInternal()
         {
-            chatFunctions.UseEmote(emote);
+            chatFunctions.UseEmote(Task.DataId, Task.Emote);
             return true;
         }
+    }
 
-        public override string ToString() => $"Emote({emote})";
+    internal sealed record UseOnSelf(EEmote Emote) : ITask
+    {
+        public override string ToString() => $"Emote({Emote})";
+    }
+
+    internal sealed class UseOnSelfExecutor(ChatFunctions chatFunctions) : AbstractDelayedTaskExecutor<UseOnSelf>
+    {
+        protected override bool StartInternal()
+        {
+            chatFunctions.UseEmote(Task.Emote);
+            return true;
+        }
     }
 }
