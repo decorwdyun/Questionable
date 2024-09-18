@@ -36,6 +36,7 @@ internal static class AetherCurrent
 
     internal sealed record Attune(uint DataId, uint AetherCurrentId) : ITask
     {
+        public bool ShouldRedoOnInterrupt() => true;
         public override string ToString() => $"AttuneAetherCurrent({AetherCurrentId})";
     }
 

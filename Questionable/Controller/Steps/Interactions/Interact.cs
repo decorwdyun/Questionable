@@ -63,6 +63,8 @@ internal static class Interact
         uint? PickUpItemId = null,
         SkipStepConditions? SkipConditions = null) : ITask
     {
+        public bool ShouldRedoOnInterrupt() => true;
+
         public override string ToString() => $"Interact({DataId})";
     }
 

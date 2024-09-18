@@ -29,6 +29,22 @@
       "Steps": [
         {
           "Position": {
+            "X": 588.5607,
+            "Y": 437.99976,
+            "Z": 299.7425
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Jump",
+          "JumpDestination": {
+            "Position": {
+              "X": 602.4677,
+              "Y": 438.6276,
+              "Z": 297.1612
+            }
+          }
+        },
+        {
+          "Position": {
             "X": 656.94653,
             "Y": 437.98502,
             "Z": 302.6322

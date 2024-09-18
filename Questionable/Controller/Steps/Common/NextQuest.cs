@@ -30,6 +30,7 @@ internal static class NextQuest
 
     internal sealed record SetQuestTask(ElementId NextQuestId, ElementId CurrentQuestId) : ITask
     {
+        public bool ShouldRedoOnInterrupt() => true;
         public override string ToString() => $"SetNextQuest({NextQuestId})";
     }
 

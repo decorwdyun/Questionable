@@ -143,6 +143,8 @@ internal static class WaitAtEnd
         {
         }
 
+        public bool ShouldRedoOnInterrupt() => true;
+
         public override string ToString() => $"Wait(seconds: {Delay.TotalSeconds})";
     }
 

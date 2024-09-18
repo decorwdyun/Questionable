@@ -811,7 +811,6 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
 
     private void OnErrorToast(ref SeString message, ref bool isHandled)
     {
-        _logger.LogWarning("XXX {A} → {B} XXX", _actionCanceledText, message.TextValue);
         if (_taskQueue.CurrentTaskExecutor is IToastAware toastAware)
         {
             if (toastAware.OnErrorToast(message))
