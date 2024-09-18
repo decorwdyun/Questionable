@@ -252,7 +252,7 @@
             "Y": -151.26128,
             "Z": -657.2519
           },
-          "StopDistance": 7,
+          "StopDistance": 6,
           "TerritoryId": 959,
           "InteractionType": "Say",
           "DisableNavmesh": true,
