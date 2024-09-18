@@ -103,6 +103,7 @@ internal abstract class MiniTaskController<T>
                     {
                         ITaskExecutor taskExecutor =
                             _serviceProvider.GetRequiredKeyedService<ITaskExecutor>(nextTask.GetType());
+                        taskExecutor.Start(nextTask);
                         _taskQueue.CurrentTaskExecutor = taskExecutor;
                         return;
                     }

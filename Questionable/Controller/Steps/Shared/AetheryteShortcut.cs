@@ -35,6 +35,7 @@ internal static class AetheryteShortcut
         EAetheryteLocation TargetAetheryte,
         ushort ExpectedTerritoryId) : ISkippableTask
     {
+        public override string ToString() => $"UseAetheryte({TargetAetheryte})";
     }
 
     internal sealed class UseAetheryteShortcut(
@@ -204,7 +205,5 @@ internal static class AetheryteShortcut
                 throw new TaskException("Unable to teleport to aetheryte");
             }
         }
-
-        public override string ToString() => $"UseAetheryte({Task.TargetAetheryte})";
     }
 }
