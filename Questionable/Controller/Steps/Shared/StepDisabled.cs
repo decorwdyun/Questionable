@@ -22,7 +22,7 @@ internal static class StepDisabled
         public override string ToString() => "StepDisabled";
     }
 
-    internal sealed class Executor(ILogger<SkipRemainingTasks> logger) : TaskExecutor<SkipRemainingTasks>
+    internal sealed class SkipDisabledStepsExecutor(ILogger<SkipRemainingTasks> logger) : TaskExecutor<SkipRemainingTasks>
     {
         protected override bool Start() => true;
 

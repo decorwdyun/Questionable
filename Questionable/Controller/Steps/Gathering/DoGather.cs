@@ -29,13 +29,13 @@ internal static class DoGather
         public override string ToString() => $"DoGather{(RevisitRequired ? " if revist" : "")}";
     }
 
-    internal sealed class Executor(
+    internal sealed class GatherExecutor(
         GatheringController gatheringController,
         GameFunctions gameFunctions,
         IGameGui gameGui,
         IClientState clientState,
         ICondition condition,
-        ILogger<Executor> logger) : TaskExecutor<Task>
+        ILogger<GatherExecutor> logger) : TaskExecutor<Task>
     {
         private const uint StatusGatheringRateUp = 218;
 

@@ -26,7 +26,7 @@ internal static class Duty
         public override string ToString() => $"OpenDutyFinder({ContentFinderConditionId})";
     }
 
-    internal sealed class Executor(
+    internal sealed class OpenDutyWindowExecutor(
         GameFunctions gameFunctions,
         ICondition condition) : TaskExecutor<Task>
     {

@@ -13,7 +13,7 @@ internal static class SwitchClassJob
         public override string ToString() => $"SwitchJob({ClassJob})";
     }
 
-    internal sealed class Executor(IClientState clientState) : AbstractDelayedTaskExecutor<Task>
+    internal sealed class SwitchClassJobExecutor(IClientState clientState) : AbstractDelayedTaskExecutor<Task>
     {
         protected override unsafe bool StartInternal()
         {

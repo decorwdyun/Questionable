@@ -9,7 +9,7 @@ internal static class WaitCondition
         public override string ToString() => Description;
     }
 
-    internal sealed class Executor : TaskExecutor<Task>
+    internal sealed class WaitConditionExecutor : TaskExecutor<Task>
     {
         private DateTime _continueAt = DateTime.MaxValue;
 

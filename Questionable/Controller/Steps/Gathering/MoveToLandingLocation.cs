@@ -21,11 +21,11 @@ internal static class MoveToLandingLocation
         public override string ToString() => $"Land/{FlyBetweenNodes}";
     }
 
-    internal sealed class Executor(
+    internal sealed class MoveToLandingLocationExecutor(
         MoveTo.MoveExecutor moveExecutor,
         GameFunctions gameFunctions,
         IObjectTable objectTable,
-        ILogger<Executor> logger) : TaskExecutor<Task>
+        ILogger<MoveToLandingLocationExecutor> logger) : TaskExecutor<Task>
     {
         private ITask _moveTask = null!;
 

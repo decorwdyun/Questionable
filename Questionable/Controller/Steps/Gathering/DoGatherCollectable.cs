@@ -27,12 +27,12 @@ internal static class DoGatherCollectable
             $"DoGatherCollectable({SeIconChar.Collectible.ToIconString()}/{Request.Collectability}){(RevisitRequired ? " if revist" : "")}";
     }
 
-    internal sealed class Executor(
+    internal sealed class GatherCollectableExecutor(
         GatheringController gatheringController,
         GameFunctions gameFunctions,
         IClientState clientState,
         IGameGui gameGui,
-        ILogger<Executor> logger) : TaskExecutor<Task>
+        ILogger<GatherCollectableExecutor> logger) : TaskExecutor<Task>
     {
         private Queue<EAction>? _actionQueue;
 

@@ -33,9 +33,9 @@ internal static class EquipItem
         public override string ToString() => $"Equip({ItemId})";
     }
 
-    internal sealed class Executor(
+    internal sealed class DoEquip(
         IDataManager dataManager,
-        ILogger<Executor> logger) : TaskExecutor<Task>, IToastAware
+        ILogger<DoEquip> logger) : TaskExecutor<Task>, IToastAware
     {
         private const int MaxAttempts = 3;
 

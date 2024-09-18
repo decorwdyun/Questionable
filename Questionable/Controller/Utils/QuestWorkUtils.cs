@@ -63,7 +63,7 @@ internal static class QuestWorkUtils
     {
         if (requiredQuestVariables.Count != 6 || requiredQuestVariables.All(x => x == null || x.Count == 0))
         {
-            logger.LogDebug("No RQW defined");
+            logger.LogDebug("No RequiredQW defined");
             return true;
         }
 
@@ -71,7 +71,7 @@ internal static class QuestWorkUtils
         {
             if (requiredQuestVariables[i] == null)
             {
-                logger.LogInformation("No RQW {Index} defined", i);
+                logger.LogDebug("No RequiredQW {Index} defined", i);
                 continue;
             }
 

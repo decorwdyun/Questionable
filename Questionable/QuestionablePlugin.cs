@@ -129,16 +129,16 @@ public sealed class QuestionablePlugin : IDalamudPlugin
     private static void AddTaskFactories(ServiceCollection serviceCollection)
     {
         // individual tasks
-        serviceCollection.AddTaskExecutor<MoveToLandingLocation.Task, MoveToLandingLocation.Executor>();
-        serviceCollection.AddTaskExecutor<DoGather.Task, DoGather.Executor>();
-        serviceCollection.AddTaskExecutor<DoGatherCollectable.Task, DoGatherCollectable.Executor>();
-        serviceCollection.AddTaskExecutor<SwitchClassJob.Task, SwitchClassJob.Executor>();
+        serviceCollection.AddTaskExecutor<MoveToLandingLocation.Task, MoveToLandingLocation.MoveToLandingLocationExecutor>();
+        serviceCollection.AddTaskExecutor<DoGather.Task, DoGather.GatherExecutor>();
+        serviceCollection.AddTaskExecutor<DoGatherCollectable.Task, DoGatherCollectable.GatherCollectableExecutor>();
+        serviceCollection.AddTaskExecutor<SwitchClassJob.Task, SwitchClassJob.SwitchClassJobExecutor>();
         serviceCollection.AddTaskExecutor<Mount.MountTask, Mount.MountExecutor>();
         serviceCollection.AddTaskExecutor<Mount.UnmountTask, Mount.UnmountExecutor>();
 
         // task factories
         serviceCollection
-            .AddTaskFactoryAndExecutor<StepDisabled.SkipRemainingTasks, StepDisabled.Factory, StepDisabled.Executor>();
+            .AddTaskFactoryAndExecutor<StepDisabled.SkipRemainingTasks, StepDisabled.Factory, StepDisabled.SkipDisabledStepsExecutor>();
         serviceCollection.AddTaskFactory<EquipRecommended.BeforeDutyOrInstance>();
         serviceCollection.AddTaskFactoryAndExecutor<Gather.GatheringTask, Gather.Factory, Gather.StartGathering>();
         serviceCollection.AddTaskExecutor<Gather.SkipMarker, Gather.DoSkip>();
@@ -156,14 +156,14 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTaskExecutor<MoveTo.WaitForNearDataId, MoveTo.WaitForNearDataIdExecutor>();
         serviceCollection.AddTaskExecutor<MoveTo.LandTask, MoveTo.LandExecutor>();
 
-        serviceCollection.AddTaskFactoryAndExecutor<NextQuest.SetQuestTask, NextQuest.Factory, NextQuest.Executor>();
+        serviceCollection.AddTaskFactoryAndExecutor<NextQuest.SetQuestTask, NextQuest.Factory, NextQuest.NextQuestExecutor>();
         serviceCollection
             .AddTaskFactoryAndExecutor<AetherCurrent.Attune, AetherCurrent.Factory, AetherCurrent.DoAttune>();
         serviceCollection
             .AddTaskFactoryAndExecutor<AethernetShard.Attune, AethernetShard.Factory, AethernetShard.DoAttune>();
         serviceCollection.AddTaskFactoryAndExecutor<Aetheryte.Attune, Aetheryte.Factory, Aetheryte.DoAttune>();
         serviceCollection.AddTaskFactoryAndExecutor<Combat.Task, Combat.Factory, Combat.HandleCombat>();
-        serviceCollection.AddTaskFactoryAndExecutor<Duty.Task, Duty.Factory, Duty.Executor>();
+        serviceCollection.AddTaskFactoryAndExecutor<Duty.Task, Duty.Factory, Duty.OpenDutyWindowExecutor>();
         serviceCollection.AddTaskFactory<Emote.Factory>();
         serviceCollection.AddTaskExecutor<Emote.UseOnObject, Emote.UseOnObjectExecutor>();
         serviceCollection.AddTaskExecutor<Emote.UseOnSelf, Emote.UseOnSelfExecutor>();
@@ -179,7 +179,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTaskExecutor<UseItem.UseOnPosition, UseItem.UseOnPositionExecutor>();
         serviceCollection.AddTaskExecutor<UseItem.UseOnObject, UseItem.UseOnObjectExecutor>();
         serviceCollection.AddTaskExecutor<UseItem.UseOnSelf, UseItem.UseOnSelfExecutor>();
-        serviceCollection.AddTaskFactoryAndExecutor<EquipItem.Task, EquipItem.Factory, EquipItem.Executor>();
+        serviceCollection.AddTaskFactoryAndExecutor<EquipItem.Task, EquipItem.Factory, EquipItem.DoEquip>();
         serviceCollection
             .AddTaskFactoryAndExecutor<EquipRecommended.EquipTask, EquipRecommended.Factory,
                 EquipRecommended.DoEquipRecommended>();
@@ -194,7 +194,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTaskExecutor<InitiateLeve.Initiate, InitiateLeve.InitiateExecutor>();
         serviceCollection.AddTaskExecutor<InitiateLeve.SelectDifficulty, InitiateLeve.SelectDifficultyExecutor>();
 
-        serviceCollection.AddTaskExecutor<WaitCondition.Task, WaitCondition.Executor>();
+        serviceCollection.AddTaskExecutor<WaitCondition.Task, WaitCondition.WaitConditionExecutor>();
         serviceCollection.AddTaskFactory<WaitAtEnd.Factory>();
         serviceCollection.AddTaskExecutor<WaitAtEnd.WaitDelay, WaitAtEnd.WaitDelayExecutor>();
         serviceCollection.AddTaskExecutor<WaitAtEnd.WaitNextStepOrSequence, WaitAtEnd.WaitNextStepOrSequenceExecutor>();
