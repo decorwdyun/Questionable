@@ -35,7 +35,7 @@ internal sealed class EditorWindow : Window
     public EditorWindow(RendererPlugin plugin, EditorCommands editorCommands, IDataManager dataManager,
         ITargetManager targetManager, IClientState clientState, IObjectTable objectTable)
         : base("Gathering Path Editor###QuestionableGatheringPathEditor",
-            ImGuiWindowFlags.NoFocusOnAppearing | ImGuiWindowFlags.NoNavFocus)
+            ImGuiWindowFlags.NoFocusOnAppearing | ImGuiWindowFlags.NoNavFocus | ImGuiWindowFlags.AlwaysAutoResize)
     {
         _plugin = plugin;
         _editorCommands = editorCommands;
@@ -46,7 +46,7 @@ internal sealed class EditorWindow : Window
 
         SizeConstraints = new WindowSizeConstraints
         {
-            MinimumSize = new Vector2(300, 300),
+            MinimumSize = new Vector2(300, 100),
         };
 
         RespectCloseHotkey = false;
