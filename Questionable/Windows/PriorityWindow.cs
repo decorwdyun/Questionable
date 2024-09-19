@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Buffers.Text;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Text;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
 using Dalamud.Plugin;
+using Dalamud.Plugin.Services;
 using ImGuiNET;
 using LLib.ImGui;
 using Questionable.Controller;
@@ -18,18 +21,23 @@ namespace Questionable.Windows;
 
 internal sealed class PriorityWindow : LWindow
 {
+    private const string ClipboardPrefix = "qst:v1:";
+    private const char ClipboardSeparator = ';';
+
     private readonly QuestController _questController;
     private readonly QuestRegistry _questRegistry;
     private readonly QuestFunctions _questFunctions;
     private readonly QuestTooltipComponent _questTooltipComponent;
     private readonly UiUtils _uiUtils;
+    private readonly IChatGui _chatGui;
     private readonly IDalamudPluginInterface _pluginInterface;
 
     private string _searchString = string.Empty;
     private ElementId? _draggedItem;
 
     public PriorityWindow(QuestController questController, QuestRegistry questRegistry, QuestFunctions questFunctions,
-        QuestTooltipComponent questTooltipComponent, UiUtils uiUtils, IDalamudPluginInterface pluginInterface)
+        QuestTooltipComponent questTooltipComponent, UiUtils uiUtils, IChatGui chatGui,
+        IDalamudPluginInterface pluginInterface)
         : base("Quest Priority###QuestionableQuestPriority")
     {
         _questController = questController;
@@ -37,6 +45,7 @@ internal sealed class PriorityWindow : LWindow
         _questFunctions = questFunctions;
         _questTooltipComponent = questTooltipComponent;
         _uiUtils = uiUtils;
+        _chatGui = chatGui;
         _pluginInterface = pluginInterface;
 
         Size = new Vector2(400, 400);
@@ -53,6 +62,18 @@ internal sealed class PriorityWindow : LWindow
         ImGui.Text("Quests to do first:");
         DrawQuestFilter();
         DrawQuestList();
+
+        List<ElementId> clipboardItems = ParseClipboardItems();
+        ImGui.BeginDisabled(clipboardItems.Count == 0);
+        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Download, "Import from Clipboard"))
+            ImportFromClipboard(clipboardItems);
+        ImGui.EndDisabled();
+        ImGui.SameLine();
+        ImGui.BeginDisabled(_questController.ManualPriorityQuests.Count == 0);
+        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Upload, "Export to Clibpoard"))
+            ExportToClipboard();
+        ImGui.EndDisabled();
+
         ImGui.Spacing();
 
         ImGui.Separator();
@@ -220,5 +241,63 @@ internal sealed class PriorityWindow : LWindow
             priorityQuests.Remove(itemToAdd);
             priorityQuests.Insert(indexToAdd, itemToAdd);
         }
+    }
+
+    private List<ElementId> ParseClipboardItems()
+    {
+        List<ElementId> clipboardItems = new List<ElementId>();
+        try
+        {
+            string? clipboardText = GetClipboardText();
+            if (clipboardText != null && clipboardText.StartsWith(ClipboardPrefix, StringComparison.InvariantCulture))
+            {
+                clipboardText = clipboardText.Substring(ClipboardPrefix.Length);
+                string text = Encoding.UTF8.GetString(Convert.FromBase64String(clipboardText));
+                foreach (string part in text.Split(ClipboardSeparator))
+                {
+                    ElementId elementId = ElementId.FromString(part);
+                    clipboardItems.Add(elementId);
+                }
+            }
+        }
+        catch (Exception)
+        {
+            clipboardItems.Clear();
+        }
+
+        return clipboardItems;
+    }
+
+    private void ExportToClipboard()
+    {
+        string clipboardText = ClipboardPrefix + Convert.ToBase64String(Encoding.UTF8.GetBytes(
+            string.Join(ClipboardSeparator, _questController.ManualPriorityQuests.Select(x => x.Id.ToString()))));
+        ImGui.SetClipboardText(clipboardText);
+        _chatGui.Print("Copied quests to clipboard.", CommandHandler.MessageTag, CommandHandler.TagColor);
+    }
+
+    private void ImportFromClipboard(List<ElementId> clipboardItems)
+    {
+        foreach (ElementId elementId in clipboardItems)
+        {
+            if (_questRegistry.TryGetQuest(elementId, out Quest? quest) &&
+                !_questController.ManualPriorityQuests.Contains(quest))
+                _questController.ManualPriorityQuests.Add(quest);
+        }
+    }
+
+    /// <summary>
+    /// The default implementation for <see cref="ImGui.GetClipboardText"/> throws an NullReferenceException if the clipboard is empty, maybe also if it doesn't contain text.
+    /// </summary>
+    private unsafe string? GetClipboardText()
+    {
+        byte* ptr = ImGuiNative.igGetClipboardText();
+        if (ptr == null)
+            return null;
+
+        int byteCount = 0;
+        while (ptr[byteCount] != 0)
+            ++byteCount;
+        return Encoding.UTF8.GetString(ptr, byteCount);
     }
 }

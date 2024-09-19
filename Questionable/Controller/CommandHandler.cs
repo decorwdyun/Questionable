@@ -14,8 +14,8 @@ namespace Questionable.Controller;
 
 internal sealed class CommandHandler : IDisposable
 {
-    private const string MessageTag = "Questionable";
-    private const ushort TagColor = 576;
+    public const string MessageTag = "Questionable";
+    public const ushort TagColor = 576;
 
     private readonly ICommandManager _commandManager;
     private readonly IChatGui _chatGui;
