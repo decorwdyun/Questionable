@@ -66,7 +66,7 @@ internal sealed class EditorWindow : Window
 
         _target = _targetManager.Target;
         var gatheringLocations = _plugin.GetLocationsInTerritory(_clientState.TerritoryType);
-        var location = gatheringLocations.SelectMany(context =>
+        var location = gatheringLocations.ToList().SelectMany(context =>
                 context.Root.Groups.SelectMany(group =>
                     group.Nodes.SelectMany(node => node.Locations
                         .Select(location =>

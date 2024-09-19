@@ -8,6 +8,7 @@ using Questionable.Controller.Steps.Shared;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Gathering;
+using Questionable.Model.Questing;
 
 namespace Questionable.Controller.Steps.Gathering;
 
@@ -50,7 +51,8 @@ internal static class MoveToLandingLocation
 
             bool fly = Task.FlyBetweenNodes && gameFunctions.IsFlyingUnlocked(Task.TerritoryId);
             _moveTask = new MoveTo.MoveTask(Task.TerritoryId, target, null, 0.25f,
-                DataId: Task.GatheringNode.DataId, Fly: fly, IgnoreDistanceToObject: true);
+                DataId: Task.GatheringNode.DataId, Fly: fly, IgnoreDistanceToObject: true,
+                InteractionType: EInteractionType.Gather);
             return moveExecutor.Start(_moveTask);
         }
 

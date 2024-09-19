@@ -36,7 +36,7 @@ internal static class MoveTo
         {
             if (step.Position != null)
             {
-                return CreateMountTasks(quest.Id, step, step.Position.Value);
+                return CreateMoveTasks(step, step.Position.Value);
             }
             else if (step is { DataId: not null, StopDistance: not null })
             {
@@ -44,17 +44,17 @@ internal static class MoveTo
             }
             else if (step is { InteractionType: EInteractionType.AttuneAetheryte, Aetheryte: not null })
             {
-                return CreateMountTasks(quest.Id, step, aetheryteData.Locations[step.Aetheryte.Value]);
+                return CreateMoveTasks(step, aetheryteData.Locations[step.Aetheryte.Value]);
             }
             else if (step is { InteractionType: EInteractionType.AttuneAethernetShard, AethernetShard: not null })
             {
-                return CreateMountTasks(quest.Id, step, aetheryteData.Locations[step.AethernetShard.Value]);
+                return CreateMoveTasks(step, aetheryteData.Locations[step.AethernetShard.Value]);
             }
 
             return [];
         }
 
-        public IEnumerable<ITask> CreateMountTasks(ElementId questId, QuestStep step, Vector3 destination)
+        private IEnumerable<ITask> CreateMoveTasks(QuestStep step, Vector3 destination)
         {
             if (step.InteractionType == EInteractionType.Jump && step.JumpDestination != null &&
                 (clientState.LocalPlayer!.Position - step.JumpDestination.Position).Length() <=
@@ -71,13 +71,9 @@ internal static class MoveTo
             {
                 yield return new WaitCondition.Task(() => movementController.IsNavmeshReady,
                     "Wait(navmesh ready)");
+            }
 
-                yield return new MoveTask(step, destination);
-            }
-            else
-            {
-                yield return new MoveTask(step, destination);
-            }
+            yield return new MoveTask(step, destination);
 
             if (step is { Fly: true, Land: true })
                 yield return new LandTask();
@@ -94,7 +90,7 @@ internal static class MoveTo
         private readonly Mount.MountExecutor _mountExecutor;
         private readonly Mount.UnmountExecutor _unmountExecutor;
 
-        private Action _startAction = null!;
+        private Action? _startAction;
         private Vector3 _destination;
         private bool _canRestart;
         private ITaskExecutor? _nestedExecutor;
@@ -115,13 +111,10 @@ internal static class MoveTo
             _mountExecutor = mountExecutor;
             _unmountExecutor = unmountExecutor;
             _cannotExecuteAtThisTime = dataManager.GetString<LogMessage>(579, x => x.Text)!;
-
         }
 
-        private void Initialize()
+        private void PrepareMovementIfNeeded()
         {
-            _destination = Task.Destination;
-
             if (!_gameFunctions.IsFlyingUnlocked(Task.TerritoryId))
             {
                 Task = Task with { Fly = false, Land = false };
@@ -147,18 +140,22 @@ internal static class MoveTo
                         ignoreDistanceToObject: Task.IgnoreDistanceToObject,
                         land: Task.Land);
             }
-
-            _canRestart = Task.RestartNavigation;
         }
 
         protected override bool Start()
         {
-            Initialize();
+            _canRestart = Task.RestartNavigation;
+            _destination = Task.Destination;
+
 
             float stopDistance = Task.StopDistance ?? QuestStep.DefaultStopDistance;
             Vector3? position = _clientState.LocalPlayer?.Position;
             float actualDistance = position == null ? float.MaxValue : Vector3.Distance(position.Value, _destination);
+            bool requiresMovement = actualDistance > stopDistance;
+            if (requiresMovement)
+                PrepareMovementIfNeeded();
 
+            // might be able to make this optional
             if (Task.Mount == true)
             {
                 var mountTask = new Mount.MountTask(Task.TerritoryId, Mount.EMountIf.Always);
@@ -207,12 +204,20 @@ internal static class MoveTo
                 if (_nestedExecutor.Update() == ETaskResult.TaskComplete)
                 {
                     _nestedExecutor = null;
-
-                    _logger.LogInformation("Moving to {Destination}", _destination.ToString("G", CultureInfo.InvariantCulture));
-                    _startAction();
+                    if (_startAction != null)
+                    {
+                        _logger.LogInformation("Moving to {Destination}",
+                            _destination.ToString("G", CultureInfo.InvariantCulture));
+                        _startAction();
+                    }
+                    else
+                        return ETaskResult.TaskComplete;
                 }
                 return ETaskResult.StillRunning;
             }
+
+            if (_startAction == null)
+                return ETaskResult.TaskComplete;
 
             if (_movementController.IsPathfinding || _movementController.IsPathRunning)
                 return ETaskResult.StillRunning;
@@ -268,7 +273,8 @@ internal static class MoveTo
         bool Fly = false,
         bool Land = false,
         bool IgnoreDistanceToObject = false,
-        bool RestartNavigation = true) : ITask
+        bool RestartNavigation = true,
+        EInteractionType InteractionType = EInteractionType.None) : ITask
     {
         public MoveTask(QuestStep step, Vector3 destination)
             : this(step.TerritoryId,
@@ -281,7 +287,8 @@ internal static class MoveTo
                 step.Fly == true,
                 step.Land == true,
                 step.IgnoreDistanceToObject == true,
-                step.RestartNavigationIfCancelled != false)
+                step.RestartNavigationIfCancelled != false,
+                step.InteractionType)
         {
         }
 

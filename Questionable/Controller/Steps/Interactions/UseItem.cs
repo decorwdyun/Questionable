@@ -62,7 +62,8 @@ internal static class UseItem
                         nextPosition != null ? Mount.EMountIf.AwayFromPosition : Mount.EMountIf.Always,
                         nextPosition),
                     new MoveTo.MoveTask(140, new(-408.92343f, 23.167036f, -351.16223f), null, 0.25f,
-                        DataId: null, DisableNavmesh: true, Sprint: false, Fly: false)
+                        DataId: null, DisableNavmesh: true, Sprint: false, Fly: false,
+                        InteractionType: EInteractionType.WalkTo)
                 ];
             }
 
@@ -105,7 +106,8 @@ internal static class UseItem
             yield return new AetheryteShortcut.Task(null, null, EAetheryteLocation.Limsa, territoryId);
             yield return new AethernetShortcut.Task(EAetheryteLocation.Limsa, EAetheryteLocation.LimsaArcanist);
             yield return new WaitAtEnd.WaitDelay();
-            yield return new MoveTo.MoveTask(territoryId, destination, DataId: npcId, Sprint: false);
+            yield return new MoveTo.MoveTask(territoryId, destination, DataId: npcId, Sprint: false,
+                InteractionType: EInteractionType.WalkTo);
             yield return new Interact.Task(npcId, null, EInteractionType.None, true);
         }
     }

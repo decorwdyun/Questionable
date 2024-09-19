@@ -167,7 +167,7 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
                 pointOnFloor = pointOnFloor.Value with { Y = pointOnFloor.Value.Y + (fly ? 3f : 0f) };
 
             _taskQueue.Enqueue(new MoveTo.MoveTask(territoryId, pointOnFloor ?? averagePosition,
-                null, 50f, Fly: fly, IgnoreDistanceToObject: true));
+                null, 50f, Fly: fly, IgnoreDistanceToObject: true, InteractionType: EInteractionType.WalkTo));
         }
 
         _taskQueue.Enqueue(new MoveToLandingLocation.Task(territoryId, fly, currentNode));
@@ -245,7 +245,7 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
 
     public override IList<string> GetRemainingTaskNames()
     {
-        if (_taskQueue.CurrentTaskExecutor?.CurrentTask is {} currentTask)
+        if (_taskQueue.CurrentTaskExecutor?.CurrentTask is { } currentTask)
             return [currentTask.ToString() ?? "?", .. base.GetRemainingTaskNames()];
         else
             return base.GetRemainingTaskNames();
