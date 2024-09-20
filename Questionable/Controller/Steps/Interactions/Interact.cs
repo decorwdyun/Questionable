@@ -72,9 +72,10 @@ internal static class Interact
         GameFunctions gameFunctions,
         ICondition condition,
         ILogger<DoInteract> logger)
-        : TaskExecutor<Task>
+        : TaskExecutor<Task>, IConditionChangeAware
     {
         private bool _needsUnmount;
+        private EInteractionState _interactionState = EInteractionState.None;
         private DateTime _continueAt = DateTime.MinValue;
 
         public Quest? Quest => Task.Quest;
@@ -111,9 +112,7 @@ internal static class Interact
 
             if (gameObject.IsTargetable && HasAnyMarker(gameObject))
             {
-                ProgressContext =
-                    InteractionProgressContext.FromActionUseOrDefault(() => gameFunctions.InteractWith(gameObject));
-                _continueAt = DateTime.Now.AddSeconds(0.5);
+                TriggerInteraction(gameObject);
                 return true;
             }
 
@@ -148,7 +147,7 @@ internal static class Interact
             }
             else
             {
-                if (ProgressContext != null && ProgressContext.WasSuccessful())
+                if (ProgressContext != null && (ProgressContext.WasSuccessful() || _interactionState == EInteractionState.InteractionConfirmed))
                     return ETaskResult.TaskComplete;
 
                 if (InteractionType == EInteractionType.Gather && condition[ConditionFlag.Gathering])
@@ -159,10 +158,22 @@ internal static class Interact
             if (gameObject == null || !gameObject.IsTargetable || !HasAnyMarker(gameObject))
                 return ETaskResult.StillRunning;
 
-            ProgressContext =
-                InteractionProgressContext.FromActionUseOrDefault(() => gameFunctions.InteractWith(gameObject));
-            _continueAt = DateTime.Now.AddSeconds(0.5);
+            TriggerInteraction(gameObject);
             return ETaskResult.StillRunning;
+        }
+
+        private void TriggerInteraction(IGameObject gameObject)
+        {
+            ProgressContext =
+                InteractionProgressContext.FromActionUseOrDefault(() =>
+                {
+                    if (gameFunctions.InteractWith(gameObject))
+                        _interactionState = EInteractionState.InteractionTriggered;
+                    else
+                        _interactionState = EInteractionState.None;
+                    return _interactionState != EInteractionState.None;
+                });
+            _continueAt = DateTime.Now.AddSeconds(0.5);
         }
 
         private unsafe bool HasAnyMarker(IGameObject gameObject)
@@ -172,6 +183,28 @@ internal static class Interact
 
             var gameObjectStruct = (FFXIVClientStructs.FFXIV.Client.Game.Object.GameObject*)gameObject.Address;
             return gameObjectStruct->NamePlateIconId != 0;
+        }
+
+        public void OnConditionChange(ConditionFlag flag, bool value)
+        {
+            if (ProgressContext != null && (ProgressContext.WasInterrupted() || ProgressContext.WasSuccessful()))
+                return;
+
+            logger.LogDebug("Condition change: {Flag} = {Value}", flag, value);
+            if (_interactionState == EInteractionState.InteractionTriggered &&
+                flag is ConditionFlag.OccupiedInQuestEvent or ConditionFlag.OccupiedInEvent &&
+                value)
+            {
+                logger.LogInformation("Interaction was most likely triggered");
+                _interactionState = EInteractionState.InteractionConfirmed;
+            }
+        }
+
+        private enum EInteractionState
+        {
+            None,
+            InteractionTriggered,
+            InteractionConfirmed,
         }
     }
 }

@@ -120,7 +120,8 @@ internal sealed class CreationUtilsComponent
 #endif
 
 #if false
-        unsafe {
+        unsafe
+        {
             var questManager = QuestManager.Instance();
             if (questManager != null)
             {
@@ -134,7 +135,8 @@ internal sealed class CreationUtilsComponent
 #endif
 
 #if false
-        unsafe {
+        unsafe
+        {
             var director = UIState.Instance()->DirectorTodo.Director;
             if (director != null)
             {
@@ -143,12 +145,22 @@ internal sealed class CreationUtilsComponent
                 ImGui.Text($"Ico: {director->IconId}");
                 if (director->EventHandlerInfo != null)
                 {
-                    ImGui.Text($"  EHI CI: {director->EventHandlerInfo->EventId.ContentId}");
-                    ImGui.Text($"  EHI EI: {director->EventHandlerInfo->EventId.Id}");
-                    ImGui.Text($"  EHI EEI: {director->EventHandlerInfo->EventId.EntryId}");
-                    ImGui.Text($"  EHI F: {director->EventHandlerInfo->Flags}");
+                    ImGui.Text($"  EHI CI: {director->Info.EventId.ContentId}");
+                    ImGui.Text($"  EHI EI: {director->Info.EventId.Id}");
+                    ImGui.Text($"  EHI EEI: {director->Info.EventId.EntryId}");
+                    ImGui.Text($"  EHI F: {director->Info.Flags}");
                 }
             }
+        }
+#endif
+
+#if false
+        unsafe
+        {
+            var actionManager = ActionManager.Instance();
+            ImGui.Text(
+                $"A1: {actionManager->CastActionId} ({actionManager->LastUsedActionSequence} → {actionManager->LastHandledActionSequence})");
+            ImGui.Text($"A2: {actionManager->CastTimeElapsed} / {actionManager->CastTimeTotal}");
         }
 #endif
 
