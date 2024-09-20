@@ -155,7 +155,8 @@
           },
           "TerritoryId": 613,
           "InteractionType": "WalkTo",
-          "Mount": true
+          "Mount": true,
+          "RestartNavigationIfCancelled": false
         },
         {
           "Position": {
@@ -164,7 +165,9 @@
             "Z": 79.0077
           },
           "TerritoryId": 613,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true,
+          "DelaySecondsAtStart": 2
         },
         {
           "Position": {
