@@ -112,7 +112,7 @@ internal sealed class PriorityWindow : LWindow
 
             foreach (var quest in foundQuests)
             {
-                if (quest.Info.IsMainScenarioQuest || _questController.ManualPriorityQuests.Contains(quest))
+                if (quest.Info.IsMainScenarioQuest || _questController.ManualPriorityQuests.Any(x => x.Id == quest.Id))
                     continue;
 
                 bool addThis = ImGui.Selectable(quest.Info.Name);
