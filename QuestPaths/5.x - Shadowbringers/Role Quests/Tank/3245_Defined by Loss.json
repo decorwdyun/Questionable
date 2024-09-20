@@ -96,7 +96,8 @@
             "Z": -197.58272
           },
           "TerritoryId": 815,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Amh Araeng - Mord Souq"
         },
         {
           "DataId": 1029898,
@@ -106,8 +107,7 @@
             "Z": -196.30737
           },
           "TerritoryId": 815,
-          "InteractionType": "Interact",
-          "AetheryteShortcut": "Amh Araeng - Mord Souq"
+          "InteractionType": "Interact"
         }
       ]
     },
