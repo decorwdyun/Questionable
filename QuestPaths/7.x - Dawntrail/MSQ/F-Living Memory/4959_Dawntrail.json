@@ -33,6 +33,7 @@
           },
           "TerritoryId": 1192,
           "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Living Memory - Leynode Mnemo",
           "$": "Leynode Mnemo to Meso Terminal waypoint",
           "SkipConditions": {
             "StepIf": {

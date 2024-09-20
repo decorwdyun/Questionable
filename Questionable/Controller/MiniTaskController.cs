@@ -167,5 +167,9 @@ internal abstract class MiniTaskController<T>
         }
         else
             _taskQueue.InterruptWith([new WaitAtEnd.WaitDelay()]);
+
+        _logger.LogInformation("Remaining tasks after interruption:");
+        foreach (ITask task in _taskQueue.RemainingTasks)
+            _logger.LogInformation("- {TaskName}", task);
     }
 }
