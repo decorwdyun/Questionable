@@ -517,8 +517,8 @@ internal sealed class InteractionUiController : IDisposable
 
         _logger.LogTrace("Prompt: '{Prompt}'", actualPrompt);
         var director = UIState.Instance()->DirectorTodo.Director;
-        if (director != null && director->EventHandlerInfo != null &&
-            director->EventHandlerInfo->EventId.ContentId == EventHandlerType.GatheringLeveDirector &&
+        if (director != null &&
+            director->Info.EventId.ContentId == EventHandlerType.GatheringLeveDirector &&
             director->Sequence == 254)
         {
             // just close the dialogue for 'do you want to return to next settlement', should prolly be different for
