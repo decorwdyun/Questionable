@@ -129,7 +129,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
     private static void AddTaskFactories(ServiceCollection serviceCollection)
     {
         // individual tasks
-        serviceCollection.AddTaskExecutor<MoveToLandingLocation.Task, MoveToLandingLocation.MoveToLandingLocationExecutor>();
+        serviceCollection
+            .AddTaskExecutor<MoveToLandingLocation.Task, MoveToLandingLocation.MoveToLandingLocationExecutor>();
         serviceCollection.AddTaskExecutor<DoGather.Task, DoGather.GatherExecutor>();
         serviceCollection.AddTaskExecutor<DoGatherCollectable.Task, DoGatherCollectable.GatherCollectableExecutor>();
         serviceCollection.AddTaskExecutor<SwitchClassJob.Task, SwitchClassJob.SwitchClassJobExecutor>();
@@ -138,13 +139,16 @@ public sealed class QuestionablePlugin : IDalamudPlugin
 
         // task factories
         serviceCollection
-            .AddTaskFactoryAndExecutor<StepDisabled.SkipRemainingTasks, StepDisabled.Factory, StepDisabled.SkipDisabledStepsExecutor>();
+            .AddTaskFactoryAndExecutor<StepDisabled.SkipRemainingTasks, StepDisabled.Factory,
+                StepDisabled.SkipDisabledStepsExecutor>();
         serviceCollection.AddTaskFactory<EquipRecommended.BeforeDutyOrInstance>();
         serviceCollection.AddTaskFactoryAndExecutor<Gather.GatheringTask, Gather.Factory, Gather.StartGathering>();
         serviceCollection.AddTaskExecutor<Gather.SkipMarker, Gather.DoSkip>();
         serviceCollection
             .AddTaskFactoryAndExecutor<AetheryteShortcut.Task, AetheryteShortcut.Factory,
                 AetheryteShortcut.UseAetheryteShortcut>();
+        serviceCollection
+            .AddTaskExecutor<AetheryteShortcut.MoveAwayFromAetheryte, AetheryteShortcut.MoveAwayFromAetheryteExecutor>();
         serviceCollection
             .AddTaskFactoryAndExecutor<SkipCondition.SkipTask, SkipCondition.Factory, SkipCondition.CheckSkip>();
         serviceCollection
@@ -156,7 +160,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTaskExecutor<MoveTo.WaitForNearDataId, MoveTo.WaitForNearDataIdExecutor>();
         serviceCollection.AddTaskExecutor<MoveTo.LandTask, MoveTo.LandExecutor>();
 
-        serviceCollection.AddTaskFactoryAndExecutor<NextQuest.SetQuestTask, NextQuest.Factory, NextQuest.NextQuestExecutor>();
+        serviceCollection
+            .AddTaskFactoryAndExecutor<NextQuest.SetQuestTask, NextQuest.Factory, NextQuest.NextQuestExecutor>();
         serviceCollection
             .AddTaskFactoryAndExecutor<AetherCurrent.Attune, AetherCurrent.Factory, AetherCurrent.DoAttune>();
         serviceCollection
@@ -189,7 +194,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
                 TurnInDelivery.SatisfactionSupplyTurnIn>();
 
         serviceCollection.AddTaskFactory<InitiateLeve.Factory>();
-        serviceCollection.AddTaskExecutor<InitiateLeve.SkipInitiateIfActive, InitiateLeve.SkipInitiateIfActiveExecutor>();
+        serviceCollection
+            .AddTaskExecutor<InitiateLeve.SkipInitiateIfActive, InitiateLeve.SkipInitiateIfActiveExecutor>();
         serviceCollection.AddTaskExecutor<InitiateLeve.OpenJournal, InitiateLeve.OpenJournalExecutor>();
         serviceCollection.AddTaskExecutor<InitiateLeve.Initiate, InitiateLeve.InitiateExecutor>();
         serviceCollection.AddTaskExecutor<InitiateLeve.SelectDifficulty, InitiateLeve.SelectDifficultyExecutor>();

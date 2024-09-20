@@ -19,7 +19,11 @@ namespace Questionable.Controller.Steps.Shared;
 
 internal static class AethernetShortcut
 {
-    internal sealed class Factory(MovementController movementController)
+    internal sealed class Factory(
+        MovementController movementController,
+        AetheryteData aetheryteData,
+        TerritoryData territoryData,
+        IClientState clientState)
         : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
@@ -31,6 +35,14 @@ internal static class AethernetShortcut
                 "Wait(navmesh ready)");
             yield return new Task(step.AethernetShortcut.From, step.AethernetShortcut.To,
                 step.SkipConditions?.AethernetShortcutIf ?? new());
+
+            if (AetheryteShortcut.MoveAwayFromAetheryteExecutor.AppliesTo(step.AethernetShortcut.To))
+            {
+                yield return new WaitCondition.Task(
+                    () => clientState.TerritoryType == aetheryteData.TerritoryIds[step.AethernetShortcut.To],
+                    $"Wait(territory: {territoryData.GetNameAndId(aetheryteData.TerritoryIds[step.AethernetShortcut.To])})");
+                yield return new AetheryteShortcut.MoveAwayFromAetheryte(step.AethernetShortcut.To);
+            }
         }
     }
 
@@ -142,7 +154,7 @@ internal static class AethernetShortcut
                             new(0, 8.442986f, -9),
                         ];
 
-                        Vector3 closestPoint = nearbyPoints.MinBy(x => (playerPosition - x).Length());
+                        Vector3 closestPoint = nearbyPoints.MinBy(x => Vector3.Distance(playerPosition, x));
                         _moving = true;
                         movementController.NavigateTo(EMovementType.Quest, (uint)Task.From, closestPoint, false, true,
                             0.25f);

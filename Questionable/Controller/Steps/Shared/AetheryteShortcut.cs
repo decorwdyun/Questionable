@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.Logging;
+using Questionable.Controller.Steps.Common;
 using Questionable.Controller.Utils;
 using Questionable.Data;
 using Questionable.Functions;
@@ -15,7 +17,8 @@ namespace Questionable.Controller.Steps.Shared;
 
 internal static class AetheryteShortcut
 {
-    internal sealed class Factory(AetheryteData aetheryteData) : ITaskFactory
+    internal sealed class Factory(AetheryteData aetheryteData, TerritoryData territoryData, IClientState clientState)
+        : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -25,6 +28,15 @@ internal static class AetheryteShortcut
             yield return new Task(step, quest.Id, step.AetheryteShortcut.Value,
                 aetheryteData.TerritoryIds[step.AetheryteShortcut.Value]);
             yield return new WaitAtEnd.WaitDelay(TimeSpan.FromSeconds(0.5));
+
+            if (MoveAwayFromAetheryteExecutor.AppliesTo(step.AetheryteShortcut.Value) &&
+                step.AethernetShortcut?.From != step.AetheryteShortcut.Value)
+            {
+                yield return new WaitCondition.Task(
+                    () => clientState.TerritoryType == aetheryteData.TerritoryIds[step.AetheryteShortcut.Value],
+                    $"Wait(territory: {territoryData.GetNameAndId(aetheryteData.TerritoryIds[step.AetheryteShortcut.Value])})");
+                yield return new MoveAwayFromAetheryte(step.AetheryteShortcut.Value);
+            }
         }
     }
 
@@ -205,5 +217,48 @@ internal static class AetheryteShortcut
                 throw new TaskException("Unable to teleport to aetheryte");
             }
         }
+    }
+
+    internal sealed record MoveAwayFromAetheryte(EAetheryteLocation TargetAetheryte) : ITask
+    {
+        public override string ToString() => $"MoveAway({TargetAetheryte})";
+    }
+
+    internal sealed class MoveAwayFromAetheryteExecutor(
+        MoveTo.MoveExecutor moveExecutor,
+        AetheryteData aetheryteData,
+        IClientState clientState) : TaskExecutor<MoveAwayFromAetheryte>
+    {
+        private static readonly Dictionary<EAetheryteLocation, List<Vector3>> AetherytesToMoveFrom = new()
+        {
+            {
+                EAetheryteLocation.SolutionNine,
+                [
+                    new(0f, 8.8f, 15.5f),
+                    new(0f, 8.8f, -15.5f),
+                    new(15.5f, 8.8f, 0f),
+                    new(-15.5f, 8.8f, 0f)
+                ]
+            }
+        };
+
+        public static bool AppliesTo(EAetheryteLocation location) => AetherytesToMoveFrom.ContainsKey(location);
+
+        protected override bool Start()
+        {
+            // only relevant if we're actually near the s9 aetheryte at the end
+            Vector3 playerPosition = clientState.LocalPlayer!.Position;
+            if (aetheryteData.CalculateDistance(playerPosition, clientState.TerritoryType, Task.TargetAetheryte) >= 20)
+                return false;
+
+            Vector3 closestPoint = AetherytesToMoveFrom[Task.TargetAetheryte]
+                .MinBy(x => Vector3.Distance(x, playerPosition));
+            MoveTo.MoveTask task = new MoveTo.MoveTask(aetheryteData.TerritoryIds[Task.TargetAetheryte],
+                closestPoint, Mount: false, StopDistance: 0.25f, DisableNavmesh: true,
+                InteractionType: EInteractionType.None, RestartNavigation: false);
+            return moveExecutor.Start(task);
+        }
+
+        public override ETaskResult Update() => moveExecutor.Update();
     }
 }

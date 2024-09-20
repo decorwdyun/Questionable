@@ -59,7 +59,8 @@
           },
           "TerritoryId": 1190,
           "InteractionType": "WalkTo",
-          "$": "Shaaloani Hhusatahwi Saloon Stairs (top)"
+          "$": "Shaaloani Hhusatahwi Saloon Stairs (top)",
+          "Mount": true
         },
         {
           "Position": {
