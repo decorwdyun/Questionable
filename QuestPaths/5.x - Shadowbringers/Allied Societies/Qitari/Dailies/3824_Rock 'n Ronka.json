@@ -1,7 +1,6 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "liza",
-  "Disabled": true,
+  "Author": "plogon_enjoyer",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -21,6 +20,22 @@
     {
       "Sequence": 255,
       "Steps": [
+        {
+          "TerritoryId": 817,
+          "InteractionType": "Gather",
+          "ItemsToGather": [
+            {
+              "QuestAcceptedAsClass": "Miner",
+              "ItemId": 29531,
+              "ItemCount": 3
+            },
+            {
+              "QuestAcceptedAsClass": "Botanist",
+              "ItemId": 29557,
+              "ItemCount": 3
+            }
+          ]
+        },
         {
           "Position": {
             "X": 788.1569,
