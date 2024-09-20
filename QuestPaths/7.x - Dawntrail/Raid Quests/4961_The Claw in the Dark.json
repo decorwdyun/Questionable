@@ -17,19 +17,12 @@
           },
           "TerritoryId": 1186,
           "InteractionType": "Interact",
-          "DialogueChoices": [
-            {
-              "Type": "YesNo",
-              "ExcelSheet": "quest/049/KinGra101_04960",
-              "Prompt": "TEXT_KINGRA101_04960_SYSTEM_100_030",
-              "Yes": true
-            }
-          ],
           "AetheryteShortcut": "Solution Nine",
           "AethernetShortcut": [
             "[Solution Nine] Aetheryte Plaza",
             "[Solution Nine] The Arcadion"
           ],
+          "TargetTerritoryId": 1224,
           "SkipConditions": {
             "AetheryteShortcutIf": {
               "InTerritory": [1224]
