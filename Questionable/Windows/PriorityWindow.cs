@@ -72,6 +72,11 @@ internal sealed class PriorityWindow : LWindow
         ImGui.BeginDisabled(_questController.ManualPriorityQuests.Count == 0);
         if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Upload, "Export to Clibpoard"))
             ExportToClipboard();
+        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Check, "Remove finished Quests"))
+            _questController.ManualPriorityQuests.RemoveAll(q => _questFunctions.IsQuestComplete(q.Id));
+        ImGui.SameLine();
+        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Trash, "Clear"))
+            _questController.ManualPriorityQuests.Clear();
         ImGui.EndDisabled();
 
         ImGui.Spacing();
