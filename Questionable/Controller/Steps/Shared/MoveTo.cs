@@ -292,6 +292,8 @@ internal static class MoveTo
         {
         }
 
+        public bool ShouldRedoOnInterrupt() => true;
+
         public override string ToString() => $"MoveTo({Destination.ToString("G", CultureInfo.InvariantCulture)})";
     }
 
