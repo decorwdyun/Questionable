@@ -105,6 +105,7 @@
           "TerritoryId": 1187,
           "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Urqopacha - Worlar's Echo",
+          "Fly": true,
           "SkipConditions": {
             "AetheryteShortcutIf": {
               "InSameTerritory": true
