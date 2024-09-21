@@ -35,6 +35,7 @@ internal sealed class CombatController : IDisposable
 
     private CurrentFight? _currentFight;
     private bool _wasInCombat;
+    private ulong? _lastTargetId;
 
     public CombatController(
         IEnumerable<ICombatModule> combatModules,
@@ -91,6 +92,33 @@ internal sealed class CombatController : IDisposable
             _movementController.IsPathRunning ||
             _movementController.MovementStartedAt > DateTime.Now.AddSeconds(-1))
             return EStatus.Moving;
+
+        // Overworld enemies typically means that if we want to kill 3 enemies, we could have anywhere from 0 to 20
+        // enemies in the area (0 if someone else killed them before, like can happen with bots in Fools' Falls in
+        // La Noscea).
+        //
+        // For all 'normal' types, e.g. auto-spawning on entering an area, there's a fixed number of enemies that you're
+        // fighting with, and the enemies in the overworld aren't relevant.
+        if (_currentFight.Data.SpawnType is EEnemySpawnType.OverworldEnemies)
+        {
+            if (_targetManager.Target != null)
+                _lastTargetId = _targetManager.Target?.GameObjectId;
+            else
+            {
+                if (_lastTargetId != null)
+                {
+                    IGameObject? lastTarget = _objectTable.FirstOrDefault(x => x.GameObjectId == _lastTargetId);
+                    if (lastTarget != null)
+                    {
+                        // wait until the game cleans up the target
+                        if (lastTarget.IsDead)
+                            return EStatus.InCombat;
+                    }
+                    else
+                        _lastTargetId = null;
+                }
+            }
+        }
 
         var target = _targetManager.Target;
         if (target != null)
@@ -192,44 +220,36 @@ internal sealed class CombatController : IDisposable
 
     public unsafe int GetKillPriority(IGameObject gameObject)
     {
+        if (_currentFight == null)
+            return 0;
+
         if (gameObject is IBattleNpc battleNpc)
         {
-            if (_currentFight != null && !_currentFight.Module.CanAttack(battleNpc))
+            if (!_currentFight.Module.CanAttack(battleNpc))
                 return 0;
 
-            // TODO this works as somewhat of a delay between killing enemies if certain items/flags are checked
-            // but also delays killing the next enemy a little
-            if (_currentFight == null ||
-                _currentFight.Data.SpawnType == EEnemySpawnType.OverworldEnemies ||
-                _currentFight.Data.SpawnType == EEnemySpawnType.FateEnemies ||
-                _currentFight.Data.KillEnemyDataIds.Count > 0)
-            {
-                if (battleNpc.IsDead)
-                    return 0;
-            }
+            if (battleNpc.IsDead)
+                return 0;
 
             if (!battleNpc.IsTargetable)
                 return 0;
 
-            if (_currentFight != null)
+            var complexCombatData = _currentFight.Data.ComplexCombatDatas;
+            if (complexCombatData.Count >= 0)
             {
-                var complexCombatData = _currentFight.Data.ComplexCombatDatas;
-                if (complexCombatData.Count >= 0)
+                for (int i = 0; i < complexCombatData.Count; ++i)
                 {
-                    for (int i = 0; i < complexCombatData.Count; ++i)
-                    {
-                        if (_currentFight.Data.CompletedComplexDatas.Contains(i))
-                            continue;
+                    if (_currentFight.Data.CompletedComplexDatas.Contains(i))
+                        continue;
 
-                        if (complexCombatData[i].DataId == battleNpc.DataId)
-                            return 100;
-                    }
+                    if (complexCombatData[i].DataId == battleNpc.DataId)
+                        return 100;
                 }
-                else
-                {
-                    if (_currentFight.Data.KillEnemyDataIds.Contains(battleNpc.DataId))
-                        return 90;
-                }
+            }
+            else
+            {
+                if (_currentFight.Data.KillEnemyDataIds.Contains(battleNpc.DataId))
+                    return 90;
             }
 
             // enemies that we have aggro on
@@ -241,8 +261,7 @@ internal sealed class CombatController : IDisposable
                 if (gameObjectStruct->NamePlateIconId is 60093 or 60732)
                     return 0;
 
-                var enemyData =
-                    _currentFight?.Data.ComplexCombatDatas.FirstOrDefault(x => x.DataId == battleNpc.DataId);
+                var enemyData = _currentFight.Data.ComplexCombatDatas.FirstOrDefault(x => x.DataId == battleNpc.DataId);
                 if (enemyData is { IgnoreQuestMarker: true })
                 {
                     if (battleNpc.StatusFlags.HasFlag(StatusFlags.InCombat))
@@ -255,7 +274,8 @@ internal sealed class CombatController : IDisposable
 
                     // for enemies that are very far away, their nameplate doesn't render but they're in the object table
                     if (_currentFight?.Data.SpawnType == EEnemySpawnType.OverworldEnemies &&
-                        Vector3.Distance(_clientState.LocalPlayer?.Position ?? Vector3.Zero, battleNpc.Position) > MaxNameplateRange)
+                        Vector3.Distance(_clientState.LocalPlayer?.Position ?? Vector3.Zero, battleNpc.Position) >
+                        MaxNameplateRange)
                         return 25;
                 }
                 else
@@ -298,12 +318,14 @@ internal sealed class CombatController : IDisposable
         }
         else if (Vector3.Distance(_clientState.LocalPlayer!.Position, target.Position) > MaxTargetRange)
         {
-            _logger.LogInformation("Moving to target, distance: {Distance:N2}", Vector3.Distance(_clientState.LocalPlayer!.Position, target.Position));
+            _logger.LogInformation("Moving to target, distance: {Distance:N2}",
+                Vector3.Distance(_clientState.LocalPlayer!.Position, target.Position));
             _currentFight!.Module.MoveToTarget(target);
         }
         else
         {
-            _logger.LogInformation("Setting target to {TargetName} ({TargetId:X8})", target.Name.ToString(), target.GameObjectId);
+            _logger.LogInformation("Setting target to {TargetName} ({TargetId:X8})", target.Name.ToString(),
+                target.GameObjectId);
             _targetManager.Target = target;
             _currentFight!.Module.MoveToTarget(target);
         }
