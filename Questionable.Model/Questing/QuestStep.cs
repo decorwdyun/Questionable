@@ -78,6 +78,7 @@ public sealed class QuestStep
     public List<QuestWorkValue?> CompletionQuestVariablesFlags { get; set; } = [];
     public List<DialogueChoice> DialogueChoices { get; set; } = [];
     public List<uint> PointMenuChoices { get; set; } = [];
+    public PurchaseMenu? PurchaseMenu { get; set; }
 
     // TODO: Not implemented
     [JsonConverter(typeof(ElementIdConverter))]

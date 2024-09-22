@@ -15,6 +15,7 @@ public enum EInteractionType
     Combat,
     UseItem,
     EquipItem,
+    PurchaseItem,
     EquipRecommended,
     Say,
     Emote,

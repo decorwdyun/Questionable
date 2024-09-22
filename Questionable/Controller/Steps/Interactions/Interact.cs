@@ -35,6 +35,11 @@ internal static class Interact
                 if (step.DataId == null)
                     yield break;
             }
+            else if (step.InteractionType == EInteractionType.PurchaseItem)
+            {
+                if (step.DataId == null)
+                    yield break;
+            }
             else if (step.InteractionType == EInteractionType.Snipe)
             {
                 if (!configuration.General.AutomaticallyCompleteSnipeTasks)
@@ -51,7 +56,8 @@ internal static class Interact
 
             yield return new Task(step.DataId.Value, quest, step.InteractionType,
                 step.TargetTerritoryId != null || quest.Id is SatisfactionSupplyNpcId ||
-                step.SkipConditions is { StepIf.Never: true }, step.PickUpItemId, step.SkipConditions?.StepIf);
+                step.SkipConditions is { StepIf.Never: true } || step.InteractionType == EInteractionType.PurchaseItem,
+                step.PickUpItemId, step.SkipConditions?.StepIf);
         }
     }
 
@@ -147,7 +153,8 @@ internal static class Interact
             }
             else
             {
-                if (ProgressContext != null && (ProgressContext.WasSuccessful() || _interactionState == EInteractionState.InteractionConfirmed))
+                if (ProgressContext != null && (ProgressContext.WasSuccessful() ||
+                                                _interactionState == EInteractionState.InteractionConfirmed))
                     return ETaskResult.TaskComplete;
 
                 if (InteractionType == EInteractionType.Gather && condition[ConditionFlag.Gathering])

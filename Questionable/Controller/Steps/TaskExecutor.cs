@@ -5,6 +5,7 @@ namespace Questionable.Controller.Steps;
 internal interface ITaskExecutor
 {
     ITask CurrentTask { get; }
+    public InteractionProgressContext? ProgressContext { get; }
 
     Type GetTaskType();
 
@@ -19,7 +20,7 @@ internal abstract class TaskExecutor<T> : ITaskExecutor
     where T : class, ITask
 {
     protected T Task { get; set; } = null!;
-    protected InteractionProgressContext? ProgressContext { get; set; }
+    public InteractionProgressContext? ProgressContext { get; set; }
     ITask ITaskExecutor.CurrentTask => Task;
 
     public bool WasInterrupted()

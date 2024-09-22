@@ -224,6 +224,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<CombatController>();
         serviceCollection.AddSingleton<GatheringController>();
         serviceCollection.AddSingleton<ContextMenuController>();
+        serviceCollection.AddSingleton<ShopController>();
 
         serviceCollection.AddSingleton<CraftworksSupplyController>();
         serviceCollection.AddSingleton<CreditsController>();
@@ -284,6 +285,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceProvider.GetRequiredService<CreditsController>();
         serviceProvider.GetRequiredService<HelpUiController>();
         serviceProvider.GetRequiredService<LeveUiController>();
+        serviceProvider.GetRequiredService<ShopController>();
         serviceProvider.GetRequiredService<QuestionableIpc>();
         serviceProvider.GetRequiredService<DalamudInitializer>();
         serviceProvider.GetRequiredService<AutoSnipeHandler>().Enable();

@@ -119,6 +119,7 @@
             "Combat",
             "UseItem",
             "EquipItem",
+            "PurchaseItem",
             "EquipRecommended",
             "Say",
             "Emote",
@@ -704,6 +705,44 @@
           "then": {
             "required": [
               "ItemId"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "InteractionType": {
+                "const": "PurchaseItem"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "ItemCount": {
+                "type": "integer"
+              },
+              "PurchaseMenu": {
+                "type": "object",
+                "description": "The text to use with /say",
+                "properties": {
+                  "ExcelSheet": {
+                    "type": "string"
+                  },
+                  "Key": {
+                    "type": [
+                      "string",
+                      "integer"
+                    ]
+                  }
+                },
+                "required": [
+                  "Key"
+                ]
+              }
+            },
+            "required": [
+              "ItemId",
+              "ItemCount"
             ]
           }
         },

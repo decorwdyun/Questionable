@@ -127,6 +127,8 @@ internal static class QuestStepExtensions
                                 .AsSyntaxNodeOrToken(),
                             AssignmentList(nameof(QuestStep.PointMenuChoices), step.PointMenuChoices)
                                 .AsSyntaxNodeOrToken(),
+                            Assignment(nameof(QuestStep.PurchaseMenu), step.PurchaseMenu, emptyStep.PurchaseMenu)
+                                .AsSyntaxNodeOrToken(),
                             Assignment(nameof(QuestStep.PickUpQuestId), step.PickUpQuestId,
                                     emptyStep.PickUpQuestId)
                                 .AsSyntaxNodeOrToken(),

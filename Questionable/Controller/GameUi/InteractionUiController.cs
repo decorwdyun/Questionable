@@ -46,6 +46,7 @@ internal sealed class InteractionUiController : IDisposable
     private readonly IGameGui _gameGui;
     private readonly ITargetManager _targetManager;
     private readonly IClientState _clientState;
+    private readonly ShopController _shopController;
     private readonly ILogger<InteractionUiController> _logger;
     private readonly Regex _returnRegex;
 
@@ -67,6 +68,7 @@ internal sealed class InteractionUiController : IDisposable
         ITargetManager targetManager,
         IPluginLog pluginLog,
         IClientState clientState,
+        ShopController shopController,
         ILogger<InteractionUiController> logger)
     {
         _addonLifecycle = addonLifecycle;
@@ -83,6 +85,7 @@ internal sealed class InteractionUiController : IDisposable
         _gameGui = gameGui;
         _targetManager = targetManager;
         _clientState = clientState;
+        _shopController = shopController;
         _logger = logger;
 
         _returnRegex = _dataManager.GetExcelSheet<Addon>()!.GetRow(196)!.GetRegex(addon => addon.Text, pluginLog)!;
@@ -334,7 +337,17 @@ internal sealed class InteractionUiController : IDisposable
                 if (step == null)
                     _logger.LogDebug("Ignoring current quest dialogue choices, no active step");
                 else
+                {
                     dialogueChoices.AddRange(step.DialogueChoices.Select(x => new DialogueChoiceInfo(quest, x)));
+                    if (step.PurchaseMenu != null)
+                        dialogueChoices.Add(new DialogueChoiceInfo(quest, new DialogueChoice
+                        {
+                            Type = EDialogChoiceType.List,
+                            ExcelSheet = step.PurchaseMenu.ExcelSheet,
+                            Prompt = null,
+                            Answer = step.PurchaseMenu.Key,
+                        }));
+                }
             }
 
             // add all travel dialogue choices
@@ -516,6 +529,13 @@ internal sealed class InteractionUiController : IDisposable
             return;
 
         _logger.LogTrace("Prompt: '{Prompt}'", actualPrompt);
+        if (_shopController.IsAutoBuyEnabled && _shopController.IsAwaitingYesNo)
+        {
+            addonSelectYesno->AtkUnitBase.FireCallbackInt(0);
+            _shopController.IsAwaitingYesNo = false;
+            return;
+        }
+
         var director = UIState.Instance()->DirectorTodo.Director;
         if (director != null &&
             director->Info.EventId.ContentId == EventHandlerType.GatheringLeveDirector &&

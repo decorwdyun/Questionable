@@ -29,6 +29,7 @@ namespace Questionable.Windows.QuestComponents;
 
 internal sealed class CreationUtilsComponent
 {
+    private readonly QuestController _questController;
     private readonly MovementController _movementController;
     private readonly GameFunctions _gameFunctions;
     private readonly QuestFunctions _questFunctions;
@@ -43,6 +44,7 @@ internal sealed class CreationUtilsComponent
     private readonly ILogger<CreationUtilsComponent> _logger;
 
     public CreationUtilsComponent(
+        QuestController questController,
         MovementController movementController,
         GameFunctions gameFunctions,
         QuestFunctions questFunctions,
@@ -56,6 +58,7 @@ internal sealed class CreationUtilsComponent
         Configuration configuration,
         ILogger<CreationUtilsComponent> logger)
     {
+        _questController = questController;
         _movementController = movementController;
         _gameFunctions = gameFunctions;
         _questFunctions = questFunctions;
@@ -154,13 +157,14 @@ internal sealed class CreationUtilsComponent
         }
 #endif
 
-#if false
+#if true
         unsafe
         {
             var actionManager = ActionManager.Instance();
             ImGui.Text(
                 $"A1: {actionManager->CastActionId} ({actionManager->LastUsedActionSequence} → {actionManager->LastHandledActionSequence})");
             ImGui.Text($"A2: {actionManager->CastTimeElapsed} / {actionManager->CastTimeTotal}");
+            ImGui.Text($"{_questController.TaskQueue.CurrentTaskExecutor?.ProgressContext}");
         }
 #endif
 
