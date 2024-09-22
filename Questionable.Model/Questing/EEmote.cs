@@ -37,4 +37,5 @@ public enum EEmote
     BattleStance = 121,
     Doze = 13,
     Box = 166,
+    SundropDance = 120,
 }
