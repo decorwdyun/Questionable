@@ -5,9 +5,9 @@ using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using LLib.GameUI;
 using LLib.Shop;
+using LLib.Shop.Model;
 using Microsoft.Extensions.Logging;
 using Questionable.Model.Questing;
-using Workshoppa.GameData.Shops;
 using ValueType = FFXIVClientStructs.FFXIV.Component.GUI.ValueType;
 
 namespace Questionable.Controller.GameUi;
