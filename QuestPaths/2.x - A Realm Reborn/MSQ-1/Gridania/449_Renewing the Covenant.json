@@ -57,13 +57,12 @@
         },
         {
           "Position": {
-            "X": 49.65071,
-            "Y": -8.046952,
-            "Z": 102.32186
+            "X": 40.596844,
+            "Y": -8,
+            "Z": 103.85207
           },
           "TerritoryId": 132,
-          "InteractionType": "WalkTo",
-          "$": "New Gridania Navmesh workaround"
+          "InteractionType": "WalkTo"
         },
         {
           "DataId": 1000460,
