@@ -82,17 +82,6 @@
       "Sequence": 255,
       "Steps": [
         {
-          "Position": {
-            "X": -660.26556,
-            "Y": -49.27812,
-            "Z": -403.1036
-          },
-          "TerritoryId": 401,
-          "InteractionType": "WalkTo",
-          "AetheryteShortcut": "The Sea of Clouds - Ok' Zundu",
-          "Fly": true
-        },
-        {
           "DataId": 1016090,
           "Position": {
             "X": -836.51483,
@@ -101,6 +90,7 @@
           },
           "TerritoryId": 401,
           "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "The Sea of Clouds - Ok' Zundu",
           "Fly": true
         }
       ]
