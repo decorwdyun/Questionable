@@ -33,17 +33,14 @@ internal static class Combat
             switch (step.EnemySpawnType)
             {
                 case EEnemySpawnType.AfterInteraction:
-                {
                     ArgumentNullException.ThrowIfNull(step.DataId);
 
                     yield return new Interact.Task(step.DataId.Value, quest, EInteractionType.None, true);
                     yield return new WaitAtEnd.WaitDelay(TimeSpan.FromSeconds(1));
                     yield return CreateTask(quest, sequence, step);
                     break;
-                }
 
                 case EEnemySpawnType.AfterItemUse:
-                {
                     ArgumentNullException.ThrowIfNull(step.DataId);
                     ArgumentNullException.ThrowIfNull(step.ItemId);
 
@@ -52,10 +49,8 @@ internal static class Combat
                     yield return new WaitAtEnd.WaitDelay(TimeSpan.FromSeconds(1));
                     yield return CreateTask(quest, sequence, step);
                     break;
-                }
 
                 case EEnemySpawnType.AfterAction:
-                {
                     ArgumentNullException.ThrowIfNull(step.DataId);
                     ArgumentNullException.ThrowIfNull(step.Action);
 
@@ -65,7 +60,18 @@ internal static class Combat
                     yield return new WaitAtEnd.WaitDelay(TimeSpan.FromSeconds(1));
                     yield return CreateTask(quest, sequence, step);
                     break;
-                }
+
+                case EEnemySpawnType.AfterEmote:
+                    ArgumentNullException.ThrowIfNull(step.Emote);
+
+                    yield return new Mount.UnmountTask();
+                    if (step.DataId != null)
+                        yield return new Emote.UseOnObject(step.Emote.Value, step.DataId.Value);
+                    else
+                        yield return new Emote.UseOnSelf(step.Emote.Value);
+                    yield return new WaitAtEnd.WaitDelay(TimeSpan.FromSeconds(1));
+                    yield return CreateTask(quest, sequence, step);
+                    break;
 
                 case EEnemySpawnType.AutoOnEnterArea:
                     if (step.CombatDelaySecondsAtStart == null)
