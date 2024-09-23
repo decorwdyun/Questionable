@@ -37,6 +37,17 @@
       "Sequence": 2,
       "Steps": [
         {
+          "Position": {
+            "X": 10.0736885,
+            "Y": 27.10196,
+            "Z": 448.53668
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Mare Lamentorum - Sinus Lacrimarum",
+          "Fly": true
+        },
+        {
           "DataId": 1041559,
           "Position": {
             "X": 8.743347,
@@ -44,9 +55,7 @@
             "Z": 447.74548
           },
           "TerritoryId": 959,
-          "InteractionType": "Interact",
-          "AetheryteShortcut": "Mare Lamentorum - Sinus Lacrimarum",
-          "Fly": true
+          "InteractionType": "Interact"
         }
       ]
     },
@@ -106,6 +115,16 @@
       "Sequence": 4,
       "Steps": [
         {
+          "Position": {
+            "X": 10.0736885,
+            "Y": 27.10196,
+            "Z": 448.53668
+          },
+          "TerritoryId": 959,
+          "InteractionType": "WalkTo",
+          "Fly": true
+        },
+        {
           "DataId": 1041559,
           "Position": {
             "X": 8.743347,
@@ -113,8 +132,7 @@
             "Z": 447.74548
           },
           "TerritoryId": 959,
-          "InteractionType": "Interact",
-          "Fly": true
+          "InteractionType": "Interact"
         }
       ]
     },
