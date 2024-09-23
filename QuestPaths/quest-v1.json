@@ -579,6 +579,7 @@
                   "AfterInteraction",
                   "AfterItemUse",
                   "AfterAction",
+                  "AfterEmote",
                   "OverworldEnemies",
                   "FateEnemies"
                 ]
@@ -807,7 +808,8 @@
                   "comfort",
                   "battlestance",
                   "doze",
-                  "box"
+                  "box",
+                  "sundropdance"
                 ]
               }
             }

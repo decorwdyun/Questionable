@@ -10,6 +10,7 @@ public enum EEnemySpawnType
     AfterInteraction,
     AfterItemUse,
     AfterAction,
+    AfterEmote,
     AutoOnEnterArea,
     OverworldEnemies,
     FateEnemies,

@@ -21,59 +21,51 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 1016090,
+          "DataId": 2006639,
           "Position": {
-            "X": -836.51483,
-            "Y": -133.26949,
-            "Z": -386.61786
+            "X": -270.3136,
+            "Y": -13.962036,
+            "Z": -635.2484
           },
           "TerritoryId": 401,
           "InteractionType": "Interact",
-          "Fly": true
-        }
-      ]
-    },
-    {
-      "Sequence": 2,
-      "Steps": [
-        {
-          "DataId": 1016093,
-          "Position": {
-            "X": -776.0281,
-            "Y": -133.35559,
-            "Z": -414.32825
-          },
-          "TerritoryId": 401,
-          "InteractionType": "Interact",
-          "Fly": true
-        }
-      ]
-    },
-    {
-      "Sequence": 3,
-      "Steps": [
-        {
-          "DataId": 1016227,
-          "Position": {
-            "X": 473.1975,
-            "Y": -98.03464,
-            "Z": -527.7333
-          },
-          "TerritoryId": 401,
-          "InteractionType": "Action",
-          "Action": "Buffet (Sanuwa)",
           "Fly": true
         },
         {
-          "DataId": 1016226,
+          "DataId": 2006642,
           "Position": {
-            "X": 710.9331,
-            "Y": -98.032555,
-            "Z": -741.0239
+            "X": -245.41089,
+            "Y": -13.229614,
+            "Z": -608.2704
           },
           "TerritoryId": 401,
-          "InteractionType": "Action",
-          "Action": "Buffet (Sanuwa)",
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
+          "KillEnemyDataIds": [5236],
+          "Fly": true
+        },
+        {
+          "DataId": 2006640,
+          "Position": {
+            "X": -82.230896,
+            "Y": -10.727112,
+            "Z": -637.90344
+          },
+          "TerritoryId": 401,
+          "InteractionType": "Interact",
+          "Fly": true
+        },
+        {
+          "DataId": 2006641,
+          "Position": {
+            "X": -24.765442,
+            "Y": 5.3253784,
+            "Z": -657.70966
+          },
+          "TerritoryId": 401,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
+          "KillEnemyDataIds": [5236],
           "Fly": true
         }
       ]
@@ -82,11 +74,11 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 1016090,
+          "DataId": 1016089,
           "Position": {
-            "X": -836.51483,
-            "Y": -133.26949,
-            "Z": -386.61786
+            "X": -799.46594,
+            "Y": -133.2695,
+            "Z": -404.1352
           },
           "TerritoryId": 401,
           "InteractionType": "CompleteQuest",
