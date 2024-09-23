@@ -21,11 +21,11 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 1016092,
+          "DataId": 1016088,
           "Position": {
-            "X": -792.6299,
-            "Y": -133.32184,
-            "Z": -425.5589
+            "X": -818.143,
+            "Y": -129.93259,
+            "Z": -414.02307
           },
           "TerritoryId": 401,
           "InteractionType": "Interact",
@@ -37,28 +37,15 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 2006676,
+          "DataId": 1016093,
           "Position": {
-            "X": -717.0062,
-            "Y": -13.901062,
-            "Z": -101.487854
+            "X": -776.0281,
+            "Y": -133.35559,
+            "Z": -414.32825
           },
           "TerritoryId": 401,
           "InteractionType": "Interact",
-          "Fly": true,
-          "RequiredQuestVariables": [null, null, [16], null, null, null]
-        },
-        {
-          "DataId": 2006762,
-          "Position": {
-            "X": -781.52136,
-            "Y": -13.931519,
-            "Z": -114.30542
-          },
-          "TerritoryId": 401,
-          "InteractionType": "Interact",
-          "Fly": true,
-          "RequiredQuestVariables": [null, null, [32], null, null, null]
+          "Fly": true
         }
       ]
     },
@@ -66,17 +53,15 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 2006675,
+          "DataId": 1016242,
           "Position": {
-            "X": -642.298,
-            "Y": -207.29382,
-            "Z": 211.10852
+            "X": 284.19922,
+            "Y": 28.574171,
+            "Z": -636.3775
           },
           "TerritoryId": 401,
-          "InteractionType": "Combat",
-          "EnemySpawnType": "AfterItemUse",
-          "ItemId": 2001912,
-          "KillEnemyDataIds": [5240],
+          "InteractionType": "Action",
+          "Action": "Buffet (Sanuwa)",
           "Fly": true
         }
       ]
@@ -85,16 +70,33 @@
       "Sequence": 4,
       "Steps": [
         {
-          "DataId": 1012054,
+          "DataId": 1016378,
           "Position": {
-            "X": -640.1007,
-            "Y": -119.56208,
-            "Z": 469.5963
+            "X": 338.4298,
+            "Y": 31.483738,
+            "Z": -562.1882
           },
           "TerritoryId": 401,
-          "InteractionType": "Interact",
-          "Fly": true,
-          "AetheryteShortcut": "The Sea of Clouds - Camp Cloudtop"
+          "InteractionType": "Action",
+          "Action": "Buffet (Sanuwa)",
+          "Fly": true
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "DataId": 1016379,
+          "Position": {
+            "X": 501.27405,
+            "Y": 112.648964,
+            "Z": -182.97095
+          },
+          "TerritoryId": 401,
+          "InteractionType": "Action",
+          "Action": "Buffet (Sanuwa)",
+          "Fly": true
         }
       ]
     },
@@ -102,11 +104,11 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 1016092,
+          "DataId": 1016088,
           "Position": {
-            "X": -792.6299,
-            "Y": -133.32184,
-            "Z": -425.5589
+            "X": -818.143,
+            "Y": -129.93259,
+            "Z": -414.02307
           },
           "TerritoryId": 401,
           "InteractionType": "CompleteQuest",
