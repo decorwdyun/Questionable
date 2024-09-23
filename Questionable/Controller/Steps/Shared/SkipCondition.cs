@@ -3,6 +3,7 @@ using System.Numerics;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Utils;
@@ -122,6 +123,21 @@ internal static class SkipCondition
                 {
                     logger.LogInformation("Skipping step, object is not targetable");
                     return true;
+                }
+            }
+
+            if (skipConditions.NotNamePlateIconId.Count > 0 &&
+                step is { DataId: not null })
+            {
+                IGameObject? target = gameFunctions.FindObjectByDataId(step.DataId.Value);
+                if (target != null)
+                {
+                    GameObject* gameObject = (GameObject*)target.Address;
+                    if (!skipConditions.NotNamePlateIconId.Contains(gameObject->NamePlateIconId))
+                    {
+                        logger.LogInformation("Skipping step, object has icon id {IconId}", gameObject->NamePlateIconId);
+                        return true;
+                    }
                 }
             }
 

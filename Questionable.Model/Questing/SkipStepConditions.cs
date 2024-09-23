@@ -13,15 +13,17 @@ public sealed class SkipStepConditions
     public ELockedSkipCondition? Flying { get; set; }
     public ELockedSkipCondition? Chocobo { get; set; }
     public bool NotTargetable { get; set; }
-    public List<ushort> InTerritory { get; set; } = new();
-    public List<ushort> NotInTerritory { get; set; } = new();
+    public List<ushort> InTerritory { get; set; } = [];
+    public List<ushort> NotInTerritory { get; set; } = [];
     public SkipItemConditions? Item { get; set; }
 
     [JsonConverter(typeof(ElementIdListConverter))]
-    public List<ElementId> QuestsAccepted { get; set; } = new();
+    public List<ElementId> QuestsAccepted { get; set; } = [];
 
     [JsonConverter(typeof(ElementIdListConverter))]
-    public List<ElementId> QuestsCompleted { get; set; } = new();
+    public List<ElementId> QuestsCompleted { get; set; } = [];
+
+    public List<uint> NotNamePlateIconId { get; set; } = [];
 
     public EAetheryteLocation? AetheryteLocked { get; set; }
     public EAetheryteLocation? AetheryteUnlocked { get; set; }
@@ -41,6 +43,7 @@ public sealed class SkipStepConditions
                Item != null ||
                QuestsAccepted.Count > 0 ||
                QuestsCompleted.Count > 0 ||
+               NotNamePlateIconId.Count > 0 ||
                AetheryteLocked != null ||
                AetheryteUnlocked != null ||
                NearPosition != null ||
@@ -50,6 +53,6 @@ public sealed class SkipStepConditions
     public override string ToString()
     {
         return
-            $"{nameof(Never)}: {Never}, {nameof(CompletionQuestVariablesFlags)}: {CompletionQuestVariablesFlags}, {nameof(Flying)}: {Flying}, {nameof(Chocobo)}: {Chocobo}, {nameof(NotTargetable)}: {NotTargetable}, {nameof(InTerritory)}: {string.Join(" ", InTerritory)}, {nameof(NotInTerritory)}: {string.Join(" ", NotInTerritory)}, {nameof(Item)}: {Item}, {nameof(QuestsAccepted)}: {string.Join(" ", QuestsAccepted)}, {nameof(QuestsCompleted)}: {string.Join(" ", QuestsCompleted)}, {nameof(NearPosition)}: {NearPosition}, {nameof(ExtraCondition)}: {ExtraCondition}";
+            $"{nameof(Never)}: {Never}, {nameof(CompletionQuestVariablesFlags)}: {CompletionQuestVariablesFlags}, {nameof(Flying)}: {Flying}, {nameof(Chocobo)}: {Chocobo}, {nameof(NotTargetable)}: {NotTargetable}, {nameof(InTerritory)}: {string.Join(" ", InTerritory)}, {nameof(NotInTerritory)}: {string.Join(" ", NotInTerritory)}, {nameof(Item)}: {Item}, {nameof(QuestsAccepted)}: {string.Join(" ", QuestsAccepted)}, {nameof(QuestsCompleted)}: {string.Join(" ", QuestsCompleted)}, {nameof(NotNamePlateIconId)}: {string.Join(" ", NotNamePlateIconId)}, {nameof(NearPosition)}: {NearPosition}, {nameof(ExtraCondition)}: {ExtraCondition}";
     }
 }
