@@ -57,6 +57,7 @@ public static class RoslynShortcuts
                 DialogueChoice dialogueChoice => dialogueChoice.ToExpressionSyntax(),
                 JumpDestination jumpDestination => jumpDestination.ToExpressionSyntax(),
                 ExcelRef excelRef => excelRef.ToExpressionSyntax(),
+                PurchaseMenu purchaseMenu => purchaseMenu.ToExpressionSyntax(),
                 ComplexCombatData complexCombatData => complexCombatData.ToExpressionSyntax(),
                 QuestWorkValue questWorkValue => questWorkValue.ToExpressionSyntax(),
                 List<QuestWorkValue> list => list.ToExpressionSyntax(), // TODO fix in AssignmentList

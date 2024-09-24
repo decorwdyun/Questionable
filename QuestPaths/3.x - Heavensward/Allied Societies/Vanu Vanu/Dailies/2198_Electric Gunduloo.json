@@ -21,11 +21,11 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 1016090,
+          "DataId": 1016088,
           "Position": {
-            "X": -836.51483,
-            "Y": -133.26949,
-            "Z": -386.61786
+            "X": -818.143,
+            "Y": -129.93259,
+            "Z": -414.02307
           },
           "TerritoryId": 401,
           "InteractionType": "Interact",
@@ -37,43 +37,51 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 1016093,
+          "DataId": 1016241,
           "Position": {
-            "X": -776.0281,
-            "Y": -133.35559,
-            "Z": -414.32825
+            "X": -182.94049,
+            "Y": 213.612,
+            "Z": 204.57764
           },
           "TerritoryId": 401,
-          "InteractionType": "Interact",
-          "Fly": true
-        }
-      ]
-    },
-    {
-      "Sequence": 3,
-      "Steps": [
-        {
-          "DataId": 1016227,
-          "Position": {
-            "X": 473.1975,
-            "Y": -98.03464,
-            "Z": -527.7333
-          },
-          "TerritoryId": 401,
-          "InteractionType": "Action",
-          "Action": "Buffet (Sanuwa)",
+          "InteractionType": "Emote",
+          "Emote": "sundropdance",
           "Fly": true
         },
         {
-          "DataId": 1016226,
           "Position": {
-            "X": 710.9331,
-            "Y": -98.032555,
-            "Z": -741.0239
+            "X": -182.94049,
+            "Y": 213.612,
+            "Z": 204.57764
           },
           "TerritoryId": 401,
-          "InteractionType": "Action",
-          "Action": "Buffet (Sanuwa)",
+          "InteractionType": "Combat",
+          "EnemySpawnType": "OverworldEnemies",
+          "KillEnemyDataIds": [5235],
+          "CombatDelaySecondsAtStart": 0
+        },
+        {
+          "DataId": 1016239,
+          "Position": {
+            "X": -64.683044,
+            "Y": 212.9267,
+            "Z": 101.33508
+          },
+          "TerritoryId": 401,
+          "InteractionType": "Emote",
+          "Emote": "sundropdance",
+          "Fly": true
+        },
+        {
+          "DataId": 1016240,
+          "Position": {
+            "X": 233.23413,
+            "Y": 240.42369,
+            "Z": 118.30322
+          },
+          "TerritoryId": 401,
+          "InteractionType": "Emote",
+          "Emote": "sundropdance",
           "Fly": true
         }
       ]
@@ -82,11 +90,11 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 1016090,
+          "DataId": 1016088,
           "Position": {
-            "X": -836.51483,
-            "Y": -133.26949,
-            "Z": -386.61786
+            "X": -818.143,
+            "Y": -129.93259,
+            "Z": -414.02307
           },
           "TerritoryId": 401,
           "InteractionType": "CompleteQuest",

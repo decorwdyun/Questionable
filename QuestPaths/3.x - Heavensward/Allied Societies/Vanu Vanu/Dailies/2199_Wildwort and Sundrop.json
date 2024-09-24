@@ -21,11 +21,11 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 1016092,
+          "DataId": 1016088,
           "Position": {
-            "X": -792.6299,
-            "Y": -133.32184,
-            "Z": -425.5589
+            "X": -818.143,
+            "Y": -129.93259,
+            "Z": -414.02307
           },
           "TerritoryId": 401,
           "InteractionType": "Interact",
@@ -37,28 +37,15 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 2006676,
+          "DataId": 2006708,
           "Position": {
-            "X": -717.0062,
-            "Y": -13.901062,
-            "Z": -101.487854
+            "X": -198.41309,
+            "Y": 93.55298,
+            "Z": -303.88342
           },
           "TerritoryId": 401,
           "InteractionType": "Interact",
-          "Fly": true,
-          "RequiredQuestVariables": [null, null, [16], null, null, null]
-        },
-        {
-          "DataId": 2006762,
-          "Position": {
-            "X": -781.52136,
-            "Y": -13.931519,
-            "Z": -114.30542
-          },
-          "TerritoryId": 401,
-          "InteractionType": "Interact",
-          "Fly": true,
-          "RequiredQuestVariables": [null, null, [32], null, null, null]
+          "Fly": true
         }
       ]
     },
@@ -66,17 +53,15 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 2006675,
+          "DataId": 2006695,
           "Position": {
-            "X": -642.298,
-            "Y": -207.29382,
-            "Z": 211.10852
+            "X": 111.46704,
+            "Y": -84.55023,
+            "Z": 429.83142
           },
           "TerritoryId": 401,
-          "InteractionType": "Combat",
-          "EnemySpawnType": "AfterItemUse",
-          "ItemId": 2001912,
-          "KillEnemyDataIds": [5240],
+          "InteractionType": "UseItem",
+          "ItemId": 2001927,
           "Fly": true
         }
       ]
@@ -85,16 +70,15 @@
       "Sequence": 4,
       "Steps": [
         {
-          "DataId": 1012054,
+          "DataId": 2006696,
           "Position": {
-            "X": -640.1007,
-            "Y": -119.56208,
-            "Z": 469.5963
+            "X": 111.436646,
+            "Y": -83.024414,
+            "Z": 428.85486
           },
           "TerritoryId": 401,
-          "InteractionType": "Interact",
-          "Fly": true,
-          "AetheryteShortcut": "The Sea of Clouds - Camp Cloudtop"
+          "InteractionType": "Emote",
+          "Emote": "sundropdance"
         }
       ]
     },
@@ -102,11 +86,11 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 1016092,
+          "DataId": 1016088,
           "Position": {
-            "X": -792.6299,
-            "Y": -133.32184,
-            "Z": -425.5589
+            "X": -818.143,
+            "Y": -129.93259,
+            "Z": -414.02307
           },
           "TerritoryId": 401,
           "InteractionType": "CompleteQuest",
