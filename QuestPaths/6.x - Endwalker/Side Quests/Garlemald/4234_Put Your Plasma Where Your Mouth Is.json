@@ -60,8 +60,7 @@
           },
           "TerritoryId": 958,
           "InteractionType": "Snipe",
-          "Comment": "they don't move very fast, one left one middle one right.",
-          "$": "snipe instance, auto option seems to skip it"
+          "Comment": "they don't move very fast, one left one middle one right."
         }
       ]
     },
