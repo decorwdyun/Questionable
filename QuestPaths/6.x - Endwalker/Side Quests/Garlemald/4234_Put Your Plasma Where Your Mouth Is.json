@@ -29,7 +29,8 @@
           },
           "TerritoryId": 958,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "Garlemald - Tertium"
+          "AetheryteShortcut": "Garlemald - Tertium",
+          "Fly": true
         }
       ]
     },
@@ -59,8 +60,7 @@
             "Z": -299.36682
           },
           "TerritoryId": 958,
-          "InteractionType": "Snipe",
-          "Comment": "They don't move very fast. One left, one middle, one right."
+          "InteractionType": "Snipe"
         }
       ]
     },
