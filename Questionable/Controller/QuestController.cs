@@ -43,8 +43,6 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
     private readonly TaskCreator _taskCreator;
     private readonly ILogger<QuestController> _logger;
 
-    private readonly string _actionCanceledText;
-
     private readonly object _progressLock = new();
 
     private QuestProgress? _startedQuest;
@@ -84,7 +82,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
         TaskCreator taskCreator,
         IServiceProvider serviceProvider,
         IDataManager dataManager)
-        : base(chatGui, condition, serviceProvider, logger)
+        : base(chatGui, condition, serviceProvider, dataManager, logger)
     {
         _clientState = clientState;
         _gameFunctions = gameFunctions;
@@ -105,8 +103,6 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
         _condition.ConditionChange += OnConditionChange;
         _toastGui.Toast += OnNormalToast;
         _toastGui.ErrorToast += OnErrorToast;
-
-        _actionCanceledText = dataManager.GetString<LogMessage>(1314, x => x.Text)!;
     }
 
     public EAutomationType AutomationType
@@ -807,24 +803,6 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
     private void OnNormalToast(ref SeString message, ref ToastOptions options, ref bool isHandled)
     {
         _gatheringController.OnNormalToast(message);
-    }
-
-    private void OnErrorToast(ref SeString message, ref bool isHandled)
-    {
-        if (_taskQueue.CurrentTaskExecutor is IToastAware toastAware)
-        {
-            if (toastAware.OnErrorToast(message))
-            {
-                isHandled = true;
-            }
-        }
-
-        if (!isHandled)
-        {
-            if (GameFunctions.GameStringEquals(_actionCanceledText, message.TextValue) &&
-                !_condition[ConditionFlag.InFlight])
-                InterruptQueueWithCombat();
-        }
     }
 
     public void Dispose()
