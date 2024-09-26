@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Dalamud.Game.Text;
+using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using FFXIVClientStructs.FFXIV.Client.Game;
@@ -124,7 +125,8 @@ internal static class Gather
         }
     }
 
-    internal sealed class StartGathering(GatheringController gatheringController) : TaskExecutor<GatheringTask>
+    internal sealed class StartGathering(GatheringController gatheringController) : TaskExecutor<GatheringTask>,
+        IToastAware
     {
         protected override bool Start()
         {
@@ -139,6 +141,13 @@ internal static class Gather
                 return ETaskResult.TaskComplete;
 
             return ETaskResult.StillRunning;
+        }
+
+        public bool OnErrorToast(SeString message)
+        {
+            bool isHandled = false;
+            gatheringController.OnErrorToast(ref message, ref isHandled);
+            return isHandled;
         }
     }
 
