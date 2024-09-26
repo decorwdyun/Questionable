@@ -62,7 +62,8 @@
           "TerritoryId": 959,
           "InteractionType": "Action",
           "Action": "Hop-step",
-          "Fly": true
+          "Fly": true,
+          "Land": true
         },
         {
           "DataId": 2013256,
@@ -74,7 +75,8 @@
           "TerritoryId": 959,
           "InteractionType": "Action",
           "Action": "Hop-step",
-          "Fly": true
+          "Fly": true,
+          "Land": true
         }
       ]
     },
