@@ -94,6 +94,7 @@
           "InteractionType": "CompleteQuest",
           "StopDistance": 5,
           "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow",
+          "Fly": true,
           "SkipConditions": {
             "AetheryteShortcutIf": {
               "NearPosition": {
@@ -103,7 +104,7 @@
                   "Z": -273.60956
                 },
                 "TerritoryId": 959,
-                "MaximumDistance": 100
+                "MaximumDistance": 200
               }
             }
           }
