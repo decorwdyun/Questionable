@@ -38,8 +38,7 @@
           "TerritoryId": 958,
           "InteractionType": "UseItem",
           "ItemId": 2003244,
-          "Fly": true,
-          "$": "fly explicit because it walks directly into house & gets stuck otherwise."
+          "Fly": true
         }
       ]
     },
