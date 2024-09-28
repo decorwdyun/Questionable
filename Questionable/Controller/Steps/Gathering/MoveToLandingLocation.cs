@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Numerics;
 using Dalamud.Game.ClientState.Objects.Enums;
+using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Shared;
@@ -26,7 +27,7 @@ internal static class MoveToLandingLocation
         MoveTo.MoveExecutor moveExecutor,
         GameFunctions gameFunctions,
         IObjectTable objectTable,
-        ILogger<MoveToLandingLocationExecutor> logger) : TaskExecutor<Task>
+        ILogger<MoveToLandingLocationExecutor> logger) : TaskExecutor<Task>, IToastAware
     {
         private ITask _moveTask = null!;
 
@@ -57,5 +58,6 @@ internal static class MoveToLandingLocation
         }
 
         public override ETaskResult Update() => moveExecutor.Update();
+        public bool OnErrorToast(SeString message) => moveExecutor.OnErrorToast(message);
     }
 }
