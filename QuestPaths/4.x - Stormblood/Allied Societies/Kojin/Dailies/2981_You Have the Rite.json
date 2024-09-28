@@ -90,6 +90,16 @@
       "Sequence": 255,
       "Steps": [
         {
+          "Position": {
+            "X": 392.59683,
+            "Y": -119.589325,
+            "Z": -234.30063
+          },
+          "TerritoryId": 613,
+          "InteractionType": "WalkTo",
+          "Fly": true
+        },
+        {
           "DataId": 1024217,
           "Position": {
             "X": 394.39978,
@@ -97,8 +107,7 @@
             "Z": -232.28815
           },
           "TerritoryId": 613,
-          "InteractionType": "CompleteQuest",
-          "Fly": true
+          "InteractionType": "CompleteQuest"
         }
       ]
     }
