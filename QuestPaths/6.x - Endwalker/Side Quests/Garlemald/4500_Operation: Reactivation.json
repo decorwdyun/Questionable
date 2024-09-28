@@ -59,7 +59,7 @@
             "Z": 614.43494
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact",
+          "InteractionType": "CompleteQuest",
           "DialogueChoices": [
             {
               "Type": "List",
