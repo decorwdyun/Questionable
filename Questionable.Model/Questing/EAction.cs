@@ -14,7 +14,7 @@ public enum EAction
     HeavyShot = 97,
     Cure = 120,
     Cure2 = 135,
-    Eukrasia = 24290,
+    Eukrasia = 24290, 
     Diagnosis = 24284,
     EukrasianDiagnosis = 24291,
     Esuna = 7568,
@@ -35,7 +35,6 @@ public enum EAction
     BlueGulal = 29384,
     ElectrixFlux = 29718,
     HopStep = 31116,
-    Dismount = 23,
 
     CollectMiner = 240,
     ScourMiner = 22182,
@@ -71,7 +70,6 @@ public static class EActionExtensions
             or EAction.YellowGulal
             or EAction.BlueGulal
             or EAction.ElectrixFlux
-            or EAction.HopStep
-            or EAction.Dismount;
+            or EAction.HopStep;
     }
 }

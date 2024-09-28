@@ -34,6 +34,5 @@ public sealed class ActionConverter() : EnumConverter<EAction>(Values)
         { EAction.BlueGulal, "Blue Gulal" },
         { EAction.ElectrixFlux, "Electric Flux" },
         { EAction.HopStep, "Hop-step" },
-        { EAction.Dismount, "Dismount" },
     };
 }
