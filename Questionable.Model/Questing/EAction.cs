@@ -27,6 +27,7 @@ public enum EAction
     Fumigate = 5872,
     MagitekPulse = 8624,
     MagitekThunder = 8625,
+    Inhale = 10013,
     SiphonSnout = 18187,
     PeculiarLight = 20030,
     Cannonfire = 20121,
@@ -63,6 +64,7 @@ public static class EActionExtensions
             or EAction.BuffetGriffin
             or EAction.Trample
             or EAction.Fumigate
+            or EAction.Inhale
             or EAction.SiphonSnout
             or EAction.PeculiarLight
             or EAction.Cannonfire
