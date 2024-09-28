@@ -74,15 +74,9 @@
       "Sequence": 255,
       "Steps": [
         {
-          "Position": {
-            "X": 370.17212,
-            "Y": -18.937208,
-            "Z": 338.0957
-          },
           "TerritoryId": 958,
-          "InteractionType": "Action",
-          "Action": "Dismount",
-          "$": "need to dismount explicitly or it blocks quest turnin, gets mad at you for not using the pet hotbar action. if we do it now, we can fly to turnin, big speedup"
+          "InteractionType": "None",
+          "Mount": false
         },
         {
           "DataId": 1041119,
