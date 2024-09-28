@@ -30,7 +30,20 @@
           "TerritoryId": 613,
           "InteractionType": "Interact",
           "Fly": true,
-          "AetheryteShortcut": "Ruby Sea - Onokoro"
+          "AetheryteShortcut": "Ruby Sea - Onokoro",
+          "RequiredQuestVariables": [null, null, [16, 32], null, null, null]
+        },
+        {
+          "DataId": 1024348,
+          "Position": {
+            "X": 724.8187,
+            "Y": 1.3691645,
+            "Z": -814.4198
+          },
+          "TerritoryId": 613,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "RequiredQuestVariables": [null, null, [32], null, null, null]
         },
         {
           "DataId": 1024420,
@@ -41,7 +54,8 @@
           },
           "TerritoryId": 613,
           "InteractionType": "Interact",
-          "Fly": true
+          "Fly": true,
+          "RequiredQuestVariables": [null, null, [16], null, null, null]
         }
       ]
     },
