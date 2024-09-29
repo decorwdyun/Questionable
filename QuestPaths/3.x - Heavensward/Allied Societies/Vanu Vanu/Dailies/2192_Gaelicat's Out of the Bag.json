@@ -37,46 +37,64 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 2006682,
+          "DataId": 1016375,
           "Position": {
-            "X": 25.711426,
-            "Y": 150.46924,
-            "Z": -133.56226
+            "X": -627.89355,
+            "Y": -149.95285,
+            "Z": 480.15564
           },
           "TerritoryId": 401,
-          "InteractionType": "Interact",
+          "InteractionType": "UseItem",
+          "ItemId": 2001934,
+          "Fly": true,
+          "AetheryteShortcut": "The Sea of Clouds - Camp Cloudtop"
+        },
+        {
+          "DataId": 1016232,
+          "Position": {
+            "X": -452.10956,
+            "Y": -187.396,
+            "Z": 734.18774
+          },
+          "TerritoryId": 401,
+          "InteractionType": "UseItem",
+          "ItemId": 2001934,
           "Fly": true
         },
         {
-          "DataId": 2006681,
+          "DataId": 1016233,
           "Position": {
-            "X": 237.07935,
-            "Y": 163.95813,
-            "Z": -46.433228
+            "X": -359.823,
+            "Y": -184.95448,
+            "Z": 796.71924
           },
           "TerritoryId": 401,
-          "InteractionType": "Interact",
+          "InteractionType": "UseItem",
+          "ItemId": 2001934,
           "Fly": true
         },
         {
+          "DataId": 1016374,
           "Position": {
-            "X": 237.02913,
-            "Y": 169.13622,
-            "Z": -44.168194
+            "X": -343.00757,
+            "Y": -161.8661,
+            "Z": 770.01587
           },
           "TerritoryId": 401,
-          "InteractionType": "WalkTo",
+          "InteractionType": "UseItem",
+          "ItemId": 2001934,
           "Fly": true
         },
         {
-          "DataId": 2006683,
+          "DataId": 1016231,
           "Position": {
-            "X": 332.5094,
-            "Y": 106.79785,
-            "Z": -68.2536
+            "X": -333.79114,
+            "Y": -184.97446,
+            "Z": 625.1162
           },
           "TerritoryId": 401,
-          "InteractionType": "Interact",
+          "InteractionType": "UseItem",
+          "ItemId": 2001934,
           "Fly": true
         }
       ]
@@ -84,16 +102,6 @@
     {
       "Sequence": 255,
       "Steps": [
-        {
-          "Position": {
-            "X": 317.41415,
-            "Y": 110.85538,
-            "Z": -34.527588
-          },
-          "TerritoryId": 401,
-          "InteractionType": "WalkTo",
-          "$": "Run away from the enemy to TP"
-        },
         {
           "DataId": 1016092,
           "Position": {
