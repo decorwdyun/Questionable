@@ -92,17 +92,24 @@ internal sealed class QuestRegistry
 
         foreach ((ElementId questId, QuestRoot questRoot) in AssemblyQuestLoader.GetQuests())
         {
-            var questInfo = _questData.GetQuestInfo(questId);
-            if (questInfo is LeveInfo leveInfo)
-                _leveData.AddQuestSteps(leveInfo, questRoot);
-            Quest quest = new()
+            try
             {
-                Id = questId,
-                Root = questRoot,
-                Info = questInfo,
-                Source = Quest.ESource.Assembly,
-            };
-            _quests[quest.Id] = quest;
+                var questInfo = _questData.GetQuestInfo(questId);
+                if (questInfo is LeveInfo leveInfo)
+                    _leveData.AddQuestSteps(leveInfo, questRoot);
+                Quest quest = new()
+                {
+                    Id = questId,
+                    Root = questRoot,
+                    Info = questInfo,
+                    Source = Quest.ESource.Assembly,
+                };
+                _quests[quest.Id] = quest;
+            }
+            catch (Exception e)
+            {
+                _logger.LogWarning("Not loading unknown quest {QuestId} from assembly: {Message}", questId, e.Message);
+            }
         }
 
         _logger.LogInformation("Loaded {Count} quests from assembly", _quests.Count);
