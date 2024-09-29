@@ -35,7 +35,7 @@
               "InSameTerritory": true
             }
           },
-          "Comment": "Cool now go inside"
+          "$": "Cool now go inside"
         },
         {
           "DataId": 1000375,
