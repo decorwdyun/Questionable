@@ -21,33 +21,11 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 2006645,
+          "DataId": 1016091,
           "Position": {
-            "X": -473.10602,
-            "Y": -56.01587,
-            "Z": -624.1398
-          },
-          "TerritoryId": 401,
-          "InteractionType": "Interact",
-          "Fly": true
-        },
-        {
-          "DataId": 2006644,
-          "Position": {
-            "X": -365.92664,
-            "Y": -57.053528,
-            "Z": -579.553
-          },
-          "TerritoryId": 401,
-          "InteractionType": "Interact",
-          "Fly": true
-        },
-        {
-          "DataId": 2006643,
-          "Position": {
-            "X": -381.9486,
-            "Y": -56.50421,
-            "Z": -521.8433
+            "X": -804.25726,
+            "Y": -133.2695,
+            "Z": -390.89038
           },
           "TerritoryId": 401,
           "InteractionType": "Interact",
@@ -59,32 +37,48 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 1016089,
+          "DataId": 1016508,
           "Position": {
-            "X": -799.46594,
-            "Y": -133.2695,
-            "Z": -404.1352
+            "X": -261.8601,
+            "Y": -132.0669,
+            "Z": 388.66248
           },
           "TerritoryId": 401,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "The Sea of Clouds - Ok' Zundu",
-          "Fly": true
-        }
-      ]
-    },
-    {
-      "Sequence": 3,
-      "Steps": [
+          "Fly": true,
+          "AetheryteShortcut": "The Sea of Clouds - Camp Cloudtop"
+        },
         {
-          "DataId": 1012056,
+          "DataId": 1016235,
           "Position": {
-            "X": -658.89984,
-            "Y": -127.78361,
-            "Z": 622.98
+            "X": -229.48047,
+            "Y": -129.59497,
+            "Z": 418.44812
           },
           "TerritoryId": 401,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "The Sea of Clouds - Camp Cloudtop",
+          "Fly": true
+        },
+        {
+          "DataId": 1016236,
+          "Position": {
+            "X": -196.2768,
+            "Y": -131.82275,
+            "Z": 333.9436
+          },
+          "TerritoryId": 401,
+          "InteractionType": "Interact",
+          "Fly": true
+        },
+        {
+          "DataId": 1016216,
+          "Position": {
+            "X": -253.62024,
+            "Y": -130.38837,
+            "Z": 340.3219
+          },
+          "TerritoryId": 401,
+          "InteractionType": "Interact",
           "Fly": true
         }
       ]
@@ -93,16 +87,16 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 1016089,
+          "DataId": 1016091,
           "Position": {
-            "X": -799.46594,
+            "X": -804.25726,
             "Y": -133.2695,
-            "Z": -404.1352
+            "Z": -390.89038
           },
           "TerritoryId": 401,
           "InteractionType": "CompleteQuest",
-          "AetheryteShortcut": "The Sea of Clouds - Ok' Zundu",
-          "Fly": true
+          "Fly": true,
+          "AetheryteShortcut": "The Sea of Clouds - Ok' Zundu"
         }
       ]
     }
