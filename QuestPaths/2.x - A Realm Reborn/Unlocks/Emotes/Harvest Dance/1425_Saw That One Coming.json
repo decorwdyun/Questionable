@@ -19,7 +19,7 @@
               "InSameTerritory": true
             }
           },
-          "Comment": "We have get here first just to make sure we don't run into walls."
+          "$": "We have get here first just to make sure we don't run into walls."
         },
         {
           "Position": {
@@ -101,7 +101,7 @@
               "InSameTerritory": true
             }
           },
-          "Comment": "Interact with the gal now!"
+          "$": "Interact with the gal now!"
         }
       ]
     },
@@ -124,7 +124,7 @@
               "InSameTerritory": true
             }
           },
-          "Comment": "Speak with the man now!"
+          "$": "Speak with the man now!"
         }
       ]
     },
@@ -151,7 +151,15 @@
               "InSameTerritory": true
             }
           },
-          "Comment": "Give the First kid his present"
+          "$": "Give the First kid his present",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 1007794,
@@ -167,7 +175,15 @@
             "[Gridania] Leatherworkers' Guild & Shaded Bower",
             "[Gridania] Mih Khetto's Amphitheatre"
           ],
-          "Comment": "Give the second kid his present."
+          "$": "Give the second kid his present.",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 1007793,
@@ -183,7 +199,15 @@
             "[Gridania] Mih Khetto's Amphitheatre",
             "[Gridania] Conjurers' Guild"
           ],
-          "Comment": "Give the third kid his present."
+          "$": "Give the third kid his present.",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         }
       ]
     },
