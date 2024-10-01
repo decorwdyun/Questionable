@@ -13,6 +13,7 @@
             "Y": 42.597717,
             "Z": 162.65016
           },
+          "StopDistance": 5,
           "TerritoryId": 134,
           "AetheryteShortcut": "Middle La Noscea - Summerford Farms",
           "Fly": true,
@@ -57,6 +58,7 @@
             "Y": 42.597717,
             "Z": 163.7445
           },
+          "StopDistance": 5,
           "TerritoryId": 134,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Middle La Noscea - Summerford Farms",
@@ -79,6 +81,7 @@
             "Y": 207,
             "Z": 49.332397
           },
+          "StopDistance": 5,
           "TerritoryId": 478,
           "InteractionType": "Interact",
           "AetheryteShortcut": "Idyllshire",
@@ -100,6 +103,7 @@
             "Y": 215.44214,
             "Z": -108.171265
           },
+          "StopDistance": 2,
           "TerritoryId": 478,
           "InteractionType": "Interact",
           "AetheryteShortcut": "Idyllshire",
