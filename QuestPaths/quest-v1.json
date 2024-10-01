@@ -29,12 +29,6 @@
       "type": "string",
       "description": "Dev Comment (not visible in-game)"
     },
-    "TerritoryBlacklist": {
-      "type": "array",
-      "items": {
-        "type": "integer"
-      }
-    },
     "QuestSequence": {
       "type": "array",
       "items": {

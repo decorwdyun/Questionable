@@ -1,9 +1,6 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "JerryWester",
-  "TerritoryBlacklist": [
-    151
-  ],
   "QuestSequence": [
     {
       "Sequence": 0,

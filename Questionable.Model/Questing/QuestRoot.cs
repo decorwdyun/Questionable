@@ -16,6 +16,5 @@ public sealed class QuestRoot
     public bool Disabled { get; set; }
 
     public string? Comment { get; set; }
-    public List<ushort> TerritoryBlacklist { get; set; } = new();
     public List<QuestSequence> QuestSequence { get; set; } = new();
 }

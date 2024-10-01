@@ -210,9 +210,6 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
             }
         }
 
-        if (CurrentQuest != null && CurrentQuest.Quest.Root.TerritoryBlacklist.Contains(_clientState.TerritoryType))
-            return;
-
         if (AutomationType == EAutomationType.Automatic &&
             (_taskQueue.AllTasksComplete || _taskQueue.CurrentTaskExecutor?.CurrentTask is WaitAtEnd.WaitQuestAccepted)
             && CurrentQuest is { Sequence: 0, Step: 0 } or { Sequence: 0, Step: 255 }

@@ -57,7 +57,6 @@ public class QuestSourceGenerator : ISourceGenerator
             {
                 quest.Author = [];
                 quest.QuestSequence = [];
-                quest.TerritoryBlacklist = [];
             }
 
             quests.Add((id, quest));
@@ -165,8 +164,6 @@ public class QuestSourceGenerator : ISourceGenerator
                                 Assignment(nameof(QuestRoot.Disabled), quest.Disabled, false).AsSyntaxNodeOrToken(),
                                 Assignment(nameof(QuestRoot.Comment), quest.Comment, null)
                                     .AsSyntaxNodeOrToken(),
-                                AssignmentList(nameof(QuestRoot.TerritoryBlacklist),
-                                    quest.TerritoryBlacklist).AsSyntaxNodeOrToken(),
                                 AssignmentExpression(
                                     SyntaxKind.SimpleAssignmentExpression,
                                     IdentifierName(nameof(QuestRoot.QuestSequence)),
