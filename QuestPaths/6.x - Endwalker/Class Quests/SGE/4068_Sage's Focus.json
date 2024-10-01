@@ -33,13 +33,8 @@
           "TerritoryId": 134,
           "InteractionType": "EquipItem",
           "ItemId": 35778,
-          "AetheryteShortcut": "Middle La Noscea - Summerford Farms",
-          "Fly": true,
           "Comment": "Try to Equip Stonegold Milpreves",
           "SkipConditions": {
-            "AetheryteShortcutIf": {
-              "InSameTerritory": true
-            },
             "StepIf": {
               "Item": {
                 "NotInInventory": true
@@ -60,14 +55,7 @@
           },
           "StopDistance": 5,
           "TerritoryId": 134,
-          "InteractionType": "AcceptQuest",
-          "AetheryteShortcut": "Middle La Noscea - Summerford Farms",
-          "Fly": true,
-          "SkipConditions": {
-            "AetheryteShortcutIf": {
-              "InSameTerritory": true
-            }
-          }
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
