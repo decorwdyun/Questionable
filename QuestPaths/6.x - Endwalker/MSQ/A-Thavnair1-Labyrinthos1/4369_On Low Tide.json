@@ -83,21 +83,24 @@
       "Steps": [
         {
           "Position": {
-            "X": 200.24112,
-            "Y": 1.7700036,
-            "Z": 712.99384
+            "X": 223.328,
+            "Y": -0.6,
+            "Z": 752.7248
           },
           "TerritoryId": 957,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true,
+          "Sprint": true
         },
         {
           "Position": {
-            "X": 240.97523,
-            "Y": 0.8542664,
-            "Z": 712.4415
+            "X": 253.03053,
+            "Y": 0.7659681,
+            "Z": 732.0563
           },
           "TerritoryId": 957,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true
         },
         {
           "DataId": 1038606,
