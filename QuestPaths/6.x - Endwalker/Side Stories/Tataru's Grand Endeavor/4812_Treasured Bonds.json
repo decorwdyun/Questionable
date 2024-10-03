@@ -104,7 +104,7 @@
             "Z": -299.8551
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact",
+          "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Thavnair - Palaka's Stand",
           "Fly": true
         }
