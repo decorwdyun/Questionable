@@ -144,7 +144,8 @@ internal static class SkipCondition
             if (skipConditions.Item is { NotInInventory: true } && step is { ItemId: not null })
             {
                 InventoryManager* inventoryManager = InventoryManager.Instance();
-                if (inventoryManager->GetInventoryItemCount(step.ItemId.Value) == 0)
+                if (inventoryManager->GetInventoryItemCount(step.ItemId.Value) == 0 &&
+                    inventoryManager->GetInventoryItemCount(step.ItemId.Value, true) == 0)
                 {
                     logger.LogInformation("Skipping step, no item with itemId {ItemId} in inventory",
                         step.ItemId.Value);

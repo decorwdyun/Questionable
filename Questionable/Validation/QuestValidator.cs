@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Questionable.Model;
+using Questionable.Model.Questing;
 
 namespace Questionable.Validation;
 
@@ -90,6 +91,9 @@ internal sealed class QuestValidator
             }
         }, CancellationToken.None, TaskCreationOptions.LongRunning, TaskScheduler.Default);
     }
+
+    public List<ValidationIssue> GetIssues(ElementId elementId) =>
+        _validationIssues.Where(x => x.ElementId == elementId).ToList();
 
     private static IEnumerable<ValidationIssue> DisabledTribesAsIssues(Dictionary<EAlliedSociety, int> disabledTribeQuests)
     {

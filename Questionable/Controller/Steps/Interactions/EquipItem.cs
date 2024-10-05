@@ -158,6 +158,8 @@ internal static class EquipItem
                     return;
                 }
             }
+
+            throw new TaskException($"Could not equip item {Task.ItemId}.");
         }
 
         private static List<ushort>? GetEquipSlot(Item item)

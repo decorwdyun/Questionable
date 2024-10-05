@@ -7,6 +7,7 @@ using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Shared;
+using Questionable.Controller.Utils;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
@@ -57,7 +58,7 @@ internal static class Interact
             yield return new Task(step.DataId.Value, quest, step.InteractionType,
                 step.TargetTerritoryId != null || quest.Id is SatisfactionSupplyNpcId ||
                 step.SkipConditions is { StepIf.Never: true } || step.InteractionType == EInteractionType.PurchaseItem,
-                step.PickUpItemId, step.SkipConditions?.StepIf);
+                step.PickUpItemId, step.SkipConditions?.StepIf, step.CompletionQuestVariablesFlags);
         }
     }
 
@@ -67,15 +68,25 @@ internal static class Interact
         EInteractionType InteractionType,
         bool SkipMarkerCheck = false,
         uint? PickUpItemId = null,
-        SkipStepConditions? SkipConditions = null) : ITask
+        SkipStepConditions? SkipConditions = null,
+        List<QuestWorkValue?>? CompletionQuestVariablesFlags = null) : ITask
     {
+        public List<QuestWorkValue?> CompletionQuestVariablesFlags { get; } = CompletionQuestVariablesFlags ?? [];
+
+        public bool HasCompletionQuestVariablesFlags { get; } =
+            Quest != null &&
+            CompletionQuestVariablesFlags != null &&
+            QuestWorkUtils.HasCompletionFlags(CompletionQuestVariablesFlags);
+
         public bool ShouldRedoOnInterrupt() => true;
 
-        public override string ToString() => $"Interact({DataId})";
+        public override string ToString() =>
+            $"Interact{(HasCompletionQuestVariablesFlags ? "*" : "")}({DataId})";
     }
 
     internal sealed class DoInteract(
         GameFunctions gameFunctions,
+        QuestFunctions questFunctions,
         ICondition condition,
         ILogger<DoInteract> logger)
         : TaskExecutor<Task>, IConditionChangeAware
@@ -151,13 +162,22 @@ internal static class Interact
                         return ETaskResult.TaskComplete;
                 }
             }
-            else
+            else if (InteractionType == EInteractionType.Gather && condition[ConditionFlag.Gathering])
+                return ETaskResult.TaskComplete;
+            else if (Quest != null && Task.HasCompletionQuestVariablesFlags)
             {
-                if (ProgressContext != null && (ProgressContext.WasSuccessful() ||
-                                                _interactionState == EInteractionState.InteractionConfirmed))
-                    return ETaskResult.TaskComplete;
-
-                if (InteractionType == EInteractionType.Gather && condition[ConditionFlag.Gathering])
+                var questWork = questFunctions.GetQuestProgressInfo(Quest.Id);
+                return questWork != null &&
+                       QuestWorkUtils.MatchesQuestWork(Task.CompletionQuestVariablesFlags, questWork)
+                    ? ETaskResult.TaskComplete
+                    : ETaskResult.StillRunning;
+            }
+            else if (ProgressContext != null)
+            {
+                if (ProgressContext.WasInterrupted())
+                    return ETaskResult.StillRunning;
+                else if (ProgressContext.WasSuccessful() ||
+                         _interactionState == EInteractionState.InteractionConfirmed)
                     return ETaskResult.TaskComplete;
             }
 

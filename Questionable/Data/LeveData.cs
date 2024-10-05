@@ -14,6 +14,11 @@ internal sealed class LeveData
     private static readonly List<LeveStepData> Leves =
     [
         new(
+            aetheryteLocation: EAetheryteLocation.Crystarium,
+            aethernetShortcut: new AethernetShortcut{From = EAetheryteLocation.Crystarium, To = EAetheryteLocation.CrystariumCrystallineMean},
+            issuerDataId: 1027847,
+            issuerPosition: new(-73.94349f, 19.999794f, -110.86395f)),
+        new(
             aetheryteLocation: EAetheryteLocation.OldSharlayan,
             aethernetShortcut: new AethernetShortcut
                 { From = EAetheryteLocation.OldSharlayan, To = EAetheryteLocation.OldSharlayanScholarsHarbor },
