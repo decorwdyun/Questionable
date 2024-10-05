@@ -90,6 +90,13 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
                     Save();
                 }
 
+                bool configureTextAdvance = _configuration.General.ConfigureTextAdvance;
+                if (ImGui.Checkbox("Automatically configure TextAdvance with the recommended settings", ref configureTextAdvance))
+                {
+                    _configuration.General.ConfigureTextAdvance = configureTextAdvance;
+                    Save();
+                }
+
                 if (ImGui.CollapsingHeader("Cheats"))
                 {
                     ImGui.TextColored(ImGuiColors.DalamudRed, "This setting will be removed in a future version, and will be\navailable through TextAdvance instead.");
