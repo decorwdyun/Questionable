@@ -6,6 +6,7 @@ using Questionable.Controller;
 using Questionable.Data;
 using Questionable.Model.Common;
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Questionable.External;
 
@@ -13,6 +14,7 @@ internal sealed class TextAdvanceIpc : IDisposable
 {
     private bool _isExternalControlActivated;
     private readonly QuestController _questController;
+    private readonly Configuration _configuration;
     private readonly IFramework _framework;
     private readonly ICallGateSubscriber<bool> _isInExternalControl;
     private readonly ICallGateSubscriber<string, ExternalTerritoryConfig, bool> _enableExternalControl;
@@ -20,10 +22,11 @@ internal sealed class TextAdvanceIpc : IDisposable
     private readonly string _pluginName;
     private readonly ExternalTerritoryConfig _externalTerritoryConfig = new();
 
-    public TextAdvanceIpc(IDalamudPluginInterface pluginInterface, IFramework framework, QuestController questController)
+    public TextAdvanceIpc(IDalamudPluginInterface pluginInterface, IFramework framework, QuestController questController, Configuration configuration)
     {
         _framework = framework;
         _questController = questController;
+        _configuration = configuration;
         _isInExternalControl = pluginInterface.GetIpcSubscriber<bool>("TextAdvance.IsInExternalControl");
         _enableExternalControl = pluginInterface.GetIpcSubscriber<string, ExternalTerritoryConfig, bool>("TextAdvance.EnableExternalControl");
         _disableExternalControl = pluginInterface.GetIpcSubscriber<string, bool>("TextAdvance.DisableExternalControl");
@@ -40,9 +43,9 @@ internal sealed class TextAdvanceIpc : IDisposable
         }
     }
 
-    public void OnUpdate(IFramework framework)
+    private void OnUpdate(IFramework framework)
     {
-        if(_questController.IsRunning)
+        if(_configuration.General.ConfigureTextAdvance && _questController.IsRunning)
         {
             if(!_isInExternalControl.InvokeFunc())
             {
@@ -64,8 +67,10 @@ internal sealed class TextAdvanceIpc : IDisposable
         }
     }
 
-    public class ExternalTerritoryConfig
+    [SuppressMessage("ReSharper", "MemberCanBePrivate.Global")]
+    public sealed class ExternalTerritoryConfig
     {
+#pragma warning disable CS0414 // Field is assigned but its value is never used
         public bool? EnableQuestAccept = true;
         public bool? EnableQuestComplete = true;
         public bool? EnableRewardPick = true;
@@ -75,5 +80,6 @@ internal sealed class TextAdvanceIpc : IDisposable
         public bool? EnableTalkSkip = true;
         public bool? EnableRequestFill = true;
         public bool? EnableAutoInteract = false;
+#pragma warning restore CS0414 // Field is assigned but its value is never used
     }
 }
