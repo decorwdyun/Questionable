@@ -124,6 +124,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<YesAlreadyIpc>();
         serviceCollection.AddSingleton<ArtisanIpc>();
         serviceCollection.AddSingleton<QuestionableIpc>();
+        serviceCollection.AddSingleton<TextAdvanceIpc>();
     }
 
     private static void AddTaskFactories(ServiceCollection serviceCollection)
@@ -289,6 +290,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceProvider.GetRequiredService<QuestionableIpc>();
         serviceProvider.GetRequiredService<DalamudInitializer>();
         serviceProvider.GetRequiredService<AutoSnipeHandler>().Enable();
+        serviceProvider.GetRequiredService<TextAdvanceIpc>();
     }
 
     public void Dispose()
