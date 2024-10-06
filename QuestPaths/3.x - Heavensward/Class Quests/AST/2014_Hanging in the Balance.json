@@ -157,7 +157,8 @@
           "AethernetShortcut": [
             "[Ishgard] Aetheryte Plaza",
             "[Ishgard] Athenaeum Astrologicum"
-          ]
+          ],
+          "NextQuestId": 2015
         }
       ]
     }

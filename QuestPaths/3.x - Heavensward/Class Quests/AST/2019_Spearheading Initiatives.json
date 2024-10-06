@@ -203,7 +203,8 @@
           "InteractionType": "CompleteQuest",
           "StopDistance": 2,
           "AetheryteShortcut": "Coerthas Central Highlands - Camp Dragonhead",
-          "Fly": true
+          "Fly": true,
+          "NextQuestId": 2020
         }
       ]
     }

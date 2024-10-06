@@ -201,7 +201,8 @@
                 "MaximumDistance": 100
               }
             }
-          }
+          },
+          "NextQuestId": 2021
         }
       ]
     }
