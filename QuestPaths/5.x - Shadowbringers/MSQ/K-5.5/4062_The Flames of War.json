@@ -88,7 +88,7 @@
             "Y": 83.2,
             "Z": 15.121643
           },
-          "StopDistance": 5,
+          "StopDistance": 7,
           "TerritoryId": 130,
           "InteractionType": "CompleteQuest"
         }
