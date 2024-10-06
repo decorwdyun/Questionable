@@ -228,7 +228,8 @@
           },
           "TerritoryId": 963,
           "InteractionType": "CompleteQuest",
-          "AetheryteShortcut": "Radz-at-Han"
+          "AetheryteShortcut": "Radz-at-Han",
+          "NextQuestId": 4641
         }
       ]
     }
