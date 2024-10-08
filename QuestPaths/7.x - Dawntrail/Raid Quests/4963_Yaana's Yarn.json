@@ -35,7 +35,7 @@
       ]
     },
     {
-      "Sequence": 2,
+      "Sequence": 255,
       "Steps": [
         {
           "DataId": 1049787,
@@ -58,12 +58,7 @@
             "[Solution Nine] True Vue",
             "[Solution Nine] The Arcadion"
           ]
-        }
-      ]
-    },
-    {
-      "Sequence": 255,
-      "Steps": [
+        },
         {
           "DataId": 1049789,
           "Position": {
