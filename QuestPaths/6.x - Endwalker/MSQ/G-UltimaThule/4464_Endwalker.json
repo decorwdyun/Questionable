@@ -1,11 +1,6 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "TerritoryBlacklist": [
-    973,
-    997,
-    1013
-  ],
   "QuestSequence": [
     {
       "Sequence": 0,

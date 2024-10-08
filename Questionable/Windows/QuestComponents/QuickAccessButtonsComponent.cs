@@ -113,7 +113,7 @@ internal sealed class QuickAccessButtonsComponent
         int partsToRender = errorCount == 0 || infoCount == 0 ? 1 : 2;
         using var id = ImRaii.PushId("validationissues");
 
-        var icon1 = FontAwesomeIcon.TimesCircle;
+        var icon1 = FontAwesomeIcon.ExclamationTriangle;
         var icon2 = FontAwesomeIcon.InfoCircle;
         Vector2 iconSize1, iconSize2;
         using (var _ = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())

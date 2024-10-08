@@ -85,6 +85,16 @@
       "Sequence": 255,
       "Steps": [
         {
+          "Position": {
+            "X": 317.41415,
+            "Y": 110.85538,
+            "Z": -34.527588
+          },
+          "TerritoryId": 401,
+          "InteractionType": "WalkTo",
+          "$": "Run away from the enemy to TP"
+        },
+        {
           "DataId": 1016092,
           "Position": {
             "X": -792.6299,

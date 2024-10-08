@@ -2,14 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using Dalamud.Game.ClientState.Conditions;
+using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
+using LLib;
+using Lumina.Excel.GeneratedSheets;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps;
-using Questionable.Controller.Steps.Common;
 using Questionable.Controller.Steps.Interactions;
 using Questionable.Controller.Steps.Shared;
+using Questionable.Functions;
 using Questionable.Model.Questing;
+using Mount = Questionable.Controller.Steps.Common.Mount;
 
 namespace Questionable.Controller;
 
@@ -22,13 +26,17 @@ internal abstract class MiniTaskController<T>
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<T> _logger;
 
+    private readonly string _actionCanceledText;
+
     protected MiniTaskController(IChatGui chatGui, ICondition condition, IServiceProvider serviceProvider,
-        ILogger<T> logger)
+        IDataManager dataManager, ILogger<T> logger)
     {
         _chatGui = chatGui;
         _logger = logger;
         _serviceProvider = serviceProvider;
         _condition = condition;
+
+        _actionCanceledText = dataManager.GetString<LogMessage>(1314, x => x.Text)!;
     }
 
     protected virtual void UpdateCurrentTask()
@@ -171,5 +179,23 @@ internal abstract class MiniTaskController<T>
         _logger.LogInformation("Remaining tasks after interruption:");
         foreach (ITask task in _taskQueue.RemainingTasks)
             _logger.LogInformation("- {TaskName}", task);
+    }
+
+    public void OnErrorToast(ref SeString message, ref bool isHandled)
+    {
+        if (_taskQueue.CurrentTaskExecutor is IToastAware toastAware)
+        {
+            if (toastAware.OnErrorToast(message))
+            {
+                isHandled = true;
+            }
+        }
+
+        if (!isHandled)
+        {
+            if (GameFunctions.GameStringEquals(_actionCanceledText, message.TextValue) &&
+                !_condition[ConditionFlag.InFlight])
+                InterruptQueueWithCombat();
+        }
     }
 }

@@ -1,9 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "TerritoryBlacklist": [
-    938
-  ],
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -91,7 +88,7 @@
             "Y": 83.2,
             "Z": 15.121643
           },
-          "StopDistance": 5,
+          "StopDistance": 7,
           "TerritoryId": 130,
           "InteractionType": "CompleteQuest"
         }

@@ -1,5 +1,5 @@
 {
-  "$schema": "https://git.carvel.li/plogon_enjoyer/Questionable/raw/branch/temp/QuestPaths/quest-v1.json",
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "plogon_enjoyer",
   "QuestSequence": [
     {
@@ -100,7 +100,7 @@
             "Z": -404.1352
           },
           "TerritoryId": 401,
-          "InteractionType": "Interact",
+          "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "The Sea of Clouds - Ok' Zundu",
           "Fly": true
         }
