@@ -38,6 +38,28 @@
       "Sequence": 255,
       "Steps": [
         {
+          "DataId": 1049787,
+          "Position": {
+            "X": 364.3396,
+            "Y": 60.125,
+            "Z": 357.1068
+          },
+          "TerritoryId": 1186,
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "ExcelSheet": "quest/049/KinGra101_04960",
+              "Prompt": "TEXT_KINGRA101_04960_SYSTEM_100_030",
+              "Yes": true
+            }
+          ],
+          "AethernetShortcut": [
+            "[Solution Nine] True Vue",
+            "[Solution Nine] The Arcadion"
+          ]
+        },
+        {
           "DataId": 1049789,
           "Position": {
             "X": 2.3651123,
