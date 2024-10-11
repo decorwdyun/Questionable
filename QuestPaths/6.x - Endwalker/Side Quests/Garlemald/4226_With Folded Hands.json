@@ -1,0 +1,54 @@
+{
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+  "Author": "goatzone",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1039399,
+          "Position": {
+            "X": 556.4812,
+            "Y": -40.250004,
+            "Z": -133.04346
+          },
+          "TerritoryId": 958,
+          "InteractionType": "AcceptQuest"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 13468,
+          "Position": {
+            "X": -159.59418,
+            "Y": 10.8,
+            "Z": -468.8335
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WaitForManualProgress",
+          "Comment": "Use item 2003202 on 13468 after \"weakening\"",
+          "Fly": true
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1039399,
+          "Position": {
+            "X": 556.4812,
+            "Y": -40.250004,
+            "Z": -133.04346
+          },
+          "TerritoryId": 958,
+          "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Garlemald - Tertium"
+        }
+      ]
+    }
+  ]
+}
