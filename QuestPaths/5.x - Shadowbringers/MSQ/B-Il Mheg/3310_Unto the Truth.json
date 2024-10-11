@@ -49,7 +49,8 @@
           "InteractionType": "Say",
           "ChatMessage": {
             "Key": "TEXT_LUCKMB109_03310_SYSTEM_000_060"
-          }
+          },
+          "DelaySecondsAtStart": 6
         }
       ]
     },
@@ -67,7 +68,8 @@
           "InteractionType": "Say",
           "ChatMessage": {
             "Key": "TEXT_LUCKMB109_03310_SYSTEM_000_070"
-          }
+          },
+          "DelaySecondsAtStart": 8
         }
       ]
     },
