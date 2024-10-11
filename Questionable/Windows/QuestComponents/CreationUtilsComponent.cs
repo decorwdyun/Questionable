@@ -157,14 +157,17 @@ internal sealed class CreationUtilsComponent
         }
 #endif
 
-#if true
-        unsafe
+#if false
+        if (_configuration.Advanced.AdditionalStatusInformation)
         {
-            var actionManager = ActionManager.Instance();
-            ImGui.Text(
-                $"A1: {actionManager->CastActionId} ({actionManager->LastUsedActionSequence} → {actionManager->LastHandledActionSequence})");
-            ImGui.Text($"A2: {actionManager->CastTimeElapsed} / {actionManager->CastTimeTotal}");
-            ImGui.Text($"{_questController.TaskQueue.CurrentTaskExecutor?.ProgressContext}");
+            unsafe
+            {
+                var actionManager = ActionManager.Instance();
+                ImGui.Text(
+                    $"A1: {actionManager->CastActionId} ({actionManager->LastUsedActionSequence} → {actionManager->LastHandledActionSequence})");
+                ImGui.Text($"A2: {actionManager->CastTimeElapsed} / {actionManager->CastTimeTotal}");
+                ImGui.Text($"{_questController.TaskQueue.CurrentTaskExecutor?.ProgressContext}");
+            }
         }
 #endif
 
