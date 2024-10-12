@@ -25,9 +25,9 @@ internal sealed class Mount128Module : ICombatModule
         _gameFunctions = gameFunctions;
     }
 
-    public bool IsLoaded => _gameFunctions.GetMountId() == MountId;
+    public bool CanHandleFight(CombatController.CombatData combatData) => _gameFunctions.GetMountId() == MountId;
 
-    public bool Start() => true;
+    public bool Start(CombatController.CombatData combatData) => true;
 
     public bool Stop() => true;
 

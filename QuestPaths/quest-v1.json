@@ -617,6 +617,25 @@
                   ]
                 }
               },
+              "CombatItemUse": {
+                "description": "Unlike the 'AfterItemUse' condition that is used for spawning an enemy in the first place, interacting with an item at a certain stage of combat is required",
+                "type": "object",
+                "properties": {
+                  "ItemId": {
+                    "type": "integer"
+                  },
+                  "Condition": {
+                    "type": "string",
+                    "enum": [
+                      "Incapacitated"
+                    ]
+                  }
+                },
+                "required": [
+                  "ItemId",
+                  "Condition"
+                ]
+              },
               "CombatDelaySecondsAtStart": {
                 "type": "number"
               }

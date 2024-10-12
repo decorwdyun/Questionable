@@ -32,23 +32,20 @@ internal sealed class RotationSolverRebornModule : ICombatModule, IDisposable
             pluginInterface.GetIpcSubscriber<StateCommandType, object>("RotationSolverReborn.ChangeOperatingMode");
     }
 
-    public bool IsLoaded
+    public bool CanHandleFight(CombatController.CombatData combatData)
     {
-        get
+        try
         {
-            try
-            {
-                _test.InvokeAction("Validate RSR is callable from Questionable");
-                return true;
-            }
-            catch (IpcError)
-            {
-                return false;
-            }
+            _test.InvokeAction("Validate RSR is callable from Questionable");
+            return true;
+        }
+        catch (IpcError)
+        {
+            return false;
         }
     }
 
-    public bool Start()
+    public bool Start(CombatController.CombatData combatData)
     {
         try
         {

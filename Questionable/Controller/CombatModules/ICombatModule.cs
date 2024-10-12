@@ -4,9 +4,9 @@ namespace Questionable.Controller.CombatModules;
 
 internal interface ICombatModule
 {
-    bool IsLoaded { get; }
+    bool CanHandleFight(CombatController.CombatData combatData);
 
-    bool Start();
+    bool Start(CombatController.CombatData combatData);
 
     bool Stop();
 

@@ -169,7 +169,7 @@ internal abstract class MiniTaskController<T>
             if (_condition[ConditionFlag.Mounted])
                 tasks.Add(new Mount.UnmountTask());
 
-            tasks.Add(Combat.Factory.CreateTask(null, false, EEnemySpawnType.QuestInterruption, [], [], []));
+            tasks.Add(Combat.Factory.CreateTask(null, false, EEnemySpawnType.QuestInterruption, [], [], [], null));
             tasks.Add(new WaitAtEnd.WaitDelay());
             _taskQueue.InterruptWith(tasks);
         }

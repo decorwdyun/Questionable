@@ -67,6 +67,7 @@ public sealed class QuestStep
     public EEnemySpawnType? EnemySpawnType { get; set; }
     public List<uint> KillEnemyDataIds { get; set; } = [];
     public List<ComplexCombatData> ComplexCombatData { get; set; } = [];
+    public CombatItemUse? CombatItemUse { get; set; }
     public float? CombatDelaySecondsAtStart { get; set; }
 
     public JumpDestination? JumpDestination { get; set; }

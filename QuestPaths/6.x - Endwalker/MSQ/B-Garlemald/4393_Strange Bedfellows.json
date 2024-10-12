@@ -188,14 +188,15 @@
             "Z": 94.77368
           },
           "TerritoryId": 958,
-          "InteractionType": "Instruction",
+          "InteractionType": "Combat",
           "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
             14079
           ],
-          "Comment": "TODO Needs item use?",
-          "ItemId": 2003231,
-          "ItemUseHealthMaxPercent": 10,
+          "CombatItemUse": {
+            "ItemId": 2003231,
+            "Condition": "Incapacitated"
+          },
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -279,14 +280,15 @@
             "Z": 396.96338
           },
           "TerritoryId": 958,
-          "InteractionType": "Instruction",
+          "InteractionType": "Combat",
           "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
             14080
           ],
-          "Comment": "TODO Needs item use?",
-          "ItemId": 2003231,
-          "ItemUseHealthMaxPercent": 10,
+          "CombatItemUse": {
+            "ItemId": 2003231,
+            "Condition": "Incapacitated"
+          },
           "DisableNavmesh": true,
           "CompletionQuestVariablesFlags": [
             null,

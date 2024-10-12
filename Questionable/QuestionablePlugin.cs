@@ -234,6 +234,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<LeveUiController>();
 
         serviceCollection.AddSingleton<ICombatModule, Mount128Module>();
+        serviceCollection.AddSingleton<ICombatModule, ItemUseModule>();
         serviceCollection.AddSingleton<ICombatModule, RotationSolverRebornModule>();
     }
 

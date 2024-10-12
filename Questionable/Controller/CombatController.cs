@@ -65,11 +65,11 @@ internal sealed class CombatController : IDisposable
     {
         Stop("Starting combat");
 
-        var combatModule = _combatModules.FirstOrDefault(x => x.IsLoaded);
+        var combatModule = _combatModules.FirstOrDefault(x => x.CanHandleFight(combatData));
         if (combatModule == null)
             return false;
 
-        if (combatModule.Start())
+        if (combatModule.Start(combatData))
         {
             _currentFight = new CurrentFight
             {
@@ -364,6 +364,7 @@ internal sealed class CombatController : IDisposable
         public required EEnemySpawnType SpawnType { get; init; }
         public required List<uint> KillEnemyDataIds { get; init; }
         public required List<ComplexCombatData> ComplexCombatDatas { get; init; }
+        public required CombatItemUse? CombatItemUse { get; init; }
 
         public HashSet<int> CompletedComplexDatas { get; } = new();
     }

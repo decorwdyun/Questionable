@@ -97,12 +97,12 @@ internal static class Combat
 
             bool isLastStep = sequence.Steps.Last() == step;
             return CreateTask(quest.Id, isLastStep, step.EnemySpawnType.Value, step.KillEnemyDataIds,
-                step.CompletionQuestVariablesFlags, step.ComplexCombatData);
+                step.CompletionQuestVariablesFlags, step.ComplexCombatData, step.CombatItemUse);
         }
 
         internal static Task CreateTask(ElementId? elementId, bool isLastStep, EEnemySpawnType enemySpawnType,
             IList<uint> killEnemyDataIds, IList<QuestWorkValue?> completionQuestVariablesFlags,
-            IList<ComplexCombatData> complexCombatData)
+            IList<ComplexCombatData> complexCombatData, CombatItemUse? combatItemUse)
         {
             return new Task(new CombatController.CombatData
             {
@@ -110,6 +110,7 @@ internal static class Combat
                 SpawnType = enemySpawnType,
                 KillEnemyDataIds = killEnemyDataIds.ToList(),
                 ComplexCombatDatas = complexCombatData.ToList(),
+                CombatItemUse = combatItemUse,
             }, completionQuestVariablesFlags, isLastStep);
         }
     }
