@@ -119,8 +119,7 @@
             "AethernetShortcutIf": {
               "InSameTerritory": true
             }
-          },
-          "Comment": "Do the Solo Duty!"
+          }
         }
       ]
     },
