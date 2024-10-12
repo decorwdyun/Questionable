@@ -22,15 +22,10 @@
           ],
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NearPosition": {
-                "Position": {
-                  "X": 202.38037,
-                  "Y": -5.3999662,
-                  "Z": -58.9151
-                },
-                "TerritoryId": 419,
-                "MaximumDistance": 100
-              }
+              "InSameTerritory": true,
+              "InTerritory": [
+                419
+              ]
             }
           }
         }
@@ -68,7 +63,7 @@
           "SkipConditions": {
             "StepIf": {
               "CompletionQuestVariablesFlags": [
-                1,
+                null,
                 null,
                 null,
                 null,
@@ -91,12 +86,12 @@
           "SkipConditions": {
             "StepIf": {
               "CompletionQuestVariablesFlags": [
-                2,
                 null,
                 null,
                 null,
                 null,
-                null
+                null,
+                64
               ]
             }
           }
@@ -110,7 +105,15 @@
           },
           "TerritoryId": 419,
           "InteractionType": "Interact",
-          "StopDistance": 4
+          "StopDistance": 4,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         }
       ]
     },

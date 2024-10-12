@@ -22,18 +22,12 @@
           ],
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NearPosition": {
-                "Position": {
-                  "X": 199.93884,
-                  "Y": -0.899981,
-                  "Z": -48.722107
-                },
-                "MaximumDistance": 100,
-                "TerritoryId": 419
-              }
+              "InSameTerritory": true,
+              "InTerritory": [
+                419
+              ]
             }
-          },
-          "Comment": "This quest have solo duty!"
+          }
         }
       ]
     },
@@ -121,11 +115,31 @@
             },
             "StepIf": {
               "CompletionQuestVariablesFlags": [
-                16,
-                16,
                 null,
                 null,
                 null,
+                null,
+                null,
+                128
+              ]
+            }
+          }
+        },
+        {
+          "Position": {
+            "X": -2.1358607,
+            "Y": 45.631218,
+            "Z": -258.50027
+          },
+          "TerritoryId": 128,
+          "InteractionType": "WalkTo",
+          "AethernetShortcut": [
+            "[Limsa Lominsa] Fishermens' Guild",
+            "[Limsa Lominsa] Marauders' Guild"
+          ],
+          "SkipConditions": {
+            "StepIf": {
+              "InTerritory": [
                 128
               ]
             }
@@ -141,39 +155,14 @@
           "TerritoryId": 128,
           "InteractionType": "Interact",
           "StopDistance": 5,
-          "AetheryteShortcut": "Limsa Lominsa",
-          "AethernetShortcut": [
-            "[Limsa Lominsa] Fishermens' Guild",
-            "[Limsa Lominsa] Marauders' Guild"
-          ],
-          "SkipConditions": {
-            "AetheryteShortcutIf": {
-              "InSameTerritory": true
-            }
-          },
-          "Comment": "You will probably need to do this manually navmesh doesn't work inside Coral Tower"
-        },
-        {
-          "DataId": 1003282,
-          "Position": {
-            "X": -3.03656,
-            "Y": 48.168007,
-            "Z": -261.70752
-          },
-          "TerritoryId": 128,
-          "InteractionType": "Interact",
-          "StopDistance": 5,
-          "AetheryteShortcut": "Limsa Lominsa",
-          "AethernetShortcut": [
-            "[Limsa Lominsa] Fishermens' Guild",
-            "[Limsa Lominsa] Marauders' Guild"
-          ],
-          "SkipConditions": {
-            "AetheryteShortcutIf": {
-              "InSameTerritory": true
-            }
-          },
-          "Comment": "You will probably need to do this manually navmesh doesn't work inside Coral Tower"
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 1002680,
@@ -185,16 +174,14 @@
           "TerritoryId": 128,
           "InteractionType": "Interact",
           "StopDistance": 5,
-          "AetheryteShortcut": "Limsa Lominsa",
-          "AethernetShortcut": [
-            "[Limsa Lominsa] Aetheryte Plaza",
-            "[Limsa Lominsa] Marauders' Guild"
-          ],
-          "SkipConditions": {
-            "AetheryteShortcutIf": {
-              "InSameTerritory": true
-            }
-          }
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         }
       ]
     },
@@ -215,13 +202,7 @@
           "AethernetShortcut": [
             "[Limsa Lominsa] Aetheryte Plaza",
             "[Limsa Lominsa] Marauders' Guild"
-          ],
-          "SkipConditions": {
-            "AetheryteShortcutIf": {
-              "InSameTerritory": true
-            }
-          },
-          "Comment": "Do it manually, navmesh can't get inside the building it seem.\nOtherwise it will run into wall."
+          ]
         }
       ]
     },
@@ -236,18 +217,7 @@
             "Z": -160.47919
           },
           "TerritoryId": 128,
-          "InteractionType": "SinglePlayerDuty",
-          "StopDistance": 3,
-          "AetheryteShortcut": "Limsa Lominsa",
-          "AethernetShortcut": [
-            "[Limsa Lominsa] Aetheryte Plaza",
-            "[Limsa Lominsa] Marauders' Guild"
-          ],
-          "SkipConditions": {
-            "AetheryteShortcutIf": {
-              "InSameTerritory": true
-            }
-          }
+          "InteractionType": "SinglePlayerDuty"
         }
       ]
     },

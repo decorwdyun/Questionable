@@ -19,15 +19,10 @@
           "AetheryteShortcut": "Coerthas Central Highlands - Camp Dragonhead",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "NearPosition": {
-                "Position": {
-                  "X": 204.60815,
-                  "Y": 307.87106,
-                  "Z": 414.63342
-                },
-                "TerritoryId": 155,
-                "MaximumDistance": 5
-              }
+              "InSameTerritory": true,
+              "InTerritory": [
+                419
+              ]
             }
           }
         }

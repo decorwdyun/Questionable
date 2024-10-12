@@ -32,8 +32,7 @@
                 "MaximumDistance": 20
               }
             }
-          },
-          "Comment": "This quest have solo duty!"
+          }
         }
       ]
     },
@@ -49,7 +48,6 @@
           },
           "TerritoryId": 628,
           "InteractionType": "Interact",
-          "StopDistance": 5,
           "AetheryteShortcut": "Kugane",
           "SkipConditions": {
             "AetheryteShortcutIf": {

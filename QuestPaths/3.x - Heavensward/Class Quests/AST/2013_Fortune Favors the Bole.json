@@ -19,10 +19,12 @@
           "AetheryteShortcut": "South Shroud - Quarrymill",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true
+              "InSameTerritory": true,
+              "InTerritory": [
+                419
+              ]
             }
-          },
-          "Comment": "This quest have solo duty!"
+          }
         }
       ]
     },
