@@ -37,10 +37,23 @@
       "Sequence": 2,
       "Steps": [
         {
+          "Position": {
+            "X": 206.0426,
+            "Y": 20.561113,
+            "Z": 629.14465
+          },
           "DataId": 1039998,
           "TerritoryId": 961,
-          "InteractionType": "WaitForManualProgress",
-          "Comment": "Capture Mobs with less than 50% HP"
+          "InteractionType": "Combat",
+          "EnemySpawnType": "OverworldEnemies",
+          "KillEnemyDataIds": [
+            13447, 13448, 13449
+          ],
+          "CombatItemUse": {
+            "ItemId": 2003232,
+            "Condition": "Health%",
+            "Value": 50
+          }
         }
       ]
     },

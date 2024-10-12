@@ -55,7 +55,7 @@
       "Steps": [
         {
           "TerritoryId": 351,
-          "InteractionType": "WaitForManualProgress",
+          "InteractionType": "None",
           "Comment": "Credits"
         }
       ]

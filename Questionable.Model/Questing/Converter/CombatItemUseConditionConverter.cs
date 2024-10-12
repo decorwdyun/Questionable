@@ -8,5 +8,6 @@ public sealed class CombatItemUseConditionConverter() : EnumConverter<ECombatIte
     private static readonly Dictionary<ECombatItemUseCondition, string> Values = new()
     {
         { ECombatItemUseCondition.Incapacitated, "Incapacitated" },
+        { ECombatItemUseCondition.HealthPercent, "Health%" },
     };
 }

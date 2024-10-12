@@ -21,15 +21,23 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 13468,
           "Position": {
             "X": -159.59418,
             "Y": 10.8,
             "Z": -468.8335
           },
+          "StopDistance": 0.5,
           "TerritoryId": 958,
-          "InteractionType": "WaitForManualProgress",
-          "Comment": "Use item 2003202 on 13468 after \"weakening\"",
+          "InteractionType": "Combat",
+          "EnemySpawnType": "OverworldEnemies",
+          "KillEnemyDataIds": [
+            13468
+          ],
+          "CombatItemUse": {
+            "ItemId": 2003202,
+            "Condition": "Health%",
+            "Value": 40
+          },
           "Fly": true
         }
       ]

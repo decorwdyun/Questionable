@@ -627,8 +627,12 @@
                   "Condition": {
                     "type": "string",
                     "enum": [
-                      "Incapacitated"
+                      "Incapacitated",
+                      "Health%"
                     ]
+                  },
+                  "Value": {
+                    "type": "integer"
                   }
                 },
                 "required": [

@@ -9,4 +9,6 @@ public sealed class CombatItemUse
 
     [JsonConverter(typeof(CombatItemUseConditionConverter))]
     public ECombatItemUseCondition Condition { get; set; }
+
+    public int Value { get; set; }
 }

@@ -4,4 +4,5 @@ public enum ECombatItemUseCondition
 {
     None,
     Incapacitated,
+    HealthPercent,
 }

@@ -6,6 +6,7 @@ using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Character;
+using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Functions;
@@ -16,19 +17,17 @@ namespace Questionable.Controller.CombatModules;
 internal sealed class ItemUseModule : ICombatModule
 {
     private readonly IServiceProvider _serviceProvider;
-    private readonly GameFunctions _gameFunctions;
     private readonly ICondition _condition;
     private readonly ILogger<ItemUseModule> _logger;
 
     private ICombatModule? _delegate;
     private CombatController.CombatData? _combatData;
     private bool _isDoingRotation;
+    private DateTime _continueAt;
 
-    public ItemUseModule(IServiceProvider serviceProvider, GameFunctions gameFunctions, ICondition condition,
-        ILogger<ItemUseModule> logger)
+    public ItemUseModule(IServiceProvider serviceProvider, ICondition condition, ILogger<ItemUseModule> logger)
     {
         _serviceProvider = serviceProvider;
-        _gameFunctions = gameFunctions;
         _condition = condition;
         _logger = logger;
     }
@@ -51,6 +50,7 @@ internal sealed class ItemUseModule : ICombatModule
         {
             _combatData = combatData;
             _isDoingRotation = true;
+            _continueAt = DateTime.Now;
             return true;
         }
 
@@ -65,6 +65,7 @@ internal sealed class ItemUseModule : ICombatModule
             _isDoingRotation = false;
             _combatData = null;
             _delegate = null;
+            _continueAt = DateTime.Now;
         }
 
         return true;
@@ -73,6 +74,9 @@ internal sealed class ItemUseModule : ICombatModule
     public void Update(IGameObject nextTarget)
     {
         if (_delegate == null)
+            return;
+
+        if (_continueAt > DateTime.Now)
             return;
 
         if (_combatData?.CombatItemUse == null)
@@ -93,6 +97,7 @@ internal sealed class ItemUseModule : ICombatModule
                     {
                         _isDoingRotation = false;
                         _delegate.Stop();
+                        return;
                     }
                 }
 
@@ -100,7 +105,11 @@ internal sealed class ItemUseModule : ICombatModule
                 {
                     _isDoingRotation = false;
                     _delegate.Stop();
-                    _gameFunctions.UseItem(nextTarget.DataId, _combatData.CombatItemUse.ItemId);
+                    unsafe
+                    {
+                        AgentInventoryContext.Instance()->UseItem(_combatData.CombatItemUse.ItemId);
+                    }
+                    _continueAt = DateTime.Now.AddSeconds(2);
                 }
                 else
                     _delegate.Update(nextTarget);
@@ -108,6 +117,9 @@ internal sealed class ItemUseModule : ICombatModule
             else if (_condition[ConditionFlag.Casting])
             {
                 // do nothing
+                DateTime alternativeContinueAt = DateTime.Now.AddSeconds(0.5);
+                if (alternativeContinueAt > _continueAt)
+                    _continueAt = alternativeContinueAt;
             }
             else
             {
@@ -131,6 +143,9 @@ internal sealed class ItemUseModule : ICombatModule
             BattleChara* battleChara = (BattleChara*)gameObject.Address;
             if (_combatData.CombatItemUse.Condition == ECombatItemUseCondition.Incapacitated)
                 return (battleChara->Flags2 & 128u) != 0;
+
+            if (_combatData.CombatItemUse.Condition == ECombatItemUseCondition.HealthPercent)
+                return (100f * battleChara->Health / battleChara->MaxHealth) < _combatData.CombatItemUse.Value;
         }
 
         return false;
