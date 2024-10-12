@@ -47,5 +47,5 @@ internal sealed class Mount128Module : ICombatModule
     {
     }
 
-    public bool CanAttack(IBattleNpc target) => target.DataId is 7504 or 7505;
+    public bool CanAttack(IBattleNpc target) => target.DataId is 7504 or 7505 or 14107;
 }

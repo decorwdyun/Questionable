@@ -53,7 +53,8 @@
           },
           "TerritoryId": 958,
           "InteractionType": "CompleteQuest",
-          "AetheryteShortcut": "Garlemald - Camp Broken Glass"
+          "AetheryteShortcut": "Garlemald - Camp Broken Glass",
+          "NextQuestId": 4500
         }
       ]
     }

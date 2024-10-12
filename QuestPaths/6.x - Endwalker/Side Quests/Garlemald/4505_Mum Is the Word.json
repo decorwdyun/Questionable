@@ -12,6 +12,7 @@
             "Y": 23.164677,
             "Z": -415.36584
           },
+          "StopDistance": 7,
           "TerritoryId": 958,
           "InteractionType": "AcceptQuest",
           "Fly": true,
@@ -86,7 +87,8 @@
               "Answer": "TEXT_AKTKZD104_04505_A1_000_002"
             }
           ],
-          "AetheryteShortcut": "Garlemald - Tertium"
+          "AetheryteShortcut": "Garlemald - Tertium",
+          "NextQuestId": 4506
         }
       ]
     }

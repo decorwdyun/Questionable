@@ -72,6 +72,7 @@
           },
           "TerritoryId": 958,
           "InteractionType": "Interact",
+          "Mount": true,
           "CompletionQuestVariablesFlags": [
           null,
           null,
@@ -91,7 +92,15 @@
           },
           "TerritoryId": 958,
           "InteractionType": "Interact",
-          "$": "49 16 16 0 0 224 -> 0 16 0 0 0 0"
+          "$": "49 16 16 0 0 224 -> 0 16 0 0 0 0",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            16
+          ]
         }
       ]
     },

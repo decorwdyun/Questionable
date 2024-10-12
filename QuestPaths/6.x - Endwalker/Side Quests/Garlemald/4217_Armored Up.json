@@ -44,19 +44,22 @@
             "Y": -18.777306,
             "Z": 527.2946
           },
+          "StopDistance": 0.5,
           "TerritoryId": 958,
-          "InteractionType": "WaitForManualProgress",
-          "CompletionQuestVariablesFlags": [
-          null,
-          null,
-          null,
-          null,
-          null,
-          128
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AutoOnEnterArea",
+          "KillEnemyDataIds": [
+            14107
           ],
-          "Comment": "Use the mount's abilities to kill the drones.",
-          "$.0": "0 0 0 0 0 0 -> 16 64 0 0 0 128",
-          "$.1": "can't find any currently extant method of automating this - could add the actions, but it's combat with the actions specifically, repeat use on targets"
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ],
+          "$.0": "0 0 0 0 0 0 -> 16 64 0 0 0 128"
         },
         {
           "Position": {
@@ -64,9 +67,21 @@
             "Y": -18.937208,
             "Z": 338.0957
           },
+          "StopDistance": 0.5,
           "TerritoryId": 958,
-          "InteractionType": "WaitForManualProgress",
-          "Comment": "Use the mount's abilities to kill the drones."
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AutoOnEnterArea",
+          "KillEnemyDataIds": [
+            14107
+          ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         }
       ]
     },
@@ -74,6 +89,12 @@
       "Sequence": 255,
       "Steps": [
         {
+          "Position": {
+            "X": 135.85095,
+            "Y": -17.135998,
+            "Z": 567.8645
+          },
+          "StopDistance": 2000,
           "TerritoryId": 958,
           "InteractionType": "None",
           "Mount": false
@@ -87,7 +108,8 @@
           },
           "TerritoryId": 958,
           "InteractionType": "CompleteQuest",
-          "Fly": true
+          "Fly": true,
+          "NextQuestId": 4218
         }
       ]
     }

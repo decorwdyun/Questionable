@@ -67,7 +67,15 @@
           },
           "TerritoryId": 958,
           "InteractionType": "Interact",
-          "$": "33 1 16 0 0 192 -> 0 0 0 0 0 0"
+          "$": "33 1 16 0 0 192 -> 0 0 0 0 0 0",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         }
       ]
     },

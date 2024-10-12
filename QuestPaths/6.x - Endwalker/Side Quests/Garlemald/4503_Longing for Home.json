@@ -83,7 +83,8 @@
           },
           "TerritoryId": 958,
           "InteractionType": "CompleteQuest",
-          "AetheryteShortcut": "Garlemald - Tertium"
+          "AetheryteShortcut": "Garlemald - Tertium",
+          "NextQuestId": 4504
         }
       ]
     }

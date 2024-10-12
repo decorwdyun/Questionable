@@ -81,7 +81,15 @@
           },
           "TerritoryId": 958,
           "InteractionType": "UseItem",
-          "ItemId": 2003210
+          "ItemId": 2003210,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         }
       ]
     },

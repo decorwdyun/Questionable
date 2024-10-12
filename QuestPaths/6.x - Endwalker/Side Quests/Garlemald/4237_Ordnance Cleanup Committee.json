@@ -21,6 +21,29 @@
       "Sequence": 1,
       "Steps": [
         {
+          "Position": {
+            "X": -189.97284,
+            "Y": 15.907461,
+            "Z": -169.83481
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo",
+          "Fly": true,
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Locked",
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                128
+              ]
+            }
+          }
+        },
+        {
           "DataId": 2012054,
           "Position": {
             "X": -156.05408,
@@ -30,17 +53,15 @@
           "TerritoryId": 958,
           "InteractionType": "Interact",
           "CompletionQuestVariablesFlags": [
-          null,
-          null,
-          null,
-          null,
-          null,
-          128
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
           ],
           "$.0": "0 0 0 0 0 0 -> 1 16 0 0 0 128",
-          "AetheryteShortcut": "Garlemald - Tertium",
-          "Fly": true,
-          "$.1": "flight path gets stuck from camp BG, not so from tertium; walkto would probably be cleaner but this seems intuitive."
+          "Fly": true
         },
         {
           "DataId": 2012055,
@@ -52,14 +73,60 @@
           "TerritoryId": 958,
           "InteractionType": "Interact",
           "CompletionQuestVariablesFlags": [
-          null,
-          null,
-          null,
-          null,
-          null,
-          64
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
           ],
+          "Fly": true,
           "$": "1 16 0 0 0 128 -> 2 32 0 0 0 192"
+        },
+        {
+          "Position": {
+            "X": -223.12543,
+            "Y": 10.826223,
+            "Z": -368.8611
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo",
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked",
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                32
+              ]
+            }
+          }
+        },
+        {
+          "Position": {
+            "X": -140.08179,
+            "Y": 16.226164,
+            "Z": -310.9478
+          },
+          "TerritoryId": 958,
+          "InteractionType": "WalkTo",
+          "Fly": true,
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Locked",
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                32
+              ]
+            }
+          }
         },
         {
           "DataId": 2012056,
@@ -71,15 +138,15 @@
           "TerritoryId": 958,
           "InteractionType": "Interact",
           "CompletionQuestVariablesFlags": [
-          null,
-          null,
-          null,
-          null,
-          null,
-          32
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
           ],
           "$.0": "2 32 0 0 0 192 -> 3 48 0 0 0 224",
-          "$.1": "fly also gets stuck here"
+          "Fly": true
         },
         {
           "DataId": 2012057,
@@ -88,10 +155,19 @@
             "Y": 16.494995,
             "Z": -413.016
           },
+          "StopDistance": 1,
           "TerritoryId": 958,
           "InteractionType": "Interact",
           "$.0": "3 48 0 0 0 224 -> 0 64 0 0 0 0",
-          "$.1": "no fly here, tries and fails to land on the railing: can't interact while flying"
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            16
+          ]
         }
       ]
     },
