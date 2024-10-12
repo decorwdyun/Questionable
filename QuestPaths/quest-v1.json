@@ -1275,6 +1275,30 @@
               "ItemsToGather"
             ]
           }
+        },
+        {
+          "if": {
+            "properties": {
+              "InteractionType": {
+                "anyOf": [
+                  {
+                    "const": "WaitForManualProgress"
+                  },
+                  {
+                    "const": "Instruction"
+                  },
+                  {
+                    "const": "Snipe"
+                  }
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "Comment"
+            ]
+          }
         }
       ]
     }

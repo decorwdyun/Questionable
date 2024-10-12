@@ -25,5 +25,14 @@ internal interface IQuestInfo
 
     public string SimplifiedName => Name
         .Replace(".", "", StringComparison.Ordinal)
+        .Replace("*", "", StringComparison.Ordinal)
+        .Replace("\"", "", StringComparison.Ordinal)
+        .Replace("/", "", StringComparison.Ordinal)
+        .Replace("\\", "", StringComparison.Ordinal)
+        .Replace("<", "", StringComparison.Ordinal)
+        .Replace(">", "", StringComparison.Ordinal)
+        .Replace("|", "", StringComparison.Ordinal)
+        .Replace(":", "", StringComparison.Ordinal)
+        .Replace("?", "", StringComparison.Ordinal)
         .TrimStart(SeIconChar.QuestSync.ToIconChar(), SeIconChar.QuestRepeatable.ToIconChar(), ' ');
 }

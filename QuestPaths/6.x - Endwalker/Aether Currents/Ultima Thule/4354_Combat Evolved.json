@@ -51,7 +51,7 @@
           },
           "StopDistance": 0.5,
           "TerritoryId": 960,
-          "InteractionType": "WaitForManualProgress",
+          "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
             14044

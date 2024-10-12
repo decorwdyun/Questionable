@@ -45,7 +45,8 @@
             "Z": -296.37604
           },
           "TerritoryId": 958,
-          "InteractionType": "Interact"
+          "InteractionType": "Snipe",
+          "Comment": "Snipe Magitek Colossi"
         }
       ]
     },
@@ -60,7 +61,7 @@
             "Z": -299.36682
           },
           "TerritoryId": 958,
-          "InteractionType": "Snipe"
+          "InteractionType": "Interact"
         }
       ]
     },

@@ -53,7 +53,8 @@
           },
           "TerritoryId": 614,
           "InteractionType": "Snipe",
-          "Fly": true
+          "Fly": true,
+          "Comment": "Snipe Namazu"
         }
       ]
     },
@@ -69,7 +70,8 @@
           },
           "TerritoryId": 614,
           "InteractionType": "Snipe",
-          "Fly": true
+          "Fly": true,
+          "Comment": "Snipe Namazu"
         }
       ]
     },

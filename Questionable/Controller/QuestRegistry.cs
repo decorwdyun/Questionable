@@ -144,7 +144,7 @@ internal sealed class QuestRegistry
 
     private void ValidateQuests()
     {
-        _questValidator.Validate(_quests.Values.Where(x => x.Source != Quest.ESource.Assembly));
+        _questValidator.Validate(_quests.Values.Where(x => x.Source != Quest.ESource.Assembly).ToList());
     }
 
     private void LoadQuestFromStream(string fileName, Stream stream, Quest.ESource source)
