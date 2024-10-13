@@ -33,6 +33,16 @@
           "PickUpQuestId": 4507
         },
         {
+          "Position": {
+            "X": -109.12761,
+            "Y": -34.0357,
+            "Z": 397.6694
+          },
+          "TerritoryId": 961,
+          "InteractionType": "WalkTo",
+          "$": "Avoids combat"
+        },
+        {
           "DataId": 1040073,
           "Position": {
             "X": -164.11078,
