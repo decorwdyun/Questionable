@@ -70,6 +70,12 @@
               "ExcelSheet": "GimmickYesNo",
               "Prompt": 142,
               "Yes": true
+            },
+            {
+              "Type": "YesNo",
+              "ExcelSheet": "GimmickYesNo",
+              "Prompt": 137,
+              "Yes": true
             }
           ]
         }
