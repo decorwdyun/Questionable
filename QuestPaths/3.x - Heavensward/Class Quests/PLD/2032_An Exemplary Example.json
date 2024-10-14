@@ -20,7 +20,10 @@
             "[Ul'dah] The Chamber of Rule"
           ],
           "SkipConditions": {
-            "AetheryteShortcutIf": { "InTerritory": [130, 131] },
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true,
+              "InTerritory": [131]
+            },
             "AethernetShortcutIf": { "InSameTerritory": true }
           }
         }
@@ -111,7 +114,10 @@
             "[Ul'dah] The Chamber of Rule"
           ],
           "SkipConditions": {
-            "AetheryteShortcutIf": { "InTerritory": [130, 131] },
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true,
+              "InTerritory": [131]
+            },
             "AethernetShortcutIf": { "InSameTerritory": true }
           }
         }
