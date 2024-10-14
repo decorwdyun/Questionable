@@ -23,4 +23,9 @@ public sealed class DialogueChoice
     /// If set, only applies when focusing the given target id.
     /// </summary>
     public uint? DataId { get; set; }
+
+    /// <summary>
+    /// Used for 'In from the Cold'.
+    /// </summary>
+    public string? SpecialCondition { get; set; }
 }

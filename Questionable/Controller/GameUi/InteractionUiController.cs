@@ -7,7 +7,9 @@ using Dalamud.Game.Addon.Lifecycle;
 using Dalamud.Game.Addon.Lifecycle.AddonArgTypes;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Event;
+using FFXIVClientStructs.FFXIV.Client.Game.InstanceContent;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Component.GUI;
@@ -333,7 +335,16 @@ internal sealed class InteractionUiController : IDisposable
             }
             else
             {
-                var step = quest.FindSequence(currentQuest.Sequence)?.FindStep(currentQuest.Step);
+                QuestStep? step = null;
+                if (_territoryData.IsQuestBattleInstance(_clientState.TerritoryType))
+                {
+                    step = quest.FindSequence(currentQuest.Sequence)?.Steps
+                        .FirstOrDefault(x => x.InteractionType == EInteractionType.SinglePlayerDuty);
+                }
+
+                if (step == null)
+                    step = quest.FindSequence(currentQuest.Sequence)?.FindStep(currentQuest.Step);
+
                 if (step == null)
                     _logger.LogDebug("Ignoring current quest dialogue choices, no active step");
                 else
@@ -426,6 +437,27 @@ internal sealed class InteractionUiController : IDisposable
         {
             if (dialogueChoice.Type != EDialogChoiceType.List)
                 continue;
+
+            if (dialogueChoice.SpecialCondition == "NoDutyActions")
+            {
+                try
+                {
+                    unsafe
+                    {
+                        ContentDirector* contentDirector = EventFramework.Instance()->GetContentDirector();
+                        if (contentDirector != null && contentDirector->DutyActionManager.ActionsPresent)
+                        {
+                            _logger.LogInformation("NoDutyActions: actions present, skipping dialogue choice");
+                            continue;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Failed to check for duty actions");
+                    continue;
+                }
+            }
 
             if (dialogueChoice.Answer == null)
             {

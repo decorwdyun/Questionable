@@ -42,6 +42,9 @@ internal static class DialogueChoiceExtensions
                                 .AsSyntaxNodeOrToken(),
                             Assignment(nameof(DialogueChoice.DataId), dialogueChoice.DataId,
                                     emptyChoice.DataId)
+                                .AsSyntaxNodeOrToken(),
+                            Assignment(nameof(DialogueChoice.SpecialCondition), dialogueChoice.SpecialCondition,
+                                    emptyChoice.SpecialCondition)
                                 .AsSyntaxNodeOrToken()))));
     }
 }

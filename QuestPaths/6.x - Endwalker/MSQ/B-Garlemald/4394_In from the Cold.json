@@ -65,6 +65,19 @@
               "Type": "YesNo",
               "Prompt": "TEXT_AKTKMB115_04394_Q1_000_042",
               "Yes": true
+            },
+            {
+              "Type": "List",
+              "ExcelSheet": "ContentTalk",
+              "Prompt": 254,
+              "Answer": 247,
+              "SpecialCondition": "NoDutyActions"
+            },
+            {
+              "Type": "List",
+              "ExcelSheet": "ContentTalk",
+              "Prompt": 254,
+              "Answer": 248
             }
           ],
           "AetheryteShortcut": "Garlemald - Camp Broken Glass",
