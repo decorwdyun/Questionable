@@ -140,7 +140,8 @@
 					},
 					"TerritoryId": 397,
 					"InteractionType": "CompleteQuest",
-					"AetheryteShortcut": "Coerthas Western Highlands - Falcon's Nest"
+					"AetheryteShortcut": "Coerthas Western Highlands - Falcon's Nest",
+					"NextQuestId": 2034
 				}
 			]
 		}

@@ -140,7 +140,8 @@
             "[Ul'dah] The Chamber of Rule",
             "[Ul'dah] Gate of Thal (Central Thanalan)"
           ],
-          "$": "nald and thal are approx. the same distance but coming from nald requires an extra walkto because it tries and fails to land on the ledge"
+          "$": "nald and thal are approx. the same distance but coming from nald requires an extra walkto because it tries and fails to land on the ledge",
+		  "NextQuestId": 2033
         }
       ]
     }
