@@ -26,7 +26,8 @@
 							"InTerritory": [141]
 						},
 						"AethernetShortcutIf": { "InSameTerritory": true }
-					}
+					},
+					"$":"you could swap this shortcut out for black brush station, just figured it worked once."
 				}
 			]
 		},
