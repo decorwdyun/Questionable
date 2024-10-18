@@ -1,7 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "liza",
-  "Disabled": true,
+  "Author": "pot0to",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -15,6 +14,51 @@
           },
           "TerritoryId": 960,
           "InteractionType": "AcceptQuest"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 2013074,
+          "Position": {
+            "X": 304.3412,
+            "Y": 483.48206,
+            "Z": 143.11438
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 1073,
+          "$": "Without this step, there are times where it doesn't confirm automatically"
+        },
+        {
+          "TerritoryId": 1073,
+          "InteractionType": "Gather",
+          "ItemsToGather": [
+            {
+              "QuestAcceptedAsClass": "Miner",
+              "ItemId": 38288,
+              "ItemCount": 3
+            },
+            {
+              "QuestAcceptedAsClass": "Botanist",
+              "ItemId": 38312,
+              "ItemCount": 3
+            }
+          ]
+        },
+        {
+          "DataId": 1043936,
+          "Position": {
+            "X": 194.56775,
+            "Y": 567.4998,
+            "Z": 250.93457
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Ultima Thule - Base Omicron",
+          "Mount": true
         }
       ]
     },
