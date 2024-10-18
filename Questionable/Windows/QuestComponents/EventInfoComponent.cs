@@ -22,7 +22,7 @@ internal sealed class EventInfoComponent
     [SuppressMessage("ReSharper", "CollectionNeverUpdated.Local")]
     private readonly List<EventQuest> _eventQuests =
     [
-        new("All Saints' Wake", [new(5184)], AtDailyReset(new(2024, 11, 4))),
+        new("All Saints' Wake", [new(5184), new(5185)], AtDailyReset(new(2024, 11, 4))),
     ];
 
     private readonly QuestData _questData;
