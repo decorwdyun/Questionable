@@ -21,17 +21,9 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 1044071,
-          "Position": {
-            "X": 46.066895,
-            "Y": 268.99976,
-            "Z": -584.77155
-          },
           "TerritoryId": 960,
-          "InteractionType": "Interact",
-          "AetheryteShortcut": "Ultima Thule - Abode of the Ea",
-          "Fly": true,
-          "RequiredGatheredItems": [
+          "InteractionType": "Gather",
+          "ItemsToGather": [
             {
               "QuestAcceptedAsClass": "Miner",
               "ItemId": 38294,
@@ -43,6 +35,18 @@
               "ItemCount": 3
             }
           ]
+        },
+        {
+          "DataId": 1044071,
+          "Position": {
+            "X": 46.066895,
+            "Y": 268.99976,
+            "Z": -584.77155
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Ultima Thule - Abode of the Ea",
+          "Fly": true
         }
       ]
     },

@@ -21,6 +21,28 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1027452,
+          "Position": {
+            "X": -310.62793,
+            "Y": 19.405178,
+            "Z": 405.2948
+          },
+          "TerritoryId": 814,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 3360
+        },
+        {
+          "DataId": 1030763,
+          "Position": {
+            "X": -306.2334,
+            "Y": 20.956566,
+            "Z": 358.41907
+          },
+          "TerritoryId": 814,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 3371
+        },
+        {
           "DataId": 2009964,
           "Position": {
             "X": 168.96313,
@@ -140,10 +162,11 @@
             "Y": 6,
             "Z": 33.17366
           },
-          "StopDistance": 5,
+          "StopDistance": 0.25,
           "TerritoryId": 820,
           "InteractionType": "UseItem",
-          "ItemId": 2002575
+          "ItemId": 2002575,
+          "DelaySecondsAtStart": 3
         }
       ]
     },
@@ -197,7 +220,8 @@
           },
           "TerritoryId": 820,
           "InteractionType": "Interact",
-          "TargetTerritoryId": 820
+          "TargetTerritoryId": 820,
+          "Sprint": true
         },
         {
           "DataId": 1029830,

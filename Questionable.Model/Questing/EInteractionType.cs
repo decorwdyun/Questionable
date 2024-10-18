@@ -15,6 +15,7 @@ public enum EInteractionType
     Combat,
     UseItem,
     EquipItem,
+    PurchaseItem,
     EquipRecommended,
     Say,
     Emote,
@@ -26,6 +27,8 @@ public enum EInteractionType
     Jump,
     Dive,
     Craft,
+    Gather,
+    Snipe,
 
     /// <summary>
     /// Needs to be manually continued.
@@ -37,7 +40,4 @@ public enum EInteractionType
     AcceptLeve,
     InitiateLeve,
     CompleteLeve,
-
-    // unmapped extra types below
-    InternalGather,
 }

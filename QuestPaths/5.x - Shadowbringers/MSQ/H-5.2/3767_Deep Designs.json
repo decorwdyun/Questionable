@@ -53,6 +53,49 @@
         },
         {
           "Position": {
+            "X": -559.0543,
+            "Y": 394.95718,
+            "Z": -611.97614
+          },
+          "TerritoryId": 818,
+          "InteractionType": "WalkTo",
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
+        },
+        {
+          "Position": {
+            "X": -681.43286,
+            "Y": 404.5379,
+            "Z": -693.3609
+          },
+          "TerritoryId": 818,
+          "InteractionType": "WalkTo",
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
+        },
+        {
+          "Position": {
+            "X": -675.946,
+            "Y": 408.10754,
+            "Z": -711.8061
+          },
+          "TerritoryId": 818,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true,
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
+        },
+        {
+          "Position": {
             "X": -423.6145,
             "Y": 393.0597,
             "Z": -823.20044

@@ -1,9 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "TerritoryBlacklist": [
-    171
-  ],
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -58,11 +55,7 @@
           },
           "TerritoryId": 132,
           "InteractionType": "CompleteQuest",
-          "AetheryteShortcut": "Limsa Lominsa",
-          "AethernetShortcut": [
-            "[Limsa Lominsa] Aetheryte Plaza",
-            "[Limsa Lominsa] The Aftcastle"
-          ]
+          "AetheryteShortcut": "Gridania"
         }
       ]
     }

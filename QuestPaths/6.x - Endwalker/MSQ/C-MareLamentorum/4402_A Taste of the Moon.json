@@ -251,7 +251,8 @@
             "Z": -620.05035
           },
           "TerritoryId": 959,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DelaySecondsAtStart": 3
         }
       ]
     },

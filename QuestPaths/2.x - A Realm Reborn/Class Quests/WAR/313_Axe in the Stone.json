@@ -314,7 +314,8 @@
           "AethernetShortcut": [
             "[Limsa Lominsa] Aetheryte Plaza",
             "[Limsa Lominsa] Marauders' Guild"
-          ]
+          ],
+          "NextQuestId": 315
         }
       ]
     }

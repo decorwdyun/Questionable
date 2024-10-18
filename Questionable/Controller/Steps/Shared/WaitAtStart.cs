@@ -18,10 +18,19 @@ internal static class WaitAtStart
         }
     }
 
-    internal sealed class WaitDelay(TimeSpan delay) : AbstractDelayedTask(delay)
-    {
-        protected override bool StartInternal() => true;
 
+    internal sealed record WaitDelay(TimeSpan Delay) : ITask
+    {
         public override string ToString() => $"Wait[S](seconds: {Delay.TotalSeconds})";
     }
+
+    internal sealed class WaitDelayExecutor : AbstractDelayedTaskExecutor<WaitDelay>
+    {
+        protected override bool StartInternal()
+        {
+            Delay = Task.Delay;
+            return true;
+        }
+    }
+
 }

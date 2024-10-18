@@ -6,6 +6,11 @@
       "Sequence": 0,
       "Steps": [
         {
+          "TerritoryId": 478,
+          "InteractionType": "Gather",
+          "ItemsToGather": []
+        },
+        {
           "Position": {
             "X": -71.31451,
             "Y": 206.56206,
@@ -13,7 +18,6 @@
           },
           "TerritoryId": 478,
           "InteractionType": "WalkTo",
-          "RequiredGatheredItems": [],
           "AetheryteShortcut": "Idyllshire"
         },
         {

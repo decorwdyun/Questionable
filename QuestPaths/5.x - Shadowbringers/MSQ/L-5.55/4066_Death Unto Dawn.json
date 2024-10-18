@@ -1,9 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "TerritoryBlacklist": [
-    977
-  ],
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -58,7 +55,7 @@
       "Steps": [
         {
           "TerritoryId": 351,
-          "InteractionType": "WaitForManualProgress",
+          "InteractionType": "None",
           "Comment": "Credits"
         }
       ]

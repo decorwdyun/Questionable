@@ -13,7 +13,14 @@
             "Z": 315.81592
           },
           "TerritoryId": 960,
-          "InteractionType": "AcceptQuest"
+          "InteractionType": "AcceptQuest",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKZK001_04354_Q1_000_100",
+              "Answer": "TEXT_AKTKZK001_04354_A2_000_100"
+            }
+          ]
         }
       ]
     },
@@ -22,18 +29,33 @@
       "Steps": [
         {
           "Position": {
+            "X": 588.5607,
+            "Y": 437.99976,
+            "Z": 299.7425
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Jump",
+          "JumpDestination": {
+            "Position": {
+              "X": 602.4677,
+              "Y": 438.6276,
+              "Z": 297.1612
+            }
+          }
+        },
+        {
+          "Position": {
             "X": 656.94653,
             "Y": 437.98502,
             "Z": 302.6322
           },
           "StopDistance": 0.5,
           "TerritoryId": 960,
-          "InteractionType": "WaitForManualProgress",
+          "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
             14044
-          ],
-          "Comment": "Can maybe be automated to use item depending on quest vars??"
+          ]
         }
       ]
     },

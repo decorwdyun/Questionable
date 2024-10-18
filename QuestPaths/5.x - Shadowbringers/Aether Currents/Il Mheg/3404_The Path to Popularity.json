@@ -92,6 +92,22 @@
       ]
     },
     {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1030838,
+          "Position": {
+            "X": -285.90833,
+            "Y": 40.324036,
+            "Z": 444.41882
+          },
+          "TerritoryId": 816,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Il Mheg - Lydha Lran"
+        }
+      ]
+    },
+    {
       "Sequence": 255,
       "Steps": [
         {

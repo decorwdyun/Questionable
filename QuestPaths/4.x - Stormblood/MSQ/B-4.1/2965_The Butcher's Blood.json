@@ -12,6 +12,7 @@
             "Y": 70,
             "Z": 576.1653
           },
+          "StopDistance": 7,
           "TerritoryId": 621,
           "InteractionType": "AcceptQuest",
           "AetheryteShortcut": "Lochs - Ala Mhigan Quarter",
@@ -49,6 +50,7 @@
             "Y": 69.999916,
             "Z": 637.3845
           },
+          "StopDistance": 5,
           "TerritoryId": 621,
           "InteractionType": "Interact"
         }
@@ -64,8 +66,16 @@
             "Y": 69.9999,
             "Z": 634.76
           },
+          "StopDistance": 7,
           "TerritoryId": 621,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_STMBDB104_02965_Q1_000_000",
+              "Yes": true
+            }
+          ]
         }
       ]
     }

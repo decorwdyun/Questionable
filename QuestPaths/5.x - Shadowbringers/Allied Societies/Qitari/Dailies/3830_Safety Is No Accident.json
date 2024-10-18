@@ -1,7 +1,6 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -22,6 +21,22 @@
       "Sequence": 255,
       "Steps": [
         {
+          "TerritoryId": 817,
+          "InteractionType": "Gather",
+          "ItemsToGather": [
+            {
+              "QuestAcceptedAsClass": "Miner",
+              "ItemId": 29535,
+              "ItemCount": 3
+            },
+            {
+              "QuestAcceptedAsClass": "Botanist",
+              "ItemId": 29561,
+              "ItemCount": 3
+            }
+          ]
+        },
+        {
           "Position": {
             "X": 788.1569,
             "Y": -45.82557,
@@ -30,12 +45,7 @@
           "TerritoryId": 817,
           "InteractionType": "WalkTo",
           "AetheryteShortcut": "Rak'tika - Fanow",
-          "Fly": true,
-          "RequiredGatheredItems": [
-
-
-
-          ]
+          "Fly": true
         },
         {
           "DataId": 1032643,

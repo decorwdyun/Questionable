@@ -32,12 +32,19 @@ internal static class DialogueChoiceExtensions
                             Assignment(nameof(DialogueChoice.Answer), dialogueChoice.Answer,
                                     emptyChoice.Answer)
                                 .AsSyntaxNodeOrToken(),
+                            Assignment(nameof(DialogueChoice.PromptIsRegularExpression),
+                                    dialogueChoice.PromptIsRegularExpression,
+                                    emptyChoice.PromptIsRegularExpression)
+                                .AsSyntaxNodeOrToken(),
                             Assignment(nameof(DialogueChoice.AnswerIsRegularExpression),
                                     dialogueChoice.AnswerIsRegularExpression,
                                     emptyChoice.AnswerIsRegularExpression)
                                 .AsSyntaxNodeOrToken(),
                             Assignment(nameof(DialogueChoice.DataId), dialogueChoice.DataId,
                                     emptyChoice.DataId)
+                                .AsSyntaxNodeOrToken(),
+                            Assignment(nameof(DialogueChoice.SpecialCondition), dialogueChoice.SpecialCondition,
+                                    emptyChoice.SpecialCondition)
                                 .AsSyntaxNodeOrToken()))));
     }
 }

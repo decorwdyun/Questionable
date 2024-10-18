@@ -32,23 +32,20 @@ internal sealed class RotationSolverRebornModule : ICombatModule, IDisposable
             pluginInterface.GetIpcSubscriber<StateCommandType, object>("RotationSolverReborn.ChangeOperatingMode");
     }
 
-    public bool IsLoaded
+    public bool CanHandleFight(CombatController.CombatData combatData)
     {
-        get
+        try
         {
-            try
-            {
-                _test.InvokeAction("Validate RSR is callable from Questionable");
-                return true;
-            }
-            catch (IpcError)
-            {
-                return false;
-            }
+            _test.InvokeAction("Validate RSR is callable from Questionable");
+            return true;
+        }
+        catch (IpcError)
+        {
+            return false;
         }
     }
 
-    public bool Start()
+    public bool Start(CombatController.CombatData combatData)
     {
         try
         {
@@ -85,7 +82,7 @@ internal sealed class RotationSolverRebornModule : ICombatModule, IDisposable
 
         float hitboxOffset = player.HitboxRadius + gameObject.HitboxRadius;
         float actualDistance = Vector3.Distance(player.Position, gameObject.Position);
-        float maxDistance = player.ClassJob.GameData?.Role is 3 or 4 ? 20f : 3f;
+        float maxDistance = player.ClassJob.GameData?.Role is 3 or 4 ? 20f : 2.9f;
         if (actualDistance - hitboxOffset >= maxDistance)
         {
             if (actualDistance - hitboxOffset <= 5)
@@ -118,6 +115,8 @@ internal sealed class RotationSolverRebornModule : ICombatModule, IDisposable
             _lastDistanceCheck = DateTime.Now;
         }
     }
+
+    public bool CanAttack(IBattleNpc target) => true;
 
     public void Dispose() => Stop();
 

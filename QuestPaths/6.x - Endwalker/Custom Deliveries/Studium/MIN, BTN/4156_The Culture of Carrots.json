@@ -21,6 +21,17 @@
       "Sequence": 255,
       "Steps": [
         {
+          "TerritoryId": 962,
+          "InteractionType": "Gather",
+          "ItemsToGather": [
+            {
+              "ItemId": 35602,
+              "ItemCount": 6,
+              "Collectability": 600
+            }
+          ]
+        },
+        {
           "DataId": 1038501,
           "Position": {
             "X": -367.3305,
@@ -33,13 +44,6 @@
           "AethernetShortcut": [
             "[Old Sharlayan] Aetheryte Plaza",
             "[Old Sharlayan] The Studium"
-          ],
-          "RequiredGatheredItems": [
-            {
-              "ItemId": 35602,
-              "ItemCount": 6,
-              "Collectability": 600
-            }
           ],
           "NextQuestId": 4157
         }

@@ -109,9 +109,9 @@
           "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow",
           "JumpDestination": {
             "Position": {
-              "X": 307.72073,
-              "Y": -143.15913,
-              "Z": -563.4788
+              "X": 315.84082,
+              "Y": -156.2339,
+              "Z": -577.15063
             },
             "StopDistance": 5
           }
@@ -160,7 +160,7 @@
             "Z": -654.13904
           },
           "TerritoryId": 959,
-          "InteractionType": "WaitForManualProgress",
+          "InteractionType": "Snipe",
           "Comment": "Find \"Runninway?\""
         }
       ]

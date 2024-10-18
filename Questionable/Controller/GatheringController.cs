@@ -13,16 +13,13 @@ using FFXIVClientStructs.FFXIV.Client.Game.Event;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using LLib;
 using Lumina.Excel.GeneratedSheets;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps;
-using Questionable.Controller.Steps.Common;
 using Questionable.Controller.Steps.Gathering;
 using Questionable.Controller.Steps.Interactions;
 using Questionable.Controller.Steps.Shared;
 using Questionable.External;
 using Questionable.Functions;
-using Questionable.GatheringPaths;
 using Questionable.Model.Gathering;
 using Questionable.Model.Questing;
 using Mount = Questionable.Controller.Steps.Common.Mount;
@@ -32,26 +29,18 @@ namespace Questionable.Controller;
 internal sealed unsafe class GatheringController : MiniTaskController<GatheringController>
 {
     private readonly MovementController _movementController;
-    private readonly MoveTo.Factory _moveFactory;
-    private readonly Mount.Factory _mountFactory;
-    private readonly Interact.Factory _interactFactory;
     private readonly GatheringPointRegistry _gatheringPointRegistry;
     private readonly GameFunctions _gameFunctions;
     private readonly NavmeshIpc _navmeshIpc;
     private readonly IObjectTable _objectTable;
     private readonly ICondition _condition;
-    private readonly ILoggerFactory _loggerFactory;
-    private readonly IGameGui _gameGui;
-    private readonly IClientState _clientState;
+    private readonly ILogger<GatheringController> _logger;
     private readonly Regex _revisitRegex;
 
     private CurrentRequest? _currentRequest;
 
     public GatheringController(
         MovementController movementController,
-        MoveTo.Factory moveFactory,
-        Mount.Factory mountFactory,
-        Interact.Factory interactFactory,
         GatheringPointRegistry gatheringPointRegistry,
         GameFunctions gameFunctions,
         NavmeshIpc navmeshIpc,
@@ -59,25 +48,18 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
         IChatGui chatGui,
         ILogger<GatheringController> logger,
         ICondition condition,
+        IServiceProvider serviceProvider,
         IDataManager dataManager,
-        ILoggerFactory loggerFactory,
-        IGameGui gameGui,
-        IClientState clientState,
         IPluginLog pluginLog)
-        : base(chatGui, logger)
+        : base(chatGui, condition, serviceProvider, dataManager, logger)
     {
         _movementController = movementController;
-        _moveFactory = moveFactory;
-        _mountFactory = mountFactory;
-        _interactFactory = interactFactory;
         _gatheringPointRegistry = gatheringPointRegistry;
         _gameFunctions = gameFunctions;
         _navmeshIpc = navmeshIpc;
         _objectTable = objectTable;
         _condition = condition;
-        _loggerFactory = loggerFactory;
-        _gameGui = gameGui;
-        _clientState = clientState;
+        _logger = logger;
 
         _revisitRegex = dataManager.GetRegex<LogMessage>(5574, x => x.Text, pluginLog)
                         ?? throw new InvalidDataException("No regex found for revisit message");
@@ -129,7 +111,7 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
             return EStatus.Complete;
         }
 
-        if (_currentTask == null && _taskQueue.Count == 0)
+        if (_taskQueue.AllTasksComplete)
             GoToNextNode();
 
         UpdateCurrentTask();
@@ -141,8 +123,7 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
     public override void Stop(string label)
     {
         _currentRequest = null;
-        _currentTask = null;
-        _taskQueue.Clear();
+        _taskQueue.Reset();
     }
 
     private void GoToNextNode()
@@ -150,12 +131,11 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
         if (_currentRequest == null)
             return;
 
-        if (_taskQueue.Count > 0)
+        if (!_taskQueue.AllTasksComplete)
             return;
 
         var director = UIState.Instance()->DirectorTodo.Director;
-        if (director != null && director->EventHandlerInfo != null &&
-            director->EventHandlerInfo->EventId.ContentId == EventHandlerType.GatheringLeveDirector)
+        if (director != null && director->Info.EventId.ContentId == EventHandlerType.GatheringLeveDirector)
         {
             if (director->Sequence == 254)
                 return;
@@ -168,7 +148,7 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
             return;
 
         ushort territoryId = _currentRequest.Root.Steps.Last().TerritoryId;
-        _taskQueue.Enqueue(_mountFactory.Mount(territoryId, Mount.EMountIf.Always));
+        _taskQueue.Enqueue(new Mount.MountTask(territoryId, Mount.EMountIf.Always));
 
         bool fly = currentNode.Fly.GetValueOrDefault(_currentRequest.Root.FlyBetweenNodes.GetValueOrDefault(true)) &&
                    _gameFunctions.IsFlyingUnlocked(territoryId);
@@ -185,14 +165,13 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
             if (pointOnFloor != null)
                 pointOnFloor = pointOnFloor.Value with { Y = pointOnFloor.Value.Y + (fly ? 3f : 0f) };
 
-            _taskQueue.Enqueue(_moveFactory.Move(new MoveTo.MoveParams(territoryId, pointOnFloor ?? averagePosition,
-                50f,
-                Fly: fly, IgnoreDistanceToObject: true)));
+            _taskQueue.Enqueue(new MoveTo.MoveTask(territoryId, pointOnFloor ?? averagePosition,
+                null, 50f, Fly: fly, IgnoreDistanceToObject: true, InteractionType: EInteractionType.WalkTo));
         }
 
-        _taskQueue.Enqueue(new MoveToLandingLocation(territoryId, fly, currentNode, _moveFactory, _gameFunctions,
-            _objectTable, _loggerFactory.CreateLogger<MoveToLandingLocation>()));
-        _taskQueue.Enqueue(_interactFactory.Interact(currentNode.DataId, null, EInteractionType.InternalGather, true));
+        _taskQueue.Enqueue(new MoveToLandingLocation.Task(territoryId, fly, currentNode));
+        _taskQueue.Enqueue(new Mount.UnmountTask());
+        _taskQueue.Enqueue(new Interact.Task(currentNode.DataId, null, EInteractionType.Gather, true));
 
         QueueGatherNode(currentNode);
     }
@@ -201,12 +180,10 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
     {
         foreach (bool revisitRequired in new[] { false, true })
         {
-            _taskQueue.Enqueue(new DoGather(_currentRequest!.Data, currentNode, revisitRequired, this, _gameFunctions,
-                _gameGui, _clientState, _condition, _loggerFactory.CreateLogger<DoGather>()));
+            _taskQueue.Enqueue(new DoGather.Task(_currentRequest!.Data, currentNode, revisitRequired));
             if (_currentRequest.Data.Collectability > 0)
             {
-                _taskQueue.Enqueue(new DoGatherCollectable(_currentRequest.Data, currentNode, revisitRequired, this,
-                    _gameFunctions, _clientState, _gameGui, _loggerFactory.CreateLogger<DoGatherCollectable>()));
+                _taskQueue.Enqueue(new DoGatherCollectable.Task(_currentRequest.Data, currentNode, revisitRequired));
             }
         }
     }
@@ -267,8 +244,8 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
 
     public override IList<string> GetRemainingTaskNames()
     {
-        if (_currentTask != null)
-            return [_currentTask.ToString() ?? "?", .. base.GetRemainingTaskNames()];
+        if (_taskQueue.CurrentTaskExecutor?.CurrentTask is { } currentTask)
+            return [currentTask.ToString() ?? "?", .. base.GetRemainingTaskNames()];
         else
             return base.GetRemainingTaskNames();
     }
@@ -277,10 +254,10 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
     {
         if (_revisitRegex.IsMatch(message.TextValue))
         {
-            if (_currentTask is IRevisitAware currentTaskRevisitAware)
+            if (_taskQueue.CurrentTaskExecutor?.CurrentTask is IRevisitAware currentTaskRevisitAware)
                 currentTaskRevisitAware.OnRevisit();
 
-            foreach (ITask task in _taskQueue)
+            foreach (ITask task in _taskQueue.RemainingTasks)
             {
                 if (task is IRevisitAware taskRevisitAware)
                     taskRevisitAware.OnRevisit();

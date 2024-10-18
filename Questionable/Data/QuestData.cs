@@ -8,7 +8,8 @@ using LLib.GameData;
 using Lumina.Excel.GeneratedSheets;
 using Questionable.Model;
 using Questionable.Model.Questing;
-using Quest = Lumina.Excel.GeneratedSheets.Quest;
+using Leve = Lumina.Excel.GeneratedSheets2.Leve;
+using Quest = Lumina.Excel.GeneratedSheets2.Quest;
 
 namespace Questionable.Data;
 
@@ -44,12 +45,22 @@ internal sealed class QuestData
                 .Where(x => x.RowId > 0 && x.Quest.Row > 0)
                 .ToDictionary(x => x.Quest.Row, x => x.Redo);
 
+        Dictionary<uint, byte> startingCities = new();
+        for (byte redoChapter = 1; redoChapter <= 3; ++redoChapter)
+        {
+            var questRedo = dataManager.GetExcelSheet<QuestRedo>()!.GetRow(redoChapter)!;
+            foreach (var quest in questRedo.Quest.Where(x => x.Row > 0))
+                startingCities[quest.Row] = redoChapter;
+        }
+
         List<IQuestInfo> quests =
         [
             ..dataManager.GetExcelSheet<Quest>()!
                 .Where(x => x.RowId > 0)
                 .Where(x => x.IssuerLocation.Row > 0)
-                .Select(x => new QuestInfo(x, questChapters.GetValueOrDefault(x.RowId))),
+                .Select(x => new QuestInfo(x, questChapters.GetValueOrDefault(x.RowId),
+                    startingCities.GetValueOrDefault(x.RowId)))
+                .Where(x => x.QuestId.Value != 1428),
             ..dataManager.GetExcelSheet<SatisfactionNpc>()!
                 .Where(x => x.RowId > 0)
                 .Select(x => new SatisfactionSupplyInfo(x)),
@@ -61,8 +72,131 @@ internal sealed class QuestData
         _quests = quests.ToDictionary(x => x.QuestId, x => x);
 
         // workaround because the game doesn't require completion of the CT questline through normal means
-        QuestInfo aTimeToEveryPurpose = (QuestInfo)_quests[new QuestId(425)];
-        aTimeToEveryPurpose.AddPreviousQuest(new QuestId(495));
+        AddPreviousQuest(new QuestId(425), new QuestId(495));
+
+        // "In order to undertake this quest" [...]
+        const int mountaintopDiplomacy = 1619;
+        const int inscrutableTastes = 2095;
+        const int tideGoesIn = 2490;
+        const int firstOfMany = 2534;
+        const int achtIaOrmhInn = 3320;
+        AddPreviousQuest(new QuestId(1480), new QuestId(2373));
+        AddPreviousQuest(new QuestId(1717), new QuestId(mountaintopDiplomacy));
+        AddPreviousQuest(new QuestId(2088), new QuestId(mountaintopDiplomacy));
+        AddPreviousQuest(new QuestId(2062), new QuestId(1617));
+        AddPreviousQuest(new QuestId(2063), new QuestId(mountaintopDiplomacy));
+        AddPreviousQuest(new QuestId(2257), new QuestId(1655));
+        AddPreviousQuest(new QuestId(2608), new QuestId(firstOfMany));
+        AddPreviousQuest(new QuestId(2600), new QuestId(2466));
+        AddPreviousQuest(new QuestId(2622), new QuestId(tideGoesIn));
+        AddPreviousQuest(new QuestId(2624), new QuestId(firstOfMany));
+        AddPreviousQuest(new QuestId(2898), new QuestId(tideGoesIn));
+        AddPreviousQuest(new QuestId(2974), new QuestId(2491));
+        AddPreviousQuest(new QuestId(2975), new QuestId(2630));
+        AddPreviousQuest(new QuestId(2912), new QuestId(tideGoesIn));
+        AddPreviousQuest(new QuestId(2914), new QuestId(2537));
+        AddPreviousQuest(new QuestId(2919), new QuestId(2455));
+        AddPreviousQuest(new QuestId(2952), new QuestId(2518));
+        AddPreviousQuest(new QuestId(2904), new QuestId(2503));
+        AddPreviousQuest(new QuestId(3038), new QuestId(firstOfMany));
+        AddPreviousQuest(new QuestId(3087), new QuestId(100));
+        AddPreviousQuest(new QuestId(3246), new QuestId(3314));
+        AddPreviousQuest(new QuestId(3247), new QuestId(achtIaOrmhInn));
+        AddPreviousQuest(new QuestId(3270), new QuestId(3333));
+        AddPreviousQuest(new QuestId(3271), new QuestId(3634));
+        AddPreviousQuest(new QuestId(3264), new QuestId(2247));
+        AddPreviousQuest(new QuestId(3253), new QuestId(2247));
+        AddPreviousQuest(new QuestId(3254), new QuestId(2537));
+        AddPreviousQuest(new QuestId(3228), new QuestId(achtIaOrmhInn));
+        AddPreviousQuest(new QuestId(3234), new QuestId(achtIaOrmhInn));
+        AddPreviousQuest(new QuestId(3237), new QuestId(achtIaOrmhInn));
+        AddPreviousQuest(new QuestId(3238), new QuestId(3634));
+        AddPreviousQuest(new QuestId(3240), new QuestId(achtIaOrmhInn));
+        AddPreviousQuest(new QuestId(3241), new QuestId(3648));
+        AddPreviousQuest(new QuestId(3628), new QuestId(3301));
+        AddPreviousQuest(new QuestId(3655), new QuestId(inscrutableTastes));
+        AddPreviousQuest(new QuestId(3771), new QuestId(495));
+        AddPreviousQuest(new QuestId(4068), new QuestId(1658));
+        AddPreviousQuest(new QuestId(4078), new QuestId(1583));
+        AddPreviousQuest(new QuestId(4150), new QuestId(4417));
+        AddPreviousQuest(new QuestId(4155), new QuestId(4383));
+        AddPreviousQuest(new QuestId(4156), new QuestId(3326));
+        AddPreviousQuest(new QuestId(4158), new QuestId(4434));
+        AddPreviousQuest(new QuestId(4159), new QuestId(4464));
+        AddPreviousQuest(new QuestId(4163), new QuestId(4398));
+        AddPreviousQuest(new QuestId(4165), new QuestId(4438));
+        AddPreviousQuest(new QuestId(4473), new QuestId(inscrutableTastes));
+        AddPreviousQuest(new QuestId(4650), new QuestId(2374));
+        AddPreviousQuest(new QuestId(4662), new QuestId(3166));
+        AddPreviousQuest(new QuestId(4761), new QuestId(4032));
+        AddPreviousQuest(new QuestId(4812), new QuestId(4750));
+        AddPreviousQuest(new QuestId(4851), new QuestId(2446));
+        AddPreviousQuest(new QuestId(4856), new QuestId(1669));
+        AddPreviousQuest(new QuestId(4857), new QuestId(2553));
+        AddPreviousQuest(new QuestId(4979), new QuestId(4896));
+        AddPreviousQuest(new QuestId(4980), new QuestId(4911));
+        AddPreviousQuest(new QuestId(4985), new QuestId(4903));
+        AddPreviousQuest(new QuestId(4987), new QuestId(4912));
+        AddPreviousQuest(new QuestId(4988), new QuestId(4942));
+        AddPreviousQuest(new QuestId(4992), new QuestId(4912));
+        AddPreviousQuest(new QuestId(4999), new QuestId(4908));
+        AddPreviousQuest(new QuestId(4966), new QuestId(inscrutableTastes));
+        AddPreviousQuest(new QuestId(5000), new QuestId(4908));
+        AddPreviousQuest(new QuestId(5001), new QuestId(4912));
+
+        // "In order to proceed with this quest" [...]
+        /* my little chocobo
+        AddPreviousQuest(new QuestId(1036), new QuestId());
+        AddPreviousQuest(new QuestId(1663), new QuestId());
+        AddPreviousQuest(new QuestId(3771), new QuestId());
+        AddPreviousQuest(new QuestId(4521), new QuestId());
+        */
+        /* only applicable for fishers
+        const int spearfishing = 2922;
+        AddPreviousQuest(new QuestId(3811), new QuestId(spearfishing));
+        AddPreviousQuest(new QuestId(3812), new QuestId(spearfishing));
+        AddPreviousQuest(new QuestId(3817), new QuestId(spearfishing));
+        AddPreviousQuest(new QuestId(3818), new QuestId(spearfishing));
+        AddPreviousQuest(new QuestId(3821), new QuestId(spearfishing));
+        AddPreviousQuest(new QuestId(3833), new QuestId(spearfishing));
+        */
+
+        // initial city quests are side quests
+        // unclear if 470 can be started as the required quest isn't available anymore
+        ushort[] limsaSideQuests =
+            [107, 111, 112, 122, 663, 475, 472, 476, 470, 473, 474, 477, 486, 478, 479, 487, 59, 400, 401, 693, 405];
+        foreach (var questId in limsaSideQuests)
+            ((QuestInfo)_quests[new QuestId(questId)]).StartingCity = 1;
+
+        ushort[] gridaniaQuests =
+            [39, 1, 32, 34, 37, 172, 127, 130, 60, 220, 378];
+        foreach (var questId in gridaniaQuests)
+            ((QuestInfo)_quests[new QuestId(questId)]).StartingCity = 2;
+
+        ushort[] uldahSideQuests =
+            [594, 389, 390, 321, 304, 322, 388, 308, 326, 1429, 58, 687, 341, 504, 531, 506, 530, 573, 342, 505];
+        foreach (var questId in uldahSideQuests)
+            ((QuestInfo)_quests[new QuestId(questId)]).StartingCity = 3;
+
+
+        // follow-up quests to picking a GC
+        AddGcFollowUpQuests();
+    }
+
+    private void AddPreviousQuest(QuestId questToUpdate, QuestId requiredQuestId)
+    {
+        QuestInfo quest = (QuestInfo)_quests[questToUpdate];
+        quest.AddPreviousQuest(new PreviousQuestInfo(requiredQuestId));
+    }
+
+    private void AddGcFollowUpQuests()
+    {
+        QuestId[] questIds = [new(683), new(684), new(685)];
+        foreach (QuestId questId in questIds)
+        {
+            QuestInfo quest = (QuestInfo)_quests[questId];
+            quest.AddQuestLocks(EQuestJoin.AtLeastOne, questIds.Where(x => x != questId).ToArray());
+        }
     }
 
     public IQuestInfo GetQuestInfo(ElementId elementId)
@@ -102,38 +236,38 @@ internal sealed class QuestData
 
             // ARR
             EClassJob.Gladiator => [63],
-            EClassJob.Paladin => [72, 73, 74, 75],
+            EClassJob.Paladin => [72, 73, 74],
             EClassJob.Marauder => [64],
-            EClassJob.Warrior => [76, 77, 78, 79],
+            EClassJob.Warrior => [76, 77, 78],
             EClassJob.Conjurer => [65],
-            EClassJob.WhiteMage => [86, 87, 88, 89],
+            EClassJob.WhiteMage => [86, 87, 88],
             EClassJob.Arcanist => [66],
-            EClassJob.Summoner => [127, 128, 129, 130],
-            EClassJob.Scholar => [90, 91, 92, 93],
+            EClassJob.Summoner => [127, 128, 129],
+            EClassJob.Scholar => [90, 91, 92],
             EClassJob.Pugilist => [67],
-            EClassJob.Monk => [98, 99, 100, 101],
+            EClassJob.Monk => [98, 99, 100],
             EClassJob.Lancer => [68],
-            EClassJob.Dragoon => [102, 103, 104, 105],
+            EClassJob.Dragoon => [102, 103, 104],
             EClassJob.Rogue => [69],
-            EClassJob.Ninja => [106, 107, 108, 109],
+            EClassJob.Ninja => [106, 107, 108],
             EClassJob.Archer => [70],
-            EClassJob.Bard => [113, 114, 115, 116],
+            EClassJob.Bard => [113, 114, 115],
             EClassJob.Thaumaturge => [71],
-            EClassJob.BlackMage => [123, 124, 125, 126],
+            EClassJob.BlackMage => [123, 124, 125],
 
             // HW
-            EClassJob.DarkKnight => [80, 81, 82, 83],
-            EClassJob.Astrologian => [94, 95, 96, 97],
-            EClassJob.Machinist => [117, 118, 119, 120],
+            EClassJob.DarkKnight => [80, 81, 82],
+            EClassJob.Astrologian => [94, 95, 96],
+            EClassJob.Machinist => [117, 118, 119],
 
             // SB
-            EClassJob.Samurai => [110, 111, 112],
-            EClassJob.RedMage => [131, 132, 133],
-            EClassJob.BlueMage => [134, 135, 146, 170],
+            EClassJob.Samurai => [110, 111],
+            EClassJob.RedMage => [131, 132],
+            EClassJob.BlueMage => [134, 135, 146],
 
             // ShB
-            EClassJob.Gunbreaker => [84, 85],
-            EClassJob.Dancer => [121, 122],
+            EClassJob.Gunbreaker => [84],
+            EClassJob.Dancer => [121],
 
             // EW
             EClassJob.Sage => [152],
@@ -198,16 +332,24 @@ internal sealed class QuestData
         if (startingClass == EClassJob.Adventurer)
             return [];
 
-        return
+        // If you start the game as another class, you get:
+        // - "So you want to be a XX"
+        // - "Way of the XX" (depends on "So you want to be a XX")
+        // - "My First XX"
+        // If you start the game with this class, you get:
+        // - "Way of the XX" (no preconditions)
+        // In both cases, the level 10 quests are different
+        List<List<ushort>> startingClassQuests =
         [
-            startingClass == EClassJob.Gladiator ? new(177) : new(253),
-            startingClass == EClassJob.Pugilist ? new(178) : new(533),
-            startingClass == EClassJob.Marauder ? new(179) : new(311),
-            startingClass == EClassJob.Lancer ? new(180) : new(23),
-            startingClass == EClassJob.Archer ? new(181) : new(21),
-            startingClass == EClassJob.Conjurer ? new(182) : new(22),
-            startingClass == EClassJob.Thaumaturge ? new(183) : new(345),
-            startingClass == EClassJob.Arcanist ? new(451) : new(453),
+            startingClass == EClassJob.Gladiator ? [177, 285, 286, 288] : [253, 261],
+            startingClass == EClassJob.Pugilist ? [178, 532, 553, 698] : [533, 555],
+            startingClass == EClassJob.Marauder ? [179, 310, 312, 315] : [311, 314],
+            startingClass == EClassJob.Lancer ? [180, 132, 218, 143] : [23, 35],
+            startingClass == EClassJob.Archer ? [181, 131, 219, 134] : [21, 67],
+            startingClass == EClassJob.Conjurer ? [182, 133, 211, 147] : [22, 91],
+            startingClass == EClassJob.Thaumaturge ? [183, 344, 346, 349] : [345, 348],
+            startingClass == EClassJob.Arcanist ? [451, 452, 454, 457] : [453, 456],
         ];
+        return startingClassQuests.SelectMany(x => x).Select(x => new QuestId(x)).ToList();
     }
 }

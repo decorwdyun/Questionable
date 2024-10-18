@@ -18,6 +18,7 @@ using Questionable.Controller.Steps.Common;
 using Questionable.Controller.Steps.Gathering;
 using Questionable.Controller.Steps.Interactions;
 using Questionable.Controller.Steps.Leves;
+using Questionable.Controller.Utils;
 using Questionable.Data;
 using Questionable.External;
 using Questionable.Functions;
@@ -55,6 +56,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
     {
         ArgumentNullException.ThrowIfNull(pluginInterface);
         ArgumentNullException.ThrowIfNull(chatGui);
+
         try
         {
             ServiceCollection serviceCollection = new();
@@ -108,6 +110,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<GameFunctions>();
         serviceCollection.AddSingleton<ChatFunctions>();
         serviceCollection.AddSingleton<QuestFunctions>();
+        serviceCollection.AddSingleton<AutoSnipeHandler>();
 
         serviceCollection.AddSingleton<AetherCurrentData>();
         serviceCollection.AddSingleton<AetheryteData>();
@@ -120,49 +123,94 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<LifestreamIpc>();
         serviceCollection.AddSingleton<YesAlreadyIpc>();
         serviceCollection.AddSingleton<ArtisanIpc>();
+        serviceCollection.AddSingleton<QuestionableIpc>();
+        serviceCollection.AddSingleton<TextAdvanceIpc>();
     }
 
     private static void AddTaskFactories(ServiceCollection serviceCollection)
     {
         // individual tasks
-        serviceCollection.AddTransient<MoveToLandingLocation>();
-        serviceCollection.AddTransient<DoGather>();
-        serviceCollection.AddTransient<DoGatherCollectable>();
-        serviceCollection.AddTransient<SwitchClassJob>();
-        serviceCollection.AddSingleton<Mount.Factory>();
+        serviceCollection
+            .AddTaskExecutor<MoveToLandingLocation.Task, MoveToLandingLocation.MoveToLandingLocationExecutor>();
+        serviceCollection.AddTaskExecutor<DoGather.Task, DoGather.GatherExecutor>();
+        serviceCollection.AddTaskExecutor<DoGatherCollectable.Task, DoGatherCollectable.GatherCollectableExecutor>();
+        serviceCollection.AddTaskExecutor<SwitchClassJob.Task, SwitchClassJob.SwitchClassJobExecutor>();
+        serviceCollection.AddTaskExecutor<Mount.MountTask, Mount.MountExecutor>();
+        serviceCollection.AddTaskExecutor<Mount.UnmountTask, Mount.UnmountExecutor>();
 
         // task factories
-        serviceCollection.AddTaskFactory<StepDisabled.Factory>();
+        serviceCollection
+            .AddTaskFactoryAndExecutor<StepDisabled.SkipRemainingTasks, StepDisabled.Factory,
+                StepDisabled.SkipDisabledStepsExecutor>();
         serviceCollection.AddTaskFactory<EquipRecommended.BeforeDutyOrInstance>();
-        serviceCollection.AddTaskFactory<GatheringRequiredItems.Factory>();
-        serviceCollection.AddTaskFactory<AetheryteShortcut.Factory>();
-        serviceCollection.AddTaskFactory<SkipCondition.Factory>();
-        serviceCollection.AddTaskFactory<AethernetShortcut.Factory>();
-        serviceCollection.AddTaskFactory<WaitAtStart.Factory>();
-        serviceCollection.AddTaskFactory<MoveTo.Factory>();
+        serviceCollection.AddTaskFactoryAndExecutor<Gather.GatheringTask, Gather.Factory, Gather.StartGathering>();
+        serviceCollection.AddTaskExecutor<Gather.SkipMarker, Gather.DoSkip>();
+        serviceCollection
+            .AddTaskFactoryAndExecutor<AetheryteShortcut.Task, AetheryteShortcut.Factory,
+                AetheryteShortcut.UseAetheryteShortcut>();
+        serviceCollection
+            .AddTaskExecutor<AetheryteShortcut.MoveAwayFromAetheryte, AetheryteShortcut.MoveAwayFromAetheryteExecutor>();
+        serviceCollection
+            .AddTaskFactoryAndExecutor<SkipCondition.SkipTask, SkipCondition.Factory, SkipCondition.CheckSkip>();
+        serviceCollection
+            .AddTaskFactoryAndExecutor<AethernetShortcut.Task, AethernetShortcut.Factory,
+                AethernetShortcut.UseAethernetShortcut>();
+        serviceCollection
+            .AddTaskFactoryAndExecutor<WaitAtStart.WaitDelay, WaitAtStart.Factory, WaitAtStart.WaitDelayExecutor>();
+        serviceCollection.AddTaskFactoryAndExecutor<MoveTo.MoveTask, MoveTo.Factory, MoveTo.MoveExecutor>();
+        serviceCollection.AddTaskExecutor<MoveTo.WaitForNearDataId, MoveTo.WaitForNearDataIdExecutor>();
+        serviceCollection.AddTaskExecutor<MoveTo.LandTask, MoveTo.LandExecutor>();
 
-        serviceCollection.AddTaskFactory<NextQuest.Factory>();
-        serviceCollection.AddTaskFactory<AetherCurrent.Factory>();
-        serviceCollection.AddTaskFactory<AethernetShard.Factory>();
-        serviceCollection.AddTaskFactory<Aetheryte.Factory>();
-        serviceCollection.AddTaskFactory<Combat.Factory>();
-        serviceCollection.AddTaskFactory<Duty.Factory>();
+        serviceCollection
+            .AddTaskFactoryAndExecutor<NextQuest.SetQuestTask, NextQuest.Factory, NextQuest.NextQuestExecutor>();
+        serviceCollection
+            .AddTaskFactoryAndExecutor<AetherCurrent.Attune, AetherCurrent.Factory, AetherCurrent.DoAttune>();
+        serviceCollection
+            .AddTaskFactoryAndExecutor<AethernetShard.Attune, AethernetShard.Factory, AethernetShard.DoAttune>();
+        serviceCollection.AddTaskFactoryAndExecutor<Aetheryte.Attune, Aetheryte.Factory, Aetheryte.DoAttune>();
+        serviceCollection.AddTaskFactoryAndExecutor<Combat.Task, Combat.Factory, Combat.HandleCombat>();
+        serviceCollection.AddTaskFactoryAndExecutor<Duty.Task, Duty.Factory, Duty.OpenDutyWindowExecutor>();
         serviceCollection.AddTaskFactory<Emote.Factory>();
-        serviceCollection.AddTaskFactory<Action.Factory>();
-        serviceCollection.AddTaskFactory<Interact.Factory>();
+        serviceCollection.AddTaskExecutor<Emote.UseOnObject, Emote.UseOnObjectExecutor>();
+        serviceCollection.AddTaskExecutor<Emote.UseOnSelf, Emote.UseOnSelfExecutor>();
+        serviceCollection.AddTaskFactoryAndExecutor<Action.UseOnObject, Action.Factory, Action.UseOnObjectExecutor>();
+        serviceCollection.AddTaskFactoryAndExecutor<Interact.Task, Interact.Factory, Interact.DoInteract>();
         serviceCollection.AddTaskFactory<Jump.Factory>();
-        serviceCollection.AddTaskFactory<Dive.Factory>();
-        serviceCollection.AddTaskFactory<Say.Factory>();
+        serviceCollection.AddTaskExecutor<Jump.SingleJumpTask, Jump.DoSingleJump>();
+        serviceCollection.AddTaskExecutor<Jump.RepeatedJumpTask, Jump.DoRepeatedJumps>();
+        serviceCollection.AddTaskFactoryAndExecutor<Dive.Task, Dive.Factory, Dive.DoDive>();
+        serviceCollection.AddTaskFactoryAndExecutor<Say.Task, Say.Factory, Say.UseChat>();
         serviceCollection.AddTaskFactory<UseItem.Factory>();
-        serviceCollection.AddTaskFactory<EquipItem.Factory>();
-        serviceCollection.AddTaskFactory<EquipRecommended.Factory>();
-        serviceCollection.AddTaskFactory<Craft.Factory>();
-        serviceCollection.AddTaskFactory<TurnInDelivery.Factory>();
-        serviceCollection.AddTaskFactory<InitiateLeve.Factory>();
+        serviceCollection.AddTaskExecutor<UseItem.UseOnGround, UseItem.UseOnGroundExecutor>();
+        serviceCollection.AddTaskExecutor<UseItem.UseOnPosition, UseItem.UseOnPositionExecutor>();
+        serviceCollection.AddTaskExecutor<UseItem.UseOnObject, UseItem.UseOnObjectExecutor>();
+        serviceCollection.AddTaskExecutor<UseItem.UseOnSelf, UseItem.UseOnSelfExecutor>();
+        serviceCollection.AddTaskFactoryAndExecutor<EquipItem.Task, EquipItem.Factory, EquipItem.DoEquip>();
+        serviceCollection
+            .AddTaskFactoryAndExecutor<EquipRecommended.EquipTask, EquipRecommended.Factory,
+                EquipRecommended.DoEquipRecommended>();
+        serviceCollection.AddTaskFactoryAndExecutor<Craft.CraftTask, Craft.Factory, Craft.DoCraft>();
+        serviceCollection
+            .AddTaskFactoryAndExecutor<TurnInDelivery.Task, TurnInDelivery.Factory,
+                TurnInDelivery.SatisfactionSupplyTurnIn>();
 
+        serviceCollection.AddTaskFactory<InitiateLeve.Factory>();
+        serviceCollection
+            .AddTaskExecutor<InitiateLeve.SkipInitiateIfActive, InitiateLeve.SkipInitiateIfActiveExecutor>();
+        serviceCollection.AddTaskExecutor<InitiateLeve.OpenJournal, InitiateLeve.OpenJournalExecutor>();
+        serviceCollection.AddTaskExecutor<InitiateLeve.Initiate, InitiateLeve.InitiateExecutor>();
+        serviceCollection.AddTaskExecutor<InitiateLeve.SelectDifficulty, InitiateLeve.SelectDifficultyExecutor>();
+
+        serviceCollection.AddTaskExecutor<WaitCondition.Task, WaitCondition.WaitConditionExecutor>();
         serviceCollection.AddTaskFactory<WaitAtEnd.Factory>();
-        serviceCollection.AddTransient<WaitAtEnd.WaitQuestAccepted>();
-        serviceCollection.AddTransient<WaitAtEnd.WaitQuestCompleted>();
+        serviceCollection.AddTaskExecutor<WaitAtEnd.WaitDelay, WaitAtEnd.WaitDelayExecutor>();
+        serviceCollection.AddTaskExecutor<WaitAtEnd.WaitNextStepOrSequence, WaitAtEnd.WaitNextStepOrSequenceExecutor>();
+        serviceCollection.AddTaskExecutor<WaitAtEnd.WaitForCompletionFlags, WaitAtEnd.WaitForCompletionFlagsExecutor>();
+        serviceCollection.AddTaskExecutor<WaitAtEnd.WaitObjectAtPosition, WaitAtEnd.WaitObjectAtPositionExecutor>();
+        serviceCollection.AddTaskExecutor<WaitAtEnd.WaitQuestAccepted, WaitAtEnd.WaitQuestAcceptedExecutor>();
+        serviceCollection.AddTaskExecutor<WaitAtEnd.WaitQuestCompleted, WaitAtEnd.WaitQuestCompletedExecutor>();
+        serviceCollection.AddTaskExecutor<WaitAtEnd.NextStep, WaitAtEnd.NextStepExecutor>();
+        serviceCollection.AddTaskExecutor<WaitAtEnd.EndAutomation, WaitAtEnd.EndAutomationExecutor>();
 
         serviceCollection.AddSingleton<TaskCreator>();
     }
@@ -177,6 +225,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<CombatController>();
         serviceCollection.AddSingleton<GatheringController>();
         serviceCollection.AddSingleton<ContextMenuController>();
+        serviceCollection.AddSingleton<ShopController>();
 
         serviceCollection.AddSingleton<CraftworksSupplyController>();
         serviceCollection.AddSingleton<CreditsController>();
@@ -184,6 +233,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<InteractionUiController>();
         serviceCollection.AddSingleton<LeveUiController>();
 
+        serviceCollection.AddSingleton<ICombatModule, Mount128Module>();
+        serviceCollection.AddSingleton<ICombatModule, ItemUseModule>();
         serviceCollection.AddSingleton<ICombatModule, RotationSolverRebornModule>();
     }
 
@@ -208,6 +259,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<QuestSelectionWindow>();
         serviceCollection.AddSingleton<QuestValidationWindow>();
         serviceCollection.AddSingleton<JournalProgressWindow>();
+        serviceCollection.AddSingleton<PriorityWindow>();
     }
 
     private static void AddQuestValidators(ServiceCollection serviceCollection)
@@ -220,6 +272,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<IQuestValidator, CompletionFlagsValidator>();
         serviceCollection.AddSingleton<IQuestValidator, AethernetShortcutValidator>();
         serviceCollection.AddSingleton<IQuestValidator, DialogueChoiceValidator>();
+        serviceCollection.AddSingleton<IQuestValidator, ClassQuestShouldHaveShortcutValidator>();
         serviceCollection.AddSingleton<JsonSchemaValidator>();
         serviceCollection.AddSingleton<IQuestValidator>(sp => sp.GetRequiredService<JsonSchemaValidator>());
     }
@@ -234,7 +287,11 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceProvider.GetRequiredService<CreditsController>();
         serviceProvider.GetRequiredService<HelpUiController>();
         serviceProvider.GetRequiredService<LeveUiController>();
+        serviceProvider.GetRequiredService<ShopController>();
+        serviceProvider.GetRequiredService<QuestionableIpc>();
         serviceProvider.GetRequiredService<DalamudInitializer>();
+        serviceProvider.GetRequiredService<AutoSnipeHandler>().Enable();
+        serviceProvider.GetRequiredService<TextAdvanceIpc>();
     }
 
     public void Dispose()

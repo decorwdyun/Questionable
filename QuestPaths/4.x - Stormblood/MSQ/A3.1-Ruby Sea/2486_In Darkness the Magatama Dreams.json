@@ -21,6 +21,25 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1023280,
+          "Position": {
+            "X": -62.790894,
+            "Y": -198.96509,
+            "Z": -64.34735
+          },
+          "TerritoryId": 613,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 2632,
+          "DialogueChoices": [
+            {
+              "ExcelSheet": "quest/026/StmBdy001_02632",
+              "Type": "List",
+              "Prompt": "TEXT_STMBDY001_02632_Q1_000_050",
+              "Answer": "TEXT_STMBDY001_02632_A1_000_051"
+            }
+          ]
+        },
+        {
           "Position": {
             "X": 21.067955,
             "Y": -197.78902,
@@ -28,7 +47,8 @@
           },
           "TerritoryId": 613,
           "InteractionType": "WalkTo",
-          "$": "Sui-no-Sato, NE inside"
+          "$": "Sui-no-Sato, NE inside",
+          "RestartNavigationIfCancelled": false
         },
         {
           "DataId": 1019978,
@@ -71,7 +91,8 @@
             "Z": 221.51514
           },
           "TerritoryId": 613,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Mount": false
         }
       ]
     },

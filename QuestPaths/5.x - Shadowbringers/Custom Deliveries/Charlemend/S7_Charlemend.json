@@ -7,6 +7,11 @@
       "Steps": [
         {
           "TerritoryId": 886,
+          "InteractionType": "Gather",
+          "ItemsToGather": []
+        },
+        {
+          "TerritoryId": 886,
           "InteractionType": "None",
           "AetheryteShortcut": "Ishgard",
           "AethernetShortcut": [

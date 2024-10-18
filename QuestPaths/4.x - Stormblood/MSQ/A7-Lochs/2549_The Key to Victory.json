@@ -27,6 +27,48 @@
       "Sequence": 1,
       "Steps": [
         {
+          "Position": {
+            "X": -791.2012,
+            "Y": 46.3994,
+            "Z": -15.904689
+          },
+          "TerritoryId": 621,
+          "InteractionType": "WalkTo",
+          "TargetTerritoryId": 620,
+          "SkipConditions": {
+            "StepIf": {
+              "InTerritory": [
+                620
+              ],
+              "QuestsCompleted": [
+                2860
+              ]
+            }
+          }
+        },
+        {
+          "DataId": 1023167,
+          "Position": {
+            "X": 313.28296,
+            "Y": 324.51355,
+            "Z": 362.4475
+          },
+          "TerritoryId": 620,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 2851
+        },
+        {
+          "DataId": 1020893,
+          "Position": {
+            "X": 283.77197,
+            "Y": 322.87146,
+            "Z": 752.34607
+          },
+          "TerritoryId": 620,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 2860
+        },
+        {
           "DataId": 1021705,
           "Position": {
             "X": -649.897,
@@ -35,7 +77,8 @@
           },
           "StopDistance": 7,
           "TerritoryId": 621,
-          "InteractionType": "SinglePlayerDuty"
+          "InteractionType": "SinglePlayerDuty",
+          "AetheryteShortcut": "Lochs - Porta Praetoria"
         }
       ]
     },
@@ -49,6 +92,7 @@
             "Y": 45.410225,
             "Z": 766.47595
           },
+          "StopDistance": 5,
           "TerritoryId": 621,
           "InteractionType": "CompleteQuest"
         }

@@ -119,8 +119,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         if (_configuration.General.HideInAllInstances && _territoryData.IsDutyInstance(_clientState.TerritoryType))
             return false;
 
-        var currentQuest = _questController.CurrentQuest;
-        return currentQuest == null || !currentQuest.Quest.Root.TerritoryBlacklist.Contains(_clientState.TerritoryType);
+        return true;
     }
 
     public override void Draw()

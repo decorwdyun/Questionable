@@ -40,7 +40,8 @@
             "Z": -314.00232
           },
           "TerritoryId": 613,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "RestartNavigationIfCancelled": false
         },
         {
           "DataId": 1019981,
@@ -60,14 +61,26 @@
       "Steps": [
         {
           "Position": {
-            "X": -659.02277,
-            "Y": -21.210977,
-            "Z": 270.70654
+            "X": -583.7968,
+            "Y": -58.207996,
+            "Z": 244.92668
           },
           "TerritoryId": 613,
           "InteractionType": "WalkTo",
           "Fly": true,
-          "StopDistance": 0.25
+          "Mount": true
+        },
+        {
+          "Position": {
+            "X": -655.3086,
+            "Y": 0,
+            "Z": 270.4341
+          },
+          "TerritoryId": 613,
+          "InteractionType": "WalkTo",
+          "Fly": true,
+          "DisableNavmesh": true,
+          "RestartNavigationIfCancelled": false
         },
         {
           "Position": {

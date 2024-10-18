@@ -127,6 +127,17 @@
           ]
         },
         {
+          "Position": {
+            "X": 445.11514,
+            "Y": 40.55606,
+            "Z": -51.57855
+          },
+          "TerritoryId": 614,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true,
+          "Mount": true
+        },
+        {
           "DataId": 2008465,
           "Position": {
             "X": 380.84985,

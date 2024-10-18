@@ -84,7 +84,7 @@
             "Z": -359.4873
           },
           "TerritoryId": 817,
-          "InteractionType": "WaitForManualProgress",
+          "InteractionType": "Snipe",
           "Comment": "Click murals"
         }
       ]

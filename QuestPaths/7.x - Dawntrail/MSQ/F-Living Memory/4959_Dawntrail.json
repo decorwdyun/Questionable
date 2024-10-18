@@ -1,10 +1,6 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "TerritoryBlacklist": [
-    1199,
-    1202
-  ],
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -34,7 +30,12 @@
           "TerritoryId": 1192,
           "InteractionType": "WalkTo",
           "AetheryteShortcut": "Living Memory - Leynode Mnemo",
-          "$": "Leynode Mnemo to Meso Terminal waypoint"
+          "$": "Leynode Mnemo to Meso Terminal waypoint",
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
         },
         {
           "DataId": 1048014,
@@ -44,7 +45,8 @@
             "Z": 363.05774
           },
           "TerritoryId": 1192,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },

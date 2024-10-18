@@ -36,6 +36,7 @@ internal sealed class DalamudInitializer : IDisposable
         QuestSelectionWindow questSelectionWindow,
         QuestValidationWindow questValidationWindow,
         JournalProgressWindow journalProgressWindow,
+        PriorityWindow priorityWindow,
         IToastGui toastGui,
         ILogger<DalamudInitializer> logger)
     {
@@ -55,6 +56,7 @@ internal sealed class DalamudInitializer : IDisposable
         _windowSystem.AddWindow(questSelectionWindow);
         _windowSystem.AddWindow(questValidationWindow);
         _windowSystem.AddWindow(journalProgressWindow);
+        _windowSystem.AddWindow(priorityWindow);
 
         _pluginInterface.UiBuilder.Draw += _windowSystem.Draw;
         _pluginInterface.UiBuilder.OpenMainUi += _questWindow.Toggle;

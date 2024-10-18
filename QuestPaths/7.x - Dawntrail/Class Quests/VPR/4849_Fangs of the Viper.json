@@ -1,9 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "TerritoryBlacklist": [
-    1235
-  ],
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -17,16 +14,27 @@
           "TerritoryId": 131,
           "InteractionType": "UseItem",
           "ItemId": 43537,
+          "AetheryteShortcut": "Ul'dah",
+          "AethernetShortcut": [
+            "[Ul'dah] Aetheryte Plaza",
+            "[Ul'dah] Weavers' Guild"
+          ],
           "SkipConditions": {
             "StepIf": {
               "Item": {
                 "NotInInventory": true
               }
+            },
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true,
+              "InTerritory": [
+                131
+              ]
             }
           }
         },
         {
-         "TerritoryId": 131,
+          "TerritoryId": 131,
           "InteractionType": "EquipItem",
           "ItemId": 41808,
           "SkipConditions": {

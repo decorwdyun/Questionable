@@ -2,51 +2,62 @@
 using System.Linq;
 using System.Numerics;
 using Dalamud.Game.ClientState.Objects.Enums;
+using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Shared;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Gathering;
+using Questionable.Model.Questing;
 
 namespace Questionable.Controller.Steps.Gathering;
 
-internal sealed class MoveToLandingLocation(
-    ushort territoryId,
-    bool flyBetweenNodes,
-    GatheringNode gatheringNode,
-    MoveTo.Factory moveFactory,
-    GameFunctions gameFunctions,
-    IObjectTable objectTable,
-    ILogger<MoveToLandingLocation> logger) : ITask
+internal static class MoveToLandingLocation
 {
-    private ITask _moveTask = null!;
-
-    public bool Start()
+    internal sealed record Task(
+        ushort TerritoryId,
+        bool FlyBetweenNodes,
+        GatheringNode GatheringNode) : ITask
     {
-        var location = gatheringNode.Locations.First();
-        if (gatheringNode.Locations.Count > 1)
-        {
-            var gameObject = objectTable.SingleOrDefault(x =>
-                x.ObjectKind == ObjectKind.GatheringPoint && x.DataId == gatheringNode.DataId && x.IsTargetable);
-            if (gameObject == null)
-                return false;
-
-            location = gatheringNode.Locations.Single(x => Vector3.Distance(x.Position, gameObject.Position) < 0.1f);
-        }
-
-        var (target, degrees, range) = GatheringMath.CalculateLandingLocation(location);
-        logger.LogInformation("Preliminary landing location: {Location}, with degrees = {Degrees}, range = {Range}",
-            target.ToString("G", CultureInfo.InvariantCulture), degrees, range);
-
-        bool fly = flyBetweenNodes && gameFunctions.IsFlyingUnlocked(territoryId);
-        _moveTask = moveFactory.Move(new MoveTo.MoveParams(territoryId, target, 0.25f, DataId: gatheringNode.DataId,
-            Fly: fly, IgnoreDistanceToObject: true));
-        return _moveTask.Start();
+        public override string ToString() => $"Land/{FlyBetweenNodes}";
     }
 
-    public ETaskResult Update() => _moveTask.Update();
+    internal sealed class MoveToLandingLocationExecutor(
+        MoveTo.MoveExecutor moveExecutor,
+        GameFunctions gameFunctions,
+        IObjectTable objectTable,
+        ILogger<MoveToLandingLocationExecutor> logger) : TaskExecutor<Task>, IToastAware
+    {
+        private ITask _moveTask = null!;
 
-    public override string ToString() => $"Land/{_moveTask}/{flyBetweenNodes}";
+        protected override bool Start()
+        {
+            var location = Task.GatheringNode.Locations.First();
+            if (Task.GatheringNode.Locations.Count > 1)
+            {
+                var gameObject = objectTable.SingleOrDefault(x =>
+                    x.ObjectKind == ObjectKind.GatheringPoint && x.DataId == Task.GatheringNode.DataId &&
+                    x.IsTargetable);
+                if (gameObject == null)
+                    return false;
+
+                location = Task.GatheringNode.Locations.Single(x =>
+                    Vector3.Distance(x.Position, gameObject.Position) < 0.1f);
+            }
+
+            var (target, degrees, range) = GatheringMath.CalculateLandingLocation(location);
+            logger.LogInformation("Preliminary landing location: {Location}, with degrees = {Degrees}, range = {Range}",
+                target.ToString("G", CultureInfo.InvariantCulture), degrees, range);
+
+            bool fly = Task.FlyBetweenNodes && gameFunctions.IsFlyingUnlocked(Task.TerritoryId);
+            _moveTask = new MoveTo.MoveTask(Task.TerritoryId, target, null, 0.25f,
+                DataId: Task.GatheringNode.DataId, Fly: fly, IgnoreDistanceToObject: true,
+                InteractionType: EInteractionType.Gather);
+            return moveExecutor.Start(_moveTask);
+        }
+
+        public override ETaskResult Update() => moveExecutor.Update();
+        public bool OnErrorToast(SeString message) => moveExecutor.OnErrorToast(message);
+    }
 }

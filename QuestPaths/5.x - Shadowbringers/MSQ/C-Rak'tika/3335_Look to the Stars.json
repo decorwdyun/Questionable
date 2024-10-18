@@ -21,6 +21,17 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1027736,
+          "Position": {
+            "X": 396.38354,
+            "Y": 20.422523,
+            "Z": -179.12573
+          },
+          "TerritoryId": 817,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 3467
+        },
+        {
           "DataId": 1029238,
           "Position": {
             "X": 206.56128,
@@ -197,7 +208,6 @@
           "TerritoryId": 817,
           "InteractionType": "Jump",
           "Comment": "Northwest",
-          "DisableNavmesh": true,
           "JumpDestination": {
             "Position": {
               "X": 123.35363,

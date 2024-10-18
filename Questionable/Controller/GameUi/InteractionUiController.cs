@@ -7,7 +7,9 @@ using Dalamud.Game.Addon.Lifecycle;
 using Dalamud.Game.Addon.Lifecycle.AddonArgTypes;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Event;
+using FFXIVClientStructs.FFXIV.Client.Game.InstanceContent;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Component.GUI;
@@ -42,9 +44,11 @@ internal sealed class InteractionUiController : IDisposable
     private readonly GatheringPointRegistry _gatheringPointRegistry;
     private readonly QuestRegistry _questRegistry;
     private readonly QuestData _questData;
+    private readonly TerritoryData _territoryData;
     private readonly IGameGui _gameGui;
     private readonly ITargetManager _targetManager;
     private readonly IClientState _clientState;
+    private readonly ShopController _shopController;
     private readonly ILogger<InteractionUiController> _logger;
     private readonly Regex _returnRegex;
 
@@ -61,10 +65,12 @@ internal sealed class InteractionUiController : IDisposable
         GatheringPointRegistry gatheringPointRegistry,
         QuestRegistry questRegistry,
         QuestData questData,
+        TerritoryData territoryData,
         IGameGui gameGui,
         ITargetManager targetManager,
         IPluginLog pluginLog,
         IClientState clientState,
+        ShopController shopController,
         ILogger<InteractionUiController> logger)
     {
         _addonLifecycle = addonLifecycle;
@@ -77,9 +83,11 @@ internal sealed class InteractionUiController : IDisposable
         _gatheringPointRegistry = gatheringPointRegistry;
         _questRegistry = questRegistry;
         _questData = questData;
+        _territoryData = territoryData;
         _gameGui = gameGui;
         _targetManager = targetManager;
         _clientState = clientState;
+        _shopController = shopController;
         _logger = logger;
 
         _returnRegex = _dataManager.GetExcelSheet<Addon>()!.GetRow(196)!.GetRegex(addon => addon.Text, pluginLog)!;
@@ -101,7 +109,9 @@ internal sealed class InteractionUiController : IDisposable
         }
     }
 
-    private bool ShouldHandleUiInteractions => _isInitialCheck || _questController.IsRunning;
+    private bool ShouldHandleUiInteractions => _isInitialCheck ||
+                                               _questController.IsRunning ||
+                                               _territoryData.IsQuestBattleInstance(_clientState.TerritoryType);
 
     internal unsafe void HandleCurrentDialogueChoices()
     {
@@ -230,6 +240,16 @@ internal sealed class InteractionUiController : IDisposable
             _logger.LogInformation("Checking if current quest {Name} is on the list", currentQuest.Quest.Info.Name);
             if (CheckQuestSelection(addonSelectIconString, currentQuest.Quest, answers))
                 return;
+
+            var sequence = currentQuest.Quest.FindSequence(currentQuest.Sequence);
+            QuestStep? step = sequence?.FindStep(currentQuest.Step);
+            if (step is { InteractionType: EInteractionType.AcceptQuest, PickUpQuestId: not null } &&
+                _questRegistry.TryGetQuest(step.PickUpQuestId, out Quest? pickupQuest))
+            {
+                _logger.LogInformation("Checking if current picked-up {Name} is on the list", pickupQuest.Info.Name);
+                if (CheckQuestSelection(addonSelectIconString, pickupQuest, answers))
+                    return;
+            }
         }
 
         var nextQuest = _questController.NextQuest;
@@ -270,7 +290,7 @@ internal sealed class InteractionUiController : IDisposable
         List<DialogueChoiceInfo> dialogueChoices = [];
 
         // levequest choices have some vague sort of priority
-        if (_questController.HasCurrentTaskMatching<Interact.DoInteract>(out var interact) &&
+        if (_questController.HasCurrentTaskExecutorMatching<Interact.DoInteract>(out var interact) &&
             interact.Quest != null &&
             interact.InteractionType is EInteractionType.AcceptLeve or EInteractionType.CompleteLeve)
         {
@@ -315,11 +335,30 @@ internal sealed class InteractionUiController : IDisposable
             }
             else
             {
-                var step = quest.FindSequence(currentQuest.Sequence)?.FindStep(currentQuest.Step);
+                QuestStep? step = null;
+                if (_territoryData.IsQuestBattleInstance(_clientState.TerritoryType))
+                {
+                    step = quest.FindSequence(currentQuest.Sequence)?.Steps
+                        .FirstOrDefault(x => x.InteractionType == EInteractionType.SinglePlayerDuty);
+                }
+
+                if (step == null)
+                    step = quest.FindSequence(currentQuest.Sequence)?.FindStep(currentQuest.Step);
+
                 if (step == null)
                     _logger.LogDebug("Ignoring current quest dialogue choices, no active step");
                 else
+                {
                     dialogueChoices.AddRange(step.DialogueChoices.Select(x => new DialogueChoiceInfo(quest, x)));
+                    if (step.PurchaseMenu != null)
+                        dialogueChoices.Add(new DialogueChoiceInfo(quest, new DialogueChoice
+                        {
+                            Type = EDialogChoiceType.List,
+                            ExcelSheet = step.PurchaseMenu.ExcelSheet,
+                            Prompt = null,
+                            Answer = step.PurchaseMenu.Key,
+                        }));
+                }
             }
 
             // add all travel dialogue choices
@@ -399,6 +438,27 @@ internal sealed class InteractionUiController : IDisposable
             if (dialogueChoice.Type != EDialogChoiceType.List)
                 continue;
 
+            if (dialogueChoice.SpecialCondition == "NoDutyActions")
+            {
+                try
+                {
+                    unsafe
+                    {
+                        ContentDirector* contentDirector = EventFramework.Instance()->GetContentDirector();
+                        if (contentDirector != null && contentDirector->DutyActionManager.ActionsPresent)
+                        {
+                            _logger.LogInformation("NoDutyActions: actions present, skipping dialogue choice");
+                            continue;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "Failed to check for duty actions");
+                    continue;
+                }
+            }
+
             if (dialogueChoice.Answer == null)
             {
                 _logger.LogDebug("Ignoring entry in DialogueChoices, no answer");
@@ -413,19 +473,19 @@ internal sealed class InteractionUiController : IDisposable
                 continue;
             }
 
-            string? excelPrompt = ResolveReference(quest, dialogueChoice.ExcelSheet, dialogueChoice.Prompt, false)
-                ?.GetString();
+            StringOrRegex? excelPrompt = ResolveReference(quest, dialogueChoice.ExcelSheet, dialogueChoice.Prompt,
+                    dialogueChoice.PromptIsRegularExpression);
             StringOrRegex? excelAnswer = ResolveReference(quest, dialogueChoice.ExcelSheet, dialogueChoice.Answer,
                 dialogueChoice.AnswerIsRegularExpression);
 
-            if (actualPrompt == null && !string.IsNullOrEmpty(excelPrompt))
+            if (actualPrompt == null && excelPrompt != null)
             {
                 _logger.LogInformation("Unexpected excelPrompt: {ExcelPrompt}", excelPrompt);
                 continue;
             }
 
             if (actualPrompt != null &&
-                (excelPrompt == null || !GameFunctions.GameStringEquals(actualPrompt, excelPrompt)))
+                (excelPrompt == null || !IsMatch(actualPrompt, excelPrompt)))
             {
                 _logger.LogInformation("Unexpected excelPrompt: {ExcelPrompt}, actualPrompt: {ActualPrompt}",
                     excelPrompt, actualPrompt);
@@ -501,9 +561,16 @@ internal sealed class InteractionUiController : IDisposable
             return;
 
         _logger.LogTrace("Prompt: '{Prompt}'", actualPrompt);
+        if (_shopController.IsAutoBuyEnabled && _shopController.IsAwaitingYesNo)
+        {
+            addonSelectYesno->AtkUnitBase.FireCallbackInt(0);
+            _shopController.IsAwaitingYesNo = false;
+            return;
+        }
+
         var director = UIState.Instance()->DirectorTodo.Director;
-        if (director != null && director->EventHandlerInfo != null &&
-            director->EventHandlerInfo->EventId.ContentId == EventHandlerType.GatheringLeveDirector &&
+        if (director != null &&
+            director->Info.EventId.ContentId == EventHandlerType.GatheringLeveDirector &&
             director->Sequence == 254)
         {
             // just close the dialogue for 'do you want to return to next settlement', should prolly be different for
@@ -582,9 +649,9 @@ internal sealed class InteractionUiController : IDisposable
                 continue;
             }
 
-            string? excelPrompt = ResolveReference(quest, dialogueChoice.ExcelSheet, dialogueChoice.Prompt, false)
-                ?.GetString();
-            if (excelPrompt == null || !GameFunctions.GameStringEquals(actualPrompt, excelPrompt))
+            StringOrRegex? excelPrompt = ResolveReference(quest, dialogueChoice.ExcelSheet, dialogueChoice.Prompt,
+                    dialogueChoice.PromptIsRegularExpression);
+            if (excelPrompt == null || !IsMatch(actualPrompt, excelPrompt))
             {
                 _logger.LogInformation("Unexpected excelPrompt: {ExcelPrompt}, actualPrompt: {ActualPrompt}",
                     excelPrompt, actualPrompt);
@@ -643,9 +710,9 @@ internal sealed class InteractionUiController : IDisposable
                 step.TargetTerritoryId);
 
         if (step != null && (step.TerritoryId != _clientState.TerritoryType || step.TargetTerritoryId == null) &&
-            step.RequiredGatheredItems.Count > 0)
+            step.InteractionType == EInteractionType.Gather)
         {
-            if (_gatheringData.TryGetGatheringPointId(step.RequiredGatheredItems[0].ItemId,
+            if (_gatheringData.TryGetGatheringPointId(step.ItemsToGather[0].ItemId,
                     (EClassJob?)_clientState.LocalPlayer?.ClassJob.Id ?? EClassJob.Adventurer,
                     out GatheringPointId? gatheringPointId) &&
                 _gatheringPointRegistry.TryGetGatheringPoint(gatheringPointId, out GatheringRoot? root))
@@ -784,7 +851,7 @@ internal sealed class InteractionUiController : IDisposable
     private void TeleportTownPostSetup(AddonEvent type, AddonArgs args)
     {
         if (ShouldHandleUiInteractions &&
-            _questController.HasCurrentTaskMatching(out AethernetShortcut.UseAethernetShortcut? aethernetShortcut) &&
+            _questController.HasCurrentTaskMatching(out AethernetShortcut.Task? aethernetShortcut) &&
             aethernetShortcut.From.IsFirmamentAetheryte())
         {
             // this might be better via atkvalues; but this works for now

@@ -10,14 +10,16 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class Say
 {
-    internal sealed class Factory(
-        ChatFunctions chatFunctions,
-        Mount.Factory mountFactory,
-        ExcelFunctions excelFunctions) : ITaskFactory
+    internal sealed class Factory(ExcelFunctions excelFunctions) : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
-            if (step.InteractionType != EInteractionType.Say)
+            if (step.InteractionType is EInteractionType.AcceptQuest or EInteractionType.CompleteQuest)
+            {
+                if (step.ChatMessage == null)
+                    return [];
+            }
+            else if (step.InteractionType != EInteractionType.Say)
                 return [];
 
 
@@ -28,20 +30,23 @@ internal static class Say
                     .GetString();
             ArgumentNullException.ThrowIfNull(excelString);
 
-            var unmount = mountFactory.Unmount();
-            var task = new UseChat(excelString, chatFunctions);
+            var unmount = new Mount.UnmountTask();
+            var task = new Task(excelString);
             return [unmount, task];
         }
     }
 
-    private sealed class UseChat(string chatMessage, ChatFunctions chatFunctions) : AbstractDelayedTask
+    internal sealed record Task(string ChatMessage) : ITask
+    {
+        public override string ToString() => $"Say({ChatMessage})";
+    }
+
+    internal sealed class UseChat(ChatFunctions chatFunctions) : AbstractDelayedTaskExecutor<Task>
     {
         protected override bool StartInternal()
         {
-            chatFunctions.ExecuteCommand($"/say {chatMessage}");
+            chatFunctions.ExecuteCommand($"/say {Task.ChatMessage}");
             return true;
         }
-
-        public override string ToString() => $"Say({chatMessage})";
     }
 }

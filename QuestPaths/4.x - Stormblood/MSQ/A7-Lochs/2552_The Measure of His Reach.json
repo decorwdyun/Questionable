@@ -27,6 +27,50 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1022987,
+          "Position": {
+            "X": -662.13477,
+            "Y": 49.999794,
+            "Z": -48.874695
+          },
+          "TerritoryId": 621,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 2881
+        },
+        {
+          "DataId": 1022992,
+          "Position": {
+            "X": -506.6148,
+            "Y": 8.7,
+            "Z": -40.299072
+          },
+          "TerritoryId": 621,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 2877
+        },
+        {
+          "DataId": 1022990,
+          "Position": {
+            "X": -524.58997,
+            "Y": 8.688546,
+            "Z": -19.424805
+          },
+          "TerritoryId": 621,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 2880
+        },
+        {
+          "DataId": 1022991,
+          "Position": {
+            "X": -539.6353,
+            "Y": 7.6119823,
+            "Z": 52.140015
+          },
+          "TerritoryId": 621,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 2883
+        },
+        {
           "DataId": 2007993,
           "Position": {
             "X": 261.5243,

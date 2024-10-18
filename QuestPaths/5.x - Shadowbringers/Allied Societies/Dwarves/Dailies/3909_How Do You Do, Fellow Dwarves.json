@@ -1,7 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -30,8 +29,78 @@
     {
       "Sequence": 1,
       "Steps": [
-
-
+        {
+          "DataId": 1033770,
+          "Position": {
+            "X": -410.11676,
+            "Y": 91.978714,
+            "Z": -426.71857
+          },
+          "TerritoryId": 813,
+          "InteractionType": "Say",
+          "ChatMessage": {
+            "Key": "TEXT_BANDWA108_03909_SAYTODO_000_030"
+          },
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [
+              16
+            ],
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "DataId": 1033771,
+          "Position": {
+            "X": -396.07843,
+            "Y": 93.51564,
+            "Z": -419.11957
+          },
+          "TerritoryId": 813,
+          "InteractionType": "Say",
+          "ChatMessage": {
+            "Key": "TEXT_BANDWA108_03909_SAYTODO_000_030"
+          },
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [
+              32
+            ],
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "DataId": 1033772,
+          "Position": {
+            "X": -399.80164,
+            "Y": 91.33075,
+            "Z": -441.42828
+          },
+          "TerritoryId": 813,
+          "InteractionType": "Say",
+          "ChatMessage": {
+            "Key": "TEXT_BANDWA108_03909_SAYTODO_000_030"
+          },
+          "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [
+              48
+            ],
+            null,
+            null,
+            null
+          ]
+        }
       ]
     },
     {

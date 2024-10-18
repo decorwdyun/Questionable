@@ -113,15 +113,26 @@
       "Sequence": 255,
       "Steps": [
         {
+          "DataId": 1040669,
           "Position": {
-            "X": 425.544,
-            "Y": 3.1257756,
-            "Z": -218.32741
+            "X": 381.64343,
+            "Y": 3.1891773,
+            "Z": -207.20227
           },
           "TerritoryId": 957,
-          "InteractionType": "WalkTo",
-          "Mount": true,
-          "DisableNavmesh": true
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 4259
+        },
+        {
+          "DataId": 1040864,
+          "Position": {
+            "X": 462.51624,
+            "Y": 14.320099,
+            "Z": -219.86731
+          },
+          "TerritoryId": 957,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 4257
         },
         {
           "DataId": 1039064,

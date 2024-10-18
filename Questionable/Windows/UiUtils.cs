@@ -26,6 +26,8 @@ internal sealed class UiUtils
             return (ImGuiColors.DalamudYellow, FontAwesomeIcon.PersonWalkingArrowRight, "Active");
         else if (_questFunctions.IsQuestAcceptedOrComplete(elementId))
             return (ImGuiColors.ParsedGreen, FontAwesomeIcon.Check, "Complete");
+        else if (_questFunctions.IsQuestUnobtainable(elementId))
+            return (ImGuiColors.DalamudGrey, FontAwesomeIcon.Minus, "Unobtainable");
         else if (_questFunctions.IsQuestLocked(elementId))
             return (ImGuiColors.DalamudRed, FontAwesomeIcon.Times, "Locked");
         else
@@ -56,6 +58,7 @@ internal sealed class UiUtils
         if (extraPadding > 0)
             ImGui.SetCursorPosX(ImGui.GetCursorPosX() + extraPadding);
         ImGui.TextUnformatted(text);
+        hover |= ImGui.IsItemHovered();
         return hover;
     }
 

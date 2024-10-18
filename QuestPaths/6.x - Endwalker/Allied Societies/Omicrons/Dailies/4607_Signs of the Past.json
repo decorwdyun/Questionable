@@ -22,8 +22,8 @@
       "Steps": [
         {
           "TerritoryId": 960,
-          "InteractionType": "None",
-          "RequiredGatheredItems": [
+          "InteractionType": "Gather",
+          "ItemsToGather": [
             {
               "QuestAcceptedAsClass": "Miner",
               "ItemId": 38281,

@@ -22,6 +22,17 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1030747,
+          "Position": {
+            "X": -81.28485,
+            "Y": -19.061882,
+            "Z": 307.20984
+          },
+          "TerritoryId": 817,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 3656
+        },
+        {
           "DataId": 1029223,
           "Position": {
             "X": -470.96973,
@@ -149,7 +160,8 @@
           "TerritoryId": 817,
           "InteractionType": "WalkTo",
           "Fly": true,
-          "DisableNavmesh": true
+          "DisableNavmesh": true,
+          "Mount": true
         },
         {
           "Position": {
@@ -169,7 +181,8 @@
           },
           "TerritoryId": 817,
           "InteractionType": "WalkTo",
-          "DisableNavmesh": true
+          "DisableNavmesh": true,
+          "RestartNavigationIfCancelled": false
         },
         {
           "Position": {

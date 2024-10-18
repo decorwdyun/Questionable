@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using Dalamud.Interface;
@@ -18,10 +19,9 @@ namespace Questionable.Windows.QuestComponents;
 
 internal sealed class EventInfoComponent
 {
+    [SuppressMessage("ReSharper", "CollectionNeverUpdated.Local")]
     private readonly List<EventQuest> _eventQuests =
     [
-        new EventQuest("Moonfire Faire", [new(5182), new(5183)],
-            new DateTime(new DateOnly(2024, 8, 26), new TimeOnly(14, 59), DateTimeKind.Utc)),
     ];
 
     private readonly QuestData _questData;
@@ -45,6 +45,12 @@ internal sealed class EventInfoComponent
         _questTooltipComponent = questTooltipComponent;
         _configuration = configuration;
         _pluginInterface = pluginInterface;
+    }
+
+    [SuppressMessage("ReSharper", "UnusedMember.Local")]
+    private static DateTime AtDailyReset(DateOnly date)
+    {
+        return new DateTime(date, new TimeOnly(14, 59), DateTimeKind.Utc);
     }
 
     public bool ShouldDraw => _configuration.General.ShowIncompleteSeasonalEvents && _eventQuests.Any(IsIncomplete);
@@ -75,10 +81,10 @@ internal sealed class EventInfoComponent
             width -= ImGui.CalcTextSize(FontAwesomeIcon.Check.ToIconString()).X;
 
         List<QuestId> startableQuests = eventQuest.QuestIds.Where(x =>
-            _questRegistry.IsKnownQuest(x) &&
-            _questFunctions.IsReadyToAcceptQuest(x) &&
-            x != _questController.StartedQuest?.Quest.Id &&
-            x != _questController.NextQuest?.Quest.Id)
+                _questRegistry.IsKnownQuest(x) &&
+                _questFunctions.IsReadyToAcceptQuest(x) &&
+                x != _questController.StartedQuest?.Quest.Id &&
+                x != _questController.NextQuest?.Quest.Id)
             .ToList();
         if (startableQuests.Count == 0)
             width = 0;

@@ -1,9 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "TerritoryBlacklist": [
-    837
-  ],
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -84,6 +81,15 @@
           "TerritoryId": 813,
           "InteractionType": "AttuneAetheryte",
           "Aetheryte": "Lakeland - Fort Jobb"
+        },
+        {
+          "Position": {
+            "X": 601.42426,
+            "Y": 23.210327,
+            "Z": -223.36815
+          },
+          "TerritoryId": 813,
+          "InteractionType": "WalkTo"
         },
         {
           "DataId": 2010028,

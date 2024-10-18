@@ -64,6 +64,28 @@
       "Sequence": 3,
       "Steps": [
         {
+          "DataId": 1051263,
+          "Position": {
+            "X": -521.0193,
+            "Y": 121.63345,
+            "Z": 319.38647
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 5085
+        },
+        {
+          "DataId": 1048855,
+          "Position": {
+            "X": -491.63043,
+            "Y": 121.63846,
+            "Z": 271.50366
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 5074
+        },
+        {
           "DataId": 1046876,
           "Position": {
             "X": -505.66876,

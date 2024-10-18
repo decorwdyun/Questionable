@@ -21,6 +21,21 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1012287,
+          "Position": {
+            "X": -28.397034,
+            "Y": 100.969696,
+            "Z": -186.4195
+          },
+          "TerritoryId": 399,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 1936,
+          "AethernetShortcut": [
+            "[Idyllshire] Aetheryte Plaza",
+            "[Idyllshire] Epilogue Gate (Eastern Hinterlands)"
+          ]
+        },
+        {
           "DataId": 1012416,
           "Position": {
             "X": 365.83496,

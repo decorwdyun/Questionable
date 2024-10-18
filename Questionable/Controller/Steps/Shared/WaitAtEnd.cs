@@ -19,9 +19,7 @@ internal static class WaitAtEnd
     internal sealed class Factory(
         IClientState clientState,
         ICondition condition,
-        TerritoryData territoryData,
-        QuestFunctions questFunctions,
-        GameFunctions gameFunctions)
+        TerritoryData territoryData)
         : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
@@ -29,7 +27,7 @@ internal static class WaitAtEnd
             if (step.CompletionQuestVariablesFlags.Count == 6 &&
                 QuestWorkUtils.HasCompletionFlags(step.CompletionQuestVariablesFlags))
             {
-                var task = new WaitForCompletionFlags((QuestId)quest.Id, step, questFunctions);
+                var task = new WaitForCompletionFlags((QuestId)quest.Id, step);
                 var delay = new WaitDelay();
                 return [task, delay, Next(quest, sequence)];
             }
@@ -38,7 +36,7 @@ internal static class WaitAtEnd
             {
                 case EInteractionType.Combat:
                     var notInCombat =
-                        new WaitConditionTask(() => !condition[ConditionFlag.InCombat], "Wait(not in combat)");
+                        new WaitCondition.Task(() => !condition[ConditionFlag.InCombat], "Wait(not in combat)");
                     return
                     [
                         new WaitDelay(),
@@ -49,6 +47,7 @@ internal static class WaitAtEnd
 
                 case EInteractionType.WaitForManualProgress:
                 case EInteractionType.Instruction:
+                case EInteractionType.Snipe:
                     return [new WaitNextStepOrSequence()];
 
                 case EInteractionType.Duty:
@@ -66,8 +65,7 @@ internal static class WaitAtEnd
 
                     return
                     [
-                        new WaitObjectAtPosition(step.DataId.Value, step.Position.Value, step.NpcWaitDistance ?? 0.05f,
-                            gameFunctions),
+                        new WaitObjectAtPosition(step.DataId.Value, step.Position.Value, step.NpcWaitDistance ?? 0.5f),
                         new WaitDelay(),
                         Next(quest, sequence)
                     ];
@@ -78,14 +76,14 @@ internal static class WaitAtEnd
                     if (step.TerritoryId != step.TargetTerritoryId)
                     {
                         // interaction moves to a different territory
-                        waitInteraction = new WaitConditionTask(
+                        waitInteraction = new WaitCondition.Task(
                             () => clientState.TerritoryType == step.TargetTerritoryId,
                             $"Wait(tp to territory: {territoryData.GetNameAndId(step.TargetTerritoryId.Value)})");
                     }
                     else
                     {
                         Vector3 lastPosition = step.Position ?? clientState.LocalPlayer?.Position ?? Vector3.Zero;
-                        waitInteraction = new WaitConditionTask(() =>
+                        waitInteraction = new WaitCondition.Task(() =>
                             {
                                 Vector3? currentPosition = clientState.LocalPlayer?.Position;
                                 if (currentPosition == null)
@@ -108,7 +106,7 @@ internal static class WaitAtEnd
 
                 case EInteractionType.AcceptQuest:
                 {
-                    var accept = new WaitQuestAccepted(step.PickUpQuestId ?? quest.Id, questFunctions);
+                    var accept = new WaitQuestAccepted(step.PickUpQuestId ?? quest.Id);
                     var delay = new WaitDelay();
                     if (step.PickUpQuestId != null)
                         return [accept, delay, Next(quest, sequence)];
@@ -118,7 +116,7 @@ internal static class WaitAtEnd
 
                 case EInteractionType.CompleteQuest:
                 {
-                    var complete = new WaitQuestCompleted(step.TurnInQuestId ?? quest.Id, questFunctions);
+                    var complete = new WaitQuestCompleted(step.TurnInQuestId ?? quest.Id);
                     var delay = new WaitDelay();
                     if (step.TurnInQuestId != null)
                         return [complete, delay, Next(quest, sequence)];
@@ -138,92 +136,121 @@ internal static class WaitAtEnd
         }
     }
 
-    internal sealed class WaitDelay(TimeSpan? delay = null) : AbstractDelayedTask(delay ?? TimeSpan.FromSeconds(1))
+    internal sealed record WaitDelay(TimeSpan Delay) : ITask
     {
-        protected override bool StartInternal() => true;
+        public WaitDelay()
+            : this(TimeSpan.FromSeconds(1))
+        {
+        }
+
+        public bool ShouldRedoOnInterrupt() => true;
 
         public override string ToString() => $"Wait(seconds: {Delay.TotalSeconds})";
     }
 
+    internal sealed class WaitDelayExecutor : AbstractDelayedTaskExecutor<WaitDelay>
+    {
+        protected override bool StartInternal()
+        {
+            Delay = Task.Delay;
+            return true;
+        }
+    }
+
     internal sealed class WaitNextStepOrSequence : ITask
     {
-        public bool Start() => true;
-
-        public ETaskResult Update() => ETaskResult.StillRunning;
-
         public override string ToString() => "Wait(next step or sequence)";
     }
 
-    internal sealed class WaitForCompletionFlags(QuestId quest, QuestStep step, QuestFunctions questFunctions) : ITask
+    internal sealed class WaitNextStepOrSequenceExecutor : TaskExecutor<WaitNextStepOrSequence>
     {
-        public bool Start() => true;
+        protected override bool Start() => true;
 
-        public ETaskResult Update()
+        public override ETaskResult Update() => ETaskResult.StillRunning;
+    }
+
+    internal sealed record WaitForCompletionFlags(QuestId Quest, QuestStep Step) : ITask
+    {
+        public override string ToString() =>
+            $"Wait(QW: {string.Join(", ", Step.CompletionQuestVariablesFlags.Select(x => x?.ToString() ?? "-"))})";
+    }
+
+    internal sealed class WaitForCompletionFlagsExecutor(QuestFunctions questFunctions)
+        : TaskExecutor<WaitForCompletionFlags>
+    {
+        protected override bool Start() => true;
+
+        public override ETaskResult Update()
         {
-            QuestProgressInfo? questWork = questFunctions.GetQuestProgressInfo(quest);
+            QuestProgressInfo? questWork = questFunctions.GetQuestProgressInfo(Task.Quest);
             return questWork != null &&
-                   QuestWorkUtils.MatchesQuestWork(step.CompletionQuestVariablesFlags, questWork)
+                   QuestWorkUtils.MatchesQuestWork(Task.Step.CompletionQuestVariablesFlags, questWork)
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
         }
+    }
 
+    internal sealed record WaitObjectAtPosition(
+        uint DataId,
+        Vector3 Destination,
+        float Distance) : ITask
+    {
         public override string ToString() =>
-            $"Wait(QW: {string.Join(", ", step.CompletionQuestVariablesFlags.Select(x => x?.ToString() ?? "-"))})";
+            $"WaitObj({DataId} at {Destination.ToString("G", CultureInfo.InvariantCulture)} < {Distance})";
     }
 
-    private sealed class WaitObjectAtPosition(
-        uint dataId,
-        Vector3 destination,
-        float distance,
-        GameFunctions gameFunctions) : ITask
+    internal sealed class WaitObjectAtPositionExecutor(GameFunctions gameFunctions) : TaskExecutor<WaitObjectAtPosition>
     {
-        public bool Start() => true;
+        protected override bool Start() => true;
 
-        public ETaskResult Update() =>
-            gameFunctions.IsObjectAtPosition(dataId, destination, distance)
+        public override ETaskResult Update() =>
+            gameFunctions.IsObjectAtPosition(Task.DataId, Task.Destination, Task.Distance)
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
-
-        public override string ToString() =>
-            $"WaitObj({dataId} at {destination.ToString("G", CultureInfo.InvariantCulture)} < {distance})";
     }
 
-    internal sealed class WaitQuestAccepted(ElementId elementId, QuestFunctions questFunctions) : ITask
+    internal sealed record WaitQuestAccepted(ElementId ElementId) : ITask
     {
-        public bool Start() => true;
+        public override string ToString() => $"WaitQuestAccepted({ElementId})";
+    }
 
-        public ETaskResult Update()
+    internal sealed class WaitQuestAcceptedExecutor(QuestFunctions questFunctions) : TaskExecutor<WaitQuestAccepted>
+    {
+        protected override bool Start() => true;
+
+        public override ETaskResult Update()
         {
-            return questFunctions.IsQuestAccepted(elementId)
+            return questFunctions.IsQuestAccepted(Task.ElementId)
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
         }
-
-        public override string ToString() => $"WaitQuestAccepted({elementId})";
     }
 
-    internal sealed class WaitQuestCompleted(ElementId elementId, QuestFunctions questFunctions) : ITask
+    internal sealed record WaitQuestCompleted(ElementId ElementId) : ITask
     {
-        public bool Start() => true;
+        public override string ToString() => $"WaitQuestComplete({ElementId})";
+    }
 
-        public ETaskResult Update()
+    internal sealed class WaitQuestCompletedExecutor(QuestFunctions questFunctions) : TaskExecutor<WaitQuestCompleted>
+    {
+        protected override bool Start() => true;
+
+        public override ETaskResult Update()
         {
-            return questFunctions.IsQuestComplete(elementId) ? ETaskResult.TaskComplete : ETaskResult.StillRunning;
+            return questFunctions.IsQuestComplete(Task.ElementId) ? ETaskResult.TaskComplete : ETaskResult.StillRunning;
         }
-
-        public override string ToString() => $"WaitQuestComplete({elementId})";
     }
 
-    internal sealed class NextStep(ElementId elementId, int sequence) : ILastTask
+    internal sealed record NextStep(ElementId ElementId, int Sequence) : ILastTask
     {
-        public ElementId ElementId { get; } = elementId;
-        public int Sequence { get; } = sequence;
-
-        public bool Start() => true;
-
-        public ETaskResult Update() => ETaskResult.NextStep;
-
         public override string ToString() => "NextStep";
+    }
+
+    internal sealed class NextStepExecutor : TaskExecutor<NextStep>
+    {
+        protected override bool Start() => true;
+
+        public override ETaskResult Update() => ETaskResult.NextStep;
     }
 
     internal sealed class EndAutomation : ILastTask
@@ -231,10 +258,13 @@ internal static class WaitAtEnd
         public ElementId ElementId => throw new InvalidOperationException();
         public int Sequence => throw new InvalidOperationException();
 
-        public bool Start() => true;
-
-        public ETaskResult Update() => ETaskResult.End;
-
         public override string ToString() => "EndAutomation";
+    }
+    internal sealed class EndAutomationExecutor : TaskExecutor<EndAutomation>
+    {
+
+        protected override bool Start() => true;
+
+        public override ETaskResult Update() => ETaskResult.End;
     }
 }

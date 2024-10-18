@@ -22,6 +22,25 @@
       "Sequence": 255,
       "Steps": [
         {
+          "DataId": 1013420,
+          "Position": {
+            "X": -511.46716,
+            "Y": 50,
+            "Z": 347.0968
+          },
+          "TerritoryId": 400,
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "The Churning Mists - Zenith",
+          "PickUpQuestId": 1828,
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "QuestsCompleted": [
+                1828
+              ]
+            }
+          }
+        },
+        {
           "DataId": 1013172,
           "Position": {
             "X": -756.0998,
@@ -30,7 +49,6 @@
           },
           "TerritoryId": 400,
           "InteractionType": "CompleteQuest",
-          "AetheryteShortcut": "The Churning Mists - Zenith",
           "Fly": true
         }
       ]

@@ -1,9 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "TerritoryBlacklist": [
-    1204
-  ],
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -16,7 +13,17 @@
             "Z": 198.07727
           },
           "TerritoryId": 1186,
-          "InteractionType": "AcceptQuest"
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Solution Nine",
+          "AethernetShortcut": [
+            "[Solution Nine] Aetheryte Plaza",
+            "[Solution Nine] Neon Stein"
+          ],
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
+          }
         }
       ]
     },
@@ -31,7 +38,13 @@
             "Z": 761.68445
           },
           "TerritoryId": 1192,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Living Memory - Leynode Mnemo",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
+          }
         }
       ]
     },
@@ -63,7 +76,13 @@
           },
           "TerritoryId": 1192,
           "InteractionType": "Interact",
-          "Fly": true
+          "Fly": true,
+          "AetheryteShortcut": "Living Memory - Leynode Mnemo",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
+          }
         }
       ]
     },
@@ -90,7 +109,13 @@
           "StopDistance": 7,
           "TerritoryId": 1192,
           "InteractionType": "Interact",
-          "Fly": true
+          "Fly": true,
+          "AetheryteShortcut": "Living Memory - Leynode Mnemo",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
+          }
         }
       ]
     },

@@ -22,6 +22,14 @@
       "Sequence": 1,
       "Steps": [
         {
+          "TerritoryId": 819,
+          "AethernetShortcut": [
+            "[Crystarium] The Amaro Launch",
+            "[Crystarium] Tessellation (Lakeland)"
+          ],
+          "InteractionType": "None"
+        },
+        {
           "Position": {
             "X": 55.589294,
             "Y": 2.0276523,
@@ -29,10 +37,6 @@
           },
           "TerritoryId": 813,
           "InteractionType": "WalkTo",
-          "AethernetShortcut": [
-            "[Crystarium] The Amaro Launch",
-            "[Crystarium] Tessellation (Lakeland)"
-          ],
           "SkipConditions": {
             "StepIf": {
               "Flying": "Unlocked"
@@ -85,7 +89,6 @@
     },
     {
       "Sequence": 2,
-      "Comment": "TODO Verify when flying unlocked",
       "Steps": [
         {
           "Position": {
@@ -148,7 +151,6 @@
     },
     {
       "Sequence": 3,
-      "Comment": "TODO Verify when flying unlocked",
       "Steps": [
         {
           "Position": {
@@ -158,7 +160,8 @@
           },
           "TerritoryId": 813,
           "InteractionType": "WalkTo",
-          "DisableNavmesh": true
+          "DisableNavmesh": true,
+          "Mount": true
         },
         {
           "Position": {
@@ -167,7 +170,12 @@
             "Z": 810.7269
           },
           "TerritoryId": 813,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
         },
         {
           "Position": {
@@ -177,7 +185,12 @@
           },
           "TerritoryId": 813,
           "InteractionType": "WalkTo",
-          "Mount": true
+          "Mount": true,
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
         },
         {
           "DataId": 1030333,
@@ -188,6 +201,7 @@
           },
           "TerritoryId": 813,
           "InteractionType": "Interact",
+          "Fly": true,
           "DialogueChoices": [
             {
               "Type": "List",

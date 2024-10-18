@@ -136,7 +136,7 @@
             "Z": -532.15845
           },
           "TerritoryId": 1188,
-          "InteractionType": "WaitForManualProgress",
+          "InteractionType": "Snipe",
           "Comment": "Inspect Eye, Carrying Pole and Tail",
           "AetheryteShortcut": "Kozama'uka - Ok'hanu"
         }

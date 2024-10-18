@@ -77,7 +77,7 @@ internal sealed class QuestValidationWindow : LWindow
                     if (validationIssue.Severity == EIssueSeverity.Error)
                     {
                         using var color = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudRed);
-                        ImGui.TextUnformatted(FontAwesomeIcon.TimesCircle.ToIconString());
+                        ImGui.TextUnformatted(FontAwesomeIcon.ExclamationTriangle.ToIconString());
                     }
                     else
                     {

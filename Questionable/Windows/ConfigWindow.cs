@@ -20,7 +20,7 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
     private readonly string[] _mountNames;
 
     private readonly string[] _grandCompanyNames =
-        ["None (manually pick quest)", "Maelstrom", "Twin Adder" /*, "Immortal Flames"*/];
+        ["None (manually pick quest)", "Maelstrom", "Twin Adder", "Immortal Flames"];
 
     [SuppressMessage("Performance", "CA1861", Justification = "One time initialization")]
     public ConfigWindow(IDalamudPluginInterface pluginInterface, Configuration configuration, IDataManager dataManager)
@@ -88,6 +88,24 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
                 {
                     _configuration.General.ShowIncompleteSeasonalEvents = showIncompleteSeasonalEvents;
                     Save();
+                }
+
+                bool configureTextAdvance = _configuration.General.ConfigureTextAdvance;
+                if (ImGui.Checkbox("Automatically configure TextAdvance with the recommended settings", ref configureTextAdvance))
+                {
+                    _configuration.General.ConfigureTextAdvance = configureTextAdvance;
+                    Save();
+                }
+
+                if (ImGui.CollapsingHeader("Cheats"))
+                {
+                    ImGui.TextColored(ImGuiColors.DalamudRed, "This setting will be removed in a future version, and will be\navailable through TextAdvance instead.");
+                    bool automaticallyCompleteSnipeTasks = _configuration.General.AutomaticallyCompleteSnipeTasks;
+                    if (ImGui.Checkbox("Automatically complete snipe tasks", ref automaticallyCompleteSnipeTasks))
+                    {
+                        _configuration.General.AutomaticallyCompleteSnipeTasks = automaticallyCompleteSnipeTasks;
+                        Save();
+                    }
                 }
 
                 ImGui.EndTabItem();

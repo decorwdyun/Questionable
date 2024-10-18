@@ -40,7 +40,7 @@
                 "Z": 634.821
               },
               "MinimumAngle": 45,
-              "MaximumAngle": 90,
+              "MaximumAngle": 65,
               "MinimumDistance": 1.6,
               "MaximumDistance": 3
             },

@@ -44,12 +44,14 @@
             "Z": -117.162285
           },
           "TerritoryId": 1186,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "RestartNavigationIfCancelled": false
         },
         {
           "TerritoryId": 1186,
           "InteractionType": "AttuneAethernetShard",
-          "AethernetShard": "[Solution Nine] Resolution"
+          "AethernetShard": "[Solution Nine] Resolution",
+          "DelaySecondsAtStart": 2
         },
         {
           "DataId": 1048073,

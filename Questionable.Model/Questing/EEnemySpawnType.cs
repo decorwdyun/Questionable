@@ -9,6 +9,10 @@ public enum EEnemySpawnType
     None = 0,
     AfterInteraction,
     AfterItemUse,
+    AfterAction,
+    AfterEmote,
     AutoOnEnterArea,
     OverworldEnemies,
+    FateEnemies,
+    QuestInterruption,
 }

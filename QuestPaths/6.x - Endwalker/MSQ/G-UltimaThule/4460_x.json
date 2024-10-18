@@ -22,15 +22,34 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 2012032,
+          "DataId": 1041656,
           "Position": {
-            "X": 661.76843,
-            "Y": 439.96326,
-            "Z": 411.73413
+            "X": 510.3075,
+            "Y": 436.9997,
+            "Z": 307.17932
           },
           "TerritoryId": 960,
-          "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818391
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 4355
+        },
+        {
+          "DataId": 1038043,
+          "Position": {
+            "X": 470.4203,
+            "Y": 437.00183,
+            "Z": 315.81592
+          },
+          "TerritoryId": 960,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 4354,
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "ExcelSheet": "quest/043/AktKzk001_04354",
+              "Prompt": "TEXT_AKTKZK001_04354_Q1_000_100",
+              "Answer": "TEXT_AKTKZK001_04354_A2_000_100"
+            }
+          ]
         },
         {
           "DataId": 1040343,
@@ -85,7 +104,7 @@
             "Z": 375.50916
           },
           "TerritoryId": 960,
-          "InteractionType": "WaitForManualProgress",
+          "InteractionType": "Snipe",
           "Comment": "Find Errant Omicron"
         }
       ]

@@ -41,6 +41,17 @@
       "Sequence": 2,
       "Steps": [
         {
+          "Position": {
+            "X": 70.965355,
+            "Y": 26.085297,
+            "Z": -607.26685
+          },
+          "TerritoryId": 621,
+          "InteractionType": "WalkTo",
+          "Fly": true,
+          "AetheryteShortcut": "Lochs - Porta Praetoria"
+        },
+        {
           "DataId": 1025546,
           "Position": {
             "X": 70.87805,
@@ -48,9 +59,7 @@
             "Z": -609.43005
           },
           "TerritoryId": 621,
-          "InteractionType": "Interact",
-          "Fly": true,
-          "AetheryteShortcut": "Lochs - Porta Praetoria"
+          "InteractionType": "Interact"
         }
       ]
     },

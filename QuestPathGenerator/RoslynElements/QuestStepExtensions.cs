@@ -62,6 +62,9 @@ internal static class QuestStepExtensions
                             Assignment(nameof(QuestStep.IgnoreDistanceToObject),
                                     step.IgnoreDistanceToObject, emptyStep.IgnoreDistanceToObject)
                                 .AsSyntaxNodeOrToken(),
+                            Assignment(nameof(QuestStep.RestartNavigationIfCancelled),
+                                    step.RestartNavigationIfCancelled, emptyStep.RestartNavigationIfCancelled)
+                                .AsSyntaxNodeOrToken(),
                             Assignment(nameof(QuestStep.Comment), step.Comment, emptyStep.Comment)
                                 .AsSyntaxNodeOrToken(),
                             Assignment(nameof(QuestStep.Aetheryte), step.Aetheryte, emptyStep.Aetheryte)
@@ -115,14 +118,16 @@ internal static class QuestStepExtensions
                             AssignmentList(nameof(QuestStep.RequiredQuestVariables),
                                     step.RequiredQuestVariables)
                                 .AsSyntaxNodeOrToken(),
-                            AssignmentList(nameof(QuestStep.RequiredGatheredItems),
-                                step.RequiredGatheredItems),
+                            AssignmentList(nameof(QuestStep.ItemsToGather),
+                                step.ItemsToGather),
                             AssignmentList(nameof(QuestStep.CompletionQuestVariablesFlags),
                                     step.CompletionQuestVariablesFlags)
                                 .AsSyntaxNodeOrToken(),
                             AssignmentList(nameof(QuestStep.DialogueChoices), step.DialogueChoices)
                                 .AsSyntaxNodeOrToken(),
                             AssignmentList(nameof(QuestStep.PointMenuChoices), step.PointMenuChoices)
+                                .AsSyntaxNodeOrToken(),
+                            Assignment(nameof(QuestStep.PurchaseMenu), step.PurchaseMenu, emptyStep.PurchaseMenu)
                                 .AsSyntaxNodeOrToken(),
                             Assignment(nameof(QuestStep.PickUpQuestId), step.PickUpQuestId,
                                     emptyStep.PickUpQuestId)

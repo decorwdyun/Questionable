@@ -99,7 +99,7 @@ internal sealed class ContextMenuController : IDisposable
             if (agentSatisfactionSupply->IsAgentActive())
             {
                 int maxTurnIns = agentSatisfactionSupply->NpcInfo.SatisfactionRank == 1 ? 3 : 6;
-                quantityToGather = Math.Min(agentSatisfactionSupply->RemainingAllowances,
+                quantityToGather = Math.Min(agentSatisfactionSupply->NpcData.RemainingAllowances,
                     ((AgentSatisfactionSupply2*)agentSatisfactionSupply)->CalculateTurnInsToNextRank(maxTurnIns));
             }
         }
@@ -134,8 +134,8 @@ internal sealed class ContextMenuController : IDisposable
             .Single(x => x is SatisfactionSupplyInfo);
         if (_questRegistry.TryGetQuest(info.QuestId, out Quest? quest))
         {
-            var step = quest.FindSequence(0)!.FindStep(0)!;
-            step.RequiredGatheredItems =
+            var step = quest.FindSequence(0)!.Steps.Single(x => x.InteractionType == EInteractionType.Gather);
+            step.ItemsToGather =
             [
                 new GatheredItem
                 {

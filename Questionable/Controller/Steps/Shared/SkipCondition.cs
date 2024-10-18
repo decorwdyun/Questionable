@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Numerics;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
-using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
-using FFXIVClientStructs.FFXIV.Client.System.Framework;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Utils;
 using Questionable.Functions;
@@ -20,12 +16,7 @@ namespace Questionable.Controller.Steps.Shared;
 
 internal static class SkipCondition
 {
-    internal sealed class Factory(
-        ILoggerFactory loggerFactory,
-        AetheryteFunctions aetheryteFunctions,
-        GameFunctions gameFunctions,
-        QuestFunctions questFunctions,
-        IClientState clientState) : SimpleTaskFactory
+    internal sealed class Factory : SimpleTaskFactory
     {
         public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -40,28 +31,31 @@ internal static class SkipCondition
                 step.NextQuestId == null)
                 return null;
 
-            return Check(step, skipConditions, quest.Id);
-        }
-
-        private CheckSkip Check(QuestStep step, SkipStepConditions? skipConditions, ElementId questId)
-        {
-            return new CheckSkip(step, skipConditions ?? new(), questId, loggerFactory.CreateLogger<CheckSkip>(),
-                aetheryteFunctions, gameFunctions, questFunctions, clientState);
+            return new SkipTask(step, skipConditions ?? new(), quest.Id);
         }
     }
 
-    private sealed class CheckSkip(
-        QuestStep step,
-        SkipStepConditions skipConditions,
-        ElementId elementId,
+    internal sealed record SkipTask(
+        QuestStep Step,
+        SkipStepConditions SkipConditions,
+        ElementId ElementId) : ITask
+    {
+        public override string ToString() => "CheckSkip";
+    }
+
+    internal sealed class CheckSkip(
         ILogger<CheckSkip> logger,
         AetheryteFunctions aetheryteFunctions,
         GameFunctions gameFunctions,
         QuestFunctions questFunctions,
-        IClientState clientState) : ITask
+        IClientState clientState) : TaskExecutor<SkipTask>
     {
-        public unsafe bool Start()
+        protected override unsafe bool Start()
         {
+            var skipConditions = Task.SkipConditions;
+            var step = Task.Step;
+            var elementId = Task.ElementId;
+
             logger.LogInformation("Checking skip conditions; {ConfiguredConditions}", string.Join(",", skipConditions));
 
             if (skipConditions.Flying == ELockedSkipCondition.Unlocked &&
@@ -132,10 +126,26 @@ internal static class SkipCondition
                 }
             }
 
+            if (skipConditions.NotNamePlateIconId.Count > 0 &&
+                step is { DataId: not null })
+            {
+                IGameObject? target = gameFunctions.FindObjectByDataId(step.DataId.Value);
+                if (target != null)
+                {
+                    GameObject* gameObject = (GameObject*)target.Address;
+                    if (!skipConditions.NotNamePlateIconId.Contains(gameObject->NamePlateIconId))
+                    {
+                        logger.LogInformation("Skipping step, object has icon id {IconId}", gameObject->NamePlateIconId);
+                        return true;
+                    }
+                }
+            }
+
             if (skipConditions.Item is { NotInInventory: true } && step is { ItemId: not null })
             {
                 InventoryManager* inventoryManager = InventoryManager.Instance();
-                if (inventoryManager->GetInventoryItemCount(step.ItemId.Value) == 0)
+                if (inventoryManager->GetInventoryItemCount(step.ItemId.Value) == 0 &&
+                    inventoryManager->GetInventoryItemCount(step.ItemId.Value, true) == 0)
                 {
                     logger.LogInformation("Skipping step, no item with itemId {ItemId} in inventory",
                         step.ItemId.Value);
@@ -204,7 +214,8 @@ internal static class SkipCondition
                 }
             }
 
-            if (skipConditions.NearPosition is { } nearPosition && clientState.TerritoryType == step.TerritoryId)
+            if (skipConditions.NearPosition is { } nearPosition &&
+                clientState.TerritoryType == nearPosition.TerritoryId)
             {
                 if (Vector3.Distance(nearPosition.Position, clientState.LocalPlayer!.Position) <=
                     nearPosition.MaximumDistance)
@@ -251,8 +262,6 @@ internal static class SkipCondition
             return false;
         }
 
-        public ETaskResult Update() => ETaskResult.SkipRemainingTasksForStep;
-
-        public override string ToString() => "CheckSkip";
+        public override ETaskResult Update() => ETaskResult.SkipRemainingTasksForStep;
     }
 }

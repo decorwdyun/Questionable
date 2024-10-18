@@ -1,7 +1,6 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -19,6 +18,66 @@
       ]
     },
     {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1032663,
+          "Position": {
+            "X": 793.97266,
+            "Y": -45.811764,
+            "Z": -188.03699
+          },
+          "TerritoryId": 817,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1032829,
+          "Position": {
+            "X": 488.3954,
+            "Y": 34.798103,
+            "Z": 232.37964
+          },
+          "TerritoryId": 817,
+          "InteractionType": "Action",
+          "Action": "Peculiar Light",
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
+        },
+        {
+          "DataId": 1032828,
+          "Position": {
+            "X": 352.16296,
+            "Y": 28.242743,
+            "Z": 303.2119
+          },
+          "TerritoryId": 817,
+          "InteractionType": "Action",
+          "Action": "Peculiar Light",
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
+        }
+      ]
+    },
+    {
       "Sequence": 255,
       "Steps": [
         {
@@ -30,12 +89,7 @@
           "TerritoryId": 817,
           "InteractionType": "WalkTo",
           "AetheryteShortcut": "Rak'tika - Fanow",
-          "Fly": true,
-          "RequiredGatheredItems": [
-
-
-
-          ]
+          "Fly": true
         },
         {
           "DataId": 1032643,

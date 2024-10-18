@@ -1,9 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects.Types;
-using FFXIVClientStructs.FFXIV.Client.Game;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Common;
 using Questionable.Functions;
@@ -14,8 +11,7 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class Action
 {
-    internal sealed class Factory(GameFunctions gameFunctions, Mount.Factory mountFactory, ILoggerFactory loggerFactory)
-        : ITaskFactory
+    internal sealed class Factory : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -24,45 +20,69 @@ internal static class Action
 
             ArgumentNullException.ThrowIfNull(step.Action);
 
-            var task = new UseOnObject(step.DataId, step.Action.Value, gameFunctions,
-                loggerFactory.CreateLogger<UseOnObject>());
+            var task = OnObject(step.DataId, step.Action.Value);
             if (step.Action.Value.RequiresMount())
                 return [task];
             else
-                return [mountFactory.Unmount(), task];
+                return [new Mount.UnmountTask(), task];
+        }
+
+        public static ITask OnObject(uint? dataId, EAction action)
+        {
+            return new UseOnObject(dataId, action);
         }
     }
 
-    private sealed class UseOnObject(
-        uint? dataId,
-        EAction action,
+    internal sealed record UseOnObject(
+        uint? DataId,
+        EAction Action) : ITask
+    {
+        public override string ToString() => $"Action({Action})";
+    }
+
+    internal sealed class UseOnObjectExecutor(
         GameFunctions gameFunctions,
-        ILogger<UseOnObject> logger) : ITask
+        ILogger<UseOnObject> logger) : TaskExecutor<UseOnObject>
     {
         private bool _usedAction;
         private DateTime _continueAt = DateTime.MinValue;
 
-        public bool Start()
+        protected override bool Start()
         {
-            if (dataId != null)
+            if (Task.DataId != null)
             {
-                IGameObject? gameObject = gameFunctions.FindObjectByDataId(dataId.Value);
+                IGameObject? gameObject = gameFunctions.FindObjectByDataId(Task.DataId.Value);
                 if (gameObject == null)
                 {
-                    logger.LogWarning("No game object with dataId {DataId}", dataId);
+                    logger.LogWarning("No game object with dataId {DataId}", Task.DataId);
                     return false;
                 }
 
                 if (gameObject.IsTargetable)
                 {
-                    _usedAction = gameFunctions.UseAction(gameObject, action);
+                    if (Task.Action == EAction.Diagnosis)
+                    {
+                        uint eukrasiaAura = 2606;
+                        // If SGE have Eukrasia status, we need to remove it.
+                        if (gameFunctions.HasStatus(eukrasiaAura))
+                        {
+                            if (GameFunctions.RemoveStatus(eukrasiaAura))
+                            {
+                                // Introduce a delay of 2 seconds before using the next action (otherwise it will try and use Eukrasia Diagnosis)
+                                _continueAt = DateTime.Now.AddSeconds(2);
+                                return true; 
+                            }
+                        }
+                    }
+                    
+                    _usedAction = gameFunctions.UseAction(gameObject, Task.Action);
                     _continueAt = DateTime.Now.AddSeconds(0.5);
                     return true;
                 }
             }
             else
             {
-                _usedAction = gameFunctions.UseAction(action);
+                _usedAction = gameFunctions.UseAction(Task.Action);
                 _continueAt = DateTime.Now.AddSeconds(0.5);
                 return true;
             }
@@ -70,25 +90,25 @@ internal static class Action
             return true;
         }
 
-        public ETaskResult Update()
+        public override ETaskResult Update()
         {
             if (DateTime.Now <= _continueAt)
                 return ETaskResult.StillRunning;
 
             if (!_usedAction)
             {
-                if (dataId != null)
+                if (Task.DataId != null)
                 {
-                    IGameObject? gameObject = gameFunctions.FindObjectByDataId(dataId.Value);
+                    IGameObject? gameObject = gameFunctions.FindObjectByDataId(Task.DataId.Value);
                     if (gameObject == null || !gameObject.IsTargetable)
                         return ETaskResult.StillRunning;
 
-                    _usedAction = gameFunctions.UseAction(gameObject, action);
+                    _usedAction = gameFunctions.UseAction(gameObject, Task.Action);
                     _continueAt = DateTime.Now.AddSeconds(0.5);
                 }
                 else
                 {
-                    _usedAction = gameFunctions.UseAction(action);
+                    _usedAction = gameFunctions.UseAction(Task.Action);
                     _continueAt = DateTime.Now.AddSeconds(0.5);
                 }
 
@@ -97,7 +117,5 @@ internal static class Action
 
             return ETaskResult.TaskComplete;
         }
-
-        public override string ToString() => $"Action({action})";
     }
 }

@@ -29,12 +29,6 @@
       "type": "string",
       "description": "Dev Comment (not visible in-game)"
     },
-    "TerritoryBlacklist": {
-      "type": "array",
-      "items": {
-        "type": "integer"
-      }
-    },
     "QuestSequence": {
       "type": "array",
       "items": {
@@ -92,6 +86,10 @@
           "type": "boolean",
           "description": "Most interactions with objects are checked for a Y (height) difference of 2 in-game units. If set to true, the game won't attempt to get any closer if the height difference is larger than this."
         },
+        "RestartNavigationIfCancelled": {
+          "type": "boolean",
+          "description": "For some specific loading screen transitions (e.g. when entering/leaving the water through the portals in the ruby sea), setting this to 'false' means it won't re-attempt to move to the portal after the loading animation"
+        },
         "TerritoryId": {
           "type": "integer",
           "description": "The territory id associated with the location",
@@ -115,6 +113,7 @@
             "Combat",
             "UseItem",
             "EquipItem",
+            "PurchaseItem",
             "EquipRecommended",
             "Say",
             "Emote",
@@ -126,6 +125,8 @@
             "Jump",
             "Dive",
             "Craft",
+            "Gather",
+            "Snipe",
             "Instruction",
             "AcceptQuest",
             "CompleteQuest",
@@ -234,13 +235,25 @@
                 "QuestsAccepted": {
                   "type": "array",
                   "items": {
-                    "type": "number"
+                    "type": [
+                      "number",
+                      "string"
+                    ]
                   }
                 },
                 "QuestsCompleted": {
                   "type": "array",
                   "items": {
-                    "type": "number"
+                    "type": [
+                      "number",
+                      "string"
+                    ]
+                  }
+                },
+                "NotNamePlateIconId": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
                   }
                 },
                 "AetheryteLocked": {
@@ -257,11 +270,15 @@
                     },
                     "MaximumDistance": {
                       "type": "number"
+                    },
+                    "TerritoryId": {
+                      "type": "number"
                     }
                   },
                   "required": [
                     "Position",
-                    "MaximumDistance"
+                    "MaximumDistance",
+                    "TerritoryId"
                   ],
                   "additionalProperties": false
                 },
@@ -290,6 +307,24 @@
                     "type": "integer"
                   }
                 },
+                "QuestsAccepted": {
+                  "type": "array",
+                  "items": {
+                    "type": [
+                      "number",
+                      "string"
+                    ]
+                  }
+                },
+                "QuestsCompleted": {
+                  "type": "array",
+                  "items": {
+                    "type": [
+                      "number",
+                      "string"
+                    ]
+                  }
+                },
                 "AetheryteLocked": {
                   "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Aetheryte"
                 },
@@ -307,11 +342,15 @@
                     },
                     "MaximumDistance": {
                       "type": "number"
+                    },
+                    "TerritoryId": {
+                      "type": "number"
                     }
                   },
                   "required": [
                     "Position",
-                    "MaximumDistance"
+                    "MaximumDistance",
+                    "TerritoryId"
                   ],
                   "additionalProperties": false
                 }
@@ -378,41 +417,6 @@
               "minimum": 0,
               "maximum": 255
             }
-          }
-        },
-        "RequiredGatheredItems": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "properties": {
-              "ItemId": {
-                "type": "number"
-              },
-              "AlternativeItemId": {
-                "description": "For leves that allow you to gather two items with different chance percentage, this is the preferred item if the gathering chance is 100% (after buffs)",
-                "type": "number"
-              },
-              "ItemCount": {
-                "type": "number",
-                "exclusiveMinimum": 0
-              },
-              "Collectability": {
-                "type": "number",
-                "minimum": 0,
-                "maximum": 1000
-              },
-              "QuestAcceptedAsClass": {
-                "type": "string",
-                "enum": [
-                  "Miner",
-                  "Botanist"
-                ]
-              }
-            },
-            "required": [
-              "ItemId",
-              "ItemCount"
-            ]
           }
         },
         "DelaySecondsAtStart": {
@@ -568,7 +572,10 @@
                   "AutoOnEnterArea",
                   "AfterInteraction",
                   "AfterItemUse",
-                  "OverworldEnemies"
+                  "AfterAction",
+                  "AfterEmote",
+                  "OverworldEnemies",
+                  "FateEnemies"
                 ]
               },
               "KillEnemyDataIds": {
@@ -609,6 +616,29 @@
                     "DataId"
                   ]
                 }
+              },
+              "CombatItemUse": {
+                "description": "Unlike the 'AfterItemUse' condition that is used for spawning an enemy in the first place, interacting with an item at a certain stage of combat is required",
+                "type": "object",
+                "properties": {
+                  "ItemId": {
+                    "type": "integer"
+                  },
+                  "Condition": {
+                    "type": "string",
+                    "enum": [
+                      "Incapacitated",
+                      "Health%"
+                    ]
+                  },
+                  "Value": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "ItemId",
+                  "Condition"
+                ]
               },
               "CombatDelaySecondsAtStart": {
                 "type": "number"
@@ -706,6 +736,44 @@
           "if": {
             "properties": {
               "InteractionType": {
+                "const": "PurchaseItem"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "ItemCount": {
+                "type": "integer"
+              },
+              "PurchaseMenu": {
+                "type": "object",
+                "description": "The text to use with /say",
+                "properties": {
+                  "ExcelSheet": {
+                    "type": "string"
+                  },
+                  "Key": {
+                    "type": [
+                      "string",
+                      "integer"
+                    ]
+                  }
+                },
+                "required": [
+                  "Key"
+                ]
+              }
+            },
+            "required": [
+              "ItemId",
+              "ItemCount"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "InteractionType": {
                 "anyOf": [
                   {
                     "const": "Emote"
@@ -753,7 +821,12 @@
                   "bow",
                   "uchiwasshoi",
                   "clap",
-                  "victorypose"
+                  "victorypose",
+                  "comfort",
+                  "battlestance",
+                  "doze",
+                  "box",
+                  "sundropdance"
                 ]
               }
             }
@@ -838,13 +911,27 @@
                 "description": "The action to use",
                 "enum": [
                   "Heavy Swing",
+                  "Bootshine",
+                  "Twin Snakes",
+                  "Demolish",
+                  "Dragon Kick",
+                  "Heavy Shot",
                   "Cure",
+                  "Cure II",
+                  "Eukrasia",
+                  "Diagnosis",
+                  "Eukrasian Diagnosis",
                   "Esuna",
                   "Physick",
+                  "Aspected Benefic",
+                  "Form Shift",
                   "Buffet (Sanuwa)",
                   "Buffet (Griffin)",
+                  "Trample",
                   "Fumigate",
+                  "Inhale",
                   "Siphon Snout",
+                  "Peculiar Light",
                   "Cannonfire",
                   "Red Gulal",
                   "Yellow Gulal",
@@ -983,6 +1070,9 @@
                               "integer"
                             ]
                           },
+                          "PromptIsRegularExpression": {
+                            "type": "boolean"
+                          },
                           "Yes": {
                             "type": "boolean",
                             "default": true
@@ -1011,11 +1101,17 @@
                               "null"
                             ]
                           },
+                          "PromptIsRegularExpression": {
+                            "type": "boolean"
+                          },
                           "Answer": {
                             "type": [
                               "string",
                               "integer"
                             ]
+                          },
+                          "AnswerIsRegularExpression": {
+                            "type": "boolean"
                           }
                         },
                         "required": [
@@ -1150,17 +1246,84 @@
               "ItemCount"
             ]
           }
-        }
-      ],
-      "not": {
-        "anyOf": [
-          {
+        },
+        {
+          "if": {
+            "properties": {
+              "InteractionType": {
+                "const": "Gather"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "ItemsToGather": {
+                "type": "array",
+                "description": "Unlike crafting steps, which will always craft a single item id regardless of class, this allows for gathering different items depending on whether you've picked the quest up as miner or botanist",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "ItemId": {
+                      "type": "number"
+                    },
+                    "AlternativeItemId": {
+                      "description": "For leves that allow you to gather two items with different chance percentage, this is the preferred item if the gathering chance is 100% (after buffs)",
+                      "type": "number"
+                    },
+                    "ItemCount": {
+                      "type": "number",
+                      "exclusiveMinimum": 0
+                    },
+                    "Collectability": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 1000
+                    },
+                    "QuestAcceptedAsClass": {
+                      "type": "string",
+                      "enum": [
+                        "Miner",
+                        "Botanist"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "ItemId",
+                    "ItemCount"
+                  ]
+                }
+              }
+            },
             "required": [
-              "SkipIf"
+              "ItemsToGather"
             ]
           }
-        ]
-      }
+        },
+        {
+          "if": {
+            "properties": {
+              "InteractionType": {
+                "anyOf": [
+                  {
+                    "const": "WaitForManualProgress"
+                  },
+                  {
+                    "const": "Instruction"
+                  },
+                  {
+                    "const": "Snipe"
+                  }
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "Comment"
+            ]
+          }
+        }
+      ]
     }
   }
 }

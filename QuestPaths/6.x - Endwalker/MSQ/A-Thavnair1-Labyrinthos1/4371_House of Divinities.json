@@ -22,6 +22,25 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1041331,
+          "Position": {
+            "X": 202.4414,
+            "Y": 1.769943,
+            "Z": 727.7484
+          },
+          "TerritoryId": 957,
+          "InteractionType": "AcceptQuest",
+          "DialogueChoices": [
+            {
+              "ExcelSheet": "quest/044/AktKza201_04489",
+              "Type": "List",
+              "Prompt": "TEXT_AKTKZA201_04489_Q1_000_004",
+              "Answer": "TEXT_AKTKZA201_04489_A1_000_002"
+            }
+          ],
+          "PickUpQuestId": 4489
+        },
+        {
           "DataId": 2011951,
           "Position": {
             "X": 105.1499,

@@ -31,6 +31,7 @@ internal sealed partial class ActiveQuestComponent
     private readonly ICommandManager _commandManager;
     private readonly Configuration _configuration;
     private readonly QuestRegistry _questRegistry;
+    private readonly PriorityWindow _priorityWindow;
     private readonly IChatGui _chatGui;
 
     public ActiveQuestComponent(
@@ -42,6 +43,7 @@ internal sealed partial class ActiveQuestComponent
         ICommandManager commandManager,
         Configuration configuration,
         QuestRegistry questRegistry,
+        PriorityWindow priorityWindow,
         IChatGui chatGui)
     {
         _questController = questController;
@@ -52,6 +54,7 @@ internal sealed partial class ActiveQuestComponent
         _commandManager = commandManager;
         _configuration = configuration;
         _questRegistry = questRegistry;
+        _priorityWindow = priorityWindow;
         _chatGui = chatGui;
     }
 
@@ -81,7 +84,7 @@ internal sealed partial class ActiveQuestComponent
             if (!isMinimized)
             {
                 bool colored = currentStep is
-                    { InteractionType: EInteractionType.Instruction or EInteractionType.WaitForManualProgress };
+                    { InteractionType: EInteractionType.Instruction or EInteractionType.WaitForManualProgress or EInteractionType.Snipe };
                 if (colored)
                     ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudOrange);
                 ImGui.TextUnformatted(currentStep?.Comment ??
@@ -111,6 +114,10 @@ internal sealed partial class ActiveQuestComponent
                 _questController.Stop("Manual (no active quest)");
                 _gatheringController.Stop("Manual (no active quest)");
             }
+
+            ImGui.SameLine();
+            if (ImGuiComponents.IconButton(FontAwesomeIcon.SortAmountDown))
+                _priorityWindow.Toggle();
         }
     }
 
@@ -142,7 +149,8 @@ internal sealed partial class ActiveQuestComponent
                     ImGui.SameLine(0);
 
                     if (ImGui.IsItemHovered())
-                        ImGui.SetTooltip("This quest is loaded from your 'pluginConfigs\\Questionable\\Quests' directory.\nThis gets loaded even if Questionable ships with a newer/different version of the quest.");
+                        ImGui.SetTooltip(
+                            "This quest is loaded from your 'pluginConfigs\\Questionable\\Quests' directory.\nThis gets loaded even if Questionable ships with a newer/different version of the quest.");
                 }
 
                 ImGui.TextUnformatted(
@@ -157,9 +165,10 @@ internal sealed partial class ActiveQuestComponent
                 if (_configuration.Advanced.AdditionalStatusInformation && _questController.IsInterruptible())
                 {
                     ImGui.SameLine();
-                    ImGui.PushFont(UiBuilder.IconFont);
-                    ImGui.TextColored(ImGuiColors.DalamudYellow, FontAwesomeIcon.Pause.ToIconString());
-                    ImGui.PopFont();
+                    ImGui.TextColored(ImGuiColors.DalamudYellow, SeIconChar.Hyadelyn.ToIconString());
+                    if (ImGui.IsItemHovered())
+                        ImGui.SetTooltip(
+                            "This quest sequence starts with a teleport to an Aetheryte.\nCertain priority quest (e.g. class quests) may be started/completed by the plugin prior to continuing with this quest.");
                 }
             }
 
@@ -168,7 +177,7 @@ internal sealed partial class ActiveQuestComponent
             {
                 using var _ = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
                 ImGui.TextUnformatted(
-                    $"Next Quest: {Shorten(currentQuest.Quest.Info.Name)} / {currentQuest.Sequence} / {currentQuest.Step}");
+                    $"Next Quest: {Shorten(nextQuest.Quest.Info.Name)} / {nextQuest.Sequence} / {nextQuest.Step}");
             }
         }
     }
@@ -290,6 +299,10 @@ internal sealed partial class ActiveQuestComponent
             if (colored)
                 ImGui.PopStyleColor();
             ImGui.EndDisabled();
+
+            ImGui.SameLine();
+            if (ImGuiComponents.IconButton(FontAwesomeIcon.SortAmountDown))
+                _priorityWindow.Toggle();
 
             if (_commandManager.Commands.TryGetValue("/questinfo", out var commandInfo))
             {

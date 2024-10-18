@@ -2,7 +2,7 @@
 
 namespace Questionable.Controller.Steps;
 
-public interface IConditionChangeAware
+internal interface IConditionChangeAware : ITaskExecutor
 {
     void OnConditionChange(ConditionFlag flag, bool value);
 }

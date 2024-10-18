@@ -92,6 +92,16 @@
       "Sequence": 255,
       "Steps": [
         {
+          "TerritoryId": 817,
+          "InteractionType": "Gather",
+          "ItemsToGather": [
+            {
+              "ItemId": 29512,
+              "ItemCount": 1
+            }
+          ]
+        },
+        {
           "DataId": 1032724,
           "Position": {
             "X": 796.7803,
@@ -100,13 +110,7 @@
           },
           "TerritoryId": 817,
           "InteractionType": "CompleteQuest",
-          "Fly": true,
-          "RequiredGatheredItems": [
-            {
-              "ItemId": 29512,
-              "ItemCount": 1
-            }
-          ]
+          "Fly": true
         }
       ]
     }

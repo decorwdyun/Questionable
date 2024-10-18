@@ -119,7 +119,7 @@
             "Z": -519.18823
           },
           "TerritoryId": 956,
-          "InteractionType": "WaitForManualProgress",
+          "InteractionType": "Snipe",
           "Comment": "Shoot Large Green Bird"
         }
       ]

@@ -91,6 +91,11 @@ internal sealed class ExcelFunctions
             var questRow = _dataManager.GetExcelSheet<EventPathMove>()!.GetRow(rowId);
             return questRow?.Unknown10;
         }
+        else if (excelSheet is "GilShop")
+        {
+            var questRow = _dataManager.GetExcelSheet<GilShop>()!.GetRow(rowId);
+            return questRow?.Name;
+        }
         else if (excelSheet is "ContentTalk" or null)
         {
             var questRow = _dataManager.GetExcelSheet<ContentTalk>()!.GetRow(rowId);

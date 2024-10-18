@@ -1,7 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "liza",
-  "Disabled": true,
+  "Author": "plogon_enjoyer",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -19,8 +18,89 @@
       ]
     },
     {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 2013074,
+          "Position": {
+            "X": 304.3412,
+            "Y": 483.4821,
+            "Z": 143.1448
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 1073
+        },
+        {
+          "TerritoryId": 1073,
+          "InteractionType": "Gather",
+          "ItemsToGather": [
+            {
+              "QuestAcceptedAsClass": "Miner",
+              "ItemId": 38293,
+              "ItemCount": 3
+            },
+            {
+              "QuestAcceptedAsClass": "Botanist",
+              "ItemId": 38317,
+              "ItemCount": 3
+            }
+          ]
+        },
+        {
+          "DataId": 2013072,
+          "Position": {
+            "X": 456.65674,
+            "Y": 438.04077,
+            "Z": 310.2312
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 960,
+          "AetheryteShortcut": "Ultima Thule - Base Omicron",
+          "Mount": true
+        },
+        {
+          "DataId": 1043865,
+          "Position": {
+            "X": 301.8081,
+            "Y": 482.13644,
+            "Z": 165.02625
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "Mount": true,
+          "TargetTerritoryId": 960,
+          "Fly": true
+        },
+        {
+          "DataId": 1043936,
+          "Position": {
+            "X": 194.56775,
+            "Y": 567.4998,
+            "Z": 250.93457
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "Fly": true
+        }
+      ]
+    },
+    {
       "Sequence": 255,
       "Steps": [
+        {
+          "DataId": 1043864,
+          "Position": {
+            "X": 244.83093,
+            "Y": 564.8203,
+            "Z": 261.76843
+          },
+          "TerritoryId": 960,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 960,
+          "Fly": true
+        },
         {
           "DataId": 1043417,
           "Position": {
@@ -29,7 +109,8 @@
             "Z": 148.11926
           },
           "TerritoryId": 960,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "Fly": true
         }
       ]
     }

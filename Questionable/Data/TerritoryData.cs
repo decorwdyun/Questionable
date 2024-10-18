@@ -12,7 +12,7 @@ internal sealed class TerritoryData
 {
     private readonly ImmutableDictionary<uint, string> _territoryNames;
     private readonly ImmutableHashSet<ushort> _territoriesWithMount;
-    private readonly ImmutableHashSet<ushort> _dutyTerritories;
+    private readonly ImmutableDictionary<ushort, uint> _dutyTerritories;
     private readonly ImmutableDictionary<ushort, string> _instanceNames;
 
     public TerritoryData(IDataManager dataManager)
@@ -35,8 +35,7 @@ internal sealed class TerritoryData
 
         _dutyTerritories = dataManager.GetExcelSheet<TerritoryType>()!
             .Where(x => x.RowId > 0 && x.ContentFinderCondition.Row != 0)
-            .Select(x => (ushort)x.RowId)
-            .ToImmutableHashSet();
+            .ToImmutableDictionary(x => (ushort)x.RowId, x => x.ContentFinderCondition.Value!.ContentType.Row);
 
         _instanceNames = dataManager.GetExcelSheet<ContentFinderCondition>()!
             .Where(x => x.RowId > 0 && x.Content != 0 && x.ContentLinkType == 1 && x.ContentType.Row != 6)
@@ -56,7 +55,10 @@ internal sealed class TerritoryData
 
     public bool CanUseMount(ushort territoryId) => _territoriesWithMount.Contains(territoryId);
 
-    public bool IsDutyInstance(ushort territoryId) => _dutyTerritories.Contains(territoryId);
+    public bool IsDutyInstance(ushort territoryId) => _dutyTerritories.ContainsKey(territoryId);
+
+    public bool IsQuestBattleInstance(ushort territoryId) =>
+        _dutyTerritories.TryGetValue(territoryId, out uint contentType) && contentType == 7;
 
     public string? GetInstanceName(ushort instanceId) => _instanceNames.GetValueOrDefault(instanceId);
 }

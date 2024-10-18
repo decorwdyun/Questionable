@@ -27,8 +27,7 @@
             "Z": -194.937
           },
           "TerritoryId": 816,
-          "InteractionType": "Dive",
-          "Comment": "TODO: Verify diving works here"
+          "InteractionType": "Dive"
         },
         {
           "DataId": 2010160,
@@ -116,7 +115,8 @@
           },
           "TerritoryId": 816,
           "InteractionType": "WalkTo",
-          "DisableNavmesh": true
+          "DisableNavmesh": true,
+          "Mount": true
         },
         {
           "Position": {

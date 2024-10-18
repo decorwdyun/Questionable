@@ -1,17 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using JetBrains.Annotations;
 using LLib.GameData;
 using Questionable.Model.Questing;
-using ExcelQuest = Lumina.Excel.GeneratedSheets.Quest;
+using ExcelQuest = Lumina.Excel.GeneratedSheets2.Quest;
 
 namespace Questionable.Model;
 
 internal sealed class QuestInfo : IQuestInfo
 {
-    public QuestInfo(ExcelQuest quest, ushort newGamePlusChapter)
+    public QuestInfo(ExcelQuest quest, ushort newGamePlusChapter, byte startingCity)
     {
         QuestId = new QuestId((ushort)(quest.RowId & 0xFFFF));
 
@@ -27,34 +28,43 @@ internal sealed class QuestInfo : IQuestInfo
             570 => " (Thaumaturge)",
             673 => " (Ul'dah)",
             674 => " (Limsa/Gridania)",
+            1432 => " (Gridania)",
+            1433 => " (Limsa)",
+            1434 => " (Ul'dah)",
             _ => "",
         };
 
         Name = $"{quest.Name}{suffix}";
-        Level = quest.ClassJobLevel0;
-        IssuerDataId = quest.IssuerStart;
+        Level = quest.ClassJobLevel[0];
+        IssuerDataId = quest.IssuerStart.Row;
         IsRepeatable = quest.IsRepeatable;
-        PreviousQuests = quest.PreviousQuest
-            .Select(x => new QuestId((ushort)(x.Row & 0xFFFF)))
-            .Where(x => x.Value != 0)
-            .ToImmutableList();
-        PreviousQuestJoin = (QuestJoin)quest.PreviousQuestJoin;
+        PreviousQuests =
+            new List<PreviousQuestInfo>
+                {
+                    new(new QuestId((ushort)(quest.PreviousQuest[0].Row & 0xFFFF)), quest.Unknown7),
+                    new(new QuestId((ushort)(quest.PreviousQuest[1].Row & 0xFFFF))),
+                    new(new QuestId((ushort)(quest.PreviousQuest[2].Row & 0xFFFF)))
+                }
+                .Where(x => x.QuestId.Value != 0)
+                .ToImmutableList();
+        PreviousQuestJoin = (EQuestJoin)quest.PreviousQuestJoin;
         QuestLocks = quest.QuestLock
             .Select(x => new QuestId((ushort)(x.Row & 0xFFFFF)))
             .Where(x => x.Value != 0)
             .ToImmutableList();
-        QuestLockJoin = (QuestJoin)quest.QuestLockJoin;
+        QuestLockJoin = (EQuestJoin)quest.QuestLockJoin;
         JournalGenre = quest.JournalGenre?.Row;
         SortKey = quest.SortKey;
         IsMainScenarioQuest = quest.JournalGenre?.Value?.JournalCategory?.Value?.JournalSection?.Row is 0 or 1;
-        CompletesInstantly = quest.ToDoCompleteSeq[0] == 0;
+        CompletesInstantly = quest.TodoParams[0].ToDoCompleteSeq == 0;
         PreviousInstanceContent = quest.InstanceContent.Select(x => (ushort)x.Row).Where(x => x != 0).ToList();
-        PreviousInstanceContentJoin = (QuestJoin)quest.InstanceContentJoin;
+        PreviousInstanceContentJoin = (EQuestJoin)quest.InstanceContentJoin;
         GrandCompany = (GrandCompany)quest.GrandCompany.Row;
         AlliedSociety = (EAlliedSociety)quest.BeastTribe.Row;
         ClassJobs = QuestInfoUtils.AsList(quest.ClassJobCategory0.Value!);
         IsSeasonalEvent = quest.Festival.Row != 0;
         NewGamePlusChapter = newGamePlusChapter;
+        StartingCity = startingCity;
         Expansion = (EExpansionVersion)quest.Expansion.Row;
     }
 
@@ -64,12 +74,12 @@ internal sealed class QuestInfo : IQuestInfo
     public ushort Level { get; }
     public uint IssuerDataId { get; }
     public bool IsRepeatable { get; }
-    public ImmutableList<QuestId> PreviousQuests { get; set; }
-    public QuestJoin PreviousQuestJoin { get; }
-    public ImmutableList<QuestId> QuestLocks { get; }
-    public QuestJoin QuestLockJoin { get; }
+    public ImmutableList<PreviousQuestInfo> PreviousQuests { get; private set; }
+    public EQuestJoin PreviousQuestJoin { get; }
+    public ImmutableList<QuestId> QuestLocks { get; private set; }
+    public EQuestJoin QuestLockJoin { get; private set; }
     public List<ushort> PreviousInstanceContent { get; }
-    public QuestJoin PreviousInstanceContentJoin { get; }
+    public EQuestJoin PreviousInstanceContentJoin { get; }
     public uint? JournalGenre { get; }
     public ushort SortKey { get; }
     public bool IsMainScenarioQuest { get; }
@@ -79,18 +89,20 @@ internal sealed class QuestInfo : IQuestInfo
     public IReadOnlyList<EClassJob> ClassJobs { get; }
     public bool IsSeasonalEvent { get; }
     public ushort NewGamePlusChapter { get; }
+    public byte StartingCity { get; set; }
     public EExpansionVersion Expansion { get; }
 
-    [UsedImplicitly(ImplicitUseKindFlags.Assign, ImplicitUseTargetFlags.Members)]
-    public enum QuestJoin : byte
-    {
-        None = 0,
-        All = 1,
-        AtLeastOne = 2,
-    }
-
-    public void AddPreviousQuest(QuestId questId)
+    public void AddPreviousQuest(PreviousQuestInfo questId)
     {
         PreviousQuests = [..PreviousQuests, questId];
+    }
+
+    public void AddQuestLocks(EQuestJoin questJoin, params QuestId[] questId)
+    {
+        if (QuestLocks.Count > 0 && QuestLockJoin != questJoin)
+            throw new InvalidOperationException();
+
+        QuestLockJoin = questJoin;
+        QuestLocks = [..QuestLocks, ..questId];
     }
 }

@@ -60,6 +60,11 @@
       "Sequence": 255,
       "Steps": [
         {
+          "TerritoryId": 612,
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Fringes - Peering Stones"
+        },
+        {
           "DataId": 1020578,
           "Position": {
             "X": 426.56592,

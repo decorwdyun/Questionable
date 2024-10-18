@@ -22,14 +22,24 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1027695,
+          "Position": {
+            "X": 441.64185,
+            "Y": 89.80711,
+            "Z": -653.43713
+          },
+          "TerritoryId": 816,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 3427
+        },
+        {
           "Position": {
             "X": 57.868374,
             "Y": -0.6,
             "Z": -431.17603
           },
           "TerritoryId": 816,
-          "InteractionType": "Dive",
-          "Comment": "TODO: Verify diving works here"
+          "InteractionType": "Dive"
         },
         {
           "DataId": 2009837,

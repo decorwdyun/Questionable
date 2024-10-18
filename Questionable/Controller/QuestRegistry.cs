@@ -92,17 +92,24 @@ internal sealed class QuestRegistry
 
         foreach ((ElementId questId, QuestRoot questRoot) in AssemblyQuestLoader.GetQuests())
         {
-            var questInfo = _questData.GetQuestInfo(questId);
-            if (questInfo is LeveInfo leveInfo)
-                _leveData.AddQuestSteps(leveInfo, questRoot);
-            Quest quest = new()
+            try
             {
-                Id = questId,
-                Root = questRoot,
-                Info = questInfo,
-                Source = Quest.ESource.Assembly,
-            };
-            _quests[quest.Id] = quest;
+                var questInfo = _questData.GetQuestInfo(questId);
+                if (questInfo is LeveInfo leveInfo)
+                    _leveData.AddQuestSteps(leveInfo, questRoot);
+                Quest quest = new()
+                {
+                    Id = questId,
+                    Root = questRoot,
+                    Info = questInfo,
+                    Source = Quest.ESource.Assembly,
+                };
+                _quests[quest.Id] = quest;
+            }
+            catch (Exception e)
+            {
+                _logger.LogWarning("Not loading unknown quest {QuestId} from assembly: {Message}", questId, e.Message);
+            }
         }
 
         _logger.LogInformation("Loaded {Count} quests from assembly", _quests.Count);
@@ -137,12 +144,13 @@ internal sealed class QuestRegistry
 
     private void ValidateQuests()
     {
-        _questValidator.Validate(_quests.Values.Where(x => x.Source != Quest.ESource.Assembly));
+        _questValidator.Validate(_quests.Values.Where(x => x.Source != Quest.ESource.Assembly).ToList());
     }
 
     private void LoadQuestFromStream(string fileName, Stream stream, Quest.ESource source)
     {
-        _logger.LogTrace("Loading quest from '{FileName}'", fileName);
+        if (source == Quest.ESource.UserDirectory)
+            _logger.LogTrace("Loading quest from '{FileName}'", fileName);
         ElementId? questId = ExtractQuestIdFromName(fileName);
         if (questId == null)
             return;
@@ -173,7 +181,8 @@ internal sealed class QuestRegistry
             return;
         }
 
-        _logger.Log(logLevel, "Loading quests from {DirectoryName}", directory);
+        if (source == Quest.ESource.UserDirectory)
+            _logger.Log(logLevel, "Loading quests from {DirectoryName}", directory);
         foreach (FileInfo fileInfo in directory.GetFiles("*.json"))
         {
             try

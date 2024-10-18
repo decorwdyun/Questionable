@@ -9,7 +9,10 @@ public sealed class EnemySpawnTypeConverter() : EnumConverter<EEnemySpawnType>(V
     {
         { EEnemySpawnType.AfterInteraction, "AfterInteraction" },
         { EEnemySpawnType.AfterItemUse, "AfterItemUse" },
+        { EEnemySpawnType.AfterAction, "AfterAction" },
+        { EEnemySpawnType.AfterEmote, "AfterEmote" },
         { EEnemySpawnType.AutoOnEnterArea, "AutoOnEnterArea" },
         { EEnemySpawnType.OverworldEnemies, "OverworldEnemies" },
+        { EEnemySpawnType.FateEnemies, "FateEnemies" },
     };
 }

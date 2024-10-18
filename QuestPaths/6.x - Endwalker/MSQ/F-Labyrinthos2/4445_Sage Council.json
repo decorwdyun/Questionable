@@ -21,6 +21,17 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1041667,
+          "Position": {
+            "X": 443.96118,
+            "Y": 65.162,
+            "Z": -105.4552
+          },
+          "TerritoryId": 956,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 4480
+        },
+        {
           "Position": {
             "X": 5.4520116,
             "Y": -28.723352,

@@ -189,6 +189,16 @@
       "Sequence": 255,
       "Steps": [
         {
+          "TerritoryId": 478,
+          "InteractionType": "Gather",
+          "ItemsToGather": [
+            {
+              "ItemId": 17946,
+              "ItemCount": 20
+            }
+          ]
+        },
+        {
           "DataId": 1021349,
           "Position": {
             "X": -43.930786,
@@ -201,12 +211,6 @@
           "AethernetShortcut": [
             "[Idyllshire] Aetheryte Plaza",
             "[Idyllshire] West Idyllshire"
-          ],
-          "RequiredGatheredItems": [
-            {
-              "ItemId": 17946,
-              "ItemCount": 20
-            }
           ],
           "NextQuestId": 2623
         }

@@ -22,6 +22,34 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1049443,
+          "Position": {
+            "X": -177.56934,
+            "Y": 29.999998,
+            "Z": -601.15967
+          },
+          "TerritoryId": 1191,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 5153,
+          "AetheryteShortcut": "Heritage Found - The Outskirts",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
+          }
+        },
+        {
+          "DataId": 1050805,
+          "Position": {
+            "X": -153.09375,
+            "Y": 34.946026,
+            "Z": -581.0178
+          },
+          "TerritoryId": 1191,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 5160
+        },
+        {
           "DataId": 1048053,
           "Position": {
             "X": -296.52863,
@@ -29,8 +57,7 @@
             "Z": -828.58014
           },
           "TerritoryId": 1191,
-          "InteractionType": "Interact",
-          "AetheryteShortcut": "Heritage Found - The Outskirts"
+          "InteractionType": "Interact"
         }
       ]
     },

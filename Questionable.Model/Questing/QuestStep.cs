@@ -12,6 +12,7 @@ namespace Questionable.Model.Questing;
 public sealed class QuestStep
 {
     public const float DefaultStopDistance = 3f;
+    public const int VesperBayAetheryteTicket = 30362;
 
     public uint? DataId { get; set; }
 
@@ -36,6 +37,7 @@ public sealed class QuestStep
     public bool? Land { get; set; }
     public bool? Sprint { get; set; }
     public bool? IgnoreDistanceToObject { get; set; }
+    public bool? RestartNavigationIfCancelled { get; set; }
     public string? Comment { get; set; }
 
     /// <summary>
@@ -65,6 +67,7 @@ public sealed class QuestStep
     public EEnemySpawnType? EnemySpawnType { get; set; }
     public List<uint> KillEnemyDataIds { get; set; } = [];
     public List<ComplexCombatData> ComplexCombatData { get; set; } = [];
+    public CombatItemUse? CombatItemUse { get; set; }
     public float? CombatDelaySecondsAtStart { get; set; }
 
     public JumpDestination? JumpDestination { get; set; }
@@ -72,10 +75,11 @@ public sealed class QuestStep
     public SkipConditions? SkipConditions { get; set; }
 
     public List<List<QuestWorkValue>?> RequiredQuestVariables { get; set; } = new();
-    public List<GatheredItem> RequiredGatheredItems { get; set; } = [];
+    public List<GatheredItem> ItemsToGather { get; set; } = [];
     public List<QuestWorkValue?> CompletionQuestVariablesFlags { get; set; } = [];
     public List<DialogueChoice> DialogueChoices { get; set; } = [];
     public List<uint> PointMenuChoices { get; set; } = [];
+    public PurchaseMenu? PurchaseMenu { get; set; }
 
     // TODO: Not implemented
     [JsonConverter(typeof(ElementIdConverter))]
@@ -108,5 +112,20 @@ public sealed class QuestStep
             return StopDistance ?? 10f;
         else
             return StopDistance ?? DefaultStopDistance;
+    }
+
+    /// <summary>
+    /// Only relevant for the step 0 in sequence 0: Whether this step is valid for teleporting to it.
+    /// </summary>
+    /// <returns></returns>
+    public bool IsTeleportableForPriorityQuests()
+    {
+        if (AetheryteShortcut != null)
+            return true;
+
+        if (InteractionType == EInteractionType.UseItem && ItemId == VesperBayAetheryteTicket)
+            return true;
+
+        return false;
     }
 }

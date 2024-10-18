@@ -1,6 +1,6 @@
-﻿{
+{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "pot0to",
+  "Author": "Kaiser",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -27,7 +27,7 @@
       ]
     },
     {
-      "Sequence": 255,
+      "Sequence": 1,
       "Steps": [
         {
           "DataId": 1044569,
@@ -37,10 +37,29 @@
             "Z": -261.28027
           },
           "TerritoryId": 959,
-          "Fly": true,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow"
-        },
+          "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow",
+          "StopDistance": 5,
+          "Fly": true,
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": -385.6718,
+                  "Y": -151.67168,
+                  "Z": -261.28027
+                },
+                "MaximumDistance": 30,
+                "TerritoryId": 959
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
         {
           "TerritoryId": 959,
           "InteractionType": "Craft",
@@ -54,7 +73,22 @@
             "Z": -273.68756
           },
           "TerritoryId": 959,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow",
+          "Fly": true,
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": -201.42024,
+                  "Y": -49.149708,
+                  "Z": -273.68756
+                },
+                "MaximumDistance": 100,
+                "TerritoryId": 959
+              }
+            }
+          }
         },
         {
           "DataId": 1044403,

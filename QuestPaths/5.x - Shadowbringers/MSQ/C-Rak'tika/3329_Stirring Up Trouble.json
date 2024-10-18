@@ -37,6 +37,15 @@
       "Sequence": 2,
       "Steps": [
         {
+          "Position": {
+            "X": -138.85619,
+            "Y": -3.036951,
+            "Z": 54.482983
+          },
+          "TerritoryId": 817,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 2010066,
           "Position": {
             "X": -141.58856,
@@ -45,7 +54,8 @@
           },
           "TerritoryId": 817,
           "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818285
+          "AetherCurrentId": 2818285,
+          "DisableNavmesh": true
         },
         {
           "DataId": 1029214,

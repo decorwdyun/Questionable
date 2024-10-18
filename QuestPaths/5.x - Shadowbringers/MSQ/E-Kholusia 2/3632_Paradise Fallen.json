@@ -62,12 +62,6 @@
       "Sequence": 3,
       "Steps": [
         {
-          "TerritoryId": 820,
-          "InteractionType": "AttuneAethernetShard",
-          "AethernetShard": "[Eulmore] Southeast Derelicts",
-          "Comment": "TODO This step isn't very a good place to have this attunement; the next step should use Nightsoil Pots"
-        },
-        {
           "DataId": 1030191,
           "Position": {
             "X": -6.729248,
@@ -77,7 +71,7 @@
           "TerritoryId": 820,
           "InteractionType": "Interact",
           "AethernetShortcut": [
-            "[Eulmore] Southeast Derelicts",
+            "[Eulmore] Nightsoil Pots",
             "[Eulmore] The Mainstay"
           ]
         }

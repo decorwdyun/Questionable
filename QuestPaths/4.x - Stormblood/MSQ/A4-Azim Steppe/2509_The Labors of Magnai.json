@@ -161,6 +161,24 @@
           ]
         },
         {
+          "DataId": 2008257,
+          "Position": {
+            "X": -194.2627,
+            "Y": -57.66388,
+            "Z": 105.97388
+          },
+          "TerritoryId": 622,
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            1
+          ]
+        },
+        {
           "DataId": 2008256,
           "Position": {
             "X": -126.26843,
@@ -215,24 +233,6 @@
             null,
             null,
             8
-          ]
-        },
-        {
-          "DataId": 2008257,
-          "Position": {
-            "X": -194.2627,
-            "Y": -57.66388,
-            "Z": 105.97388
-          },
-          "TerritoryId": 622,
-          "InteractionType": "Interact",
-          "CompletionQuestVariablesFlags": [
-            null,
-            null,
-            null,
-            null,
-            null,
-            1
           ]
         }
       ]

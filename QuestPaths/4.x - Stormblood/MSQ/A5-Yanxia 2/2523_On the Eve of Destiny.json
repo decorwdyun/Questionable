@@ -106,6 +106,7 @@
           },
           "TerritoryId": 614,
           "InteractionType": "CompleteQuest",
+          "Fly": true,
           "DialogueChoices": [
             {
               "Type": "List",

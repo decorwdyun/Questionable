@@ -12,6 +12,7 @@
             "Y": 74.00002,
             "Z": 75.48633
           },
+          "StopDistance": 5,
           "TerritoryId": 621,
           "InteractionType": "AcceptQuest",
           "DialogueChoices": [
@@ -52,7 +53,14 @@
           },
           "TerritoryId": 621,
           "InteractionType": "Interact",
-          "Fly": true
+          "Fly": true,
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_STMBDB111_02972_Q2_000_000",
+              "Yes": true
+            }
+          ]
         }
       ]
     },
@@ -66,6 +74,7 @@
             "Y": 122,
             "Z": -349.0807
           },
+          "StopDistance": 5,
           "TerritoryId": 737,
           "InteractionType": "SinglePlayerDuty"
         }
@@ -99,6 +108,7 @@
             "Y": 70,
             "Z": 525.5055
           },
+          "StopDistance": 6,
           "TerritoryId": 621,
           "InteractionType": "Interact"
         }
@@ -114,6 +124,7 @@
             "Y": 70,
             "Z": 525.5055
           },
+          "StopDistance": 6,
           "TerritoryId": 621,
           "InteractionType": "Interact"
         }

@@ -7,6 +7,7 @@ using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
+using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using ImGuiNET;
@@ -28,6 +29,7 @@ internal sealed class QuickAccessButtonsComponent
     private readonly IClientState _clientState;
     private readonly ICondition _condition;
     private readonly ICommandManager _commandManager;
+    private readonly IDalamudPluginInterface _pluginInterface;
 
     public QuickAccessButtonsComponent(
         MovementController movementController,
@@ -39,7 +41,8 @@ internal sealed class QuickAccessButtonsComponent
         JournalProgressWindow journalProgressWindow,
         IClientState clientState,
         ICondition condition,
-        ICommandManager commandManager)
+        ICommandManager commandManager,
+        IDalamudPluginInterface pluginInterface)
     {
         _movementController = movementController;
         _gameFunctions = gameFunctions;
@@ -51,6 +54,7 @@ internal sealed class QuickAccessButtonsComponent
         _clientState = clientState;
         _condition = condition;
         _commandManager = commandManager;
+        _pluginInterface = pluginInterface;
     }
 
     public event EventHandler? Reload;
@@ -109,12 +113,14 @@ internal sealed class QuickAccessButtonsComponent
         int partsToRender = errorCount == 0 || infoCount == 0 ? 1 : 2;
         using var id = ImRaii.PushId("validationissues");
 
-        ImGui.PushFont(UiBuilder.IconFont);
-        var icon1 = FontAwesomeIcon.TimesCircle;
+        var icon1 = FontAwesomeIcon.ExclamationTriangle;
         var icon2 = FontAwesomeIcon.InfoCircle;
-        Vector2 iconSize1 = errorCount > 0 ? ImGui.CalcTextSize(icon1.ToIconString()) : Vector2.Zero;
-        Vector2 iconSize2 = infoCount > 0 ? ImGui.CalcTextSize(icon2.ToIconString()) : Vector2.Zero;
-        ImGui.PopFont();
+        Vector2 iconSize1, iconSize2;
+        using (var _ = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
+        {
+            iconSize1 = errorCount > 0 ? ImGui.CalcTextSize(icon1.ToIconString()) : Vector2.Zero;
+            iconSize2 = infoCount > 0 ? ImGui.CalcTextSize(icon2.ToIconString()) : Vector2.Zero;
+        }
 
         string text1 = errorCount > 0 ? errorCount.ToString(CultureInfo.InvariantCulture) : string.Empty;
         string text2 = infoCount > 0 ? infoCount.ToString(CultureInfo.InvariantCulture) : string.Empty;
@@ -136,9 +142,11 @@ internal sealed class QuickAccessButtonsComponent
             cursor.Y + ImGui.GetStyle().FramePadding.Y);
         if (errorCount > 0)
         {
-            ImGui.PushFont(UiBuilder.IconFont);
-            dl.AddText(position, ImGui.GetColorU32(ImGuiColors.DalamudRed), icon1.ToIconString());
-            ImGui.PopFont();
+            using (var _ = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
+            {
+                dl.AddText(position, ImGui.GetColorU32(ImGuiColors.DalamudRed), icon1.ToIconString());
+            }
+
             position = position with { X = position.X + iconSize1.X + iconPadding };
 
             // Draw the text on the window drawlist
@@ -148,9 +156,11 @@ internal sealed class QuickAccessButtonsComponent
 
         if (infoCount > 0)
         {
-            ImGui.PushFont(UiBuilder.IconFont);
-            dl.AddText(position, ImGui.GetColorU32(ImGuiColors.ParsedBlue), icon2.ToIconString());
-            ImGui.PopFont();
+            using (var _ = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
+            {
+                dl.AddText(position, ImGui.GetColorU32(ImGuiColors.ParsedBlue), icon2.ToIconString());
+            }
+
             position = position with { X = position.X + iconSize2.X + iconPadding };
 
             // Draw the text on the window drawlist

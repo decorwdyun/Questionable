@@ -6,6 +6,11 @@
       "Sequence": 0,
       "Steps": [
         {
+          "TerritoryId": 613,
+          "InteractionType": "Gather",
+          "ItemsToGather": []
+        },
+        {
           "DataId": 1025878,
           "Position": {
             "X": 343.984,
@@ -14,7 +19,6 @@
           },
           "TerritoryId": 613,
           "InteractionType": "Interact",
-          "RequiredGatheredItems": [],
           "AetheryteShortcut": "Ruby Sea - Tamamizu",
           "DialogueChoices": [
             {

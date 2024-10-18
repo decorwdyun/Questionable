@@ -12,10 +12,8 @@ namespace Questionable.Controller.Steps.Interactions;
 internal static class AetherCurrent
 {
     internal sealed class Factory(
-        GameFunctions gameFunctions,
         AetherCurrentData aetherCurrentData,
-        IChatGui chatGui,
-        ILoggerFactory loggerFactory) : SimpleTaskFactory
+        IChatGui chatGui) : SimpleTaskFactory
     {
         public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -32,32 +30,40 @@ internal static class AetherCurrent
                 return null;
             }
 
-            return new DoAttune(step.DataId.Value, step.AetherCurrentId.Value, gameFunctions, loggerFactory.CreateLogger<DoAttune>());
+            return new Attune(step.DataId.Value, step.AetherCurrentId.Value);
         }
     }
 
-    private sealed class DoAttune(uint dataId, uint aetherCurrentId, GameFunctions gameFunctions, ILogger<DoAttune> logger) : ITask
+    internal sealed record Attune(uint DataId, uint AetherCurrentId) : ITask
     {
-        public bool Start()
+        public bool ShouldRedoOnInterrupt() => true;
+        public override string ToString() => $"AttuneAetherCurrent({AetherCurrentId})";
+    }
+
+    internal sealed class DoAttune(
+        GameFunctions gameFunctions,
+        ILogger<DoAttune> logger) : TaskExecutor<Attune>
+    {
+        protected override bool Start()
         {
-            if (!gameFunctions.IsAetherCurrentUnlocked(aetherCurrentId))
+            if (!gameFunctions.IsAetherCurrentUnlocked(Task.AetherCurrentId))
             {
-                logger.LogInformation("Attuning to aether current {AetherCurrentId} / {DataId}", aetherCurrentId,
-                    dataId);
-                gameFunctions.InteractWith(dataId);
+                logger.LogInformation("Attuning to aether current {AetherCurrentId} / {DataId}", Task.AetherCurrentId,
+                    Task.DataId);
+                ProgressContext =
+                    InteractionProgressContext.FromActionUseOrDefault(() => gameFunctions.InteractWith(Task.DataId));
                 return true;
             }
 
-            logger.LogInformation("Already attuned to aether current {AetherCurrentId} / {DataId}", aetherCurrentId,
-                dataId);
+            logger.LogInformation("Already attuned to aether current {AetherCurrentId} / {DataId}",
+                Task.AetherCurrentId,
+                Task.DataId);
             return false;
         }
 
-        public ETaskResult Update() =>
-            gameFunctions.IsAetherCurrentUnlocked(aetherCurrentId)
+        public override ETaskResult Update() =>
+            gameFunctions.IsAetherCurrentUnlocked(Task.AetherCurrentId)
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
-
-        public override string ToString() => $"AttuneAetherCurrent({aetherCurrentId})";
     }
 }

@@ -8,7 +8,9 @@ using Dalamud.Game.Gui.Toast;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using LLib;
 using LLib.GameData;
+using Lumina.Excel.GeneratedSheets;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps;
 using Questionable.Controller.Steps.Interactions;
@@ -18,6 +20,8 @@ using Questionable.External;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
+using Quest = Questionable.Model.Quest;
+using Mount = Questionable.Controller.Steps.Common.Mount;
 
 namespace Questionable.Controller;
 
@@ -31,11 +35,13 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
     private readonly GatheringController _gatheringController;
     private readonly QuestRegistry _questRegistry;
     private readonly IKeyState _keyState;
+    private readonly IChatGui _chatGui;
     private readonly ICondition _condition;
     private readonly IToastGui _toastGui;
     private readonly Configuration _configuration;
     private readonly YesAlreadyIpc _yesAlreadyIpc;
     private readonly TaskCreator _taskCreator;
+    private readonly ILogger<QuestController> _logger;
 
     private readonly object _progressLock = new();
 
@@ -73,8 +79,10 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
         IToastGui toastGui,
         Configuration configuration,
         YesAlreadyIpc yesAlreadyIpc,
-        TaskCreator taskCreator)
-        : base(chatGui, logger)
+        TaskCreator taskCreator,
+        IServiceProvider serviceProvider,
+        IDataManager dataManager)
+        : base(chatGui, condition, serviceProvider, dataManager, logger)
     {
         _clientState = clientState;
         _gameFunctions = gameFunctions;
@@ -84,11 +92,13 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
         _gatheringController = gatheringController;
         _questRegistry = questRegistry;
         _keyState = keyState;
+        _chatGui = chatGui;
         _condition = condition;
         _toastGui = toastGui;
         _configuration = configuration;
         _yesAlreadyIpc = yesAlreadyIpc;
         _taskCreator = taskCreator;
+        _logger = logger;
 
         _condition.ConditionChange += OnConditionChange;
         _toastGui.Toast += OnNormalToast;
@@ -138,6 +148,8 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
     /// </summary>
     public QuestProgress? PendingQuest => _pendingQuest;
 
+    public List<Quest> ManualPriorityQuests { get; } = [];
+
     public string? DebugState { get; private set; }
 
     public void Reload()
@@ -179,7 +191,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
 
         if (!_clientState.IsLoggedIn || _condition[ConditionFlag.Unconscious])
         {
-            if (_currentTask != null || _taskQueue.Count > 0)
+            if (!_taskQueue.AllTasksComplete)
             {
                 Stop("HP = 0");
                 _movementController.Stop();
@@ -189,7 +201,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
         }
         else if (_configuration.General.UseEscToCancelQuesting && _keyState[VirtualKey.ESCAPE])
         {
-            if (_currentTask != null || _taskQueue.Count > 0)
+            if (!_taskQueue.AllTasksComplete)
             {
                 Stop("ESC pressed");
                 _movementController.Stop();
@@ -198,12 +210,8 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
             }
         }
 
-        if (CurrentQuest != null && CurrentQuest.Quest.Root.TerritoryBlacklist.Contains(_clientState.TerritoryType))
-            return;
-
         if (AutomationType == EAutomationType.Automatic &&
-            ((_currentTask == null && _taskQueue.Count == 0) ||
-             _currentTask is WaitAtEnd.WaitQuestAccepted)
+            (_taskQueue.AllTasksComplete || _taskQueue.CurrentTaskExecutor?.CurrentTask is WaitAtEnd.WaitQuestAccepted)
             && CurrentQuest is { Sequence: 0, Step: 0 } or { Sequence: 0, Step: 255 }
             && DateTime.Now >= CurrentQuest.StepProgress.StartedAt.AddSeconds(15))
         {
@@ -274,8 +282,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
                 questToRun = _nextQuest;
                 currentSequence = _nextQuest.Sequence; // by definition, this should always be 0
                 if (_nextQuest.Step == 0 &&
-                    _currentTask == null &&
-                    _taskQueue.Count == 0 &&
+                    _taskQueue.AllTasksComplete &&
                     AutomationType == EAutomationType.Automatic)
                     ExecuteNextStep();
             }
@@ -284,14 +291,19 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
                 questToRun = _gatheringQuest;
                 currentSequence = _gatheringQuest.Sequence;
                 if (_gatheringQuest.Step == 0 &&
-                    _currentTask == null &&
-                    _taskQueue.Count == 0 &&
+                    _taskQueue.AllTasksComplete &&
                     AutomationType == EAutomationType.Automatic)
                     ExecuteNextStep();
             }
             else
             {
-                (ElementId? currentQuestId, currentSequence) = _questFunctions.GetCurrentQuest();
+                (ElementId? currentQuestId, currentSequence) =
+                    ManualPriorityQuests
+                        .Where(x => _questFunctions.IsReadyToAcceptQuest(x.Id) || _questFunctions.IsQuestAccepted(x.Id))
+                        .Select(x =>
+                            ((ElementId?, byte)?)(x.Id, _questFunctions.GetQuestProgressInfo(x.Id)?.Sequence ?? 0))
+                        .FirstOrDefault() ??
+                    _questFunctions.GetCurrentQuest();
                 if (currentQuestId == null || currentQuestId.Value == 0)
                 {
                     if (_startedQuest != null)
@@ -310,7 +322,8 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
                         _logger.LogInformation("New quest: {QuestName}", quest.Info.Name);
                         _startedQuest = new QuestProgress(quest, currentSequence);
 
-                        if (_clientState.LocalPlayer!.Level < quest.Info.Level)
+                        if (_clientState.LocalPlayer != null &&
+                            _clientState.LocalPlayer.Level < quest.Info.Level)
                         {
                             _logger.LogInformation(
                                 "Stopping automation, player level ({PlayerLevel}) < quest level ({QuestLevel}",
@@ -383,7 +396,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
             if (questToRun.Step == 255)
             {
                 DebugState = "Step completed";
-                if (_currentTask != null || _taskQueue.Count > 0)
+                if (!_taskQueue.AllTasksComplete)
                     CheckNextTasks("Step complete");
                 return;
             }
@@ -456,10 +469,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
     private void ClearTasksInternal()
     {
         //_logger.LogDebug("Clearing task (internally)");
-        _currentTask = null;
-
-        if (_taskQueue.Count > 0)
-            _taskQueue.Clear();
+        _taskQueue.Reset();
 
         _yesAlreadyIpc.RestoreYesAlready();
         _combatController.Stop("ClearTasksInternal");
@@ -620,13 +630,15 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
 
     public string ToStatString()
     {
-        return _currentTask == null ? $"- (+{_taskQueue.Count})" : $"{_currentTask} (+{_taskQueue.Count})";
+        return _taskQueue.CurrentTaskExecutor?.CurrentTask is { } currentTask
+            ? $"{currentTask} (+{_taskQueue.RemainingTasks.Count()})"
+            : $"- (+{_taskQueue.RemainingTasks.Count()})";
     }
 
-    public bool HasCurrentTaskMatching<T>([NotNullWhen(true)] out T? task)
-        where T : class, ITask
+    public bool HasCurrentTaskExecutorMatching<T>([NotNullWhen(true)] out T? task)
+        where T : class, ITaskExecutor
     {
-        if (_currentTask is T t)
+        if (_taskQueue.CurrentTaskExecutor is T t)
         {
             task = t;
             return true;
@@ -638,7 +650,23 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
         }
     }
 
-    public bool IsRunning => _currentTask != null || _taskQueue.Count > 0;
+    public bool HasCurrentTaskMatching<T>([NotNullWhen(true)] out T? task)
+        where T : class, ITask
+    {
+        if (_taskQueue.CurrentTaskExecutor?.CurrentTask is T t)
+        {
+            task = t;
+            return true;
+        }
+        else
+        {
+            task = null;
+            return false;
+        }
+    }
+
+    public bool IsRunning => !_taskQueue.AllTasksComplete;
+    public TaskQueue TaskQueue => _taskQueue;
 
     public sealed class QuestProgress
     {
@@ -678,19 +706,19 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
     {
         lock (_progressLock)
         {
-            if (_currentTask is ISkippableTask)
-                _currentTask = null;
-            else if (_currentTask != null)
+            if (_taskQueue.CurrentTaskExecutor?.CurrentTask is ISkippableTask)
+                _taskQueue.CurrentTaskExecutor = null;
+            else if (_taskQueue.CurrentTaskExecutor != null)
             {
-                _currentTask = null;
-                while (_taskQueue.Count > 0)
+                _taskQueue.CurrentTaskExecutor = null;
+                while (_taskQueue.TryPeek(out ITask? task))
                 {
-                    var task = _taskQueue.Dequeue();
+                    _taskQueue.TryDequeue(out _);
                     if (task is ISkippableTask)
                         return;
                 }
 
-                if (_taskQueue.Count == 0)
+                if (_taskQueue.AllTasksComplete)
                 {
                     Stop("Skip");
                     IncreaseStepCount(elementId, currentQuestSequence);
@@ -706,7 +734,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
 
     public void SkipSimulatedTask()
     {
-        _currentTask = null;
+        _taskQueue.CurrentTaskExecutor = null;
     }
 
     public bool IsInterruptible()
@@ -716,7 +744,13 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
             return false;
 
         var (currentQuest, type) = details.Value;
-        if (type != ECurrentQuestType.Normal)
+        if (type != ECurrentQuestType.Normal || currentQuest.Sequence == 0)
+            return false;
+
+        if (ManualPriorityQuests.Contains(currentQuest.Quest))
+            return false;
+
+        if (currentQuest.Quest.Info.AlliedSociety != EAlliedSociety.None)
             return false;
 
         QuestSequence? currentSequence = currentQuest.Quest.FindSequence(currentQuest.Sequence);
@@ -724,7 +758,9 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
             return false;
 
         QuestStep? currentStep = currentSequence?.FindStep(currentQuest.Step);
-        return currentStep?.AetheryteShortcut != null;
+        return currentStep?.AetheryteShortcut != null &&
+               (currentStep.SkipConditions?.AetheryteShortcutIf?.QuestsCompleted.Count ?? 0) == 0 &&
+               (currentStep.SkipConditions?.AetheryteShortcutIf?.QuestsAccepted.Count ?? 0) == 0;
     }
 
     public bool TryPickPriorityQuest()
@@ -757,24 +793,13 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
 
     private void OnConditionChange(ConditionFlag flag, bool value)
     {
-        if (_currentTask is IConditionChangeAware conditionChangeAware)
+        if (_taskQueue.CurrentTaskExecutor is IConditionChangeAware conditionChangeAware)
             conditionChangeAware.OnConditionChange(flag, value);
     }
 
     private void OnNormalToast(ref SeString message, ref ToastOptions options, ref bool isHandled)
     {
         _gatheringController.OnNormalToast(message);
-    }
-
-    private void OnErrorToast(ref SeString message, ref bool isHandled)
-    {
-        if (_currentTask is IToastAware toastAware)
-        {
-            if (toastAware.OnErrorToast(message))
-            {
-                isHandled = true;
-            }
-        }
     }
 
     public void Dispose()

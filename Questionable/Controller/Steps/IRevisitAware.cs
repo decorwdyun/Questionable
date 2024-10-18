@@ -1,6 +1,6 @@
 ﻿namespace Questionable.Controller.Steps;
 
-public interface IRevisitAware
+internal interface IRevisitAware
 {
     void OnRevisit();
 }

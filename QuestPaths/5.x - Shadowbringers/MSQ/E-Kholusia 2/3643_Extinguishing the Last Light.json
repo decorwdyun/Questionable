@@ -1,10 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "TerritoryBlacklist": [
-    822,
-    846
-  ],
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -55,7 +51,8 @@
             "Z": -797.3602
           },
           "TerritoryId": 814,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Kholusia - Tomra"
         }
       ]
     },

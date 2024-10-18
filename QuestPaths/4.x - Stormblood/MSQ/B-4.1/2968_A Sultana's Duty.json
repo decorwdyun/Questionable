@@ -85,20 +85,12 @@
       "Sequence": 255,
       "Steps": [
         {
-          "Position": {
-            "X": 12.5078335,
-            "Y": 4.1552944,
-            "Z": 45.718685
-          },
           "TerritoryId": 144,
-          "InteractionType": "Jump",
-          "JumpDestination": {
-            "Position": {
-              "X": 12.60962,
-              "Y": 4.2181597,
-              "Z": 49.651253
-            }
-          }
+          "AethernetShortcut": [
+            "[Gold Saucer] Entrance & Card Squares",
+            "[Gold Saucer] Wonder Square West"
+          ],
+          "InteractionType": "None"
         },
         {
           "DataId": 1024043,

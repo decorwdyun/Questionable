@@ -35,7 +35,7 @@ internal sealed class EditorWindow : Window
     public EditorWindow(RendererPlugin plugin, EditorCommands editorCommands, IDataManager dataManager,
         ITargetManager targetManager, IClientState clientState, IObjectTable objectTable)
         : base("Gathering Path Editor###QuestionableGatheringPathEditor",
-            ImGuiWindowFlags.NoFocusOnAppearing | ImGuiWindowFlags.NoNavFocus)
+            ImGuiWindowFlags.NoFocusOnAppearing | ImGuiWindowFlags.NoNavFocus | ImGuiWindowFlags.AlwaysAutoResize)
     {
         _plugin = plugin;
         _editorCommands = editorCommands;
@@ -46,7 +46,7 @@ internal sealed class EditorWindow : Window
 
         SizeConstraints = new WindowSizeConstraints
         {
-            MinimumSize = new Vector2(300, 300),
+            MinimumSize = new Vector2(300, 100),
         };
 
         RespectCloseHotkey = false;
@@ -66,7 +66,7 @@ internal sealed class EditorWindow : Window
 
         _target = _targetManager.Target;
         var gatheringLocations = _plugin.GetLocationsInTerritory(_clientState.TerritoryType);
-        var location = gatheringLocations.SelectMany(context =>
+        var location = gatheringLocations.ToList().SelectMany(context =>
                 context.Root.Groups.SelectMany(group =>
                     group.Nodes.SelectMany(node => node.Locations
                         .Select(location =>

@@ -1,9 +1,6 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "TerritoryBlacklist": [
-    830
-  ],
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -34,6 +31,7 @@
           "StopDistance": 7,
           "TerritoryId": 621,
           "InteractionType": "Interact",
+          "TargetTerritoryId": 829,
           "DialogueChoices": [
             {
               "Type": "YesNo",

@@ -80,8 +80,7 @@ internal sealed class GatheringPointRegistry : IDisposable
                 {
                     foreach (var expansionFolder in ExpansionData.ExpansionFolders.Values)
                         LoadFromDirectory(
-                            new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, expansionFolder)),
-                            LogLevel.Trace);
+                            new DirectoryInfo(Path.Combine(pathProjectDirectory.FullName, expansionFolder)));
                 }
                 catch (Exception e)
                 {
@@ -94,7 +93,7 @@ internal sealed class GatheringPointRegistry : IDisposable
 
     private void LoadGatheringPointFromStream(string fileName, Stream stream)
     {
-        _logger.LogTrace("Loading gathering point from '{FileName}'", fileName);
+        //_logger.LogTrace("Loading gathering point from '{FileName}'", fileName);
         GatheringPointId? gatheringPointId = ExtractGatheringPointIdFromName(fileName);
         if (gatheringPointId == null)
             return;
@@ -102,7 +101,7 @@ internal sealed class GatheringPointRegistry : IDisposable
         _gatheringPoints[gatheringPointId] = JsonSerializer.Deserialize<GatheringRoot>(stream)!;
     }
 
-    private void LoadFromDirectory(DirectoryInfo directory, LogLevel logLevel = LogLevel.Information)
+    private void LoadFromDirectory(DirectoryInfo directory)
     {
         if (!directory.Exists)
         {
@@ -110,7 +109,6 @@ internal sealed class GatheringPointRegistry : IDisposable
             return;
         }
 
-        _logger.Log(logLevel, "Loading gathering points from {DirectoryName}", directory);
         foreach (FileInfo fileInfo in directory.GetFiles("*.json"))
         {
             try
@@ -125,7 +123,7 @@ internal sealed class GatheringPointRegistry : IDisposable
         }
 
         foreach (DirectoryInfo childDirectory in directory.GetDirectories())
-            LoadFromDirectory(childDirectory, logLevel);
+            LoadFromDirectory(childDirectory);
     }
 
     private static GatheringPointId? ExtractGatheringPointIdFromName(string resourceName)

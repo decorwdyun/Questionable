@@ -45,7 +45,8 @@
           },
           "TerritoryId": 398,
           "InteractionType": "CompleteQuest",
-          "AetheryteShortcut": "The Dravanian Forelands - Tailfeather"
+          "AetheryteShortcut": "The Dravanian Forelands - Tailfeather",
+          "Fly": true
         }
       ]
     }

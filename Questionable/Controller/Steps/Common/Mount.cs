@@ -11,49 +11,38 @@ namespace Questionable.Controller.Steps.Common;
 
 internal static class Mount
 {
-    internal sealed class Factory(
-        GameFunctions gameFunctions,
-        ICondition condition,
-        TerritoryData territoryData,
-        IClientState clientState,
-        ILoggerFactory loggerFactory)
+    internal sealed record MountTask(
+        ushort TerritoryId,
+        EMountIf MountIf,
+        Vector3? Position = null) : ITask
     {
-        public ITask Mount(ushort territoryId, EMountIf mountIf, Vector3? position = null)
-        {
-            if (mountIf == EMountIf.AwayFromPosition)
-                ArgumentNullException.ThrowIfNull(position);
+        public Vector3? Position { get; } = MountIf == EMountIf.AwayFromPosition
+            ? Position ?? throw new ArgumentNullException(nameof(Position))
+            : null;
 
-            return new MountTask(territoryId, mountIf, position, gameFunctions, condition, territoryData, clientState,
-                loggerFactory.CreateLogger<MountTask>());
-        }
+        public bool ShouldRedoOnInterrupt() => true;
 
-        public ITask Unmount()
-        {
-            return new UnmountTask(condition, loggerFactory.CreateLogger<UnmountTask>(), gameFunctions);
-        }
+        public override string ToString() => "Mount";
     }
 
-    private sealed class MountTask(
-        ushort territoryId,
-        EMountIf mountIf,
-        Vector3? position,
+    internal sealed class MountExecutor(
         GameFunctions gameFunctions,
         ICondition condition,
         TerritoryData territoryData,
         IClientState clientState,
-        ILogger<MountTask> logger) : ITask
+        ILogger<MountTask> logger) : TaskExecutor<MountTask>
     {
         private bool _mountTriggered;
         private DateTime _retryAt = DateTime.MinValue;
 
-        public bool Start()
+        protected override bool Start()
         {
             if (condition[ConditionFlag.Mounted])
                 return false;
 
-            if (!territoryData.CanUseMount(territoryId))
+            if (!territoryData.CanUseMount(Task.TerritoryId))
             {
-                logger.LogInformation("Can't use mount in current territory {Id}", territoryId);
+                logger.LogInformation("Can't use mount in current territory {Id}", Task.TerritoryId);
                 return false;
             }
 
@@ -63,11 +52,11 @@ internal static class Mount
                 return false;
             }
 
-            if (mountIf == EMountIf.AwayFromPosition)
+            if (Task.MountIf == EMountIf.AwayFromPosition)
             {
                 Vector3 playerPosition = clientState.LocalPlayer?.Position ?? Vector3.Zero;
-                float distance = System.Numerics.Vector3.Distance(playerPosition, position.GetValueOrDefault());
-                if (territoryId == clientState.TerritoryType && distance < 30f && !Conditions.IsDiving)
+                float distance = System.Numerics.Vector3.Distance(playerPosition, Task.Position.GetValueOrDefault());
+                if (Task.TerritoryId == clientState.TerritoryType && distance < 30f && !Conditions.IsDiving)
                 {
                     logger.LogInformation("Not using mount, as we're close to the target");
                     return false;
@@ -75,10 +64,10 @@ internal static class Mount
 
                 logger.LogInformation(
                     "Want to use mount if away from destination ({Distance} yalms), trying (in territory {Id})...",
-                    distance, territoryId);
+                    distance, Task.TerritoryId);
             }
             else
-                logger.LogInformation("Want to use mount, trying (in territory {Id})...", territoryId);
+                logger.LogInformation("Want to use mount, trying (in territory {Id})...", Task.TerritoryId);
 
             if (!condition[ConditionFlag.InCombat])
             {
@@ -89,7 +78,7 @@ internal static class Mount
             return false;
         }
 
-        public ETaskResult Update()
+        public override ETaskResult Update()
         {
             if (_mountTriggered && !condition[ConditionFlag.Mounted] && DateTime.Now > _retryAt)
             {
@@ -106,7 +95,9 @@ internal static class Mount
                     return ETaskResult.TaskComplete;
                 }
 
-                _mountTriggered = gameFunctions.Mount();
+                ProgressContext =
+                    InteractionProgressContext.FromActionUse(() => _mountTriggered = gameFunctions.Mount());
+
                 _retryAt = DateTime.Now.AddSeconds(5);
                 return ETaskResult.StillRunning;
             }
@@ -115,17 +106,26 @@ internal static class Mount
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
         }
-
-        public override string ToString() => "Mount";
     }
 
-    private sealed class UnmountTask(ICondition condition, ILogger<UnmountTask> logger, GameFunctions gameFunctions)
-        : ITask
+    internal sealed record UnmountTask : ITask
+    {
+        public bool ShouldRedoOnInterrupt() => true;
+
+        public override string ToString() => "Unmount";
+    }
+
+    internal sealed class UnmountExecutor(
+        ICondition condition,
+        ILogger<UnmountTask> logger,
+        GameFunctions gameFunctions,
+        IClientState clientState)
+        : TaskExecutor<UnmountTask>
     {
         private bool _unmountTriggered;
         private DateTime _continueAt = DateTime.MinValue;
 
-        public bool Start()
+        protected override bool Start()
         {
             if (!condition[ConditionFlag.Mounted])
                 return false;
@@ -143,9 +143,12 @@ internal static class Mount
             return true;
         }
 
-        public ETaskResult Update()
+        public override ETaskResult Update()
         {
             if (_continueAt >= DateTime.Now)
+                return ETaskResult.StillRunning;
+
+            if (IsUnmounting())
                 return ETaskResult.StillRunning;
 
             if (!_unmountTriggered)
@@ -172,7 +175,7 @@ internal static class Mount
                 : ETaskResult.TaskComplete;
         }
 
-        public override string ToString() => "Unmount";
+        private unsafe bool IsUnmounting() => **(byte**)(clientState.LocalPlayer!.Address + 1432) == 1;
     }
 
     public enum EMountIf

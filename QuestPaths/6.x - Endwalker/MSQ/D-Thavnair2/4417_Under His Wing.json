@@ -12,7 +12,7 @@
             "Y": 3.1168795,
             "Z": -262.62305
           },
-          "StopDistance": 5,
+          "StopDistance": 8,
           "TerritoryId": 957,
           "InteractionType": "AcceptQuest"
         }
@@ -29,7 +29,8 @@
             "Z": -597.83325
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
@@ -45,7 +46,8 @@
           "TerritoryId": 957,
           "InteractionType": "WalkTo",
           "Comment": "Travel to Radz-at-Han",
-          "TargetTerritoryId": 963
+          "TargetTerritoryId": 963,
+          "Fly": true
         },
         {
           "DataId": 1040354,

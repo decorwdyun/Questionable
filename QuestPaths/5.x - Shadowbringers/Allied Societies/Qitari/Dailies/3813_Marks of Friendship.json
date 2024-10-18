@@ -1,7 +1,6 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "liza",
-  "Disabled": true,
+  "Author": "plogon_enjoyer",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -19,6 +18,45 @@
       ]
     },
     {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1027719,
+          "Position": {
+            "X": 303.5172,
+            "Y": 34.242825,
+            "Z": -146.65448
+          },
+          "TerritoryId": 817,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Rak'tika - Fanow",
+          "Fly": true
+        },
+        {
+          "DataId": 1027715,
+          "Position": {
+            "X": 411.21533,
+            "Y": 33.637783,
+            "Z": -128.5268
+          },
+          "TerritoryId": 817,
+          "InteractionType": "Interact",
+          "Fly": true
+        },
+        {
+          "DataId": 1027713,
+          "Position": {
+            "X": 446.70776,
+            "Y": 34.051743,
+            "Z": -117.17407
+          },
+          "TerritoryId": 817,
+          "InteractionType": "Interact",
+          "Fly": true
+        }
+      ]
+    },
+    {
       "Sequence": 255,
       "Steps": [
         {
@@ -29,13 +67,7 @@
           },
           "TerritoryId": 817,
           "InteractionType": "WalkTo",
-          "AetheryteShortcut": "Rak'tika - Fanow",
-          "Fly": true,
-          "RequiredGatheredItems": [
-
-
-
-          ]
+          "Fly": true
         },
         {
           "DataId": 1032643,

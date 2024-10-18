@@ -23,9 +23,9 @@
       "Steps": [
         {
           "Position": {
-            "X": 643.7624,
-            "Y": 0.35477543,
-            "Z": 541.9913
+            "X": 639.3296,
+            "Y": 0.52189386,
+            "Z": 533.5061
           },
           "TerritoryId": 814,
           "InteractionType": "WalkTo"

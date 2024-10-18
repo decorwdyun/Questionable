@@ -6,6 +6,22 @@
       "Sequence": 0,
       "Steps": [
         {
+          "InteractionType": "None",
+          "TerritoryId": 886,
+          "AetheryteShortcut": "Ishgard",
+          "AethernetShortcut": [
+            "[Ishgard] Aetheryte Plaza",
+            "[Ishgard] Firmament"
+          ],
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InTerritory": [
+                886
+              ]
+            }
+          }
+        },
+        {
           "DataId": 1031681,
           "Position": {
             "X": 8.102478,
@@ -13,7 +29,14 @@
             "Z": 146.34924
           },
           "TerritoryId": 886,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "SkipConditions": {
+            "StepIf": {
+              "NotNamePlateIconId": [
+                60091
+              ]
+            }
+          }
         },
         {
           "DataId": 1031677,
@@ -23,7 +46,14 @@
             "Z": 168.9325
           },
           "TerritoryId": 886,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "SkipConditions": {
+            "StepIf": {
+              "NotNamePlateIconId": [
+                60091
+              ]
+            }
+          }
         },
         {
           "DataId": 1031692,
@@ -34,7 +64,14 @@
           },
           "StopDistance": 5,
           "TerritoryId": 886,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "SkipConditions": {
+            "StepIf": {
+              "NotNamePlateIconId": [
+                60091
+              ]
+            }
+          }
         },
         {
           "Position": {
@@ -53,7 +90,14 @@
             "Z": 138.47559
           },
           "TerritoryId": 886,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "SkipConditions": {
+            "StepIf": {
+              "NotNamePlateIconId": [
+                60091
+              ]
+            }
+          }
         },
         {
           "DataId": 1031693,
@@ -63,7 +107,14 @@
             "Z": 138.93335
           },
           "TerritoryId": 886,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "SkipConditions": {
+            "StepIf": {
+              "NotNamePlateIconId": [
+                60091
+              ]
+            }
+          }
         },
         {
           "DataId": 1031694,
@@ -74,7 +125,14 @@
           },
           "StopDistance": 7,
           "TerritoryId": 886,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "SkipConditions": {
+            "StepIf": {
+              "NotNamePlateIconId": [
+                60091
+              ]
+            }
+          }
         },
         {
           "DataId": 1031695,
@@ -84,7 +142,14 @@
             "Z": 169.9397
           },
           "TerritoryId": 886,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "SkipConditions": {
+            "StepIf": {
+              "NotNamePlateIconId": [
+                60091
+              ]
+            }
+          }
         },
         {
           "DataId": 1031681,
@@ -94,7 +159,14 @@
             "Z": 146.34924
           },
           "TerritoryId": 886,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "SkipConditions": {
+            "StepIf": {
+              "NotNamePlateIconId": [
+                60091
+              ]
+            }
+          }
         },
         {
           "DataId": 1031992,

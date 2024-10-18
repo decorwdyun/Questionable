@@ -1,10 +1,6 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "TerritoryBlacklist": [
-    1200,
-    1208
-  ],
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -32,7 +28,8 @@
             "Z": -565.48413
           },
           "TerritoryId": 1191,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },

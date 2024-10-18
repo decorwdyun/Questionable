@@ -46,6 +46,16 @@ public sealed class AethernetShardConverter() : EnumConverter<EAetheryteLocation
         { EAetheryteLocation.LimsaTempestGate, "[Limsa Lominsa] Tempest Gate (Lower La Noscea)" },
         { EAetheryteLocation.LimsaAirship, "[Limsa Lominsa] Airship Landing" },
 
+        { EAetheryteLocation.GoldSaucer, "[Gold Saucer] Aetheryte Plaza" },
+        { EAetheryteLocation.GoldSaucerEntranceCardSquares, "[Gold Saucer] Entrance & Card Squares" },
+        { EAetheryteLocation.GoldSaucerWonderSquareEast, "[Gold Saucer] Wonder Square East" },
+        { EAetheryteLocation.GoldSaucerWonderSquareWest, "[Gold Saucer] Wonder Square West" },
+        { EAetheryteLocation.GoldSaucerEventSquare, "[Gold Saucer] Event Square" },
+        { EAetheryteLocation.GoldSaucerCactpotBoard, "[Gold Saucer] Cactpot Board" },
+        { EAetheryteLocation.GoldSaucerRoundSquare, "[Gold Saucer] Round Square" },
+        { EAetheryteLocation.GoldSaucerChocoboSquare, "[Gold Saucer] Chocobo Square" },
+        { EAetheryteLocation.GoldSaucerMinionSquare, "[Gold Saucer] Minion Square" },
+
         { EAetheryteLocation.Ishgard, "[Ishgard] Aetheryte Plaza" },
         { EAetheryteLocation.IshgardForgottenKnight, "[Ishgard] The Forgotten Knight" },
         { EAetheryteLocation.IshgardSkysteelManufactory, "[Ishgard] Skysteel Manufactory" },
@@ -89,6 +99,13 @@ public sealed class AethernetShardConverter() : EnumConverter<EAetheryteLocation
         { EAetheryteLocation.KuganeRakuzaDistrict, "[Kugane] Rakuza District" },
         { EAetheryteLocation.KuganeRubyPrice, "[Kugane] The Ruby Price" },
         { EAetheryteLocation.KuganeAirship, "[Kugane] Airship Landing" },
+
+        { EAetheryteLocation.DomanEnclave, "[Doman Enclave] Aetheryte Plaza" },
+        { EAetheryteLocation.DomanEnclaveNorthern, "[Doman Enclave] The Northern Enclave" },
+        { EAetheryteLocation.DomanEnclaveSouthern, "[Doman Enclave] The Southern Enclave" },
+        { EAetheryteLocation.DomanEnclaveDocks, "[Doman Enclave] Ferry Docks" },
+        { EAetheryteLocation.DomanEnclaveOneRiver, "[Doman Enclave] The One River" },
+        { EAetheryteLocation.DomanEnclaveGangos, "[Doman Enclave] Gangos" },
 
         { EAetheryteLocation.Crystarium, "[Crystarium] Aetheryte Plaza" },
         { EAetheryteLocation.CrystariumMarkets, "[Crystarium] Musica Universalis Markets" },

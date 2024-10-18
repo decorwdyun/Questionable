@@ -7,13 +7,29 @@ namespace Questionable.Model.Questing;
 public enum EAction
 {
     HeavySwing = 31,
+    Bootshine = 53,
+    TwinSnakes = 61,
+    Demolish = 66,
+    DragonKick = 74,
+    HeavyShot = 97,
     Cure = 120,
+    Cure2 = 135,
+    Eukrasia = 24290, 
+    Diagnosis = 24284,
+    EukrasianDiagnosis = 24291,
     Esuna = 7568,
     Physick = 190,
+    AspectedBenefic = 3595,
+    FormShift = 4262,
     BuffetSanuwa = 4931,
     BuffetGriffin = 4583,
+    Trample = 4585,
     Fumigate = 5872,
+    MagitekPulse = 8624,
+    MagitekThunder = 8625,
+    Inhale = 10013,
     SiphonSnout = 18187,
+    PeculiarLight = 20030,
     Cannonfire = 20121,
     RedGulal = 29382,
     YellowGulal = 29383,
@@ -46,8 +62,11 @@ public static class EActionExtensions
         return action
             is EAction.BuffetSanuwa
             or EAction.BuffetGriffin
+            or EAction.Trample
             or EAction.Fumigate
+            or EAction.Inhale
             or EAction.SiphonSnout
+            or EAction.PeculiarLight
             or EAction.Cannonfire
             or EAction.RedGulal
             or EAction.YellowGulal

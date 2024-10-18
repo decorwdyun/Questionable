@@ -81,8 +81,9 @@ internal sealed unsafe class GameFunctions
 
         if (_questFunctions.IsQuestAccepted(new QuestId(3304)) && _condition[ConditionFlag.Mounted])
         {
-            BattleChara* battleChara = (BattleChara*)(_clientState.LocalPlayer?.Address ?? 0);
-            if (battleChara != null && battleChara->Mount.MountId == 198) // special quest amaro, not the normal one
+            // special quest amaro, not the normal one
+            // TODO Check if this also applies to beast tribe mounts
+            if (GetMountId() == 198)
                 return true;
         }
 
@@ -90,6 +91,15 @@ internal sealed unsafe class GameFunctions
         return playerState != null &&
                _territoryToAetherCurrentCompFlgSet.TryGetValue(territoryId, out byte aetherCurrentCompFlgSet) &&
                playerState->IsAetherCurrentZoneComplete(aetherCurrentCompFlgSet);
+    }
+
+    public ushort? GetMountId()
+    {
+        BattleChara* battleChara = (BattleChara*)(_clientState.LocalPlayer?.Address ?? 0);
+        if (battleChara != null && battleChara->Mount.MountId != 0)
+            return battleChara->Mount.MountId;
+        else
+            return null;
     }
 
     public bool IsFlyingUnlockedInCurrentZone() => IsFlyingUnlocked(_clientState.TerritoryType);
@@ -172,9 +182,7 @@ internal sealed unsafe class GameFunctions
             long result = AgentInventoryContext.Instance()->UseItem(itemId);
 
             _logger.LogInformation("UseItem result on {DataId}: {Result}", dataId, result);
-
-            // TODO is 1 a generally accepted result?
-            return result == 0 || (itemId == 2002450 && result == 1);
+            return result is 0 or 1;
         }
 
         return false;
@@ -210,10 +218,10 @@ internal sealed unsafe class GameFunctions
         return false;
     }
 
-    public bool UseAction(IGameObject gameObject, EAction action)
+    public bool UseAction(IGameObject gameObject, EAction action, bool checkCanUse = true)
     {
         var actionRow = _dataManager.GetExcelSheet<Action>()!.GetRow((uint)action)!;
-        if (!ActionManager.CanUseActionOnTarget((uint)action, (GameObject*)gameObject.Address))
+        if (checkCanUse && !ActionManager.CanUseActionOnTarget((uint)action, (GameObject*)gameObject.Address))
         {
             _logger.LogWarning("Can not use action {Action} on target {Target}", action, gameObject);
             return false;
@@ -299,6 +307,11 @@ internal sealed unsafe class GameFunctions
         var battleChara = (BattleChara*)localPlayer.Address;
         StatusManager* statusManager = battleChara->GetStatusManager();
         return statusManager->HasStatus(statusId);
+    }
+    
+    public static bool RemoveStatus(uint statusId)
+    {
+        return StatusManager.ExecuteStatusOff(statusId);
     }
 
     public bool Mount()
@@ -398,7 +411,7 @@ internal sealed unsafe class GameFunctions
         if (!_clientState.IsLoggedIn || _clientState.LocalPlayer == null)
             return true;
 
-        if (IsLoadingScreenVisible(true))
+        if (IsLoadingScreenVisible())
             return true;
 
         if (_condition[ConditionFlag.Crafting])
@@ -431,25 +444,23 @@ internal sealed unsafe class GameFunctions
         if (!AgentSatisfactionSupply.Instance()->IsAgentActive())
             return false;
 
-        var flags = _condition.AsReadOnlySet();
+        var flags = _condition.AsReadOnlySet().ToHashSet();
+        flags.Remove(ConditionFlag.InDutyQueue); // irrelevant
         return flags.Count == 2 &&
                flags.Contains(ConditionFlag.NormalConditions) &&
                flags.Contains(ConditionFlag.OccupiedInQuestEvent);
     }
 
-    public bool IsLoadingScreenVisible(bool all)
+    public bool IsLoadingScreenVisible()
     {
         if (_gameGui.TryGetAddonByName("FadeMiddle", out AtkUnitBase* fade) && LAddon.IsAddonReady(fade) && fade->IsVisible)
             return true;
 
-        if (all)
-        {
-            if (_gameGui.TryGetAddonByName("FadeBack", out fade) && LAddon.IsAddonReady(fade) && fade->IsVisible)
-                return true;
+        if (_gameGui.TryGetAddonByName("FadeBack", out fade) && LAddon.IsAddonReady(fade) && fade->IsVisible)
+            return true;
 
-            if (_gameGui.TryGetAddonByName("NowLoading", out fade) && LAddon.IsAddonReady(fade) && fade->IsVisible)
-                return true;
-        }
+        if (_gameGui.TryGetAddonByName("NowLoading", out fade) && LAddon.IsAddonReady(fade) && fade->IsVisible)
+            return true;
 
         return false;
     }

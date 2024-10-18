@@ -70,6 +70,54 @@
       "Sequence": 3,
       "Steps": [
         {
+          "DataId": 1041369,
+          "Position": {
+            "X": -639.85657,
+            "Y": 162.30406,
+            "Z": -189.47137
+          },
+          "TerritoryId": 961,
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Elpis - Poieten Oikos",
+          "PickUpQuestId": 4511,
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "QuestsCompleted": [
+                4511
+              ]
+            }
+          }
+        },
+        {
+          "DataId": 1041847,
+          "Position": {
+            "X": -484.2146,
+            "Y": 141.86789,
+            "Z": -97.21527
+          },
+          "TerritoryId": 961,
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 4313,
+          "AetheryteShortcut": "Elpis - Poieten Oikos",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "QuestsCompleted": [
+                4313
+              ]
+            }
+          },
+          "$": "Teleporting at the start of the quest, as navmesh gets stuck on a rock otherwise"
+        },
+        {
+          "Position": {
+            "X": -531.21313,
+            "Y": 159.97144,
+            "Z": -244.95073
+          },
+          "TerritoryId": 961,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 2012151,
           "Position": {
             "X": -481.8647,
@@ -78,7 +126,6 @@
           },
           "TerritoryId": 961,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "Elpis - Poieten Oikos",
           "DialogueChoices": [
             {
               "Type": "YesNo",

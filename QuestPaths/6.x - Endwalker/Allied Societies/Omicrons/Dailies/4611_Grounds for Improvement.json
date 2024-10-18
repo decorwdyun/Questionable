@@ -1,6 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "liza",
+  "Author": "plogon_enjoyer",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -21,9 +21,20 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 2013074,
+          "Position": {
+            "X": 304.3412,
+            "Y": 483.48206,
+            "Z": 143.11438
+          },
           "TerritoryId": 960,
-          "InteractionType": "None",
-          "RequiredGatheredItems": [
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 1073
+        },
+        {
+          "TerritoryId": 1073,
+          "InteractionType": "Gather",
+          "ItemsToGather": [
             {
               "QuestAcceptedAsClass": "Miner",
               "ItemId": 38284,

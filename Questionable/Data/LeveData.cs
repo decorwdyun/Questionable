@@ -13,7 +13,21 @@ internal sealed class LeveData
 {
     private static readonly List<LeveStepData> Leves =
     [
-        new(EAetheryteLocation.Tuliyollal, 1048390, new(15.243713f, -14.000001f, 85.83191f)),
+        new(
+            aetheryteLocation: EAetheryteLocation.Crystarium,
+            aethernetShortcut: new AethernetShortcut{From = EAetheryteLocation.Crystarium, To = EAetheryteLocation.CrystariumCrystallineMean},
+            issuerDataId: 1027847,
+            issuerPosition: new(-73.94349f, 19.999794f, -110.86395f)),
+        new(
+            aetheryteLocation: EAetheryteLocation.OldSharlayan,
+            aethernetShortcut: new AethernetShortcut
+                { From = EAetheryteLocation.OldSharlayan, To = EAetheryteLocation.OldSharlayanScholarsHarbor },
+            issuerDataId: 1037263,
+            issuerPosition: new(45.818386f, -15.646993f, 109.40509f)),
+        new(aetheryteLocation: EAetheryteLocation.Tuliyollal,
+            aethernetShortcut: null,
+            issuerDataId: 1048390,
+            issuerPosition: new(15.243713f, -14.000001f, 85.83191f)),
     ];
 
     private readonly AetheryteData _aetheryteData;
@@ -44,6 +58,7 @@ internal sealed class LeveData
                         TerritoryId = _aetheryteData.TerritoryIds[leveStepData.AetheryteLocation],
                         InteractionType = EInteractionType.AcceptLeve,
                         AetheryteShortcut = leveStepData.AetheryteLocation,
+                        AethernetShortcut = leveStepData.AethernetShortcut,
                         SkipConditions = new()
                         {
                             AetheryteShortcutIf = new()
@@ -71,6 +86,7 @@ internal sealed class LeveData
                         TerritoryId = _aetheryteData.TerritoryIds[leveStepData.AetheryteLocation],
                         InteractionType = EInteractionType.CompleteLeve,
                         AetheryteShortcut = leveStepData.AetheryteLocation,
+                        AethernetShortcut = leveStepData.AethernetShortcut,
                         SkipConditions = new()
                         {
                             AetheryteShortcutIf = new()
@@ -93,10 +109,16 @@ internal sealed class LeveData
         private readonly uint? _crafterTurnInDataId;
         private readonly Vector3? _crafterTurnInPosition;
 
-        public LeveStepData(EAetheryteLocation aetheryteLocation, uint issuerDataId, Vector3 issuerPosition,
-            uint? turnInDataId = null, Vector3? turnInPosition = null,
-            uint? gathererTurnInDataId = null, Vector3? gathererTurnInPosition = null,
-            uint? crafterTurnInDataId = null, Vector3? crafterTurnInPosition = null)
+        public LeveStepData(EAetheryteLocation aetheryteLocation,
+            AethernetShortcut? aethernetShortcut,
+            uint issuerDataId,
+            Vector3 issuerPosition,
+            uint? turnInDataId = null,
+            Vector3? turnInPosition = null,
+            uint? gathererTurnInDataId = null,
+            Vector3? gathererTurnInPosition = null,
+            uint? crafterTurnInDataId = null,
+            Vector3? crafterTurnInPosition = null)
         {
             _turnInDataId = turnInDataId;
             _turnInPosition = turnInPosition;
@@ -105,11 +127,13 @@ internal sealed class LeveData
             _crafterTurnInDataId = crafterTurnInDataId;
             _crafterTurnInPosition = crafterTurnInPosition;
             AetheryteLocation = aetheryteLocation;
+            AethernetShortcut = aethernetShortcut;
             IssuerDataId = issuerDataId;
             IssuerPosition = issuerPosition;
         }
 
         public EAetheryteLocation AetheryteLocation { get; }
+        public AethernetShortcut? AethernetShortcut { get; }
         public uint IssuerDataId { get; }
         public Vector3 IssuerPosition { get; }
 

@@ -1,6 +1,7 @@
 ## Amazing Graze
 
 Sequence 2:
+
 ```
 0 x 0 0 0 0
   1         →         2010896 2010897

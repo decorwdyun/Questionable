@@ -1,6 +1,7 @@
 ## The Aesthetician of Il Mheg
 
 QuestWork:
+
 ```
 0 x 0 0 0 0                                   | QW after first
   1         → 2010860                 2010863 | 1 18 0 0 0 128

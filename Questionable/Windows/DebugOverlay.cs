@@ -25,7 +25,8 @@ internal sealed class DebugOverlay : Window
     private readonly Configuration _configuration;
 
     public DebugOverlay(QuestController questController, QuestRegistry questRegistry, IGameGui gameGui,
-        IClientState clientState, ICondition condition, AetheryteData aetheryteData, IObjectTable objectTable, CombatController combatController, Configuration configuration)
+        IClientState clientState, ICondition condition, AetheryteData aetheryteData, IObjectTable objectTable,
+        CombatController combatController, Configuration configuration)
         : base("Questionable Debug Overlay###QuestionableDebugOverlay",
             ImGuiWindowFlags.NoTitleBar | ImGuiWindowFlags.NoScrollbar | ImGuiWindowFlags.NoBackground |
             ImGuiWindowFlags.NoInputs | ImGuiWindowFlags.NoSavedSettings, true)
@@ -45,6 +46,8 @@ internal sealed class DebugOverlay : Window
         Size = ImGui.GetIO().DisplaySize;
         SizeCondition = ImGuiCond.Always;
         IsOpen = true;
+        ShowCloseButton = false;
+        RespectCloseHotkey = false;
     }
 
     public ElementId? HighlightedQuest { get; set; }
@@ -134,7 +137,9 @@ internal sealed class DebugOverlay : Window
             if (!visible)
                 continue;
 
-            ImGui.GetWindowDrawList() .AddText(screenPos + new Vector2(10, -8), 0xFFFFFFFF, $"{x.Name}/{x.GameObjectId:X}, {_combatController.GetKillPriority(x)}, {Vector3.Distance(x.Position, _clientState.LocalPlayer!.Position):N2}, {x.IsTargetable}");
+            int priority = _combatController.GetKillPriority(x);
+            ImGui.GetWindowDrawList().AddText(screenPos + new Vector2(10, -8), priority > 0 ? 0xFF00FF00 : 0xFFFFFFFF,
+                $"{x.Name}/{x.GameObjectId:X}, {x.DataId}, {priority}, {Vector3.Distance(x.Position, _clientState.LocalPlayer!.Position):N2}, {x.IsTargetable}");
         }
     }
 

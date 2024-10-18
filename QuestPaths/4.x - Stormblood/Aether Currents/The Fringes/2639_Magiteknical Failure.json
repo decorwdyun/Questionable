@@ -49,8 +49,7 @@
           },
           "StopDistance": 0.5,
           "TerritoryId": 612,
-          "InteractionType": "Instruction",
-          "Comment": "Manual combat",
+          "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
             7504
@@ -69,8 +68,7 @@
           },
           "StopDistance": 2,
           "TerritoryId": 612,
-          "InteractionType": "Instruction",
-          "Comment": "Manual combat",
+          "InteractionType": "Combat",
           "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
             7505

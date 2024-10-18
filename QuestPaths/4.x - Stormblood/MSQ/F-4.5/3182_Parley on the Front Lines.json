@@ -102,7 +102,14 @@
               "Answer": "TEXT_STMBDF104_03182_A3_000_001"
             }
           ],
-          "$": "QW: 0 0 0 0 0 0 -> QW: 1 0 0 0 0 64"
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 1026817,
@@ -121,7 +128,14 @@
               "Answer": "TEXT_STMBDF104_03182_A2_000_001"
             }
           ],
-          "$": "QW: 1 0 0 0 0 64 -> QW: 2 0 0 0 0 96"
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 1026818,
@@ -138,6 +152,14 @@
               "Prompt": "TEXT_STMBDF104_03182_Q1_000_000",
               "Answer": "TEXT_STMBDF104_03182_A1_000_001"
             }
+          ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
           ]
         }
       ]
@@ -152,6 +174,7 @@
             "Y": 0.014375329,
             "Z": 3.2807007
           },
+          "StopDistance": 7,
           "TerritoryId": 829,
           "InteractionType": "Interact"
         }
@@ -167,6 +190,7 @@
             "Y": 107.62999,
             "Z": 130.9071
           },
+          "StopDistance": 6,
           "TerritoryId": 829,
           "InteractionType": "CompleteQuest"
         }

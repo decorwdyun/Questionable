@@ -20,6 +20,89 @@
     {
       "Sequence": 1,
       "Steps": [
+
+        {
+          "DataId": 2013960,
+          "Position": {
+            "X": 380.30054,
+            "Y": -16.983276,
+            "Z": -508.17123
+          },
+          "TerritoryId": 1190,
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818452
+        },
+        {
+          "Position": {
+            "X": 616.9261,
+            "Y": -17.458832,
+            "Z": -435.18936
+          },
+          "TerritoryId": 1190,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "DataId": 2013961,
+          "Position": {
+            "X": 645.5939,
+            "Y": -11.7647705,
+            "Z": -417.65472
+          },
+          "TerritoryId": 1190,
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818456
+        },
+        {
+          "Position": {
+            "X": 659.8994,
+            "Y": -16.525915,
+            "Z": -173.6375
+          },
+          "TerritoryId": 1190,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "DataId": 2013963,
+          "Position": {
+            "X": 658.2893,
+            "Y": 21.011597,
+            "Z": 82.993774
+          },
+          "TerritoryId": 1190,
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818458
+        },
+        {
+          "Position": {
+            "X": 198.9425,
+            "Y": 6.210067,
+            "Z": -53.1092
+          },
+          "TerritoryId": 1190,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "DataId": 2013962,
+          "Position": {
+            "X": 183.88635,
+            "Y": 11.917236,
+            "Z": -59.342346
+          },
+          "TerritoryId": 1190,
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818457,
+          "DisableNavmesh": true
+        },
+        {
+          "Position": {
+            "X": 290.40674,
+            "Y": -11.14023,
+            "Z": -126.13759
+          },
+          "TerritoryId": 1190,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true
+        },
         {
           "DataId": 1050656,
           "Position": {

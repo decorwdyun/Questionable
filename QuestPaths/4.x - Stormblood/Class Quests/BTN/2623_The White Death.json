@@ -123,6 +123,16 @@
       "Sequence": 6,
       "Steps": [
         {
+          "TerritoryId": 478,
+          "InteractionType": "Gather",
+          "ItemsToGather": [
+            {
+              "ItemId": 17947,
+              "ItemCount": 20
+            }
+          ]
+        },
+        {
           "DataId": 1017106,
           "Position": {
             "X": 73.99097,
@@ -131,13 +141,7 @@
           },
           "TerritoryId": 478,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "Idyllshire",
-          "RequiredGatheredItems": [
-            {
-              "ItemId": 17947,
-              "ItemCount": 20
-            }
-          ]
+          "AetheryteShortcut": "Idyllshire"
         }
       ]
     },

@@ -12,6 +12,7 @@
             "Y": 12.349811,
             "Z": -283.8026
           },
+          "StopDistance": 7,
           "TerritoryId": 613,
           "InteractionType": "AcceptQuest"
         }
@@ -56,7 +57,14 @@
           },
           "TerritoryId": 614,
           "InteractionType": "Interact",
-          "$": "QW: 0 0 0 0 0 0 -> QW: 1 0 0 0 0 128"
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 1019286,
@@ -66,7 +74,15 @@
             "Z": -425.3758
           },
           "TerritoryId": 614,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         }
       ]
     },
@@ -111,6 +127,7 @@
             "Y": 36.90612,
             "Z": -524.71204
           },
+          "StopDistance": 4,
           "TerritoryId": 614,
           "InteractionType": "Interact"
         }
@@ -120,16 +137,6 @@
       "Sequence": 255,
       "Steps": [
         {
-          "Position": {
-            "X": 228.99776,
-            "Y": 5.218606,
-            "Z": -407.7175
-          },
-          "TerritoryId": 614,
-          "InteractionType": "WalkTo",
-          "Fly": true
-        },
-        {
           "DataId": 1020524,
           "Position": {
             "X": 173.20508,
@@ -137,7 +144,9 @@
             "Z": -433.24945
           },
           "TerritoryId": 614,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Yanxia - House of the Fierce",
+          "Fly": true
         }
       ]
     }

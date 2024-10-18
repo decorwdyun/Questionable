@@ -13,7 +13,14 @@
             "Z": -74.906555
           },
           "TerritoryId": 956,
-          "InteractionType": "AcceptQuest"
+          "InteractionType": "AcceptQuest",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_AKTKZI005_04320_Q1_000_000",
+              "Answer": "TEXT_AKTKZI005_04320_A1_000_003"
+            }
+          ]
         }
       ]
     },
