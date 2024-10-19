@@ -15,19 +15,10 @@
           "TerritoryId": 137,
           "InteractionType": "Interact",
           "AetheryteShortcut": "Eastern La Noscea - Wineport",
-          "Fly": true,
           "SkipConditions": {
             "AetheryteShortcutIf": { "InSameTerritory": true },
             "StepIf": {
-              "NearPosition": {
-                "Position": {
-                  "X": -25.149055,
-                  "Y": -24.773232,
-                  "Z": 258.15594
-                },
-                "TerritoryId": 137,
-                "MaximumDistance": 25
-              }
+              "ExtraCondition": "DockStorehouse"
             }
           },
           "TargetTerritoryId": 137
@@ -114,19 +105,10 @@
           "TerritoryId": 137,
           "InteractionType": "Interact",
           "AetheryteShortcut": "Eastern La Noscea - Wineport",
-          "Fly": true,
           "SkipConditions": {
             "AetheryteShortcutIf": { "InSameTerritory": true },
             "StepIf": {
-              "NearPosition": {
-                "Position": {
-                  "X": -25.149055,
-                  "Y": -24.773232,
-                  "Z": 258.15594
-                },
-                "TerritoryId": 137,
-                "MaximumDistance": 25
-              }
+              "ExtraCondition": "DockStorehouse"
             }
           },
           "TargetTerritoryId": 137
@@ -156,7 +138,14 @@
           "TerritoryId": 135,
           "Fly": true,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "Lower La Noscea - Moraby Drydocks"
+          "AetheryteShortcut": "Lower La Noscea - Moraby Drydocks",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_JOBNIN600_01688_Q1_000_000",
+              "Answer": "TEXT_JOBNIN600_01688_A1_000_010"
+            }
+          ]
         }
       ]
     },
@@ -220,18 +209,9 @@
           "TerritoryId": 137,
           "InteractionType": "Interact",
           "AetheryteShortcut": "Eastern La Noscea - Wineport",
-          "Fly": true,
           "SkipConditions": {
             "StepIf": {
-              "NearPosition": {
-                "Position": {
-                  "X": -25.149055,
-                  "Y": -24.773232,
-                  "Z": 258.15594
-                },
-                "TerritoryId": 137,
-                "MaximumDistance": 25
-              }
+              "ExtraCondition": "DockStorehouse"
             }
           },
           "TargetTerritoryId": 137

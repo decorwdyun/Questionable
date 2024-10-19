@@ -17,7 +17,14 @@
           "AetheryteShortcut": "Yanxia - Namai",
           "SkipConditions": {
             "AetheryteShortcutIf": { "InSameTerritory": true }
-          }
+          },
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_JOBNIN700_02952_Q1_100_004",
+              "Answer": "TEXT_JOBNIN700_02952_A1_100_005"
+            }
+          ]
         }
       ]
     },
@@ -34,7 +41,7 @@
           "TerritoryId": 622,
           "InteractionType": "SinglePlayerDuty",
           "Fly": true,
-          "AetheryteShortcut": "Azim Steppe - Dawn Throne",
+          "AetheryteShortcut": "Azim Steppe - Reunion",
           "SkipConditions": {
             "AetheryteShortcutIf": {
               "NearPosition": {
@@ -64,18 +71,9 @@
           "TerritoryId": 137,
           "InteractionType": "Interact",
           "AetheryteShortcut": "Eastern La Noscea - Wineport",
-          "Fly": true,
           "SkipConditions": {
             "StepIf": {
-              "NearPosition": {
-                "Position": {
-                  "X": -25.149055,
-                  "Y": -24.773232,
-                  "Z": 258.15594
-                },
-                "TerritoryId": 137,
-                "MaximumDistance": 25
-              }
+              "ExtraCondition": "DockStorehouse"
             }
           },
           "TargetTerritoryId": 137

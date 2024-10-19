@@ -15,19 +15,10 @@
           "TerritoryId": 137,
           "InteractionType": "Interact",
           "AetheryteShortcut": "Eastern La Noscea - Wineport",
-          "Fly": true,
           "SkipConditions": {
             "AetheryteShortcutIf": { "InSameTerritory": true },
             "StepIf": {
-              "NearPosition": {
-                "Position": {
-                  "X": -25.149055,
-                  "Y": -24.773232,
-                  "Z": 258.15594
-                },
-                "TerritoryId": 137,
-                "MaximumDistance": 25
-              }
+              "ExtraCondition": "DockStorehouse"
             }
           },
           "TargetTerritoryId": 137
@@ -74,7 +65,8 @@
             "Z": -60.22008
           },
           "TerritoryId": 628,
-          "InteractionType": "WalkTo",
+          "InteractionType": "Action",
+          "Action": "Hide",
           "AethernetShortcut": [
             "[Kugane] Sekiseigumi Barracks",
             "[Kugane] Aetheryte Plaza"
@@ -93,10 +85,19 @@
           }
         },
         {
-          "InteractionType": "WaitForManualProgress",
+          "Position": {
+            "X": -46.572186,
+            "Y": 3.0135043,
+            "Z": -71.70311
+          },
           "TerritoryId": 628,
-          "Comment": "Hide, then approach Loutish Lickspittle",
+          "InteractionType": "WalkTo",
           "CompletionQuestVariablesFlags": [null, null, null, null, null, 128]
+        },
+        {
+          "TerritoryId": 628,
+          "InteractionType": "StatusOff",
+          "Status": "Hidden"
         },
         {
           "Position": {
@@ -105,18 +106,28 @@
             "Z": -106.929726
           },
           "TerritoryId": 628,
-          "InteractionType": "WalkTo"
+          "InteractionType": "Action",
+          "Action": "Hide"
         },
         {
-          "InteractionType": "WaitForManualProgress",
+          "Position": {
+            "X": -82.41595,
+            "Y": -7.300003,
+            "Z": -111.459076
+          },
           "TerritoryId": 628,
-          "Comment": "Hide, then approach the two NPCs downstairs"
+          "InteractionType": "WalkTo"
         }
       ]
     },
     {
       "Sequence": 3,
       "Steps": [
+        {
+          "TerritoryId": 628,
+          "InteractionType": "StatusOff",
+          "Status": "Hidden"
+        },
         {
           "DataId": 1023555,
           "Position": {

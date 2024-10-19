@@ -37,8 +37,6 @@ internal static class DoGather
         ICondition condition,
         ILogger<GatherExecutor> logger) : TaskExecutor<Task>
     {
-        private const uint StatusGatheringRateUp = 218;
-
         private bool _wasGathering;
         private SlotInfo? _slotToGather;
         private Queue<EAction>? _actionQueue;
@@ -155,7 +153,7 @@ internal static class DoGather
             //uint gp = clientState.LocalPlayer!.CurrentGp;
             Queue<EAction> actions = new();
 
-            if (!gameFunctions.HasStatus(StatusGatheringRateUp))
+            if (!gameFunctions.HasStatus(EStatus.GatheringRateUp))
             {
                 // do we have an alternative item? only happens for 'evaluation' leve quests
                 if (Task.Request.AlternativeItemId != 0)

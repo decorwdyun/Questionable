@@ -35,6 +35,7 @@ public sealed class ActionConverter() : EnumConverter<EAction>(Values)
         { EAction.BlueGulal, "Blue Gulal" },
         { EAction.ElectrixFlux, "Electric Flux" },
         { EAction.HopStep, "Hop-step" },
+        { EAction.Hide, "Hide" },
         { EAction.FumaShuriken, "Fuma Shuriken" },
         { EAction.Katon, "Katon" },
         { EAction.Raiton, "Raiton" },

@@ -18,15 +18,7 @@
           "SkipConditions": {
             "AetheryteShortcutIf": { "InSameTerritory": true },
             "StepIf": {
-              "NearPosition": {
-                "Position": {
-                  "X": -25.149055,
-                  "Y": -24.773232,
-                  "Z": 258.15594
-                },
-                "TerritoryId": 137,
-                "MaximumDistance": 25
-              }
+              "ExtraCondition": "DockStorehouse"
             }
           },
           "TargetTerritoryId": 137
@@ -71,9 +63,15 @@
           }
         },
         {
-          "InteractionType": "WaitForManualProgress",
+          "DataId": 2004928,
+          "Position": {
+            "X": -10.605103,
+            "Y": 41.397705,
+            "Z": 267.87207
+          },
           "TerritoryId": 137,
-          "Comment": "Use Ten -> Chi -> Raiton on the dummy"
+          "InteractionType": "Action",
+          "Action": "Raiton"
         }
       ]
     },
@@ -96,9 +94,16 @@
       "Sequence": 3,
       "Steps": [
         {
-          "InteractionType": "WaitForManualProgress",
+          "DataId": 2004929,
+          "Position": {
+            "X": -10.605103,
+            "Y": 41.397705,
+            "Z": 267.87207
+          },
+          "StopDistance": 7,
           "TerritoryId": 137,
-          "Comment": "Use Chi -> Ten -> Katon on the dummy"
+          "InteractionType": "Action",
+          "Action": "Katon"
         }
       ]
     },
@@ -180,15 +185,7 @@
           "SkipConditions": {
             "AetheryteShortcutIf": { "InSameTerritory": true },
             "StepIf": {
-              "NearPosition": {
-                "Position": {
-                  "X": -25.149055,
-                  "Y": -24.773232,
-                  "Z": 258.15594
-                },
-                "TerritoryId": 137,
-                "MaximumDistance": 25
-              }
+              "ExtraCondition": "DockStorehouse"
             }
           },
           "TargetTerritoryId": 137

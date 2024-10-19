@@ -36,6 +36,7 @@ public enum EAction
     BlueGulal = 29384,
     ElectrixFlux = 29718,
     HopStep = 31116,
+    Hide = 2245,
     Ten = 2259,
     Ninjutsu = 2260,
     Chi = 2261,
@@ -43,6 +44,7 @@ public enum EAction
     FumaShuriken = 2265,
     Katon = 2266,
     Raiton = 2267,
+    RabbitMedium = 2272,
 
     CollectMiner = 240,
     ScourMiner = 22182,

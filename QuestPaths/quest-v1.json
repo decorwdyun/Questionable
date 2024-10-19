@@ -118,6 +118,7 @@
             "Say",
             "Emote",
             "Action",
+            "StatusOff",
             "WaitForNpcAtPosition",
             "WaitForManualProgress",
             "Duty",
@@ -945,12 +946,36 @@
                   "Hop-step",
                   "Fuma Shuriken",
                   "Katon",
-                  "Raiton"
+                  "Raiton",
+                  "Hide"
                 ]
               }
             },
             "required": [
               "Action"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "InteractionType": {
+                "const": "StatusOff"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "Status": {
+                "type": "string",
+                "description": "The status to disable",
+                "enum": [
+                  "Hidden"
+                ]
+              }
+            },
+            "required": [
+              "Status"
             ]
           }
         },
