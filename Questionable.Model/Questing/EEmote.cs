@@ -38,4 +38,7 @@ public enum EEmote
     Doze = 13,
     Box = 166,
     SundropDance = 120,
+    Disappointed = 49,
+    ExamineSelf = 44,
+    Joy = 18,
 }
