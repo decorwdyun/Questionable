@@ -286,7 +286,9 @@
                   "type": "string",
                   "enum": [
                     "WakingSandsMainArea",
-                    "RisingStonesSolar"
+                    "RisingStonesSolar",
+                    "RoguesGuild",
+                    "DockStorehouse"
                   ]
                 }
               },
