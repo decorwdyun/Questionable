@@ -174,6 +174,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTaskExecutor<Emote.UseOnObject, Emote.UseOnObjectExecutor>();
         serviceCollection.AddTaskExecutor<Emote.UseOnSelf, Emote.UseOnSelfExecutor>();
         serviceCollection.AddTaskFactoryAndExecutor<Action.UseOnObject, Action.Factory, Action.UseOnObjectExecutor>();
+        serviceCollection.AddTaskExecutor<Action.UseMudraOnObject, Action.UseMudraOnObjectExecutor>();
+        serviceCollection.AddTaskFactoryAndExecutor<StatusOff.Task, StatusOff.Factory, StatusOff.DoStatusOff>();
         serviceCollection.AddTaskFactoryAndExecutor<Interact.Task, Interact.Factory, Interact.DoInteract>();
         serviceCollection.AddTaskFactory<Jump.Factory>();
         serviceCollection.AddTaskExecutor<Jump.SingleJumpTask, Jump.DoSingleJump>();

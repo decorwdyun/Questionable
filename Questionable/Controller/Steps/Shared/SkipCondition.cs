@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Numerics;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
@@ -225,24 +226,14 @@ internal static class SkipCondition
                 }
             }
 
-            if (skipConditions.ExtraCondition == EExtraSkipCondition.WakingSandsMainArea &&
-                clientState.TerritoryType == 212)
+            if (skipConditions.ExtraCondition != null && skipConditions.ExtraCondition != EExtraSkipCondition.None)
             {
-                var position = clientState.LocalPlayer!.Position;
-                if (position.X < 24)
+                var position = clientState.LocalPlayer?.Position;
+                if (position != null &&
+                    clientState.TerritoryType != 0 &&
+                    MatchesExtraCondition(skipConditions.ExtraCondition.Value, position.Value, clientState.TerritoryType))
                 {
-                    logger.LogInformation("Skipping step, as we're not in the Solar");
-                    return true;
-                }
-            }
-
-            if (skipConditions.ExtraCondition == EExtraSkipCondition.RisingStonesSolar &&
-                clientState.TerritoryType == 351)
-            {
-                var position = clientState.LocalPlayer!.Position;
-                if (position.Z <= -28)
-                {
-                    logger.LogInformation("Skipping step, as we're in the Rising Stones Solar");
+                    logger.LogInformation("Skipping step, extra condition {} matches", skipConditions.ExtraCondition);
                     return true;
                 }
             }
@@ -260,6 +251,18 @@ internal static class SkipCondition
             }
 
             return false;
+        }
+
+        private static bool MatchesExtraCondition(EExtraSkipCondition condition, Vector3 position, ushort territoryType)
+        {
+            return condition switch
+            {
+                EExtraSkipCondition.WakingSandsMainArea => territoryType == 212 && position.X < 24,
+                EExtraSkipCondition.RisingStonesSolar => territoryType == 351 && position.Z <= -28,
+                EExtraSkipCondition.RoguesGuild => territoryType == 129 && position.Y <= -115,
+                EExtraSkipCondition.DockStorehouse => territoryType == 137 && position.Y <= -20,
+                _ => throw new ArgumentOutOfRangeException(nameof(condition), condition, null)
+            };
         }
 
         public override ETaskResult Update() => ETaskResult.SkipRemainingTasksForStep;

@@ -298,7 +298,7 @@ internal sealed unsafe class GameFunctions
                statusManager->HasStatus(2730);
     }
 
-    public bool HasStatus(uint statusId)
+    public bool HasStatus(EStatus statusId)
     {
         var localPlayer = _clientState.LocalPlayer;
         if (localPlayer == null)
@@ -306,12 +306,12 @@ internal sealed unsafe class GameFunctions
 
         var battleChara = (BattleChara*)localPlayer.Address;
         StatusManager* statusManager = battleChara->GetStatusManager();
-        return statusManager->HasStatus(statusId);
+        return statusManager->HasStatus((uint)statusId);
     }
     
-    public static bool RemoveStatus(uint statusId)
+    public static bool RemoveStatus(EStatus statusId)
     {
-        return StatusManager.ExecuteStatusOff(statusId);
+        return StatusManager.ExecuteStatusOff((uint)statusId);
     }
 
     public bool Mount()

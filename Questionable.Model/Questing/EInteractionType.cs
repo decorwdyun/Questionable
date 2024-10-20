@@ -20,6 +20,7 @@ public enum EInteractionType
     Say,
     Emote,
     Action,
+    StatusOff,
     WaitForObjectAtPosition,
     WaitForManualProgress,
     Duty,
