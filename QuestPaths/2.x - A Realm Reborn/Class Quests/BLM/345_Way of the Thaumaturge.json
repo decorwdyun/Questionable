@@ -36,7 +36,8 @@
               "Prompt": "TEXT_CLSTHM020_00345_Q1_001_1",
               "Yes": true
             }
-          ]
+          ],
+          "NextQuestId": 351
         }
       ]
     }
