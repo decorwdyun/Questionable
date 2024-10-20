@@ -97,7 +97,7 @@
                     "Fly": true,
                     "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow",
                     "CompletionQuestVariablesFlags": [
-                        17,
+                        null,
                         null,
                         null,
                         null,
@@ -116,12 +116,12 @@
                     "InteractionType": "Interact",
                     "Fly": true,
                     "CompletionQuestVariablesFlags": [
-                        33,
-                        16,
                         null,
                         null,
                         null,
-                        96
+                        null,
+                        null,
+                        32
                     ]
                 },
                 {
