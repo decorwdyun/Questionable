@@ -34,31 +34,16 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 1001712,
+          "DataId": 1004094,
           "Position": {
-            "X": -241.50458,
-            "Y": 19.57727,
-            "Z": 84.64172
-          },
-          "TerritoryId": 130,
-          "InteractionType": "Interact"
-        }
-      ]
-    },
-    {
-      "Sequence": 2,
-      "Steps": [
-        {
-          "DataId": 1002305,
-          "Position": {
-            "X": 14.419739,
-            "Y": 22.157166,
-            "Z": 72.3125
+            "X": -413.47375,
+            "Y": 23.113977,
+            "Z": -383.71863
           },
           "TerritoryId": 140,
-          "Fly": true,
           "InteractionType": "Interact",
           "AetheryteShortcut": "Western Thanalan - Horizon",
+          "Fly": true,
           "SkipConditions": {
             "AetheryteShortcutIf": {
               "InSameTerritory": true,
@@ -67,6 +52,41 @@
               ]
             }
           }
+        },
+        {
+          "DataId": 1004070,
+          "Position": {
+            "X": -455.86328,
+            "Y": 23.11398,
+            "Z": -326.92456
+          },
+          "TerritoryId": 140,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1004096,
+          "Position": {
+            "X": -444.75476,
+            "Y": 25,
+            "Z": -324.26947
+          },
+          "TerritoryId": 140,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1002316,
+          "Position": {
+            "X": -436.72852,
+            "Y": 23.774809,
+            "Z": -350.8202
+          },
+          "TerritoryId": 140,
+          "InteractionType": "Interact"
         }
       ]
     },
@@ -74,35 +94,19 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 1002324,
+          "DataId": 1002315,
           "Position": {
-            "X": 112.80994,
-            "Y": 17.536886,
-            "Z": 31.296265
+            "X": -392.32477,
+            "Y": 23.557693,
+            "Z": -546.9902
           },
           "TerritoryId": 140,
+          "InteractionType": "Combat",
           "Fly": true,
-          "InteractionType": "Interact"
-        },
-        {
-          "DataId": 1002322,
-          "Position": {
-            "X": 116.89929,
-            "Y": 17.536886,
-            "Z": 12.954895
-          },
-          "TerritoryId": 140,
-          "InteractionType": "Interact"
-        },
-        {
-          "DataId": 1002323,
-          "Position": {
-            "X": 132.43298,
-            "Y": 21.104982,
-            "Z": 9.018005
-          },
-          "TerritoryId": 140,
-          "InteractionType": "Interact"
+          "EnemySpawnType": "AfterInteraction",
+          "KillEnemyDataIds": [
+            1239
+          ]
         }
       ]
     },
@@ -110,14 +114,13 @@
       "Sequence": 4,
       "Steps": [
         {
-          "DataId": 1002305,
+          "DataId": 1002315,
           "Position": {
-            "X": 14.419739,
-            "Y": 22.157166,
-            "Z": 72.3125
+            "X": -392.32477,
+            "Y": 23.557693,
+            "Z": -546.9902
           },
           "TerritoryId": 140,
-          "Fly": true,
           "InteractionType": "Interact"
         }
       ]
@@ -126,75 +129,22 @@
       "Sequence": 5,
       "Steps": [
         {
-          "DataId": 2001472,
+          "DataId": 1002317,
           "Position": {
-            "X": 150.71338,
-            "Y": 18.783813,
-            "Z": -5.7526855
+            "X": -269.85577,
+            "Y": 15.346575,
+            "Z": -718.1354
           },
           "TerritoryId": 140,
+          "InteractionType": "SinglePlayerDuty",
           "Fly": true,
-          "InteractionType": "SinglePlayerDuty"
-        }
-      ]
-    },
-    {
-      "Sequence": 6,
-      "Steps": [
-        {
-          "DataId": 1002305,
-          "Position": {
-            "X": 14.419739,
-            "Y": 22.157166,
-            "Z": 72.3125
-          },
-          "TerritoryId": 140,
-          "Fly": true,
-          "InteractionType": "Interact"
-        }
-      ]
-    },
-    {
-      "Sequence": 7,
-      "Steps": [
-        {
-          "DataId": 2001474,
-          "Position": {
-            "X": 96.238525,
-            "Y": 16.952698,
-            "Z": 188.83032
-          },
-          "TerritoryId": 140,
-          "Fly": true,
-          "InteractionType": "Interact"
-        }
-      ]
-    },
-    {
-      "Sequence": 8,
-      "Steps": [
-        {
-          "DataId": 1001712,
-          "Position": {
-            "X": -241.50458,
-            "Y": 19.57727,
-            "Z": 84.64172
-          },
-          "TerritoryId": 130,
-          "InteractionType": "Interact",
-          "AetheryteShortcut": "Ul'dah",
-          "AethernetShortcut": [
-            "[Ul'dah] Aetheryte Plaza",
-            "[Ul'dah] Thaumaturges' Guild"
-          ],
-          "SkipConditions": {
-            "AetheryteShortcutIf": {
-              "InSameTerritory": true,
-              "InTerritory": [
-                130
-              ]
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_CLSTHM300_00353_Q_000_1",
+              "Answer": "TEXT_CLSTHM300_00353_A_000_2"
             }
-          }
+          ]
         }
       ]
     },
@@ -210,7 +160,19 @@
           },
           "TerritoryId": 130,
           "InteractionType": "CompleteQuest",
-          "NextQuestId": 352
+          "AetheryteShortcut": "Ul'dah",
+          "AethernetShortcut": [
+            "[Ul'dah] Aetheryte Plaza",
+            "[Ul'dah] Thaumaturges' Guild"
+          ],
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true,
+              "InTerritory": [
+                130
+              ]
+            }
+          }
         }
       ]
     }
