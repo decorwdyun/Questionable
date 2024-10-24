@@ -29,7 +29,9 @@ namespace Questionable.Windows.QuestComponents;
 
 internal sealed class CreationUtilsComponent
 {
+#if false
     private readonly QuestController _questController;
+#endif
     private readonly MovementController _movementController;
     private readonly GameFunctions _gameFunctions;
     private readonly QuestFunctions _questFunctions;
@@ -44,7 +46,9 @@ internal sealed class CreationUtilsComponent
     private readonly ILogger<CreationUtilsComponent> _logger;
 
     public CreationUtilsComponent(
+#if false
         QuestController questController,
+#endif
         MovementController movementController,
         GameFunctions gameFunctions,
         QuestFunctions questFunctions,
@@ -58,7 +62,9 @@ internal sealed class CreationUtilsComponent
         Configuration configuration,
         ILogger<CreationUtilsComponent> logger)
     {
+#if false
         _questController = questController;
+#endif
         _movementController = movementController;
         _gameFunctions = gameFunctions;
         _questFunctions = questFunctions;
