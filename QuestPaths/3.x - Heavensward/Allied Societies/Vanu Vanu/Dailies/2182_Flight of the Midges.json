@@ -71,7 +71,8 @@
           "TerritoryId": 401,
           "InteractionType": "Action",
           "Action": "Buffet (Sanuwa)",
-          "Fly": true
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [null,null,null,null,null,32]
         },
         {
           "DataId": 1016221,
@@ -83,7 +84,8 @@
           "TerritoryId": 401,
           "InteractionType": "Action",
           "Action": "Buffet (Sanuwa)",
-          "Fly": true
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [null,null,null,null,null,64]
         },
         {
           "DataId": 1016220,
