@@ -110,18 +110,19 @@
           "InteractionType": "Jump",
           "JumpDestination": {
             "Position": {
-              "X": -443.62042,
-              "Y": -160.7644,
-              "Z": -644.7719
-            }
+              "X": -444.56757,
+              "Y": -160.76439,
+              "Z": -644.749
+            },
+            "DelaySeconds": 0.7
           },
           "Comment": "Platform 4"
         },
         {
           "Position": {
-            "X": -443.62042,
-            "Y": -160.7644,
-            "Z": -644.7719
+            "X": -444.56757,
+            "Y": -160.76439,
+            "Z": -644.749
           },
           "TerritoryId": 959,
           "InteractionType": "Jump",
