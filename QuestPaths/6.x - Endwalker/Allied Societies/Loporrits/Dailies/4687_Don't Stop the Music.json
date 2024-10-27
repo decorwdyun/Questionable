@@ -1,6 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "liza",
+  "Author": "pot0to",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -30,28 +30,55 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 1044564,
+          "DataId": 1044571,
           "Position": {
-            "X": 456.13794,
-            "Y": -167.50003,
-            "Z": -759.02954
+            "X": 20.09607,
+            "Y": 64.97662,
+            "Z": 43.411865
           },
           "TerritoryId": 959,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "Mare Lamentorum - Bestways Burrow",
           "Fly": true
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1044571,
+          "Position": {
+            "X": 20.09607,
+            "Y": 64.97662,
+            "Z": 43.411865
+          },
+          "TerritoryId": 959,
+          "InteractionType": "UseItem",
+          "ItemId": 2003449,
+          "GroundTarget": true
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1044571,
+          "Position": {
+            "X": 20.09607,
+            "Y": 64.97662,
+            "Z": 43.411865
+          },
+          "TerritoryId": 959,
+          "InteractionType": "UseItem",
+          "ItemId": 2003449,
+          "GroundTarget": true
         }
       ]
     },
     {
       "Sequence": 255,
       "Steps": [
-        {
-          "TerritoryId": 959,
-          "InteractionType": "Craft",
-          "ItemId": 38853,
-          "ItemCount": 3
-        },
         {
           "Position": {
             "X": -201.42024,
