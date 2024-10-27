@@ -29,7 +29,8 @@
           },
           "TerritoryId": 155,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "Coerthas Central Highlands - Camp Dragonhead"
+          "AetheryteShortcut": "Coerthas Central Highlands - Camp Dragonhead",
+          "Fly": true
         }
       ]
     },

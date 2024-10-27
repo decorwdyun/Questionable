@@ -16,6 +16,7 @@ using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.NavigationOverrides;
+using Questionable.Data;
 using Questionable.External;
 using Questionable.Functions;
 using Questionable.Model;
@@ -36,13 +37,14 @@ internal sealed class MovementController : IDisposable
     private readonly ChatFunctions _chatFunctions;
     private readonly ICondition _condition;
     private readonly MovementOverrideController _movementOverrideController;
+    private readonly AetheryteData _aetheryteData;
     private readonly ILogger<MovementController> _logger;
     private CancellationTokenSource? _cancellationTokenSource;
     private Task<List<Vector3>>? _pathfindTask;
 
     public MovementController(NavmeshIpc navmeshIpc, IClientState clientState, GameFunctions gameFunctions,
         ChatFunctions chatFunctions, ICondition condition, MovementOverrideController movementOverrideController,
-        ILogger<MovementController> logger)
+        AetheryteData aetheryteData, ILogger<MovementController> logger)
     {
         _navmeshIpc = navmeshIpc;
         _clientState = clientState;
@@ -50,6 +52,7 @@ internal sealed class MovementController : IDisposable
         _chatFunctions = chatFunctions;
         _condition = condition;
         _movementOverrideController = movementOverrideController;
+        _aetheryteData = aetheryteData;
         _logger = logger;
     }
 
@@ -305,8 +308,18 @@ internal sealed class MovementController : IDisposable
         Destination.NavmeshCalculations++;
         _cancellationTokenSource = new();
         _cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(30));
+
+        Vector3 startPosition = _clientState.LocalPlayer!.Position;
+        if (fly && _aetheryteData.CalculateDistance(startPosition, _clientState.TerritoryType,
+                EAetheryteLocation.CoerthasCentralHighlandsCampDragonhead) < 11f)
+        {
+            startPosition = startPosition with { Y = startPosition.Y + 1f };
+            _logger.LogInformation("Using modified start position for flying pathfinding: {StartPosition}",
+                startPosition.ToString("G", CultureInfo.InvariantCulture));
+        }
+
         _pathfindTask =
-            _navmeshIpc.Pathfind(_clientState.LocalPlayer!.Position, to, fly, _cancellationTokenSource.Token);
+            _navmeshIpc.Pathfind(startPosition, to, fly, _cancellationTokenSource.Token);
     }
 
     public void NavigateTo(EMovementType type, uint? dataId, List<Vector3> to, bool fly, bool sprint,
