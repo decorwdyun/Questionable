@@ -92,7 +92,8 @@
             "Z": 50.459126
           },
           "TerritoryId": 1186,
-          "InteractionType": "WaitForNpcAtPosition"
+          "InteractionType": "WaitForNpcAtPosition",
+          "StopDistance": 1
         },
         {
           "DataId": 1048078,
@@ -103,7 +104,8 @@
           },
           "TerritoryId": 1186,
           "InteractionType": "WaitForNpcAtPosition",
-          "NpcWaitDistance": 2
+          "NpcWaitDistance": 3,
+          "StopDistance": 5
         },
         {
           "DataId": 1048078,
