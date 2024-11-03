@@ -111,6 +111,7 @@ internal sealed class OneTimeSetupWindow : LWindow, IDisposable
                 {
                     _configuration.MarkPluginSetupComplete();
                     _pluginInterface.SavePluginConfig(_configuration);
+                    IsOpen = false;
                 }
             }
         }
