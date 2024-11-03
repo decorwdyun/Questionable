@@ -174,7 +174,7 @@
       "gatheringpaths": {
         "type": "Project",
         "dependencies": {
-          "Questionable.Model": "[3.10.0, )"
+          "Questionable.Model": "[3.12.0, )"
         }
       },
       "llib": {
@@ -182,6 +182,9 @@
         "dependencies": {
           "DalamudPackager": "[2.1.13, )"
         }
+      },
+      "notificationmasterapi": {
+        "type": "Project"
       },
       "questionable.model": {
         "type": "Project",
@@ -192,7 +195,7 @@
       "questpaths": {
         "type": "Project",
         "dependencies": {
-          "Questionable.Model": "[3.10.0, )"
+          "Questionable.Model": "[3.12.0, )"
         }
       }
     }

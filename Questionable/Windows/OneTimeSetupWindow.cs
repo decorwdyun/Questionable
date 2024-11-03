@@ -44,6 +44,12 @@ internal sealed class OneTimeSetupWindow : LWindow, IDisposable
             during quests, including being interrupted by mobs.
             """,
             new Uri("https://github.com/FFXIV-CombatReborn/RotationSolverReborn")),
+        new("NotificationMaster",
+            """
+            Sends a configurable out-of-game notification if a quest
+            requires manual actions.
+            """,
+            new Uri("https://github.com/NightmareXIV/NotificationMaster")),
     ];
 
     private readonly Configuration _configuration;
@@ -109,6 +115,7 @@ internal sealed class OneTimeSetupWindow : LWindow, IDisposable
             {
                 if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Check, "Finish Setup"))
                 {
+                    _logger.LogInformation("Marking setup as complete");
                     _configuration.MarkPluginSetupComplete();
                     _pluginInterface.SavePluginConfig(_configuration);
                     IsOpen = false;
@@ -128,6 +135,7 @@ internal sealed class OneTimeSetupWindow : LWindow, IDisposable
 
         if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Times, "Close window & don't enable Questionable"))
         {
+            _logger.LogWarning("Closing window without all required plugins installed");
             IsOpen = false;
         }
     }

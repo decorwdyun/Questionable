@@ -4,3 +4,6 @@
 [submodule "vendor/ECommons"]
 	path = vendor/ECommons
 	url = https://github.com/NightmareXIV/ECommons.git
+[submodule "vendor/NotificationMasterAPI"]
+	path = vendor/NotificationMasterAPI
+	url = https://github.com/NightmareXIV/NotificationMasterAPI.git
