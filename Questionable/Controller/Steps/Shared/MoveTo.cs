@@ -325,6 +325,7 @@ internal static class MoveTo
     internal sealed class LandTask : ITask
     {
         public bool ShouldRedoOnInterrupt() => true;
+        public override string ToString() => "Land";
     }
 
     internal sealed class LandExecutor(IClientState clientState, ICondition condition, ILogger<LandExecutor> logger) : TaskExecutor<LandTask>
