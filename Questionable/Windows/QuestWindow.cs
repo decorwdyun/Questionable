@@ -113,6 +113,9 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
 
     public override bool DrawConditions()
     {
+        if (!_configuration.IsPluginSetupComplete())
+            return false;
+
         if (!_clientState.IsLoggedIn || _clientState.LocalPlayer == null || _clientState.IsPvPExcludingDen)
             return false;
 

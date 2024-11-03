@@ -6,11 +6,18 @@ namespace Questionable;
 
 internal sealed class Configuration : IPluginConfiguration
 {
+    public const int PluginSetupVersion = 1;
+
     public int Version { get; set; } = 1;
+    public int PluginSetupCompleteVersion { get; set; }
     public GeneralConfiguration General { get; } = new();
     public AdvancedConfiguration Advanced { get; } = new();
     public WindowConfig DebugWindowConfig { get; } = new();
     public WindowConfig ConfigWindowConfig { get; } = new();
+
+    internal bool IsPluginSetupComplete() => PluginSetupCompleteVersion == PluginSetupVersion;
+
+    internal void MarkPluginSetupComplete() => PluginSetupCompleteVersion = PluginSetupVersion;
 
     internal sealed class GeneralConfiguration
     {

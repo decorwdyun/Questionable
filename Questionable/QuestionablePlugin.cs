@@ -6,6 +6,7 @@ using Dalamud.Game.ClientState.Objects;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
+using LLib;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller;
@@ -110,6 +111,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<GameFunctions>();
         serviceCollection.AddSingleton<ChatFunctions>();
         serviceCollection.AddSingleton<QuestFunctions>();
+        serviceCollection.AddSingleton<DalamudReflector>();
         serviceCollection.AddSingleton<AutoSnipeHandler>();
 
         serviceCollection.AddSingleton<AetherCurrentData>();
@@ -255,6 +257,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<QuestJournalComponent>();
         serviceCollection.AddSingleton<GatheringJournalComponent>();
 
+        serviceCollection.AddSingleton<OneTimeSetupWindow>();
         serviceCollection.AddSingleton<QuestWindow>();
         serviceCollection.AddSingleton<ConfigWindow>();
         serviceCollection.AddSingleton<DebugOverlay>();

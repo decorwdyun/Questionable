@@ -24,12 +24,14 @@ internal sealed class CommandHandler : IDisposable
     private readonly QuestRegistry _questRegistry;
     private readonly ConfigWindow _configWindow;
     private readonly DebugOverlay _debugOverlay;
+    private readonly OneTimeSetupWindow _oneTimeSetupWindow;
     private readonly QuestWindow _questWindow;
     private readonly QuestSelectionWindow _questSelectionWindow;
     private readonly ITargetManager _targetManager;
     private readonly QuestFunctions _questFunctions;
     private readonly GameFunctions _gameFunctions;
     private readonly IDataManager _dataManager;
+    private readonly Configuration _configuration;
 
     public CommandHandler(
         ICommandManager commandManager,
@@ -39,12 +41,14 @@ internal sealed class CommandHandler : IDisposable
         QuestRegistry questRegistry,
         ConfigWindow configWindow,
         DebugOverlay debugOverlay,
+        OneTimeSetupWindow oneTimeSetupWindow,
         QuestWindow questWindow,
         QuestSelectionWindow questSelectionWindow,
         ITargetManager targetManager,
         QuestFunctions questFunctions,
         GameFunctions gameFunctions,
-        IDataManager dataManager)
+        IDataManager dataManager,
+        Configuration configuration)
     {
         _commandManager = commandManager;
         _chatGui = chatGui;
@@ -53,12 +57,14 @@ internal sealed class CommandHandler : IDisposable
         _questRegistry = questRegistry;
         _configWindow = configWindow;
         _debugOverlay = debugOverlay;
+        _oneTimeSetupWindow = oneTimeSetupWindow;
         _questWindow = questWindow;
         _questSelectionWindow = questSelectionWindow;
         _targetManager = targetManager;
         _questFunctions = questFunctions;
         _gameFunctions = gameFunctions;
         _dataManager = dataManager;
+        _configuration = configuration;
 
         _commandManager.AddHandler("/qst", new CommandInfo(ProcessCommand)
         {
@@ -75,6 +81,15 @@ internal sealed class CommandHandler : IDisposable
 
     private void ProcessCommand(string command, string arguments)
     {
+        if (!_configuration.IsPluginSetupComplete())
+        {
+            if (string.IsNullOrEmpty(arguments))
+                _oneTimeSetupWindow.IsOpen = true;
+            else
+                _chatGui.PrintError("Please complete the one-time setup first.", MessageTag, TagColor);
+            return;
+        }
+
         string[] parts = arguments.Split(' ');
         switch (parts[0])
         {
