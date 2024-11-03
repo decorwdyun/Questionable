@@ -34,19 +34,12 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 1004094,
-          "Position": {
-            "X": -413.47375,
-            "Y": 23.113977,
-            "Z": -383.71863
-          },
-          "TerritoryId": 140,
-          "InteractionType": "Interact",
-          "AetheryteShortcut": "Western Thanalan - Horizon",
-          "Fly": true,
+          "TerritoryId": 145,
+          "InteractionType": "UseItem",
+          "ItemId": 30362,
+          "TargetTerritoryId": 140,
           "SkipConditions": {
-            "AetheryteShortcutIf": {
-              "InSameTerritory": true,
+            "StepIf": {
               "InTerritory": [
                 140
               ]
@@ -69,6 +62,16 @@
             "X": -444.75476,
             "Y": 25,
             "Z": -324.26947
+          },
+          "TerritoryId": 140,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1004094,
+          "Position": {
+            "X": -413.47375,
+            "Y": 23.113977,
+            "Z": -383.71863
           },
           "TerritoryId": 140,
           "InteractionType": "Interact"
