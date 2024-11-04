@@ -1,16 +1,16 @@
-{
+﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "Cacahuetes",
+  "Author": "liza",
   "QuestSequence": [
     {
       "Sequence": 0,
       "Steps": [
         {
-          "DataId": 1000895,
+          "DataId": 1000909,
           "Position": {
-            "X": -335.74432,
-            "Y": 12.899764,
-            "Z": 1.3884888
+            "X": -326.37524,
+            "Y": 12.899658,
+            "Z": 9.994568
           },
           "TerritoryId": 129,
           "InteractionType": "AcceptQuest",
@@ -28,6 +28,28 @@
       ]
     },
     {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1005199,
+          "Position": {
+            "X": -348.3177,
+            "Y": -2.3744698,
+            "Z": 11.917236
+          },
+          "TerritoryId": 129,
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_CLSACN149_01103_Q1_000_000",
+              "Answer": "TEXT_CLSACN149_01103_A1_000_000"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "Sequence": 255,
       "Steps": [
         {
@@ -39,14 +61,7 @@
           },
           "TerritoryId": 129,
           "InteractionType": "CompleteQuest",
-          "DialogueChoices": [
-            {
-              "Type": "YesNo",
-              "Prompt": "TEXT_CLSACN011_00452_Q1_000_000",
-              "Yes": true
-            }
-          ],
-          "NextQuestId": 454
+          "NextQuestId": 458
         }
       ]
     }
