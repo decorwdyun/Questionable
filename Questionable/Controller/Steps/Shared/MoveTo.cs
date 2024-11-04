@@ -87,19 +87,23 @@ internal static class MoveTo
         private readonly GameFunctions _gameFunctions;
         private readonly ILogger<MoveExecutor> _logger;
         private readonly IClientState _clientState;
+        private readonly ICondition _condition;
         private readonly Mount.MountExecutor _mountExecutor;
         private readonly Mount.UnmountExecutor _unmountExecutor;
 
         private Action? _startAction;
         private Vector3 _destination;
         private bool _canRestart;
-        private ITaskExecutor? _nestedExecutor;
+
+        private (ITaskExecutor Executor, ITask Task, bool Triggered)? _nestedExecutor =
+            (new NoOpTaskExecutor(), new NoOpTask(), true);
 
         public MoveExecutor(
             MovementController movementController,
             GameFunctions gameFunctions,
             ILogger<MoveExecutor> logger,
             IClientState clientState,
+            ICondition condition,
             IDataManager dataManager,
             Mount.MountExecutor mountExecutor,
             Mount.UnmountExecutor unmountExecutor)
@@ -108,6 +112,7 @@ internal static class MoveTo
             _gameFunctions = gameFunctions;
             _logger = logger;
             _clientState = clientState;
+            _condition = condition;
             _mountExecutor = mountExecutor;
             _unmountExecutor = unmountExecutor;
             _cannotExecuteAtThisTime = dataManager.GetString<LogMessage>(579, x => x.Text)!;
@@ -161,16 +166,18 @@ internal static class MoveTo
                 var mountTask = new Mount.MountTask(Task.TerritoryId, Mount.EMountIf.Always);
                 if (_mountExecutor.Start(mountTask))
                 {
-                    _nestedExecutor = _mountExecutor;
+                    _nestedExecutor = (_mountExecutor, mountTask, true);
                     return true;
                 }
+                else if (_mountExecutor.EvaluateMountState() == Mount.MountResult.WhenOutOfCombat)
+                    _nestedExecutor = (_mountExecutor, mountTask, false);
             }
             else if (Task.Mount == false)
             {
                 var mountTask = new Mount.UnmountTask();
                 if (_unmountExecutor.Start(mountTask))
                 {
-                    _nestedExecutor = _unmountExecutor;
+                    _nestedExecutor = (_unmountExecutor, mountTask, true);
                     return true;
                 }
             }
@@ -187,21 +194,43 @@ internal static class MoveTo
                     var mountTask = new Mount.MountTask(Task.TerritoryId, mountIf, _destination);
                     if (_mountExecutor.Start(mountTask))
                     {
-                        _nestedExecutor = _mountExecutor;
+                        _nestedExecutor = (_mountExecutor, mountTask, true);
                         return true;
                     }
+                    else if (_mountExecutor.EvaluateMountState() == Mount.MountResult.WhenOutOfCombat)
+                        _nestedExecutor = (_mountExecutor, mountTask, false);
                 }
             }
 
-            _nestedExecutor = new NoOpTaskExecutor();
+            if (_startAction != null && (_nestedExecutor == null || _nestedExecutor.Value.Triggered == false))
+                _startAction();
             return true;
         }
 
         public override ETaskResult Update()
         {
-            if (_nestedExecutor != null)
+            if (_nestedExecutor is { } nestedExecutor)
             {
-                if (_nestedExecutor.Update() == ETaskResult.TaskComplete)
+                if (nestedExecutor is { Triggered: false, Executor: Mount.MountExecutor mountExecutor })
+                {
+                    if (!_condition[ConditionFlag.InCombat])
+                    {
+                        if (mountExecutor.EvaluateMountState() == Mount.MountResult.DontMount)
+                            _nestedExecutor = (new NoOpTaskExecutor(), new NoOpTask(), true);
+                        else
+                        {
+                            if (_movementController.IsPathfinding || _movementController.IsPathRunning)
+                                _movementController.Stop();
+
+                            if (nestedExecutor.Executor.Start(nestedExecutor.Task))
+                            {
+                                _nestedExecutor = nestedExecutor with { Triggered = true };
+                                return ETaskResult.StillRunning;
+                            }
+                        }
+                    }
+                }
+                else if (nestedExecutor.Executor.Update() == ETaskResult.TaskComplete)
                 {
                     _nestedExecutor = null;
                     if (_startAction != null)
@@ -213,6 +242,7 @@ internal static class MoveTo
                     else
                         return ETaskResult.TaskComplete;
                 }
+
                 return ETaskResult.StillRunning;
             }
 
@@ -245,6 +275,17 @@ internal static class MoveTo
             return ETaskResult.TaskComplete;
         }
 
+        public override bool WasInterrupted()
+        {
+            if (Task.Fly && _condition[ConditionFlag.InCombat] && !_condition[ConditionFlag.Mounted] &&
+                _nestedExecutor is { Triggered: false, Executor: Mount.MountExecutor mountExecutor } &&
+                mountExecutor.EvaluateMountState() == Mount.MountResult.WhenOutOfCombat)
+            {
+                return true;
+            }
+
+            return base.WasInterrupted();
+        }
 
         public bool OnErrorToast(SeString message)
         {
@@ -255,7 +296,9 @@ internal static class MoveTo
         }
     }
 
-    private sealed class NoOpTaskExecutor : TaskExecutor<ITask>
+    private sealed record NoOpTask : ITask;
+
+    private sealed class NoOpTaskExecutor : TaskExecutor<NoOpTask>
     {
         protected override bool Start() => true;
 
@@ -306,7 +349,6 @@ internal static class MoveTo
         GameFunctions gameFunctions,
         IClientState clientState) : TaskExecutor<WaitForNearDataId>
     {
-
         protected override bool Start() => true;
 
         public override ETaskResult Update()
@@ -328,7 +370,8 @@ internal static class MoveTo
         public override string ToString() => "Land";
     }
 
-    internal sealed class LandExecutor(IClientState clientState, ICondition condition, ILogger<LandExecutor> logger) : TaskExecutor<LandTask>
+    internal sealed class LandExecutor(IClientState clientState, ICondition condition, ILogger<LandExecutor> logger)
+        : TaskExecutor<LandTask>
     {
         private bool _landing;
         private DateTime _continueAt;

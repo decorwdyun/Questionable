@@ -23,7 +23,7 @@ internal abstract class TaskExecutor<T> : ITaskExecutor
     public InteractionProgressContext? ProgressContext { get; set; }
     ITask ITaskExecutor.CurrentTask => Task;
 
-    public bool WasInterrupted()
+    public virtual bool WasInterrupted()
     {
         if (ProgressContext is {} progressContext)
         {
