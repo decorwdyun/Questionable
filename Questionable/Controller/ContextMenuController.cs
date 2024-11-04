@@ -123,12 +123,12 @@ internal sealed class ContextMenuController : IDisposable
             Prefix = SeIconChar.Hyadelyn,
             PrefixColor = 52,
             Name = name,
-            OnClicked = _ => StartGathering(npcId, itemId, quantityToGather, collectability, classJob),
+            OnClicked = _ => StartGathering(npcId, itemId, quantityToGather, collectability),
             IsEnabled = string.IsNullOrEmpty(lockedReasonn),
         });
     }
 
-    private void StartGathering(uint npcId, uint itemId, int quantity, ushort collectability, EClassJob classJob)
+    private void StartGathering(uint npcId, uint itemId, int quantity, ushort collectability)
     {
         var info = (SatisfactionSupplyInfo)_questData.GetAllByIssuerDataId(npcId)
             .Single(x => x is SatisfactionSupplyInfo);
@@ -142,7 +142,6 @@ internal sealed class ContextMenuController : IDisposable
                     ItemId = itemId,
                     ItemCount = quantity,
                     Collectability = collectability,
-                    QuestAcceptedAsClass = (uint)classJob,
                 }
             ];
             _questController.SetGatheringQuest(quest);

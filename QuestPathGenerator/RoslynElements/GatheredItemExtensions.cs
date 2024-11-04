@@ -29,10 +29,6 @@ internal static class GatheredItemExtensions
                                 .AsSyntaxNodeOrToken(),
                             Assignment(nameof(GatheredItem.Collectability), gatheredItem.Collectability,
                                     emptyItem.Collectability)
-                                .AsSyntaxNodeOrToken(),
-                            Assignment(nameof(GatheredItem.QuestAcceptedAsClass),
-                                    gatheredItem.QuestAcceptedAsClass,
-                                    emptyItem.QuestAcceptedAsClass)
                                 .AsSyntaxNodeOrToken()))));
     }
 }

@@ -36,25 +36,12 @@ internal static class Gather
             foreach (var itemToGather in step.ItemsToGather)
             {
                 EClassJob currentClassJob = (EClassJob)clientState.LocalPlayer!.ClassJob.Id;
-                EClassJob classJob = currentClassJob;
-                if (itemToGather.QuestAcceptedAsClass != null)
-                {
-                    classJob = (EClassJob)itemToGather.QuestAcceptedAsClass.Value;
-                    if (!IsClassJobQuestWasAcceptedWith(quest.Id, classJob))
-                        continue;
-                }
-
-                if (!gatheringData.TryGetGatheringPointId(itemToGather.ItemId, classJob,
+                if (!gatheringData.TryGetGatheringPointId(itemToGather.ItemId, currentClassJob,
                         out GatheringPointId? gatheringPointId))
                     throw new TaskException($"No gathering point found for item {itemToGather.ItemId}");
 
                 if (!gatheringPointRegistry.TryGetGatheringPoint(gatheringPointId, out GatheringRoot? gatheringRoot))
                     throw new TaskException($"No path found for gathering point {gatheringPointId}");
-
-                if (classJob != currentClassJob)
-                {
-                    yield return new SwitchClassJob.Task(classJob);
-                }
 
                 if (HasRequiredItems(itemToGather))
                     continue;
@@ -87,18 +74,6 @@ internal static class Gather
                 yield return new GatheringTask(gatheringPointId, itemToGather);
                 yield return new WaitAtEnd.WaitDelay();
             }
-        }
-
-        private unsafe bool IsClassJobQuestWasAcceptedWith(ElementId questId, EClassJob expectedClassJob)
-        {
-            if (questId is not QuestId)
-                return true;
-
-            QuestWork* questWork = QuestManager.Instance()->GetQuestById(questId.Value);
-            if (questWork->AcceptClassJob != 0)
-                return (EClassJob)questWork->AcceptClassJob == expectedClassJob;
-
-            return true;
         }
 
         private unsafe bool HasRequiredItems(GatheredItem itemToGather)

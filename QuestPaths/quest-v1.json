@@ -422,6 +422,20 @@
             }
           }
         },
+        "RequiredCurrentJob": {
+          "description": "Which class or job you are using whenever this step gets executed",
+          "type": "array",
+          "items": {
+            "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/ClassJob"
+          }
+        },
+        "RequiredQuestAcceptedJob": {
+          "description": "Which class or job you were using when accepting this quest (e.g. for beast tribes)",
+          "type": "array",
+          "items": {
+            "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/ClassJob"
+          }
+        },
         "DelaySecondsAtStart": {
           "description": "Time to wait before starting",
           "type": [
@@ -1313,13 +1327,6 @@
                       "type": "number",
                       "minimum": 0,
                       "maximum": 1000
-                    },
-                    "QuestAcceptedAsClass": {
-                      "type": "string",
-                      "enum": [
-                        "Miner",
-                        "Botanist"
-                      ]
                     }
                   },
                   "required": [

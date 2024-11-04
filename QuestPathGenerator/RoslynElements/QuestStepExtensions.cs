@@ -120,6 +120,12 @@ internal static class QuestStepExtensions
                             AssignmentList(nameof(QuestStep.RequiredQuestVariables),
                                     step.RequiredQuestVariables)
                                 .AsSyntaxNodeOrToken(),
+                            AssignmentList(nameof(QuestStep.RequiredCurrentJob),
+                                    step.RequiredCurrentJob)
+                                .AsSyntaxNodeOrToken(),
+                            AssignmentList(nameof(QuestStep.RequiredQuestAcceptedJob),
+                                    step.RequiredQuestAcceptedJob)
+                                .AsSyntaxNodeOrToken(),
                             AssignmentList(nameof(QuestStep.ItemsToGather),
                                 step.ItemsToGather),
                             AssignmentList(nameof(QuestStep.CompletionQuestVariablesFlags),

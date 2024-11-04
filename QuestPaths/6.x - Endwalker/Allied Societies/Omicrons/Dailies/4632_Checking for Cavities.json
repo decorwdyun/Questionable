@@ -24,14 +24,25 @@
           "TerritoryId": 960,
           "InteractionType": "Gather",
           "AetheryteShortcut": "Ultima Thule - Reah Tahra",
+          "RequiredQuestAcceptedJob": [
+            "Miner"
+          ],
           "ItemsToGather": [
             {
-              "QuestAcceptedAsClass": "Miner",
               "ItemId": 38299,
               "ItemCount": 3
-            },
+            }
+          ]
+        },
+        {
+          "TerritoryId": 960,
+          "InteractionType": "Gather",
+          "AetheryteShortcut": "Ultima Thule - Reah Tahra",
+          "RequiredQuestAcceptedJob": [
+            "Botanist"
+          ],
+          "ItemsToGather": [
             {
-              "QuestAcceptedAsClass": "Botanist",
               "ItemId": 38323,
               "ItemCount": 3
             }
