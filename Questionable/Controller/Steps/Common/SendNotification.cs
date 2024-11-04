@@ -1,13 +1,36 @@
-﻿using Dalamud.Game.Text;
+﻿using System.Collections.Generic;
+using Dalamud.Game.Text;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
+using Questionable.Data;
 using Questionable.External;
+using Questionable.Model;
 using Questionable.Model.Questing;
 
 namespace Questionable.Controller.Steps.Common;
 
 internal static class SendNotification
 {
+    internal sealed class Factory(
+        Configuration configuration,
+        TerritoryData territoryData) : SimpleTaskFactory
+    {
+        public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
+        {
+            return step.InteractionType switch
+            {
+                EInteractionType.Snipe when !configuration.General.AutomaticallyCompleteSnipeTasks =>
+                    new Task(step.InteractionType, step.Comment),
+                EInteractionType.Duty =>
+                    new Task(step.InteractionType, step.ContentFinderConditionId.HasValue
+                        ? territoryData.GetContentFinderConditionName(step.ContentFinderConditionId.Value)
+                        : step.Comment),
+                EInteractionType.SinglePlayerDuty => new Task(step.InteractionType, quest.Info.Name),
+                _ => null,
+            };
+        }
+    }
+
     internal sealed record Task(EInteractionType InteractionType, string? Comment) : ITask
     {
         public override string ToString() => "SendNotification";

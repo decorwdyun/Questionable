@@ -163,6 +163,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTaskFactoryAndExecutor<MoveTo.MoveTask, MoveTo.Factory, MoveTo.MoveExecutor>();
         serviceCollection.AddTaskExecutor<MoveTo.WaitForNearDataId, MoveTo.WaitForNearDataIdExecutor>();
         serviceCollection.AddTaskExecutor<MoveTo.LandTask, MoveTo.LandExecutor>();
+        serviceCollection
+            .AddTaskFactoryAndExecutor<SendNotification.Task, SendNotification.Factory, SendNotification.Executor>();
 
         serviceCollection
             .AddTaskFactoryAndExecutor<NextQuest.SetQuestTask, NextQuest.Factory, NextQuest.NextQuestExecutor>();
@@ -206,7 +208,6 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTaskExecutor<InitiateLeve.Initiate, InitiateLeve.InitiateExecutor>();
         serviceCollection.AddTaskExecutor<InitiateLeve.SelectDifficulty, InitiateLeve.SelectDifficultyExecutor>();
 
-        serviceCollection.AddTaskExecutor<SendNotification.Task, SendNotification.Executor>();
         serviceCollection.AddTaskExecutor<WaitCondition.Task, WaitCondition.WaitConditionExecutor>();
         serviceCollection.AddTaskFactory<WaitAtEnd.Factory>();
         serviceCollection.AddTaskExecutor<WaitAtEnd.WaitDelay, WaitAtEnd.WaitDelayExecutor>();

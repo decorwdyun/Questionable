@@ -6,7 +6,6 @@ using System.Numerics;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Plugin.Services;
 using Questionable.Controller.Steps.Common;
-using Questionable.Controller.Steps.Interactions;
 using Questionable.Controller.Utils;
 using Questionable.Data;
 using Questionable.Functions;
@@ -20,8 +19,7 @@ internal static class WaitAtEnd
     internal sealed class Factory(
         IClientState clientState,
         ICondition condition,
-        TerritoryData territoryData,
-        Configuration configuration)
+        TerritoryData territoryData)
         : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
@@ -49,28 +47,12 @@ internal static class WaitAtEnd
 
                 case EInteractionType.WaitForManualProgress:
                 case EInteractionType.Instruction:
+                case EInteractionType.Snipe:
                     return [new WaitNextStepOrSequence()];
 
-                case EInteractionType.Snipe:
-                    if (configuration.General.AutomaticallyCompleteSnipeTasks)
-                        return [new WaitNextStepOrSequence()];
-                    else
-                        return [
-                            new SendNotification.Task(step.InteractionType, step.Comment),
-                            new WaitNextStepOrSequence()
-                        ];
-
                 case EInteractionType.Duty:
-                    return [
-                        new SendNotification.Task(step.InteractionType, step.ContentFinderConditionId.HasValue ? territoryData.GetContentFinderConditionName(step.ContentFinderConditionId.Value) : step.Comment),
-                        new EndAutomation(),
-                    ];
-
                 case EInteractionType.SinglePlayerDuty:
-                    return [
-                        new SendNotification.Task(step.InteractionType, quest.Info.Name),
-                        new EndAutomation()
-                    ];
+                    return [new EndAutomation()];
 
                 case EInteractionType.WalkTo:
                 case EInteractionType.Jump:
