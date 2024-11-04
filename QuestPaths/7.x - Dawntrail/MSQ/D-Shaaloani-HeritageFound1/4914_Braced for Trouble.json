@@ -105,16 +105,6 @@
           "AetherCurrentId": 2818450
         },
         {
-          "Position": {
-            "X": -725.3725,
-            "Y": 28.795446,
-            "Z": -39.464005
-          },
-          "TerritoryId": 1190,
-          "InteractionType": "WalkTo",
-          "Mount": true
-        },
-        {
           "DataId": 2013799,
           "Position": {
             "X": -687.89197,
@@ -132,6 +122,16 @@
             null,
             64
           ]
+        },
+        {
+          "Position": {
+            "X": -725.3725,
+            "Y": 28.795446,
+            "Z": -39.464005
+          },
+          "TerritoryId": 1190,
+          "InteractionType": "WalkTo",
+          "Mount": true
         },
         {
           "DataId": 2013800,
