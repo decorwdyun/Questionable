@@ -45,6 +45,7 @@ public enum EAction
     Katon = 2266,
     Raiton = 2267,
     RabbitMedium = 2272,
+    SlugShot = 7412,
 
     CollectMiner = 240,
     ScourMiner = 22182,

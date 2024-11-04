@@ -39,5 +39,6 @@ public sealed class ActionConverter() : EnumConverter<EAction>(Values)
         { EAction.FumaShuriken, "Fuma Shuriken" },
         { EAction.Katon, "Katon" },
         { EAction.Raiton, "Raiton" },
+        { EAction.SlugShot, "Slug Shot" },
     };
 }
