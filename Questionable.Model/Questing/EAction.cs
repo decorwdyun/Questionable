@@ -21,6 +21,7 @@ public enum EAction
     Physick = 190,
     AspectedBenefic = 3595,
     FormShift = 4262,
+    FieryBreath = 1764,
     BuffetSanuwa = 4931,
     BuffetGriffin = 4583,
     Trample = 4585,
@@ -70,7 +71,8 @@ public static class EActionExtensions
     public static bool RequiresMount(this EAction action)
     {
         return action
-            is EAction.BuffetSanuwa
+            is EAction.FieryBreath
+            or EAction.BuffetSanuwa
             or EAction.BuffetGriffin
             or EAction.Trample
             or EAction.Fumigate
