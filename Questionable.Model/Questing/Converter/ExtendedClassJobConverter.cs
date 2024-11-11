@@ -7,6 +7,7 @@ internal sealed class ExtendedClassJobConverter() : EnumConverter<EExtendedClass
 {
     private static readonly Dictionary<EExtendedClassJob, string> Values = new()
     {
+        { EExtendedClassJob.None, "None" },
         { EExtendedClassJob.Gladiator, "Gladiator" },
         { EExtendedClassJob.Pugilist, "Pugilist" },
         { EExtendedClassJob.Marauder, "Marauder" },

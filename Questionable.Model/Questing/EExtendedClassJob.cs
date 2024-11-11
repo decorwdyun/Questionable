@@ -6,6 +6,7 @@ namespace Questionable.Model.Questing;
 [JsonConverter(typeof(ExtendedClassJobConverter))]
 public enum EExtendedClassJob
 {
+    None,
     Gladiator,
     Pugilist,
     Marauder,
@@ -53,3 +54,4 @@ public enum EExtendedClassJob
     DoH,
     DoL,
 }
+

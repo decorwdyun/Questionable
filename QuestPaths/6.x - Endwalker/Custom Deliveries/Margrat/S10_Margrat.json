@@ -7,6 +7,11 @@
       "Steps": [
         {
           "TerritoryId": 956,
+          "InteractionType": "SwitchClass",
+          "TargetClass": "Blue Mage"
+        },
+        {
+          "TerritoryId": 956,
           "InteractionType": "Gather",
           "ItemsToGather": []
         },

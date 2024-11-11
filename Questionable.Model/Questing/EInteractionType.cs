@@ -30,6 +30,7 @@ public enum EInteractionType
     Craft,
     Gather,
     Snipe,
+    SwitchClass,
 
     /// <summary>
     /// Needs to be manually continued.

@@ -128,6 +128,7 @@
             "Craft",
             "Gather",
             "Snipe",
+            "SwitchClass",
             "Instruction",
             "AcceptQuest",
             "CompleteQuest",
@@ -1363,6 +1364,25 @@
           "then": {
             "required": [
               "Comment"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "InteractionType": {
+                "const": "SwitchClass"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "TargetClass": {
+                "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/ClassJob"
+              }
+            },
+            "required": [
+              "TargetClass"
             ]
           }
         }

@@ -64,6 +64,7 @@ public sealed class QuestStep
     public ChatMessage? ChatMessage { get; set; }
     public EAction? Action { get; set; }
     public EStatus? Status { get; set; }
+    public EExtendedClassJob TargetClass { get; set; } = EExtendedClassJob.None;
 
     public EEnemySpawnType? EnemySpawnType { get; set; }
     public List<uint> KillEnemyDataIds { get; set; } = [];
