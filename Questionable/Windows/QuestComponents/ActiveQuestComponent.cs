@@ -400,7 +400,7 @@ internal sealed partial class ActiveQuestComponent
             ImGui.SameLine();
             if (ImGui.Button("Clear sim"))
             {
-                _questController.SimulateQuest(null);
+                _questController.SimulateQuest(null, 0, 0);
 
                 _movementController.Stop();
                 _questController.Stop("ClearSim");

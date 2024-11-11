@@ -205,7 +205,24 @@ internal sealed class CommandHandler : IDisposable
         {
             if (_questRegistry.TryGetQuest(questId, out Quest? quest))
             {
-                _questController.SimulateQuest(quest);
+                byte sequenceId = 0;
+                int stepId = 0;
+                if (arguments.Length >= 2 && byte.TryParse(arguments[1], out byte parsedSequence))
+                {
+                    QuestSequence? sequence = quest.FindSequence(parsedSequence);
+                    if (sequence != null)
+                    {
+                        sequenceId = (byte)sequence.Sequence;
+                        if (arguments.Length >= 3 && int.TryParse(arguments[2], out int parsedStep))
+                        {
+                            QuestStep? step = sequence.FindStep(parsedStep);
+                            if (step != null)
+                                stepId = parsedStep;
+                        }
+                    }
+                }
+
+                _questController.SimulateQuest(quest, sequenceId, stepId);
                 _chatGui.Print($"Simulating quest {questId} ({quest.Info.Name}).", MessageTag, TagColor);
             }
             else
@@ -213,7 +230,7 @@ internal sealed class CommandHandler : IDisposable
         }
         else
         {
-            _questController.SimulateQuest(null);
+            _questController.SimulateQuest(null, 0, 0);
             _chatGui.Print("Cleared simulated quest.", MessageTag, TagColor);
         }
     }
