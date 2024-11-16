@@ -3,11 +3,10 @@ using System.Linq;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.Command;
 using Dalamud.Plugin.Services;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 using Questionable.Functions;
 using Questionable.Model.Questing;
 using Questionable.Windows;
-using Questionable.Windows.QuestComponents;
 using Quest = Questionable.Model.Quest;
 
 namespace Questionable.Controller;
@@ -240,7 +239,7 @@ internal sealed class CommandHandler : IDisposable
         ushort? mountId = _gameFunctions.GetMountId();
         if (mountId != null)
         {
-            var row = _dataManager.GetExcelSheet<Mount>()!.GetRow(mountId.Value);
+            var row = _dataManager.GetExcelSheet<Mount>().GetRowOrDefault(mountId.Value);
             _chatGui.Print(
                 $"Mount ID: {mountId}, Name: {row?.Singular}, Obtainable: {(row?.Order == -1 ? "No" : "Yes")}",
                 MessageTag, TagColor);

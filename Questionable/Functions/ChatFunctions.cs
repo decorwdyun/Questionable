@@ -12,7 +12,7 @@ using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.System.Framework;
 using FFXIVClientStructs.FFXIV.Client.System.Memory;
 using FFXIVClientStructs.FFXIV.Client.System.String;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 using Microsoft.Extensions.Logging;
 using Questionable.Model.Questing;
 
@@ -41,11 +41,11 @@ internal sealed unsafe class ChatFunctions
         _sanitiseString =
             (delegate* unmanaged<Utf8String*, int, IntPtr, void>)sigScanner.ScanText(Signatures.SanitiseString);
 
-        _emoteCommands = dataManager.GetExcelSheet<Emote>()!
+        _emoteCommands = dataManager.GetExcelSheet<Emote>()
             .Where(x => x.RowId > 0)
-            .Where(x => x.TextCommand != null && x.TextCommand.Value != null)
-            .Select(x => (x.RowId, Command: x.TextCommand.Value!.Command?.ToString()))
-            .Where(x => x.Command != null && x.Command.StartsWith('/'))
+            .Where(x => x.TextCommand.IsValid)
+            .Select(x => (x.RowId, Command: x.TextCommand.Value.Command.ToString()))
+            .Where(x => !string.IsNullOrEmpty(x.Command) && x.Command.StartsWith('/'))
             .ToDictionary(x => (EEmote)x.RowId, x => x.Command!)
             .AsReadOnly();
     }
@@ -156,8 +156,8 @@ internal sealed unsafe class ChatFunctions
 
     private static class Signatures
     {
-        internal const string SendChat = "48 89 5C 24 ?? 57 48 83 EC 20 48 8B FA 48 8B D9 45 84 C9";
-        internal const string SanitiseString = "E8 ?? ?? ?? ?? 48 8D 4C 24 ?? 0F B6 F0 E8 ?? ?? ?? ?? 48 8D 4D C0";
+        internal const string SendChat = "48 89 5C 24 ?? 48 89 74 24 ?? 57 48 83 EC 20 48 8B F2 48 8B F9 45 84 C9";
+        internal const string SanitiseString = "E8 ?? ?? ?? ?? EB 0A 48 8D 4C 24 ?? E8 ?? ?? ?? ?? 48 8D AE";
     }
 
     [StructLayout(LayoutKind.Explicit)]

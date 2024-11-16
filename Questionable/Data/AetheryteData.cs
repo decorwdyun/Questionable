@@ -4,7 +4,7 @@ using System.Linq;
 using System.Numerics;
 using Dalamud.Plugin.Services;
 using Dalamud.Utility;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 using Questionable.Model.Common;
 
 namespace Questionable.Data;
@@ -29,19 +29,19 @@ internal sealed class AetheryteData
         void ConfigureAetheryteWithPlaceName(EAetheryteLocation aetheryteLocation, uint placeNameId, ushort territoryId)
         {
             ConfigureAetheryte(aetheryteLocation,
-                dataManager.GetExcelSheet<PlaceName>()!.GetRow(placeNameId)!.Name.ToDalamudString().TextValue,
+                dataManager.GetExcelSheet<PlaceName>().GetRow(placeNameId).Name.ToDalamudString().TextValue,
                 territoryId,
                 (ushort)((int)aetheryteLocation / 100));
         }
 
-        foreach (var aetheryte in dataManager.GetExcelSheet<Aetheryte>()!.Where(x => x.RowId > 0))
+        foreach (var aetheryte in dataManager.GetExcelSheet<Aetheryte>().Where(x => x.RowId > 0))
         {
-            string? aethernetName = aetheryte.AethernetName?.Value?.Name.ToString();
+            string? aethernetName = aetheryte.AethernetName.ValueNullable?.Name.ToString();
             if (!string.IsNullOrEmpty(aethernetName))
                 aethernetNames[(EAetheryteLocation)aetheryte.RowId] = aethernetName;
 
-            if (aetheryte.Territory != null && aetheryte.Territory.Row > 0)
-                territoryIds[(EAetheryteLocation)aetheryte.RowId] = (ushort)aetheryte.Territory.Row;
+            if (aetheryte.Territory.RowId > 0)
+                territoryIds[(EAetheryteLocation)aetheryte.RowId] = (ushort)aetheryte.Territory.RowId;
 
             if (aetheryte.AethernetGroup > 0)
                 aethernetGroups[(EAetheryteLocation)aetheryte.RowId] = aetheryte.AethernetGroup;
@@ -62,8 +62,8 @@ internal sealed class AetheryteData
         TerritoryIds = territoryIds.AsReadOnly();
         AethernetGroups = aethernetGroups.AsReadOnly();
 
-        TownTerritoryIds = dataManager.GetExcelSheet<TerritoryType>()!
-            .Where(x => x.RowId > 0 && !string.IsNullOrEmpty(x.Name) && x.TerritoryIntendedUse == 0)
+        TownTerritoryIds = dataManager.GetExcelSheet<TerritoryType>()
+            .Where(x => x.RowId > 0 && !string.IsNullOrEmpty(x.Name.ToString()) && x.TerritoryIntendedUse.RowId == 0)
             .Select(x => (ushort)x.RowId)
             .ToList();
     }

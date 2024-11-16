@@ -31,7 +31,7 @@ internal static class SwitchClassJob
     {
         protected override unsafe bool StartInternal()
         {
-            if (clientState.LocalPlayer!.ClassJob.Id == (uint)Task.ClassJob)
+            if (clientState.LocalPlayer!.ClassJob.RowId == (uint)Task.ClassJob)
                 return false;
 
             var gearsetModule = RaptureGearsetModule.Instance();

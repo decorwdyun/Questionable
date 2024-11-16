@@ -14,23 +14,22 @@ using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using LLib.GameUI;
+using Lumina.Excel.Sheets;
 using Microsoft.Extensions.Logging;
 using Questionable.Model;
-using Questionable.Model.Common;
 using Questionable.Model.Questing;
-using Action = Lumina.Excel.GeneratedSheets2.Action;
+using Action = Lumina.Excel.Sheets.Action;
 using BattleChara = FFXIVClientStructs.FFXIV.Client.Game.Character.BattleChara;
-using ContentFinderCondition = Lumina.Excel.GeneratedSheets.ContentFinderCondition;
+using ContentFinderCondition = Lumina.Excel.Sheets.ContentFinderCondition;
 using ObjectKind = Dalamud.Game.ClientState.Objects.Enums.ObjectKind;
 using Quest = Questionable.Model.Quest;
-using TerritoryType = Lumina.Excel.GeneratedSheets.TerritoryType;
 
 namespace Questionable.Functions;
 
 internal sealed unsafe class GameFunctions
 {
     private readonly ReadOnlyDictionary<ushort, byte> _territoryToAetherCurrentCompFlgSet;
-    private readonly ReadOnlyDictionary<uint, ushort> _contentFinderConditionToContentId;
+    private readonly ReadOnlyDictionary<uint, uint> _contentFinderConditionToContentId;
 
     private readonly QuestFunctions _questFunctions;
     private readonly IDataManager _dataManager;
@@ -63,14 +62,15 @@ internal sealed unsafe class GameFunctions
         _configuration = configuration;
         _logger = logger;
 
-        _territoryToAetherCurrentCompFlgSet = dataManager.GetExcelSheet<TerritoryType>()!
+        _territoryToAetherCurrentCompFlgSet = dataManager.GetExcelSheet<TerritoryType>()
             .Where(x => x.RowId > 0)
-            .Where(x => x.Unknown32 > 0)
-            .ToDictionary(x => (ushort)x.RowId, x => x.Unknown32)
+            .Where(x => x.Unknown3 > 0)
+            .ToDictionary(x => (ushort)x.RowId, x => x.Unknown4)
             .AsReadOnly();
-        _contentFinderConditionToContentId = dataManager.GetExcelSheet<ContentFinderCondition>()!
-            .Where(x => x.RowId > 0 && x.Content > 0)
-            .ToDictionary(x => x.RowId, x => x.Content)
+        _territoryToAetherCurrentCompFlgSet = new Dictionary<ushort, byte>().AsReadOnly();
+        _contentFinderConditionToContentId = dataManager.GetExcelSheet<ContentFinderCondition>()
+            .Where(x => x.RowId > 0 && x.Content.RowId > 0)
+            .ToDictionary(x => x.RowId, x => x.Content.RowId)
             .AsReadOnly();
     }
 
@@ -220,7 +220,7 @@ internal sealed unsafe class GameFunctions
 
     public bool UseAction(IGameObject gameObject, EAction action, bool checkCanUse = true)
     {
-        var actionRow = _dataManager.GetExcelSheet<Action>()!.GetRow((uint)action)!;
+        var actionRow = _dataManager.GetExcelSheet<Action>().GetRow((uint)action);
         if (checkCanUse && !ActionManager.CanUseActionOnTarget((uint)action, (GameObject*)gameObject.Address))
         {
             _logger.LogWarning("Can not use action {Action} on target {Target}", action, gameObject);
@@ -378,7 +378,7 @@ internal sealed unsafe class GameFunctions
 
     public void OpenDutyFinder(uint contentFinderConditionId)
     {
-        if (_contentFinderConditionToContentId.TryGetValue(contentFinderConditionId, out ushort contentId))
+        if (_contentFinderConditionToContentId.TryGetValue(contentFinderConditionId, out uint contentId))
         {
             if (UIState.IsInstanceContentUnlocked(contentId))
                 AgentContentsFinder.Instance()->OpenRegularDuty(contentFinderConditionId);

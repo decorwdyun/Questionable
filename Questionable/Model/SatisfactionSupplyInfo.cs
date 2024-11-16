@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using LLib.GameData;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 using Questionable.Model.Questing;
 
 namespace Questionable.Model;
@@ -11,12 +11,12 @@ internal sealed class SatisfactionSupplyInfo : IQuestInfo
     public SatisfactionSupplyInfo(SatisfactionNpc npc)
     {
         QuestId = new SatisfactionSupplyNpcId((ushort)npc.RowId);
-        Name = npc.Npc.Value!.Singular;
-        IssuerDataId = npc.Npc.Row;
+        Name = npc.Npc.Value.Singular.ToString();
+        IssuerDataId = npc.Npc.RowId;
         Level = npc.LevelUnlock;
         SortKey = QuestId.Value;
-        Expansion = (EExpansionVersion)npc.QuestRequired.Value!.Expansion.Row;
-        PreviousQuests = [new PreviousQuestInfo(new QuestId((ushort)(npc.QuestRequired.Row & 0xFFFF)))];
+        Expansion = (EExpansionVersion)npc.QuestRequired.Value!.Expansion.RowId;
+        PreviousQuests = [new PreviousQuestInfo(new QuestId((ushort)(npc.QuestRequired.RowId & 0xFFFF)))];
     }
 
     public ElementId QuestId { get; }

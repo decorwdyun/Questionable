@@ -79,7 +79,7 @@ internal sealed class ContextMenuController : IDisposable
     private void AddContextMenuEntry(IMenuOpenedArgs args, uint itemId, uint npcId, EExtendedClassJob extendedClassJob,
         string verb)
     {
-        EClassJob currentClassJob = (EClassJob)_clientState.LocalPlayer!.ClassJob.Id;
+        EClassJob currentClassJob = (EClassJob)_clientState.LocalPlayer!.ClassJob.RowId;
         EClassJob classJob = ClassJobUtils.AsIndividualJobs(extendedClassJob).Single();
         if (classJob != currentClassJob && currentClassJob is EClassJob.Miner or EClassJob.Botanist)
             return;

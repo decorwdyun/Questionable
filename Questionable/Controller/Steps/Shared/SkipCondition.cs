@@ -239,7 +239,7 @@ internal static class SkipCondition
             {
                 List<EClassJob> expectedJobs =
                     step.RequiredCurrentJob.SelectMany(ClassJobUtils.AsIndividualJobs).ToList();
-                EClassJob currentJob = (EClassJob)clientState.LocalPlayer!.ClassJob.Id;
+                EClassJob currentJob = (EClassJob)clientState.LocalPlayer!.ClassJob.RowId;
                 logger.LogInformation("Checking current job {CurrentJob} against {ExpectedJobs}", currentJob,
                     string.Join(",", expectedJobs));
                 if (!expectedJobs.Contains(currentJob))

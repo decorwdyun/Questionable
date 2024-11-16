@@ -11,7 +11,7 @@ using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using LLib.GameData;
 using LLib.GameUI;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 using Questionable.Controller;
 using Questionable.Controller.Steps.Interactions;
 using Questionable.Data;
@@ -311,8 +311,8 @@ internal sealed unsafe class QuestFunctions
             ..QuestData.CrystalTowerQuests
         ];
 
-        EClassJob classJob = (EClassJob?)_clientState.LocalPlayer?.ClassJob.Id ?? EClassJob.Adventurer;
-        ushort[] shadowbringersRoleQuestChapters = QuestData.AllRoleQuestChapters.Select(x => x[0]).ToArray();
+        EClassJob classJob = (EClassJob?)_clientState.LocalPlayer?.ClassJob.RowId ?? EClassJob.Adventurer;
+        uint[] shadowbringersRoleQuestChapters = QuestData.AllRoleQuestChapters.Select(x => x[0]).ToArray();
         if (classJob != EClassJob.Adventurer)
         {
             priorityQuests.AddRange(_questRegistry.GetKnownClassJobQuests(classJob)
@@ -460,7 +460,7 @@ internal sealed unsafe class QuestFunctions
 
         // this only checks for the current class
         IQuestInfo questInfo = _questData.GetQuestInfo(leveId);
-        if (!questInfo.ClassJobs.Contains((EClassJob)_clientState.LocalPlayer!.ClassJob.Id) ||
+        if (!questInfo.ClassJobs.Contains((EClassJob)_clientState.LocalPlayer!.ClassJob.RowId) ||
             questInfo.Level > _clientState.LocalPlayer.Level)
             return true;
 
@@ -597,7 +597,7 @@ internal sealed unsafe class QuestFunctions
     public bool IsClassJobUnlocked(EClassJob classJob)
     {
         var classJobRow = _dataManager.GetExcelSheet<ClassJob>()!.GetRow((uint)classJob)!;
-        var questId = (ushort)classJobRow.UnlockQuest.Row;
+        var questId = (ushort)classJobRow.UnlockQuest.RowId;
         if (questId != 0)
             return IsQuestComplete(new QuestId(questId));
 
@@ -608,7 +608,7 @@ internal sealed unsafe class QuestFunctions
     public bool IsJobUnlocked(EClassJob classJob)
     {
         var classJobRow = _dataManager.GetExcelSheet<ClassJob>()!.GetRow((uint)classJob)!;
-        return IsClassJobUnlocked((EClassJob)classJobRow.ClassJobParent.Row);
+        return IsClassJobUnlocked((EClassJob)classJobRow.ClassJobParent.RowId);
     }
 
     public GrandCompany GetGrandCompany()

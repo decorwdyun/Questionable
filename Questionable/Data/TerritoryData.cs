@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game.Character;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 
 namespace Questionable.Data;
 
@@ -13,37 +13,37 @@ internal sealed class TerritoryData
     private readonly ImmutableDictionary<uint, string> _territoryNames;
     private readonly ImmutableHashSet<ushort> _territoriesWithMount;
     private readonly ImmutableDictionary<ushort, uint> _dutyTerritories;
-    private readonly ImmutableDictionary<ushort, string> _instanceNames;
+    private readonly ImmutableDictionary<uint, string> _instanceNames;
     private readonly ImmutableDictionary<uint, string> _contentFinderConditionNames;
 
     public TerritoryData(IDataManager dataManager)
     {
-        _territoryNames = dataManager.GetExcelSheet<TerritoryType>()!
+        _territoryNames = dataManager.GetExcelSheet<TerritoryType>()
             .Where(x => x.RowId > 0)
             .Select(x =>
                 new
                 {
                     x.RowId,
-                    Name = x.PlaceName.Value?.Name?.ToString() ?? x.PlaceNameZone?.Value?.Name?.ToString(),
+                    Name = x.PlaceName.ValueNullable?.Name.ToString() ?? x.PlaceNameZone.ValueNullable?.Name.ToString(),
                 })
             .Where(x => !string.IsNullOrEmpty(x.Name))
             .ToImmutableDictionary(x => x.RowId, x => x.Name!);
 
-        _territoriesWithMount = dataManager.GetExcelSheet<TerritoryType>()!
+        _territoriesWithMount = dataManager.GetExcelSheet<TerritoryType>()
             .Where(x => x.RowId > 0 && x.Mount)
             .Select(x => (ushort)x.RowId)
             .ToImmutableHashSet();
 
-        _dutyTerritories = dataManager.GetExcelSheet<TerritoryType>()!
-            .Where(x => x.RowId > 0 && x.ContentFinderCondition.Row != 0)
-            .ToImmutableDictionary(x => (ushort)x.RowId, x => x.ContentFinderCondition.Value!.ContentType.Row);
+        _dutyTerritories = dataManager.GetExcelSheet<TerritoryType>()
+            .Where(x => x.RowId > 0 && x.ContentFinderCondition.RowId != 0)
+            .ToImmutableDictionary(x => (ushort)x.RowId, x => x.ContentFinderCondition.Value.ContentType.RowId);
 
-        _instanceNames = dataManager.GetExcelSheet<ContentFinderCondition>()!
-            .Where(x => x.RowId > 0 && x.Content != 0 && x.ContentLinkType == 1 && x.ContentType.Row != 6)
-            .ToImmutableDictionary(x => x.Content, x => x.Name.ToString());
+        _instanceNames = dataManager.GetExcelSheet<ContentFinderCondition>()
+            .Where(x => x.RowId > 0 && x.Content.RowId != 0 && x.ContentLinkType == 1 && x.ContentType.RowId != 6)
+            .ToImmutableDictionary(x => x.Content.RowId, x => x.Name.ToString());
 
-        _contentFinderConditionNames = dataManager.GetExcelSheet<ContentFinderCondition>()!
-            .Where(x => x.RowId > 0 && x.Content != 0 && x.ContentLinkType == 1 && x.ContentType.Row != 6)
+        _contentFinderConditionNames = dataManager.GetExcelSheet<ContentFinderCondition>()
+            .Where(x => x.RowId > 0 && x.Content.RowId != 0 && x.ContentLinkType == 1 && x.ContentType.RowId != 6)
             .ToImmutableDictionary(x => x.RowId, x => x.Name.ToString());
     }
 

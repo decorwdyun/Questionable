@@ -35,7 +35,7 @@ internal static class Gather
 
             foreach (var itemToGather in step.ItemsToGather)
             {
-                EClassJob currentClassJob = (EClassJob)clientState.LocalPlayer!.ClassJob.Id;
+                EClassJob currentClassJob = (EClassJob)clientState.LocalPlayer!.ClassJob.RowId;
                 if (!gatheringData.TryGetGatheringPointId(itemToGather.ItemId, currentClassJob,
                         out GatheringPointId? gatheringPointId))
                     throw new TaskException($"No gathering point found for item {itemToGather.ItemId}");

@@ -5,8 +5,7 @@ using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using LLib;
-using Lumina.Excel.GeneratedSheets;
-using Microsoft.Extensions.DependencyInjection;
+using Lumina.Excel.Sheets;
 using Microsoft.Extensions.Logging;
 using Questionable.Functions;
 using Questionable.Model.Questing;
@@ -63,13 +62,13 @@ internal static class EquipItem
         ];
 
         private int _attempts;
-        private Item _item = null!;
+        private Item? _item;
         private List<ushort> _targetSlots = null!;
         private DateTime _continueAt = DateTime.MaxValue;
 
         protected override bool Start()
         {
-            _item = dataManager.GetExcelSheet<Item>()!.GetRow(Task.ItemId) ??
+            _item = dataManager.GetExcelSheet<Item>().GetRowOrDefault(Task.ItemId) ??
                     throw new ArgumentOutOfRangeException(nameof(Task.ItemId));
             _targetSlots = GetEquipSlot(_item) ?? throw new InvalidOperationException("Not a piece of equipment");
 
@@ -118,7 +117,7 @@ internal static class EquipItem
                 var itemSlot = equippedContainer->GetInventorySlot(slot);
                 if (itemSlot != null && itemSlot->ItemId == Task.ItemId)
                 {
-                    logger.LogInformation("Already equipped {Item}, skipping step", _item.Name?.ToString());
+                    logger.LogInformation("Already equipped {Item}, skipping step", _item?.Name.ToString());
                     return;
                 }
             }
@@ -162,11 +161,13 @@ internal static class EquipItem
             throw new TaskException($"Could not equip item {Task.ItemId}.");
         }
 
-        private static List<ushort>? GetEquipSlot(Item item)
+        private static List<ushort>? GetEquipSlot(Item? item)
         {
-            return item.EquipSlotCategory.Row switch
+            if (item == null)
+                return [];
+            return item.Value.EquipSlotCategory.RowId switch
             {
-                >= 1 and <= 11 => [(ushort)(item.EquipSlotCategory.Row - 1)],
+                >= 1 and <= 11 => [(ushort)(item.Value.EquipSlotCategory.RowId - 1)],
                 12 => [11, 12], // rings
                 13 => [0],
                 17 => [13], // soul crystal

@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Dalamud.Plugin.Services;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
+using Microsoft.Extensions.Logging;
 using Questionable.Model;
 using Questionable.Model.Questing;
 
@@ -9,28 +10,36 @@ namespace Questionable.Data;
 
 internal sealed class JournalData
 {
-    public JournalData(IDataManager dataManager, QuestData questData)
+    public JournalData(IDataManager dataManager, QuestData questData, ILogger<JournalData> logger)
     {
-        var genres = dataManager.GetExcelSheet<JournalGenre>()!
+        var genres = dataManager.GetExcelSheet<JournalGenre>()
             .Where(x => x.RowId > 0 && x.Icon > 0)
             .Select(x => new Genre(x, questData.GetAllByJournalGenre(x.RowId)))
             .ToList();
+        foreach (var genre in genres)
+        {
+            logger.LogInformation("Genre {GenreId}: {GenreName} has {QuestCount} quests",
+                genre.Id, genre.Name, genre.QuestCount);
+        }
+        logger.LogInformation("Genre count: {GenreCount}", genres.Count);
+        var quest = questData.GetQuestInfo(new QuestId(5193));
+        logger.LogInformation("Q: {N}, {A}, {B}", quest.Name, quest.JournalGenre, quest.IssuerDataId);
 
-        var limsaStart = dataManager.GetExcelSheet<QuestRedo>()!.GetRow(1)!;
-        var gridaniaStart = dataManager.GetExcelSheet<QuestRedo>()!.GetRow(2)!;
-        var uldahStart = dataManager.GetExcelSheet<QuestRedo>()!.GetRow(3)!;
+        var limsaStart = dataManager.GetExcelSheet<QuestRedo>().GetRow(1);
+        var gridaniaStart = dataManager.GetExcelSheet<QuestRedo>().GetRow(2);
+        var uldahStart = dataManager.GetExcelSheet<QuestRedo>().GetRow(3);
         var genreLimsa = new Genre(uint.MaxValue - 3, "Starting in Limsa Lominsa", 1,
-            new uint[] { 108, 109 }.Concat(limsaStart.Quest.Select(x => x.Row))
+            new uint[] { 108, 109 }.Concat(limsaStart.QuestRedoParam.Select(x => x.Quest.RowId))
                 .Where(x => x != 0)
                 .Select(x => questData.GetQuestInfo(new QuestId((ushort)(x & 0xFFFF))))
                 .ToList());
         var genreGridania = new Genre(uint.MaxValue - 2, "Starting in Gridania", 1,
-            new uint[] { 85, 123, 124 }.Concat(gridaniaStart.Quest.Select(x => x.Row))
+            new uint[] { 85, 123, 124 }.Concat(gridaniaStart.QuestRedoParam.Select(x => x.Quest.RowId))
                 .Where(x => x != 0)
                 .Select(x => questData.GetQuestInfo(new QuestId((ushort)(x & 0xFFFF))))
                 .ToList());
         var genreUldah = new Genre(uint.MaxValue - 1, "Starting in Ul'dah", 1,
-            new uint[] { 568, 569, 570 }.Concat(uldahStart.Quest.Select(x => x.Row))
+            new uint[] { 568, 569, 570 }.Concat(uldahStart.QuestRedoParam.Select(x => x.Quest.RowId))
                 .Where(x => x != 0)
                 .Select(x => questData.GetQuestInfo(new QuestId((ushort)(x & 0xFFFF))))
                 .ToList());
@@ -41,12 +50,12 @@ internal sealed class JournalData
                 genreLimsa.Quests.Contains(x) || genreGridania.Quests.Contains(x) || genreUldah.Quests.Contains(x));
 
         Genres = genres.AsReadOnly();
-        Categories = dataManager.GetExcelSheet<JournalCategory>()!
+        Categories = dataManager.GetExcelSheet<JournalCategory>()
             .Where(x => x.RowId > 0)
             .Select(x => new Category(x, Genres.Where(y => y.CategoryId == x.RowId).ToList()))
             .ToList()
             .AsReadOnly();
-        Sections = dataManager.GetExcelSheet<JournalSection>()!
+        Sections = dataManager.GetExcelSheet<JournalSection>()
             .Select(x => new Section(x, Categories.Where(y => y.SectionId == x.RowId).ToList()))
             .ToList();
     }
@@ -61,7 +70,7 @@ internal sealed class JournalData
         {
             Id = journalGenre.RowId;
             Name = journalGenre.Name.ToString();
-            CategoryId = journalGenre.JournalCategory.Row;
+            CategoryId = journalGenre.JournalCategory.RowId;
             Quests = quests;
         }
 
@@ -84,7 +93,7 @@ internal sealed class JournalData
     {
         public uint Id { get; } = journalCategory.RowId;
         public string Name { get; } = journalCategory.Name.ToString();
-        public uint SectionId { get; } = journalCategory.JournalSection.Row;
+        public uint SectionId { get; } = journalCategory.JournalSection.RowId;
         public IReadOnlyList<Genre> Genres { get; } = genres;
         public int QuestCount => Genres.Sum(x => x.QuestCount);
     }

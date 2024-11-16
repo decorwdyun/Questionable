@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Linq;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
-using Lumina.Excel.GeneratedSheets;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Model.Common;
 using Questionable.Model.Questing;
-using Action = Lumina.Excel.GeneratedSheets.Action;
+using Action = Lumina.Excel.Sheets.Action;
 
 namespace Questionable.Functions;
 
@@ -57,9 +55,10 @@ internal sealed unsafe class AetheryteFunctions
 
     public bool IsTeleportUnlocked()
     {
-        uint unlockLink = _dataManager.GetExcelSheet<Action>()!
-            .GetRow(5)!
-            .UnlockLink;
+        uint unlockLink = _dataManager.GetExcelSheet<Action>()
+            .GetRow(5)
+            .UnlockLink
+            .RowId;
         return UIState.Instance()->IsUnlockLinkUnlocked(unlockLink);
     }
 

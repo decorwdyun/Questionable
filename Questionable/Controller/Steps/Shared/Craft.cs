@@ -6,7 +6,7 @@ using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using LLib.GameData;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 using Microsoft.Extensions.Logging;
 using Questionable.External;
 using Questionable.Model.Questing;
@@ -55,20 +55,20 @@ internal static class Craft
                 return false;
             }
 
-            RecipeLookup? recipeLookup = dataManager.GetExcelSheet<RecipeLookup>()!.GetRow(Task.ItemId);
+            RecipeLookup? recipeLookup = dataManager.GetExcelSheet<RecipeLookup>().GetRowOrDefault(Task.ItemId);
             if (recipeLookup == null)
                 throw new TaskException($"Item {Task.ItemId} is not craftable");
 
-            uint recipeId = (EClassJob)clientState.LocalPlayer!.ClassJob.Id switch
+            uint recipeId = (EClassJob)clientState.LocalPlayer!.ClassJob.RowId switch
             {
-                EClassJob.Carpenter => recipeLookup.CRP.Row,
-                EClassJob.Blacksmith => recipeLookup.BSM.Row,
-                EClassJob.Armorer => recipeLookup.ARM.Row,
-                EClassJob.Goldsmith => recipeLookup.GSM.Row,
-                EClassJob.Leatherworker => recipeLookup.LTW.Row,
-                EClassJob.Weaver => recipeLookup.WVR.Row,
-                EClassJob.Alchemist => recipeLookup.ALC.Row,
-                EClassJob.Culinarian => recipeLookup.CUL.Row,
+                EClassJob.Carpenter => recipeLookup.Value.CRP.RowId,
+                EClassJob.Blacksmith => recipeLookup.Value.BSM.RowId,
+                EClassJob.Armorer => recipeLookup.Value.ARM.RowId,
+                EClassJob.Goldsmith => recipeLookup.Value.GSM.RowId,
+                EClassJob.Leatherworker => recipeLookup.Value.LTW.RowId,
+                EClassJob.Weaver => recipeLookup.Value.WVR.RowId,
+                EClassJob.Alchemist => recipeLookup.Value.ALC.RowId,
+                EClassJob.Culinarian => recipeLookup.Value.CUL.RowId,
                 _ => 0
             };
 
@@ -76,14 +76,14 @@ internal static class Craft
             {
                 recipeId = new[]
                     {
-                        recipeLookup.CRP.Row,
-                        recipeLookup.BSM.Row,
-                        recipeLookup.ARM.Row,
-                        recipeLookup.GSM.Row,
-                        recipeLookup.LTW.Row,
-                        recipeLookup.WVR.Row,
-                        recipeLookup.ALC.Row,
-                        recipeLookup.WVR.Row
+                        recipeLookup.Value.CRP.RowId,
+                        recipeLookup.Value.BSM.RowId,
+                        recipeLookup.Value.ARM.RowId,
+                        recipeLookup.Value.GSM.RowId,
+                        recipeLookup.Value.LTW.RowId,
+                        recipeLookup.Value.WVR.RowId,
+                        recipeLookup.Value.ALC.RowId,
+                        recipeLookup.Value.WVR.RowId
                     }
                     .FirstOrDefault(x => x != 0);
             }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Immutable;
 using System.Linq;
 using Dalamud.Plugin.Services;
-using Lumina.Excel.GeneratedSheets2;
+using Lumina.Excel.Sheets;
 
 namespace Questionable.Data;
 
@@ -13,12 +13,12 @@ internal sealed class AetherCurrentData
     {
         _overworldCurrents = dataManager.GetExcelSheet<AetherCurrentCompFlgSet>()!
             .Where(x => x.RowId > 0)
-            .Where(x => x.Territory.Value != null)
+            .Where(x => x.Territory.IsValid)
             .ToImmutableDictionary(
-                x => (ushort)x.Territory.Row,
+                x => (ushort)x.Territory.RowId,
                 x => x.AetherCurrents
-                    .Where(y => y.Row > 0 && y.Value?.Quest.Row == 0)
-                    .Select(y => y.Row)
+                    .Where(y => y.RowId > 0 && y.Value.Quest.RowId == 0)
+                    .Select(y => y.RowId)
                     .ToImmutableList());
     }
 

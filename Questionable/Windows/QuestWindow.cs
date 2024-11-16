@@ -67,7 +67,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
 #endif
         SizeConstraints = new WindowSizeConstraints
         {
-            MinimumSize = new Vector2(200, 30),
+            MinimumSize = new Vector2(230, 30),
             MaximumSize = default
         };
         RespectCloseHotkey = false;

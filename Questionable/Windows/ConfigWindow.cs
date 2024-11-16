@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Dalamud.Game.Text;
@@ -10,7 +11,7 @@ using Dalamud.Plugin.Services;
 using Dalamud.Utility;
 using ImGuiNET;
 using LLib.ImGui;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 using Questionable.External;
 using GrandCompany = FFXIVClientStructs.FFXIV.Client.UI.Agent.GrandCompany;
 
@@ -36,7 +37,7 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
         _notificationMasterIpc = notificationMasterIpc;
         _configuration = configuration;
 
-        var mounts = dataManager.GetExcelSheet<Mount>()!
+        var mounts = dataManager.GetExcelSheet<Mount>()
             .Where(x => x is { RowId: > 0, Icon: > 0 })
             .Select(x => (MountId: x.RowId, Name: x.Singular.ToString()))
             .Where(x => !string.IsNullOrEmpty(x.Name))

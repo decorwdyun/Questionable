@@ -45,7 +45,7 @@ internal static class EquipRecommended
 
         protected override bool Start()
         {
-            RecommendEquipModule.Instance()->SetupForClassJob((byte)clientState.LocalPlayer!.ClassJob.Id);
+            RecommendEquipModule.Instance()->SetupForClassJob((byte)clientState.LocalPlayer!.ClassJob.RowId);
             return true;
         }
 
