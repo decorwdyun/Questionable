@@ -291,6 +291,7 @@ internal sealed class AetheryteData
                 { EAetheryteLocation.KozamaukaOkHanu, new(-169.51251f, 6.576599f, -479.42322f) },
                 { EAetheryteLocation.KozamaukaManyFires, new(541.16125f, 117.41809f, 203.60107f) },
                 { EAetheryteLocation.KozamaukaEarthenshire, new(-477.53113f, 124.04053f, 311.32983f) },
+                { EAetheryteLocation.KozamaukaDockPoga, new(787.59436f, 14.175598f, -236.22491f) },
                 { EAetheryteLocation.YakTelIqBraax, new(-397.05505f, 23.5141f, -431.93713f) },
                 { EAetheryteLocation.YakTelMamook, new(721.40076f, -132.31104f, 526.1769f) },
                 { EAetheryteLocation.ShaaloaniHhusatahwi, new(386.40417f, -0.19836426f, 467.61267f) },

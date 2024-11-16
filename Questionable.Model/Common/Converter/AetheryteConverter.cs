@@ -110,6 +110,7 @@ public sealed class AetheryteConverter() : EnumConverter<EAetheryteLocation>(Val
         { EAetheryteLocation.KozamaukaOkHanu, "Kozama'uka - Ok'hanu" },
         { EAetheryteLocation.KozamaukaManyFires, "Kozama'uka - Many Fires" },
         { EAetheryteLocation.KozamaukaEarthenshire, "Kozama'uka - Earthenshire" },
+        { EAetheryteLocation.KozamaukaDockPoga, "Kozama'uka - Dock Poga" },
         { EAetheryteLocation.YakTelIqBraax, "Yak T'el - Iq Br'aax" },
         { EAetheryteLocation.YakTelMamook, "Yak T'el - Mamook" },
         { EAetheryteLocation.ShaaloaniHhusatahwi, "Shaaloani - Hhusatahwi" },
