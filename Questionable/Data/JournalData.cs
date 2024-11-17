@@ -2,7 +2,6 @@
 using System.Linq;
 using Dalamud.Plugin.Services;
 using Lumina.Excel.Sheets;
-using Microsoft.Extensions.Logging;
 using Questionable.Model;
 using Questionable.Model.Questing;
 
@@ -10,20 +9,12 @@ namespace Questionable.Data;
 
 internal sealed class JournalData
 {
-    public JournalData(IDataManager dataManager, QuestData questData, ILogger<JournalData> logger)
+    public JournalData(IDataManager dataManager, QuestData questData)
     {
         var genres = dataManager.GetExcelSheet<JournalGenre>()
             .Where(x => x.RowId > 0 && x.Icon > 0)
             .Select(x => new Genre(x, questData.GetAllByJournalGenre(x.RowId)))
             .ToList();
-        foreach (var genre in genres)
-        {
-            logger.LogInformation("Genre {GenreId}: {GenreName} has {QuestCount} quests",
-                genre.Id, genre.Name, genre.QuestCount);
-        }
-        logger.LogInformation("Genre count: {GenreCount}", genres.Count);
-        var quest = questData.GetQuestInfo(new QuestId(5193));
-        logger.LogInformation("Q: {N}, {A}, {B}", quest.Name, quest.JournalGenre, quest.IssuerDataId);
 
         var limsaStart = dataManager.GetExcelSheet<QuestRedo>().GetRow(1);
         var gridaniaStart = dataManager.GetExcelSheet<QuestRedo>().GetRow(2);

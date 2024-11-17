@@ -64,10 +64,9 @@ internal sealed unsafe class GameFunctions
 
         _territoryToAetherCurrentCompFlgSet = dataManager.GetExcelSheet<TerritoryType>()
             .Where(x => x.RowId > 0)
-            .Where(x => x.Unknown3 > 0)
+            .Where(x => x.Unknown4 > 0)
             .ToDictionary(x => (ushort)x.RowId, x => x.Unknown4)
             .AsReadOnly();
-        _territoryToAetherCurrentCompFlgSet = new Dictionary<ushort, byte>().AsReadOnly();
         _contentFinderConditionToContentId = dataManager.GetExcelSheet<ContentFinderCondition>()
             .Where(x => x.RowId > 0 && x.Content.RowId > 0)
             .ToDictionary(x => x.RowId, x => x.Content.RowId)

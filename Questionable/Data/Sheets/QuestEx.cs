@@ -12,6 +12,7 @@ public readonly unsafe struct QuestEx(ExcelPage page, uint offset, uint row) : I
 
     public Quest Original { get; } = new(page, offset, row);
 
+    public readonly ReadOnlySeString Id => page.ReadString(offset + 2420, offset);
     public RowRef IssuerStart => RowRef.GetFirstValidRowOrUntyped(page.Module, page.ReadUInt32(offset + 2456), [typeof(EObjName), typeof(ENpcResident)], 882056187, page.Language);
     public RowRef<Level> IssuerLocation => new(page.Module, page.ReadUInt32(offset + 2460), page.Language);
     public RowRef<JournalGenre> JournalGenre => new(page.Module, page.ReadUInt32(offset + 2468), page.Language);

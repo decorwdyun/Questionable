@@ -3,10 +3,13 @@ using System.Linq;
 using Dalamud.Plugin.Services;
 using Dalamud.Utility;
 using LLib;
+using Lumina.Excel;
+using Lumina.Excel.Exceptions;
 using Lumina.Excel.Sheets;
 using Lumina.Text;
 using Lumina.Text.ReadOnly;
 using Microsoft.Extensions.Logging;
+using Questionable.Data.Sheets;
 using Questionable.Model;
 using Quest = Questionable.Model.Quest;
 using GimmickYesNo = Lumina.Excel.Sheets.GimmickYesNo;
@@ -38,7 +41,7 @@ internal sealed class ExcelFunctions
         if (currentQuest != null && excelSheetName == null)
         {
             var questRow =
-                _dataManager.GetExcelSheet<Lumina.Excel.Sheets.Quest>().GetRowOrDefault((uint)currentQuest.Id.Value +
+                _dataManager.GetExcelSheet<QuestEx>().GetRowOrDefault((uint)currentQuest.Id.Value +
                     0x10000);
             if (questRow == null)
             {
@@ -46,13 +49,20 @@ internal sealed class ExcelFunctions
                 return null;
             }
 
-            excelSheetName = $"quest/{(currentQuest.Id.Value / 100):000}/{questRow.Value.RowId}";
+            excelSheetName = $"quest/{(currentQuest.Id.Value / 100):000}/{questRow.Value.Id}";
         }
 
         ArgumentNullException.ThrowIfNull(excelSheetName);
-        var excelSheet = _dataManager.GetExcelSheet<QuestDialogueText>(name: excelSheetName);
-        return excelSheet.Cast<QuestDialogueText?>()
-            .FirstOrDefault(x => x!.Value.Key == key)?.Value;
+        try
+        {
+            var excelSheet = _dataManager.GetExcelSheet<QuestDialogueText>(name: excelSheetName);
+            return excelSheet.Cast<QuestDialogueText?>()
+                .FirstOrDefault(x => x!.Value.Key == key)?.Value;
+        }
+        catch (SheetNotFoundException e)
+        {
+            throw new SheetNotFoundException($"Sheet '{excelSheetName}' not found", e);
+        }
     }
 
     public StringOrRegex GetDialogueTextByRowId(string? excelSheet, uint rowId, bool isRegex)
