@@ -25,4 +25,5 @@ public enum EAlliedSociety : byte
     Arkasodara = 15,
     Omicrons = 16,
     Loporrits = 17,
+    Pelupelu = 18,
 }
