@@ -1,7 +1,9 @@
 ﻿using System;
 using Dalamud.Game.ClientState.Conditions;
+using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using FFXIVClientStructs.FFXIV.Client.Game.Character;
 using FFXIVClientStructs.FFXIV.Common.Math;
 using Microsoft.Extensions.Logging;
 using Questionable.Data;
@@ -184,7 +186,17 @@ internal static class Mount
                 : ETaskResult.TaskComplete;
         }
 
-        private unsafe bool IsUnmounting() => **(byte**)(clientState.LocalPlayer!.Address + 1432) == 1;
+        private unsafe bool IsUnmounting()
+        {
+            IPlayerCharacter? localPlayer = clientState.LocalPlayer;
+            if (localPlayer != null)
+            {
+                BattleChara* battleChara = (BattleChara*) localPlayer.Address;
+                return (battleChara->Mount.Flags & 1) == 1;
+            }
+
+            return false;
+        }
     }
 
     public enum EMountIf

@@ -4,14 +4,14 @@ using System.Collections.Immutable;
 using System.Linq;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using LLib.GameData;
-using Questionable.Data.Sheets;
 using Questionable.Model.Questing;
+using ExcelQuest = Lumina.Excel.Sheets.Quest;
 
 namespace Questionable.Model;
 
 internal sealed class QuestInfo : IQuestInfo
 {
-    public QuestInfo(QuestEx quest, uint newGamePlusChapter, byte startingCity)
+    public QuestInfo(ExcelQuest quest, uint newGamePlusChapter, byte startingCity)
     {
         QuestId = new QuestId((ushort)(quest.RowId & 0xFFFF));
 
@@ -33,7 +33,7 @@ internal sealed class QuestInfo : IQuestInfo
             _ => "",
         };
 
-        Name = $"{quest.Original.Name}{suffix}";
+        Name = $"{quest.Name}{suffix}";
         Level = quest.ClassJobLevel[0];
         IssuerDataId = quest.IssuerStart.RowId;
         IsRepeatable = quest.IsRepeatable;
@@ -55,7 +55,7 @@ internal sealed class QuestInfo : IQuestInfo
         JournalGenre = quest.JournalGenre.ValueNullable?.RowId;
         SortKey = quest.SortKey;
         IsMainScenarioQuest = quest.JournalGenre.ValueNullable?.JournalCategory.ValueNullable?.JournalSection.ValueNullable?.RowId is 0 or 1;
-        CompletesInstantly = quest.Original.TodoParams[0].ToDoCompleteSeq == 0;
+        CompletesInstantly = quest.TodoParams[0].ToDoCompleteSeq == 0;
         PreviousInstanceContent = quest.InstanceContent.Select(x => (ushort)x.RowId).Where(x => x != 0).ToList();
         PreviousInstanceContentJoin = (EQuestJoin)quest.InstanceContentJoin;
         GrandCompany = (GrandCompany)quest.GrandCompany.RowId;

@@ -36,8 +36,8 @@ internal sealed class GatheringData
         }
 
         _itemIdToCollectability = dataManager.GetSubrowExcelSheet<SatisfactionSupply>()
+            .Flatten()
             .Where(x => x.RowId > 0)
-            .SelectMany(x => x)
             .Where(x => x.Slot is 2)
             .Select(x => new
             {
@@ -50,8 +50,8 @@ internal sealed class GatheringData
         _npcForCustomDeliveries = dataManager.GetExcelSheet<SatisfactionNpc>()
             .Where(x => x.RowId > 0)
             .SelectMany(x => dataManager.GetSubrowExcelSheet<SatisfactionSupply>()
+                .Flatten()
                 .Where(y => y.RowId == x.SatisfactionNpcParams.Last().SupplyIndex)
-                .SelectMany(y => y)
                 .Select(y => new
                 {
                     ItemId = y.Item.RowId,

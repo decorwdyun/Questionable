@@ -6,7 +6,6 @@ using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using LLib.GameData;
 using Lumina.Excel.Sheets;
-using Questionable.Data.Sheets;
 using Questionable.Model;
 using Questionable.Model.Questing;
 using Quest = Lumina.Excel.Sheets.Quest;
@@ -55,7 +54,7 @@ internal sealed class QuestData
 
         List<IQuestInfo> quests =
         [
-            ..dataManager.GetExcelSheet<QuestEx>()
+            ..dataManager.GetExcelSheet<Quest>()
                 .Where(x => x.RowId > 0)
                 .Where(x => x.IssuerLocation.RowId > 0)
                 .Select(x => new QuestInfo(x, questChapters.GetValueOrDefault(x.RowId),

@@ -3,13 +3,10 @@ using System.Linq;
 using Dalamud.Plugin.Services;
 using Dalamud.Utility;
 using LLib;
-using Lumina.Excel;
 using Lumina.Excel.Exceptions;
 using Lumina.Excel.Sheets;
-using Lumina.Text;
 using Lumina.Text.ReadOnly;
 using Microsoft.Extensions.Logging;
-using Questionable.Data.Sheets;
 using Questionable.Model;
 using Quest = Questionable.Model.Quest;
 using GimmickYesNo = Lumina.Excel.Sheets.GimmickYesNo;
@@ -41,7 +38,7 @@ internal sealed class ExcelFunctions
         if (currentQuest != null && excelSheetName == null)
         {
             var questRow =
-                _dataManager.GetExcelSheet<QuestEx>().GetRowOrDefault((uint)currentQuest.Id.Value +
+                _dataManager.GetExcelSheet<Lumina.Excel.Sheets.Quest>().GetRowOrDefault((uint)currentQuest.Id.Value +
                     0x10000);
             if (questRow == null)
             {
