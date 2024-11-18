@@ -48,7 +48,21 @@
             null,
             null,
             64
-          ]
+          ],
+          "AetheryteShortcut": "Kozama'uka - Dock Poga",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": 770.7179,
+                  "Y": 12.84657,
+                  "Z": -263.99634
+                },
+                "TerritoryId": 1188,
+                "MaximumDistance": 300
+              }
+            }
+          }
         },
         {
           "DataId": 2014485,
@@ -101,7 +115,21 @@
           },
           "TerritoryId": 1188,
           "InteractionType": "WalkTo",
-          "Fly": true
+          "Fly": true,
+          "AetheryteShortcut": "Kozama'uka - Dock Poga",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": 770.7179,
+                  "Y": 12.84657,
+                  "Z": -263.99634
+                },
+                "TerritoryId": 1188,
+                "MaximumDistance": 300
+              }
+            }
+          }
         },
         {
           "DataId": 1051711,
