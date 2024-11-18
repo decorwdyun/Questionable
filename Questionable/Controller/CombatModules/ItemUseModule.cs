@@ -142,8 +142,7 @@ internal sealed class ItemUseModule : ICombatModule
         {
             BattleChara* battleChara = (BattleChara*)gameObject.Address;
             if (_combatData.CombatItemUse.Condition == ECombatItemUseCondition.Incapacitated)
-                //return (byte)(((nint)battleChara + 0x1C68) & 0x40) != 0; // FIXME 7.1
-                return false;
+                return (*(byte*)((nint)battleChara + 0x1C68) & 0x40) != 0;
 
             if (_combatData.CombatItemUse.Condition == ECombatItemUseCondition.HealthPercent)
                 return (100f * battleChara->Health / battleChara->MaxHealth) < _combatData.CombatItemUse.Value;
