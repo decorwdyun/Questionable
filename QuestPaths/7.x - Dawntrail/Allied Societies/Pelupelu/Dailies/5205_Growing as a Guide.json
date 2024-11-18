@@ -31,9 +31,20 @@
       "Sequence": 1,
       "Steps": [
         {
+          "Position": {
+            "X": -165.49648,
+            "Y": 8.736965,
+            "Z": -401.72836
+          },
           "TerritoryId": 1188,
-          "InteractionType": "None",
-          "AetheryteShortcut": "Kozama'uka - Ok'hanu"
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Kozama'uka - Ok'hanu",
+          "Fly": true,
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Locked"
+            }
+          }
         },
         {
           "DataId": 1052307,
