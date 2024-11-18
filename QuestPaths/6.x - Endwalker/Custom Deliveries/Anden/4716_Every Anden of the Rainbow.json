@@ -75,7 +75,8 @@
           "TerritoryId": 816,
           "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Il Mheg - Lydha Lran",
-          "Fly": true
+          "Fly": true,
+          "NextQuestId": 4717
         }
       ]
     }
