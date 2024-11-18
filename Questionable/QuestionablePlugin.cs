@@ -147,7 +147,6 @@ public sealed class QuestionablePlugin : IDalamudPlugin
             .AddTaskFactoryAndExecutor<StepDisabled.SkipRemainingTasks, StepDisabled.Factory,
                 StepDisabled.SkipDisabledStepsExecutor>();
         serviceCollection.AddTaskFactory<EquipRecommended.BeforeDutyOrInstance>();
-        serviceCollection.AddTaskFactoryAndExecutor<Gather.GatheringTask, Gather.Factory, Gather.StartGathering>();
         serviceCollection.AddTaskExecutor<Gather.SkipMarker, Gather.DoSkip>();
         serviceCollection
             .AddTaskFactoryAndExecutor<AetheryteShortcut.Task, AetheryteShortcut.Factory,
@@ -156,6 +155,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
             .AddTaskExecutor<AetheryteShortcut.MoveAwayFromAetheryte, AetheryteShortcut.MoveAwayFromAetheryteExecutor>();
         serviceCollection
             .AddTaskFactoryAndExecutor<SkipCondition.SkipTask, SkipCondition.Factory, SkipCondition.CheckSkip>();
+        serviceCollection.AddTaskFactoryAndExecutor<Gather.GatheringTask, Gather.Factory, Gather.StartGathering>();
+        serviceCollection.AddTaskExecutor<Gather.DelayedGatheringTask, Gather.DelayedGatheringExecutor>();
         serviceCollection
             .AddTaskFactoryAndExecutor<AethernetShortcut.Task, AethernetShortcut.Factory,
                 AethernetShortcut.UseAethernetShortcut>();

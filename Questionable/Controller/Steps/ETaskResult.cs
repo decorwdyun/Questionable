@@ -11,6 +11,11 @@ internal enum ETaskResult
     /// </summary>
     SkipRemainingTasksForStep,
 
+    /// <summary>
+    /// Assumes the task executor implements <see cref="IExtraTaskCreator"/>.
+    /// </summary>
+    CreateNewTasks,
+
     NextStep,
     End,
 }

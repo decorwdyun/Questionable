@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Questionable.Model;
 
 namespace Questionable.Controller.Steps;
 
@@ -14,6 +16,11 @@ internal interface ITaskExecutor
     bool WasInterrupted();
 
     ETaskResult Update();
+}
+
+internal interface IExtraTaskCreator : ITaskExecutor
+{
+    IEnumerable<ITask> CreateExtraTasks();
 }
 
 internal abstract class TaskExecutor<T> : ITaskExecutor

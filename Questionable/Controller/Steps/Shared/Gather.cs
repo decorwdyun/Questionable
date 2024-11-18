@@ -4,7 +4,6 @@ using System.Linq;
 using Dalamud.Game.Text;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
-using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using LLib.GameData;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,14 +18,7 @@ namespace Questionable.Controller.Steps.Shared;
 
 internal static class Gather
 {
-    internal sealed class Factory(
-        IServiceProvider serviceProvider,
-        MovementController movementController,
-        GatheringPointRegistry gatheringPointRegistry,
-        IClientState clientState,
-        GatheringData gatheringData,
-        TerritoryData territoryData,
-        ILogger<Factory> logger) : ITaskFactory
+    internal sealed class Factory : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -35,45 +27,69 @@ internal static class Gather
 
             foreach (var itemToGather in step.ItemsToGather)
             {
-                EClassJob currentClassJob = (EClassJob)clientState.LocalPlayer!.ClassJob.RowId;
-                if (!gatheringData.TryGetGatheringPointId(itemToGather.ItemId, currentClassJob,
-                        out GatheringPointId? gatheringPointId))
-                    throw new TaskException($"No gathering point found for item {itemToGather.ItemId}");
-
-                if (!gatheringPointRegistry.TryGetGatheringPoint(gatheringPointId, out GatheringRoot? gatheringRoot))
-                    throw new TaskException($"No path found for gathering point {gatheringPointId}");
-
-                if (HasRequiredItems(itemToGather))
-                    continue;
-
-                using (var _ = logger.BeginScope("Gathering(inner)"))
-                {
-                    QuestSequence gatheringSequence = new QuestSequence
-                    {
-                        Sequence = 0,
-                        Steps = gatheringRoot.Steps
-                    };
-                    foreach (var gatheringStep in gatheringSequence.Steps)
-                    {
-                        foreach (var task in serviceProvider.GetRequiredService<TaskCreator>()
-                                     .CreateTasks(quest, gatheringSequence, gatheringStep))
-                            if (task is WaitAtEnd.NextStep)
-                                yield return new SkipMarker();
-                            else
-                                yield return task;
-                    }
-                }
-
-                ushort territoryId = gatheringRoot.Steps.Last().TerritoryId;
-                yield return new WaitCondition.Task(() => clientState.TerritoryType == territoryId,
-                    $"Wait(territory: {territoryData.GetNameAndId(territoryId)})");
-
-                yield return new WaitCondition.Task(() => movementController.IsNavmeshReady,
-                    "Wait(navmesh ready)");
-
-                yield return new GatheringTask(gatheringPointId, itemToGather);
-                yield return new WaitAtEnd.WaitDelay();
+                yield return new DelayedGatheringTask(itemToGather, quest);
             }
+        }
+    }
+
+    internal sealed record DelayedGatheringTask(GatheredItem GatheredItem, Quest Quest) : ITask
+    {
+        public override string ToString() => $"Gathering(pending for {GatheredItem.ItemId})";
+    }
+
+    internal sealed class DelayedGatheringExecutor(
+        MovementController movementController,
+        GatheringData gatheringData,
+        GatheringPointRegistry gatheringPointRegistry,
+        TerritoryData territoryData,
+        IClientState clientState,
+        IServiceProvider serviceProvider,
+        ILogger<DelayedGatheringExecutor> logger) : TaskExecutor<DelayedGatheringTask>, IExtraTaskCreator
+    {
+        protected override bool Start() => true;
+
+        public override ETaskResult Update() => ETaskResult.CreateNewTasks;
+
+        public IEnumerable<ITask> CreateExtraTasks()
+        {
+            EClassJob currentClassJob = (EClassJob)clientState.LocalPlayer!.ClassJob.RowId;
+            if (!gatheringData.TryGetGatheringPointId(Task.GatheredItem.ItemId, currentClassJob,
+                    out GatheringPointId? gatheringPointId))
+                throw new TaskException($"No gathering point found for item {Task.GatheredItem.ItemId}");
+
+            if (!gatheringPointRegistry.TryGetGatheringPoint(gatheringPointId, out GatheringRoot? gatheringRoot))
+                throw new TaskException($"No path found for gathering point {gatheringPointId}");
+
+            if (HasRequiredItems(Task.GatheredItem))
+                yield break;
+
+            using (var _ = logger.BeginScope("Gathering(inner)"))
+            {
+                QuestSequence gatheringSequence = new QuestSequence
+                {
+                    Sequence = 0,
+                    Steps = gatheringRoot.Steps
+                };
+                foreach (var gatheringStep in gatheringSequence.Steps)
+                {
+                    foreach (var task in serviceProvider.GetRequiredService<TaskCreator>()
+                                 .CreateTasks(Task.Quest, gatheringSequence, gatheringStep))
+                        if (task is WaitAtEnd.NextStep)
+                            yield return new SkipMarker();
+                        else
+                            yield return task;
+                }
+            }
+
+            ushort territoryId = gatheringRoot.Steps.Last().TerritoryId;
+            yield return new WaitCondition.Task(() => clientState.TerritoryType == territoryId,
+                $"Wait(territory: {territoryData.GetNameAndId(territoryId)})");
+
+            yield return new WaitCondition.Task(() => movementController.IsNavmeshReady,
+                "Wait(navmesh ready)");
+
+            yield return new GatheringTask(gatheringPointId, Task.GatheredItem);
+            yield return new WaitAtEnd.WaitDelay();
         }
 
         private unsafe bool HasRequiredItems(GatheredItem itemToGather)

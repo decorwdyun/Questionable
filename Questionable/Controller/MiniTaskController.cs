@@ -120,10 +120,14 @@ internal abstract class MiniTaskController<T>
                 return;
 
             case ETaskResult.TaskComplete:
+            case ETaskResult.CreateNewTasks:
                 _logger.LogInformation("{Task} → {Result}, remaining tasks: {RemainingTaskCount}",
                     _taskQueue.CurrentTaskExecutor.CurrentTask, result, _taskQueue.RemainingTasks.Count());
 
                 OnTaskComplete(_taskQueue.CurrentTaskExecutor.CurrentTask);
+
+                if (result == ETaskResult.CreateNewTasks && _taskQueue.CurrentTaskExecutor is IExtraTaskCreator extraTaskCreator)
+                    _taskQueue.EnqueueAll(extraTaskCreator.CreateExtraTasks());
 
                 _taskQueue.CurrentTaskExecutor = null;
 
