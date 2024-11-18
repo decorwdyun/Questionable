@@ -129,9 +129,6 @@ internal sealed unsafe class QuestFunctions
                 var trackedQuest = questManager->TrackedQuests[i];
                 switch (trackedQuest.QuestType)
                 {
-                    default:
-                        break;
-
                     case 1: // normal quest
                         currentQuest = new QuestId(questManager->NormalQuests[trackedQuest.Index].QuestId);
                         if (_questRegistry.IsKnownQuest(currentQuest))
@@ -629,7 +626,7 @@ internal sealed unsafe class QuestFunctions
 
     public bool IsClassJobUnlocked(EClassJob classJob)
     {
-        var classJobRow = _dataManager.GetExcelSheet<ClassJob>()!.GetRow((uint)classJob)!;
+        var classJobRow = _dataManager.GetExcelSheet<ClassJob>().GetRow((uint)classJob);
         var questId = (ushort)classJobRow.UnlockQuest.RowId;
         if (questId != 0)
             return IsQuestComplete(new QuestId(questId));
@@ -640,7 +637,7 @@ internal sealed unsafe class QuestFunctions
 
     public bool IsJobUnlocked(EClassJob classJob)
     {
-        var classJobRow = _dataManager.GetExcelSheet<ClassJob>()!.GetRow((uint)classJob)!;
+        var classJobRow = _dataManager.GetExcelSheet<ClassJob>().GetRow((uint)classJob);
         return IsClassJobUnlocked((EClassJob)classJobRow.ClassJobParent.RowId);
     }
 

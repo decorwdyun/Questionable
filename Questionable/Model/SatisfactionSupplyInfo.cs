@@ -15,7 +15,7 @@ internal sealed class SatisfactionSupplyInfo : IQuestInfo
         IssuerDataId = npc.Npc.RowId;
         Level = npc.LevelUnlock;
         SortKey = QuestId.Value;
-        Expansion = (EExpansionVersion)npc.QuestRequired.Value!.Expansion.RowId;
+        Expansion = (EExpansionVersion)npc.QuestRequired.Value.Expansion.RowId;
         PreviousQuests = [new PreviousQuestInfo(new QuestId((ushort)(npc.QuestRequired.RowId & 0xFFFF)))];
     }
 

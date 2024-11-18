@@ -46,7 +46,7 @@ internal sealed unsafe class ChatFunctions
             .Where(x => x.TextCommand.IsValid)
             .Select(x => (x.RowId, Command: x.TextCommand.Value.Command.ToString()))
             .Where(x => !string.IsNullOrEmpty(x.Command) && x.Command.StartsWith('/'))
-            .ToDictionary(x => (EEmote)x.RowId, x => x.Command!)
+            .ToDictionary(x => (EEmote)x.RowId, x => x.Command)
             .AsReadOnly();
     }
 

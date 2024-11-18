@@ -40,7 +40,7 @@ internal sealed class QuestData
     public QuestData(IDataManager dataManager)
     {
         Dictionary<uint, uint> questChapters =
-            dataManager.GetExcelSheet<QuestChapter>()!
+            dataManager.GetExcelSheet<QuestChapter>()
                 .Where(x => x.RowId > 0 && x.Quest.RowId > 0)
                 .ToDictionary(x => x.Quest.RowId, x => x.Redo.RowId);
 

@@ -11,7 +11,7 @@ internal sealed class AetherCurrentData
 
     public AetherCurrentData(IDataManager dataManager)
     {
-        _overworldCurrents = dataManager.GetExcelSheet<AetherCurrentCompFlgSet>()!
+        _overworldCurrents = dataManager.GetExcelSheet<AetherCurrentCompFlgSet>()
             .Where(x => x.RowId > 0)
             .Where(x => x.Territory.IsValid)
             .ToImmutableDictionary(

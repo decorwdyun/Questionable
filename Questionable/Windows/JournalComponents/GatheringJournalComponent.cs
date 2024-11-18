@@ -108,9 +108,9 @@ internal sealed class GatheringJournalComponent
             .GroupBy(x => x.GatheringPointId)
             .ToDictionary(x => x.Key, x => x.First());
 
-        var itemSheet = dataManager.GetExcelSheet<Item>()!;
+        var itemSheet = dataManager.GetExcelSheet<Item>();
 
-        _gatheringItems = dataManager.GetExcelSheet<GatheringItem>()!
+        _gatheringItems = dataManager.GetExcelSheet<GatheringItem>()
             .Where(x => x.RowId != 0 && x.GatheringItemLevel.RowId != 0)
             .Select(x => new
             {
@@ -120,7 +120,7 @@ internal sealed class GatheringJournalComponent
             .Where(x => !string.IsNullOrEmpty(x.Name))
             .ToDictionary(x => x.GatheringItemId, x => x.Name!);
 
-        _gatheringPointsByExpansion = dataManager.GetExcelSheet<GatheringPoint>()!
+        _gatheringPointsByExpansion = dataManager.GetExcelSheet<GatheringPoint>()
             .Where(x => x.GatheringPointBase.RowId != 0)
             .Where(x => x.GatheringPointBase.RowId is < 653 or > 680) // exclude ishgard restoration phase 1
             .DistinctBy(x => x.GatheringPointBase.RowId)
@@ -128,7 +128,7 @@ internal sealed class GatheringJournalComponent
             {
                 GatheringPointId = x.RowId,
                 Point = new DefaultGatheringPoint(new GatheringPointId((ushort)x.GatheringPointBase.RowId),
-                    x.GatheringPointBase.Value!.GatheringType.RowId switch
+                    x.GatheringPointBase.Value.GatheringType.RowId switch
                     {
                         0 or 1 => EClassJob.Miner,
                         2 or 3 => EClassJob.Botanist,
@@ -159,7 +159,7 @@ internal sealed class GatheringJournalComponent
                          _gatheringPointRegistry.TryGetGatheringPoint(x.Point.Id, out GatheringRoot? gatheringRoot))
                 {
                     // for some reason the game doesn't know where this gathering location is
-                    var territoryType = territoryTypeSheet.GetRow(gatheringRoot.Steps.Last().TerritoryId)!;
+                    var territoryType = territoryTypeSheet.GetRow(gatheringRoot.Steps.Last().TerritoryId);
                     return x.Point with
                     {
                         Expansion = (EExpansionVersion)territoryType.ExVersion.RowId,

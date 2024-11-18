@@ -756,12 +756,12 @@ internal sealed class InteractionUiController : IDisposable
     private bool TryFindWarp(ushort targetTerritoryId, string actualPrompt, [NotNullWhen(true)] out uint? warpId,
         [NotNullWhen(true)] out string? warpText)
     {
-        var warps = _dataManager.GetExcelSheet<Warp>()!
+        var warps = _dataManager.GetExcelSheet<Warp>()
             .Where(x => x.RowId > 0 && x.TerritoryType.RowId == targetTerritoryId);
         foreach (var entry in warps)
         {
-            string? excelName = entry.Name.ToString();
-            string? excelQuestion = entry.Question.ToString();
+            string excelName = entry.Name.ToString();
+            string excelQuestion = entry.Question.ToString();
 
             if (!string.IsNullOrEmpty(excelQuestion) && GameFunctions.GameStringEquals(excelQuestion, actualPrompt))
             {
