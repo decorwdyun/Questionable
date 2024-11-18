@@ -164,6 +164,21 @@
       "Sequence": 255,
       "Steps": [
         {
+          "Position": {
+            "X": 780.3438,
+            "Y": 13.823656,
+            "Z": -238.32625
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "WalkTo",
+          "Fly": true,
+          "SkipConditions": {
+            "StepIf": {
+              "AetheryteUnlocked": "Kozama'uka - Dock Poga"
+            }
+          }
+        },
+        {
           "TerritoryId": 1188,
           "InteractionType": "AttuneAetheryte",
           "Aetheryte": "Kozama'uka - Dock Poga",
