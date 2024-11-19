@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Game.ClientState.Objects;
@@ -11,7 +10,7 @@ using Dalamud.Interface.Colors;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin.Services;
 using ImGuiNET;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 using Questionable.Model.Gathering;
 
 namespace GatheringPathRenderer.Windows;
@@ -205,12 +204,12 @@ internal sealed class EditorWindow : Window
         }
         else if (_target != null)
         {
-            var gatheringPoint = _dataManager.GetExcelSheet<GatheringPoint>()!.GetRow(_target.DataId);
+            var gatheringPoint = _dataManager.GetExcelSheet<GatheringPoint>().GetRowOrDefault(_target.DataId);
             if (gatheringPoint == null)
                 return;
 
             var locationsInTerritory = _plugin.GetLocationsInTerritory(_clientState.TerritoryType).ToList();
-            var location = locationsInTerritory.SingleOrDefault(x => x.Id == gatheringPoint.GatheringPointBase.Row);
+            var location = locationsInTerritory.SingleOrDefault(x => x.Id == gatheringPoint.Value.GatheringPointBase.RowId);
             if (location != null)
             {
                 var targetFile = location.File;
@@ -234,9 +233,9 @@ internal sealed class EditorWindow : Window
             }
             else
             {
-                if (ImGui.Button($"Create location ({gatheringPoint.GatheringPointBase.Row})"))
+                if (ImGui.Button($"Create location ({gatheringPoint.Value.GatheringPointBase.RowId})"))
                 {
-                    var (targetFile, root) = _editorCommands.CreateNewFile(gatheringPoint, _target);
+                    var (targetFile, root) = _editorCommands.CreateNewFile(gatheringPoint.Value, _target);
                     _plugin.Save(targetFile, root);
                 }
             }
