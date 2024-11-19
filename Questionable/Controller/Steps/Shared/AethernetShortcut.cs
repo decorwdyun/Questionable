@@ -205,17 +205,9 @@ internal static class AethernetShortcut
 
         private void DoTeleport()
         {
-            if (Task.From.IsFirmamentAetheryte())
-            {
-                logger.LogInformation("Using manual teleport interaction");
-                _teleported = gameFunctions.InteractWith((uint)Task.From, ObjectKind.EventObj);
-            }
-            else
-            {
-                logger.LogInformation("Using lifestream to teleport to {Destination}", Task.To);
-                lifestreamIpc.Teleport(Task.To);
-                _teleported = true;
-            }
+            logger.LogInformation("Using lifestream to teleport to {Destination}", Task.To);
+            lifestreamIpc.Teleport(Task.To);
+            _teleported = true;
         }
 
         public override ETaskResult Update()

@@ -98,7 +98,6 @@ internal sealed class InteractionUiController : IDisposable
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "SelectYesno", SelectYesnoPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "PointMenu", PointMenuPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "HousingSelectBlock", HousingSelectBlockPostSetup);
-        _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "TelepotTown", TeleportTownPostSetup);
 
         unsafe
         {
@@ -848,46 +847,6 @@ internal sealed class InteractionUiController : IDisposable
         addon->FireCallbackInt(0);
     }
 
-    private void TeleportTownPostSetup(AddonEvent type, AddonArgs args)
-    {
-        if (ShouldHandleUiInteractions &&
-            _questController.HasCurrentTaskMatching(out AethernetShortcut.Task? aethernetShortcut) &&
-            aethernetShortcut.From.IsFirmamentAetheryte())
-        {
-            // this might be better via atkvalues; but this works for now
-            uint toIndex = aethernetShortcut.To switch
-            {
-                EAetheryteLocation.FirmamentMendicantsCourt => 0,
-                EAetheryteLocation.FirmamentMattock => 1,
-                EAetheryteLocation.FirmamentNewNest => 2,
-                EAetheryteLocation.FirmanentSaintRoellesDais => 3,
-                EAetheryteLocation.FirmamentFeatherfall => 4,
-                EAetheryteLocation.FirmamentHoarfrostHall => 5,
-                EAetheryteLocation.FirmamentWesternRisensongQuarter => 6,
-                EAetheryteLocation.FIrmamentEasternRisensongQuarter => 7,
-                _ => uint.MaxValue,
-            };
-
-            if (toIndex == uint.MaxValue)
-                return;
-
-            _logger.LogInformation("Teleporting to {ToName} with menu index {ToIndex}", aethernetShortcut.From,
-                toIndex);
-            unsafe
-            {
-                var teleportToDestination = stackalloc AtkValue[]
-                {
-                    new() { Type = ValueType.Int, Int = 11 },
-                    new() { Type = ValueType.UInt, UInt = toIndex }
-                };
-
-                var addon = (AtkUnitBase*)args.Addon;
-                addon->FireCallback(2, teleportToDestination);
-                addon->FireCallback(2, teleportToDestination, true);
-            }
-        }
-    }
-
     private StringOrRegex? ResolveReference(Quest? quest, string? excelSheet, ExcelRef? excelRef, bool isRegExp)
     {
         if (excelRef == null)
@@ -905,7 +864,6 @@ internal sealed class InteractionUiController : IDisposable
 
     public void Dispose()
     {
-        _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "TelepotTown", TeleportTownPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "HousingSelectBlock", HousingSelectBlockPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "PointMenu", PointMenuPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "SelectYesno", SelectYesnoPostSetup);
