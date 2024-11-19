@@ -1,7 +1,6 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "Comment": "TODO untested how many RNG states this has",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -106,6 +105,32 @@
             [
               {
                 "High": 2
+              }
+            ],
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "DataId": 2014490,
+          "Position": {
+            "X": 485.6183,
+            "Y": 10.8185425,
+            "Z": -281.7884
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AfterInteraction",
+          "KillEnemyDataIds": [
+            18173
+          ],
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [
+              {
+                "High": 3
               }
             ],
             null,
