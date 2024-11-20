@@ -47,6 +47,7 @@ public enum EAction
     Raiton = 2267,
     RabbitMedium = 2272,
     SlugShot = 7412,
+    BosomBrook = 37173,
 
     CollectMiner = 240,
     ScourMiner = 22182,
@@ -84,6 +85,7 @@ public static class EActionExtensions
             or EAction.YellowGulal
             or EAction.BlueGulal
             or EAction.ElectrixFlux
-            or EAction.HopStep;
+            or EAction.HopStep
+            or EAction.BosomBrook;
     }
 }

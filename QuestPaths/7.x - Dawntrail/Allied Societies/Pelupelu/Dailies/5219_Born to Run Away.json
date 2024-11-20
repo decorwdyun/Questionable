@@ -1,7 +1,6 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -29,6 +28,84 @@
       ]
     },
     {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1052333,
+          "Position": {
+            "X": 775.1736,
+            "Y": 12.871736,
+            "Z": -196.0022
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
+        },
+        {
+          "DataId": 1052335,
+          "Position": {
+            "X": 867.76526,
+            "Y": 14.402381,
+            "Z": -171.31305
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
+        },
+        {
+          "DataId": 1052334,
+          "Position": {
+            "X": 864.5609,
+            "Y": 15.056413,
+            "Z": -256.27533
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1052336,
+          "Position": {
+            "X": 838.4375,
+            "Y": 14.301746,
+            "Z": -222.06458
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "Interact",
+          "Fly": true
+        }
+      ]
+    },
+    {
       "Sequence": 255,
       "Steps": [
         {
@@ -39,7 +116,7 @@
           },
           "TerritoryId": 1188,
           "InteractionType": "WalkTo",
-          "AetheryteShortcut": "Kozama'uka - Dock Poga"
+          "Fly": true
         },
         {
           "DataId": 1051711,
