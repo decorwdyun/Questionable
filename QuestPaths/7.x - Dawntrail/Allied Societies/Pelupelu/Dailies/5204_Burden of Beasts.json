@@ -77,6 +77,42 @@
       "Sequence": 3,
       "Steps": [
         {
+          "Position": {
+            "X": 548.1944,
+            "Y": 6.15866,
+            "Z": -196.99664
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "Position": {
+            "X": 610.0975,
+            "Y": 7.8043165,
+            "Z": -228.70596
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "Position": {
+            "X": 680.4834,
+            "Y": 10.053757,
+            "Z": -263.73697
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "Position": {
+            "X": 743.98376,
+            "Y": 9.793373,
+            "Z": -263.45914
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 1052306,
           "Position": {
             "X": 791.37854,
