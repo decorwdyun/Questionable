@@ -8,6 +8,7 @@ using FFXIVClientStructs.FFXIV.Client.Game;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Shared;
 using Questionable.Controller.Utils;
+using Questionable.External;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
@@ -16,7 +17,7 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class Interact
 {
-    internal sealed class Factory(Configuration configuration) : ITaskFactory
+    internal sealed class Factory(AutomatonIpc automatonIpc) : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -43,7 +44,7 @@ internal static class Interact
             }
             else if (step.InteractionType == EInteractionType.Snipe)
             {
-                if (!configuration.General.AutomaticallyCompleteSnipeTasks)
+                if (!automatonIpc.IsAutoSnipeEnabled)
                     yield break;
             }
             else if (step.InteractionType != EInteractionType.Interact)

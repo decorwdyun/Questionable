@@ -12,14 +12,14 @@ namespace Questionable.Controller.Steps.Common;
 internal static class SendNotification
 {
     internal sealed class Factory(
-        Configuration configuration,
+        AutomatonIpc automatonIpc,
         TerritoryData territoryData) : SimpleTaskFactory
     {
         public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
             return step.InteractionType switch
             {
-                EInteractionType.Snipe when !configuration.General.AutomaticallyCompleteSnipeTasks =>
+                EInteractionType.Snipe when !automatonIpc.IsAutoSnipeEnabled =>
                     new Task(step.InteractionType, step.Comment),
                 EInteractionType.Duty =>
                     new Task(step.InteractionType, step.ContentFinderConditionId.HasValue

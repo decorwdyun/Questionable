@@ -7,7 +7,7 @@ namespace Questionable;
 
 internal sealed class Configuration : IPluginConfiguration
 {
-    public const int PluginSetupVersion = 1;
+    public const int PluginSetupVersion = 2;
 
     public int Version { get; set; } =1 ;
     public int PluginSetupCompleteVersion { get; set; }
@@ -28,7 +28,6 @@ internal sealed class Configuration : IPluginConfiguration
         public bool HideInAllInstances { get; set; } = true;
         public bool UseEscToCancelQuesting { get; set; } = true;
         public bool ShowIncompleteSeasonalEvents { get; set; } = true;
-        public bool AutomaticallyCompleteSnipeTasks { get; set; }
         public bool ConfigureTextAdvance { get; set; } = true;
     }
 

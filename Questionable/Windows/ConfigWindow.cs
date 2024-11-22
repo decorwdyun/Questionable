@@ -115,18 +115,6 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
             _configuration.General.ConfigureTextAdvance = configureTextAdvance;
             Save();
         }
-
-        if (ImGui.CollapsingHeader("Cheats"))
-        {
-            ImGui.TextColored(ImGuiColors.DalamudRed,
-                "This setting will be removed in a future version, and will be\navailable through TextAdvance instead.");
-            bool automaticallyCompleteSnipeTasks = _configuration.General.AutomaticallyCompleteSnipeTasks;
-            if (ImGui.Checkbox("Automatically complete snipe tasks", ref automaticallyCompleteSnipeTasks))
-            {
-                _configuration.General.AutomaticallyCompleteSnipeTasks = automaticallyCompleteSnipeTasks;
-                Save();
-            }
-        }
     }
 
     private void DrawNotificationsTab()

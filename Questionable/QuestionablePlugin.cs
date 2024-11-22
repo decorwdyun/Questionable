@@ -112,7 +112,6 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<ChatFunctions>();
         serviceCollection.AddSingleton<QuestFunctions>();
         serviceCollection.AddSingleton<DalamudReflector>();
-        serviceCollection.AddSingleton<AutoSnipeHandler>();
 
         serviceCollection.AddSingleton<AetherCurrentData>();
         serviceCollection.AddSingleton<AetheryteData>();
@@ -128,6 +127,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<QuestionableIpc>();
         serviceCollection.AddSingleton<TextAdvanceIpc>();
         serviceCollection.AddSingleton<NotificationMasterIpc>();
+        serviceCollection.AddSingleton<AutomatonIpc>();
     }
 
     private static void AddTaskFactories(ServiceCollection serviceCollection)
@@ -300,8 +300,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceProvider.GetRequiredService<ShopController>();
         serviceProvider.GetRequiredService<QuestionableIpc>();
         serviceProvider.GetRequiredService<DalamudInitializer>();
-        serviceProvider.GetRequiredService<AutoSnipeHandler>().Enable();
         serviceProvider.GetRequiredService<TextAdvanceIpc>();
+        serviceProvider.GetRequiredService<AutomatonIpc>();
     }
 
     public void Dispose()
