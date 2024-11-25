@@ -97,6 +97,9 @@ internal static class QuestStepExtensions
                                 .AsSyntaxNodeOrToken(),
                             Assignment(nameof(QuestStep.Status), step.Status, emptyStep.Status)
                                 .AsSyntaxNodeOrToken(),
+                            Assignment(nameof(QuestStep.TargetClass), step.TargetClass,
+                                    emptyStep.TargetClass)
+                                .AsSyntaxNodeOrToken(),
                             Assignment(nameof(QuestStep.EnemySpawnType), step.EnemySpawnType,
                                     emptyStep.EnemySpawnType)
                                 .AsSyntaxNodeOrToken(),
@@ -119,6 +122,12 @@ internal static class QuestStepExtensions
                                 .AsSyntaxNodeOrToken(),
                             AssignmentList(nameof(QuestStep.RequiredQuestVariables),
                                     step.RequiredQuestVariables)
+                                .AsSyntaxNodeOrToken(),
+                            AssignmentList(nameof(QuestStep.RequiredCurrentJob),
+                                    step.RequiredCurrentJob)
+                                .AsSyntaxNodeOrToken(),
+                            AssignmentList(nameof(QuestStep.RequiredQuestAcceptedJob),
+                                    step.RequiredQuestAcceptedJob)
                                 .AsSyntaxNodeOrToken(),
                             AssignmentList(nameof(QuestStep.ItemsToGather),
                                 step.ItemsToGather),

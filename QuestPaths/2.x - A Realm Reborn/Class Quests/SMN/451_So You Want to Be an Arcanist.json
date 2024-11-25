@@ -21,10 +21,7 @@
           ],
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true,
-              "InTerritory": [
-                129
-              ]
+              "InSameTerritory": true
             }
           },
           "DialogueChoices": [

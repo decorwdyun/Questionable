@@ -1,4 +1,4 @@
-﻿<Project Sdk="Dalamud.NET.Sdk/10.0.0">
+﻿<Project Sdk="Dalamud.NET.Sdk/11.0.0">
     <PropertyGroup>
         <OutputPath>dist</OutputPath>
         <PathMap Condition="$(SolutionDir) != ''">$(SolutionDir)=X:\</PathMap>
@@ -21,5 +21,6 @@
         <ProjectReference Include="..\LLib\LLib.csproj"/>
         <ProjectReference Include="..\Questionable.Model\Questionable.Model.csproj"/>
         <ProjectReference Include="..\QuestPaths\QuestPaths.csproj"/>
+        <ProjectReference Include="..\vendor\NotificationMasterAPI\NotificationMasterAPI\NotificationMasterAPI.csproj" />
     </ItemGroup>
 </Project>

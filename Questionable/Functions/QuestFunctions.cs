@@ -11,7 +11,7 @@ using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using LLib.GameData;
 using LLib.GameUI;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 using Questionable.Controller;
 using Questionable.Controller.Steps.Interactions;
 using Questionable.Data;
@@ -122,27 +122,43 @@ internal sealed unsafe class QuestFunctions
             // do the MSQ; if a side quest is the first item do that side quest.
             //
             // If no quests are marked as 'priority', accepting a new quest adds it to the top of the list.
+            List<(ElementId Quest, byte Sequence)> trackedQuests = [];
             for (int i = questManager->TrackedQuests.Length - 1; i >= 0; --i)
             {
                 ElementId currentQuest;
                 var trackedQuest = questManager->TrackedQuests[i];
                 switch (trackedQuest.QuestType)
                 {
-                    default:
-                        continue;
-
                     case 1: // normal quest
                         currentQuest = new QuestId(questManager->NormalQuests[trackedQuest.Index].QuestId);
                         if (_questRegistry.IsKnownQuest(currentQuest))
-                            return (currentQuest, QuestManager.GetQuestSequence(currentQuest.Value));
-                        continue;
+                            trackedQuests.Add((currentQuest, QuestManager.GetQuestSequence(currentQuest.Value)));
+                        break;
 
                     case 2: // leve
                         currentQuest = new LeveId(questManager->LeveQuests[trackedQuest.Index].LeveId);
                         if (_questRegistry.IsKnownQuest(currentQuest))
-                            return (currentQuest, questManager->GetLeveQuestById(currentQuest.Value)->Sequence);
-                        continue;
+                            trackedQuests.Add((currentQuest, questManager->GetLeveQuestById(currentQuest.Value)->Sequence));
+                        break;
                 }
+            }
+
+            if (trackedQuests.Count > 0)
+            {
+                // if we have multiple quests to turn in for an allied society, try and complete all of them
+                var (firstTrackedQuest, firstTrackedSequence) = trackedQuests.First();
+                EAlliedSociety firstTrackedAlliedSociety = GetCommonAlliedSocietyTurnIn(firstTrackedQuest);
+                if (firstTrackedAlliedSociety != EAlliedSociety.None && firstTrackedSequence == 255)
+                {
+                    foreach (var (quest, sequence) in trackedQuests.Skip(1))
+                    {
+                        // only if the other quest isn't ready to be turned in
+                        if (GetCommonAlliedSocietyTurnIn(quest) == firstTrackedAlliedSociety && sequence != 255)
+                            return (quest, sequence);
+                    }
+                }
+
+                return (firstTrackedQuest, firstTrackedSequence);
             }
 
             ElementId? priorityQuest = GetNextPriorityQuestThatCanBeAccepted();
@@ -219,6 +235,21 @@ internal sealed unsafe class QuestFunctions
             return default;
 
         return (currentQuest, QuestManager.GetQuestSequence(currentQuest.Value));
+    }
+
+    private static EAlliedSociety GetCommonAlliedSocietyTurnIn(ElementId elementId)
+    {
+        if (elementId is QuestId questId)
+        {
+            return questId.Value switch
+            {
+                5215 => EAlliedSociety.None,
+                >= 5199 and <= 5226 => EAlliedSociety.Pelupelu,
+                _ => EAlliedSociety.None,
+            };
+        }
+
+        return EAlliedSociety.None;
     }
 
     public QuestProgressInfo? GetQuestProgressInfo(ElementId elementId)
@@ -311,8 +342,8 @@ internal sealed unsafe class QuestFunctions
             ..QuestData.CrystalTowerQuests
         ];
 
-        EClassJob classJob = (EClassJob?)_clientState.LocalPlayer?.ClassJob.Id ?? EClassJob.Adventurer;
-        ushort[] shadowbringersRoleQuestChapters = QuestData.AllRoleQuestChapters.Select(x => x[0]).ToArray();
+        EClassJob classJob = (EClassJob?)_clientState.LocalPlayer?.ClassJob.RowId ?? EClassJob.Adventurer;
+        uint[] shadowbringersRoleQuestChapters = QuestData.AllRoleQuestChapters.Select(x => x[0]).ToArray();
         if (classJob != EClassJob.Adventurer)
         {
             priorityQuests.AddRange(_questRegistry.GetKnownClassJobQuests(classJob)
@@ -460,7 +491,7 @@ internal sealed unsafe class QuestFunctions
 
         // this only checks for the current class
         IQuestInfo questInfo = _questData.GetQuestInfo(leveId);
-        if (!questInfo.ClassJobs.Contains((EClassJob)_clientState.LocalPlayer!.ClassJob.Id) ||
+        if (!questInfo.ClassJobs.Contains((EClassJob)_clientState.LocalPlayer!.ClassJob.RowId) ||
             questInfo.Level > _clientState.LocalPlayer.Level)
             return true;
 
@@ -596,8 +627,8 @@ internal sealed unsafe class QuestFunctions
 
     public bool IsClassJobUnlocked(EClassJob classJob)
     {
-        var classJobRow = _dataManager.GetExcelSheet<ClassJob>()!.GetRow((uint)classJob)!;
-        var questId = (ushort)classJobRow.UnlockQuest.Row;
+        var classJobRow = _dataManager.GetExcelSheet<ClassJob>().GetRow((uint)classJob);
+        var questId = (ushort)classJobRow.UnlockQuest.RowId;
         if (questId != 0)
             return IsQuestComplete(new QuestId(questId));
 
@@ -607,8 +638,8 @@ internal sealed unsafe class QuestFunctions
 
     public bool IsJobUnlocked(EClassJob classJob)
     {
-        var classJobRow = _dataManager.GetExcelSheet<ClassJob>()!.GetRow((uint)classJob)!;
-        return IsClassJobUnlocked((EClassJob)classJobRow.ClassJobParent.Row);
+        var classJobRow = _dataManager.GetExcelSheet<ClassJob>().GetRow((uint)classJob);
+        return IsClassJobUnlocked((EClassJob)classJobRow.ClassJobParent.RowId);
     }
 
     public GrandCompany GetGrandCompany()

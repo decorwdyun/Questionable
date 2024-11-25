@@ -64,6 +64,7 @@ public sealed class QuestStep
     public ChatMessage? ChatMessage { get; set; }
     public EAction? Action { get; set; }
     public EStatus? Status { get; set; }
+    public EExtendedClassJob TargetClass { get; set; } = EExtendedClassJob.None;
 
     public EEnemySpawnType? EnemySpawnType { get; set; }
     public List<uint> KillEnemyDataIds { get; set; } = [];
@@ -76,6 +77,8 @@ public sealed class QuestStep
     public SkipConditions? SkipConditions { get; set; }
 
     public List<List<QuestWorkValue>?> RequiredQuestVariables { get; set; } = new();
+    public List<EExtendedClassJob> RequiredCurrentJob { get; set; } = [];
+    public List<EExtendedClassJob> RequiredQuestAcceptedJob { get; set; } = [];
     public List<GatheredItem> ItemsToGather { get; set; } = [];
     public List<QuestWorkValue?> CompletionQuestVariablesFlags { get; set; } = [];
     public List<DialogueChoice> DialogueChoices { get; set; } = [];

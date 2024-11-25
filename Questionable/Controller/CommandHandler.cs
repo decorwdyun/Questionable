@@ -3,11 +3,10 @@ using System.Linq;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.Command;
 using Dalamud.Plugin.Services;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 using Questionable.Functions;
 using Questionable.Model.Questing;
 using Questionable.Windows;
-using Questionable.Windows.QuestComponents;
 using Quest = Questionable.Model.Quest;
 
 namespace Questionable.Controller;
@@ -24,12 +23,14 @@ internal sealed class CommandHandler : IDisposable
     private readonly QuestRegistry _questRegistry;
     private readonly ConfigWindow _configWindow;
     private readonly DebugOverlay _debugOverlay;
+    private readonly OneTimeSetupWindow _oneTimeSetupWindow;
     private readonly QuestWindow _questWindow;
     private readonly QuestSelectionWindow _questSelectionWindow;
     private readonly ITargetManager _targetManager;
     private readonly QuestFunctions _questFunctions;
     private readonly GameFunctions _gameFunctions;
     private readonly IDataManager _dataManager;
+    private readonly Configuration _configuration;
 
     public CommandHandler(
         ICommandManager commandManager,
@@ -39,12 +40,14 @@ internal sealed class CommandHandler : IDisposable
         QuestRegistry questRegistry,
         ConfigWindow configWindow,
         DebugOverlay debugOverlay,
+        OneTimeSetupWindow oneTimeSetupWindow,
         QuestWindow questWindow,
         QuestSelectionWindow questSelectionWindow,
         ITargetManager targetManager,
         QuestFunctions questFunctions,
         GameFunctions gameFunctions,
-        IDataManager dataManager)
+        IDataManager dataManager,
+        Configuration configuration)
     {
         _commandManager = commandManager;
         _chatGui = chatGui;
@@ -53,12 +56,14 @@ internal sealed class CommandHandler : IDisposable
         _questRegistry = questRegistry;
         _configWindow = configWindow;
         _debugOverlay = debugOverlay;
+        _oneTimeSetupWindow = oneTimeSetupWindow;
         _questWindow = questWindow;
         _questSelectionWindow = questSelectionWindow;
         _targetManager = targetManager;
         _questFunctions = questFunctions;
         _gameFunctions = gameFunctions;
         _dataManager = dataManager;
+        _configuration = configuration;
 
         _commandManager.AddHandler("/qst", new CommandInfo(ProcessCommand)
         {
@@ -75,6 +80,15 @@ internal sealed class CommandHandler : IDisposable
 
     private void ProcessCommand(string command, string arguments)
     {
+        if (!_configuration.IsPluginSetupComplete())
+        {
+            if (string.IsNullOrEmpty(arguments))
+                _oneTimeSetupWindow.IsOpen = true;
+            else
+                _chatGui.PrintError("Please complete the one-time setup first.", MessageTag, TagColor);
+            return;
+        }
+
         string[] parts = arguments.Split(' ');
         switch (parts[0])
         {
@@ -190,7 +204,24 @@ internal sealed class CommandHandler : IDisposable
         {
             if (_questRegistry.TryGetQuest(questId, out Quest? quest))
             {
-                _questController.SimulateQuest(quest);
+                byte sequenceId = 0;
+                int stepId = 0;
+                if (arguments.Length >= 2 && byte.TryParse(arguments[1], out byte parsedSequence))
+                {
+                    QuestSequence? sequence = quest.FindSequence(parsedSequence);
+                    if (sequence != null)
+                    {
+                        sequenceId = (byte)sequence.Sequence;
+                        if (arguments.Length >= 3 && int.TryParse(arguments[2], out int parsedStep))
+                        {
+                            QuestStep? step = sequence.FindStep(parsedStep);
+                            if (step != null)
+                                stepId = parsedStep;
+                        }
+                    }
+                }
+
+                _questController.SimulateQuest(quest, sequenceId, stepId);
                 _chatGui.Print($"Simulating quest {questId} ({quest.Info.Name}).", MessageTag, TagColor);
             }
             else
@@ -198,7 +229,7 @@ internal sealed class CommandHandler : IDisposable
         }
         else
         {
-            _questController.SimulateQuest(null);
+            _questController.SimulateQuest(null, 0, 0);
             _chatGui.Print("Cleared simulated quest.", MessageTag, TagColor);
         }
     }
@@ -208,7 +239,7 @@ internal sealed class CommandHandler : IDisposable
         ushort? mountId = _gameFunctions.GetMountId();
         if (mountId != null)
         {
-            var row = _dataManager.GetExcelSheet<Mount>()!.GetRow(mountId.Value);
+            var row = _dataManager.GetExcelSheet<Mount>().GetRowOrDefault(mountId.Value);
             _chatGui.Print(
                 $"Mount ID: {mountId}, Name: {row?.Singular}, Obtainable: {(row?.Order == -1 ? "No" : "Yes")}",
                 MessageTag, TagColor);

@@ -10,7 +10,7 @@ using Dalamud.Plugin.Services;
 using Dalamud.Utility.Signatures;
 using ImGuiNET;
 using LLib.GameData;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 using Questionable.Controller;
 using Questionable.Model;
 using Questionable.Model.Gathering;
@@ -44,24 +44,24 @@ internal sealed class GatheringJournalComponent
         _gatheringPointRegistry = gatheringPointRegistry;
 
         // TODO some of the logic here would be better suited elsewhere, in particular the [item] → [gathering item] → [location] lookup
-        var routeToGatheringPoint = dataManager.GetExcelSheet<GatheringLeveRoute>()!
-            .Where(x => x.UnkData0[0].GatheringPoint != 0)
-            .SelectMany(x => x.UnkData0
-                .Where(y => y.GatheringPoint != 0)
+        var routeToGatheringPoint = dataManager.GetExcelSheet<GatheringLeveRoute>()
+            .Where(x => x.GatheringPoint[0].RowId != 0)
+            .SelectMany(x => x.GatheringPoint
+                .Where(y => y.RowId != 0)
                 .Select(y => new
                 {
                     RouteId = x.RowId,
-                    GatheringPointId = y.GatheringPoint
+                    GatheringPointId = y.RowId
                 }))
             .GroupBy(x => x.RouteId)
             .ToDictionary(x => x.Key, x => x.Select(y => y.GatheringPointId).ToList());
-        var gatheringLeveSheet = dataManager.GetExcelSheet<GatheringLeve>()!;
-        var territoryTypeSheet = dataManager.GetExcelSheet<TerritoryType>()!;
-        var gatheringPointToLeve = dataManager.GetExcelSheet<Leve>()!
+        var gatheringLeveSheet = dataManager.GetExcelSheet<GatheringLeve>();
+        var territoryTypeSheet = dataManager.GetExcelSheet<TerritoryType>();
+        var gatheringPointToLeve = dataManager.GetExcelSheet<Leve>()
             .Where(x => x.RowId > 0)
             .Select(x =>
             {
-                uint startZonePlaceName = x.PlaceNameStartZone.Row;
+                uint startZonePlaceName = x.PlaceNameStartZone.RowId;
                 startZonePlaceName = startZonePlaceName switch
                 {
                     27 => 28, // limsa
@@ -71,16 +71,17 @@ internal sealed class GatheringJournalComponent
                     _ => startZonePlaceName
                 };
 
-                var territoryType = territoryTypeSheet.FirstOrDefault(y => startZonePlaceName == y.PlaceName.Row)
+                var territoryType = territoryTypeSheet.Cast<TerritoryType?>()
+                                        .FirstOrDefault(y => startZonePlaceName == y!.Value.PlaceName.RowId)
                                     ?? throw new InvalidOperationException($"Unable to use {startZonePlaceName}");
                 return new
                 {
                     LeveId = x.RowId,
                     LeveName = x.Name.ToString(),
                     TerritoryType = (ushort)territoryType.RowId,
-                    TerritoryName = territoryType.PlaceName.Value?.Name.ToString(),
-                    Expansion = (EExpansionVersion)territoryType.ExVersion.Row,
-                    GatheringLeve = gatheringLeveSheet.GetRow((uint)x.DataId),
+                    TerritoryName = territoryType.PlaceName.ValueNullable?.Name.ToString(),
+                    Expansion = (EExpansionVersion)territoryType.ExVersion.RowId,
+                    GatheringLeve = gatheringLeveSheet.GetRowOrDefault(x.DataId.RowId),
                 };
             })
             .Where(x => x.GatheringLeve != null)
@@ -91,9 +92,9 @@ internal sealed class GatheringJournalComponent
                 x.TerritoryType,
                 x.TerritoryName,
                 x.Expansion,
-                GatheringPoints = x.GatheringLeve!.Route
-                    .Where(y => y.Row != 0)
-                    .SelectMany(y => routeToGatheringPoint[y.Row]),
+                GatheringPoints = x.GatheringLeve!.Value.Route
+                    .Where(y => y.RowId != 0)
+                    .SelectMany(y => routeToGatheringPoint[y.RowId]),
             })
             .SelectMany(x => x.GatheringPoints.Select(y => new
             {
@@ -107,43 +108,43 @@ internal sealed class GatheringJournalComponent
             .GroupBy(x => x.GatheringPointId)
             .ToDictionary(x => x.Key, x => x.First());
 
-        var itemSheet = dataManager.GetExcelSheet<Item>()!;
+        var itemSheet = dataManager.GetExcelSheet<Item>();
 
-        _gatheringItems = dataManager.GetExcelSheet<GatheringItem>()!
-            .Where(x => x.RowId != 0 && x.GatheringItemLevel.Row != 0)
+        _gatheringItems = dataManager.GetExcelSheet<GatheringItem>()
+            .Where(x => x.RowId != 0 && x.GatheringItemLevel.RowId != 0)
             .Select(x => new
             {
                 GatheringItemId = (int)x.RowId,
-                Name = itemSheet.GetRow((uint)x.Item)?.Name.ToString()
+                Name = itemSheet.GetRowOrDefault(x.Item.RowId)?.Name.ToString()
             })
             .Where(x => !string.IsNullOrEmpty(x.Name))
             .ToDictionary(x => x.GatheringItemId, x => x.Name!);
 
-        _gatheringPointsByExpansion = dataManager.GetExcelSheet<GatheringPoint>()!
-            .Where(x => x.GatheringPointBase.Row != 0)
-            .Where(x => x.GatheringPointBase.Row is < 653 or > 680) // exclude ishgard restoration phase 1
-            .DistinctBy(x => x.GatheringPointBase.Row)
+        _gatheringPointsByExpansion = dataManager.GetExcelSheet<GatheringPoint>()
+            .Where(x => x.GatheringPointBase.RowId != 0)
+            .Where(x => x.GatheringPointBase.RowId is < 653 or > 680) // exclude ishgard restoration phase 1
+            .DistinctBy(x => x.GatheringPointBase.RowId)
             .Select(x => new
             {
                 GatheringPointId = x.RowId,
-                Point = new DefaultGatheringPoint(new GatheringPointId((ushort)x.GatheringPointBase.Row),
-                    x.GatheringPointBase.Value!.GatheringType.Row switch
+                Point = new DefaultGatheringPoint(new GatheringPointId((ushort)x.GatheringPointBase.RowId),
+                    x.GatheringPointBase.Value.GatheringType.RowId switch
                     {
                         0 or 1 => EClassJob.Miner,
                         2 or 3 => EClassJob.Botanist,
                         _ => EClassJob.Fisher
                     },
                     x.GatheringPointBase.Value.GatheringLevel,
-                    x.GatheringPointBase.Value.Item.Where(y => y != 0).Select(y => (ushort)y).ToList(),
-                    (EExpansionVersion?)x.TerritoryType.Value?.ExVersion.Row ?? (EExpansionVersion)byte.MaxValue,
-                    (ushort)x.TerritoryType.Row,
-                    x.TerritoryType.Value?.PlaceName.Value?.Name.ToString(),
-                    $"{x.GatheringPointBase.Row} - {x.PlaceName.Value?.Name}")
+                    x.GatheringPointBase.Value.Item.Where(y => y.RowId != 0).Select(y => (ushort)y.RowId).ToList(),
+                    (EExpansionVersion?)x.TerritoryType.ValueNullable?.ExVersion.RowId ?? (EExpansionVersion)byte.MaxValue,
+                    (ushort)x.TerritoryType.RowId,
+                    x.TerritoryType.ValueNullable?.PlaceName.ValueNullable?.Name.ToString(),
+                    $"{x.GatheringPointBase.RowId} - {x.PlaceName.ValueNullable?.Name}")
             })
             .Where(x => x.Point.ClassJob != EClassJob.Fisher)
             .Select(x =>
             {
-                if (gatheringPointToLeve.TryGetValue((int)x.GatheringPointId, out var leve))
+                if (gatheringPointToLeve.TryGetValue(x.GatheringPointId, out var leve))
                 {
                     // it's a leve
                     return x.Point with
@@ -158,12 +159,12 @@ internal sealed class GatheringJournalComponent
                          _gatheringPointRegistry.TryGetGatheringPoint(x.Point.Id, out GatheringRoot? gatheringRoot))
                 {
                     // for some reason the game doesn't know where this gathering location is
-                    var territoryType = territoryTypeSheet.GetRow(gatheringRoot.Steps.Last().TerritoryId)!;
+                    var territoryType = territoryTypeSheet.GetRow(gatheringRoot.Steps.Last().TerritoryId);
                     return x.Point with
                     {
-                        Expansion = (EExpansionVersion)territoryType.ExVersion.Row,
+                        Expansion = (EExpansionVersion)territoryType.ExVersion.RowId,
                         TerritoryType = (ushort)territoryType.RowId,
-                        TerritoryName = territoryType.PlaceName.Value?.Name.ToString(),
+                        TerritoryName = territoryType.PlaceName.ValueNullable?.Name.ToString(),
                     };
                 }
                 else
@@ -429,7 +430,7 @@ internal sealed class GatheringJournalComponent
         }
     }
 
-    public void ClearCounts()
+    public void ClearCounts(int type, int code)
     {
         foreach (var expansion in _gatheringPointsByExpansion)
         {

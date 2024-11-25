@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using LLib.GameData;
-using Lumina.Excel.GeneratedSheets2;
+using Lumina.Excel.Sheets;
 
 namespace Questionable.Model;
 
@@ -9,8 +10,12 @@ internal static class QuestInfoUtils
 {
     private static readonly Dictionary<uint, IReadOnlyList<EClassJob>> CachedClassJobs = new();
 
-    internal static IReadOnlyList<EClassJob> AsList(ClassJobCategory classJobCategory)
+    internal static IReadOnlyList<EClassJob> AsList(ClassJobCategory? optionalClassJobCategory)
     {
+        if (optionalClassJobCategory == null)
+            return Enum.GetValues<EClassJob>();
+
+        ClassJobCategory classJobCategory = optionalClassJobCategory.Value;
         if (CachedClassJobs.TryGetValue(classJobCategory.RowId, out IReadOnlyList<EClassJob>? classJobs))
             return classJobs;
 
@@ -57,8 +62,8 @@ internal static class QuestInfoUtils
                 { EClassJob.Dancer, classJobCategory.DNC },
                 { EClassJob.Reaper, classJobCategory.RPR },
                 { EClassJob.Sage, classJobCategory.SGE },
-                { EClassJob.Viper, classJobCategory.Unknown1 },
-                { EClassJob.Pictomancer, classJobCategory.Unknown2 }
+                { EClassJob.Viper, classJobCategory.VPR },
+                { EClassJob.Pictomancer, classJobCategory.PCT }
             }
             .Where(y => y.Value)
             .Select(y => y.Key)

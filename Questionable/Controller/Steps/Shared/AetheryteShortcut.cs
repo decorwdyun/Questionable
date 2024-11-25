@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
+using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Common;
@@ -56,6 +57,7 @@ internal static class AetheryteShortcut
         QuestFunctions questFunctions,
         IClientState clientState,
         IChatGui chatGui,
+        ICondition condition,
         AetheryteData aetheryteData) : TaskExecutor<Task>
     {
         private bool _teleported;
@@ -217,6 +219,8 @@ internal static class AetheryteShortcut
                 throw new TaskException("Unable to teleport to aetheryte");
             }
         }
+
+        public override bool WasInterrupted() => condition[ConditionFlag.InCombat] || base.WasInterrupted();
     }
 
     internal sealed record MoveAwayFromAetheryte(EAetheryteLocation TargetAetheryte) : ITask

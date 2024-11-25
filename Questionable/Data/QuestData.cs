@@ -5,11 +5,10 @@ using System.Linq;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using LLib.GameData;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 using Questionable.Model;
 using Questionable.Model.Questing;
-using Leve = Lumina.Excel.GeneratedSheets2.Leve;
-using Quest = Lumina.Excel.GeneratedSheets2.Quest;
+using Quest = Lumina.Excel.Sheets.Quest;
 
 namespace Questionable.Data;
 
@@ -18,13 +17,13 @@ internal sealed class QuestData
     public static readonly IReadOnlyList<QuestId> CrystalTowerQuests =
         [new(1709), new(1200), new(1201), new(1202), new(1203), new(1474), new(494), new(495)];
 
-    public static readonly IReadOnlyList<ushort> TankRoleQuests = [136, 154, 178];
-    public static readonly IReadOnlyList<ushort> HealerRoleQuests = [137, 155, 179];
-    public static readonly IReadOnlyList<ushort> MeleeRoleQuests = [138, 156, 180];
-    public static readonly IReadOnlyList<ushort> PhysicalRangedRoleQuests = [138, 157, 181];
-    public static readonly IReadOnlyList<ushort> CasterRoleQuests = [139, 158, 182];
+    public static readonly IReadOnlyList<uint> TankRoleQuests = [136, 154, 178];
+    public static readonly IReadOnlyList<uint> HealerRoleQuests = [137, 155, 179];
+    public static readonly IReadOnlyList<uint> MeleeRoleQuests = [138, 156, 180];
+    public static readonly IReadOnlyList<uint> PhysicalRangedRoleQuests = [138, 157, 181];
+    public static readonly IReadOnlyList<uint> CasterRoleQuests = [139, 158, 182];
 
-    public static readonly IReadOnlyList<IReadOnlyList<ushort>> AllRoleQuestChapters =
+    public static readonly IReadOnlyList<IReadOnlyList<uint>> AllRoleQuestChapters =
     [
         TankRoleQuests,
         HealerRoleQuests,
@@ -40,33 +39,33 @@ internal sealed class QuestData
 
     public QuestData(IDataManager dataManager)
     {
-        Dictionary<uint, ushort> questChapters =
-            dataManager.GetExcelSheet<QuestChapter>()!
-                .Where(x => x.RowId > 0 && x.Quest.Row > 0)
-                .ToDictionary(x => x.Quest.Row, x => x.Redo);
+        Dictionary<uint, uint> questChapters =
+            dataManager.GetExcelSheet<QuestChapter>()
+                .Where(x => x.RowId > 0 && x.Quest.RowId > 0)
+                .ToDictionary(x => x.Quest.RowId, x => x.Redo.RowId);
 
         Dictionary<uint, byte> startingCities = new();
         for (byte redoChapter = 1; redoChapter <= 3; ++redoChapter)
         {
-            var questRedo = dataManager.GetExcelSheet<QuestRedo>()!.GetRow(redoChapter)!;
-            foreach (var quest in questRedo.Quest.Where(x => x.Row > 0))
-                startingCities[quest.Row] = redoChapter;
+            var questRedo = dataManager.GetExcelSheet<QuestRedo>().GetRow(redoChapter);
+            foreach (var quest in questRedo.QuestRedoParam.Where(x => x.Quest.IsValid))
+                startingCities[quest.Quest.RowId] = redoChapter;
         }
 
         List<IQuestInfo> quests =
         [
-            ..dataManager.GetExcelSheet<Quest>()!
+            ..dataManager.GetExcelSheet<Quest>()
                 .Where(x => x.RowId > 0)
-                .Where(x => x.IssuerLocation.Row > 0)
+                .Where(x => x.IssuerLocation.RowId > 0)
                 .Select(x => new QuestInfo(x, questChapters.GetValueOrDefault(x.RowId),
                     startingCities.GetValueOrDefault(x.RowId)))
                 .Where(x => x.QuestId.Value != 1428),
-            ..dataManager.GetExcelSheet<SatisfactionNpc>()!
-                .Where(x => x.RowId > 0)
+            ..dataManager.GetExcelSheet<SatisfactionNpc>()
+                .Where(x => x is { RowId: > 0, Npc.RowId: > 0 })
                 .Select(x => new SatisfactionSupplyInfo(x)),
-            ..dataManager.GetExcelSheet<Leve>()!
+            ..dataManager.GetExcelSheet<Leve>()
                 .Where(x => x.RowId > 0)
-                .Where(x => x.LevelLevemete.Row != 0)
+                .Where(x => x.LevelLevemete.RowId != 0)
                 .Select(x => new LeveInfo(x)),
         ];
         _quests = quests.ToDictionary(x => x.QuestId, x => x);
@@ -230,7 +229,7 @@ internal sealed class QuestData
 
     public List<QuestInfo> GetClassJobQuests(EClassJob classJob)
     {
-        List<ushort> chapterIds = classJob switch
+        List<uint> chapterIds = classJob switch
         {
             EClassJob.Adventurer => throw new ArgumentOutOfRangeException(nameof(classJob)),
 
@@ -308,7 +307,7 @@ internal sealed class QuestData
         return GetQuestsInNewGamePlusChapters(chapterIds);
     }
 
-    private List<QuestInfo> GetQuestsInNewGamePlusChapters(List<ushort> chapterIds)
+    private List<QuestInfo> GetQuestsInNewGamePlusChapters(List<uint> chapterIds)
     {
         return _quests.Values
             .Where(x => x is QuestInfo)

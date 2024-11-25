@@ -8,20 +8,14 @@ using Dalamud.Game.Gui.Toast;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
-using LLib;
-using LLib.GameData;
-using Lumina.Excel.GeneratedSheets;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps;
-using Questionable.Controller.Steps.Interactions;
 using Questionable.Controller.Steps.Shared;
-using Questionable.Data;
 using Questionable.External;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
 using Quest = Questionable.Model.Quest;
-using Mount = Questionable.Controller.Steps.Common.Mount;
 
 namespace Questionable.Controller;
 
@@ -509,11 +503,11 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
             Stop(label);
     }
 
-    public void SimulateQuest(Quest? quest)
+    public void SimulateQuest(Quest? quest, byte sequence, int step)
     {
         _logger.LogInformation("SimulateQuest: {QuestId}", quest?.Id);
         if (quest != null)
-            _simulatedQuest = new QuestProgress(quest);
+            _simulatedQuest = new QuestProgress(quest, sequence, step);
         else
             _simulatedQuest = null;
     }
@@ -675,16 +669,16 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
         public int Step { get; private set; }
         public StepProgress StepProgress { get; private set; } = new(DateTime.Now);
 
-        public QuestProgress(Quest quest, byte sequence = 0)
+        public QuestProgress(Quest quest, byte sequence = 0, int step = 0)
         {
             Quest = quest;
-            SetSequence(sequence);
+            SetSequence(sequence, step);
         }
 
-        public void SetSequence(byte sequence)
+        public void SetSequence(byte sequence, int step = 0)
         {
             Sequence = sequence;
-            SetStep(0);
+            SetStep(step);
         }
 
         public void SetStep(int step)

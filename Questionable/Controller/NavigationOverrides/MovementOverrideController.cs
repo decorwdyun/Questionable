@@ -49,6 +49,9 @@ internal sealed class MovementOverrideController
         // rising stones, plant boxes
         new BlacklistedPoint(351, new(3.25f, 0.75f, 8.5f), new(4f, 0f, 9.5f)),
 
+        // ishgard, clutter
+        new BlacklistedPoint(418, new(-136.75f, 2.75f, 9), new(-138.66408f, 2.0333426f, 8.860787f), 1f),
+
         // southern sea of clouds, random rock
         new BlacklistedPoint(401, new(-14.75f, -136.75f, 515.75f), new(-17.631899f, -137.39148f, 512.6676f), 2),
 

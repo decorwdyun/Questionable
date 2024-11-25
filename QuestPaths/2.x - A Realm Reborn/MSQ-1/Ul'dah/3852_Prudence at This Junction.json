@@ -41,8 +41,86 @@
       "Sequence": 255,
       "Steps": [
         {
+          "Position": {
+            "X": -12.223117,
+            "Y": -2.0482793,
+            "Z": -145.75566
+          },
+          "TerritoryId": 141,
+          "InteractionType": "WalkTo"
+        },
+        {
           "TerritoryId": 141,
           "InteractionType": "EquipRecommended"
+        },
+        {
+          "DataId": 1001564,
+          "Position": {
+            "X": -9.689575,
+            "Y": -2.0480804,
+            "Z": -145.09808
+          },
+          "TerritoryId": 141,
+          "InteractionType": "PurchaseItem",
+          "PurchaseMenu": {
+            "ExcelSheet": "GilShop",
+            "Key": 262186
+          },
+          "ItemId": 2654,
+          "ItemCount": 1,
+          "RequiredCurrentJob": [
+            "DoW"
+          ],
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": false
+              }
+            }
+          }
+        },
+        {
+          "DataId": 1001564,
+          "Position": {
+            "X": -9.689575,
+            "Y": -2.0480804,
+            "Z": -145.09808
+          },
+          "TerritoryId": 141,
+          "InteractionType": "PurchaseItem",
+          "PurchaseMenu": {
+            "ExcelSheet": "GilShop",
+            "Key": 262186
+          },
+          "ItemId": 2655,
+          "ItemCount": 1,
+          "RequiredCurrentJob": [
+            "DoM"
+          ]
+        },
+        {
+          "TerritoryId": 141,
+          "InteractionType": "EquipItem",
+          "ItemId": 2654,
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
+        },
+        {
+          "TerritoryId": 141,
+          "InteractionType": "EquipItem",
+          "ItemId": 2655,
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
         },
         {
           "DataId": 1001447,
@@ -52,8 +130,7 @@
             "Z": -148.51611
           },
           "TerritoryId": 141,
-          "InteractionType": "CompleteQuest",
-          "Comment": "All starting gear (except the hat) is ilvl 5 already"
+          "InteractionType": "CompleteQuest"
         }
       ]
     }

@@ -59,7 +59,7 @@ public sealed class RendererPlugin : IDalamudPlugin
         _editorWindow = new EditorWindow(this, _editorCommands, dataManager, targetManager, clientState, objectTable)
             { IsOpen = true };
         _windowSystem.AddWindow(_editorWindow);
-        _currentClassJob = (EClassJob?)_clientState.LocalPlayer?.ClassJob.Id ?? EClassJob.Adventurer;
+        _currentClassJob = (EClassJob?)_clientState.LocalPlayer?.ClassJob.RowId ?? EClassJob.Adventurer;
 
         _pluginInterface.GetIpcSubscriber<object>("Questionable.ReloadData")
             .Subscribe(Reload);

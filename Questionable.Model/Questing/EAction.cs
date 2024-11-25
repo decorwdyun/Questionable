@@ -21,6 +21,7 @@ public enum EAction
     Physick = 190,
     AspectedBenefic = 3595,
     FormShift = 4262,
+    FieryBreath = 1764,
     BuffetSanuwa = 4931,
     BuffetGriffin = 4583,
     Trample = 4585,
@@ -45,6 +46,8 @@ public enum EAction
     Katon = 2266,
     Raiton = 2267,
     RabbitMedium = 2272,
+    SlugShot = 7412,
+    BosomBrook = 37173,
 
     CollectMiner = 240,
     ScourMiner = 22182,
@@ -69,7 +72,8 @@ public static class EActionExtensions
     public static bool RequiresMount(this EAction action)
     {
         return action
-            is EAction.BuffetSanuwa
+            is EAction.FieryBreath
+            or EAction.BuffetSanuwa
             or EAction.BuffetGriffin
             or EAction.Trample
             or EAction.Fumigate
@@ -81,6 +85,7 @@ public static class EActionExtensions
             or EAction.YellowGulal
             or EAction.BlueGulal
             or EAction.ElectrixFlux
-            or EAction.HopStep;
+            or EAction.HopStep
+            or EAction.BosomBrook;
     }
 }

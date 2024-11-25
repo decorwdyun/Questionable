@@ -18,6 +18,11 @@ internal sealed class TaskQueue
         _tasks.Add(task);
     }
 
+    public void EnqueueAll(IEnumerable<ITask> tasks)
+    {
+        _tasks.InsertRange(0, tasks);
+    }
+
     public bool TryDequeue([NotNullWhen(true)] out ITask? task)
     {
         task = _tasks.FirstOrDefault();

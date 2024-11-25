@@ -5,7 +5,7 @@ using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
 using LLib;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps;
@@ -120,10 +120,14 @@ internal abstract class MiniTaskController<T>
                 return;
 
             case ETaskResult.TaskComplete:
+            case ETaskResult.CreateNewTasks:
                 _logger.LogInformation("{Task} → {Result}, remaining tasks: {RemainingTaskCount}",
                     _taskQueue.CurrentTaskExecutor.CurrentTask, result, _taskQueue.RemainingTasks.Count());
 
                 OnTaskComplete(_taskQueue.CurrentTaskExecutor.CurrentTask);
+
+                if (result == ETaskResult.CreateNewTasks && _taskQueue.CurrentTaskExecutor is IExtraTaskCreator extraTaskCreator)
+                    _taskQueue.EnqueueAll(extraTaskCreator.CreateExtraTasks());
 
                 _taskQueue.CurrentTaskExecutor = null;
 

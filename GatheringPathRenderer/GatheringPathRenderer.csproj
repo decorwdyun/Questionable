@@ -1,4 +1,4 @@
-<Project Sdk="Dalamud.NET.Sdk/10.0.0">
+<Project Sdk="Dalamud.NET.Sdk/11.0.0">
     <ItemGroup>
       <ProjectReference Include="..\LLib\LLib.csproj" />
       <ProjectReference Include="..\Questionable.Model\Questionable.Model.csproj" />

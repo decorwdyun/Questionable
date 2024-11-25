@@ -33,9 +33,9 @@
         {
           "DataId": 1001710,
           "Position": {
-              "X": -240.2533,
-              "Y": 18.8,
-              "Z": 86.900024
+            "X": -240.2533,
+            "Y": 18.8,
+            "Z": 86.900024
           },
           "TerritoryId": 130,
           "InteractionType": "Interact"
@@ -43,49 +43,79 @@
       ]
     },
     {
-        "Sequence": 2,
-        "Steps": [
-          {
-            "Position": {
-                "X": 149.07747,
-                "Y": -2,
-                "Z": -225.21188
+      "Sequence": 2,
+      "Steps": [
+        {
+          "TerritoryId": 130,
+          "InteractionType": "None",
+          "AetheryteShortcut": "Ul'dah",
+          "AethernetShortcut": [
+            "[Ul'dah] Thaumaturges' Guild",
+            "[Ul'dah] Gate of Nald (Central Thanalan)"
+          ],
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true,
+              "InTerritory": [
+                141
+              ],
+              "AetheryteUnlocked": "Central Thanalan - Black Brush Station"
             },
-            "TerritoryId": 141,
-            "AetheryteShortcut": "Ul'dah",
-            "AethernetShortcut": [
-              "[Ul'dah] Thaumaturges' Guild",
-              "[Ul'dah] Gate of Nald (Central Thanalan)"
-            ],
-            "SkipConditions": {
-              "AetheryteShortcutIf": {
-                "InSameTerritory": true,
-                "InTerritory": [
-                  141
-                ]
-              }
-            },
-            "InteractionType": "Combat",
-            "EnemySpawnType": "OverworldEnemies",
-            "ComplexCombatData": [
-              {
-                "DataId": 160,
-                "MinimumKillCount": 8,
-                "$": "Slay efts",
-                "CompletionQuestVariablesFlags": [
-                  {
-                    "Low": 8
-                  },
-                  null,
-                  null,
-                  null,
-                  null,
-                  null
-                ]
-              }
-            ]
+            "AethernetShortcutIf": {
+              "AetheryteUnlocked": "Central Thanalan - Black Brush Station"
+            }
           }
-        ]
+        },
+        {
+          "Position": {
+            "X": -62.183617,
+            "Y": -3.6582246,
+            "Z": 145.88391
+          },
+          "InteractionType": "WalkTo",
+          "TerritoryId": 141,
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked",
+              "AetheryteUnlocked": "Central Thanalan - Black Brush Station"
+            }
+          }
+        },
+        {
+          "Position": {
+            "X": 149.07747,
+            "Y": -2,
+            "Z": -225.21188
+          },
+          "TerritoryId": 141,
+          "AetheryteShortcut": "Central Thanalan - Black Brush Station",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
+          },
+          "Fly": true,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "OverworldEnemies",
+          "ComplexCombatData": [
+            {
+              "DataId": 160,
+              "MinimumKillCount": 8,
+              "$": "Slay efts",
+              "CompletionQuestVariablesFlags": [
+                {
+                  "Low": 8
+                },
+                null,
+                null,
+                null,
+                null,
+                null
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "Sequence": 3,
@@ -93,9 +123,9 @@
         {
           "DataId": 1001710,
           "Position": {
-              "X": -240.2533,
-              "Y": 18.8,
-              "Z": 86.900024
+            "X": -240.2533,
+            "Y": 18.8,
+            "Z": 86.900024
           },
           "TerritoryId": 130,
           "InteractionType": "Interact",
@@ -125,9 +155,9 @@
         {
           "DataId": 2001512,
           "Position": {
-              "X": -366.29285,
-              "Y": -34.989014,
-              "Z": 293.56824
+            "X": -366.29285,
+            "Y": -34.989014,
+            "Z": 293.56824
           },
           "TerritoryId": 145,
           "InteractionType": "Combat",
@@ -151,9 +181,9 @@
         {
           "DataId": 2001499,
           "Position": {
-              "X": -366.29285,
-              "Y": -34.989014,
-              "Z": 293.56824
+            "X": -366.29285,
+            "Y": -34.989014,
+            "Z": 293.56824
           },
           "TerritoryId": 145,
           "InteractionType": "Interact"
@@ -166,9 +196,9 @@
         {
           "DataId": 1001710,
           "Position": {
-              "X": -240.2533,
-              "Y": 18.8,
-              "Z": 86.900024
+            "X": -240.2533,
+            "Y": 18.8,
+            "Z": 86.900024
           },
           "TerritoryId": 130,
           "InteractionType": "CompleteQuest",

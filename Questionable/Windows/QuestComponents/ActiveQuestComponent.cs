@@ -128,13 +128,13 @@ internal sealed partial class ActiveQuestComponent
         {
             using var _ = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudRed);
             ImGui.TextUnformatted(
-                $"Simulated Quest: {Shorten(currentQuest.Quest.Info.Name)} / {currentQuest.Sequence} / {currentQuest.Step}");
+                $"Simulated Quest: {Shorten(currentQuest.Quest.Info.Name)} ({currentQuest.Quest.Id}) / {currentQuest.Sequence} / {currentQuest.Step}");
         }
         else if (currentQuestType == QuestController.ECurrentQuestType.Gathering)
         {
             using var _ = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.ParsedGold);
             ImGui.TextUnformatted(
-                $"Gathering: {Shorten(currentQuest.Quest.Info.Name)} / {currentQuest.Sequence} / {currentQuest.Step}");
+                $"Gathering: {Shorten(currentQuest.Quest.Info.Name)} ({currentQuest.Quest.Id}) / {currentQuest.Sequence} / {currentQuest.Step}");
         }
         else
         {
@@ -154,7 +154,7 @@ internal sealed partial class ActiveQuestComponent
                 }
 
                 ImGui.TextUnformatted(
-                    $"Quest: {Shorten(startedQuest.Quest.Info.Name)} / {startedQuest.Sequence} / {startedQuest.Step}");
+                    $"Quest: {Shorten(startedQuest.Quest.Info.Name)} ({startedQuest.Quest.Id}) / {startedQuest.Sequence} / {startedQuest.Step}");
 
                 if (startedQuest.Quest.Root.Disabled)
                 {
@@ -177,7 +177,7 @@ internal sealed partial class ActiveQuestComponent
             {
                 using var _ = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
                 ImGui.TextUnformatted(
-                    $"Next Quest: {Shorten(nextQuest.Quest.Info.Name)} / {nextQuest.Sequence} / {nextQuest.Step}");
+                    $"Next Quest: {Shorten(nextQuest.Quest.Info.Name)} ({nextQuest.Quest.Id}) / {nextQuest.Sequence} / {nextQuest.Step}");
             }
         }
     }
@@ -400,7 +400,7 @@ internal sealed partial class ActiveQuestComponent
             ImGui.SameLine();
             if (ImGui.Button("Clear sim"))
             {
-                _questController.SimulateQuest(null);
+                _questController.SimulateQuest(null, 0, 0);
 
                 _movementController.Stop();
                 _questController.Stop("ClearSim");

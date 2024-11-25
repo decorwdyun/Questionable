@@ -193,7 +193,7 @@ internal static class DoGatherCollectable
 
         private EAction PickAction(EAction minerAction, EAction botanistAction)
         {
-            if ((EClassJob?)clientState.LocalPlayer?.ClassJob.Id == EClassJob.Miner)
+            if ((EClassJob?)clientState.LocalPlayer?.ClassJob.RowId == EClassJob.Miner)
                 return minerAction;
             else
                 return botanistAction;

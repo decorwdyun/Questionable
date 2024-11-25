@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Game.ClientState.Objects.Types;
@@ -6,8 +7,10 @@ using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
+using LLib.GameData;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Utils;
+using Questionable.Data;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Common;
@@ -29,7 +32,9 @@ internal static class SkipCondition
                 !QuestWorkUtils.HasCompletionFlags(step.CompletionQuestVariablesFlags) &&
                 step.RequiredQuestVariables.Count == 0 &&
                 step.PickUpQuestId == null &&
-                step.NextQuestId == null)
+                step.NextQuestId == null &&
+                step.RequiredCurrentJob.Count == 0 &&
+                step.RequiredQuestAcceptedJob.Count == 0)
                 return null;
 
             return new SkipTask(step, skipConditions ?? new(), quest.Id);
@@ -136,7 +141,8 @@ internal static class SkipCondition
                     GameObject* gameObject = (GameObject*)target.Address;
                     if (!skipConditions.NotNamePlateIconId.Contains(gameObject->NamePlateIconId))
                     {
-                        logger.LogInformation("Skipping step, object has icon id {IconId}", gameObject->NamePlateIconId);
+                        logger.LogInformation("Skipping step, object has icon id {IconId}",
+                            gameObject->NamePlateIconId);
                         return true;
                     }
                 }
@@ -213,6 +219,34 @@ internal static class SkipCondition
                         return true;
                     }
                 }
+
+                if (step is { RequiredQuestAcceptedJob.Count: > 0 })
+                {
+                    List<EClassJob> expectedJobs = step.RequiredQuestAcceptedJob
+                        .SelectMany(ClassJobUtils.AsIndividualJobs).ToList();
+                    EClassJob questJob = questWork.ClassJob;
+                    logger.LogInformation("Checking quest job {QuestJob} against {ExpectedJobs}", questJob,
+                        string.Join(",", expectedJobs));
+                    if (questJob != EClassJob.Adventurer && !expectedJobs.Contains(questJob))
+                    {
+                        logger.LogInformation("Skipping step, as quest was accepted on a different job");
+                        return true;
+                    }
+                }
+            }
+
+            if (step is { RequiredCurrentJob.Count: > 0 })
+            {
+                List<EClassJob> expectedJobs =
+                    step.RequiredCurrentJob.SelectMany(ClassJobUtils.AsIndividualJobs).ToList();
+                EClassJob currentJob = (EClassJob)clientState.LocalPlayer!.ClassJob.RowId;
+                logger.LogInformation("Checking current job {CurrentJob} against {ExpectedJobs}", currentJob,
+                    string.Join(",", expectedJobs));
+                if (!expectedJobs.Contains(currentJob))
+                {
+                    logger.LogInformation("Skipping step, as step requires a different job");
+                    return true;
+                }
             }
 
             if (skipConditions.NearPosition is { } nearPosition &&
@@ -231,7 +265,8 @@ internal static class SkipCondition
                 var position = clientState.LocalPlayer?.Position;
                 if (position != null &&
                     clientState.TerritoryType != 0 &&
-                    MatchesExtraCondition(skipConditions.ExtraCondition.Value, position.Value, clientState.TerritoryType))
+                    MatchesExtraCondition(skipConditions.ExtraCondition.Value, position.Value,
+                        clientState.TerritoryType))
                 {
                     logger.LogInformation("Skipping step, extra condition {} matches", skipConditions.ExtraCondition);
                     return true;

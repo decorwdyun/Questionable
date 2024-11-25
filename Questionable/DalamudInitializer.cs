@@ -18,9 +18,11 @@ internal sealed class DalamudInitializer : IDisposable
     private readonly QuestController _questController;
     private readonly MovementController _movementController;
     private readonly WindowSystem _windowSystem;
+    private readonly OneTimeSetupWindow _oneTimeSetupWindow;
     private readonly QuestWindow _questWindow;
     private readonly ConfigWindow _configWindow;
     private readonly IToastGui _toastGui;
+    private readonly Configuration _configuration;
     private readonly ILogger<DalamudInitializer> _logger;
 
     public DalamudInitializer(
@@ -30,6 +32,7 @@ internal sealed class DalamudInitializer : IDisposable
         MovementController movementController,
         InteractionUiController interactionUiController,
         WindowSystem windowSystem,
+        OneTimeSetupWindow oneTimeSetupWindow,
         QuestWindow questWindow,
         DebugOverlay debugOverlay,
         ConfigWindow configWindow,
@@ -38,6 +41,7 @@ internal sealed class DalamudInitializer : IDisposable
         JournalProgressWindow journalProgressWindow,
         PriorityWindow priorityWindow,
         IToastGui toastGui,
+        Configuration configuration,
         ILogger<DalamudInitializer> logger)
     {
         _pluginInterface = pluginInterface;
@@ -45,11 +49,14 @@ internal sealed class DalamudInitializer : IDisposable
         _questController = questController;
         _movementController = movementController;
         _windowSystem = windowSystem;
+        _oneTimeSetupWindow = oneTimeSetupWindow;
         _questWindow = questWindow;
         _configWindow = configWindow;
         _toastGui = toastGui;
+        _configuration = configuration;
         _logger = logger;
 
+        _windowSystem.AddWindow(oneTimeSetupWindow);
         _windowSystem.AddWindow(questWindow);
         _windowSystem.AddWindow(configWindow);
         _windowSystem.AddWindow(debugOverlay);
@@ -59,7 +66,7 @@ internal sealed class DalamudInitializer : IDisposable
         _windowSystem.AddWindow(priorityWindow);
 
         _pluginInterface.UiBuilder.Draw += _windowSystem.Draw;
-        _pluginInterface.UiBuilder.OpenMainUi += _questWindow.Toggle;
+        _pluginInterface.UiBuilder.OpenMainUi += ToggleQuestWindow;
         _pluginInterface.UiBuilder.OpenConfigUi += _configWindow.Toggle;
         _framework.Update += FrameworkUpdate;
         _framework.RunOnTick(interactionUiController.HandleCurrentDialogueChoices, TimeSpan.FromMilliseconds(200));
@@ -91,6 +98,14 @@ internal sealed class DalamudInitializer : IDisposable
     private void OnQuestToast(ref SeString message, ref QuestToastOptions options, ref bool isHandled)
         => _logger.LogTrace("Quest Toast: {Message}", message);
 
+    private void ToggleQuestWindow()
+    {
+        if (_configuration.IsPluginSetupComplete())
+            _questWindow.Toggle();
+        else
+            _oneTimeSetupWindow.IsOpen = true;
+    }
+
     public void Dispose()
     {
         _toastGui.QuestToast -= OnQuestToast;
@@ -98,7 +113,7 @@ internal sealed class DalamudInitializer : IDisposable
         _toastGui.Toast -= OnToast;
         _framework.Update -= FrameworkUpdate;
         _pluginInterface.UiBuilder.OpenConfigUi -= _configWindow.Toggle;
-        _pluginInterface.UiBuilder.OpenMainUi -= _questWindow.Toggle;
+        _pluginInterface.UiBuilder.OpenMainUi -= ToggleQuestWindow;
         _pluginInterface.UiBuilder.Draw -= _windowSystem.Draw;
 
         _windowSystem.RemoveAllWindows();

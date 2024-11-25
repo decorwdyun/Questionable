@@ -1,13 +1,27 @@
-﻿using Dalamud.Plugin.Services;
-using FFXIVClientStructs.FFXIV.Client.Game;
+﻿using System.Linq;
+using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
 using LLib.GameData;
 using Questionable.Controller.Steps.Common;
+using Questionable.Data;
+using Questionable.Model;
+using Questionable.Model.Questing;
 
 namespace Questionable.Controller.Steps.Shared;
 
 internal static class SwitchClassJob
 {
+    internal sealed class Factory : SimpleTaskFactory
+    {
+        public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
+        {
+            if (step.InteractionType != EInteractionType.SwitchClass)
+                return null;
+
+            EClassJob classJob = ClassJobUtils.AsIndividualJobs(step.TargetClass).Single();
+            return new Task(classJob);
+        }
+    }
     internal sealed record Task(EClassJob ClassJob) : ITask
     {
         public override string ToString() => $"SwitchJob({ClassJob})";
@@ -17,7 +31,7 @@ internal static class SwitchClassJob
     {
         protected override unsafe bool StartInternal()
         {
-            if (clientState.LocalPlayer!.ClassJob.Id == (uint)Task.ClassJob)
+            if (clientState.LocalPlayer!.ClassJob.RowId == (uint)Task.ClassJob)
                 return false;
 
             var gearsetModule = RaptureGearsetModule.Instance();

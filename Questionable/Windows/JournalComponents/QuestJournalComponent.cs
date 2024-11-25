@@ -368,7 +368,7 @@ internal sealed class QuestJournalComponent
         }
     }
 
-    internal void ClearCounts()
+    internal void ClearCounts(int type, int code)
     {
         foreach (var genreCount in _genreCounts.ToList())
             _genreCounts[genreCount.Key] = genreCount.Value with { Completed = 0 };

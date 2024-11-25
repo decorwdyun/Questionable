@@ -22,9 +22,9 @@
       "Steps": [
         {
           "Position": {
-            "X": 291.9449,
-            "Y": -62.62814,
-            "Z": -214.1033
+            "X": 318.06195,
+            "Y": -83.027016,
+            "Z": -226.5931
           },
           "TerritoryId": 613,
           "InteractionType": "WalkTo",
@@ -154,16 +154,6 @@
       "Sequence": 2,
       "Steps": [
         {
-          "Position": {
-            "X": 804.21405,
-            "Y": 1.4000988,
-            "Z": 720.92487
-          },
-          "TerritoryId": 613,
-          "InteractionType": "WalkTo",
-          "Fly": true
-        },
-        {
           "DataId": 1024460,
           "Position": {
             "X": 873.9298,
@@ -172,6 +162,11 @@
           },
           "TerritoryId": 613,
           "InteractionType": "Interact",
+          "AetheryteShortcut": "Kugane",
+          "AethernetShortcut": [
+            "[Kugane] Aetheryte Plaza",
+            "[Kugane] The Ruby Price"
+          ],
           "Fly": true
         }
       ]
@@ -187,8 +182,8 @@
           },
           "TerritoryId": 613,
           "InteractionType": "WalkTo",
-          "Fly": true,
-          "AetheryteShortcut": "Ruby Sea - Tamamizu"
+          "AetheryteShortcut": "Ruby Sea - Tamamizu",
+          "Fly": true
         },
         {
           "DataId": 1024217,

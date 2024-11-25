@@ -258,6 +258,7 @@ public enum EAetheryteLocation
     KozamaukaOkHanu = 202,
     KozamaukaManyFires = 203,
     KozamaukaEarthenshire = 204,
+    KozamaukaDockPoga = 238,
     YakTelIqBraax = 205,
     YakTelMamook = 206,
     ShaaloaniHhusatahwi = 207,

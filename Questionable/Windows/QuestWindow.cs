@@ -67,7 +67,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
 #endif
         SizeConstraints = new WindowSizeConstraints
         {
-            MinimumSize = new Vector2(200, 30),
+            MinimumSize = new Vector2(230, 30),
             MaximumSize = default
         };
         RespectCloseHotkey = false;
@@ -113,6 +113,9 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
 
     public override bool DrawConditions()
     {
+        if (!_configuration.IsPluginSetupComplete())
+            return false;
+
         if (!_clientState.IsLoggedIn || _clientState.LocalPlayer == null || _clientState.IsPvPExcludingDen)
             return false;
 

@@ -3,13 +3,13 @@ using System.Linq;
 using Dalamud.Plugin.Services;
 using Dalamud.Utility;
 using LLib;
-using Lumina.Excel.CustomSheets;
-using Lumina.Excel.GeneratedSheets;
-using Lumina.Text;
+using Lumina.Excel.Exceptions;
+using Lumina.Excel.Sheets;
+using Lumina.Text.ReadOnly;
 using Microsoft.Extensions.Logging;
 using Questionable.Model;
 using Quest = Questionable.Model.Quest;
-using GimmickYesNo = Lumina.Excel.GeneratedSheets2.GimmickYesNo;
+using GimmickYesNo = Lumina.Excel.Sheets.GimmickYesNo;
 
 namespace Questionable.Functions;
 
@@ -33,12 +33,12 @@ internal sealed class ExcelFunctions
             return new StringOrRegex(seString?.ToDalamudString().ToString());
     }
 
-    public SeString? GetRawDialogueText(Quest? currentQuest, string? excelSheetName, string key)
+    public ReadOnlySeString? GetRawDialogueText(Quest? currentQuest, string? excelSheetName, string key)
     {
         if (currentQuest != null && excelSheetName == null)
         {
             var questRow =
-                _dataManager.GetExcelSheet<Lumina.Excel.GeneratedSheets2.Quest>()!.GetRow((uint)currentQuest.Id.Value +
+                _dataManager.GetExcelSheet<Lumina.Excel.Sheets.Quest>().GetRowOrDefault((uint)currentQuest.Id.Value +
                     0x10000);
             if (questRow == null)
             {
@@ -46,18 +46,20 @@ internal sealed class ExcelFunctions
                 return null;
             }
 
-            excelSheetName = $"quest/{(currentQuest.Id.Value / 100):000}/{questRow.Id}";
+            excelSheetName = $"quest/{(currentQuest.Id.Value / 100):000}/{questRow.Value.Id}";
         }
 
         ArgumentNullException.ThrowIfNull(excelSheetName);
-        var excelSheet = _dataManager.Excel.GetSheet<QuestDialogueText>(excelSheetName);
-        if (excelSheet == null)
+        try
         {
-            _logger.LogError("Unknown excel sheet '{SheetName}'", excelSheetName);
-            return null;
+            var excelSheet = _dataManager.GetExcelSheet<QuestDialogueText>(name: excelSheetName);
+            return excelSheet.Cast<QuestDialogueText?>()
+                .FirstOrDefault(x => x!.Value.Key == key)?.Value;
         }
-
-        return excelSheet.FirstOrDefault(x => x.Key == key)?.Value;
+        catch (SheetNotFoundException e)
+        {
+            throw new SheetNotFoundException($"Sheet '{excelSheetName}' not found", e);
+        }
     }
 
     public StringOrRegex GetDialogueTextByRowId(string? excelSheet, uint rowId, bool isRegex)
@@ -69,36 +71,36 @@ internal sealed class ExcelFunctions
             return new StringOrRegex(seString?.ToDalamudString().ToString());
     }
 
-    public SeString? GetRawDialogueTextByRowId(string? excelSheet, uint rowId)
+    public ReadOnlySeString? GetRawDialogueTextByRowId(string? excelSheet, uint rowId)
     {
         if (excelSheet == "GimmickYesNo")
         {
-            var questRow = _dataManager.GetExcelSheet<GimmickYesNo>()!.GetRow(rowId);
+            var questRow = _dataManager.GetExcelSheet<GimmickYesNo>().GetRowOrDefault(rowId);
             return questRow?.Unknown0;
         }
         else if (excelSheet == "Warp")
         {
-            var questRow = _dataManager.GetExcelSheet<Warp>()!.GetRow(rowId);
+            var questRow = _dataManager.GetExcelSheet<Warp>().GetRowOrDefault(rowId);
             return questRow?.Name;
         }
         else if (excelSheet is "Addon")
         {
-            var questRow = _dataManager.GetExcelSheet<Addon>()!.GetRow(rowId);
+            var questRow = _dataManager.GetExcelSheet<Addon>().GetRowOrDefault(rowId);
             return questRow?.Text;
         }
         else if (excelSheet is "EventPathMove")
         {
-            var questRow = _dataManager.GetExcelSheet<EventPathMove>()!.GetRow(rowId);
-            return questRow?.Unknown10;
+            var questRow = _dataManager.GetExcelSheet<EventPathMove>().GetRowOrDefault(rowId);
+            return questRow?.Unknown0;
         }
         else if (excelSheet is "GilShop")
         {
-            var questRow = _dataManager.GetExcelSheet<GilShop>()!.GetRow(rowId);
+            var questRow = _dataManager.GetExcelSheet<GilShop>().GetRowOrDefault(rowId);
             return questRow?.Name;
         }
         else if (excelSheet is "ContentTalk" or null)
         {
-            var questRow = _dataManager.GetExcelSheet<ContentTalk>()!.GetRow(rowId);
+            var questRow = _dataManager.GetExcelSheet<ContentTalk>().GetRowOrDefault(rowId);
             return questRow?.Text;
         }
         else

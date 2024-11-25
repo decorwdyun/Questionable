@@ -3,16 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Numerics;
-using System.Text.Json;
-using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
-using System.Text.Json.Serialization.Metadata;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Game.Command;
 using Dalamud.Plugin.Services;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 using Questionable.Model;
 using Questionable.Model.Gathering;
 using Questionable.Model.Questing;
@@ -70,14 +66,14 @@ internal sealed class EditorCommands : IDisposable
         if (target == null || target.ObjectKind != ObjectKind.GatheringPoint)
             throw new Exception("No valid target");
 
-        var gatheringPoint = _dataManager.GetExcelSheet<GatheringPoint>()!.GetRow(target.DataId);
+        var gatheringPoint = _dataManager.GetExcelSheet<GatheringPoint>().GetRowOrDefault(target.DataId);
         if (gatheringPoint == null)
             throw new Exception("Invalid gathering point");
 
         FileInfo targetFile;
         GatheringRoot root;
         var locationsInTerritory = _plugin.GetLocationsInTerritory(_clientState.TerritoryType).ToList();
-        var location = locationsInTerritory.SingleOrDefault(x => x.Id == gatheringPoint.GatheringPointBase.Row);
+        var location = locationsInTerritory.SingleOrDefault(x => x.Id == gatheringPoint.Value.GatheringPointBase.RowId);
         if (location != null)
         {
             targetFile = location.File;
@@ -96,7 +92,7 @@ internal sealed class EditorCommands : IDisposable
         }
         else
         {
-            (targetFile, root) = CreateNewFile(gatheringPoint, target);
+            (targetFile, root) = CreateNewFile(gatheringPoint.Value, target);
             _chatGui.Print($"Creating new file under {targetFile.FullName}", "qG");
         }
 
@@ -174,16 +170,16 @@ internal sealed class EditorCommands : IDisposable
             ?.File.Directory;
         if (targetFolder == null)
         {
-            var territoryInfo = _dataManager.GetExcelSheet<TerritoryType>()!.GetRow(_clientState.TerritoryType)!;
+            var territoryInfo = _dataManager.GetExcelSheet<TerritoryType>().GetRow(_clientState.TerritoryType);
             targetFolder = _plugin.PathsDirectory
-                .CreateSubdirectory(ExpansionData.ExpansionFolders[(EExpansionVersion)territoryInfo.ExVersion.Row])
-                .CreateSubdirectory(territoryInfo.PlaceName.Value!.Name.ToString());
+                .CreateSubdirectory(ExpansionData.ExpansionFolders[(EExpansionVersion)territoryInfo.ExVersion.RowId])
+                .CreateSubdirectory(territoryInfo.PlaceName.Value.Name.ToString());
         }
 
         FileInfo targetFile =
             new FileInfo(
                 Path.Combine(targetFolder.FullName,
-                    $"{gatheringPoint.GatheringPointBase.Row}_{gatheringPoint.PlaceName.Value!.Name}_{(_clientState.LocalPlayer!.ClassJob.Id == 16 ? "MIN" : "BTN")}.json"));
+                    $"{gatheringPoint.GatheringPointBase.RowId}_{gatheringPoint.PlaceName.Value.Name}_{(_clientState.LocalPlayer!.ClassJob.RowId == 16 ? "MIN" : "BTN")}.json"));
         var root = new GatheringRoot
         {
             Author = [_configuration.AuthorName],

@@ -59,6 +59,16 @@
       "Sequence": 2,
       "Steps": [
         {
+          "Position": {
+            "X": 58.39701,
+            "Y": -48.000008,
+            "Z": -172.36507
+          },
+          "TerritoryId": 398,
+          "InteractionType": "WalkTo",
+          "Fly": true
+        },
+        {
           "DataId": 1016803,
           "Position": {
             "X": 57.297607,
@@ -66,8 +76,7 @@
             "Z": -174.63953
           },
           "TerritoryId": 398,
-          "InteractionType": "Interact",
-          "Fly": true
+          "InteractionType": "Interact"
         }
       ]
     },
@@ -103,6 +112,16 @@
       "Sequence": 255,
       "Steps": [
         {
+          "Position": {
+            "X": 58.39701,
+            "Y": -48.000008,
+            "Z": -172.36507
+          },
+          "TerritoryId": 398,
+          "InteractionType": "WalkTo",
+          "Fly": true
+        },
+        {
           "DataId": 1016803,
           "Position": {
             "X": 57.297607,
@@ -110,8 +129,7 @@
             "Z": -174.63953
           },
           "TerritoryId": 398,
-          "InteractionType": "CompleteQuest",
-          "Fly": true
+          "InteractionType": "CompleteQuest"
         }
       ]
     }

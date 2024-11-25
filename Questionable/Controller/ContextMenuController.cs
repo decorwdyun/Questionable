@@ -71,14 +71,16 @@ internal sealed class ContextMenuController : IDisposable
 
         if (_gatheringData.TryGetCustomDeliveryNpc(itemId, out uint npcId))
         {
-            AddContextMenuEntry(args, itemId, npcId, EClassJob.Miner, "Mine");
-            AddContextMenuEntry(args, itemId, npcId, EClassJob.Botanist, "Harvest");
+            AddContextMenuEntry(args, itemId, npcId, EExtendedClassJob.Miner, "Mine");
+            AddContextMenuEntry(args, itemId, npcId, EExtendedClassJob.Botanist, "Harvest");
         }
     }
 
-    private void AddContextMenuEntry(IMenuOpenedArgs args, uint itemId, uint npcId, EClassJob classJob, string verb)
+    private void AddContextMenuEntry(IMenuOpenedArgs args, uint itemId, uint npcId, EExtendedClassJob extendedClassJob,
+        string verb)
     {
-        EClassJob currentClassJob = (EClassJob)_clientState.LocalPlayer!.ClassJob.Id;
+        EClassJob currentClassJob = (EClassJob)_clientState.LocalPlayer!.ClassJob.RowId;
+        EClassJob classJob = ClassJobUtils.AsIndividualJobs(extendedClassJob).Single();
         if (classJob != currentClassJob && currentClassJob is EClassJob.Miner or EClassJob.Botanist)
             return;
 
@@ -123,26 +125,31 @@ internal sealed class ContextMenuController : IDisposable
             Prefix = SeIconChar.Hyadelyn,
             PrefixColor = 52,
             Name = name,
-            OnClicked = _ => StartGathering(npcId, itemId, quantityToGather, collectability, classJob),
+            OnClicked = _ => StartGathering(npcId, itemId, quantityToGather, collectability, extendedClassJob),
             IsEnabled = string.IsNullOrEmpty(lockedReasonn),
         });
     }
 
-    private void StartGathering(uint npcId, uint itemId, int quantity, ushort collectability, EClassJob classJob)
+    private void StartGathering(uint npcId, uint itemId, int quantity, ushort collectability,
+        EExtendedClassJob extendedClassJob)
     {
         var info = (SatisfactionSupplyInfo)_questData.GetAllByIssuerDataId(npcId)
             .Single(x => x is SatisfactionSupplyInfo);
         if (_questRegistry.TryGetQuest(info.QuestId, out Quest? quest))
         {
-            var step = quest.FindSequence(0)!.Steps.Single(x => x.InteractionType == EInteractionType.Gather);
-            step.ItemsToGather =
+            var sequence = quest.FindSequence(0)!;
+
+            var switchClassStep = sequence.Steps.Single(x => x.InteractionType == EInteractionType.SwitchClass);
+            switchClassStep.TargetClass = extendedClassJob;
+
+            var gatherStep = sequence.Steps.Single(x => x.InteractionType == EInteractionType.Gather);
+            gatherStep.ItemsToGather =
             [
                 new GatheredItem
                 {
                     ItemId = itemId,
                     ItemCount = quantity,
                     Collectability = collectability,
-                    QuestAcceptedAsClass = (uint)classJob,
                 }
             ];
             _questController.SetGatheringQuest(quest);

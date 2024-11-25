@@ -140,19 +140,28 @@
         {
           "TerritoryId": 960,
           "InteractionType": "Gather",
+          "RequiredQuestAcceptedJob": [
+            "Miner"
+          ],
           "ItemsToGather": [
             {
-              "QuestAcceptedAsClass": "Miner",
               "ItemId": 38278,
               "ItemCount": 3
-            },
+            }
+          ]
+        },
+        {
+          "TerritoryId": 960,
+          "InteractionType": "Gather",
+          "RequiredQuestAcceptedJob": [
+            "Botanist"
+          ],
+          "ItemsToGather": [
             {
-              "QuestAcceptedAsClass": "Botanist",
               "ItemId": 38302,
               "ItemCount": 3
             }
-          ],
-          "Fly": true
+          ]
         },
         {
           "DataId": 2013072,

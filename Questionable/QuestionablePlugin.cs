@@ -6,6 +6,7 @@ using Dalamud.Game.ClientState.Objects;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
+using LLib;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller;
@@ -110,7 +111,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<GameFunctions>();
         serviceCollection.AddSingleton<ChatFunctions>();
         serviceCollection.AddSingleton<QuestFunctions>();
-        serviceCollection.AddSingleton<AutoSnipeHandler>();
+        serviceCollection.AddSingleton<DalamudReflector>();
 
         serviceCollection.AddSingleton<AetherCurrentData>();
         serviceCollection.AddSingleton<AetheryteData>();
@@ -125,6 +126,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<ArtisanIpc>();
         serviceCollection.AddSingleton<QuestionableIpc>();
         serviceCollection.AddSingleton<TextAdvanceIpc>();
+        serviceCollection.AddSingleton<NotificationMasterIpc>();
+        serviceCollection.AddSingleton<AutomatonIpc>();
     }
 
     private static void AddTaskFactories(ServiceCollection serviceCollection)
@@ -134,7 +137,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
             .AddTaskExecutor<MoveToLandingLocation.Task, MoveToLandingLocation.MoveToLandingLocationExecutor>();
         serviceCollection.AddTaskExecutor<DoGather.Task, DoGather.GatherExecutor>();
         serviceCollection.AddTaskExecutor<DoGatherCollectable.Task, DoGatherCollectable.GatherCollectableExecutor>();
-        serviceCollection.AddTaskExecutor<SwitchClassJob.Task, SwitchClassJob.SwitchClassJobExecutor>();
+        serviceCollection.AddTaskFactoryAndExecutor<SwitchClassJob.Task, SwitchClassJob.Factory,
+            SwitchClassJob.SwitchClassJobExecutor>();
         serviceCollection.AddTaskExecutor<Mount.MountTask, Mount.MountExecutor>();
         serviceCollection.AddTaskExecutor<Mount.UnmountTask, Mount.UnmountExecutor>();
 
@@ -143,7 +147,6 @@ public sealed class QuestionablePlugin : IDalamudPlugin
             .AddTaskFactoryAndExecutor<StepDisabled.SkipRemainingTasks, StepDisabled.Factory,
                 StepDisabled.SkipDisabledStepsExecutor>();
         serviceCollection.AddTaskFactory<EquipRecommended.BeforeDutyOrInstance>();
-        serviceCollection.AddTaskFactoryAndExecutor<Gather.GatheringTask, Gather.Factory, Gather.StartGathering>();
         serviceCollection.AddTaskExecutor<Gather.SkipMarker, Gather.DoSkip>();
         serviceCollection
             .AddTaskFactoryAndExecutor<AetheryteShortcut.Task, AetheryteShortcut.Factory,
@@ -152,6 +155,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
             .AddTaskExecutor<AetheryteShortcut.MoveAwayFromAetheryte, AetheryteShortcut.MoveAwayFromAetheryteExecutor>();
         serviceCollection
             .AddTaskFactoryAndExecutor<SkipCondition.SkipTask, SkipCondition.Factory, SkipCondition.CheckSkip>();
+        serviceCollection.AddTaskFactoryAndExecutor<Gather.GatheringTask, Gather.Factory, Gather.StartGathering>();
+        serviceCollection.AddTaskExecutor<Gather.DelayedGatheringTask, Gather.DelayedGatheringExecutor>();
         serviceCollection
             .AddTaskFactoryAndExecutor<AethernetShortcut.Task, AethernetShortcut.Factory,
                 AethernetShortcut.UseAethernetShortcut>();
@@ -160,6 +165,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTaskFactoryAndExecutor<MoveTo.MoveTask, MoveTo.Factory, MoveTo.MoveExecutor>();
         serviceCollection.AddTaskExecutor<MoveTo.WaitForNearDataId, MoveTo.WaitForNearDataIdExecutor>();
         serviceCollection.AddTaskExecutor<MoveTo.LandTask, MoveTo.LandExecutor>();
+        serviceCollection
+            .AddTaskFactoryAndExecutor<SendNotification.Task, SendNotification.Factory, SendNotification.Executor>();
 
         serviceCollection
             .AddTaskFactoryAndExecutor<NextQuest.SetQuestTask, NextQuest.Factory, NextQuest.NextQuestExecutor>();
@@ -255,6 +262,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<QuestJournalComponent>();
         serviceCollection.AddSingleton<GatheringJournalComponent>();
 
+        serviceCollection.AddSingleton<OneTimeSetupWindow>();
         serviceCollection.AddSingleton<QuestWindow>();
         serviceCollection.AddSingleton<ConfigWindow>();
         serviceCollection.AddSingleton<DebugOverlay>();
@@ -292,8 +300,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceProvider.GetRequiredService<ShopController>();
         serviceProvider.GetRequiredService<QuestionableIpc>();
         serviceProvider.GetRequiredService<DalamudInitializer>();
-        serviceProvider.GetRequiredService<AutoSnipeHandler>().Enable();
         serviceProvider.GetRequiredService<TextAdvanceIpc>();
+        serviceProvider.GetRequiredService<AutomatonIpc>();
     }
 
     public void Dispose()

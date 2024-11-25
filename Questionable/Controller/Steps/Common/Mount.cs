@@ -1,7 +1,9 @@
 ﻿using System;
 using Dalamud.Game.ClientState.Conditions;
+using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using FFXIVClientStructs.FFXIV.Client.Game.Character;
 using FFXIVClientStructs.FFXIV.Common.Math;
 using Microsoft.Extensions.Logging;
 using Questionable.Data;
@@ -35,21 +37,21 @@ internal static class Mount
         private bool _mountTriggered;
         private DateTime _retryAt = DateTime.MinValue;
 
-        protected override bool Start()
+        public MountResult EvaluateMountState()
         {
             if (condition[ConditionFlag.Mounted])
-                return false;
+                return MountResult.DontMount;
 
             if (!territoryData.CanUseMount(Task.TerritoryId))
             {
                 logger.LogInformation("Can't use mount in current territory {Id}", Task.TerritoryId);
-                return false;
+                return MountResult.DontMount;
             }
 
             if (gameFunctions.HasStatusPreventingMount())
             {
                 logger.LogInformation("Can't mount due to status preventing sprint or mount");
-                return false;
+                return MountResult.DontMount;
             }
 
             if (Task.MountIf == EMountIf.AwayFromPosition)
@@ -59,7 +61,7 @@ internal static class Mount
                 if (Task.TerritoryId == clientState.TerritoryType && distance < 30f && !Conditions.IsDiving)
                 {
                     logger.LogInformation("Not using mount, as we're close to the target");
-                    return false;
+                    return MountResult.DontMount;
                 }
 
                 logger.LogInformation(
@@ -72,11 +74,13 @@ internal static class Mount
             if (!condition[ConditionFlag.InCombat])
             {
                 _retryAt = DateTime.Now.AddSeconds(0.5);
-                return true;
+                return MountResult.Mount;
             }
-
-            return false;
+            else
+                return MountResult.WhenOutOfCombat;
         }
+
+        protected override bool Start() => EvaluateMountState() == MountResult.Mount;
 
         public override ETaskResult Update()
         {
@@ -106,6 +110,13 @@ internal static class Mount
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
         }
+    }
+
+    internal enum MountResult
+    {
+        DontMount,
+        Mount,
+        WhenOutOfCombat,
     }
 
     internal sealed record UnmountTask : ITask
@@ -175,7 +186,17 @@ internal static class Mount
                 : ETaskResult.TaskComplete;
         }
 
-        private unsafe bool IsUnmounting() => **(byte**)(clientState.LocalPlayer!.Address + 1432) == 1;
+        private unsafe bool IsUnmounting()
+        {
+            IPlayerCharacter? localPlayer = clientState.LocalPlayer;
+            if (localPlayer != null)
+            {
+                BattleChara* battleChara = (BattleChara*) localPlayer.Address;
+                return (battleChara->Mount.Flags & 1) == 1;
+            }
+
+            return false;
+        }
     }
 
     public enum EMountIf

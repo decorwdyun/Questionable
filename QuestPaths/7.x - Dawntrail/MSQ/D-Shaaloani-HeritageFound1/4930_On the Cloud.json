@@ -147,8 +147,7 @@
             "Z": -473.94547
           },
           "TerritoryId": 1191,
-          "InteractionType": "WalkTo",
-          "Comment": "TODO Verify this avoids combat"
+          "InteractionType": "WalkTo"
         },
         {
           "DataId": 1047428,

@@ -28,6 +28,7 @@
           },
           "TerritoryId": 613,
           "InteractionType": "WalkTo",
+          "RestartNavigationIfCancelled": false,
           "Fly": true
         },
         {
@@ -38,6 +39,7 @@
           },
           "TerritoryId": 613,
           "InteractionType": "WalkTo",
+          "RestartNavigationIfCancelled": false,
           "Fly": true
         },
         {
@@ -58,9 +60,9 @@
       "Steps": [
         {
           "Position": {
-            "X": 368.39856,
-            "Y": -116.624695,
-            "Z": -291.34058
+            "X": 367.17773,
+            "Y": -119.94679,
+            "Z": -292.3781
           },
           "TerritoryId": 613,
           "InteractionType": "UseItem",

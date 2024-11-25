@@ -157,14 +157,24 @@
         {
           "TerritoryId": 1073,
           "InteractionType": "Gather",
+          "RequiredQuestAcceptedJob": [
+            "Miner"
+          ],
           "ItemsToGather": [
             {
-              "QuestAcceptedAsClass": "Miner",
               "ItemId": 38280,
               "ItemCount": 3
-            },
+            }
+          ]
+        },
+        {
+          "TerritoryId": 1073,
+          "InteractionType": "Gather",
+          "RequiredQuestAcceptedJob": [
+            "Botanist"
+          ],
+          "ItemsToGather": [
             {
-              "QuestAcceptedAsClass": "Botanist",
               "ItemId": 38304,
               "ItemCount": 3
             }

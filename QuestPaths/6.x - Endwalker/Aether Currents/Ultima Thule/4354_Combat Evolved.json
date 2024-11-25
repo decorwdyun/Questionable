@@ -55,7 +55,11 @@
           "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
             14044
-          ]
+          ],
+          "CombatItemUse": {
+            "ItemId": 2003273,
+            "Condition": "Incapacitated"
+          }
         }
       ]
     },

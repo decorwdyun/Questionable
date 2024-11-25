@@ -16,7 +16,7 @@ using FFXIVClientStructs.FFXIV.Component.GUI;
 using LLib;
 using LLib.GameData;
 using LLib.GameUI;
-using Lumina.Excel.GeneratedSheets;
+using Lumina.Excel.Sheets;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Interactions;
 using Questionable.Data;
@@ -90,7 +90,7 @@ internal sealed class InteractionUiController : IDisposable
         _shopController = shopController;
         _logger = logger;
 
-        _returnRegex = _dataManager.GetExcelSheet<Addon>()!.GetRow(196)!.GetRegex(addon => addon.Text, pluginLog)!;
+        _returnRegex = _dataManager.GetExcelSheet<Addon>().GetRow(196).GetRegex(addon => addon.Text, pluginLog)!;
 
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "SelectString", SelectStringPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "CutSceneSelectString", CutsceneSelectStringPostSetup);
@@ -98,7 +98,6 @@ internal sealed class InteractionUiController : IDisposable
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "SelectYesno", SelectYesnoPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "PointMenu", PointMenuPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "HousingSelectBlock", HousingSelectBlockPostSetup);
-        _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "TelepotTown", TeleportTownPostSetup);
 
         unsafe
         {
@@ -713,7 +712,7 @@ internal sealed class InteractionUiController : IDisposable
             step.InteractionType == EInteractionType.Gather)
         {
             if (_gatheringData.TryGetGatheringPointId(step.ItemsToGather[0].ItemId,
-                    (EClassJob?)_clientState.LocalPlayer?.ClassJob.Id ?? EClassJob.Adventurer,
+                    (EClassJob?)_clientState.LocalPlayer?.ClassJob.RowId ?? EClassJob.Adventurer,
                     out GatheringPointId? gatheringPointId) &&
                 _gatheringPointRegistry.TryGetGatheringPoint(gatheringPointId, out GatheringRoot? root))
             {
@@ -756,20 +755,20 @@ internal sealed class InteractionUiController : IDisposable
     private bool TryFindWarp(ushort targetTerritoryId, string actualPrompt, [NotNullWhen(true)] out uint? warpId,
         [NotNullWhen(true)] out string? warpText)
     {
-        var warps = _dataManager.GetExcelSheet<Warp>()!
-            .Where(x => x.RowId > 0 && x.TerritoryType.Row == targetTerritoryId);
+        var warps = _dataManager.GetExcelSheet<Warp>()
+            .Where(x => x.RowId > 0 && x.TerritoryType.RowId == targetTerritoryId);
         foreach (var entry in warps)
         {
-            string? excelName = entry.Name?.ToString();
-            string? excelQuestion = entry.Question?.ToString();
+            string excelName = entry.Name.ToString();
+            string excelQuestion = entry.Question.ToString();
 
-            if (excelQuestion != null && GameFunctions.GameStringEquals(excelQuestion, actualPrompt))
+            if (!string.IsNullOrEmpty(excelQuestion) && GameFunctions.GameStringEquals(excelQuestion, actualPrompt))
             {
                 warpId = entry.RowId;
                 warpText = excelQuestion;
                 return true;
             }
-            else if (excelName != null && GameFunctions.GameStringEquals(excelName, actualPrompt))
+            else if (!string.IsNullOrEmpty(excelName) && GameFunctions.GameStringEquals(excelName, actualPrompt))
             {
                 warpId = entry.RowId;
                 warpText = excelName;
@@ -848,46 +847,6 @@ internal sealed class InteractionUiController : IDisposable
         addon->FireCallbackInt(0);
     }
 
-    private void TeleportTownPostSetup(AddonEvent type, AddonArgs args)
-    {
-        if (ShouldHandleUiInteractions &&
-            _questController.HasCurrentTaskMatching(out AethernetShortcut.Task? aethernetShortcut) &&
-            aethernetShortcut.From.IsFirmamentAetheryte())
-        {
-            // this might be better via atkvalues; but this works for now
-            uint toIndex = aethernetShortcut.To switch
-            {
-                EAetheryteLocation.FirmamentMendicantsCourt => 0,
-                EAetheryteLocation.FirmamentMattock => 1,
-                EAetheryteLocation.FirmamentNewNest => 2,
-                EAetheryteLocation.FirmanentSaintRoellesDais => 3,
-                EAetheryteLocation.FirmamentFeatherfall => 4,
-                EAetheryteLocation.FirmamentHoarfrostHall => 5,
-                EAetheryteLocation.FirmamentWesternRisensongQuarter => 6,
-                EAetheryteLocation.FIrmamentEasternRisensongQuarter => 7,
-                _ => uint.MaxValue,
-            };
-
-            if (toIndex == uint.MaxValue)
-                return;
-
-            _logger.LogInformation("Teleporting to {ToName} with menu index {ToIndex}", aethernetShortcut.From,
-                toIndex);
-            unsafe
-            {
-                var teleportToDestination = stackalloc AtkValue[]
-                {
-                    new() { Type = ValueType.Int, Int = 11 },
-                    new() { Type = ValueType.UInt, UInt = toIndex }
-                };
-
-                var addon = (AtkUnitBase*)args.Addon;
-                addon->FireCallback(2, teleportToDestination);
-                addon->FireCallback(2, teleportToDestination, true);
-            }
-        }
-    }
-
     private StringOrRegex? ResolveReference(Quest? quest, string? excelSheet, ExcelRef? excelRef, bool isRegExp)
     {
         if (excelRef == null)
@@ -905,7 +864,6 @@ internal sealed class InteractionUiController : IDisposable
 
     public void Dispose()
     {
-        _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "TelepotTown", TeleportTownPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "HousingSelectBlock", HousingSelectBlockPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "PointMenu", PointMenuPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "SelectYesno", SelectYesnoPostSetup);
