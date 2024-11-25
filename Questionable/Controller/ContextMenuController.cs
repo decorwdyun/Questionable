@@ -4,8 +4,10 @@ using Dalamud.Game.Gui.ContextMenu;
 using Dalamud.Game.Text;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using LLib.GameData;
+using LLib.GameUI;
 using Microsoft.Extensions.Logging;
 using Questionable.Data;
 using Questionable.Functions;
@@ -59,9 +61,16 @@ internal sealed class ContextMenuController : IDisposable
 
     private void MenuOpened(IMenuOpenedArgs args)
     {
-        uint itemId = (uint)_gameGui.HoveredItem;
-        if (itemId == 0)
+        // no clue why this isn't the actual name, but here we are
+        if (args.AddonName != null)
             return;
+
+        uint itemId = GetHoveredSatisfactionSupplyItemId();
+        if (itemId == 0)
+        {
+            _logger.LogTrace("Ignoring context menu, no item hovered");
+            return;
+        }
 
         if (itemId > 1_000_000)
             itemId -= 1_000_000;
@@ -74,6 +83,25 @@ internal sealed class ContextMenuController : IDisposable
             AddContextMenuEntry(args, itemId, npcId, EExtendedClassJob.Miner, "Mine");
             AddContextMenuEntry(args, itemId, npcId, EExtendedClassJob.Botanist, "Harvest");
         }
+        else
+            _logger.LogDebug("No custom delivery NPC found for item {ItemId}.", itemId);
+    }
+
+    private unsafe uint GetHoveredSatisfactionSupplyItemId()
+    {
+        AgentSatisfactionSupply* agent = AgentSatisfactionSupply.Instance();
+        if (agent == null || !agent->IsAgentActive())
+            return 0;
+
+
+        if (_gameGui.TryGetAddonByName("SatisfactionSupply", out AddonSatisfactionSupply* addon) &&
+            LAddon.IsAddonReady(&addon->AtkUnitBase) &&
+            addon->HoveredElementIndex is >= 0 and <= 2)
+        {
+            return agent->Items[addon->HoveredElementIndex].Id;
+        }
+
+        return 0;
     }
 
     private void AddContextMenuEntry(IMenuOpenedArgs args, uint itemId, uint npcId, EExtendedClassJob extendedClassJob,
@@ -86,7 +114,7 @@ internal sealed class ContextMenuController : IDisposable
 
         if (!_gatheringData.TryGetGatheringPointId(itemId, classJob, out _))
         {
-            _logger.LogInformation("No gathering point found for current job.");
+            _logger.LogInformation("No gathering point found for {ClassJob}.", classJob);
             return;
         }
 
