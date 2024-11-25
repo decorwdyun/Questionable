@@ -1,7 +1,6 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -25,6 +24,53 @@
           "StopDistance": 5,
           "TerritoryId": 1188,
           "InteractionType": "AcceptQuest"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1051798,
+          "Position": {
+            "X": 897.734,
+            "Y": 6.8223433,
+            "Z": -285.1759
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "AetheryteShortcut": "Kozama'uka - Dock Poga",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": 770.7179,
+                  "Y": 12.84657,
+                  "Z": -263.99634
+                },
+                "TerritoryId": 1188,
+                "MaximumDistance": 300
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1052345,
+          "Position": {
+            "X": 908.50684,
+            "Y": 5.7142797,
+            "Z": -337.85004
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "Action",
+          "Action": "Bosom Brook",
+          "Fly": true
         }
       ]
     },

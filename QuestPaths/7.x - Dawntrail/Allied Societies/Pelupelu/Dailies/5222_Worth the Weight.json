@@ -1,7 +1,6 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -29,6 +28,66 @@
       ]
     },
     {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1052339,
+          "Position": {
+            "X": 910.3379,
+            "Y": 10.1397,
+            "Z": -381.36877
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "AetheryteShortcut": "Kozama'uka - Dock Poga",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": 770.7179,
+                  "Y": 12.84657,
+                  "Z": -263.99634
+                },
+                "TerritoryId": 1188,
+                "MaximumDistance": 300
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 2014506,
+          "Position": {
+            "X": 910.3379,
+            "Y": 10.421875,
+            "Z": -379.01886
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1052340,
+          "Position": {
+            "X": 789.9137,
+            "Y": 14.354868,
+            "Z": -215.77783
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
       "Sequence": 255,
       "Steps": [
         {
@@ -39,7 +98,20 @@
           },
           "TerritoryId": 1188,
           "InteractionType": "WalkTo",
-          "AetheryteShortcut": "Kozama'uka - Dock Poga"
+          "AetheryteShortcut": "Kozama'uka - Dock Poga",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": 770.7179,
+                  "Y": 12.84657,
+                  "Z": -263.99634
+                },
+                "TerritoryId": 1188,
+                "MaximumDistance": 300
+              }
+            }
+          }
         },
         {
           "DataId": 1051711,

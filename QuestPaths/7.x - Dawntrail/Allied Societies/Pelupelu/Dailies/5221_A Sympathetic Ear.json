@@ -1,7 +1,6 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -25,6 +24,35 @@
           "StopDistance": 5,
           "TerritoryId": 1188,
           "InteractionType": "AcceptQuest"
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1052337,
+          "Position": {
+            "X": 479.14844,
+            "Y": 113.54922,
+            "Z": 175.37183
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Kozama'uka - Many Fires",
+          "Fly": true,
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_BANPEL123_05221_Q1_000_000",
+              "Answer": "TEXT_BANPEL123_05221_A1_000_003"
+            },
+            {
+              "Type": "List",
+              "Prompt": "TEXT_BANPEL123_05221_Q2_000_000",
+              "Answer": "TEXT_BANPEL123_05221_A2_000_002"
+            }
+          ]
         }
       ]
     },
