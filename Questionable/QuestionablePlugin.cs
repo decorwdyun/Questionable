@@ -133,6 +133,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
     private static void AddTaskFactories(ServiceCollection serviceCollection)
     {
         // individual tasks
+        serviceCollection.AddTaskFactory<QuestCleanUp.CheckAlliedSocietyMount>();
         serviceCollection
             .AddTaskExecutor<MoveToLandingLocation.Task, MoveToLandingLocation.MoveToLandingLocationExecutor>();
         serviceCollection.AddTaskExecutor<DoGather.Task, DoGather.GatherExecutor>();
