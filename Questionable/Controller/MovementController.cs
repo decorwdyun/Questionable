@@ -317,6 +317,13 @@ internal sealed class MovementController : IDisposable
             _logger.LogInformation("Using modified start position for flying pathfinding: {StartPosition}",
                 startPosition.ToString("G", CultureInfo.InvariantCulture));
         }
+        else if (fly)
+        {
+            // other positions have a (lesser) chance of starting from underground too, in which case pathfinding takes
+            // >10 seconds and gets stuck trying to go through the ground.
+            // only for flying; as walking uses a different algorithm
+            startPosition = startPosition with { Y = startPosition.Y + 0.2f };
+        }
 
         _pathfindTask =
             _navmeshIpc.Pathfind(startPosition, to, fly, _cancellationTokenSource.Token);
