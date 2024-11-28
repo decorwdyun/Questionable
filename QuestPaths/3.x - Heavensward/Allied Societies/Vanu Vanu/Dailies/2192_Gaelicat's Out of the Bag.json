@@ -47,7 +47,15 @@
           "InteractionType": "UseItem",
           "ItemId": 2001934,
           "Fly": true,
-          "AetheryteShortcut": "The Sea of Clouds - Camp Cloudtop"
+          "AetheryteShortcut": "The Sea of Clouds - Camp Cloudtop",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            8
+          ]
         },
         {
           "DataId": 1016232,
@@ -59,7 +67,15 @@
           "TerritoryId": 401,
           "InteractionType": "UseItem",
           "ItemId": 2001934,
-          "Fly": true
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 1016233,
@@ -71,7 +87,15 @@
           "TerritoryId": 401,
           "InteractionType": "UseItem",
           "ItemId": 2001934,
-          "Fly": true
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 1016374,
@@ -83,7 +107,15 @@
           "TerritoryId": 401,
           "InteractionType": "UseItem",
           "ItemId": 2001934,
-          "Fly": true
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            16
+          ]
         },
         {
           "DataId": 1016231,
@@ -95,7 +127,15 @@
           "TerritoryId": 401,
           "InteractionType": "UseItem",
           "ItemId": 2001934,
-          "Fly": true
+          "Fly": true,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         }
       ]
     },
