@@ -1,0 +1,131 @@
+﻿{
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+  "Author": "pot0to",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1006753,
+          "Position": {
+              "X": 325.063,
+              "Y": 11.236564,
+              "Z": -6.2105103
+          },
+          "TerritoryId": 145,
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Eastern Thanalan - Camp Drybone",
+          "Fly": true,
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1006752,
+          "Position": {
+              "X": 87.5105,
+              "Y": 18,
+              "Z": 113.725464
+          },
+          "TerritoryId": 131,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Ul'dah",
+          "AethernetShortcut": [
+            "[Ul'dah] Aetheryte Plaza",
+            "[Ul'dah] Weavers' Guild"
+          ],
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true,
+              "InTerritory": [
+                130,
+                131
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "Position": {
+              "X": -431.92166,
+              "Y": 6.5580425,
+              "Z": -17.561014
+          },
+          "TerritoryId": 146,
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Southern Thanalan - Forgotten Springs",
+          "Fly": false,
+          "$": "Flying in Thanalan is TERRIBLE due to heigh limit."
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1007872,
+          "Position": {
+              "X": -468.925,
+              "Y": -3.1649342,
+              "Z": 59.464355
+          },
+          "TerritoryId": 146,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1007871,
+          "Position": {
+              "X": -464.46936,
+              "Y": -3.1649272,
+              "Z": 65.415405
+          },
+          "TerritoryId": 146,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1007873,
+          "Position": {
+              "X": -458.70148,
+              "Y": -3.164927,
+              "Z": 63.370728
+          },
+          "TerritoryId": 146,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1006753,
+          "Position": {
+              "X": 325.063,
+              "Y": 11.236564,
+              "Z": -6.2105103
+          },
+          "TerritoryId": 145,
+          "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Eastern Thanalan - Camp Drybone",
+          "Fly": true,
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

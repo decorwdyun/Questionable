@@ -37,6 +37,27 @@
       "Sequence": 1,
       "Steps": [
         {
+          "Position": {
+            "X": 570.48596,
+            "Y": 96.46625,
+            "Z": -526.59546
+          },
+          "TerritoryId": 135,
+          "TargetTerritoryId": 137,
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Limsa Lominsa",
+          "Fly": true,
+          "AethernetShortcut": [
+            "[Limsa Lominsa] Aetheryte Plaza",
+            "[Limsa Lominsa] Tempest Gate (Lower La Noscea)"
+          ],
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "AetheryteUnlocked": "Eastern La Noscea - Wineport"
+            }
+          }
+        },
+        {
           "DataId": 2002366,
           "Position": {
             "X": -143.0534,
