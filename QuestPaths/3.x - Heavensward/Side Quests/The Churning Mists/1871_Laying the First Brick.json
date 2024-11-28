@@ -75,12 +75,13 @@
       "Steps": [
         {
           "Position": {
-            "X": 380.00024,
-            "Y": -69.42949,
-            "Z": 694.65753
+            "X": 379.64865,
+            "Y": -69.42944,
+            "Z": 695.1956
           },
           "TerritoryId": 400,
           "InteractionType": "WalkTo",
+          "$": "Moglin",
           "AetheryteShortcut": "The Churning Mists - Moghome"
         },
         {

@@ -94,6 +94,16 @@
       "Sequence": 255,
       "Steps": [
         {
+          "Position": {
+            "X": 379.64865,
+            "Y": -69.42944,
+            "Z": 695.1956
+          },
+          "TerritoryId": 400,
+          "InteractionType": "WalkTo",
+          "$": "Moglin"
+        },
+        {
           "DataId": 1012077,
           "Position": {
             "X": 381.70435,
