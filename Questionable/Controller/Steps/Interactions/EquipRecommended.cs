@@ -1,4 +1,5 @@
 ﻿using System;
+using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.UI.Misc;
@@ -39,12 +40,15 @@ internal static class EquipRecommended
         public override string ToString() => "EquipRecommended";
     }
 
-    internal sealed unsafe class DoEquipRecommended(IClientState clientState, IChatGui chatGui) : TaskExecutor<EquipTask>
+    internal sealed unsafe class DoEquipRecommended(IClientState clientState, IChatGui chatGui, ICondition condition) : TaskExecutor<EquipTask>
     {
         private bool _equipped;
 
         protected override bool Start()
         {
+            if (condition[ConditionFlag.InCombat])
+                return false;
+
             RecommendEquipModule.Instance()->SetupForClassJob((byte)clientState.LocalPlayer!.ClassJob.RowId);
             return true;
         }
