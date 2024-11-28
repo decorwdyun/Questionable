@@ -38,6 +38,7 @@ public enum EEmote
     SundropDance = 120, 
     BattleStance = 121,
     VictoryPose = 122,
+    MogDance = 126,
     Flex = 139,
     Respect = 140,
     Box = 166,
