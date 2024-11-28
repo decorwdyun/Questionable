@@ -593,7 +593,8 @@
                   "AfterAction",
                   "AfterEmote",
                   "OverworldEnemies",
-                  "FateEnemies"
+                  "FateEnemies",
+                  "FinishCombatIfAny"
                 ]
               },
               "KillEnemyDataIds": {

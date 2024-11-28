@@ -21,6 +21,17 @@
       "Sequence": 1,
       "Steps": [
         {
+          "Position": {
+            "X": 486.40424,
+            "Y": 24.968294,
+            "Z": -88.684456
+          },
+          "TerritoryId": 148,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "FinishCombatIfAny",
+          "KillEnemyDataIds": []
+        },
+        {
           "DataId": 2000010,
           "Position": {
             "X": 480.88794,

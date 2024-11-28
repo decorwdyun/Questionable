@@ -14,5 +14,6 @@ public enum EEnemySpawnType
     AutoOnEnterArea,
     OverworldEnemies,
     FateEnemies,
+    FinishCombatIfAny,
     QuestInterruption,
 }

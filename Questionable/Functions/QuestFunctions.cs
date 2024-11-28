@@ -243,6 +243,8 @@ internal sealed unsafe class QuestFunctions
         {
             return questId.Value switch
             {
+                >= 2171 and <= 2200 => EAlliedSociety.VanuVanu,
+                >= 2261 and <= 2280 => EAlliedSociety.Vath,
                 >= 5199 and <= 5226 => EAlliedSociety.Pelupelu,
                 _ => EAlliedSociety.None,
             };

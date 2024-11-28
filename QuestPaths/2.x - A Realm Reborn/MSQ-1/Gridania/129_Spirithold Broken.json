@@ -36,18 +36,6 @@
       "Sequence": 2,
       "Steps": [
         {
-          "DataId": 1000465,
-          "Position": {
-            "X": 298.63428,
-            "Y": 9.999997,
-            "Z": 119.035645
-          },
-          "TerritoryId": 148,
-          "InteractionType": "WaitForManualProgress",
-          "Comment": "Manual Quest Progress (very combat heavy)",
-          "$": "TODO Remove later"
-        },
-        {
           "DataId": 1000512,
           "Position": {
             "X": 311.69592,
@@ -56,7 +44,6 @@
           },
           "TerritoryId": 148,
           "InteractionType": "Interact",
-          "Disabled": true,
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -75,7 +62,6 @@
           },
           "TerritoryId": 148,
           "InteractionType": "Interact",
-          "Disabled": true,
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -94,7 +80,6 @@
           },
           "TerritoryId": 148,
           "InteractionType": "Interact",
-          "Disabled": true,
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -113,7 +98,6 @@
           },
           "TerritoryId": 148,
           "InteractionType": "Interact",
-          "Disabled": true,
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -132,7 +116,6 @@
           },
           "TerritoryId": 148,
           "InteractionType": "Interact",
-          "Disabled": true,
           "CompletionQuestVariablesFlags": [
             null,
             null,

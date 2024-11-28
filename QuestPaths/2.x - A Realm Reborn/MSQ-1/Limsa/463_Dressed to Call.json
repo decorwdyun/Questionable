@@ -25,6 +25,75 @@
           "InteractionType": "EquipRecommended"
         },
         {
+          "DataId": 1003257,
+          "Position": {
+            "X": 201.70898,
+            "Y": 98.422874,
+            "Z": -206.10364
+          },
+          "TerritoryId": 134,
+          "InteractionType": "PurchaseItem",
+          "PurchaseMenu": {
+            "ExcelSheet": "GilShop",
+            "Key": 262186
+          },
+          "ItemId": 2653,
+          "ItemCount": 1,
+          "RequiredCurrentJob": [
+            "DoW"
+          ],
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": false
+              }
+            }
+          }
+        },
+        {
+          "DataId": 1003257,
+          "Position": {
+            "X": 201.70898,
+            "Y": 98.422874,
+            "Z": -206.10364
+          },
+          "TerritoryId": 134,
+          "InteractionType": "PurchaseItem",
+          "PurchaseMenu": {
+            "ExcelSheet": "GilShop",
+            "Key": 262186
+          },
+          "ItemId": 2655,
+          "ItemCount": 1,
+          "RequiredCurrentJob": [
+            "DoM"
+          ]
+        },
+        {
+          "TerritoryId": 134,
+          "InteractionType": "EquipItem",
+          "ItemId": 2653,
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
+        },
+        {
+          "TerritoryId": 134,
+          "InteractionType": "EquipItem",
+          "ItemId": 2655,
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
+        },
+        {
           "DataId": 1002626,
           "Position": {
             "X": 207.2633,

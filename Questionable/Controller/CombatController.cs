@@ -76,7 +76,7 @@ internal sealed class CombatController : IDisposable
                 Module = combatModule,
                 Data = combatData,
             };
-            _wasInCombat = combatData.SpawnType == EEnemySpawnType.QuestInterruption;
+            _wasInCombat = combatData.SpawnType is EEnemySpawnType.QuestInterruption or EEnemySpawnType.FinishCombatIfAny;
             return true;
         }
         else

@@ -14,7 +14,8 @@ internal static class QuestCleanUp
 {
     private static readonly Dictionary<ushort, MountConfiguration> AlliedSocietyMountConfiguration = new()
     {
-        { 369, new(1051798, EAetheryteLocation.KozamaukaDockPoga) }
+        { 79, new(1017031, EAetheryteLocation.DravanianForelandsAnyxTrine) },
+        { 369, new(1051798, EAetheryteLocation.KozamaukaDockPoga) },
     };
 
     internal sealed class CheckAlliedSocietyMount(GameFunctions gameFunctions, AetheryteData aetheryteData, ILogger<CheckAlliedSocietyMount> logger) : SimpleTaskFactory

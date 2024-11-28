@@ -83,6 +83,7 @@ internal static class Combat
 
                 case EEnemySpawnType.OverworldEnemies:
                 case EEnemySpawnType.FateEnemies:
+                case EEnemySpawnType.FinishCombatIfAny:
                     yield return CreateTask(quest, sequence, step);
                     break;
 
@@ -122,17 +123,18 @@ internal static class Combat
     {
         public override string ToString()
         {
+            if (CombatData.SpawnType == EEnemySpawnType.FinishCombatIfAny)
+                return "HandleCombat(wait: not in combat, optional)";
             if (QuestWorkUtils.HasCompletionFlags(CompletionQuestVariableFlags))
-                return $"HandleCombat(wait: QW flags)";
+                return "HandleCombat(wait: QW flags)";
             else if (IsLastStep)
-                return $"HandleCombat(wait: next sequence)";
+                return "HandleCombat(wait: next sequence)";
             else
-                return $"HandleCombat(wait: not in combat)";
+                return "HandleCombat(wait: not in combat)";
         }
     }
 
     internal sealed class HandleCombat(
-
         CombatController combatController,
         QuestFunctions questFunctions) : TaskExecutor<Task>
     {

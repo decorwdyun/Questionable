@@ -51,6 +51,7 @@ internal sealed class InteractionUiController : IDisposable
     private readonly ShopController _shopController;
     private readonly ILogger<InteractionUiController> _logger;
     private readonly Regex _returnRegex;
+    private readonly Regex _purchaseItemRegex;
 
     private bool _isInitialCheck;
 
@@ -91,6 +92,7 @@ internal sealed class InteractionUiController : IDisposable
         _logger = logger;
 
         _returnRegex = _dataManager.GetExcelSheet<Addon>().GetRow(196).GetRegex(addon => addon.Text, pluginLog)!;
+        _purchaseItemRegex = _dataManager.GetRegex<Addon>(3406, addon => addon.Text, pluginLog)!;
 
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "SelectString", SelectStringPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "CutSceneSelectString", CutsceneSelectStringPostSetup);
@@ -560,7 +562,7 @@ internal sealed class InteractionUiController : IDisposable
             return;
 
         _logger.LogTrace("Prompt: '{Prompt}'", actualPrompt);
-        if (_shopController.IsAutoBuyEnabled && _shopController.IsAwaitingYesNo)
+        if (_shopController.IsAwaitingYesNo && _purchaseItemRegex.IsMatch(actualPrompt))
         {
             addonSelectYesno->AtkUnitBase.FireCallbackInt(0);
             _shopController.IsAwaitingYesNo = false;

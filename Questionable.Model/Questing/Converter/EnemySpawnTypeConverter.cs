@@ -14,5 +14,6 @@ public sealed class EnemySpawnTypeConverter() : EnumConverter<EEnemySpawnType>(V
         { EEnemySpawnType.AutoOnEnterArea, "AutoOnEnterArea" },
         { EEnemySpawnType.OverworldEnemies, "OverworldEnemies" },
         { EEnemySpawnType.FateEnemies, "FateEnemies" },
+        { EEnemySpawnType.FinishCombatIfAny, "FinishCombatIfAny" }
     };
 }
