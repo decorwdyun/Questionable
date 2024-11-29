@@ -177,9 +177,17 @@ internal sealed class QuestData
         foreach (var questId in uldahSideQuests)
             ((QuestInfo)_quests[new QuestId(questId)]).StartingCity = 3;
 
-
         // follow-up quests to picking a GC
         AddGcFollowUpQuests();
+
+        // update relic quests to be in a different journal category
+        ushort[] zodiacStartingQuests = [1119, 1120, 1121, 1122, 1123, 1124, 1125, 1126, 1127, 1579];
+        foreach (var questId in zodiacStartingQuests)
+        {
+            var quest = ((QuestInfo)_quests[new QuestId(questId)]);
+            quest.JournalGenre = 82;
+            quest.SortKey = 0;
+        }
     }
 
     private void AddPreviousQuest(QuestId questToUpdate, QuestId requiredQuestId)

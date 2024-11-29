@@ -79,8 +79,8 @@ internal sealed class QuestInfo : IQuestInfo
     public EQuestJoin QuestLockJoin { get; private set; }
     public List<ushort> PreviousInstanceContent { get; }
     public EQuestJoin PreviousInstanceContentJoin { get; }
-    public uint? JournalGenre { get; }
-    public ushort SortKey { get; }
+    public uint? JournalGenre { get; set; }
+    public ushort SortKey { get; set; }
     public bool IsMainScenarioQuest { get; }
     public bool CompletesInstantly { get; }
     public GrandCompany GrandCompany { get; }
