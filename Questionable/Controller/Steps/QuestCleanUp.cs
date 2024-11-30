@@ -14,6 +14,7 @@ internal static class QuestCleanUp
 {
     private static readonly Dictionary<ushort, MountConfiguration> AlliedSocietyMountConfiguration = new()
     {
+        { 66, new(1016093, EAetheryteLocation.SeaOfCloudsOkZundu) },
         { 79, new(1017031, EAetheryteLocation.DravanianForelandsAnyxTrine) },
         { 369, new(1051798, EAetheryteLocation.KozamaukaDockPoga) },
     };
