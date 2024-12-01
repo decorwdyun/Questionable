@@ -12,14 +12,7 @@ namespace Questionable.Controller.Steps;
 
 internal static class QuestCleanUp
 {
-    private static readonly Dictionary<ushort, MountConfiguration> AlliedSocietyMountConfiguration = new()
-    {
-        { 66, new(1016093, EAetheryteLocation.SeaOfCloudsOkZundu) },
-        { 79, new(1017031, EAetheryteLocation.DravanianForelandsAnyxTrine) },
-        { 369, new(1051798, EAetheryteLocation.KozamaukaDockPoga) },
-    };
-
-    internal sealed class CheckAlliedSocietyMount(GameFunctions gameFunctions, AetheryteData aetheryteData, ILogger<CheckAlliedSocietyMount> logger) : SimpleTaskFactory
+    internal sealed class CheckAlliedSocietyMount(GameFunctions gameFunctions, AetheryteData aetheryteData, AlliedSocietyData alliedSocietyData, ILogger<CheckAlliedSocietyMount> logger) : SimpleTaskFactory
     {
         public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -28,7 +21,7 @@ internal static class QuestCleanUp
 
             // if you are on a allied society mount
             if (gameFunctions.GetMountId() is { } mountId &&
-                AlliedSocietyMountConfiguration.TryGetValue(mountId, out var mountConfiguration))
+                alliedSocietyData.Mounts.TryGetValue(mountId, out var mountConfiguration))
             {
                 logger.LogInformation("We are on a known allied society mount with id = {MountId}", mountId);
 
@@ -68,6 +61,4 @@ internal static class QuestCleanUp
             return null;
         }
     }
-
-    private sealed record MountConfiguration(uint IssuerDataId, EAetheryteLocation ClosestAetheryte);
 }

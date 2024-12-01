@@ -6,6 +6,7 @@ using Dalamud.Memory;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using FFXIVClientStructs.FFXIV.Client.Game.Character;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Component.GUI;
@@ -27,6 +28,7 @@ internal sealed unsafe class QuestFunctions
     private readonly QuestRegistry _questRegistry;
     private readonly QuestData _questData;
     private readonly AetheryteFunctions _aetheryteFunctions;
+    private readonly AlliedSocietyData _alliedSocietyData;
     private readonly Configuration _configuration;
     private readonly IDataManager _dataManager;
     private readonly IClientState _clientState;
@@ -36,6 +38,7 @@ internal sealed unsafe class QuestFunctions
         QuestRegistry questRegistry,
         QuestData questData,
         AetheryteFunctions aetheryteFunctions,
+        AlliedSocietyData alliedSocietyData,
         Configuration configuration,
         IDataManager dataManager,
         IClientState clientState,
@@ -44,6 +47,7 @@ internal sealed unsafe class QuestFunctions
         _questRegistry = questRegistry;
         _questData = questData;
         _aetheryteFunctions = aetheryteFunctions;
+        _alliedSocietyData = alliedSocietyData;
         _configuration = configuration;
         _dataManager = dataManager;
         _clientState = clientState;
@@ -138,7 +142,8 @@ internal sealed unsafe class QuestFunctions
                     case 2: // leve
                         currentQuest = new LeveId(questManager->LeveQuests[trackedQuest.Index].LeveId);
                         if (_questRegistry.IsKnownQuest(currentQuest))
-                            trackedQuests.Add((currentQuest, questManager->GetLeveQuestById(currentQuest.Value)->Sequence));
+                            trackedQuests.Add((currentQuest,
+                                questManager->GetLeveQuestById(currentQuest.Value)->Sequence));
                         break;
                 }
             }
@@ -147,14 +152,63 @@ internal sealed unsafe class QuestFunctions
             {
                 // if we have multiple quests to turn in for an allied society, try and complete all of them
                 var (firstTrackedQuest, firstTrackedSequence) = trackedQuests.First();
-                EAlliedSociety firstTrackedAlliedSociety = GetCommonAlliedSocietyTurnIn(firstTrackedQuest);
-                if (firstTrackedAlliedSociety != EAlliedSociety.None && firstTrackedSequence == 255)
+                EAlliedSociety firstTrackedAlliedSociety = _alliedSocietyData.GetCommonAlliedSocietyTurnIn(firstTrackedQuest);
+                if (firstTrackedAlliedSociety != EAlliedSociety.None)
                 {
-                    foreach (var (quest, sequence) in trackedQuests.Skip(1))
+                    var alliedQuestsForSameSociety = trackedQuests.Skip(1)
+                        .Where(quest => _alliedSocietyData.GetCommonAlliedSocietyTurnIn(quest.Quest) == firstTrackedAlliedSociety)
+                        .ToList();
+                    if (alliedQuestsForSameSociety.Count > 0)
                     {
-                        // only if the other quest isn't ready to be turned in
-                        if (GetCommonAlliedSocietyTurnIn(quest) == firstTrackedAlliedSociety && sequence != 255)
-                            return (quest, sequence);
+                        if (firstTrackedSequence == 255)
+                        {
+                            foreach (var (quest, sequence) in alliedQuestsForSameSociety)
+                            {
+                                // only if the other quest isn't ready to be turned in
+                                if (sequence != 255)
+                                    return (quest, sequence);
+                            }
+                        }
+                        else if (!IsOnAlliedSocietyMount())
+                        {
+                            // a few of the vanu quests require you to talk to one of the npcs near the issuer, so we
+                            // give priority to those
+
+                            // also include the first quest in the list for those
+                            alliedQuestsForSameSociety.Insert(0, (firstTrackedQuest, firstTrackedSequence));
+
+                            _alliedSocietyData.GetCommonAlliedSocietyNpcs(firstTrackedAlliedSociety, out uint[]? normalNpcs,
+                                out uint[]? mountNpcs);
+
+                            if (normalNpcs.Length > 0)
+                            {
+                                var talkToNormalNpcs = alliedQuestsForSameSociety
+                                    .Where(x => x.Sequence < 255)
+                                    .Where(x => IsInteractStep(x.Quest, x.Sequence, normalNpcs))
+                                    .Cast<(ElementId, byte)?>()
+                                    .FirstOrDefault();
+                                if (talkToNormalNpcs != null)
+                                    return talkToNormalNpcs.Value;
+                            }
+
+                            /*
+                             * TODO: If you have e.g. a mount quest in the middle of 3, it should temporarily make you
+                             *       do that quest first, even if it isn't the first in the list. Otherwise, the logic
+                             *       here won't make much sense.
+                             *
+                             * TODO: This also won't work if two or three daily quests use a mount.
+                            if (mountNpcs.Length > 0)
+                            {
+                                var talkToMountNpc = alliedQuestsForSameSociety
+                                    .Where(x => x.Sequence < 255)
+                                    .Where(x => IsInteractStep(x.Quest, x.Sequence, mountNpcs))
+                                    .Cast<(ElementId, byte)?>()
+                                    .FirstOrDefault();
+                                if (talkToMountNpc != null)
+                                    return talkToMountNpc.Value;
+                            }
+                            */
+                        }
                     }
                 }
 
@@ -237,20 +291,24 @@ internal sealed unsafe class QuestFunctions
         return (currentQuest, QuestManager.GetQuestSequence(currentQuest.Value));
     }
 
-    private static EAlliedSociety GetCommonAlliedSocietyTurnIn(ElementId elementId)
+    private bool IsOnAlliedSocietyMount()
     {
-        if (elementId is QuestId questId)
+        BattleChara* battleChara = (BattleChara*)(_clientState.LocalPlayer?.Address ?? 0);
+        return battleChara != null &&
+               battleChara->Mount.MountId != 0 &&
+               _alliedSocietyData.Mounts.ContainsKey(battleChara->Mount.MountId);
+    }
+
+    private bool IsInteractStep(ElementId questId, byte sequence, uint[] dataIds)
+    {
+        if (_questRegistry.TryGetQuest(questId, out var quest))
         {
-            return questId.Value switch
-            {
-                >= 2171 and <= 2200 => EAlliedSociety.VanuVanu,
-                >= 2261 and <= 2280 => EAlliedSociety.Vath,
-                >= 5199 and <= 5226 => EAlliedSociety.Pelupelu,
-                _ => EAlliedSociety.None,
-            };
+            QuestStep? firstStepOfSequence = quest.FindSequence(sequence)?.FindStep(0);
+            return firstStepOfSequence is { InteractionType: EInteractionType.Interact, DataId: { } dataId } &&
+                   dataIds.Contains(dataId);
         }
 
-        return EAlliedSociety.None;
+        return false;
     }
 
     public QuestProgressInfo? GetQuestProgressInfo(ElementId elementId)
