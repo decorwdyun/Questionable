@@ -178,7 +178,7 @@ internal sealed unsafe class QuestFunctions
                             alliedQuestsForSameSociety.Insert(0, (firstTrackedQuest, firstTrackedSequence));
 
                             _alliedSocietyData.GetCommonAlliedSocietyNpcs(firstTrackedAlliedSociety, out uint[]? normalNpcs,
-                                out uint[]? mountNpcs);
+                                out _);
 
                             if (normalNpcs.Length > 0)
                             {
