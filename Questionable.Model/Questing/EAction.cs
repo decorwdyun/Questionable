@@ -48,6 +48,7 @@ public enum EAction
     RabbitMedium = 2272,
     SlugShot = 7412,
     BosomBrook = 37173,
+    Souleater = 3632,
 
     CollectMiner = 240,
     ScourMiner = 22182,
