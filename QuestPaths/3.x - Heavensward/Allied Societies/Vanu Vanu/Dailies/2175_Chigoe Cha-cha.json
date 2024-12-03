@@ -27,7 +27,7 @@
             "Z": -414.32825
           },
           "StopDistance": 3,
-          "TerritoryId": 398,
+          "TerritoryId": 401,
           "InteractionType": "WalkTo",
           "Fly": true,
           "SkipConditions": {
