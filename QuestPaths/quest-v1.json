@@ -211,6 +211,9 @@
                     "Unlocked"
                   ]
                 },
+                "Diving": {
+                  "type": ["boolean", "null"]
+                },
                 "NotTargetable": {
                   "type": "boolean"
                 },

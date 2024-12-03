@@ -48,6 +48,9 @@ internal static class SkipConditionsExtensions
                             Assignment(nameof(SkipStepConditions.Flying), skipStepConditions.Flying,
                                     emptyStep.Flying)
                                 .AsSyntaxNodeOrToken(),
+                            Assignment(nameof(SkipStepConditions.Diving), skipStepConditions.Diving,
+                                    emptyStep.Diving)
+                                .AsSyntaxNodeOrToken(),
                             Assignment(nameof(SkipStepConditions.Chocobo), skipStepConditions.Chocobo,
                                     emptyStep.Chocobo)
                                 .AsSyntaxNodeOrToken(),

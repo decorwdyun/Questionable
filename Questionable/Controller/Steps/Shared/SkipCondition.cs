@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
@@ -54,7 +55,8 @@ internal static class SkipCondition
         AetheryteFunctions aetheryteFunctions,
         GameFunctions gameFunctions,
         QuestFunctions questFunctions,
-        IClientState clientState) : TaskExecutor<SkipTask>
+        IClientState clientState,
+        ICondition condition) : TaskExecutor<SkipTask>
     {
         protected override unsafe bool Start()
         {
@@ -82,6 +84,18 @@ internal static class SkipCondition
                 PlayerState.Instance()->IsMountUnlocked(1))
             {
                 logger.LogInformation("Skipping step, as chocobo is unlocked");
+                return true;
+            }
+
+            if (skipConditions.Diving == true && condition[ConditionFlag.Diving])
+            {
+                logger.LogInformation("Skipping step, as you're currently diving underwater");
+                return true;
+            }
+
+            if (skipConditions.Diving == false && !condition[ConditionFlag.Diving])
+            {
+                logger.LogInformation("Skipping step, as you're not currently diving underwater");
                 return true;
             }
 
