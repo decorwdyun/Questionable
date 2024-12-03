@@ -21,6 +21,30 @@
       "Sequence": 1,
       "Steps": [
         {
+          "Position": {
+            "X": 74.20459,
+            "Y": -48.533592,
+            "Z": -171.12994
+          },
+          "StopDistance": 3,
+          "TerritoryId": 398,
+          "InteractionType": "WalkTo",
+          "Fly": true,
+          "SkipConditions": {
+            "StepIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": 74.20459,
+                  "Y": -48.533592,
+                  "Z": -171.12994
+                },
+                "MaximumDistance": 50,
+                "TerritoryId": 398
+              }
+            }
+          }
+        },
+        {
           "DataId": 1017031,
           "Position": {
             "X": 74.20459,

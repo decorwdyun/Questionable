@@ -152,11 +152,13 @@ internal sealed unsafe class QuestFunctions
             {
                 // if we have multiple quests to turn in for an allied society, try and complete all of them
                 var (firstTrackedQuest, firstTrackedSequence) = trackedQuests.First();
-                EAlliedSociety firstTrackedAlliedSociety = _alliedSocietyData.GetCommonAlliedSocietyTurnIn(firstTrackedQuest);
+                EAlliedSociety firstTrackedAlliedSociety =
+                    _alliedSocietyData.GetCommonAlliedSocietyTurnIn(firstTrackedQuest);
                 if (firstTrackedAlliedSociety != EAlliedSociety.None)
                 {
                     var alliedQuestsForSameSociety = trackedQuests.Skip(1)
-                        .Where(quest => _alliedSocietyData.GetCommonAlliedSocietyTurnIn(quest.Quest) == firstTrackedAlliedSociety)
+                        .Where(quest =>
+                            _alliedSocietyData.GetCommonAlliedSocietyTurnIn(quest.Quest) == firstTrackedAlliedSociety)
                         .ToList();
                     if (alliedQuestsForSameSociety.Count > 0)
                     {
@@ -177,14 +179,15 @@ internal sealed unsafe class QuestFunctions
                             // also include the first quest in the list for those
                             alliedQuestsForSameSociety.Insert(0, (firstTrackedQuest, firstTrackedSequence));
 
-                            _alliedSocietyData.GetCommonAlliedSocietyNpcs(firstTrackedAlliedSociety, out uint[]? normalNpcs,
+                            _alliedSocietyData.GetCommonAlliedSocietyNpcs(firstTrackedAlliedSociety,
+                                out uint[]? normalNpcs,
                                 out _);
 
                             if (normalNpcs.Length > 0)
                             {
                                 var talkToNormalNpcs = alliedQuestsForSameSociety
                                     .Where(x => x.Sequence < 255)
-                                    .Where(x => IsInteractStep(x.Quest, x.Sequence, normalNpcs))
+                                    .Where(x => IsInteractSequence(x.Quest, x.Sequence, normalNpcs))
                                     .Cast<(ElementId, byte)?>()
                                     .FirstOrDefault();
                                 if (talkToNormalNpcs != null)
@@ -299,13 +302,16 @@ internal sealed unsafe class QuestFunctions
                _alliedSocietyData.Mounts.ContainsKey(battleChara->Mount.MountId);
     }
 
-    private bool IsInteractStep(ElementId questId, byte sequence, uint[] dataIds)
+    private bool IsInteractSequence(ElementId questId, byte sequenceNo, uint[] dataIds)
     {
         if (_questRegistry.TryGetQuest(questId, out var quest))
         {
-            QuestStep? firstStepOfSequence = quest.FindSequence(sequence)?.FindStep(0);
-            return firstStepOfSequence is { InteractionType: EInteractionType.Interact, DataId: { } dataId } &&
-                   dataIds.Contains(dataId);
+            QuestSequence? sequence = quest.FindSequence(sequenceNo);
+            return sequence != null &&
+                   sequence.Steps.All(x =>
+                       x is { InteractionType: EInteractionType.WalkTo } ||
+                       (x is { InteractionType: EInteractionType.Interact, DataId: { } dataId } &&
+                        dataIds.Contains(dataId)));
         }
 
         return false;
