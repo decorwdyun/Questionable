@@ -552,7 +552,7 @@ internal sealed unsafe class QuestFunctions
         if (questInfo.GrandCompany != GrandCompany.None && questInfo.GrandCompany != GetGrandCompany())
             return true;
 
-        if (questInfo.AlliedSociety != EAlliedSociety.None)
+        if (questInfo.AlliedSociety != EAlliedSociety.None && questInfo.IsRepeatable)
             return !IsDailyAlliedSocietyQuestAndAvailableToday(questId);
 
         return !HasCompletedPreviousQuests(questInfo, extraCompletedQuest) || !HasCompletedPreviousInstances(questInfo);

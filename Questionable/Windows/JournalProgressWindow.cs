@@ -11,18 +11,21 @@ namespace Questionable.Windows;
 internal sealed class JournalProgressWindow : LWindow, IDisposable
 {
     private readonly QuestJournalComponent _questJournalComponent;
+    private readonly AlliedSocietyJournalComponent _alliedSocietyJournalComponent;
     private readonly GatheringJournalComponent _gatheringJournalComponent;
     private readonly QuestRegistry _questRegistry;
     private readonly IClientState _clientState;
 
     public JournalProgressWindow(
         QuestJournalComponent questJournalComponent,
+        AlliedSocietyJournalComponent alliedSocietyJournalComponent,
         GatheringJournalComponent gatheringJournalComponent,
         QuestRegistry questRegistry,
         IClientState clientState)
         : base("Journal Progress###QuestionableJournalProgress")
     {
         _questJournalComponent = questJournalComponent;
+        _alliedSocietyJournalComponent = alliedSocietyJournalComponent;
         _gatheringJournalComponent = gatheringJournalComponent;
         _questRegistry = questRegistry;
         _clientState = clientState;
@@ -60,6 +63,7 @@ internal sealed class JournalProgressWindow : LWindow, IDisposable
             return;
 
         _questJournalComponent.DrawQuests();
+        _alliedSocietyJournalComponent.DrawAlliedSocietyQuests();
         _gatheringJournalComponent.DrawGatheringItems();
     }
 
