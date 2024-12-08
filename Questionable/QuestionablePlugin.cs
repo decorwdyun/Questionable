@@ -111,6 +111,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<GameFunctions>();
         serviceCollection.AddSingleton<ChatFunctions>();
         serviceCollection.AddSingleton<QuestFunctions>();
+        serviceCollection.AddSingleton<AlliedSocietyQuestFunctions>();
         serviceCollection.AddSingleton<DalamudReflector>();
 
         serviceCollection.AddSingleton<AetherCurrentData>();

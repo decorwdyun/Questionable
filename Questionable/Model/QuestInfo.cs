@@ -60,6 +60,8 @@ internal sealed class QuestInfo : IQuestInfo
         PreviousInstanceContentJoin = (EQuestJoin)quest.InstanceContentJoin;
         GrandCompany = (GrandCompany)quest.GrandCompany.RowId;
         AlliedSociety = (EAlliedSociety)quest.BeastTribe.RowId;
+        AlliedSocietyQuestGroup = quest.Unknown11;
+        AlliedSocietyRank = (int)quest.BeastReputationRank.RowId;
         ClassJobs = QuestInfoUtils.AsList(quest.ClassJobCategory0.ValueNullable!);
         IsSeasonalEvent = quest.Festival.RowId != 0;
         NewGamePlusChapter = newGamePlusChapter;
@@ -85,6 +87,8 @@ internal sealed class QuestInfo : IQuestInfo
     public bool CompletesInstantly { get; }
     public GrandCompany GrandCompany { get; }
     public EAlliedSociety AlliedSociety { get; }
+    public byte AlliedSocietyQuestGroup { get; }
+    public int AlliedSocietyRank { get; }
     public IReadOnlyList<EClassJob> ClassJobs { get; }
     public bool IsSeasonalEvent { get; }
     public uint NewGamePlusChapter { get; }

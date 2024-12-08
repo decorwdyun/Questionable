@@ -235,6 +235,16 @@ internal sealed class QuestData
             .ToList();
     }
 
+    public List<QuestInfo> GetAllByAlliedSociety(EAlliedSociety alliedSociety)
+    {
+        return _quests.Values
+            .Where(x => x is QuestInfo)
+            .Cast<QuestInfo>()
+            .Where(x => x.AlliedSociety == alliedSociety)
+            .OrderBy(x => x.QuestId)
+            .ToList();
+    }
+
     public List<QuestInfo> GetClassJobQuests(EClassJob classJob)
     {
         List<uint> chapterIds = classJob switch

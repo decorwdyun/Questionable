@@ -24,6 +24,15 @@ internal sealed class UiUtils
     {
         if (_questFunctions.IsQuestAccepted(elementId))
             return (ImGuiColors.DalamudYellow, FontAwesomeIcon.PersonWalkingArrowRight, "Active");
+        else if (elementId is QuestId questId && _questFunctions.IsDailyAlliedSocietyQuestAndAvailableToday(questId))
+        {
+            if (!_questFunctions.IsReadyToAcceptQuest(questId))
+                return (ImGuiColors.ParsedGreen, FontAwesomeIcon.Check, "Complete");
+            else if (_questFunctions.IsQuestComplete(questId))
+                return (ImGuiColors.ParsedBlue, FontAwesomeIcon.Running, "Available (Complete)");
+            else
+                return (ImGuiColors.DalamudYellow, FontAwesomeIcon.Running, "Available");
+        }
         else if (_questFunctions.IsQuestAcceptedOrComplete(elementId))
             return (ImGuiColors.ParsedGreen, FontAwesomeIcon.Check, "Complete");
         else if (_questFunctions.IsQuestUnobtainable(elementId))

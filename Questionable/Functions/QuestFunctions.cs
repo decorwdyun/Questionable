@@ -28,6 +28,7 @@ internal sealed unsafe class QuestFunctions
     private readonly QuestRegistry _questRegistry;
     private readonly QuestData _questData;
     private readonly AetheryteFunctions _aetheryteFunctions;
+    private readonly AlliedSocietyQuestFunctions _alliedSocietyQuestFunctions;
     private readonly AlliedSocietyData _alliedSocietyData;
     private readonly Configuration _configuration;
     private readonly IDataManager _dataManager;
@@ -38,6 +39,7 @@ internal sealed unsafe class QuestFunctions
         QuestRegistry questRegistry,
         QuestData questData,
         AetheryteFunctions aetheryteFunctions,
+        AlliedSocietyQuestFunctions alliedSocietyQuestFunctions,
         AlliedSocietyData alliedSocietyData,
         Configuration configuration,
         IDataManager dataManager,
@@ -47,6 +49,7 @@ internal sealed unsafe class QuestFunctions
         _questRegistry = questRegistry;
         _questData = questData;
         _aetheryteFunctions = aetheryteFunctions;
+        _alliedSocietyQuestFunctions = alliedSocietyQuestFunctions;
         _alliedSocietyData = alliedSocietyData;
         _configuration = configuration;
         _dataManager = dataManager;
@@ -447,8 +450,11 @@ internal sealed unsafe class QuestFunctions
             if (IsQuestAccepted(questId))
                 return false;
 
-            if (QuestManager.Instance()->IsDailyQuestCompleted(questId.Value))
-                return false;
+            if (quest.Info.AlliedSociety != EAlliedSociety.None)
+            {
+                if (QuestManager.Instance()->IsDailyQuestCompleted(questId.Value))
+                    return false;
+            }
         }
         else
         {
@@ -546,6 +552,9 @@ internal sealed unsafe class QuestFunctions
         if (questInfo.GrandCompany != GrandCompany.None && questInfo.GrandCompany != GetGrandCompany())
             return true;
 
+        if (questInfo.AlliedSociety != EAlliedSociety.None)
+            return !IsDailyAlliedSocietyQuestAndAvailableToday(questId);
+
         return !HasCompletedPreviousQuests(questInfo, extraCompletedQuest) || !HasCompletedPreviousInstances(questInfo);
     }
 
@@ -567,6 +576,21 @@ internal sealed unsafe class QuestFunctions
     {
         SatisfactionSupplyInfo questInfo = (SatisfactionSupplyInfo)_questData.GetQuestInfo(satisfactionSupplyNpcId);
         return !HasCompletedPreviousQuests(questInfo, null);
+    }
+
+    public bool IsDailyAlliedSocietyQuest(QuestId questId)
+    {
+        var questInfo = (QuestInfo)_questData.GetQuestInfo(questId);
+        return questInfo.AlliedSociety != EAlliedSociety.None && questInfo.IsRepeatable;
+    }
+
+    public bool IsDailyAlliedSocietyQuestAndAvailableToday(QuestId questId)
+    {
+        if (!IsDailyAlliedSocietyQuest(questId))
+            return false;
+
+        var questInfo = (QuestInfo)_questData.GetQuestInfo(questId);
+        return _alliedSocietyQuestFunctions.GetAvailableAlliedSocietyQuests(questInfo.AlliedSociety).Contains(questId);
     }
 
     public bool IsQuestUnobtainable(ElementId elementId, ElementId? extraCompletedQuest = null)
