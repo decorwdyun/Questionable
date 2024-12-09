@@ -21,6 +21,7 @@ internal sealed class AlliedSocietyJournalComponent
     private readonly AlliedSocietyQuestFunctions _alliedSocietyQuestFunctions;
     private readonly QuestData _questData;
     private readonly QuestRegistry _questRegistry;
+    private readonly QuestJournalUtils _questJournalUtils;
     private readonly QuestTooltipComponent _questTooltipComponent;
     private readonly UiUtils _uiUtils;
 
@@ -29,6 +30,7 @@ internal sealed class AlliedSocietyJournalComponent
         AlliedSocietyQuestFunctions alliedSocietyQuestFunctions,
         QuestData questData,
         QuestRegistry questRegistry,
+        QuestJournalUtils questJournalUtils,
         QuestTooltipComponent questTooltipComponent,
         UiUtils uiUtils)
     {
@@ -36,6 +38,7 @@ internal sealed class AlliedSocietyJournalComponent
         _alliedSocietyQuestFunctions = alliedSocietyQuestFunctions;
         _questData = questData;
         _questRegistry = questRegistry;
+        _questJournalUtils = questJournalUtils;
         _questTooltipComponent = questTooltipComponent;
         _uiUtils = uiUtils;
     }
@@ -85,13 +88,15 @@ internal sealed class AlliedSocietyJournalComponent
         }
     }
 
-    private void DrawQuest(QuestInfo quest)
+    private void DrawQuest(QuestInfo questInfo)
     {
-        var (color, icon, tooltipText) = _uiUtils.GetQuestStyle(quest.QuestId);
-        if (!_questRegistry.IsKnownQuest(quest.QuestId))
+        var (color, icon, tooltipText) = _uiUtils.GetQuestStyle(questInfo.QuestId);
+        if (!_questRegistry.TryGetQuest(questInfo.QuestId, out var quest))
             color = ImGuiColors.DalamudGrey;
 
-        if (_uiUtils.ChecklistItem($"{quest.Name} ({tooltipText})", color, icon))
-            _questTooltipComponent.Draw(quest);
+        if (_uiUtils.ChecklistItem($"{questInfo.Name} ({tooltipText})", color, icon))
+            _questTooltipComponent.Draw(questInfo);
+
+        _questJournalUtils.ShowContextMenu(questInfo, quest, nameof(AlliedSocietyJournalComponent));
     }
 }

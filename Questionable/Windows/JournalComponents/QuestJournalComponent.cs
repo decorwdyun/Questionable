@@ -30,8 +30,7 @@ internal sealed class QuestJournalComponent
     private readonly UiUtils _uiUtils;
     private readonly QuestTooltipComponent _questTooltipComponent;
     private readonly IDalamudPluginInterface _pluginInterface;
-    private readonly QuestController _questController;
-    private readonly ICommandManager _commandManager;
+    private readonly QuestJournalUtils _questJournalUtils;
     private readonly QuestValidator _questValidator;
 
     private List<FilteredSection> _filteredSections = [];
@@ -39,7 +38,7 @@ internal sealed class QuestJournalComponent
 
     public QuestJournalComponent(JournalData journalData, QuestRegistry questRegistry, QuestFunctions questFunctions,
         UiUtils uiUtils, QuestTooltipComponent questTooltipComponent, IDalamudPluginInterface pluginInterface,
-        QuestController questController, ICommandManager commandManager, QuestValidator questValidator)
+        QuestJournalUtils questJournalUtils, QuestValidator questValidator)
     {
         _journalData = journalData;
         _questRegistry = questRegistry;
@@ -47,8 +46,7 @@ internal sealed class QuestJournalComponent
         _uiUtils = uiUtils;
         _questTooltipComponent = questTooltipComponent;
         _pluginInterface = pluginInterface;
-        _questController = questController;
-        _commandManager = commandManager;
+        _questJournalUtils = questJournalUtils;
         _questValidator = questValidator;
     }
 
@@ -184,23 +182,7 @@ internal sealed class QuestJournalComponent
         if (ImGui.IsItemHovered())
             _questTooltipComponent.Draw(questInfo);
 
-        if (ImGui.BeginPopupContextItem($"##QuestPopup{questInfo.QuestId}", ImGuiPopupFlags.MouseButtonRight))
-        {
-            if (ImGui.MenuItem("Start as next quest", _questFunctions.IsReadyToAcceptQuest(questInfo.QuestId)))
-            {
-                _questController.SetNextQuest(quest);
-                _questController.Start("SeasonalEventSelection");
-            }
-
-            bool openInQuestMap = _commandManager.Commands.TryGetValue("/questinfo", out var commandInfo);
-            if (ImGui.MenuItem("View in Quest Map", questInfo.QuestId is QuestId && openInQuestMap))
-            {
-                _commandManager.DispatchCommand("/questinfo", questInfo.QuestId.ToString() ?? string.Empty,
-                    commandInfo!);
-            }
-
-            ImGui.EndPopup();
-        }
+        _questJournalUtils.ShowContextMenu(questInfo, quest, nameof(QuestJournalComponent));
 
         ImGui.TableNextColumn();
         float spacing;

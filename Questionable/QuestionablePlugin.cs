@@ -262,6 +262,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<QuickAccessButtonsComponent>();
         serviceCollection.AddSingleton<RemainingTasksComponent>();
 
+        serviceCollection.AddSingleton<QuestJournalUtils>();
         serviceCollection.AddSingleton<QuestJournalComponent>();
         serviceCollection.AddSingleton<GatheringJournalComponent>();
         serviceCollection.AddSingleton<AlliedSocietyJournalComponent>();
