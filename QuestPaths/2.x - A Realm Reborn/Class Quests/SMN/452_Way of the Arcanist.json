@@ -6,14 +6,13 @@
       "Sequence": 0,
       "Steps": [
         {
-          "DataId": 1000895,
           "Position": {
-            "X": -335.74432,
+            "X": -335.8204,
             "Y": 12.899764,
-            "Z": 1.3884888
+            "Z": 4.017052
           },
           "TerritoryId": 129,
-          "InteractionType": "AcceptQuest",
+          "InteractionType": "WalkTo",
           "AetheryteShortcut": "Limsa Lominsa",
           "AethernetShortcut": [
             "[Limsa Lominsa] Aetheryte Plaza",
@@ -24,6 +23,16 @@
               "InSameTerritory": true
             }
           }
+        },
+        {
+          "DataId": 1000895,
+          "Position": {
+            "X": -335.74432,
+            "Y": 12.899764,
+            "Z": 1.3884888
+          },
+          "TerritoryId": 129,
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
