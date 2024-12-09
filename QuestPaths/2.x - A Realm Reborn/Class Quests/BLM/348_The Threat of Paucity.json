@@ -1,6 +1,6 @@
-{
+﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "pot0to",
+  "Author": ["liza", "pot0to"],
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -142,8 +142,8 @@
           "DialogueChoices": [
             {
               "Type": "List",
-              "Prompt": "TEXT_CLSTHM101_00349_Q_000_1",
-              "Answer": "TEXT_CLSTHM101_00349_A_000_3"
+              "Prompt": "TEXT_CLSTHM100_00348_Q_000_1",
+              "Answer": "TEXT_CLSTHM100_00348_A_000_3"
             }
           ]
         }
@@ -153,7 +153,7 @@
       "Sequence": 4,
       "Steps": [
         {
-          "DataId": 2001512,
+          "DataId": 2001511,
           "Position": {
             "X": -366.29285,
             "Y": -34.989014,
@@ -180,7 +180,7 @@
       "Sequence": 5,
       "Steps": [
         {
-          "DataId": 2001499,
+          "DataId": 2001498,
           "Position": {
             "X": -366.29285,
             "Y": -34.989014,
@@ -192,7 +192,7 @@
       ]
     },
     {
-      "Sequence": 255,
+      "Sequence": 6,
       "Steps": [
         {
           "DataId": 1001710,
@@ -202,12 +202,27 @@
             "Z": 86.900024
           },
           "TerritoryId": 130,
-          "InteractionType": "CompleteQuest",
+          "InteractionType": "Interact",
           "AetheryteShortcut": "Ul'dah",
           "AethernetShortcut": [
             "[Ul'dah] Aetheryte Plaza",
             "[Ul'dah] Thaumaturges' Guild"
-          ],
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1001708,
+          "Position": {
+            "X": -250.3548,
+            "Y": 18,
+            "Z": 80.88806
+          },
+          "TerritoryId": 130,
+          "InteractionType": "CompleteQuest",
           "NextQuestId": 350
         }
       ]

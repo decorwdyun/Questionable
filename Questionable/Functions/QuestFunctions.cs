@@ -221,7 +221,7 @@ internal sealed unsafe class QuestFunctions
                 return (firstTrackedQuest, firstTrackedSequence);
             }
 
-            ElementId? priorityQuest = GetNextPriorityQuestThatCanBeAccepted();
+            ElementId? priorityQuest = GetNextPriorityQuestsThatCanBeAccepted().FirstOrDefault();
             if (priorityQuest != null)
             {
                 // if we have an accepted msq quest, and know of no quest of those currently in the to-do list...
@@ -336,12 +336,12 @@ internal sealed unsafe class QuestFunctions
             return null;
     }
 
-    public ElementId? GetNextPriorityQuestThatCanBeAccepted()
+    public List<ElementId> GetNextPriorityQuestsThatCanBeAccepted()
     {
         // all priority quests assume we're able to teleport to the beginning (and for e.g. class quests, the end)
         // ideally without having to wait 15m for Return.
         if (!_aetheryteFunctions.IsTeleportUnlocked())
-            return null;
+            return [];
 
         // ideally, we'd also be able to afford *some* teleports
         // this implicitly makes sure we're not starting one of the lv1 class quests if we can't afford to teleport back
@@ -363,7 +363,7 @@ internal sealed unsafe class QuestFunctions
 
                 return firstStep.IsTeleportableForPriorityQuests();
             })
-            .FirstOrDefault(x =>
+            .Where(x =>
             {
                 if (!_questRegistry.TryGetQuest(x, out Quest? quest))
                     return false;
@@ -390,7 +390,8 @@ internal sealed unsafe class QuestFunctions
 
                     return true;
                 });
-            });
+            })
+            .ToList();
     }
 
     private static int EstimateTeleportCosts(Quest quest)

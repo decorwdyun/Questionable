@@ -762,7 +762,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
         if (!IsInterruptible() || _nextQuest != null || _gatheringQuest != null || _simulatedQuest != null)
             return false;
 
-        ElementId? priorityQuestId = _questFunctions.GetNextPriorityQuestThatCanBeAccepted();
+        ElementId? priorityQuestId = _questFunctions.GetNextPriorityQuestsThatCanBeAccepted().FirstOrDefault();
         if (priorityQuestId == null)
             return false;
 

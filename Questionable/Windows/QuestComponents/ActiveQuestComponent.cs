@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text.RegularExpressions;
@@ -167,8 +168,29 @@ internal sealed partial class ActiveQuestComponent
                     ImGui.SameLine();
                     ImGui.TextColored(ImGuiColors.DalamudYellow, SeIconChar.Hyadelyn.ToIconString());
                     if (ImGui.IsItemHovered())
-                        ImGui.SetTooltip(
-                            "This quest sequence starts with a teleport to an Aetheryte.\nCertain priority quest (e.g. class quests) may be started/completed by the plugin prior to continuing with this quest.");
+                    {
+                        using var tooltip = ImRaii.Tooltip();
+                        if (tooltip)
+                        {
+                            ImGui.Text("This quest sequence starts with a teleport to an Aetheryte.");
+                            ImGui.Text(
+                                "Certain priority quest (e.g. class quests) may be started/completed by the plugin prior to continuing with this quest.");
+                            ImGui.Separator();
+                            ImGui.Text("Available priority quests:");
+
+                            List<ElementId> priorityQuests = _questFunctions.GetNextPriorityQuestsThatCanBeAccepted();
+                            if (priorityQuests.Count > 0)
+                            {
+                                foreach (var questId in priorityQuests)
+                                {
+                                    if (_questRegistry.TryGetQuest(questId, out var quest))
+                                        ImGui.BulletText($"{quest.Info.Name} ({questId})");
+                                }
+                            }
+                            else
+                                ImGui.BulletText("(none)");
+                        }
+                    }
                 }
             }
 
