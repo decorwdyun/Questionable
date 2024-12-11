@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using Microsoft.Extensions.Logging;
 using Questionable.Data;
@@ -45,7 +46,7 @@ internal sealed class AlliedSocietyQuestFunctions
             return [];
 
         bool rankedUp = (rankData & 0x80) != 0;
-        byte seed = 183;
+        byte seed = Marshal.ReadByte((nint)QuestManager.Instance() + 0x698); // TODO Use clientstructs
         List<QuestId> result = [];
         foreach (NpcData npcData in _questsByAlliedSociety[alliedSociety])
         {
@@ -56,7 +57,7 @@ internal sealed class AlliedSocietyQuestFunctions
             else
             {
                 var quests = CalculateAvailableQuests(npcData.AllQuests, seed, outranksAll, currentRank, rankedUp);
-                _logger.LogInformation("Available for {Tribe} (Issuer: {IssuerId}: {Quests}", alliedSociety, npcData.IssuerDataId, string.Join(", ", quests));
+                _logger.LogInformation("Available for {Tribe} (Seed: {Seed}, Issuer: {IssuerId}): {Quests}", alliedSociety, seed, npcData.IssuerDataId, string.Join(", ", quests));
 
                 _dailyQuests[key] = quests;
                 result.AddRange(quests);
