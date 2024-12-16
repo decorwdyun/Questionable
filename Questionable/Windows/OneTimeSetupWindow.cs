@@ -69,7 +69,7 @@ internal sealed class OneTimeSetupWindow : LWindow
                 new Uri("https://github.com/FFXIV-CombatReborn/RotationSolverReborn"),
                 new Uri(
                     "https://raw.githubusercontent.com/FFXIV-CombatReborn/CombatRebornRepo/main/pluginmaster.json")),
-            new PluginInfo("Automaton",
+            new PluginInfo("CBT (formerly known as Automaton)",
                 """
                 Automaton is a collection of automation-related tweaks.
                 The 'Sniper no sniping' tweak can complete snipe tasks automatically.
