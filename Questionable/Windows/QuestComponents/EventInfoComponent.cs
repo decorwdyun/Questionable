@@ -22,6 +22,7 @@ internal sealed class EventInfoComponent
     [SuppressMessage("ReSharper", "CollectionNeverUpdated.Local")]
     private readonly List<EventQuest> _eventQuests =
     [
+        new("Starlight Celebration", [new(5227), new(5228)], AtDailyReset(new(2024, 12, 31))),
     ];
 
     private readonly QuestData _questData;

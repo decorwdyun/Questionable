@@ -57,15 +57,27 @@ internal sealed class AlliedSocietyJournalComponent
             if (quests.Count == 0)
                 continue;
 
-            bool containsNewQuests = quests.Any(x => !_questFunctions.IsQuestComplete(x.QuestId));
-            if (containsNewQuests)
-                ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
+            string label = $"{alliedSociety}###AlliedSociety{(int)alliedSociety}";
+#if DEBUG
+            bool isOpen;
+            if (quests.Any(x => !_questRegistry.IsKnownQuest(x.QuestId)))
+            {
+                using (ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudOrange))
+                    isOpen = ImGui.CollapsingHeader(label);
+            }
+            else if (quests.Any(x => !_questFunctions.IsQuestComplete(x.QuestId)))
+            {
+                using (ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudYellow))
+                    isOpen = ImGui.CollapsingHeader(label);
+            }
+            else
+                isOpen = ImGui.CollapsingHeader(label);
+#else
+            bool isOpen = ImGui.CollapsingHeader(label);
+#endif
 
-            if (!ImGui.CollapsingHeader($"{alliedSociety}###AlliedSociety{(int)alliedSociety}"))
+            if (!isOpen)
                 continue;
-
-            if (containsNewQuests)
-                ImGui.PopStyleColor();
 
             if (alliedSociety <= EAlliedSociety.Ixal)
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
@@ -19,6 +20,7 @@ internal sealed class OneTimeSetupWindow : LWindow
     private static readonly IReadOnlyList<PluginInfo> RequiredPlugins =
     [
         new("vnavmesh",
+            "vnavmesh",
             """
             vnavmesh handles the navigation within a zone, moving
             your character to the next quest-related objective.
@@ -26,12 +28,14 @@ internal sealed class OneTimeSetupWindow : LWindow
             new Uri("https://github.com/awgil/ffxiv_navmesh/"),
             new Uri("https://puni.sh/api/repository/veyn")),
         new("Lifestream",
+            "Lifestream",
             """
             Used to travel to aethernet shards in cities.
             """,
             new Uri("https://github.com/NightmareXIV/Lifestream"),
             new Uri("https://github.com/NightmareXIV/MyDalamudPlugins/raw/main/pluginmaster.json")),
         new("TextAdvance",
+            "TextAdvance",
             """
             Automatically accepts and turns in quests, skips cutscenes
             and dialogue.
@@ -45,23 +49,22 @@ internal sealed class OneTimeSetupWindow : LWindow
     private readonly Configuration _configuration;
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly UiUtils _uiUtils;
-    private readonly DalamudReflector _dalamudReflector;
     private readonly ILogger<OneTimeSetupWindow> _logger;
 
     public OneTimeSetupWindow(Configuration configuration, IDalamudPluginInterface pluginInterface, UiUtils uiUtils,
-        DalamudReflector dalamudReflector, ILogger<OneTimeSetupWindow> logger, AutomatonIpc automatonIpc)
+        ILogger<OneTimeSetupWindow> logger, AutomatonIpc automatonIpc)
         : base("Questionable Setup###QuestionableOneTimeSetup",
             ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoSavedSettings, true)
     {
         _configuration = configuration;
         _pluginInterface = pluginInterface;
         _uiUtils = uiUtils;
-        _dalamudReflector = dalamudReflector;
         _logger = logger;
 
         _recommendedPlugins =
         [
             new("Rotation Solver Reborn",
+                "RotationSolver",
                 """
                 Automatically handles most combat interactions you encounter
                 during quests, including being interrupted by mobs.
@@ -69,7 +72,8 @@ internal sealed class OneTimeSetupWindow : LWindow
                 new Uri("https://github.com/FFXIV-CombatReborn/RotationSolverReborn"),
                 new Uri(
                     "https://raw.githubusercontent.com/FFXIV-CombatReborn/CombatRebornRepo/main/pluginmaster.json")),
-            new PluginInfo("Automaton",
+            new PluginInfo("CBT (formerly known as Automaton)",
+                "Automaton",
                 """
                 Automaton is a collection of automation-related tweaks.
                 The 'Sniper no sniping' tweak can complete snipe tasks automatically.
@@ -78,6 +82,7 @@ internal sealed class OneTimeSetupWindow : LWindow
                 new Uri("https://puni.sh/api/repository/croizat"),
                 [new PluginDetailInfo("'Sniper no sniping' enabled", () => automatonIpc.IsAutoSnipeEnabled)]),
             new("NotificationMaster",
+                "NotificationMaster",
                 """
                 Sends a configurable out-of-game notification if a quest
                 requires manual actions.
@@ -159,7 +164,7 @@ internal sealed class OneTimeSetupWindow : LWindow
 
     private bool DrawPlugin(PluginInfo plugin, float checklistPadding)
     {
-        bool isInstalled = IsPluginInstalled(plugin.DisplayName);
+        bool isInstalled = IsPluginInstalled(plugin);
         using (ImRaii.PushId("plugin_" + plugin.DisplayName))
         {
             _uiUtils.ChecklistItem(plugin.DisplayName, isInstalled);
@@ -194,13 +199,14 @@ internal sealed class OneTimeSetupWindow : LWindow
         return isInstalled;
     }
 
-    private bool IsPluginInstalled(string internalName)
+    private bool IsPluginInstalled(PluginInfo pluginInfo)
     {
-        return _dalamudReflector.TryGetDalamudPlugin(internalName, out _, suppressErrors: true, ignoreCache: true);
+        return _pluginInterface.InstalledPlugins.Any(x => x.InternalName == pluginInfo.InternalName && x.IsLoaded);
     }
 
     private sealed record PluginInfo(
         string DisplayName,
+        string InternalName,
         string Details,
         Uri WebsiteUri,
         Uri? DalamudRepositoryUri,
