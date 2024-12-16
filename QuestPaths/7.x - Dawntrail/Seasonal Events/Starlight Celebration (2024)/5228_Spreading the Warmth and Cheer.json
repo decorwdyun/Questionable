@@ -98,7 +98,15 @@
             "Z": -0.289917
           },
           "TerritoryId": 1247,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         },
         {
           "DataId": 1051809,
@@ -108,7 +116,15 @@
             "Z": 9.84198
           },
           "TerritoryId": 1247,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 1051813,
@@ -118,7 +134,15 @@
             "Z": -31.99823
           },
           "TerritoryId": 1247,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         }
       ]
     },
