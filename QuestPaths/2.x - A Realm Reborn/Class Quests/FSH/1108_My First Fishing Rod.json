@@ -1,6 +1,6 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "Cacahuetes",
+  "Author": ["Cacahuetes", "Friendly"],
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -13,9 +13,9 @@
             "StepIf": {
               "Item": {
                 "NotInInventory": true
-              }
-            }
-          }
+               }
+             }
+           }
         },
         {
           "TerritoryId": 129,
@@ -37,6 +37,33 @@
       "Sequence": 255,
       "Steps": [
         {
+          "DataId": 1001016,
+          "Position": {
+            "X": -42.679565,
+            "Y": 39.999947,
+            "Z": 119.920654
+          },
+          "TerritoryId": 128,
+          "InteractionType": "PurchaseItem",
+          "AethernetShortcut": [
+            "[Limsa Lominsa] Fishermens' Guild",
+            "[Limsa Lominsa] The Aftcastle"
+          ],
+          "PurchaseMenu": {
+            "ExcelSheet": "GilShop",
+            "Key": 262186
+          },
+          "ItemId": 4870,
+          "ItemCount": 5,
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": false
+              }
+            }
+          }
+        },
+        {
           "DataId": 1000857,
           "Position": {
             "X": -165.27051,
@@ -50,8 +77,7 @@
             "[Limsa Lominsa] Fishermens' Guild"
           ],
           "NextQuestId": 3843,
-          "Disabled": true,
-          "Comment": "Catch/turn in fish manually"
+          "Comment": "Complete quest"
         }
       ]
     }
