@@ -46,7 +46,7 @@ internal sealed class AlliedSocietyQuestFunctions
             return [];
 
         bool rankedUp = (rankData & 0x80) != 0;
-        byte seed = Marshal.ReadByte((nint)QuestManager.Instance() + 0x698); // TODO Use clientstructs
+        byte seed = QuestManager.Instance()->DailyQuestSeed;
         List<QuestId> result = [];
         foreach (NpcData npcData in _questsByAlliedSociety[alliedSociety])
         {
