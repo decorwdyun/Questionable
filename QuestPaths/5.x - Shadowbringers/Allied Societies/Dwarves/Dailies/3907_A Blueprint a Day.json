@@ -1,7 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "liza",
-  "Disabled": true,
+  "Author": "pot0to",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -30,11 +29,34 @@
     {
       "Sequence": 1,
       "Steps": [
+        {
+          "DataId": 1034115,
+          "Position": {
+            "X": 732.3567,
+            "Y": 21.798542,
+            "Z": -77.62268
+          },
+          "TerritoryId": 813,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "AetheryteShortcut": "Lakeland - Fort Jobb",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "AetheryteLocked": "Lakeland - Fort Jobb"
+            }
+          }
+        }
       ]
     },
     {
       "Sequence": 255,
       "Steps": [
+        {
+          "TerritoryId": 813,
+          "InteractionType": "Craft",
+          "ItemId": 31155,
+          "ItemCount": 2
+        },
         {
           "Position": {
             "X": -615.73865,
