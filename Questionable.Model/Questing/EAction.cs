@@ -26,6 +26,7 @@ public enum EAction
     BuffetGriffin = 4583,
     Trample = 4585,
     Fumigate = 5872,
+    Seed = 6294,
     MagitekPulse = 8624,
     MagitekThunder = 8625,
     Inhale = 10013,
@@ -78,6 +79,7 @@ public static class EActionExtensions
             or EAction.BuffetGriffin
             or EAction.Trample
             or EAction.Fumigate
+            or EAction.Seed
             or EAction.Inhale
             or EAction.SiphonSnout
             or EAction.PeculiarLight

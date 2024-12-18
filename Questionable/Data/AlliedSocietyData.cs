@@ -15,6 +15,7 @@ internal sealed class AlliedSocietyData
         {
             { 66, new(1016093, EAetheryteLocation.SeaOfCloudsOkZundu) },
             { 79, new(1017031, EAetheryteLocation.DravanianForelandsAnyxTrine) },
+            { 89, new(1017322, EAetheryteLocation.ChurningMistsZenith) },
             { 369, new(1051798, EAetheryteLocation.KozamaukaDockPoga) },
         }.AsReadOnly();
 
@@ -26,6 +27,7 @@ internal sealed class AlliedSocietyData
             {
                 >= 2171 and <= 2200 => EAlliedSociety.VanuVanu,
                 >= 2261 and <= 2280 => EAlliedSociety.Vath,
+                >= 2290 and <= 2319 => EAlliedSociety.Moogles,
                 >= 5199 and <= 5226 => EAlliedSociety.Pelupelu,
                 _ => EAlliedSociety.None,
             };
@@ -45,6 +47,11 @@ internal sealed class AlliedSocietyData
         {
             normalNpcs = [];
             mountNpcs = [1017031];
+        }
+        else if (alliedSociety == EAlliedSociety.Moogles)
+        {
+            normalNpcs = [];
+            mountNpcs = [1017322];
         }
         else
         {
