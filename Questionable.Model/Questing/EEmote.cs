@@ -24,6 +24,7 @@ public enum EEmote
     Deny = 25,
     Poke = 28,
     Psych = 30,
+    Salute = 31,
     Rally = 34,
     Soothe = 35,
     Stretch = 37,
