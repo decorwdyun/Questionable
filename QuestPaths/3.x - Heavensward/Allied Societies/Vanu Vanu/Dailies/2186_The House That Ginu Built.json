@@ -46,7 +46,9 @@
           "TerritoryId": 401,
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterInteraction",
-          "KillEnemyDataIds": [5241],
+          "KillEnemyDataIds": [
+            5241
+          ],
           "Fly": true
         },
         {
@@ -59,7 +61,9 @@
           "TerritoryId": 401,
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterInteraction",
-          "KillEnemyDataIds": [5241],
+          "KillEnemyDataIds": [
+            5241
+          ],
           "Fly": true
         }
       ]
@@ -77,7 +81,20 @@
           "TerritoryId": 401,
           "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "The Sea of Clouds - Ok' Zundu",
-          "Fly": true
+          "Fly": true,
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": -799.46594,
+                  "Y": -133.2695,
+                  "Z": -404.1352
+                },
+                "TerritoryId": 401,
+                "MaximumDistance": 50
+              }
+            }
+          }
         }
       ]
     }

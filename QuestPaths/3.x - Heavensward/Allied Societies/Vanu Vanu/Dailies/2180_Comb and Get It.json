@@ -30,7 +30,16 @@
           "TerritoryId": 401,
           "InteractionType": "Interact",
           "Fly": true,
-          "RequiredQuestVariables": [null, null, [16], null, null, null]
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [
+              16
+            ],
+            null,
+            null,
+            null
+          ]
         },
         {
           "DataId": 2006761,
@@ -42,7 +51,16 @@
           "TerritoryId": 401,
           "InteractionType": "Interact",
           "Fly": true,
-          "RequiredQuestVariables": [null, null, [32], null, null, null]
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [
+              32
+            ],
+            null,
+            null,
+            null
+          ]
         }
       ]
     },
@@ -60,9 +78,20 @@
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterItemUse",
           "ItemId": 2001941,
-          "KillEnemyDataIds": [5238],
+          "KillEnemyDataIds": [
+            5238
+          ],
           "Fly": true,
-          "RequiredQuestVariables": [null, [1], null, null, null, null]
+          "RequiredQuestVariables": [
+            null,
+            [
+              1
+            ],
+            null,
+            null,
+            null,
+            null
+          ]
         }
       ]
     },
