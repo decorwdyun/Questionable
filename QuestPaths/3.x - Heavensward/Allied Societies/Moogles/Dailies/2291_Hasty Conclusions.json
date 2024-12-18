@@ -1,0 +1,52 @@
+﻿{
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+  "Author": "liza",
+  "Disabled": true,
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1017171,
+          "Position": {
+            "X": -335.56116,
+            "Y": 59.003433,
+            "Z": 313.98486
+          },
+          "TerritoryId": 400,
+          "InteractionType": "AcceptQuest"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1017171,
+          "Position": {
+            "X": -335.56116,
+            "Y": 59.003433,
+            "Z": 313.98486
+          },
+          "TerritoryId": 400,
+          "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "The Churning Mists - Zenith",
+          "Fly": true,
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": -335.56116,
+                  "Y": 59.003433,
+                  "Z": 313.98486
+                },
+                "TerritoryId": 400,
+                "MaximumDistance": 50
+              }
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
