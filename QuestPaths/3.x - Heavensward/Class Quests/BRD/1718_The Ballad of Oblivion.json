@@ -144,7 +144,8 @@
           "TerritoryId": 153,
           "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "South Shroud - Quarrymill",
-          "Fly": true
+          "Fly": true,
+          "NextQuestId": 2890
         }
       ]
     }
