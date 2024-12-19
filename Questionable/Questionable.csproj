@@ -26,8 +26,8 @@
 
 	<ItemGroup>
 		<None Remove="Controller\CombatModules\BossModPreset.json" />
-		<Content Include="Controller\CombatModules\BossModPreset.json">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</Content>
+		<EmbeddedResource Include="Controller\CombatModules\BossModPreset.json">
+			<LogicalName>Questionable.Controller.CombatModules.BossModPreset</LogicalName>
+		</EmbeddedResource>
 	</ItemGroup>
 </Project>

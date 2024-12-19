@@ -3,6 +3,7 @@ using Dalamud.Plugin;
 using Dalamud.Plugin.Ipc;
 using Dalamud.Plugin.Ipc.Exceptions;
 using Dalamud.Plugin.Services;
+using Json.Schema;
 using Microsoft.Extensions.Logging;
 using Questionable.Model;
 using System;
@@ -22,6 +23,7 @@ internal sealed class BossModModule(ILogger<BossModModule> logger, MovementContr
     private readonly ICallGateSubscriber<string, bool> _setPreset = pluginInterface.GetIpcSubscriber<string, bool>($"{Name}.Presets.SetActive");
     private readonly ICallGateSubscriber<bool> _clearPreset = pluginInterface.GetIpcSubscriber<bool>($"{Name}.Presets.ClearActive");
 
+    private static Stream Preset => typeof(BossModModule).Assembly.GetManifestResourceStream("Questionable.Controller.CombatModules.BossModPreset")!;
     private DateTime _lastDistanceCheck = DateTime.MinValue;
 
     public bool CanHandleFight(CombatController.CombatData combatData)
@@ -40,10 +42,11 @@ internal sealed class BossModModule(ILogger<BossModModule> logger, MovementContr
     {
         try
         {
-            _logger.LogInformation("Starting {Name}", Name);
-            var path = Path.Combine(pluginInterface.AssemblyLocation.DirectoryName!, @"Controller\CombatModules\BossModPreset.json");
             if (_getPreset.InvokeFunc("Questionable") == null)
-                _logger.LogInformation("Loading Questionable BossMod Preset: {LoadedState}", _createPreset.InvokeFunc(File.ReadAllText(path), true));
+            {
+                using var reader = new StreamReader(Preset);
+                _logger.LogInformation("Loading Questionable BossMod Preset: {LoadedState}", _createPreset.InvokeFunc(reader.ReadToEnd(), true));
+            }
             _setPreset.InvokeFunc("Questionable");
             _lastDistanceCheck = DateTime.Now;
             return true;
