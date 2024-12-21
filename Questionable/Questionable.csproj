@@ -23,4 +23,11 @@
         <ProjectReference Include="..\QuestPaths\QuestPaths.csproj"/>
         <ProjectReference Include="..\vendor\NotificationMasterAPI\NotificationMasterAPI\NotificationMasterAPI.csproj" />
     </ItemGroup>
+
+	<ItemGroup>
+		<None Remove="Controller\CombatModules\BossModPreset.json" />
+		<EmbeddedResource Include="Controller\CombatModules\BossModPreset.json">
+			<LogicalName>Questionable.Controller.CombatModules.BossModPreset</LogicalName>
+		</EmbeddedResource>
+	</ItemGroup>
 </Project>
