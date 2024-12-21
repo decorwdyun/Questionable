@@ -14,7 +14,6 @@ using LLib.GameData;
 using LLib.GameUI;
 using Lumina.Excel.Sheets;
 using Questionable.Controller;
-using Questionable.Controller.Steps.Interactions;
 using Questionable.Data;
 using Questionable.Model;
 using Questionable.Model.Questing;
@@ -487,6 +486,8 @@ internal sealed unsafe class QuestFunctions
             return IsQuestAccepted(leveId);
         else if (elementId is SatisfactionSupplyNpcId)
             return false;
+        else if (elementId is AlliedSocietyDailyId)
+            return false;
         else
             throw new ArgumentOutOfRangeException(nameof(elementId));
     }
@@ -517,6 +518,8 @@ internal sealed unsafe class QuestFunctions
             return IsQuestComplete(leveId);
         else if (elementId is SatisfactionSupplyNpcId)
             return false;
+        else if (elementId is AlliedSocietyDailyId)
+            return false;
         else
             throw new ArgumentOutOfRangeException(nameof(elementId));
     }
@@ -540,6 +543,8 @@ internal sealed unsafe class QuestFunctions
             return IsQuestLocked(leveId);
         else if (elementId is SatisfactionSupplyNpcId satisfactionSupplyNpcId)
             return IsQuestLocked(satisfactionSupplyNpcId);
+        else if (elementId is AlliedSocietyDailyId alliedSocietyDailyId)
+            return IsQuestLocked(alliedSocietyDailyId);
         else
             throw new ArgumentOutOfRangeException(nameof(elementId));
     }
@@ -577,6 +582,13 @@ internal sealed unsafe class QuestFunctions
     {
         SatisfactionSupplyInfo questInfo = (SatisfactionSupplyInfo)_questData.GetQuestInfo(satisfactionSupplyNpcId);
         return !HasCompletedPreviousQuests(questInfo, null);
+    }
+
+    private bool IsQuestLocked(AlliedSocietyDailyId alliedSocietyDailyId)
+    {
+        PlayerState* playerState = PlayerState.Instance();
+        byte currentRank = playerState->GetBeastTribeRank(alliedSocietyDailyId.AlliedSociety);
+        return currentRank == 0 || currentRank < alliedSocietyDailyId.Rank;
     }
 
     public bool IsDailyAlliedSocietyQuest(QuestId questId)

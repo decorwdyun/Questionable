@@ -68,6 +68,29 @@ internal sealed class QuestData
                 .Where(x => x.LevelLevemete.RowId != 0)
                 .Select(x => new LeveInfo(x)),
         ];
+
+        quests.AddRange(
+            dataManager.GetExcelSheet<BeastTribe>()
+                .Where(x => x.RowId > 0 && !x.Name.IsEmpty)
+                .SelectMany(x =>
+                {
+                    if (x.RowId < 5)
+                    {
+                        return ((IEnumerable<byte>)
+                            [
+                                0,
+                                ..quests.Where(y => y.AlliedSociety == (EAlliedSociety)x.RowId && y.IsRepeatable)
+                                    .Cast<QuestInfo>()
+                                    .Select(y => (byte)y.AlliedSocietyRank).Distinct()
+                            ])
+                            .Select(rank => new AlliedSocietyDailyInfo(x, rank));
+                    }
+                    else
+                    {
+                        return [new AlliedSocietyDailyInfo(x, 0)];
+                    }
+                }));
+
         _quests = quests.ToDictionary(x => x.QuestId, x => x);
 
         // workaround because the game doesn't require completion of the CT questline through normal means
