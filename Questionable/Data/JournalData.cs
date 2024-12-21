@@ -77,7 +77,6 @@ internal sealed class JournalData
         public string Name { get; }
         public uint CategoryId { get; }
         public List<IQuestInfo> Quests { get; }
-        public int QuestCount => Quests.Count;
     }
 
     internal sealed class Category(JournalCategory journalCategory, IReadOnlyList<Genre> genres)
@@ -86,7 +85,6 @@ internal sealed class JournalData
         public string Name { get; } = journalCategory.Name.ToString();
         public uint SectionId { get; } = journalCategory.JournalSection.RowId;
         public IReadOnlyList<Genre> Genres { get; } = genres;
-        public int QuestCount => Genres.Sum(x => x.QuestCount);
     }
 
     internal sealed class Section(JournalSection journalSection, IReadOnlyList<Category> categories)
@@ -94,6 +92,5 @@ internal sealed class JournalData
         public uint Id { get; } = journalSection.RowId;
         public string Name { get; } = journalSection.Name.ToString();
         public IReadOnlyList<Category> Categories { get; } = categories;
-        public int QuestCount => Categories.Sum(x => x.QuestCount);
     }
 }

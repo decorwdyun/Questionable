@@ -93,10 +93,10 @@ internal sealed class QuestJournalComponent
 
     private void DrawSection(FilteredSection filter)
     {
-        if (filter.Section.QuestCount == 0)
+        (int available, int total, int obtainable, int completed) =
+            _sectionCounts.GetValueOrDefault(filter.Section, new());
+        if (total == 0)
             return;
-
-        (int available, int obtainable, int completed) = _sectionCounts.GetValueOrDefault(filter.Section, new());
 
         ImGui.TableNextRow();
         ImGui.TableNextColumn();
@@ -104,7 +104,7 @@ internal sealed class QuestJournalComponent
         bool open = ImGui.TreeNodeEx(filter.Section.Name, ImGuiTreeNodeFlags.SpanFullWidth);
 
         ImGui.TableNextColumn();
-        DrawCount(available, filter.Section.QuestCount);
+        DrawCount(available, total);
         ImGui.TableNextColumn();
         DrawCount(completed, obtainable);
 
@@ -119,10 +119,10 @@ internal sealed class QuestJournalComponent
 
     private void DrawCategory(FilteredCategory filter)
     {
-        if (filter.Category.QuestCount == 0)
+        (int available, int total, int obtainable, int completed) =
+            _categoryCounts.GetValueOrDefault(filter.Category, new());
+        if (total == 0)
             return;
-
-        (int available, int obtainable, int completed) = _categoryCounts.GetValueOrDefault(filter.Category, new());
 
         ImGui.TableNextRow();
         ImGui.TableNextColumn();
@@ -130,7 +130,7 @@ internal sealed class QuestJournalComponent
         bool open = ImGui.TreeNodeEx(filter.Category.Name, ImGuiTreeNodeFlags.SpanFullWidth);
 
         ImGui.TableNextColumn();
-        DrawCount(available, filter.Category.QuestCount);
+        DrawCount(available, total);
         ImGui.TableNextColumn();
         DrawCount(completed, obtainable);
 
@@ -145,10 +145,9 @@ internal sealed class QuestJournalComponent
 
     private void DrawGenre(FilteredGenre filter)
     {
-        if (filter.Genre.QuestCount == 0)
+        (int supported, int total, int obtainable, int completed) = _genreCounts.GetValueOrDefault(filter.Genre, new());
+        if (total == 0)
             return;
-
-        (int supported, int obtainable, int completed) = _genreCounts.GetValueOrDefault(filter.Genre, new());
 
         ImGui.TableNextRow();
         ImGui.TableNextColumn();
@@ -156,7 +155,7 @@ internal sealed class QuestJournalComponent
         bool open = ImGui.TreeNodeEx(filter.Genre.Name, ImGuiTreeNodeFlags.SpanFullWidth);
 
         ImGui.TableNextColumn();
-        DrawCount(supported, filter.Genre.QuestCount);
+        DrawCount(supported, total);
         ImGui.TableNextColumn();
         DrawCount(completed, obtainable);
 
@@ -194,7 +193,9 @@ internal sealed class QuestJournalComponent
 
         ImGui.SetCursorPosX(ImGui.GetCursorPosX() + spacing);
 
-        if (quest is { Root.Disabled: false })
+        if (_questFunctions.IsQuestRemoved(questInfo.QuestId))
+            _uiUtils.ChecklistItem(string.Empty, ImGuiColors.DalamudGrey, FontAwesomeIcon.Minus);
+        else if (quest is { Root.Disabled: false })
         {
             List<ValidationIssue> issues = _questValidator.GetIssues(quest.Id);
             if (issues.Any(x => x.Severity == EIssueSeverity.Error))
@@ -319,10 +320,13 @@ internal sealed class QuestJournalComponent
         foreach (var genre in _journalData.Genres)
         {
             int available = genre.Quests.Count(x =>
-                _questRegistry.TryGetQuest(x.QuestId, out var quest) && !quest.Root.Disabled);
+                _questRegistry.TryGetQuest(x.QuestId, out var quest) &&
+                !quest.Root.Disabled &&
+                !_questFunctions.IsQuestRemoved(x.QuestId));
+            int total = genre.Quests.Count(x => !_questFunctions.IsQuestRemoved(x.QuestId));
             int obtainable = genre.Quests.Count(x => !_questFunctions.IsQuestUnobtainable(x.QuestId));
             int completed = genre.Quests.Count(x => _questFunctions.IsQuestComplete(x.QuestId));
-            _genreCounts[genre] = new(available, obtainable, completed);
+            _genreCounts[genre] = new(available, total, obtainable, completed);
         }
 
         foreach (var category in _journalData.Categories)
@@ -332,9 +336,10 @@ internal sealed class QuestJournalComponent
                 .Select(x => x.Value)
                 .ToList();
             int available = counts.Sum(x => x.Available);
+            int total = counts.Sum(x => x.Total);
             int obtainable = counts.Sum(x => x.Obtainable);
             int completed = counts.Sum(x => x.Completed);
-            _categoryCounts[category] = new(available, obtainable, completed);
+            _categoryCounts[category] = new(available, total, obtainable, completed);
         }
 
         foreach (var section in _journalData.Sections)
@@ -344,9 +349,10 @@ internal sealed class QuestJournalComponent
                 .Select(x => x.Value)
                 .ToList();
             int available = counts.Sum(x => x.Available);
+            int total = counts.Sum(x => x.Total);
             int obtainable = counts.Sum(x => x.Obtainable);
             int completed = counts.Sum(x => x.Completed);
-            _sectionCounts[section] = new(available, obtainable, completed);
+            _sectionCounts[section] = new(available, total, obtainable, completed);
         }
     }
 
@@ -368,5 +374,11 @@ internal sealed class QuestJournalComponent
 
     private sealed record FilteredGenre(JournalData.Genre Genre, List<IQuestInfo> Quests);
 
-    private sealed record JournalCounts(int Available = 0, int Obtainable = 0, int Completed = 0);
+    private sealed record JournalCounts(int Available, int Total, int Obtainable, int Completed)
+    {
+        public JournalCounts()
+            : this(0, 0, 0, 0)
+        {
+        }
+    }
 }

@@ -670,6 +670,9 @@ internal sealed unsafe class QuestFunctions
                 return true;
         }
 
+        if (IsQuestRemoved(questId))
+            return true;
+
         return false;
     }
 
@@ -680,6 +683,20 @@ internal sealed unsafe class QuestFunctions
             return true;
 
         return false;
+    }
+
+    public bool IsQuestRemoved(ElementId elementId)
+    {
+        if (elementId is QuestId questId)
+            return IsQuestRemoved(questId);
+        else
+            return false;
+    }
+
+    [SuppressMessage("Performance", "CA1822")]
+    private bool IsQuestRemoved(QuestId questId)
+    {
+        return questId.Value is 487 or 1428 or 1429;
     }
 
     private bool HasCompletedPreviousQuests(IQuestInfo questInfo, ElementId? extraCompletedQuest)
