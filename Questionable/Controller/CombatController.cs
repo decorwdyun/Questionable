@@ -242,7 +242,8 @@ internal sealed class CombatController : IDisposable
                     if (_currentFight.Data.CompletedComplexDatas.Contains(i))
                         continue;
 
-                    if (complexCombatData[i].DataId == battleNpc.DataId)
+                    if (complexCombatData[i].DataId == battleNpc.DataId &&
+                        (complexCombatData[i].NameId == null || complexCombatData[i].NameId == battleNpc.NameId))
                         return 100;
                 }
             }
@@ -261,7 +262,9 @@ internal sealed class CombatController : IDisposable
                 if (gameObjectStruct->NamePlateIconId is 60093 or 60732)
                     return 0;
 
-                var enemyData = _currentFight.Data.ComplexCombatDatas.FirstOrDefault(x => x.DataId == battleNpc.DataId);
+                var enemyData = _currentFight.Data.ComplexCombatDatas
+                    .FirstOrDefault(x => x.DataId == battleNpc.DataId &&
+                                         (x.NameId == null || x.NameId == battleNpc.NameId));
                 if (enemyData is { IgnoreQuestMarker: true })
                 {
                     if (battleNpc.StatusFlags.HasFlag(StatusFlags.InCombat))

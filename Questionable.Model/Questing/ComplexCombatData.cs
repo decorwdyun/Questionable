@@ -5,6 +5,7 @@ namespace Questionable.Model.Questing;
 public sealed class ComplexCombatData
 {
     public uint DataId { get; set; }
+    public uint? NameId { get; set; }
 
     // TODO Use this
     public uint? MinimumKillCount { get; set; }

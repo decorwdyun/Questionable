@@ -11,6 +11,7 @@ using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using FFXIVClientStructs.FFXIV.Client.Game.Character;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
 using FFXIVClientStructs.FFXIV.Client.Game.Event;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
@@ -199,9 +200,13 @@ internal sealed class CreationUtilsComponent
 
     private unsafe void DrawTargetDetails(IGameObject target)
     {
+        string nameId = string.Empty;
+        if (target is ICharacter character)
+            nameId = $"; n={character.NameId}";
+
         ImGui.Separator();
         ImGui.Text(string.Create(CultureInfo.InvariantCulture,
-            $"Target: {target.Name}  ({target.ObjectKind}; {target.DataId})"));
+            $"Target: {target.Name}  ({target.ObjectKind}; {target.DataId}{nameId})"));
 
         if (_clientState.LocalPlayer != null)
         {
