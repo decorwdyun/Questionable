@@ -44,7 +44,8 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         QuickAccessButtonsComponent quickAccessButtonsComponent,
         RemainingTasksComponent remainingTasksComponent,
         IFramework framework,
-        InteractionUiController interactionUiController)
+        InteractionUiController interactionUiController,
+        ConfigWindow configWindow)
         : base($"Questionable v{PluginVersion.ToString(2)}###Questionable",
             ImGuiWindowFlags.AlwaysAutoResize)
     {
@@ -67,7 +68,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
 #endif
         SizeConstraints = new WindowSizeConstraints
         {
-            MinimumSize = new Vector2(230, 30),
+            MinimumSize = new Vector2(240, 30),
             MaximumSize = default
         };
         RespectCloseHotkey = false;
@@ -86,6 +87,20 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
             AvailableClickthrough = true,
         };
         TitleBarButtons.Insert(0, _minimizeButton);
+
+        TitleBarButtons.Add(new TitleBarButton
+        {
+            Icon = FontAwesomeIcon.Cog,
+            IconOffset = new Vector2(1.5f, 1),
+            Click = _ => configWindow.IsOpen = true,
+            Priority = int.MinValue,
+            ShowTooltip = () =>
+            {
+                ImGui.BeginTooltip();
+                ImGui.Text("Open Configuration");
+                ImGui.EndTooltip();
+            }
+        });
 
         _activeQuestComponent.Reload += OnReload;
         _quickAccessButtonsComponent.Reload += OnReload;

@@ -16,17 +16,19 @@ internal sealed class RotationSolverRebornModule : ICombatModule, IDisposable
     private readonly ILogger<RotationSolverRebornModule> _logger;
     private readonly MovementController _movementController;
     private readonly IClientState _clientState;
+    private readonly Configuration _configuration;
     private readonly ICallGateSubscriber<string, object> _test;
     private readonly ICallGateSubscriber<StateCommandType, object> _changeOperationMode;
 
     private DateTime _lastDistanceCheck = DateTime.MinValue;
 
     public RotationSolverRebornModule(ILogger<RotationSolverRebornModule> logger, MovementController movementController,
-        IClientState clientState, IDalamudPluginInterface pluginInterface)
+        IClientState clientState, IDalamudPluginInterface pluginInterface, Configuration configuration)
     {
         _logger = logger;
         _movementController = movementController;
         _clientState = clientState;
+        _configuration = configuration;
         _test = pluginInterface.GetIpcSubscriber<string, object>("RotationSolverReborn.Test");
         _changeOperationMode =
             pluginInterface.GetIpcSubscriber<StateCommandType, object>("RotationSolverReborn.ChangeOperatingMode");
@@ -34,6 +36,9 @@ internal sealed class RotationSolverRebornModule : ICombatModule, IDisposable
 
     public bool CanHandleFight(CombatController.CombatData combatData)
     {
+        if (_configuration.General.CombatModule != Configuration.ECombatModule.RotationSolverReborn)
+            return false;
+
         try
         {
             _test.InvokeAction("Validate RSR is callable from Questionable");

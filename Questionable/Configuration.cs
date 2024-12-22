@@ -7,9 +7,9 @@ namespace Questionable;
 
 internal sealed class Configuration : IPluginConfiguration
 {
-    public const int PluginSetupVersion = 2;
+    public const int PluginSetupVersion = 3;
 
-    public int Version { get; set; } =1 ;
+    public int Version { get; set; } = 1;
     public int PluginSetupCompleteVersion { get; set; }
     public GeneralConfiguration General { get; } = new();
     public NotificationConfiguration Notifications { get; } = new();
@@ -23,6 +23,7 @@ internal sealed class Configuration : IPluginConfiguration
 
     internal sealed class GeneralConfiguration
     {
+        public ECombatModule CombatModule { get; set; } = ECombatModule.BossMod;
         public uint MountId { get; set; } = 71;
         public GrandCompany GrandCompany { get; set; } = GrandCompany.None;
         public bool HideInAllInstances { get; set; } = true;
@@ -44,5 +45,12 @@ internal sealed class Configuration : IPluginConfiguration
         public bool DebugOverlay { get; set; }
         public bool NeverFly { get; set; }
         public bool AdditionalStatusInformation { get; set; }
+    }
+
+    internal enum ECombatModule
+    {
+        None,
+        BossMod,
+        RotationSolverReborn,
     }
 }

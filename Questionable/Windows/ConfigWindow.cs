@@ -26,6 +26,7 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
     private readonly uint[] _mountIds;
     private readonly string[] _mountNames;
 
+    private readonly string[] _combatModuleNames = ["None", "Boss Mod (VBM)", "Rotation Solver Reborn"];
     private readonly string[] _grandCompanyNames =
         ["None (manually pick quest)", "Maelstrom", "Twin Adder", "Immortal Flames"];
 
@@ -65,6 +66,14 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
         using var tab = ImRaii.TabItem("General");
         if (!tab)
             return;
+
+        int selectedCombatModule = (int)_configuration.General.CombatModule;
+        if (ImGui.Combo("Preferred Combat Module", ref selectedCombatModule, _combatModuleNames, _combatModuleNames.Length))
+        {
+            _configuration.General.CombatModule = (Configuration.ECombatModule)selectedCombatModule;
+            Save();
+        }
+
         int selectedMount = Array.FindIndex(_mountIds, x => x == _configuration.General.MountId);
         if (selectedMount == -1)
         {

@@ -12,22 +12,44 @@ using System.Numerics;
 
 namespace Questionable.Controller.CombatModules;
 
-internal sealed class BossModModule(ILogger<BossModModule> logger, MovementController movementController, IClientState clientState, IDalamudPluginInterface pluginInterface) : ICombatModule, IDisposable
+internal sealed class BossModModule : ICombatModule, IDisposable
 {
     private const string Name = "BossMod";
-    private readonly ILogger<BossModModule> _logger = logger;
-    private readonly MovementController _movementController = movementController;
-    private readonly IClientState _clientState = clientState;
-    private readonly ICallGateSubscriber<string, string?> _getPreset = pluginInterface.GetIpcSubscriber<string, string?>($"{Name}.Presets.Get");
-    private readonly ICallGateSubscriber<string, bool, bool> _createPreset = pluginInterface.GetIpcSubscriber<string, bool, bool>($"{Name}.Presets.Create");
-    private readonly ICallGateSubscriber<string, bool> _setPreset = pluginInterface.GetIpcSubscriber<string, bool>($"{Name}.Presets.SetActive");
-    private readonly ICallGateSubscriber<bool> _clearPreset = pluginInterface.GetIpcSubscriber<bool>($"{Name}.Presets.ClearActive");
+    private readonly ILogger<BossModModule> _logger;
+    private readonly MovementController _movementController;
+    private readonly IClientState _clientState;
+    private readonly Configuration _configuration;
+    private readonly ICallGateSubscriber<string, string?> _getPreset;
+    private readonly ICallGateSubscriber<string, bool, bool> _createPreset;
+    private readonly ICallGateSubscriber<string, bool> _setPreset;
+    private readonly ICallGateSubscriber<bool> _clearPreset;
 
     private static Stream Preset => typeof(BossModModule).Assembly.GetManifestResourceStream("Questionable.Controller.CombatModules.BossModPreset")!;
     private DateTime _lastDistanceCheck = DateTime.MinValue;
 
+    public BossModModule(
+        ILogger<BossModModule> logger,
+        MovementController movementController,
+        IClientState clientState,
+        IDalamudPluginInterface pluginInterface,
+        Configuration configuration)
+    {
+        _logger = logger;
+        _movementController = movementController;
+        _clientState = clientState;
+        _configuration = configuration;
+
+        _getPreset = pluginInterface.GetIpcSubscriber<string, string?>($"{Name}.Presets.Get");
+        _createPreset = pluginInterface.GetIpcSubscriber<string, bool, bool>($"{Name}.Presets.Create");
+        _setPreset = pluginInterface.GetIpcSubscriber<string, bool>($"{Name}.Presets.SetActive");
+        _clearPreset = pluginInterface.GetIpcSubscriber<bool>($"{Name}.Presets.ClearActive");
+    }
+
     public bool CanHandleFight(CombatController.CombatData combatData)
     {
+        if (_configuration.General.CombatModule != Configuration.ECombatModule.BossMod)
+            return false;
+
         try
         {
             return _getPreset.HasFunction;

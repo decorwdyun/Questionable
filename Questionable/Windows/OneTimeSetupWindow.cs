@@ -44,6 +44,27 @@ internal sealed class OneTimeSetupWindow : LWindow
             new Uri("https://github.com/NightmareXIV/MyDalamudPlugins/raw/main/pluginmaster.json")),
     ];
 
+    private static readonly IReadOnlyDictionary<Configuration.ECombatModule, PluginInfo> CombatPlugins = new Dictionary<Configuration.ECombatModule, PluginInfo>
+    {
+        {
+            Configuration.ECombatModule.BossMod,
+            new("Boss Mod (VBM)",
+                "BossMod",
+                string.Empty,
+                new Uri("https://github.com/awgil/ffxiv_bossmod"),
+                new Uri("https://puni.sh/api/repository/veyn"))
+        },
+        {
+            Configuration.ECombatModule.RotationSolverReborn,
+            new("Rotation Solver Reborn",
+                "RotationSolver",
+                string.Empty,
+                new Uri("https://github.com/FFXIV-CombatReborn/RotationSolverReborn"),
+                new Uri(
+                    "https://raw.githubusercontent.com/FFXIV-CombatReborn/CombatRebornRepo/main/pluginmaster.json"))
+        },
+    }.AsReadOnly();
+
     private readonly IReadOnlyList<PluginInfo> _recommendedPlugins;
 
     private readonly Configuration _configuration;
@@ -60,18 +81,8 @@ internal sealed class OneTimeSetupWindow : LWindow
         _pluginInterface = pluginInterface;
         _uiUtils = uiUtils;
         _logger = logger;
-
         _recommendedPlugins =
         [
-            new("Rotation Solver Reborn",
-                "RotationSolver",
-                """
-                Automatically handles most combat interactions you encounter
-                during quests, including being interrupted by mobs.
-                """,
-                new Uri("https://github.com/FFXIV-CombatReborn/RotationSolverReborn"),
-                new Uri(
-                    "https://raw.githubusercontent.com/FFXIV-CombatReborn/CombatRebornRepo/main/pluginmaster.json")),
             new PluginInfo("CBT (formerly known as Automaton)",
                 "Automaton",
                 """
@@ -114,6 +125,25 @@ internal sealed class OneTimeSetupWindow : LWindow
         {
             foreach (var plugin in RequiredPlugins)
                 allRequiredInstalled &= DrawPlugin(plugin, checklistPadding);
+        }
+
+        ImGui.Spacing();
+        ImGui.Separator();
+        ImGui.Spacing();
+
+        ImGui.Text("Questionable supports multiple rotation/combat plugins, please pick the one\nyou want to use:");
+
+        using (ImRaii.PushIndent())
+        {
+            if (ImGui.RadioButton("No rotation/combat plugin (combat must be done manually)",
+                    _configuration.General.CombatModule == Configuration.ECombatModule.None))
+            {
+                _configuration.General.CombatModule = Configuration.ECombatModule.None;
+                _pluginInterface.SavePluginConfig(_configuration);
+            }
+
+            DrawCombatPlugin(Configuration.ECombatModule.BossMod, checklistPadding);
+            DrawCombatPlugin(Configuration.ECombatModule.RotationSolverReborn, checklistPadding);
         }
 
         ImGui.Spacing();
@@ -164,39 +194,75 @@ internal sealed class OneTimeSetupWindow : LWindow
 
     private bool DrawPlugin(PluginInfo plugin, float checklistPadding)
     {
-        bool isInstalled = IsPluginInstalled(plugin);
         using (ImRaii.PushId("plugin_" + plugin.DisplayName))
         {
+            bool isInstalled = IsPluginInstalled(plugin);
             _uiUtils.ChecklistItem(plugin.DisplayName, isInstalled);
-            using (ImRaii.PushIndent(checklistPadding))
+
+            DrawPluginDetails(plugin, checklistPadding, isInstalled);
+            return isInstalled;
+        }
+    }
+
+    private void DrawCombatPlugin(Configuration.ECombatModule combatModule, float checklistPadding)
+    {
+        ImGui.Spacing();
+
+        PluginInfo plugin = CombatPlugins[combatModule];
+        using (ImRaii.PushId("plugin_" + plugin.DisplayName))
+        {
+            bool isInstalled = IsPluginInstalled(plugin);
+            if (ImGui.RadioButton(plugin.DisplayName, _configuration.General.CombatModule == combatModule))
             {
+                _configuration.General.CombatModule = combatModule;
+                _pluginInterface.SavePluginConfig(_configuration);
+            }
+
+            ImGui.SameLine(0);
+            using (_pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
+            {
+                var iconColor = isInstalled ? ImGuiColors.ParsedGreen : ImGuiColors.DalamudRed;
+                var icon = isInstalled ? FontAwesomeIcon.Check : FontAwesomeIcon.Times;
+
+                ImGui.AlignTextToFramePadding();
+                ImGui.TextColored(iconColor, icon.ToIconString());
+            }
+
+
+            DrawPluginDetails(plugin, checklistPadding, isInstalled);
+        }
+    }
+
+    private void DrawPluginDetails(PluginInfo plugin, float checklistPadding, bool isInstalled)
+    {
+        using (ImRaii.PushIndent(checklistPadding))
+        {
+            if (!string.IsNullOrEmpty(plugin.Details))
                 ImGui.TextUnformatted(plugin.Details);
-                if (plugin.DetailsToCheck != null)
-                {
-                    foreach (var detail in plugin.DetailsToCheck)
-                        _uiUtils.ChecklistItem(detail.DisplayName, isInstalled && detail.Predicate());
-                }
 
-                ImGui.Spacing();
+            if (plugin.DetailsToCheck != null)
+            {
+                foreach (var detail in plugin.DetailsToCheck)
+                    _uiUtils.ChecklistItem(detail.DisplayName, isInstalled && detail.Predicate());
+            }
 
-                if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Globe, "Open Website"))
-                    Util.OpenLink(plugin.WebsiteUri.ToString());
+            ImGui.Spacing();
 
-                ImGui.SameLine();
-                if (plugin.DalamudRepositoryUri != null)
-                {
-                    if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Code, "Open Repository"))
-                        Util.OpenLink(plugin.DalamudRepositoryUri.ToString());
-                }
-                else
-                {
-                    ImGui.AlignTextToFramePadding();
-                    ImGuiComponents.HelpMarker("Available on official Dalamud Repository");
-                }
+            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Globe, "Open Website"))
+                Util.OpenLink(plugin.WebsiteUri.ToString());
+
+            ImGui.SameLine();
+            if (plugin.DalamudRepositoryUri != null)
+            {
+                if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Code, "Open Repository"))
+                    Util.OpenLink(plugin.DalamudRepositoryUri.ToString());
+            }
+            else
+            {
+                ImGui.AlignTextToFramePadding();
+                ImGuiComponents.HelpMarker("Available on official Dalamud Repository");
             }
         }
-
-        return isInstalled;
     }
 
     private bool IsPluginInstalled(PluginInfo pluginInfo)
