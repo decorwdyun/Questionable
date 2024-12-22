@@ -182,6 +182,14 @@ internal sealed class QuestData
         AddPreviousQuest(new QuestId(3833), new QuestId(spearfishing));
         */
 
+        // The Hero's Journey
+        AddPreviousQuest(new QuestId(3986), new QuestId(2115));
+        AddPreviousQuest(new QuestId(3986), new QuestId(2116));
+        AddPreviousQuest(new QuestId(3986), new QuestId(2281));
+        AddPreviousQuest(new QuestId(3986), new QuestId(2333));
+        AddPreviousQuest(new QuestId(3986), new QuestId(2395));
+        AddPreviousQuest(new QuestId(3986), new QuestId(3985));
+
         // initial city quests are side quests
         // unclear if 470 can be started as the required quest isn't available anymore
         ushort[] limsaSideQuests =
