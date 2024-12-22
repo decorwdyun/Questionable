@@ -201,7 +201,8 @@
             "AetheryteShortcutIf": {
               "InSameTerritory": true
             }
-          }
+          },
+          "NextQuestId": 1678
         }
       ]
     }
