@@ -19,6 +19,7 @@ public enum EEmote
     Wave = 16,
     Joy = 18,
     Kneel = 19,
+    Laugh = 21,
     Lookout = 22,
     Me = 23,
     Deny = 25,
