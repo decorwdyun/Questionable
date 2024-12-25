@@ -44,5 +44,6 @@ public sealed class ActionConverter() : EnumConverter<EAction>(Values)
         { EAction.SlugShot, "Slug Shot" },
         { EAction.BosomBrook, "Bosom Brook" },
         { EAction.Souleater, "Souleater" },
+        { EAction.Fire3, "Fire III" },
     };
 }

@@ -50,6 +50,7 @@ public enum EAction
     SlugShot = 7412,
     BosomBrook = 37173,
     Souleater = 3632,
+    Fire3 = 152,
 
     CollectMiner = 240,
     ScourMiner = 22182,
