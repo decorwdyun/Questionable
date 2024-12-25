@@ -60,6 +60,12 @@ internal sealed class QuestTooltipComponent
 
             if (_questRegistry.TryGetQuest(questInfo.QuestId, out Quest? quest))
             {
+                if (quest.Root.Disabled)
+                {
+                    ImGui.SameLine();
+                    ImGui.TextColored(ImGuiColors.DalamudRed, "Disabled");
+                }
+
                 if (quest.Root.Author.Count == 1)
                     ImGui.Text($"Author: {quest.Root.Author[0]}");
                 else
@@ -68,7 +74,7 @@ internal sealed class QuestTooltipComponent
             else
             {
                 ImGui.SameLine();
-                ImGui.TextUnformatted("NoQuestPath");
+                ImGui.TextColored(ImGuiColors.DalamudRed, "NoQuestPath");
             }
 
             DrawQuestUnlocks(questInfo, 0);
