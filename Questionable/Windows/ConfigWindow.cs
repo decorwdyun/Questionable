@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Dalamud.Game.Text;
 using Dalamud.Interface.Colors;
@@ -12,6 +11,7 @@ using Dalamud.Utility;
 using ImGuiNET;
 using LLib.ImGui;
 using Lumina.Excel.Sheets;
+using Questionable.Controller;
 using Questionable.External;
 using GrandCompany = FFXIVClientStructs.FFXIV.Client.UI.Agent.GrandCompany;
 
@@ -19,24 +19,32 @@ namespace Questionable.Windows;
 
 internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
 {
+    private static readonly List<(uint Id, string Name)> DefaultMounts = [(0, "Mount Roulette")];
+
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly NotificationMasterIpc _notificationMasterIpc;
     private readonly Configuration _configuration;
+    private readonly CombatController _combatController;
 
     private readonly uint[] _mountIds;
     private readonly string[] _mountNames;
 
     private readonly string[] _combatModuleNames = ["None", "Boss Mod (VBM)", "Rotation Solver Reborn"];
+
     private readonly string[] _grandCompanyNames =
         ["None (manually pick quest)", "Maelstrom", "Twin Adder", "Immortal Flames"];
 
-    [SuppressMessage("Performance", "CA1861", Justification = "One time initialization")]
-    public ConfigWindow(IDalamudPluginInterface pluginInterface, NotificationMasterIpc notificationMasterIpc, Configuration configuration, IDataManager dataManager)
+    public ConfigWindow(IDalamudPluginInterface pluginInterface,
+        NotificationMasterIpc notificationMasterIpc,
+        Configuration configuration,
+        IDataManager dataManager,
+        CombatController combatController)
         : base("Config - Questionable###QuestionableConfig", ImGuiWindowFlags.AlwaysAutoResize)
     {
         _pluginInterface = pluginInterface;
         _notificationMasterIpc = notificationMasterIpc;
         _configuration = configuration;
+        _combatController = combatController;
 
         var mounts = dataManager.GetExcelSheet<Mount>()
             .Where(x => x is { RowId: > 0, Icon: > 0 })
@@ -44,8 +52,8 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
             .Where(x => !string.IsNullOrEmpty(x.Name))
             .OrderBy(x => x.Name)
             .ToList();
-        _mountIds = new uint[] { 0 }.Concat(mounts.Select(x => x.MountId)).ToArray();
-        _mountNames = new[] { "Mount Roulette" }.Concat(mounts.Select(x => x.Name)).ToArray();
+        _mountIds = DefaultMounts.Select(x => x.Id).Concat(mounts.Select(x => x.MountId)).ToArray();
+        _mountNames = DefaultMounts.Select(x => x.Name).Concat(mounts.Select(x => x.Name)).ToArray();
     }
 
     public WindowConfig WindowConfig => _configuration.ConfigWindowConfig;
@@ -67,11 +75,15 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
         if (!tab)
             return;
 
-        int selectedCombatModule = (int)_configuration.General.CombatModule;
-        if (ImGui.Combo("Preferred Combat Module", ref selectedCombatModule, _combatModuleNames, _combatModuleNames.Length))
+        using (ImRaii.Disabled(_combatController.IsRunning))
         {
-            _configuration.General.CombatModule = (Configuration.ECombatModule)selectedCombatModule;
-            Save();
+            int selectedCombatModule = (int)_configuration.General.CombatModule;
+            if (ImGui.Combo("Preferred Combat Module", ref selectedCombatModule, _combatModuleNames,
+                    _combatModuleNames.Length))
+            {
+                _configuration.General.CombatModule = (Configuration.ECombatModule)selectedCombatModule;
+                Save();
+            }
         }
 
         int selectedMount = Array.FindIndex(_mountIds, x => x == _configuration.General.MountId);
