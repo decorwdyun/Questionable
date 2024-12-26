@@ -27,6 +27,7 @@ public sealed class ActionConverter() : EnumConverter<EAction>(Values)
         { EAction.BuffetGriffin, "Buffet (Griffin)" },
         { EAction.Trample, "Trample" },
         { EAction.Fumigate, "Fumigate" },
+        { EAction.Roar, "Roar" },
         { EAction.Seed, "Seed" },
         { EAction.Inhale, "Inhale" },
         { EAction.SiphonSnout, "Siphon Snout" },
