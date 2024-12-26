@@ -66,6 +66,7 @@ internal sealed class QuestInfo : IQuestInfo
         IsSeasonalEvent = quest.Festival.RowId != 0;
         NewGamePlusChapter = newGamePlusChapter;
         StartingCity = startingCity;
+        MoogleDeliveryLevel = (byte)quest.DeliveryQuest.RowId;
         Expansion = (EExpansionVersion)quest.Expansion.RowId;
     }
 
@@ -102,6 +103,7 @@ internal sealed class QuestInfo : IQuestInfo
     public bool IsSeasonalEvent { get; }
     public uint NewGamePlusChapter { get; }
     public byte StartingCity { get; set; }
+    public byte MoogleDeliveryLevel { get; }
     public EExpansionVersion Expansion { get; }
 
     public void AddPreviousQuest(PreviousQuestInfo questId)
