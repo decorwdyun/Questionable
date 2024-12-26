@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using Dalamud.Interface;
+﻿using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin;
@@ -12,9 +8,12 @@ using Questionable.Controller;
 using Questionable.Data;
 using Questionable.Functions;
 using Questionable.Model;
-using Questionable.Model.Questing;
 using Questionable.Validation;
 using Questionable.Windows.QuestComponents;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 
 namespace Questionable.Windows.JournalComponents;
 
@@ -32,13 +31,14 @@ internal sealed class QuestJournalComponent
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly QuestJournalUtils _questJournalUtils;
     private readonly QuestValidator _questValidator;
+    private readonly IPluginLog _log;
 
     private List<FilteredSection> _filteredSections = [];
     private string _searchText = string.Empty;
 
     public QuestJournalComponent(JournalData journalData, QuestRegistry questRegistry, QuestFunctions questFunctions,
         UiUtils uiUtils, QuestTooltipComponent questTooltipComponent, IDalamudPluginInterface pluginInterface,
-        QuestJournalUtils questJournalUtils, QuestValidator questValidator)
+        QuestJournalUtils questJournalUtils, QuestValidator questValidator, IPluginLog log)
     {
         _journalData = journalData;
         _questRegistry = questRegistry;
@@ -48,6 +48,7 @@ internal sealed class QuestJournalComponent
         _pluginInterface = pluginInterface;
         _questJournalUtils = questJournalUtils;
         _questValidator = questValidator;
+        _log = log;
     }
 
     public void DrawQuests()
@@ -69,6 +70,9 @@ internal sealed class QuestJournalComponent
             ImGui.Spacing();
         }
 
+        QuestJournalUtils.ShowFilterContextMenu(this);
+
+        ImGui.SameLine();
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
         if (ImGui.InputTextWithHint(string.Empty, "Search quests and categories", ref _searchText, 256))
             UpdateFilter();
@@ -235,17 +239,41 @@ internal sealed class QuestJournalComponent
 
     public void UpdateFilter()
     {
-        Predicate<string> match;
-        if (string.IsNullOrWhiteSpace(_searchText))
-            match = _ => true;
-        else
-            match = x => x.Contains(_searchText, StringComparison.CurrentCultureIgnoreCase);
+        _journalData.Reload();
+        Predicate<string> match = string.IsNullOrWhiteSpace(_searchText) ? x => true : x => x.Contains(_searchText, StringComparison.CurrentCultureIgnoreCase);
 
         _filteredSections = _journalData.Sections
             .Select(section => FilterSection(section, match))
             .Where(x => x != null)
             .Cast<FilteredSection>()
             .ToList();
+
+        for (int i = 0; i < _filteredSections.Count; i++)
+        {
+            var section = _filteredSections[i];
+            for (int s = 0; s < section.Categories.Count; s++)
+            {
+                var category = section.Categories[s];
+                for (int c = 0; c < category.Genres.Count; c++)
+                {
+                    var genre = category.Genres[c];
+                    for (int g = 0; g < genre.Quests.Count; g++)
+                    {
+                        var quest = genre.Quests[g];
+
+                        //All Quest Filter conditions checked here, cause we just love IEnumerable
+                        if (QuestJournalUtils.AvailableOnly && !_questFunctions.IsReadyToAcceptQuest(quest.QuestId) ||
+                            QuestJournalUtils.HideNoPaths && !_questRegistry.TryGetQuest(quest.QuestId, out _))
+                        {
+                            genre.Quests.Remove(quest);
+                            g--;
+                        }
+                    }
+                }
+            }
+        }
+
+        RefreshCounts();
     }
 
     private static FilteredSection? FilterSection(JournalData.Section section, Predicate<string> match)
