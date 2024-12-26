@@ -24,7 +24,10 @@ internal sealed class QuestJournalUtils
 
     public void ShowContextMenu(IQuestInfo questInfo, Quest? quest, string label)
     {
-        using var popup = ImRaii.ContextPopup($"##QuestPopup{questInfo.QuestId}", ImGuiPopupFlags.MouseButtonRight);
+        if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
+            ImGui.OpenPopup($"##QuestPopup{questInfo.QuestId}");
+
+        using var popup = ImRaii.Popup($"##QuestPopup{questInfo.QuestId}");
         if (!popup)
             return;
 
