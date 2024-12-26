@@ -201,7 +201,7 @@ internal sealed class CreationUtilsComponent
     private unsafe void DrawTargetDetails(IGameObject target)
     {
         string nameId = string.Empty;
-        if (target is ICharacter character)
+        if (target is ICharacter { NameId: > 0 } character)
             nameId = $"; n={character.NameId}";
 
         ImGui.Separator();
