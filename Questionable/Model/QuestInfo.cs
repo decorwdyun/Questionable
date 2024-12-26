@@ -40,9 +40,9 @@ internal sealed class QuestInfo : IQuestInfo
         PreviousQuests =
             new List<PreviousQuestInfo>
                 {
-                    new(new QuestId((ushort)(quest.PreviousQuest[0].RowId & 0xFFFF)), quest.Unknown7),
-                    new(new QuestId((ushort)(quest.PreviousQuest[1].RowId & 0xFFFF))),
-                    new(new QuestId((ushort)(quest.PreviousQuest[2].RowId & 0xFFFF)))
+                    new(ReplaceOldQuestIds((ushort)(quest.PreviousQuest[0].RowId & 0xFFFF)), quest.Unknown7),
+                    new(ReplaceOldQuestIds((ushort)(quest.PreviousQuest[1].RowId & 0xFFFF))),
+                    new(ReplaceOldQuestIds((ushort)(quest.PreviousQuest[2].RowId & 0xFFFF)))
                 }
                 .Where(x => x.QuestId.Value != 0)
                 .ToImmutableList();
@@ -67,6 +67,15 @@ internal sealed class QuestInfo : IQuestInfo
         NewGamePlusChapter = newGamePlusChapter;
         StartingCity = startingCity;
         Expansion = (EExpansionVersion)quest.Expansion.RowId;
+    }
+
+    private static QuestId ReplaceOldQuestIds(ushort questId)
+    {
+        return new QuestId(questId switch
+        {
+            524 => 4522,
+            _ => questId,
+        });
     }
 
 
