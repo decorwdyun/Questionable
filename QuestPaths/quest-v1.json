@@ -963,6 +963,7 @@
                   "Buffet (Griffin)",
                   "Trample",
                   "Fumigate",
+                  "Roar",
                   "Seed",
                   "Inhale",
                   "Siphon Snout",
@@ -980,7 +981,9 @@
                   "Slug Shot",
                   "Bosom Brook",
                   "Souleater",
-                  "Fire III"
+                  "Fire III",
+                  "Adloquium",
+                  "Water Cannon"
                 ]
               }
             },

@@ -26,6 +26,7 @@ public enum EAction
     BuffetGriffin = 4583,
     Trample = 4585,
     Fumigate = 5872,
+    Roar = 6293,
     Seed = 6294,
     MagitekPulse = 8624,
     MagitekThunder = 8625,
@@ -51,6 +52,8 @@ public enum EAction
     BosomBrook = 37173,
     Souleater = 3632,
     Fire3 = 152,
+    Adloquium = 185,
+    WaterCannon = 11385,
 
     CollectMiner = 240,
     ScourMiner = 22182,
@@ -80,6 +83,7 @@ public static class EActionExtensions
             or EAction.BuffetGriffin
             or EAction.Trample
             or EAction.Fumigate
+            or EAction.Roar
             or EAction.Seed
             or EAction.Inhale
             or EAction.SiphonSnout

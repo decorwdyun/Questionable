@@ -22,7 +22,8 @@ internal static class Combat
 
             ArgumentNullException.ThrowIfNull(step.EnemySpawnType);
 
-            if (gameFunctions.GetMountId() != Mount128Module.MountId)
+            if (gameFunctions.GetMountId() != Mount128Module.MountId &&
+                gameFunctions.GetMountId() != Mount147Module.MountId)
                 yield return new Mount.UnmountTask();
 
             if (step.CombatDelaySecondsAtStart != null)
