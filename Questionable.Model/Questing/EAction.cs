@@ -53,6 +53,7 @@ public enum EAction
     Souleater = 3632,
     Fire3 = 152,
     Adloquium = 185,
+    WaterCannon = 11385,
 
     CollectMiner = 240,
     ScourMiner = 22182,

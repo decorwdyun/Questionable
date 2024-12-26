@@ -310,7 +310,7 @@ internal sealed class QuestData
             // SB
             EClassJob.Samurai => [110, 111],
             EClassJob.RedMage => [131, 132],
-            EClassJob.BlueMage => [134, 135, 146],
+            EClassJob.BlueMage => [134, 135, 146, 170],
 
             // ShB
             EClassJob.Gunbreaker => [84],
