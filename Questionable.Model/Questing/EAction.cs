@@ -51,6 +51,7 @@ public enum EAction
     BosomBrook = 37173,
     Souleater = 3632,
     Fire3 = 152,
+    Adloquium = 185,
 
     CollectMiner = 240,
     ScourMiner = 22182,
