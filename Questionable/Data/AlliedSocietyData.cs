@@ -16,6 +16,7 @@ internal sealed class AlliedSocietyData
             { 66, new(1016093, EAetheryteLocation.SeaOfCloudsOkZundu) },
             { 79, new(1017031, EAetheryteLocation.DravanianForelandsAnyxTrine) },
             { 89, new(1017322, EAetheryteLocation.ChurningMistsZenith) },
+            { 147, new(1024777, EAetheryteLocation.FringesPeeringStones) },
             { 369, new(1051798, EAetheryteLocation.KozamaukaDockPoga) },
         }.AsReadOnly();
 

@@ -38,7 +38,7 @@ internal static class QuestCleanUp
                 }
 
                 // if the quest uses no mount actions, that's not a mount quest
-                if (!quest.AllSteps().Any(x => x.Step.Action is { } action && action.RequiresMount()))
+                if (!quest.AllSteps().Any(x => (x.Step.Action is { } action && action.RequiresMount()) || (x.Step.InteractionType == EInteractionType.Combat && x.Step.KillEnemyDataIds.Contains(8593))))
                 {
                     logger.LogInformation("Quest doesn't use any mount actions, teleporting to {Aetheryte}", mountConfiguration.ClosestAetheryte);
                     return teleportTask;
