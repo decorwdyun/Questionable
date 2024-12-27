@@ -104,6 +104,7 @@ internal sealed class QuestInfo : IQuestInfo
     public uint NewGamePlusChapter { get; }
     public byte StartingCity { get; set; }
     public byte MoogleDeliveryLevel { get; }
+    public bool IsMoogleDeliveryQuest => JournalGenre == 87;
     public EExpansionVersion Expansion { get; }
 
     public void AddPreviousQuest(PreviousQuestInfo questId)

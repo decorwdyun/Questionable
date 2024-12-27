@@ -561,9 +561,17 @@ internal sealed unsafe class QuestFunctions
         if (questInfo.AlliedSociety != EAlliedSociety.None && questInfo.IsRepeatable)
             return !IsDailyAlliedSocietyQuestAndAvailableToday(questId);
 
-        if (questInfo.MoogleDeliveryLevel > 0 &&
-            questInfo.MoogleDeliveryLevel > PlayerState.Instance()->DeliveryLevel)
-            return true;
+        if (questInfo.IsMoogleDeliveryQuest)
+        {
+            byte currentDeliveryLevel = PlayerState.Instance()->DeliveryLevel;
+            if (extraCompletedQuest != null &&
+                _questData.TryGetQuestInfo(extraCompletedQuest, out IQuestInfo? extraQuestInfo) &&
+                extraQuestInfo is QuestInfo { IsMoogleDeliveryQuest: true })
+                currentDeliveryLevel++;
+
+            if (questInfo.MoogleDeliveryLevel > currentDeliveryLevel)
+                return true;
+        }
 
         return !HasCompletedPreviousQuests(questInfo, extraCompletedQuest) || !HasCompletedPreviousInstances(questInfo);
     }
