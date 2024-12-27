@@ -19,7 +19,6 @@ using Questionable.Controller.Steps.Common;
 using Questionable.Controller.Steps.Gathering;
 using Questionable.Controller.Steps.Interactions;
 using Questionable.Controller.Steps.Leves;
-using Questionable.Controller.Utils;
 using Questionable.Data;
 using Questionable.External;
 using Questionable.Functions;
@@ -249,6 +248,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<ICombatModule, Mount147Module>();
         serviceCollection.AddSingleton<ICombatModule, ItemUseModule>();
         serviceCollection.AddSingleton<ICombatModule, BossModModule>();
+        serviceCollection.AddSingleton<ICombatModule, WrathComboModule>();
         serviceCollection.AddSingleton<ICombatModule, RotationSolverRebornModule>();
     }
 

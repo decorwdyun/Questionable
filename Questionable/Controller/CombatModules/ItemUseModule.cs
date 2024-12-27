@@ -152,7 +152,5 @@ internal sealed class ItemUseModule : ICombatModule
         return false;
     }
 
-    public void MoveToTarget(IGameObject nextTarget) => _delegate!.MoveToTarget(nextTarget);
-
     public bool CanAttack(IBattleNpc target) => _delegate!.CanAttack(target);
 }

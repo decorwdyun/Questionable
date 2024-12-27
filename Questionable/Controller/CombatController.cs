@@ -13,8 +13,10 @@ using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Common.Math;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.CombatModules;
+using Questionable.Controller.Steps;
 using Questionable.Controller.Utils;
 using Questionable.Functions;
+using Questionable.Model;
 using Questionable.Model.Questing;
 
 namespace Questionable.Controller;
@@ -75,6 +77,7 @@ internal sealed class CombatController : IDisposable
             {
                 Module = combatModule,
                 Data = combatData,
+                LastDistanceCheck = DateTime.Now,
             };
             _wasInCombat = combatData.SpawnType is EEnemySpawnType.QuestInterruption or EEnemySpawnType.FinishCombatIfAny;
             return true;
@@ -129,7 +132,18 @@ internal sealed class CombatController : IDisposable
 
             if (nextTarget != null && nextTarget.Equals(target))
             {
-                _currentFight.Module.Update(target);
+                if (!IsMovingOrShouldMove(target))
+                {
+                    try
+                    {
+                        _currentFight.Module.Update(target);
+                    }
+                    catch (TaskException e)
+                    {
+                        _logger.LogWarning(e, "Combat was interrupted, stopping: {Exception}", e.Message);
+                        SetTarget(null);
+                    }
+                }
             }
             else if (nextTarget != null)
             {
@@ -323,14 +337,57 @@ internal sealed class CombatController : IDisposable
         {
             _logger.LogInformation("Moving to target, distance: {Distance:N2}",
                 Vector3.Distance(_clientState.LocalPlayer!.Position, target.Position));
-            _currentFight!.Module.MoveToTarget(target);
+            MoveToTarget(target);
         }
         else
         {
             _logger.LogInformation("Setting target to {TargetName} ({TargetId:X8})", target.Name.ToString(),
                 target.GameObjectId);
             _targetManager.Target = target;
-            _currentFight!.Module.MoveToTarget(target);
+            MoveToTarget(target);
+        }
+    }
+
+    private bool IsMovingOrShouldMove(IGameObject gameObject)
+    {
+        if (_movementController.IsPathfinding || _movementController.IsPathRunning)
+            return true;
+
+        if (DateTime.Now > _currentFight!.LastDistanceCheck.AddSeconds(10))
+        {
+            MoveToTarget(gameObject);
+            _currentFight!.LastDistanceCheck = DateTime.Now;
+            return true;
+        }
+
+        return false;
+    }
+
+    private void MoveToTarget(IGameObject gameObject)
+    {
+        var player = _clientState.LocalPlayer;
+        if (player == null)
+            return; // uh oh
+
+        float hitboxOffset = player.HitboxRadius + gameObject.HitboxRadius;
+        float actualDistance = Vector3.Distance(player.Position, gameObject.Position);
+        float maxDistance = player.ClassJob.ValueNullable?.Role is 3 or 4 ? 20f : 2.9f;
+        if (actualDistance - hitboxOffset >= maxDistance)
+        {
+            if (actualDistance - hitboxOffset <= 5)
+            {
+                _logger.LogInformation("Moving to {TargetName} ({DataId}) to attack", gameObject.Name,
+                    gameObject.DataId);
+                _movementController.NavigateTo(EMovementType.Combat, null, [gameObject.Position], false, false,
+                    maxDistance + hitboxOffset - 0.25f, true);
+            }
+            else
+            {
+                _logger.LogInformation("Moving to {TargetName} ({DataId}) to attack (with navmesh)", gameObject.Name,
+                    gameObject.DataId);
+                _movementController.NavigateTo(EMovementType.Combat, null, gameObject.Position, false, false,
+                    maxDistance + hitboxOffset - 0.25f, true);
+            }
         }
     }
 
@@ -359,6 +416,7 @@ internal sealed class CombatController : IDisposable
     {
         public required ICombatModule Module { get; init; }
         public required CombatData Data { get; init; }
+        public required DateTime LastDistanceCheck { get; set; }
     }
 
     public sealed class CombatData
