@@ -7,6 +7,7 @@ using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
 using System;
+using Dalamud.Interface.Colors;
 
 namespace Questionable.Windows.JournalComponents;
 
@@ -15,9 +16,6 @@ internal sealed class QuestJournalUtils
     private readonly QuestController _questController;
     private readonly QuestFunctions _questFunctions;
     private readonly ICommandManager _commandManager;
-
-    public static bool AvailableOnly;
-    public static bool HideNoPaths;
 
     public QuestJournalUtils(QuestController questController, QuestFunctions questFunctions,
         ICommandManager commandManager)
@@ -50,19 +48,17 @@ internal sealed class QuestJournalUtils
         }
     }
 
-    internal static void ShowFilterContextMenu(QuestJournalComponent journalUI)
+    internal static void ShowFilterContextMenu(QuestJournalComponent journalUi)
     {
-        if (ImGuiComponents.IconButton(Dalamud.Interface.FontAwesomeIcon.Filter))
-            ImGui.OpenPopup($"##QuestFilters");
+        if (ImGuiComponents.IconButtonWithText(Dalamud.Interface.FontAwesomeIcon.Filter, "Filter"))
+            ImGui.OpenPopup("##QuestFilters");
 
-        using var popup = ImRaii.Popup($"##QuestFilters");
+        using var popup = ImRaii.Popup("##QuestFilters");
         if (!popup)
             return;
 
-        if (ImGui.Checkbox("Show only Available Quests", ref AvailableOnly) ||
-            ImGui.Checkbox("Hide Quests Without Path", ref HideNoPaths))
-            journalUI.UpdateFilter();
-
-
+        if (ImGui.Checkbox("Show only Available Quests", ref journalUi.Filter.AvailableOnly) ||
+            ImGui.Checkbox("Hide Quests Without Path", ref journalUi.Filter.HideNoPaths))
+            journalUi.UpdateFilter();
     }
 }
