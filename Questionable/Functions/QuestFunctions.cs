@@ -455,6 +455,9 @@ internal sealed unsafe class QuestFunctions
                 if (QuestManager.Instance()->IsDailyQuestCompleted(questId.Value))
                     return false;
             }
+
+            if (IsQuestComplete(questId))
+                return false;
         }
         else
         {
