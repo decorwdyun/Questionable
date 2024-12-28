@@ -104,6 +104,11 @@
       "Sequence": 5,
       "Steps": [
         {
+          "TerritoryId": 1188,
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Kozama'uka - Dock Poga"
+        },
+        {
           "DataId": 2013937,
           "Position": {
             "X": 918.15063,
