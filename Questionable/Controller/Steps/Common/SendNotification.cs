@@ -13,6 +13,7 @@ internal static class SendNotification
 {
     internal sealed class Factory(
         AutomatonIpc automatonIpc,
+        AutoDutyIpc autoDutyIpc,
         TerritoryData territoryData) : SimpleTaskFactory
     {
         public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
@@ -21,7 +22,7 @@ internal static class SendNotification
             {
                 EInteractionType.Snipe when !automatonIpc.IsAutoSnipeEnabled =>
                     new Task(step.InteractionType, step.Comment),
-                EInteractionType.Duty =>
+                EInteractionType.Duty when !autoDutyIpc.IsConfiguredToRunContent(step.ContentFinderConditionId, step.AutoDutyEnabled) =>
                     new Task(step.InteractionType, step.ContentFinderConditionId.HasValue
                         ? territoryData.GetContentFinderConditionName(step.ContentFinderConditionId.Value)
                         : step.Comment),

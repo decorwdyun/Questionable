@@ -1,4 +1,5 @@
-﻿using Dalamud.Configuration;
+﻿using System.Collections.Generic;
+using Dalamud.Configuration;
 using Dalamud.Game.Text;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using LLib.ImGui;
@@ -12,6 +13,7 @@ internal sealed class Configuration : IPluginConfiguration
     public int Version { get; set; } = 1;
     public int PluginSetupCompleteVersion { get; set; }
     public GeneralConfiguration General { get; } = new();
+    public DutyConfiguration Duties { get; } = new();
     public NotificationConfiguration Notifications { get; } = new();
     public AdvancedConfiguration Advanced { get; } = new();
     public WindowConfig DebugWindowConfig { get; } = new();
@@ -30,6 +32,13 @@ internal sealed class Configuration : IPluginConfiguration
         public bool UseEscToCancelQuesting { get; set; } = true;
         public bool ShowIncompleteSeasonalEvents { get; set; } = true;
         public bool ConfigureTextAdvance { get; set; } = true;
+    }
+
+    internal sealed class DutyConfiguration
+    {
+        public bool RunInstancedContentWithAutoDuty { get; set; }
+        public HashSet<uint> WhitelistedDutyCfcIds { get; set; } = [];
+        public HashSet<uint> BlacklistedDutyCfcIds { get; set; } = [];
     }
 
     internal sealed class NotificationConfiguration

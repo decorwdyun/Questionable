@@ -29,7 +29,8 @@ internal sealed class QuestRegistry
     private readonly LeveData _leveData;
 
     private readonly ICallGateProvider<object> _reloadDataIpc;
-    private readonly Dictionary<ElementId, Quest> _quests = new();
+    private readonly Dictionary<ElementId, Quest> _quests = [];
+    private readonly Dictionary<uint, (ElementId QuestId, QuestStep Step)> _contentFinderConditionIds = [];
 
     public QuestRegistry(IDalamudPluginInterface pluginInterface, QuestData questData,
         QuestValidator questValidator, JsonSchemaValidator jsonSchemaValidator,
@@ -55,6 +56,7 @@ internal sealed class QuestRegistry
     {
         _questValidator.Reset();
         _quests.Clear();
+        _contentFinderConditionIds.Clear();
 
         LoadQuestsFromAssembly();
         LoadQuestsFromProjectDirectory();
@@ -70,6 +72,7 @@ internal sealed class QuestRegistry
                 "Failed to load all quests from user directory (some may have been successfully loaded)");
         }
 
+        LoadCfcIds();
         ValidateQuests();
         Reloaded?.Invoke(this, EventArgs.Empty);
         try
@@ -138,6 +141,18 @@ internal sealed class QuestRegistry
                     _quests.Clear();
                     _logger.LogError(e, "Failed to load quests from project directory");
                 }
+            }
+        }
+    }
+
+    private void LoadCfcIds()
+    {
+        foreach (var quest in _quests.Values)
+        {
+            foreach (var dutyStep in quest.AllSteps().Where(x =>
+                         x.Step.InteractionType == EInteractionType.Duty && x.Step.ContentFinderConditionId != null))
+            {
+                _contentFinderConditionIds[dutyStep.Step.ContentFinderConditionId!.Value] = (quest.Id, dutyStep.Step);
             }
         }
     }
@@ -222,5 +237,17 @@ internal sealed class QuestRegistry
         return _questData.GetClassJobQuests(classJob)
             .Where(x => IsKnownQuest(x.QuestId))
             .ToList();
+    }
+
+    public bool TryGetDutyByContentFinderConditionId(uint cfcId, out bool autoDutyEnabledByDefault)
+    {
+        if (_contentFinderConditionIds.TryGetValue(cfcId, out var value))
+        {
+            autoDutyEnabledByDefault = value.Step.AutoDutyEnabled;
+            return true;
+        }
+
+        autoDutyEnabledByDefault = false;
+        return false;
     }
 }

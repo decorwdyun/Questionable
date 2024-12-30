@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Numerics;
+using System.Text;
 using Dalamud.Game.Text;
+using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
@@ -12,19 +16,28 @@ using ImGuiNET;
 using LLib.ImGui;
 using Lumina.Excel.Sheets;
 using Questionable.Controller;
+using Questionable.Data;
 using Questionable.External;
+using Questionable.Model;
 using GrandCompany = FFXIVClientStructs.FFXIV.Client.UI.Agent.GrandCompany;
 
 namespace Questionable.Windows;
 
 internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
 {
+    private const string DutyClipboardPrefix = "qst:duty:";
+    private const string DutyClipboardSeparator = ";";
+    private const string DutyWhitelistPrefix = "+";
+    private const string DutyBlacklistPrefix = "-";
+
     private static readonly List<(uint Id, string Name)> DefaultMounts = [(0, "Mount Roulette")];
 
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly NotificationMasterIpc _notificationMasterIpc;
     private readonly Configuration _configuration;
     private readonly CombatController _combatController;
+    private readonly QuestRegistry _questRegistry;
+    private readonly AutoDutyIpc _autoDutyIpc;
 
     private readonly uint[] _mountIds;
     private readonly string[] _mountNames;
@@ -34,17 +47,38 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
     private readonly string[] _grandCompanyNames =
         ["None (manually pick quest)", "Maelstrom", "Twin Adder", "Immortal Flames"];
 
+    private readonly string[] _supportedCfcOptions =
+    [
+        $"{SeIconChar.Circle.ToIconChar()} Enabled (Default)",
+        $"{SeIconChar.Circle.ToIconChar()} Enabled",
+        $"{SeIconChar.Cross.ToIconChar()} Disabled"
+    ];
+
+    private readonly string[] _unsupportedCfcOptions =
+    [
+        $"{SeIconChar.Cross.ToIconChar()} Disabled (Default)",
+        $"{SeIconChar.Circle.ToIconChar()} Enabled",
+        $"{SeIconChar.Cross.ToIconChar()} Disabled"
+    ];
+
+    private readonly Dictionary<EExpansionVersion, List<DutyInfo>> _contentFinderConditionNames;
+
     public ConfigWindow(IDalamudPluginInterface pluginInterface,
         NotificationMasterIpc notificationMasterIpc,
         Configuration configuration,
         IDataManager dataManager,
-        CombatController combatController)
+        CombatController combatController,
+        TerritoryData territoryData,
+        QuestRegistry questRegistry,
+        AutoDutyIpc autoDutyIpc)
         : base("Config - Questionable###QuestionableConfig", ImGuiWindowFlags.AlwaysAutoResize)
     {
         _pluginInterface = pluginInterface;
         _notificationMasterIpc = notificationMasterIpc;
         _configuration = configuration;
         _combatController = combatController;
+        _questRegistry = questRegistry;
+        _autoDutyIpc = autoDutyIpc;
 
         var mounts = dataManager.GetExcelSheet<Mount>()
             .Where(x => x is { RowId: > 0, Icon: > 0 })
@@ -54,9 +88,40 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
             .ToList();
         _mountIds = DefaultMounts.Select(x => x.Id).Concat(mounts.Select(x => x.MountId)).ToArray();
         _mountNames = DefaultMounts.Select(x => x.Name).Concat(mounts.Select(x => x.Name)).ToArray();
+
+        _contentFinderConditionNames = dataManager.GetExcelSheet<DawnContent>()
+            .Where(x => x.RowId > 0)
+            .Select(x => x.Content.ValueNullable)
+            .Where(x => x != null)
+            .Select(x => x!.Value)
+            .Select(x => new
+            {
+                Expansion = (EExpansionVersion)x.TerritoryType.Value.ExVersion.RowId,
+                CfcId = x.RowId,
+                Name = territoryData.GetContentFinderConditionName(x.RowId) ?? "?",
+                TerritoryId = x.TerritoryType.RowId,
+                ContentType = x.ContentType.RowId,
+                Level = x.ClassJobLevelRequired,
+                x.SortKey
+            })
+            .GroupBy(x => x.Expansion)
+            .ToDictionary(x => x.Key,
+                x => x.OrderBy(y => y.Level)
+                    .ThenBy(y => y.ContentType)
+                    .ThenBy(y => y.SortKey)
+                    .Select(y => new DutyInfo(y.CfcId, y.TerritoryId, $"{SeIconChar.LevelEn.ToIconChar()}{FormatLevel(y.Level)} {y.Name}"))
+                    .ToList());
     }
 
     public WindowConfig WindowConfig => _configuration.ConfigWindowConfig;
+
+    private static string FormatLevel(int level)
+    {
+        if (level == 0)
+            return string.Empty;
+
+        return $"{FormatLevel(level / 10)}{(SeIconChar.Number0 + level % 10).ToIconChar()}";
+    }
 
     public override void Draw()
     {
@@ -65,6 +130,7 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
             return;
 
         DrawGeneralTab();
+        DrawDutiesTab();
         DrawNotificationsTab();
         DrawAdvancedTab();
     }
@@ -135,6 +201,175 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
         {
             _configuration.General.ConfigureTextAdvance = configureTextAdvance;
             Save();
+        }
+    }
+
+    private void DrawDutiesTab()
+    {
+        using var tab = ImRaii.TabItem("Duties");
+        if (!tab)
+            return;
+
+        bool runInstancedContentWithAutoDuty = _configuration.Duties.RunInstancedContentWithAutoDuty;
+        if (ImGui.Checkbox("Run instanced content with AutoDuty and BossMod", ref runInstancedContentWithAutoDuty))
+        {
+            _configuration.Duties.RunInstancedContentWithAutoDuty = runInstancedContentWithAutoDuty;
+            Save();
+        }
+
+        ImGui.SameLine();
+        ImGuiComponents.HelpMarker(
+            "The combat module used for this is configured by AutoDuty, ignoring whichever selection you've made in Questionable's \"General\" configuration.");
+
+        ImGui.Separator();
+
+        using (ImRaii.Disabled(!runInstancedContentWithAutoDuty))
+        {
+            ImGui.Text(
+                "Questionable includes a default list of duties that work if AutoDuty and BossMod are installed.");
+
+            ImGui.Text("The included list of duties can change with each update, and is based on the following spreadsheet:");
+            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.GlobeEurope, "Open AutoDuty spreadsheet"))
+                Util.OpenLink(
+                    "https://docs.google.com/spreadsheets/d/151RlpqRcCpiD_VbQn6Duf-u-S71EP7d0mx3j1PDNoNA/edit?pli=1#gid=0");
+
+            ImGui.Separator();
+            ImGui.Text("You can override the dungeon settings for each individual dungeon/trial:");
+
+            using (var child = ImRaii.Child("DutyConfiguration", new Vector2(-1, 400), true))
+            {
+                if (child)
+                {
+                    foreach (EExpansionVersion expansion in Enum.GetValues<EExpansionVersion>())
+                    {
+                        if (ImGui.CollapsingHeader(expansion.ToString()))
+                        {
+                            using var table = ImRaii.Table($"Duties{expansion}", 2, ImGuiTableFlags.SizingFixedFit);
+                            if (table)
+                            {
+                                ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.WidthStretch);
+                                ImGui.TableSetupColumn("Options", ImGuiTableColumnFlags.WidthFixed, 200f);
+
+                                if (_contentFinderConditionNames.TryGetValue(expansion, out var cfcNames))
+                                {
+                                    foreach (var (cfcId, territoryId, name) in cfcNames)
+                                    {
+                                        if (_questRegistry.TryGetDutyByContentFinderConditionId(cfcId,
+                                                out bool autoDutyEnabledByDefault))
+                                        {
+                                            ImGui.TableNextRow();
+
+                                            string[] labels = autoDutyEnabledByDefault
+                                                ? _supportedCfcOptions
+                                                : _unsupportedCfcOptions;
+                                            int value = 0;
+                                            if (_configuration.Duties.WhitelistedDutyCfcIds.Contains(cfcId))
+                                                value = 1;
+                                            if (_configuration.Duties.BlacklistedDutyCfcIds.Contains(cfcId))
+                                                value = 2;
+
+                                            if (ImGui.TableNextColumn())
+                                            {
+                                                ImGui.AlignTextToFramePadding();
+                                                ImGui.TextUnformatted(name);
+                                                if (ImGui.IsItemHovered() && _configuration.Advanced.AdditionalStatusInformation)
+                                                {
+                                                    using var tooltip = ImRaii.Tooltip();
+                                                    if (tooltip)
+                                                    {
+                                                        ImGui.TextUnformatted(name);
+                                                        ImGui.Separator();
+                                                        ImGui.BulletText($"TerritoryId: {territoryId}");
+                                                        ImGui.BulletText($"ContentFinderConditionId: {cfcId}");
+                                                    }
+                                                }
+
+                                                if (runInstancedContentWithAutoDuty && !_autoDutyIpc.HasPath(cfcId))
+                                                    ImGuiComponents.HelpMarker("This duty is not supported by AutoDuty", FontAwesomeIcon.Times, ImGuiColors.DalamudRed);
+                                            }
+
+                                            if (ImGui.TableNextColumn())
+                                            {
+                                                using var _ = ImRaii.PushId($"##Dungeon{cfcId}");
+                                                ImGui.SetNextItemWidth(200);
+                                                if (ImGui.Combo(string.Empty, ref value, labels, labels.Length))
+                                                {
+                                                    _configuration.Duties.WhitelistedDutyCfcIds.Remove(cfcId);
+                                                    _configuration.Duties.BlacklistedDutyCfcIds.Remove(cfcId);
+
+                                                    if (value == 1)
+                                                        _configuration.Duties.WhitelistedDutyCfcIds.Add(cfcId);
+                                                    else if (value == 2)
+                                                        _configuration.Duties.BlacklistedDutyCfcIds.Add(cfcId);
+
+                                                    Save();
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            using (ImRaii.Disabled(_configuration.Duties.WhitelistedDutyCfcIds.Count +
+                       _configuration.Duties.BlacklistedDutyCfcIds.Count == 0))
+            {
+                if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Copy, "Export to clipboard"))
+                {
+                    var whitelisted =
+                        _configuration.Duties.WhitelistedDutyCfcIds.Select(x => $"{DutyWhitelistPrefix}{x}");
+                    var blacklisted =
+                        _configuration.Duties.BlacklistedDutyCfcIds.Select(x => $"{DutyBlacklistPrefix}{x}");
+                    string text = DutyClipboardPrefix + Convert.ToBase64String(Encoding.UTF8.GetBytes(
+                        string.Join(DutyClipboardSeparator, whitelisted.Concat(blacklisted))));
+                    ImGui.SetClipboardText(text);
+                }
+            }
+
+            ImGui.SameLine();
+
+            string? clipboardText = GetClipboardText();
+            using (ImRaii.Disabled(clipboardText == null || !clipboardText.StartsWith(DutyClipboardPrefix, StringComparison.InvariantCulture)))
+            {
+                if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Paste, "Import from Clipboard"))
+                {
+                    clipboardText = clipboardText!.Substring(DutyClipboardPrefix.Length);
+                    string text = Encoding.UTF8.GetString(Convert.FromBase64String(clipboardText));
+
+                    _configuration.Duties.WhitelistedDutyCfcIds.Clear();
+                    _configuration.Duties.BlacklistedDutyCfcIds.Clear();
+                    foreach (string part in text.Split(DutyClipboardSeparator))
+                    {
+                        if (part.StartsWith(DutyWhitelistPrefix, StringComparison.InvariantCulture) &&
+                            uint.TryParse(part.AsSpan(DutyWhitelistPrefix.Length), CultureInfo.InvariantCulture,
+                                out uint whitelistedCfcId))
+                            _configuration.Duties.WhitelistedDutyCfcIds.Add(whitelistedCfcId);
+
+                        if (part.StartsWith(DutyBlacklistPrefix, StringComparison.InvariantCulture) &&
+                            uint.TryParse(part.AsSpan(DutyBlacklistPrefix.Length), CultureInfo.InvariantCulture,
+                                out uint blacklistedCfcId))
+                            _configuration.Duties.WhitelistedDutyCfcIds.Add(blacklistedCfcId);
+                    }
+                }
+            }
+
+            ImGui.SameLine();
+
+            using (var unused = ImRaii.Disabled(!ImGui.IsKeyDown(ImGuiKey.ModCtrl)))
+            {
+                if (ImGui.Button("Reset to default"))
+                {
+                    _configuration.Duties.WhitelistedDutyCfcIds.Clear();
+                    _configuration.Duties.BlacklistedDutyCfcIds.Clear();
+                    Save();
+                }
+            }
+
+            if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
+                ImGui.SetTooltip("Hold CTRL to enable this button.");
         }
     }
 
@@ -231,4 +466,21 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
     private void Save() => _pluginInterface.SavePluginConfig(_configuration);
 
     public void SaveWindowConfig() => Save();
+
+    /// <summary>
+    /// The default implementation for <see cref="ImGui.GetClipboardText"/> throws an NullReferenceException if the clipboard is empty, maybe also if it doesn't contain text.
+    /// </summary>
+    private unsafe string? GetClipboardText()
+    {
+        byte* ptr = ImGuiNative.igGetClipboardText();
+        if (ptr == null)
+            return null;
+
+        int byteCount = 0;
+        while (ptr[byteCount] != 0)
+            ++byteCount;
+        return Encoding.UTF8.GetString(ptr, byteCount);
+    }
+
+    private sealed record DutyInfo(uint CfcId, uint TerritoryId, string Name);
 }

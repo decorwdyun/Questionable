@@ -1217,6 +1217,9 @@
                 "exclusiveMinimum": 0,
                 "exclusiveMaximum": 3000
               },
+              "AutoDutyEnabled": {
+                "type": "boolean"
+              },
               "DataId": {
                 "type": "null"
               },

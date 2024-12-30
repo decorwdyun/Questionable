@@ -8,6 +8,7 @@ using Dalamud.Plugin.Services;
 using Questionable.Controller.Steps.Common;
 using Questionable.Controller.Utils;
 using Questionable.Data;
+using Questionable.External;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
@@ -19,7 +20,8 @@ internal static class WaitAtEnd
     internal sealed class Factory(
         IClientState clientState,
         ICondition condition,
-        TerritoryData territoryData)
+        TerritoryData territoryData,
+        AutoDutyIpc autoDutyIpc)
         : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
@@ -50,7 +52,7 @@ internal static class WaitAtEnd
                 case EInteractionType.Snipe:
                     return [new WaitNextStepOrSequence()];
 
-                case EInteractionType.Duty:
+                case EInteractionType.Duty when !autoDutyIpc.IsConfiguredToRunContent(step.ContentFinderConditionId, step.AutoDutyEnabled):
                 case EInteractionType.SinglePlayerDuty:
                     return [new EndAutomation()];
 
