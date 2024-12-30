@@ -90,7 +90,8 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
         _mountNames = DefaultMounts.Select(x => x.Name).Concat(mounts.Select(x => x.Name)).ToArray();
 
         _contentFinderConditionNames = dataManager.GetExcelSheet<DawnContent>()
-            .Where(x => x.RowId > 0)
+            .Where(x => x is { RowId: > 0, Unknown16: false })
+            .OrderBy(x => x.Unknown15) // SortKey for the support UI
             .Select(x => x.Content.ValueNullable)
             .Where(x => x != null)
             .Select(x => x!.Value)
@@ -106,9 +107,7 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
             })
             .GroupBy(x => x.Expansion)
             .ToDictionary(x => x.Key,
-                x => x.OrderBy(y => y.Level)
-                    .ThenBy(y => y.ContentType)
-                    .ThenBy(y => y.SortKey)
+                x => x
                     .Select(y => new DutyInfo(y.CfcId, y.TerritoryId, $"{SeIconChar.LevelEn.ToIconChar()}{FormatLevel(y.Level)} {y.Name}"))
                     .ToList());
     }
