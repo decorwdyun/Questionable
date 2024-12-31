@@ -211,9 +211,9 @@ internal static class UseItem
         ElementId? QuestId,
         uint DataId,
         uint ItemId,
-        IList<QuestWorkValue?> CompletionQuestVariablesFlags) : IUseItemBase
+        IList<QuestWorkValue?> CompletionQuestVariablesFlags,
+        bool StartingCombat = false) : IUseItemBase
     {
-        public bool StartingCombat => false;
         public override string ToString() => $"UseItem({ItemId} on ground at {DataId})";
     }
 

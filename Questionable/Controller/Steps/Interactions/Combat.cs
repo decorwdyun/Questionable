@@ -45,8 +45,12 @@ internal static class Combat
                     ArgumentNullException.ThrowIfNull(step.DataId);
                     ArgumentNullException.ThrowIfNull(step.ItemId);
 
-                    yield return new UseItem.UseOnObject(quest.Id, step.DataId.Value, step.ItemId.Value,
-                        step.CompletionQuestVariablesFlags, true);
+                    if (step.GroundTarget == true)
+                        yield return new UseItem.UseOnGround(quest.Id, step.DataId.Value, step.ItemId.Value,
+                            step.CompletionQuestVariablesFlags, true);
+                    else
+                        yield return new UseItem.UseOnObject(quest.Id, step.DataId.Value, step.ItemId.Value,
+                            step.CompletionQuestVariablesFlags, true);
                     yield return new WaitAtEnd.WaitDelay(TimeSpan.FromSeconds(1));
                     yield return CreateTask(quest, sequence, step);
                     break;
