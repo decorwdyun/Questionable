@@ -85,6 +85,17 @@
           "Mount": true
         },
         {
+          "DataId": 2013938,
+          "Position": {
+            "X": 516.80774,
+            "Y": 17.959839,
+            "Z": -348.0431
+          },
+          "TerritoryId": 1188,
+          "InteractionType": "AttuneAetherCurrent",
+          "AetherCurrentId": 2818425
+        },
+        {
           "DataId": 2013632,
           "Position": {
             "X": 656.7025,

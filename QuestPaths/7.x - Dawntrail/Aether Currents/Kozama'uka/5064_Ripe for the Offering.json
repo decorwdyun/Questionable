@@ -95,23 +95,6 @@
           }
         },
         {
-          "DataId": 2013938,
-          "Position": {
-            "X": 516.80774,
-            "Y": 17.959839,
-            "Z": -348.0431
-          },
-          "TerritoryId": 1188,
-          "InteractionType": "AttuneAetherCurrent",
-          "AetherCurrentId": 2818425,
-          "AetheryteShortcut": "Kozama'uka - Dock Poga",
-          "SkipConditions": {
-            "AetheryteShortcutIf": {
-              "AetheryteLocked": "Kozama'uka - Dock Poga"
-            }
-          }
-        },
-        {
           "DataId": 1048826,
           "Position": {
             "X": 672.4802,
@@ -119,7 +102,13 @@
             "Z": -527.36707
           },
           "TerritoryId": 1188,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Kozama'uka - Dock Poga",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "AetheryteLocked": "Kozama'uka - Dock Poga"
+            }
+          }
         }
       ]
     },
