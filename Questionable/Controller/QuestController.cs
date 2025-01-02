@@ -146,6 +146,8 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
 
     public string? DebugState { get; private set; }
 
+    public Func<bool> IsQuestWindowOpen { private get; set; } = () => true;
+
     public void Reload()
     {
         lock (_progressLock)
@@ -180,6 +182,9 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
                     _safeAnimationEnd = DateTime.Now.AddSeconds(1 + animationLock);
             }
         }
+
+        if (AutomationType == EAutomationType.Manual && !IsRunning && !IsQuestWindowOpen())
+            return;
 
         UpdateCurrentQuest();
 

@@ -104,6 +104,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
 
         _activeQuestComponent.Reload += OnReload;
         _quickAccessButtonsComponent.Reload += OnReload;
+        _questController.IsQuestWindowOpen = () => IsOpen;
     }
 
     public WindowConfig WindowConfig => _configuration.DebugWindowConfig;
