@@ -138,6 +138,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTaskFactory<QuestCleanUp.CheckAlliedSocietyMount>();
         serviceCollection
             .AddTaskExecutor<MoveToLandingLocation.Task, MoveToLandingLocation.MoveToLandingLocationExecutor>();
+        serviceCollection
+            .AddTaskFactoryAndExecutor<RedeemRewardItems.Task, RedeemRewardItems.Factory, RedeemRewardItems.Executor>();
         serviceCollection.AddTaskExecutor<DoGather.Task, DoGather.GatherExecutor>();
         serviceCollection.AddTaskExecutor<DoGatherCollectable.Task, DoGatherCollectable.GatherCollectableExecutor>();
         serviceCollection.AddTaskFactoryAndExecutor<SwitchClassJob.Task, SwitchClassJob.Factory,
@@ -155,7 +157,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
             .AddTaskFactoryAndExecutor<AetheryteShortcut.Task, AetheryteShortcut.Factory,
                 AetheryteShortcut.UseAetheryteShortcut>();
         serviceCollection
-            .AddTaskExecutor<AetheryteShortcut.MoveAwayFromAetheryte, AetheryteShortcut.MoveAwayFromAetheryteExecutor>();
+            .AddTaskExecutor<AetheryteShortcut.MoveAwayFromAetheryte,
+                AetheryteShortcut.MoveAwayFromAetheryteExecutor>();
         serviceCollection
             .AddTaskFactoryAndExecutor<SkipCondition.SkipTask, SkipCondition.Factory, SkipCondition.CheckSkip>();
         serviceCollection.AddTaskFactoryAndExecutor<Gather.GatheringTask, Gather.Factory, Gather.StartGathering>();
@@ -179,7 +182,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
             .AddTaskFactoryAndExecutor<AethernetShard.Attune, AethernetShard.Factory, AethernetShard.DoAttune>();
         serviceCollection.AddTaskFactoryAndExecutor<Aetheryte.Attune, Aetheryte.Factory, Aetheryte.DoAttune>();
         serviceCollection.AddTaskFactoryAndExecutor<Combat.Task, Combat.Factory, Combat.HandleCombat>();
-        serviceCollection.AddTaskFactoryAndExecutor<Duty.OpenDutyFinderTask, Duty.Factory, Duty.OpenDutyFinderExecutor>();
+        serviceCollection
+            .AddTaskFactoryAndExecutor<Duty.OpenDutyFinderTask, Duty.Factory, Duty.OpenDutyFinderExecutor>();
         serviceCollection.AddTaskExecutor<Duty.StartAutoDutyTask, Duty.StartAutoDutyExecutor>();
         serviceCollection.AddTaskExecutor<Duty.WaitAutoDutyTask, Duty.WaitAutoDutyExecutor>();
         serviceCollection.AddTaskFactory<Emote.Factory>();
@@ -269,6 +273,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
 
         serviceCollection.AddSingleton<QuestJournalUtils>();
         serviceCollection.AddSingleton<QuestJournalComponent>();
+        serviceCollection.AddSingleton<QuestRewardComponent>();
         serviceCollection.AddSingleton<GatheringJournalComponent>();
         serviceCollection.AddSingleton<AlliedSocietyJournalComponent>();
 

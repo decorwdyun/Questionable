@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Dalamud.Plugin.Services;
@@ -218,7 +219,14 @@ internal sealed class QuestData
             quest.JournalGenre = 82;
             quest.SortKey = 0;
         }
+
+        RedeemableItems = quests.Where(x => x is QuestInfo)
+            .Cast<QuestInfo>()
+            .SelectMany(x => x.ItemRewards)
+            .ToImmutableHashSet();
     }
+
+    public ImmutableHashSet<ItemReward> RedeemableItems { get; }
 
     private void AddPreviousQuest(QuestId questToUpdate, QuestId requiredQuestId)
     {

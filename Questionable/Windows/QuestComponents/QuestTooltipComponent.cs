@@ -40,48 +40,58 @@ internal sealed class QuestTooltipComponent
     {
         using var tooltip = ImRaii.Tooltip();
         if (tooltip)
-        {
-            ImGui.Text($"{SeIconChar.LevelEn.ToIconString()}{questInfo.Level}");
-            ImGui.SameLine();
-
-            var (color, _, tooltipText) = _uiUtils.GetQuestStyle(questInfo.QuestId);
-            ImGui.TextColored(color, tooltipText);
-            if (questInfo.IsRepeatable)
-            {
-                ImGui.SameLine();
-                ImGui.TextUnformatted("Repeatable");
-            }
-
-            if (questInfo is QuestInfo { CompletesInstantly: true })
-            {
-                ImGui.SameLine();
-                ImGui.TextUnformatted("Instant");
-            }
-
-            if (_questRegistry.TryGetQuest(questInfo.QuestId, out Quest? quest))
-            {
-                if (quest.Root.Disabled)
-                {
-                    ImGui.SameLine();
-                    ImGui.TextColored(ImGuiColors.DalamudRed, "Disabled");
-                }
-
-                if (quest.Root.Author.Count == 1)
-                    ImGui.Text($"Author: {quest.Root.Author[0]}");
-                else
-                    ImGui.Text($"Authors: {string.Join(", ", quest.Root.Author)}");
-            }
-            else
-            {
-                ImGui.SameLine();
-                ImGui.TextColored(ImGuiColors.DalamudRed, "NoQuestPath");
-            }
-
-            DrawQuestUnlocks(questInfo, 0);
-        }
+            DrawInner(questInfo, true);
     }
 
-    private void DrawQuestUnlocks(IQuestInfo questInfo, int counter)
+    public void DrawInner(IQuestInfo questInfo, bool showItemRewards)
+    {
+        ImGui.Text($"{SeIconChar.LevelEn.ToIconString()}{questInfo.Level}");
+        ImGui.SameLine();
+
+        var (color, _, tooltipText) = _uiUtils.GetQuestStyle(questInfo.QuestId);
+        ImGui.TextColored(color, tooltipText);
+
+        if (questInfo is QuestInfo { IsSeasonalEvent: true })
+        {
+            ImGui.SameLine();
+            ImGui.TextUnformatted("Event");
+        }
+
+        if (questInfo.IsRepeatable)
+        {
+            ImGui.SameLine();
+            ImGui.TextUnformatted("Repeatable");
+        }
+
+        if (questInfo is QuestInfo { CompletesInstantly: true })
+        {
+            ImGui.SameLine();
+            ImGui.TextUnformatted("Instant");
+        }
+
+        if (_questRegistry.TryGetQuest(questInfo.QuestId, out Quest? quest))
+        {
+            if (quest.Root.Disabled)
+            {
+                ImGui.SameLine();
+                ImGui.TextColored(ImGuiColors.DalamudRed, "Disabled");
+            }
+
+            if (quest.Root.Author.Count == 1)
+                ImGui.Text($"Author: {quest.Root.Author[0]}");
+            else
+                ImGui.Text($"Authors: {string.Join(", ", quest.Root.Author)}");
+        }
+        else
+        {
+            ImGui.SameLine();
+            ImGui.TextColored(ImGuiColors.DalamudRed, "NoQuestPath");
+        }
+
+        DrawQuestUnlocks(questInfo, 0, showItemRewards);
+    }
+
+    private void DrawQuestUnlocks(IQuestInfo questInfo, int counter, bool showItemRewards)
     {
         if (counter >= 10)
             return;
@@ -118,12 +128,13 @@ internal sealed class QuestTooltipComponent
                             _questFunctions.IsQuestComplete(q.QuestId) ? byte.MinValue : q.Sequence), iconColor, icon);
 
                     if (qInfo is QuestInfo qstInfo && (counter <= 2 || icon != FontAwesomeIcon.Check))
-                        DrawQuestUnlocks(qstInfo, counter + 1);
+                        DrawQuestUnlocks(qstInfo, counter + 1, false);
                 }
                 else
                 {
                     using var _ = ImRaii.Disabled();
-                    _uiUtils.ChecklistItem($"Unknown Quest ({q.QuestId})", ImGuiColors.DalamudGrey, FontAwesomeIcon.Question);
+                    _uiUtils.ChecklistItem($"Unknown Quest ({q.QuestId})", ImGuiColors.DalamudGrey,
+                        FontAwesomeIcon.Question);
                 }
             }
         }
@@ -192,6 +203,16 @@ internal sealed class QuestTooltipComponent
 
                 GrandCompany currentGrandCompany = _questFunctions.GetGrandCompany();
                 _uiUtils.ChecklistItem($"Grand Company: {gcName}", actualQuestInfo.GrandCompany == currentGrandCompany);
+            }
+
+            if (showItemRewards && actualQuestInfo.ItemRewards.Count > 0)
+            {
+                ImGui.Separator();
+                ImGui.Text("Item Rewards:");
+                foreach (var reward in actualQuestInfo.ItemRewards)
+                {
+                    ImGui.BulletText(reward.Name);
+                }
             }
         }
 
