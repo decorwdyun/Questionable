@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Dalamud.Game.Text;
 using Dalamud.Interface.Utility.Raii;
 using ImGuiNET;
 using Questionable.Data;
@@ -13,6 +14,8 @@ internal sealed class QuestRewardComponent
     private readonly QuestData _questData;
     private readonly QuestTooltipComponent _questTooltipComponent;
     private readonly UiUtils _uiUtils;
+
+    private bool _showEventRewards;
 
     public QuestRewardComponent(
         QuestData questData,
@@ -30,7 +33,10 @@ internal sealed class QuestRewardComponent
         if (!tab)
             return;
 
-        ImGui.BulletText("Only untradeable items are listed (you can e.g. sell your Wind-up Airship from the enovy quest).");
+        ImGui.Checkbox("Show rewards from seasonal event quests", ref _showEventRewards);
+        ImGui.Spacing();
+
+        ImGui.BulletText("Only untradeable items are listed (e.g. the Wind-up Airship can be sold on the market board).");
 
         DrawGroup("Mounts", EItemRewardType.Mount);
         DrawGroup("Minions", EItemRewardType.Minion);
@@ -47,9 +53,17 @@ internal sealed class QuestRewardComponent
         foreach (var item in _questData.RedeemableItems.Where(x => x.Type == type)
                      .OrderBy(x => x.Name, StringComparer.CurrentCultureIgnoreCase))
         {
-            if (_uiUtils.ChecklistItem(item.Name, item.IsUnlocked()))
+            if (_questData.TryGetQuestInfo(item.ElementId, out var questInfo))
             {
-                if (_questData.TryGetQuestInfo(item.ElementId, out var questInfo))
+                bool isEventQuest = questInfo is QuestInfo { IsSeasonalEvent: true };
+                if (!_showEventRewards && isEventQuest)
+                    continue;
+
+                string name = item.Name;
+                if (isEventQuest)
+                    name += $" {SeIconChar.Clock.ToIconString()}";
+
+                if (_uiUtils.ChecklistItem(name, item.IsUnlocked()))
                 {
                     using var tooltip = ImRaii.Tooltip();
                     if (!tooltip)
