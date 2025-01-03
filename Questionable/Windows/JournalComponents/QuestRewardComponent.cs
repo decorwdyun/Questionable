@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Linq;
 using Dalamud.Game.Text;
+using Dalamud.Interface;
+using Dalamud.Interface.Colors;
 using Dalamud.Interface.Utility.Raii;
 using ImGuiNET;
+using Questionable.Controller;
 using Questionable.Data;
 using Questionable.Model;
 using Questionable.Windows.QuestComponents;
@@ -11,6 +14,7 @@ namespace Questionable.Windows.JournalComponents;
 
 internal sealed class QuestRewardComponent
 {
+    private readonly QuestRegistry _questRegistry;
     private readonly QuestData _questData;
     private readonly QuestTooltipComponent _questTooltipComponent;
     private readonly UiUtils _uiUtils;
@@ -18,10 +22,12 @@ internal sealed class QuestRewardComponent
     private bool _showEventRewards;
 
     public QuestRewardComponent(
+        QuestRegistry questRegistry,
         QuestData questData,
         QuestTooltipComponent questTooltipComponent,
         UiUtils uiUtils)
     {
+        _questRegistry = questRegistry;
         _questData = questData;
         _questTooltipComponent = questTooltipComponent;
         _uiUtils = uiUtils;
@@ -36,7 +42,8 @@ internal sealed class QuestRewardComponent
         ImGui.Checkbox("Show rewards from seasonal event quests", ref _showEventRewards);
         ImGui.Spacing();
 
-        ImGui.BulletText("Only untradeable items are listed (e.g. the Wind-up Airship can be sold on the market board).");
+        ImGui.BulletText(
+            "Only untradeable items are listed (e.g. the Wind-up Airship can be sold on the market board).");
 
         DrawGroup("Mounts", EItemRewardType.Mount);
         DrawGroup("Minions", EItemRewardType.Minion);
@@ -63,7 +70,14 @@ internal sealed class QuestRewardComponent
                 if (isEventQuest)
                     name += $" {SeIconChar.Clock.ToIconString()}";
 
-                if (_uiUtils.ChecklistItem(name, item.IsUnlocked()))
+                bool complete = item.IsUnlocked();
+                var color = !_questRegistry.IsKnownQuest(item.ElementId)
+                    ? ImGuiColors.DalamudGrey
+                    : complete
+                        ? ImGuiColors.ParsedGreen
+                        : ImGuiColors.DalamudRed;
+                var icon = complete ? FontAwesomeIcon.Check : FontAwesomeIcon.Times;
+                if (_uiUtils.ChecklistItem(name, color, icon))
                 {
                     using var tooltip = ImRaii.Tooltip();
                     if (!tooltip)
