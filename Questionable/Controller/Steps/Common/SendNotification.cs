@@ -24,7 +24,7 @@ internal static class SendNotification
                     new Task(step.InteractionType, step.Comment),
                 EInteractionType.Duty when !autoDutyIpc.IsConfiguredToRunContent(step.ContentFinderConditionId, step.AutoDutyEnabled) =>
                     new Task(step.InteractionType, step.ContentFinderConditionId.HasValue
-                        ? territoryData.GetContentFinderConditionName(step.ContentFinderConditionId.Value)
+                        ? territoryData.GetContentFinderCondition(step.ContentFinderConditionId.Value)?.Name
                         : step.Comment),
                 EInteractionType.SinglePlayerDuty => new Task(step.InteractionType, quest.Info.Name),
                 _ => null,

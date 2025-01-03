@@ -38,7 +38,7 @@ internal sealed class AutoDutyIpc
             return false;
 
         if (_configuration.Duties.WhitelistedDutyCfcIds.Contains(cfcId.Value) &&
-            _territoryData.TryGetTerritoryIdForContentFinderCondition(cfcId.Value, out _))
+            _territoryData.TryGetContentFinderCondition(cfcId.Value, out _))
             return true;
 
         return autoDutyEnabled && HasPath(cfcId.Value);
@@ -46,28 +46,28 @@ internal sealed class AutoDutyIpc
 
     public bool HasPath(uint cfcId)
     {
-        if (!_territoryData.TryGetTerritoryIdForContentFinderCondition(cfcId, out uint territoryType))
+        if (!_territoryData.TryGetContentFinderCondition(cfcId, out var cfcData))
             return false;
 
         try
         {
-            return _contentHasPath.InvokeFunc(territoryType);
+            return _contentHasPath.InvokeFunc(cfcData.TerritoryId);
         }
         catch (IpcError e)
         {
-            _logger.LogWarning("Unable to query AutoDuty for path in territory {TerritoryType}: {Message}", territoryType, e.Message);
+            _logger.LogWarning("Unable to query AutoDuty for path in territory {TerritoryType}: {Message}", cfcData.TerritoryId, e.Message);
             return false;
         }
     }
 
     public void StartInstance(uint cfcId)
     {
-        if (!_territoryData.TryGetTerritoryIdForContentFinderCondition(cfcId, out uint territoryType))
+        if (!_territoryData.TryGetContentFinderCondition(cfcId, out var cfcData))
             throw new TaskException($"Unknown ContentFinderConditionId {cfcId}");
 
         try
         {
-            _run.InvokeAction(territoryType, 0, true);
+            _run.InvokeAction(cfcData.TerritoryId, 0, true);
         }
         catch (IpcError e)
         {

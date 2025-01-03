@@ -99,7 +99,7 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
             {
                 Expansion = (EExpansionVersion)x.TerritoryType.Value.ExVersion.RowId,
                 CfcId = x.RowId,
-                Name = territoryData.GetContentFinderConditionName(x.RowId) ?? "?",
+                Name = territoryData.GetContentFinderCondition(x.RowId)?.Name ?? "?",
                 TerritoryId = x.TerritoryType.RowId,
                 ContentType = x.ContentType.RowId,
                 Level = x.ClassJobLevelRequired,

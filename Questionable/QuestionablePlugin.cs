@@ -7,6 +7,7 @@ using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using LLib;
+using LLib.Gear;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller;
@@ -130,6 +131,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<NotificationMasterIpc>();
         serviceCollection.AddSingleton<AutomatonIpc>();
         serviceCollection.AddSingleton<AutoDutyIpc>();
+
+        serviceCollection.AddSingleton<GearStatsCalculator>();
     }
 
     private static void AddTaskFactories(ServiceCollection serviceCollection)

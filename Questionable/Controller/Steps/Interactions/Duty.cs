@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Client.Game;
+using LLib.Gear;
+using Questionable.Controller.Steps.Common;
 using Questionable.Controller.Steps.Shared;
 using Questionable.Data;
 using Questionable.External;
@@ -41,23 +44,54 @@ internal static class Duty
     }
 
     internal sealed class StartAutoDutyExecutor(
+        GearStatsCalculator gearStatsCalculator,
         AutoDutyIpc autoDutyIpc,
         TerritoryData territoryData,
-        IClientState clientState) : TaskExecutor<StartAutoDutyTask>
+        IClientState clientState,
+        IChatGui chatGui,
+        SendNotification.Executor sendNotificationExecutor) : TaskExecutor<StartAutoDutyTask>
     {
         protected override bool Start()
         {
+            if (!territoryData.TryGetContentFinderCondition(Task.ContentFinderConditionId,
+                    out var cfcData))
+                throw new TaskException("Failed to get territory ID for content finder condition");
+
+            unsafe
+            {
+                InventoryManager* inventoryManager = InventoryManager.Instance();
+                if (inventoryManager == null)
+                    throw new TaskException("Inventory unavailable");
+
+                var equippedItems = inventoryManager->GetInventoryContainer(InventoryType.EquippedItems);
+                if (equippedItems == null)
+                    throw new TaskException("Equipped items unavailable");
+
+                var currentItemLevel = gearStatsCalculator.CalculateAverageItemLevel(equippedItems);
+                if (cfcData.RequiredItemLevel > currentItemLevel)
+                {
+                    string errorText =
+                        $"Could not use AutoDuty to queue for {cfcData.Name}, required item level: {cfcData.RequiredItemLevel}, current item level: {currentItemLevel}.";
+                    if (!sendNotificationExecutor.Start(new SendNotification.Task(EInteractionType.Duty, errorText)))
+                        chatGui.PrintError(errorText, CommandHandler.MessageTag, CommandHandler.TagColor);
+
+                    return false;
+                }
+            }
+
             autoDutyIpc.StartInstance(Task.ContentFinderConditionId);
             return true;
         }
 
         public override ETaskResult Update()
         {
-            if (!territoryData.TryGetTerritoryIdForContentFinderCondition(Task.ContentFinderConditionId,
-                    out uint territoryId))
+            if (!territoryData.TryGetContentFinderCondition(Task.ContentFinderConditionId,
+                    out var cfcData))
                 throw new TaskException("Failed to get territory ID for content finder condition");
 
-            return clientState.TerritoryType == territoryId ? ETaskResult.TaskComplete : ETaskResult.StillRunning;
+            return clientState.TerritoryType == cfcData.TerritoryId
+                ? ETaskResult.TaskComplete
+                : ETaskResult.StillRunning;
         }
     }
 
@@ -75,11 +109,11 @@ internal static class Duty
 
         public override ETaskResult Update()
         {
-            if (!territoryData.TryGetTerritoryIdForContentFinderCondition(Task.ContentFinderConditionId,
-                    out uint territoryId))
+            if (!territoryData.TryGetContentFinderCondition(Task.ContentFinderConditionId,
+                    out var cfcData))
                 throw new TaskException("Failed to get territory ID for content finder condition");
 
-            return clientState.TerritoryType != territoryId && autoDutyIpc.IsStopped()
+            return clientState.TerritoryType != cfcData.TerritoryId && autoDutyIpc.IsStopped()
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
         }
