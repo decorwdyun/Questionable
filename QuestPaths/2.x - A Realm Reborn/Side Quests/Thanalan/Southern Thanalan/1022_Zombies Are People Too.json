@@ -13,7 +13,8 @@
             "Z": 972.5642
           },
           "TerritoryId": 146,
-          "InteractionType": "AcceptQuest"
+          "InteractionType": "AcceptQuest",
+          "Fly": true
         }
       ]
     },

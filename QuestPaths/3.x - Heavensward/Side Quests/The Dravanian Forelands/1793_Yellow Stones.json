@@ -13,7 +13,8 @@
             "Z": -135.91211
           },
           "TerritoryId": 398,
-          "InteractionType": "AcceptQuest"
+          "InteractionType": "AcceptQuest",
+          "Fly": true
         }
       ]
     },
@@ -55,8 +56,8 @@
             null,
             null,
             32
-          ]
-
+          ],
+          "Fly": true
         },
         {
           "DataId": 2005633,
@@ -74,7 +75,8 @@
             null,
             null,
             128
-          ]
+          ],
+          "Fly": true
         },
         {
           "DataId": 2005634,
@@ -92,7 +94,8 @@
             null,
             null,
             64
-          ]
+          ],
+          "Fly": true
         }
       ]
     },{

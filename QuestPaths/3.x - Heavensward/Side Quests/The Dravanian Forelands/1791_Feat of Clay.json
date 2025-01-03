@@ -13,7 +13,8 @@
             "Z": -135.91211
           },
           "TerritoryId": 398,
-          "InteractionType": "AcceptQuest"
+          "InteractionType": "AcceptQuest",
+          "Fly": true
         }
       ]
     },
@@ -27,12 +28,16 @@
             "Y": -99.931335,
             "Z": 644.4646
           },
+          "StopDistance": 0.5,
           "TerritoryId": 398,
           "InteractionType": "Interact",
           "CompletionQuestVariablesFlags": [
-            null, null,
-            null, null,
-            null, 128
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
           ],
           "Fly": true
         },
@@ -43,13 +48,18 @@
             "Y": -94.10242,
             "Z": 597.9553
           },
+          "StopDistance": 0.5,
           "TerritoryId": 398,
           "InteractionType": "Interact",
           "CompletionQuestVariablesFlags": [
-            null, null,
-            null, null,
-            null, 64
-          ]
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ],
+          "Fly": true
         }
       ]
     },
@@ -65,7 +75,8 @@
           },
           "TerritoryId": 398,
           "InteractionType": "CompleteQuest",
-          "Fly": true
+          "Fly": true,
+          "NextQuestId": 1793
         }
       ]
     }
