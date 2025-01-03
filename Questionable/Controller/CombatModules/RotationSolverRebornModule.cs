@@ -14,16 +14,16 @@ namespace Questionable.Controller.CombatModules;
 internal sealed class RotationSolverRebornModule : ICombatModule, IDisposable
 {
     private readonly ILogger<RotationSolverRebornModule> _logger;
-    private readonly IClientState _clientState;
     private readonly Configuration _configuration;
     private readonly ICallGateSubscriber<string, object> _test;
     private readonly ICallGateSubscriber<StateCommandType, object> _changeOperationMode;
 
-    public RotationSolverRebornModule(ILogger<RotationSolverRebornModule> logger, MovementController movementController,
-        IClientState clientState, IDalamudPluginInterface pluginInterface, Configuration configuration)
+    public RotationSolverRebornModule(
+        ILogger<RotationSolverRebornModule> logger,
+        IDalamudPluginInterface pluginInterface,
+        Configuration configuration)
     {
         _logger = logger;
-        _clientState = clientState;
         _configuration = configuration;
         _test = pluginInterface.GetIpcSubscriber<string, object>("RotationSolverReborn.Test");
         _changeOperationMode =

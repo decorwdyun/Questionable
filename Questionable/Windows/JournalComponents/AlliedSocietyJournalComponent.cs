@@ -17,7 +17,6 @@ internal sealed class AlliedSocietyJournalComponent
     private static readonly string[] RankNames =
         ["Neutral", "Recognized", "Friendly", "Trusted", "Respected", "Honored", "Sworn", "Allied"];
 
-    private readonly QuestFunctions _questFunctions;
     private readonly AlliedSocietyQuestFunctions _alliedSocietyQuestFunctions;
     private readonly QuestData _questData;
     private readonly QuestRegistry _questRegistry;
@@ -26,7 +25,6 @@ internal sealed class AlliedSocietyJournalComponent
     private readonly UiUtils _uiUtils;
 
     public AlliedSocietyJournalComponent(
-        QuestFunctions questFunctions,
         AlliedSocietyQuestFunctions alliedSocietyQuestFunctions,
         QuestData questData,
         QuestRegistry questRegistry,
@@ -34,7 +32,6 @@ internal sealed class AlliedSocietyJournalComponent
         QuestTooltipComponent questTooltipComponent,
         UiUtils uiUtils)
     {
-        _questFunctions = questFunctions;
         _alliedSocietyQuestFunctions = alliedSocietyQuestFunctions;
         _questData = questData;
         _questRegistry = questRegistry;
