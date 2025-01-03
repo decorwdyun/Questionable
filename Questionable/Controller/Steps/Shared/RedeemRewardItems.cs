@@ -63,7 +63,7 @@ internal static class RedeemRewardItems
 
             _continueAt = DateTime.Now
                 .Add(castTime)
-                .AddSeconds(1);
+                .AddSeconds(3);
             return gameFunctions.UseItem(Task.ItemReward.ItemId);
         }
 
