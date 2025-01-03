@@ -49,6 +49,7 @@ internal static class RedeemRewardItems
         GameFunctions gameFunctions,
         ICondition condition) : TaskExecutor<Task>
     {
+        private static readonly TimeSpan MinimumCastTime = TimeSpan.FromSeconds(4);
         private DateTime _continueAt;
 
         protected override bool Start()
@@ -56,7 +57,13 @@ internal static class RedeemRewardItems
             if (condition[ConditionFlag.Mounted])
                 return false;
 
-            _continueAt = DateTime.Now.Add(Task.ItemReward.CastTime).AddSeconds(1);
+            TimeSpan castTime = Task.ItemReward.CastTime;
+            if (castTime < MinimumCastTime)
+                castTime = MinimumCastTime;
+
+            _continueAt = DateTime.Now
+                .Add(castTime)
+                .AddSeconds(1);
             return gameFunctions.UseItem(Task.ItemReward.ItemId);
         }
 
