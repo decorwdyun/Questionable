@@ -450,14 +450,19 @@ internal sealed unsafe class QuestFunctions
             if (IsQuestAccepted(questId))
                 return false;
 
-            if (quest.Info.AlliedSociety != EAlliedSociety.None)
+            if (questId is QuestId qId && IsDailyAlliedSocietyQuest(qId))
             {
                 if (QuestManager.Instance()->IsDailyQuestCompleted(questId.Value))
                     return false;
-            }
 
-            if (IsQuestComplete(questId))
-                return false;
+                if (!IsDailyAlliedSocietyQuestAndAvailableToday(qId))
+                    return false;
+            }
+            else
+            {
+                if (IsQuestComplete(questId))
+                    return false;
+            }
         }
         else
         {
