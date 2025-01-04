@@ -48,7 +48,7 @@ public enum EAction
     Katon = 2266,
     Raiton = 2267,
     RabbitMedium = 2272,
-    SlugShot = 7412,
+    SlugShot = 2868,
     BosomBrook = 37173,
     Souleater = 3632,
     Fire3 = 152,
