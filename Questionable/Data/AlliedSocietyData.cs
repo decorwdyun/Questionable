@@ -53,7 +53,7 @@ internal sealed class AlliedSocietyData
         else if (alliedSociety == EAlliedSociety.Moogles)
         {
             normalNpcs = [];
-            mountNpcs = [1017322, 1017470];
+            mountNpcs = [1017322, 1017470, 1017471];
         }
         else
         {
