@@ -12,7 +12,7 @@ namespace Questionable.Model;
 
 internal sealed class QuestInfo : IQuestInfo
 {
-    public QuestInfo(ExcelQuest quest, uint newGamePlusChapter, byte startingCity)
+    public QuestInfo(ExcelQuest quest, uint newGamePlusChapter, byte startingCity, JournalGenreOverrides journalGenreOverrides)
     {
         QuestId = new QuestId((ushort)(quest.RowId & 0xFFFF));
 
@@ -53,7 +53,12 @@ internal sealed class QuestInfo : IQuestInfo
             .Where(x => x.Value != 0)
             .ToImmutableList();
         QuestLockJoin = (EQuestJoin)quest.QuestLockJoin;
-        JournalGenre = quest.JournalGenre.ValueNullable?.RowId;
+        JournalGenre = QuestId.Value switch
+        {
+            >= 4196 and <= 4209 => journalGenreOverrides.ThavnairSideQuests,
+            4173 => journalGenreOverrides.RadzAtHanSideQuests,
+            _ => quest.JournalGenre.ValueNullable?.RowId,
+        };
         SortKey = quest.SortKey;
         IsMainScenarioQuest = quest.JournalGenre.ValueNullable?.JournalCategory.ValueNullable?.JournalSection
             .ValueNullable?.RowId is 0 or 1;
