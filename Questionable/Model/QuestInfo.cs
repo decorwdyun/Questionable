@@ -60,8 +60,7 @@ internal sealed class QuestInfo : IQuestInfo
             _ => quest.JournalGenre.ValueNullable?.RowId,
         };
         SortKey = quest.SortKey;
-        IsMainScenarioQuest = quest.JournalGenre.ValueNullable?.JournalCategory.ValueNullable?.JournalSection
-            .ValueNullable?.RowId is 0 or 1;
+        IsMainScenarioQuest = quest.JournalGenre.ValueNullable?.Icon == 61412;
         CompletesInstantly = quest.TodoParams[0].ToDoCompleteSeq == 0;
         PreviousInstanceContent = quest.InstanceContent.Select(x => (ushort)x.RowId).Where(x => x != 0).ToList();
         PreviousInstanceContentJoin = (EQuestJoin)quest.InstanceContentJoin;
