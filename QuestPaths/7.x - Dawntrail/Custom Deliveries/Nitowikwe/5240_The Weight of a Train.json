@@ -67,7 +67,8 @@
           },
           "TerritoryId": 1190,
           "InteractionType": "CompleteQuest",
-          "Fly": true
+          "Fly": true,
+          "NextQuestId": 5241
         }
       ]
     }
