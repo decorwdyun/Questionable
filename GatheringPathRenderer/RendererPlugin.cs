@@ -114,7 +114,7 @@ public sealed class RendererPlugin : IDalamudPlugin
         try
         {
 #if DEBUG
-            foreach (var expansionFolder in ExpansionData.ExpansionFolders.Values)
+            foreach (var expansionFolder in Questionable.Model.ExpansionData.ExpansionFolders.Values)
                 LoadFromDirectory(
                     new DirectoryInfo(Path.Combine(PathsDirectory.FullName, expansionFolder)));
             _pluginLog.Information(
