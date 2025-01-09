@@ -1,5 +1,5 @@
 {
-  "schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
   "Author": "Theo",
   "Steps": [
     {
@@ -19,7 +19,8 @@
                 "Y": -21.51083,
                 "Z": 558.524
               },
-              "StopDistance": 0
+              "MinimumAngle": 90,
+              "MaximumAngle": 270
             }
           ]
         }
@@ -35,7 +36,9 @@
                 "X": 609.9794,
                 "Y": -21.53052,
                 "Z": 579.6443
-              }
+              },
+              "MinimumAngle": 90,
+              "MaximumAngle": 135
             }
           ]
         }
@@ -51,7 +54,9 @@
                 "X": 588.3865,
                 "Y": -20.42655,
                 "Z": 561.5663
-              }
+              },
+              "MinimumAngle": 45,
+              "MaximumAngle": 315
             }
           ]
         }
