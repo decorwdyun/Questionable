@@ -30,7 +30,7 @@
 					"TerritoryId": 402,
 					"InteractionType": "WalkTo",
 					"Fly": true,
-					"$": "can get stuck on the spire structure when trying to land"
+					"$": "can get stuck on the spire structure when trying to land. could land elsewhere but we want to start with this one because it's the first on foot, so if done before flying unlocked that would necessitate walking directly past it."
 				},
 				{
 					"DataId": 2005900,
