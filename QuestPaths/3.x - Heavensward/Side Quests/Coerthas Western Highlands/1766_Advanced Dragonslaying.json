@@ -28,7 +28,8 @@
             "Z": -244.1596
           },
           "TerritoryId": 397,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
@@ -58,12 +59,14 @@
             "Y": 100.08534,
             "Z": -603.926
           },
+          "StopDistance": 0.5,
           "TerritoryId": 397,
           "InteractionType": "Combat",
           "KillEnemyDataIds": [
             4468
           ],
-          "EnemySpawnType": "AutoOnEnterArea"
+          "EnemySpawnType": "AutoOnEnterArea",
+          "Fly": true
         }
       ]
     },
@@ -78,7 +81,8 @@
             "Z": -503.7156
           },
           "TerritoryId": 397,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
