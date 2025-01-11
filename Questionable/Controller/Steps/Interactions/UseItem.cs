@@ -29,7 +29,7 @@ internal static class UseItem
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
-            if (step.InteractionType is EInteractionType.SinglePlayerDuty)
+            if (step.InteractionType is EInteractionType.SinglePlayerDuty or EInteractionType.CompleteQuest)
             {
                 if (step.ItemId == null)
                     return [];
