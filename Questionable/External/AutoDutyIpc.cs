@@ -67,7 +67,7 @@ internal sealed class AutoDutyIpc
 
         try
         {
-            _run.InvokeAction(cfcData.TerritoryId, 0, true);
+            _run.InvokeAction(cfcData.TerritoryId, 1, true);
         }
         catch (IpcError e)
         {
