@@ -80,7 +80,7 @@
             "null"
           ],
           "description": "Set if pathfinding should stop closer or further away from the default stop distance",
-          "exclusiveMinimum": 0
+          "minimum": 0.25
         },
         "IgnoreDistanceToObject": {
           "type": "boolean",

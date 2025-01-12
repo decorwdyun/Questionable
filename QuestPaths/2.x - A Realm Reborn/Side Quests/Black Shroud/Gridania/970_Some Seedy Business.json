@@ -57,7 +57,7 @@
           },
           "TerritoryId": 152,
           "InteractionType": "Interact",
-          "StopDistance": 0.1,
+          "StopDistance": 0.25,
           "AetheryteShortcut": "East Shroud - Hawthorne Hut",
           "Fly": true,
           "SkipConditions": {
