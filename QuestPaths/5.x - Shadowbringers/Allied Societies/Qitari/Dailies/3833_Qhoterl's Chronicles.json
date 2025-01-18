@@ -1,7 +1,6 @@
-{
+﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "liza",
-  "Disabled": true,
+  "Author": "pot0to",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -9,9 +8,9 @@
         {
           "DataId": 1032643,
           "Position": {
-            "X": 787.0145,
-            "Y": -45.82774,
-            "Z": -218.555
+              "X": 787.0145,
+              "Y": -45.82774,
+              "Z": -218.555
           },
           "TerritoryId": 817,
           "InteractionType": "AcceptQuest"
@@ -22,26 +21,56 @@
       "Sequence": 255,
       "Steps": [
         {
+          "DataId": 33005,
           "Position": {
-            "X": 788.1569,
-            "Y": -45.82557,
-            "Z": -212.9306
+              "X": 214.7744,
+              "Y": -19.57758,
+              "Z": 623.6767
           },
           "TerritoryId": 817,
-          "InteractionType": "WalkTo",
-          "AetheryteShortcut": "Rak'tika - Fanow",
+          "InteractionType": "Gather",
+          "RequiredQuestAcceptedJob": [
+            "Miner"
+          ],
+          "ItemsToGather": [
+            {
+              "ItemId": 29537,
+              "ItemCount": 3
+            }
+          ],
+          "Fly": true
+        },
+        {
+          "DataId": 33020,
+          "Position": {
+              "X": 226.1767,
+              "Y": -20.10281,
+              "Z": 643.5543
+          },
+          "TerritoryId": 817,
+          "InteractionType": "Gather",
+          "RequiredQuestAcceptedJob": [
+            "Botanist"
+          ],
+          "ItemsToGather": [
+            {
+              "ItemId": 29563,
+              "ItemCount": 3
+            }
+          ],
           "Fly": true
         },
         {
           "DataId": 1032643,
           "Position": {
-            "X": 787.0145,
-            "Y": -45.82774,
-            "Z": -218.555
+              "X": 787.0145,
+              "Y": -45.82774,
+              "Z": -218.555
           },
-          "StopDistance": 7,
           "TerritoryId": 817,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Rak'tika - Fanow",
+          "Fly": true
         }
       ]
     }
