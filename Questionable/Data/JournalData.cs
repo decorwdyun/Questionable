@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Client.Game.Fate;
 using Lumina.Excel.Sheets;
 using Questionable.Model;
 using Questionable.Model.Questing;
@@ -14,7 +15,7 @@ internal sealed class JournalData
         var genres = dataManager.GetExcelSheet<JournalGenre>()
             .Where(x => x.RowId > 0 && x.Icon > 0)
             .Select(x => new Genre(x, questData.GetAllByJournalGenre(x.RowId)))
-            .ToList();
+        .ToList();
 
         var limsaStart = dataManager.GetExcelSheet<QuestRedo>().GetRow(1);
         var gridaniaStart = dataManager.GetExcelSheet<QuestRedo>().GetRow(2);
@@ -40,20 +41,19 @@ internal sealed class JournalData
             .RemoveAll(x =>
                 genreLimsa.Quests.Contains(x) || genreGridania.Quests.Contains(x) || genreUldah.Quests.Contains(x));
 
-        Genres = genres.AsReadOnly();
+        Genres = genres.ToList();
         Categories = dataManager.GetExcelSheet<JournalCategory>()
             .Where(x => x.RowId > 0)
             .Select(x => new Category(x, Genres.Where(y => y.CategoryId == x.RowId).ToList()))
-            .ToList()
-            .AsReadOnly();
+        .ToList();
         Sections = dataManager.GetExcelSheet<JournalSection>()
             .Select(x => new Section(x, Categories.Where(y => y.SectionId == x.RowId).ToList()))
             .ToList();
     }
 
-    public IReadOnlyList<Genre> Genres { get; }
-    public IReadOnlyList<Category> Categories { get; }
-    public List<Section> Sections { get; set; }
+    public List<Genre> Genres { get; }
+    public List<Category> Categories { get; }
+    public List<Section> Sections { get; }
 
     internal sealed class Genre
     {
@@ -77,7 +77,6 @@ internal sealed class JournalData
         public string Name { get; }
         public uint CategoryId { get; }
         public List<IQuestInfo> Quests { get; }
-        public int QuestCount => Quests.Count;
     }
 
     internal sealed class Category(JournalCategory journalCategory, IReadOnlyList<Genre> genres)
@@ -86,7 +85,6 @@ internal sealed class JournalData
         public string Name { get; } = journalCategory.Name.ToString();
         public uint SectionId { get; } = journalCategory.JournalSection.RowId;
         public IReadOnlyList<Genre> Genres { get; } = genres;
-        public int QuestCount => Genres.Sum(x => x.QuestCount);
     }
 
     internal sealed class Section(JournalSection journalSection, IReadOnlyList<Category> categories)
@@ -94,6 +92,5 @@ internal sealed class JournalData
         public uint Id { get; } = journalSection.RowId;
         public string Name { get; } = journalSection.Name.ToString();
         public IReadOnlyList<Category> Categories { get; } = categories;
-        public int QuestCount => Categories.Sum(x => x.QuestCount);
     }
 }

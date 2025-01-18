@@ -89,6 +89,15 @@
           "AethernetShard": "[Solution Nine] Nexus Arcade"
         },
         {
+          "Position": {
+            "X": -320.34818,
+            "Y": 9.519508,
+            "Z": -6.9244547
+          },
+          "TerritoryId": 1186,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 1048065,
           "Position": {
             "X": -320.34818,
@@ -97,7 +106,8 @@
           },
           "StopDistance": 0.25,
           "TerritoryId": 1186,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DelaySecondsAtStart": 3
         }
       ]
     },

@@ -55,8 +55,7 @@ internal sealed class UiUtils
 
     public bool ChecklistItem(string text, Vector4 color, FontAwesomeIcon icon, float extraPadding = 0)
     {
-        // ReSharper disable once UnusedVariable
-        using (var font = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
+        using (_pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
         {
             ImGui.TextColored(color, icon.ToIconString());
         }

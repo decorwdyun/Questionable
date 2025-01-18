@@ -1,10 +1,13 @@
-﻿using Dalamud.Interface.Utility.Raii;
+﻿using Dalamud.Interface.Components;
+using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin.Services;
 using ImGuiNET;
 using Questionable.Controller;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
+using System;
+using Dalamud.Interface.Colors;
 
 namespace Questionable.Windows.JournalComponents;
 
@@ -24,7 +27,10 @@ internal sealed class QuestJournalUtils
 
     public void ShowContextMenu(IQuestInfo questInfo, Quest? quest, string label)
     {
-        using var popup = ImRaii.ContextPopup($"##QuestPopup{questInfo.QuestId}", ImGuiPopupFlags.MouseButtonRight);
+        if (ImGui.IsItemClicked(ImGuiMouseButton.Right))
+            ImGui.OpenPopup($"##QuestPopup{questInfo.QuestId}");
+
+        using var popup = ImRaii.Popup($"##QuestPopup{questInfo.QuestId}");
         if (!popup)
             return;
 
@@ -40,5 +46,19 @@ internal sealed class QuestJournalUtils
             _commandManager.DispatchCommand("/questinfo", questInfo.QuestId.ToString() ?? string.Empty,
                 commandInfo!);
         }
+    }
+
+    internal static void ShowFilterContextMenu(QuestJournalComponent journalUi)
+    {
+        if (ImGuiComponents.IconButtonWithText(Dalamud.Interface.FontAwesomeIcon.Filter, "Filter"))
+            ImGui.OpenPopup("##QuestFilters");
+
+        using var popup = ImRaii.Popup("##QuestFilters");
+        if (!popup)
+            return;
+
+        if (ImGui.Checkbox("Show only Available Quests", ref journalUi.Filter.AvailableOnly) ||
+            ImGui.Checkbox("Hide Quests Without Path", ref journalUi.Filter.HideNoPaths))
+            journalUi.UpdateFilter();
     }
 }

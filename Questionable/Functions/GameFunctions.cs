@@ -206,10 +206,12 @@ internal sealed unsafe class GameFunctions
 
     public bool UseAction(EAction action)
     {
-        if (ActionManager.Instance()->GetActionStatus(ActionType.Action, (uint)action) == 0)
+        uint actionId = ActionManager.Instance()->GetAdjustedActionId((uint)action);
+        if (ActionManager.Instance()->GetActionStatus(ActionType.Action, actionId) == 0)
         {
-            bool result = ActionManager.Instance()->UseAction(ActionType.Action, (uint)action);
-            _logger.LogInformation("UseAction {Action} result: {Result}", action, result);
+            bool result = ActionManager.Instance()->UseAction(ActionType.Action, actionId);
+            _logger.LogInformation("UseAction {Action} (adjusted: {AdjustedActionId}) result: {Result}", action,
+                actionId, result);
 
             return result;
         }
@@ -219,31 +221,34 @@ internal sealed unsafe class GameFunctions
 
     public bool UseAction(IGameObject gameObject, EAction action, bool checkCanUse = true)
     {
-        var actionRow = _dataManager.GetExcelSheet<Action>().GetRow((uint)action);
-        if (checkCanUse && !ActionManager.CanUseActionOnTarget((uint)action, (GameObject*)gameObject.Address))
+        uint actionId = ActionManager.Instance()->GetAdjustedActionId((uint)action);
+        var actionRow = _dataManager.GetExcelSheet<Action>().GetRow(actionId);
+        if (checkCanUse && !ActionManager.CanUseActionOnTarget(actionId, (GameObject*)gameObject.Address))
         {
-            _logger.LogWarning("Can not use action {Action} on target {Target}", action, gameObject);
+            _logger.LogWarning("Can not use action {Action} (adjusted: {AdjustedActionId}) on target {Target}", action,
+                actionId, gameObject);
             return false;
         }
 
         _targetManager.Target = gameObject;
-        if (ActionManager.Instance()->GetActionStatus(ActionType.Action, (uint)action, gameObject.GameObjectId) == 0)
+        if (ActionManager.Instance()->GetActionStatus(ActionType.Action, actionId, gameObject.GameObjectId) == 0)
         {
             bool result;
             if (actionRow.TargetArea)
             {
                 Vector3 position = gameObject.Position;
-                result = ActionManager.Instance()->UseActionLocation(ActionType.Action, (uint)action,
+                result = ActionManager.Instance()->UseActionLocation(ActionType.Action, actionId,
                     location: &position);
-                _logger.LogInformation("UseAction {Action} on target area {Target} result: {Result}", action,
-                    gameObject,
-                    result);
+                _logger.LogInformation(
+                    "UseAction {Action} (adjusted: {AdjustedActionId}) on target area {Target} result: {Result}",
+                    action, actionId, gameObject, result);
             }
             else
             {
-                result = ActionManager.Instance()->UseAction(ActionType.Action, (uint)action, gameObject.GameObjectId);
-                _logger.LogInformation("UseAction {Action} on target {Target} result: {Result}", action, gameObject,
-                    result);
+                result = ActionManager.Instance()->UseAction(ActionType.Action, actionId, gameObject.GameObjectId);
+                _logger.LogInformation(
+                    "UseAction {Action} (adjusted: {AdjustedActionId}) on target {Target} result: {Result}", action,
+                    actionId, gameObject, result);
             }
 
             return result;
@@ -307,7 +312,7 @@ internal sealed unsafe class GameFunctions
         StatusManager* statusManager = battleChara->GetStatusManager();
         return statusManager->HasStatus((uint)statusId);
     }
-    
+
     public static bool RemoveStatus(EStatus statusId)
     {
         return StatusManager.ExecuteStatusOff((uint)statusId);
@@ -452,7 +457,8 @@ internal sealed unsafe class GameFunctions
 
     public bool IsLoadingScreenVisible()
     {
-        if (_gameGui.TryGetAddonByName("FadeMiddle", out AtkUnitBase* fade) && LAddon.IsAddonReady(fade) && fade->IsVisible)
+        if (_gameGui.TryGetAddonByName("FadeMiddle", out AtkUnitBase* fade) && LAddon.IsAddonReady(fade) &&
+            fade->IsVisible)
             return true;
 
         if (_gameGui.TryGetAddonByName("FadeBack", out fade) && LAddon.IsAddonReady(fade) && fade->IsVisible)

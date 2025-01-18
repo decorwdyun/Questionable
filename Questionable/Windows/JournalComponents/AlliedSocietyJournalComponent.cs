@@ -17,7 +17,9 @@ internal sealed class AlliedSocietyJournalComponent
     private static readonly string[] RankNames =
         ["Neutral", "Recognized", "Friendly", "Trusted", "Respected", "Honored", "Sworn", "Allied"];
 
+#if DEBUG
     private readonly QuestFunctions _questFunctions;
+#endif
     private readonly AlliedSocietyQuestFunctions _alliedSocietyQuestFunctions;
     private readonly QuestData _questData;
     private readonly QuestRegistry _questRegistry;
@@ -26,7 +28,9 @@ internal sealed class AlliedSocietyJournalComponent
     private readonly UiUtils _uiUtils;
 
     public AlliedSocietyJournalComponent(
+#if DEBUG
         QuestFunctions questFunctions,
+#endif
         AlliedSocietyQuestFunctions alliedSocietyQuestFunctions,
         QuestData questData,
         QuestRegistry questRegistry,
@@ -34,7 +38,9 @@ internal sealed class AlliedSocietyJournalComponent
         QuestTooltipComponent questTooltipComponent,
         UiUtils uiUtils)
     {
+#if DEBUG
         _questFunctions = questFunctions;
+#endif
         _alliedSocietyQuestFunctions = alliedSocietyQuestFunctions;
         _questData = questData;
         _questRegistry = questRegistry;
@@ -60,7 +66,7 @@ internal sealed class AlliedSocietyJournalComponent
             string label = $"{alliedSociety}###AlliedSociety{(int)alliedSociety}";
 #if DEBUG
             bool isOpen;
-            if (quests.Any(x => !_questRegistry.IsKnownQuest(x.QuestId)))
+            if (quests.Any(x => !_questRegistry.TryGetQuest(x.QuestId, out var quest) || quest.Root.Disabled))
             {
                 using (ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudOrange))
                     isOpen = ImGui.CollapsingHeader(label);
@@ -103,7 +109,7 @@ internal sealed class AlliedSocietyJournalComponent
     private void DrawQuest(QuestInfo questInfo)
     {
         var (color, icon, tooltipText) = _uiUtils.GetQuestStyle(questInfo.QuestId);
-        if (!_questRegistry.TryGetQuest(questInfo.QuestId, out var quest))
+        if (!_questRegistry.TryGetQuest(questInfo.QuestId, out var quest) || quest.Root.Disabled)
             color = ImGuiColors.DalamudGrey;
 
         if (_uiUtils.ChecklistItem($"{questInfo.Name} ({tooltipText})", color, icon))

@@ -18,6 +18,7 @@ public sealed class EmoteConverter() : EnumConverter<EEmote>(Values)
         { EEmote.Wave, "wave" },
         { EEmote.Joy, "joy" },
         { EEmote.Kneel, "kneel" },
+        { EEmote.Laugh, "laugh" },
         { EEmote.Lookout, "lookout" },
         { EEmote.Me, "me" },
         { EEmote.Deny, "deny" },
@@ -42,6 +43,7 @@ public sealed class EmoteConverter() : EnumConverter<EEmote>(Values)
         { EEmote.Flex, "flex" },
         { EEmote.Respect, "respect" },
         { EEmote.Box, "box" },
-        { EEmote.Uchiwasshoi, "uchiwasshoi" }
+        { EEmote.Greeting, "greeting" },
+        { EEmote.Uchiwasshoi, "uchiwasshoi" },
     };
 }

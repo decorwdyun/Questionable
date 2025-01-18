@@ -29,7 +29,7 @@ internal static class UseItem
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
-            if (step.InteractionType is EInteractionType.SinglePlayerDuty)
+            if (step.InteractionType is EInteractionType.SinglePlayerDuty or EInteractionType.CompleteQuest)
             {
                 if (step.ItemId == null)
                     return [];
@@ -211,9 +211,9 @@ internal static class UseItem
         ElementId? QuestId,
         uint DataId,
         uint ItemId,
-        IList<QuestWorkValue?> CompletionQuestVariablesFlags) : IUseItemBase
+        IList<QuestWorkValue?> CompletionQuestVariablesFlags,
+        bool StartingCombat = false) : IUseItemBase
     {
-        public bool StartingCombat => false;
         public override string ToString() => $"UseItem({ItemId} on ground at {DataId})";
     }
 

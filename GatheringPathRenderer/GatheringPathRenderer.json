@@ -1,6 +1,7 @@
 {
   "Name": "GatheringPathRenderer",
   "Author": "Liza Carvelli",
-  "Punchline": "dev only plugin: Renders gathering location.",
-  "Description": "dev only plugin: Renders gathering location (without ECommons polluting the entire normal project)."
+  "Punchline": "[Questionable dev plugin]: Renders gathering location.",
+  "Description": "[Questionable dev plugin]: Renders gathering location using Splatoon.",
+  "RepoUrl": "https://git.carvel.li/liza/Questionable/src/branch/master/GatheringPathRenderer"
 }

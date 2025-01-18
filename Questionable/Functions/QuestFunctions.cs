@@ -14,7 +14,6 @@ using LLib.GameData;
 using LLib.GameUI;
 using Lumina.Excel.Sheets;
 using Questionable.Controller;
-using Questionable.Controller.Steps.Interactions;
 using Questionable.Data;
 using Questionable.Model;
 using Questionable.Model.Questing;
@@ -451,9 +450,17 @@ internal sealed unsafe class QuestFunctions
             if (IsQuestAccepted(questId))
                 return false;
 
-            if (quest.Info.AlliedSociety != EAlliedSociety.None)
+            if (questId is QuestId qId && IsDailyAlliedSocietyQuest(qId))
             {
                 if (QuestManager.Instance()->IsDailyQuestCompleted(questId.Value))
+                    return false;
+
+                if (!IsDailyAlliedSocietyQuestAndAvailableToday(qId))
+                    return false;
+            }
+            else
+            {
+                if (IsQuestComplete(questId))
                     return false;
             }
         }
@@ -487,6 +494,8 @@ internal sealed unsafe class QuestFunctions
             return IsQuestAccepted(leveId);
         else if (elementId is SatisfactionSupplyNpcId)
             return false;
+        else if (elementId is AlliedSocietyDailyId)
+            return false;
         else
             throw new ArgumentOutOfRangeException(nameof(elementId));
     }
@@ -517,6 +526,8 @@ internal sealed unsafe class QuestFunctions
             return IsQuestComplete(leveId);
         else if (elementId is SatisfactionSupplyNpcId)
             return false;
+        else if (elementId is AlliedSocietyDailyId)
+            return false;
         else
             throw new ArgumentOutOfRangeException(nameof(elementId));
     }
@@ -540,6 +551,8 @@ internal sealed unsafe class QuestFunctions
             return IsQuestLocked(leveId);
         else if (elementId is SatisfactionSupplyNpcId satisfactionSupplyNpcId)
             return IsQuestLocked(satisfactionSupplyNpcId);
+        else if (elementId is AlliedSocietyDailyId alliedSocietyDailyId)
+            return IsQuestLocked(alliedSocietyDailyId);
         else
             throw new ArgumentOutOfRangeException(nameof(elementId));
     }
@@ -555,6 +568,18 @@ internal sealed unsafe class QuestFunctions
 
         if (questInfo.AlliedSociety != EAlliedSociety.None && questInfo.IsRepeatable)
             return !IsDailyAlliedSocietyQuestAndAvailableToday(questId);
+
+        if (questInfo.IsMoogleDeliveryQuest)
+        {
+            byte currentDeliveryLevel = PlayerState.Instance()->DeliveryLevel;
+            if (extraCompletedQuest != null &&
+                _questData.TryGetQuestInfo(extraCompletedQuest, out IQuestInfo? extraQuestInfo) &&
+                extraQuestInfo is QuestInfo { IsMoogleDeliveryQuest: true })
+                currentDeliveryLevel++;
+
+            if (questInfo.MoogleDeliveryLevel > currentDeliveryLevel)
+                return true;
+        }
 
         return !HasCompletedPreviousQuests(questInfo, extraCompletedQuest) || !HasCompletedPreviousInstances(questInfo);
     }
@@ -577,6 +602,13 @@ internal sealed unsafe class QuestFunctions
     {
         SatisfactionSupplyInfo questInfo = (SatisfactionSupplyInfo)_questData.GetQuestInfo(satisfactionSupplyNpcId);
         return !HasCompletedPreviousQuests(questInfo, null);
+    }
+
+    private bool IsQuestLocked(AlliedSocietyDailyId alliedSocietyDailyId)
+    {
+        PlayerState* playerState = PlayerState.Instance();
+        byte currentRank = playerState->GetBeastTribeRank(alliedSocietyDailyId.AlliedSociety);
+        return currentRank == 0 || currentRank < alliedSocietyDailyId.Rank;
     }
 
     public bool IsDailyAlliedSocietyQuest(QuestId questId)
@@ -658,6 +690,9 @@ internal sealed unsafe class QuestFunctions
                 return true;
         }
 
+        if (IsQuestRemoved(questId))
+            return true;
+
         return false;
     }
 
@@ -668,6 +703,20 @@ internal sealed unsafe class QuestFunctions
             return true;
 
         return false;
+    }
+
+    public bool IsQuestRemoved(ElementId elementId)
+    {
+        if (elementId is QuestId questId)
+            return IsQuestRemoved(questId);
+        else
+            return false;
+    }
+
+    [SuppressMessage("Performance", "CA1822")]
+    private bool IsQuestRemoved(QuestId questId)
+    {
+        return questId.Value is 487 or 1428 or 1429;
     }
 
     private bool HasCompletedPreviousQuests(IQuestInfo questInfo, ElementId? extraCompletedQuest)

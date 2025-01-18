@@ -80,7 +80,7 @@
             "null"
           ],
           "description": "Set if pathfinding should stop closer or further away from the default stop distance",
-          "exclusiveMinimum": 0
+          "minimum": 0.25
         },
         "IgnoreDistanceToObject": {
           "type": "boolean",
@@ -617,6 +617,10 @@
                       "description": "The enemy data id which is supposed to be killed",
                       "type": "integer"
                     },
+                    "NameId": {
+                      "description": "Name id of the enemy which is supposed to be killed, helpful if multiple nearby enemies share the same DataId",
+                      "type": "integer"
+                    },
                     "MinimumKillCount": {
                       "description": "Overworld mobs: If this number of mobs has been killed, will wait a bit before attempting to pull another mob to see if the quest progresses",
                       "type": "integer"
@@ -854,7 +858,9 @@
                   "examineself",
                   "joy",
                   "mogdance",
-                  "salute"
+                  "salute",
+                  "laugh",
+                  "greeting"
                 ]
               }
             }
@@ -958,6 +964,7 @@
                   "Buffet (Griffin)",
                   "Trample",
                   "Fumigate",
+                  "Roar",
                   "Seed",
                   "Inhale",
                   "Siphon Snout",
@@ -974,7 +981,10 @@
                   "Hide",
                   "Slug Shot",
                   "Bosom Brook",
-                  "Souleater"
+                  "Souleater",
+                  "Fire III",
+                  "Adloquium",
+                  "Water Cannon"
                 ]
               }
             },
@@ -1207,6 +1217,9 @@
                 "type": "integer",
                 "exclusiveMinimum": 0,
                 "exclusiveMaximum": 3000
+              },
+              "AutoDutyEnabled": {
+                "type": "boolean"
               },
               "DataId": {
                 "type": "null"

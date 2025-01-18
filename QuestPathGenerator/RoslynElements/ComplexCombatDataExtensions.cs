@@ -21,6 +21,9 @@ internal static class ComplexCombatDataExtensions
                             Assignment(nameof(ComplexCombatData.DataId), complexCombatData.DataId,
                                     emptyData.DataId)
                                 .AsSyntaxNodeOrToken(),
+                            Assignment(nameof(ComplexCombatData.NameId), complexCombatData.NameId,
+                                    emptyData.NameId)
+                                .AsSyntaxNodeOrToken(),
                             Assignment(nameof(ComplexCombatData.MinimumKillCount),
                                     complexCombatData.MinimumKillCount, emptyData.MinimumKillCount)
                                 .AsSyntaxNodeOrToken(),

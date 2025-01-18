@@ -57,7 +57,8 @@
           "TerritoryId": 958,
           "InteractionType": "Duty",
           "Comment": "Lapis Manalis",
-          "ContentFinderConditionId": 896
+          "ContentFinderConditionId": 896,
+          "AutoDutyEnabled": true
         }
       ]
     },

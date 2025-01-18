@@ -22,7 +22,8 @@ internal static class Combat
 
             ArgumentNullException.ThrowIfNull(step.EnemySpawnType);
 
-            if (gameFunctions.GetMountId() != Mount128Module.MountId)
+            if (gameFunctions.GetMountId() != Mount128Module.MountId &&
+                gameFunctions.GetMountId() != Mount147Module.MountId)
                 yield return new Mount.UnmountTask();
 
             if (step.CombatDelaySecondsAtStart != null)
@@ -44,8 +45,12 @@ internal static class Combat
                     ArgumentNullException.ThrowIfNull(step.DataId);
                     ArgumentNullException.ThrowIfNull(step.ItemId);
 
-                    yield return new UseItem.UseOnObject(quest.Id, step.DataId.Value, step.ItemId.Value,
-                        step.CompletionQuestVariablesFlags, true);
+                    if (step.GroundTarget == true)
+                        yield return new UseItem.UseOnGround(quest.Id, step.DataId.Value, step.ItemId.Value,
+                            step.CompletionQuestVariablesFlags, true);
+                    else
+                        yield return new UseItem.UseOnObject(quest.Id, step.DataId.Value, step.ItemId.Value,
+                            step.CompletionQuestVariablesFlags, true);
                     yield return new WaitAtEnd.WaitDelay(TimeSpan.FromSeconds(1));
                     yield return CreateTask(quest, sequence, step);
                     break;
@@ -97,17 +102,30 @@ internal static class Combat
             ArgumentNullException.ThrowIfNull(step.EnemySpawnType);
 
             bool isLastStep = sequence.Steps.Last() == step;
-            return CreateTask(quest.Id, isLastStep, step.EnemySpawnType.Value, step.KillEnemyDataIds,
-                step.CompletionQuestVariablesFlags, step.ComplexCombatData, step.CombatItemUse);
+            return CreateTask(quest.Id,
+                sequence.Sequence,
+                isLastStep,
+                step.EnemySpawnType.Value,
+                step.KillEnemyDataIds,
+                step.CompletionQuestVariablesFlags,
+                step.ComplexCombatData,
+                step.CombatItemUse);
         }
 
-        internal static Task CreateTask(ElementId? elementId, bool isLastStep, EEnemySpawnType enemySpawnType,
-            IList<uint> killEnemyDataIds, IList<QuestWorkValue?> completionQuestVariablesFlags,
-            IList<ComplexCombatData> complexCombatData, CombatItemUse? combatItemUse)
+        internal static Task CreateTask(ElementId? elementId,
+            int sequence,
+            bool isLastStep,
+            EEnemySpawnType enemySpawnType,
+            IList<uint> killEnemyDataIds,
+            IList<QuestWorkValue?> completionQuestVariablesFlags,
+            IList<ComplexCombatData> complexCombatData,
+            CombatItemUse? combatItemUse)
         {
             return new Task(new CombatController.CombatData
             {
                 ElementId = elementId,
+                Sequence = sequence,
+                CompletionQuestVariablesFlags = completionQuestVariablesFlags,
                 SpawnType = enemySpawnType,
                 KillEnemyDataIds = killEnemyDataIds.ToList(),
                 ComplexCombatDatas = complexCombatData.ToList(),

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using Dalamud.Interface;
+﻿using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin;
@@ -12,9 +8,12 @@ using Questionable.Controller;
 using Questionable.Data;
 using Questionable.Functions;
 using Questionable.Model;
-using Questionable.Model.Questing;
 using Questionable.Validation;
 using Questionable.Windows.QuestComponents;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 
 namespace Questionable.Windows.JournalComponents;
 
@@ -34,7 +33,6 @@ internal sealed class QuestJournalComponent
     private readonly QuestValidator _questValidator;
 
     private List<FilteredSection> _filteredSections = [];
-    private string _searchText = string.Empty;
 
     public QuestJournalComponent(JournalData journalData, QuestRegistry questRegistry, QuestFunctions questFunctions,
         UiUtils uiUtils, QuestTooltipComponent questTooltipComponent, IDalamudPluginInterface pluginInterface,
@@ -49,6 +47,8 @@ internal sealed class QuestJournalComponent
         _questJournalUtils = questJournalUtils;
         _questValidator = questValidator;
     }
+
+    internal FilterConfiguration Filter { get; } = new();
 
     public void DrawQuests()
     {
@@ -69,8 +69,11 @@ internal sealed class QuestJournalComponent
             ImGui.Spacing();
         }
 
+        QuestJournalUtils.ShowFilterContextMenu(this);
+
+        ImGui.SameLine();
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
-        if (ImGui.InputTextWithHint(string.Empty, "Search quests and categories", ref _searchText, 256))
+        if (ImGui.InputTextWithHint(string.Empty, "Search quests and categories", ref Filter.SearchText, 256))
             UpdateFilter();
 
         if (_filteredSections.Count > 0)
@@ -88,15 +91,15 @@ internal sealed class QuestJournalComponent
                 DrawSection(section);
         }
         else
-            ImGui.Text("No quest or category matches your search text.");
+            ImGui.Text("No quest or category matches your search.");
     }
 
     private void DrawSection(FilteredSection filter)
     {
-        if (filter.Section.QuestCount == 0)
+        (int available, int total, int obtainable, int completed) =
+            _sectionCounts.GetValueOrDefault(filter.Section, new());
+        if (total == 0)
             return;
-
-        (int available, int obtainable, int completed) = _sectionCounts.GetValueOrDefault(filter.Section, new());
 
         ImGui.TableNextRow();
         ImGui.TableNextColumn();
@@ -104,7 +107,7 @@ internal sealed class QuestJournalComponent
         bool open = ImGui.TreeNodeEx(filter.Section.Name, ImGuiTreeNodeFlags.SpanFullWidth);
 
         ImGui.TableNextColumn();
-        DrawCount(available, filter.Section.QuestCount);
+        DrawCount(available, total);
         ImGui.TableNextColumn();
         DrawCount(completed, obtainable);
 
@@ -119,10 +122,10 @@ internal sealed class QuestJournalComponent
 
     private void DrawCategory(FilteredCategory filter)
     {
-        if (filter.Category.QuestCount == 0)
+        (int available, int total, int obtainable, int completed) =
+            _categoryCounts.GetValueOrDefault(filter.Category, new());
+        if (total == 0)
             return;
-
-        (int available, int obtainable, int completed) = _categoryCounts.GetValueOrDefault(filter.Category, new());
 
         ImGui.TableNextRow();
         ImGui.TableNextColumn();
@@ -130,7 +133,7 @@ internal sealed class QuestJournalComponent
         bool open = ImGui.TreeNodeEx(filter.Category.Name, ImGuiTreeNodeFlags.SpanFullWidth);
 
         ImGui.TableNextColumn();
-        DrawCount(available, filter.Category.QuestCount);
+        DrawCount(available, total);
         ImGui.TableNextColumn();
         DrawCount(completed, obtainable);
 
@@ -145,10 +148,9 @@ internal sealed class QuestJournalComponent
 
     private void DrawGenre(FilteredGenre filter)
     {
-        if (filter.Genre.QuestCount == 0)
+        (int supported, int total, int obtainable, int completed) = _genreCounts.GetValueOrDefault(filter.Genre, new());
+        if (total == 0)
             return;
-
-        (int supported, int obtainable, int completed) = _genreCounts.GetValueOrDefault(filter.Genre, new());
 
         ImGui.TableNextRow();
         ImGui.TableNextColumn();
@@ -156,7 +158,7 @@ internal sealed class QuestJournalComponent
         bool open = ImGui.TreeNodeEx(filter.Genre.Name, ImGuiTreeNodeFlags.SpanFullWidth);
 
         ImGui.TableNextColumn();
-        DrawCount(supported, filter.Genre.QuestCount);
+        DrawCount(supported, total);
         ImGui.TableNextColumn();
         DrawCount(completed, obtainable);
 
@@ -194,7 +196,9 @@ internal sealed class QuestJournalComponent
 
         ImGui.SetCursorPosX(ImGui.GetCursorPosX() + spacing);
 
-        if (quest is { Root.Disabled: false })
+        if (_questFunctions.IsQuestRemoved(questInfo.QuestId))
+            _uiUtils.ChecklistItem(string.Empty, ImGuiColors.DalamudGrey, FontAwesomeIcon.Minus);
+        else if (quest is { Root.Disabled: false })
         {
             List<ValidationIssue> issues = _questValidator.GetIssues(quest.Id);
             if (issues.Any(x => x.Severity == EIssueSeverity.Error))
@@ -234,80 +238,63 @@ internal sealed class QuestJournalComponent
 
     public void UpdateFilter()
     {
-        Predicate<string> match;
-        if (string.IsNullOrWhiteSpace(_searchText))
-            match = _ => true;
-        else
-            match = x => x.Contains(_searchText, StringComparison.CurrentCultureIgnoreCase);
-
         _filteredSections = _journalData.Sections
-            .Select(section => FilterSection(section, match))
-            .Where(x => x != null)
-            .Cast<FilteredSection>()
+            .Select(x => FilterSection(x, Filter))
+            .Where(x => x.Categories.Count > 0)
             .ToList();
+
+        RefreshCounts();
     }
 
-    private static FilteredSection? FilterSection(JournalData.Section section, Predicate<string> match)
+    private FilteredSection FilterSection(JournalData.Section section, FilterConfiguration filter)
     {
-        if (match(section.Name))
+        IEnumerable<FilteredCategory> filteredCategories;
+        if (IsCategorySectionGenreMatch(filter, section.Name))
         {
-            return new FilteredSection(section,
-                section.Categories
-                    .Select(x => FilterCategory(x, _ => true))
-                    .Cast<FilteredCategory>()
-                    .ToList());
+            filteredCategories = section.Categories
+                .Select(x => FilterCategory(x, filter.WithoutName()));
         }
         else
         {
-            List<FilteredCategory> filteredCategories = section.Categories
-                .Select(category => FilterCategory(category, match))
-                .Where(x => x != null)
-                .Cast<FilteredCategory>()
-                .ToList();
-            if (filteredCategories.Count > 0)
-                return new FilteredSection(section, filteredCategories);
-
-            return null;
+            filteredCategories = section.Categories
+                .Select(category => FilterCategory(category, filter));
         }
+
+        return new FilteredSection(section, filteredCategories.Where(x => x.Genres.Count > 0).ToList());
     }
 
-    private static FilteredCategory? FilterCategory(JournalData.Category category, Predicate<string> match)
+    private FilteredCategory FilterCategory(JournalData.Category category, FilterConfiguration filter)
     {
-        if (match(category.Name))
+        IEnumerable<FilteredGenre> filteredGenres;
+        if (IsCategorySectionGenreMatch(filter, category.Name))
         {
-            return new FilteredCategory(category,
-                category.Genres
-                    .Select(x => FilterGenre(x, _ => true)!)
-                    .ToList());
+            filteredGenres = category.Genres
+                .Select(x => FilterGenre(x, filter.WithoutName()));
         }
         else
         {
-            List<FilteredGenre> filteredGenres = category.Genres
-                .Select(genre => FilterGenre(genre, match))
-                .Where(x => x != null)
-                .Cast<FilteredGenre>()
-                .ToList();
-            if (filteredGenres.Count > 0)
-                return new FilteredCategory(category, filteredGenres);
-
-            return null;
+            filteredGenres = category.Genres
+                .Select(genre => FilterGenre(genre, filter));
         }
+
+        return new FilteredCategory(category, filteredGenres.Where(x => x.Quests.Count > 0).ToList());
     }
 
-    private static FilteredGenre? FilterGenre(JournalData.Genre genre, Predicate<string> match)
+    private FilteredGenre FilterGenre(JournalData.Genre genre, FilterConfiguration filter)
     {
-        if (match(genre.Name))
-            return new FilteredGenre(genre, genre.Quests);
+        IEnumerable<IQuestInfo> filteredQuests;
+        if (IsCategorySectionGenreMatch(filter, genre.Name))
+        {
+            filteredQuests = genre.Quests
+                .Where(x => IsQuestMatch(filter.WithoutName(), x));
+        }
         else
         {
-            List<IQuestInfo> filteredQuests = genre.Quests
-                .Where(x => match(x.Name))
-                .ToList();
-            if (filteredQuests.Count > 0)
-                return new FilteredGenre(genre, filteredQuests);
+            filteredQuests = genre.Quests
+                .Where(x => IsQuestMatch(filter, x));
         }
 
-        return null;
+        return new FilteredGenre(genre, filteredQuests.ToList());
     }
 
     internal void RefreshCounts()
@@ -319,10 +306,13 @@ internal sealed class QuestJournalComponent
         foreach (var genre in _journalData.Genres)
         {
             int available = genre.Quests.Count(x =>
-                _questRegistry.TryGetQuest(x.QuestId, out var quest) && !quest.Root.Disabled);
+                _questRegistry.TryGetQuest(x.QuestId, out var quest) &&
+                !quest.Root.Disabled &&
+                !_questFunctions.IsQuestRemoved(x.QuestId));
+            int total = genre.Quests.Count(x => !_questFunctions.IsQuestRemoved(x.QuestId));
             int obtainable = genre.Quests.Count(x => !_questFunctions.IsQuestUnobtainable(x.QuestId));
             int completed = genre.Quests.Count(x => _questFunctions.IsQuestComplete(x.QuestId));
-            _genreCounts[genre] = new(available, obtainable, completed);
+            _genreCounts[genre] = new(available, total, obtainable, completed);
         }
 
         foreach (var category in _journalData.Categories)
@@ -332,9 +322,10 @@ internal sealed class QuestJournalComponent
                 .Select(x => x.Value)
                 .ToList();
             int available = counts.Sum(x => x.Available);
+            int total = counts.Sum(x => x.Total);
             int obtainable = counts.Sum(x => x.Obtainable);
             int completed = counts.Sum(x => x.Completed);
-            _categoryCounts[category] = new(available, obtainable, completed);
+            _categoryCounts[category] = new(available, total, obtainable, completed);
         }
 
         foreach (var section in _journalData.Sections)
@@ -344,9 +335,10 @@ internal sealed class QuestJournalComponent
                 .Select(x => x.Value)
                 .ToList();
             int available = counts.Sum(x => x.Available);
+            int total = counts.Sum(x => x.Total);
             int obtainable = counts.Sum(x => x.Obtainable);
             int completed = counts.Sum(x => x.Completed);
-            _sectionCounts[section] = new(available, obtainable, completed);
+            _sectionCounts[section] = new(available, total, obtainable, completed);
         }
     }
 
@@ -362,11 +354,54 @@ internal sealed class QuestJournalComponent
             _sectionCounts[sectionCount.Key] = sectionCount.Value with { Completed = 0 };
     }
 
+    private static bool IsCategorySectionGenreMatch(FilterConfiguration filter, string name)
+    {
+        return string.IsNullOrEmpty(filter.SearchText) ||
+               name.Contains(filter.SearchText, StringComparison.CurrentCultureIgnoreCase);
+    }
+
+    private bool IsQuestMatch(FilterConfiguration filter, IQuestInfo questInfo)
+    {
+        if (!string.IsNullOrEmpty(filter.SearchText) &&
+            !questInfo.Name.Contains(filter.SearchText, StringComparison.CurrentCultureIgnoreCase))
+            return false;
+
+        if (filter.AvailableOnly && !_questFunctions.IsReadyToAcceptQuest(questInfo.QuestId))
+            return false;
+
+        if (filter.HideNoPaths &&
+            (!_questRegistry.TryGetQuest(questInfo.QuestId, out var quest) || quest.Root.Disabled))
+            return false;
+
+        return true;
+    }
+
     private sealed record FilteredSection(JournalData.Section Section, List<FilteredCategory> Categories);
 
     private sealed record FilteredCategory(JournalData.Category Category, List<FilteredGenre> Genres);
 
     private sealed record FilteredGenre(JournalData.Genre Genre, List<IQuestInfo> Quests);
 
-    private sealed record JournalCounts(int Available = 0, int Obtainable = 0, int Completed = 0);
+    private sealed record JournalCounts(int Available, int Total, int Obtainable, int Completed)
+    {
+        public JournalCounts()
+            : this(0, 0, 0, 0)
+        {
+        }
+    }
+
+    internal sealed class FilterConfiguration
+    {
+        public string SearchText = string.Empty;
+        public bool AvailableOnly;
+        public bool HideNoPaths;
+
+        public bool AdvancedFiltersActive => AvailableOnly || HideNoPaths;
+
+        public FilterConfiguration WithoutName() => new()
+        {
+            AvailableOnly = AvailableOnly,
+            HideNoPaths = HideNoPaths
+        };
+    }
 }

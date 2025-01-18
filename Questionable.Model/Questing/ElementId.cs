@@ -56,6 +56,19 @@ public abstract class ElementId : IComparable<ElementId>, IEquatable<ElementId>
             return new LeveId(ushort.Parse(value.Substring(1), CultureInfo.InvariantCulture));
         else if (value.StartsWith("S"))
             return new SatisfactionSupplyNpcId(ushort.Parse(value.Substring(1), CultureInfo.InvariantCulture));
+        else if (value.StartsWith("A"))
+        {
+            value = value.Substring(1);
+            string[] parts = value.Split('x');
+            if (parts.Length == 2)
+            {
+                return new AlliedSocietyDailyId(
+                    byte.Parse(parts[0], CultureInfo.InvariantCulture),
+                    byte.Parse(parts[1], CultureInfo.InvariantCulture));
+            }
+            else
+                return new AlliedSocietyDailyId(byte.Parse(value, CultureInfo.InvariantCulture));
+        }
         else
             return new QuestId(ushort.Parse(value, CultureInfo.InvariantCulture));
     }
@@ -70,7 +83,8 @@ public abstract class ElementId : IComparable<ElementId>, IEquatable<ElementId>
         catch (Exception)
         {
             elementId = null;
-            return false;
+            //return false;
+            throw;
         }
     }
 }
@@ -96,5 +110,16 @@ public sealed class SatisfactionSupplyNpcId(ushort value) : ElementId(value)
     public override string ToString()
     {
         return "S" + Value.ToString(CultureInfo.InvariantCulture);
+    }
+}
+
+public sealed class AlliedSocietyDailyId(byte alliedSociety, byte rank = 0) : ElementId((ushort)(alliedSociety * 10 + rank))
+{
+    public byte AlliedSociety { get; } = alliedSociety;
+    public byte Rank { get; } = rank;
+
+    public override string ToString()
+    {
+        return "A" + AlliedSociety + "x" + Rank;
     }
 }

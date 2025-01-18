@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using LLib.GameData;
+using Lumina.Excel.Sheets;
 using Questionable.Model.Questing;
 using ExcelQuest = Lumina.Excel.Sheets.Quest;
+using GrandCompany = FFXIVClientStructs.FFXIV.Client.UI.Agent.GrandCompany;
 
 namespace Questionable.Model;
 
 internal sealed class QuestInfo : IQuestInfo
 {
-    public QuestInfo(ExcelQuest quest, uint newGamePlusChapter, byte startingCity)
+    public QuestInfo(ExcelQuest quest, uint newGamePlusChapter, byte startingCity, JournalGenreOverrides journalGenreOverrides)
     {
         QuestId = new QuestId((ushort)(quest.RowId & 0xFFFF));
 
@@ -40,9 +41,9 @@ internal sealed class QuestInfo : IQuestInfo
         PreviousQuests =
             new List<PreviousQuestInfo>
                 {
-                    new(new QuestId((ushort)(quest.PreviousQuest[0].RowId & 0xFFFF)), quest.Unknown7),
-                    new(new QuestId((ushort)(quest.PreviousQuest[1].RowId & 0xFFFF))),
-                    new(new QuestId((ushort)(quest.PreviousQuest[2].RowId & 0xFFFF)))
+                    new(ReplaceOldQuestIds((ushort)(quest.PreviousQuest[0].RowId & 0xFFFF)), quest.Unknown7),
+                    new(ReplaceOldQuestIds((ushort)(quest.PreviousQuest[1].RowId & 0xFFFF))),
+                    new(ReplaceOldQuestIds((ushort)(quest.PreviousQuest[2].RowId & 0xFFFF)))
                 }
                 .Where(x => x.QuestId.Value != 0)
                 .ToImmutableList();
@@ -52,9 +53,14 @@ internal sealed class QuestInfo : IQuestInfo
             .Where(x => x.Value != 0)
             .ToImmutableList();
         QuestLockJoin = (EQuestJoin)quest.QuestLockJoin;
-        JournalGenre = quest.JournalGenre.ValueNullable?.RowId;
+        JournalGenre = QuestId.Value switch
+        {
+            >= 4196 and <= 4209 => journalGenreOverrides.ThavnairSideQuests,
+            4173 => journalGenreOverrides.RadzAtHanSideQuests,
+            _ => quest.JournalGenre.ValueNullable?.RowId,
+        };
         SortKey = quest.SortKey;
-        IsMainScenarioQuest = quest.JournalGenre.ValueNullable?.JournalCategory.ValueNullable?.JournalSection.ValueNullable?.RowId is 0 or 1;
+        IsMainScenarioQuest = quest.JournalGenre.ValueNullable?.Icon == 61412;
         CompletesInstantly = quest.TodoParams[0].ToDoCompleteSeq == 0;
         PreviousInstanceContent = quest.InstanceContent.Select(x => (ushort)x.RowId).Where(x => x != 0).ToList();
         PreviousInstanceContentJoin = (EQuestJoin)quest.InstanceContentJoin;
@@ -66,9 +72,27 @@ internal sealed class QuestInfo : IQuestInfo
         IsSeasonalEvent = quest.Festival.RowId != 0;
         NewGamePlusChapter = newGamePlusChapter;
         StartingCity = startingCity;
+        MoogleDeliveryLevel = (byte)quest.DeliveryQuest.RowId;
+        ItemRewards = quest.Reward.Where(x => x.RowId > 0 && x.Is<Item>())
+            .Select(x => x.GetValueOrDefault<Item>())
+            .Where(x => x != null)
+            .Cast<Item>()
+            .Where(x => x.IsUntradable)
+            .Select(x => ItemReward.CreateFromItem(x, QuestId))
+            .Where(x => x != null)
+            .Cast<ItemReward>()
+            .ToList();
         Expansion = (EExpansionVersion)quest.Expansion.RowId;
     }
 
+    private static QuestId ReplaceOldQuestIds(ushort questId)
+    {
+        return new QuestId(questId switch
+        {
+            524 => 4522,
+            _ => questId,
+        });
+    }
 
     public ElementId QuestId { get; }
     public string Name { get; }
@@ -93,6 +117,9 @@ internal sealed class QuestInfo : IQuestInfo
     public bool IsSeasonalEvent { get; }
     public uint NewGamePlusChapter { get; }
     public byte StartingCity { get; set; }
+    public byte MoogleDeliveryLevel { get; }
+    public bool IsMoogleDeliveryQuest => JournalGenre == 87;
+    public IReadOnlyList<ItemReward> ItemRewards { get; }
     public EExpansionVersion Expansion { get; }
 
     public void AddPreviousQuest(PreviousQuestInfo questId)

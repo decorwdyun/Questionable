@@ -86,7 +86,8 @@ internal sealed class ItemUseModule : ICombatModule
         }
 
         if (_combatData.KillEnemyDataIds.Contains(nextTarget.DataId) ||
-            _combatData.ComplexCombatDatas.Any(x => x.DataId == nextTarget.DataId))
+            _combatData.ComplexCombatDatas.Any(x => x.DataId == nextTarget.DataId &&
+                                                    (x.NameId == null || (nextTarget is ICharacter character && x.NameId == character.NameId))))
         {
             if (_isDoingRotation)
             {
@@ -150,8 +151,6 @@ internal sealed class ItemUseModule : ICombatModule
 
         return false;
     }
-
-    public void MoveToTarget(IGameObject nextTarget) => _delegate!.MoveToTarget(nextTarget);
 
     public bool CanAttack(IBattleNpc target) => _delegate!.CanAttack(target);
 }

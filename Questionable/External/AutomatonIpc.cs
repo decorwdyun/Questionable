@@ -15,7 +15,7 @@ internal sealed class AutomatonIpc
     {
         _logger = logger;
         _isTweakEnabled = pluginInterface.GetIpcSubscriber<string, bool>("Automaton.IsTweakEnabled");
-        logger.LogWarning("Automaton x {IsTweakEnabled}", IsAutoSnipeEnabled);
+        logger.LogInformation("Automaton auto-snipe enabled: {IsTweakEnabled}", IsAutoSnipeEnabled);
     }
 
     public bool IsAutoSnipeEnabled

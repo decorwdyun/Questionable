@@ -15,13 +15,10 @@ internal sealed class Mount128Module : ICombatModule
     public const ushort MountId = 128;
     private readonly EAction[] _actions = [EAction.MagitekThunder, EAction.MagitekPulse];
 
-    private readonly MovementController _movementController;
     private readonly GameFunctions _gameFunctions;
 
-
-    public Mount128Module(MovementController movementController, GameFunctions gameFunctions)
+    public Mount128Module(GameFunctions gameFunctions)
     {
-        _movementController = movementController;
         _gameFunctions = gameFunctions;
     }
 
@@ -33,18 +30,11 @@ internal sealed class Mount128Module : ICombatModule
 
     public void Update(IGameObject gameObject)
     {
-        if (_movementController.IsPathfinding || _movementController.IsPathRunning)
-            return;
-
         foreach (EAction action in _actions)
         {
             if (_gameFunctions.UseAction(gameObject, action, checkCanUse: false))
                 return;
         }
-    }
-
-    public void MoveToTarget(IGameObject gameObject)
-    {
     }
 
     public bool CanAttack(IBattleNpc target) => target.DataId is 7504 or 7505 or 14107;

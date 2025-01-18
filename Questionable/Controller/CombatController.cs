@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Numerics;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.ClientState.Objects.Enums;
@@ -10,11 +11,14 @@ using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
-using FFXIVClientStructs.FFXIV.Common.Math;
+using FFXIVClientStructs.FFXIV.Client.System.Framework;
+using FFXIVClientStructs.FFXIV.Common.Component.BGCollision;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.CombatModules;
+using Questionable.Controller.Steps;
 using Questionable.Controller.Utils;
 using Questionable.Functions;
+using Questionable.Model;
 using Questionable.Model.Questing;
 
 namespace Questionable.Controller;
@@ -36,6 +40,7 @@ internal sealed class CombatController : IDisposable
     private CurrentFight? _currentFight;
     private bool _wasInCombat;
     private ulong? _lastTargetId;
+    private List<byte>? _previousQuestVariables;
 
     public CombatController(
         IEnumerable<ICombatModule> combatModules,
@@ -75,8 +80,11 @@ internal sealed class CombatController : IDisposable
             {
                 Module = combatModule,
                 Data = combatData,
+                LastDistanceCheck = DateTime.Now,
             };
-            _wasInCombat = combatData.SpawnType is EEnemySpawnType.QuestInterruption or EEnemySpawnType.FinishCombatIfAny;
+            _wasInCombat =
+                combatData.SpawnType is EEnemySpawnType.QuestInterruption or EEnemySpawnType.FinishCombatIfAny;
+            UpdateLastTargetAndQuestVariables(null);
             return true;
         }
         else
@@ -112,7 +120,31 @@ internal sealed class CombatController : IDisposable
                     {
                         // wait until the game cleans up the target
                         if (lastTarget.IsDead)
-                            return EStatus.InCombat;
+                        {
+                            ElementId? elementId = _currentFight.Data.ElementId;
+                            QuestProgressInfo? questProgressInfo = elementId != null
+                                ? _questFunctions.GetQuestProgressInfo(elementId)
+                                : null;
+
+                            if (questProgressInfo != null &&
+                                questProgressInfo.Sequence == _currentFight.Data.Sequence &&
+                                QuestWorkUtils.HasCompletionFlags(_currentFight.Data.CompletionQuestVariablesFlags) &&
+                                QuestWorkUtils.MatchesQuestWork(_currentFight.Data.CompletionQuestVariablesFlags,
+                                    questProgressInfo))
+                            {
+                                // would be the final enemy of the bunch
+                                return EStatus.InCombat;
+                            }
+                            else if (questProgressInfo != null &&
+                                     questProgressInfo.Sequence == _currentFight.Data.Sequence &&
+                                     _previousQuestVariables != null &&
+                                     !questProgressInfo.Variables.SequenceEqual(_previousQuestVariables))
+                            {
+                                UpdateLastTargetAndQuestVariables(null);
+                            }
+                            else
+                                return EStatus.InCombat;
+                        }
                     }
                     else
                         _lastTargetId = null;
@@ -129,7 +161,18 @@ internal sealed class CombatController : IDisposable
 
             if (nextTarget != null && nextTarget.Equals(target))
             {
-                _currentFight.Module.Update(target);
+                if (!IsMovingOrShouldMove(target))
+                {
+                    try
+                    {
+                        _currentFight.Module.Update(target);
+                    }
+                    catch (TaskException e)
+                    {
+                        _logger.LogWarning(e, "Combat was interrupted, stopping: {Exception}", e.Message);
+                        SetTarget(null);
+                    }
+                }
             }
             else if (nextTarget != null)
             {
@@ -242,7 +285,8 @@ internal sealed class CombatController : IDisposable
                     if (_currentFight.Data.CompletedComplexDatas.Contains(i))
                         continue;
 
-                    if (complexCombatData[i].DataId == battleNpc.DataId)
+                    if (complexCombatData[i].DataId == battleNpc.DataId &&
+                        (complexCombatData[i].NameId == null || complexCombatData[i].NameId == battleNpc.NameId))
                         return 100;
                 }
             }
@@ -261,7 +305,9 @@ internal sealed class CombatController : IDisposable
                 if (gameObjectStruct->NamePlateIconId is 60093 or 60732)
                     return 0;
 
-                var enemyData = _currentFight.Data.ComplexCombatDatas.FirstOrDefault(x => x.DataId == battleNpc.DataId);
+                var enemyData = _currentFight.Data.ComplexCombatDatas
+                    .FirstOrDefault(x => x.DataId == battleNpc.DataId &&
+                                         (x.NameId == null || x.NameId == battleNpc.NameId));
                 if (enemyData is { IgnoreQuestMarker: true })
                 {
                     if (battleNpc.StatusFlags.HasFlag(StatusFlags.InCombat))
@@ -320,15 +366,105 @@ internal sealed class CombatController : IDisposable
         {
             _logger.LogInformation("Moving to target, distance: {Distance:N2}",
                 Vector3.Distance(_clientState.LocalPlayer!.Position, target.Position));
-            _currentFight!.Module.MoveToTarget(target);
+            MoveToTarget(target);
         }
         else
         {
             _logger.LogInformation("Setting target to {TargetName} ({TargetId:X8})", target.Name.ToString(),
                 target.GameObjectId);
             _targetManager.Target = target;
-            _currentFight!.Module.MoveToTarget(target);
+            MoveToTarget(target);
         }
+    }
+
+    private bool IsMovingOrShouldMove(IGameObject gameObject)
+    {
+        if (_movementController.IsPathfinding || _movementController.IsPathRunning)
+            return true;
+
+        if (DateTime.Now > _currentFight!.LastDistanceCheck.AddSeconds(10))
+        {
+            MoveToTarget(gameObject);
+            _currentFight!.LastDistanceCheck = DateTime.Now;
+            return true;
+        }
+
+        return false;
+    }
+
+    private void MoveToTarget(IGameObject gameObject)
+    {
+        var player = _clientState.LocalPlayer;
+        if (player == null)
+            return; // uh oh
+
+        float hitboxOffset = player.HitboxRadius + gameObject.HitboxRadius;
+        float actualDistance = Vector3.Distance(player.Position, gameObject.Position);
+        float maxDistance = player.ClassJob.ValueNullable?.Role is 3 or 4 ? 20f : 2.9f;
+        bool outOfRange = actualDistance - hitboxOffset >= maxDistance;
+        bool isInLineOfSight = IsInLineOfSight(gameObject);
+        if (outOfRange || !isInLineOfSight)
+        {
+            bool useNavmesh = actualDistance - hitboxOffset > 5f;
+            if (!outOfRange && !isInLineOfSight)
+            {
+                maxDistance = Math.Min(maxDistance, actualDistance) / 2;
+                useNavmesh = true;
+            }
+
+            if (!useNavmesh)
+            {
+                _logger.LogInformation("Moving to {TargetName} ({DataId}) to attack", gameObject.Name,
+                    gameObject.DataId);
+                _movementController.NavigateTo(EMovementType.Combat, null, [gameObject.Position], false, false,
+                    maxDistance + hitboxOffset - 0.25f, true);
+            }
+            else
+            {
+                _logger.LogInformation("Moving to {TargetName} ({DataId}) to attack (with navmesh)", gameObject.Name,
+                    gameObject.DataId);
+                _movementController.NavigateTo(EMovementType.Combat, null, gameObject.Position, false, false,
+                    maxDistance + hitboxOffset - 0.25f, true);
+            }
+        }
+    }
+
+    internal unsafe bool IsInLineOfSight(IGameObject target)
+    {
+        Vector3 sourcePos = _clientState.LocalPlayer!.Position;
+        sourcePos.Y += 2;
+
+        Vector3 targetPos = target.Position;
+        targetPos.Y += 2;
+
+        Vector3 direction = targetPos - sourcePos;
+        float distance = direction.Length();
+
+        direction = Vector3.Normalize(direction);
+
+        Vector3 originVect = new Vector3(sourcePos.X, sourcePos.Y, sourcePos.Z);
+        Vector3 directionVect = new Vector3(direction.X, direction.Y, direction.Z);
+
+        RaycastHit hit;
+        var flags = stackalloc int[] { 0x4000, 0, 0x4000, 0 };
+        var isLoSBlocked =
+            Framework.Instance()->BGCollisionModule->RaycastMaterialFilter(&hit, &originVect, &directionVect, distance,
+                1, flags);
+
+        return isLoSBlocked == false;
+    }
+
+    private void UpdateLastTargetAndQuestVariables(IGameObject? target)
+    {
+        _lastTargetId = target?.GameObjectId;
+        _previousQuestVariables = _currentFight!.Data.ElementId != null
+            ? _questFunctions.GetQuestProgressInfo(_currentFight.Data.ElementId)?.Variables
+            : null;
+        /*
+        _logger.LogTrace("UpdateTargetData: {TargetId}; {QuestVariables}",
+            target?.GameObjectId.ToString("X8", CultureInfo.InvariantCulture) ?? "null",
+            _previousQuestVariables != null ? string.Join(", ", _previousQuestVariables) : "null");
+        */
     }
 
     public void Stop(string label)
@@ -356,11 +492,14 @@ internal sealed class CombatController : IDisposable
     {
         public required ICombatModule Module { get; init; }
         public required CombatData Data { get; init; }
+        public required DateTime LastDistanceCheck { get; set; }
     }
 
     public sealed class CombatData
     {
         public required ElementId? ElementId { get; init; }
+        public required int Sequence { get; init; }
+        public required IList<QuestWorkValue?> CompletionQuestVariablesFlags { get; init; }
         public required EEnemySpawnType SpawnType { get; init; }
         public required List<uint> KillEnemyDataIds { get; init; }
         public required List<ComplexCombatData> ComplexCombatDatas { get; init; }

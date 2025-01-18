@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Dalamud.Plugin.Services;
@@ -39,6 +40,12 @@ internal sealed class QuestData
 
     public QuestData(IDataManager dataManager)
     {
+        JournalGenreOverrides journalGenreOverrides = new()
+        {
+            RadzAtHanSideQuests = dataManager.GetExcelSheet<Quest>().GetRow(69805).JournalGenre.RowId,
+            ThavnairSideQuests = dataManager.GetExcelSheet<Quest>().GetRow(70025).JournalGenre.RowId,
+        };
+
         Dictionary<uint, uint> questChapters =
             dataManager.GetExcelSheet<QuestChapter>()
                 .Where(x => x.RowId > 0 && x.Quest.RowId > 0)
@@ -58,8 +65,7 @@ internal sealed class QuestData
                 .Where(x => x.RowId > 0)
                 .Where(x => x.IssuerLocation.RowId > 0)
                 .Select(x => new QuestInfo(x, questChapters.GetValueOrDefault(x.RowId),
-                    startingCities.GetValueOrDefault(x.RowId)))
-                .Where(x => x.QuestId.Value != 1428),
+                    startingCities.GetValueOrDefault(x.RowId), journalGenreOverrides)),
             ..dataManager.GetExcelSheet<SatisfactionNpc>()
                 .Where(x => x is { RowId: > 0, Npc.RowId: > 0 })
                 .Select(x => new SatisfactionSupplyInfo(x)),
@@ -68,6 +74,29 @@ internal sealed class QuestData
                 .Where(x => x.LevelLevemete.RowId != 0)
                 .Select(x => new LeveInfo(x)),
         ];
+
+        quests.AddRange(
+            dataManager.GetExcelSheet<BeastTribe>()
+                .Where(x => x.RowId > 0 && !x.Name.IsEmpty)
+                .SelectMany(x =>
+                {
+                    if (x.RowId < 5)
+                    {
+                        return ((IEnumerable<byte>)
+                            [
+                                0,
+                                ..quests.Where(y => y.AlliedSociety == (EAlliedSociety)x.RowId && y.IsRepeatable)
+                                    .Cast<QuestInfo>()
+                                    .Select(y => (byte)y.AlliedSocietyRank).Distinct()
+                            ])
+                            .Select(rank => new AlliedSocietyDailyInfo(x, rank));
+                    }
+                    else
+                    {
+                        return [new AlliedSocietyDailyInfo(x, 0)];
+                    }
+                }));
+
         _quests = quests.ToDictionary(x => x.QuestId, x => x);
 
         // workaround because the game doesn't require completion of the CT questline through normal means
@@ -160,10 +189,18 @@ internal sealed class QuestData
         AddPreviousQuest(new QuestId(3833), new QuestId(spearfishing));
         */
 
+        // The Hero's Journey
+        AddPreviousQuest(new QuestId(3986), new QuestId(2115));
+        AddPreviousQuest(new QuestId(3986), new QuestId(2116));
+        AddPreviousQuest(new QuestId(3986), new QuestId(2281));
+        AddPreviousQuest(new QuestId(3986), new QuestId(2333));
+        AddPreviousQuest(new QuestId(3986), new QuestId(2395));
+        AddPreviousQuest(new QuestId(3986), new QuestId(3985));
+
         // initial city quests are side quests
         // unclear if 470 can be started as the required quest isn't available anymore
         ushort[] limsaSideQuests =
-            [107, 111, 112, 122, 663, 475, 472, 476, 470, 473, 474, 477, 486, 478, 479, 487, 59, 400, 401, 693, 405];
+            [107, 111, 112, 122, 663, 475, 472, 476, 470, 473, 474, 477, 486, 478, 479, 59, 400, 401, 693, 405];
         foreach (var questId in limsaSideQuests)
             ((QuestInfo)_quests[new QuestId(questId)]).StartingCity = 1;
 
@@ -173,7 +210,7 @@ internal sealed class QuestData
             ((QuestInfo)_quests[new QuestId(questId)]).StartingCity = 2;
 
         ushort[] uldahSideQuests =
-            [594, 389, 390, 321, 304, 322, 388, 308, 326, 1429, 58, 687, 341, 504, 531, 506, 530, 573, 342, 505];
+            [594, 389, 390, 321, 304, 322, 388, 308, 326, 58, 687, 341, 504, 531, 506, 530, 573, 342, 505];
         foreach (var questId in uldahSideQuests)
             ((QuestInfo)_quests[new QuestId(questId)]).StartingCity = 3;
 
@@ -188,7 +225,14 @@ internal sealed class QuestData
             quest.JournalGenre = 82;
             quest.SortKey = 0;
         }
+
+        RedeemableItems = quests.Where(x => x is QuestInfo)
+            .Cast<QuestInfo>()
+            .SelectMany(x => x.ItemRewards)
+            .ToImmutableHashSet();
     }
+
+    public ImmutableHashSet<ItemReward> RedeemableItems { get; }
 
     private void AddPreviousQuest(QuestId questToUpdate, QuestId requiredQuestId)
     {
@@ -280,7 +324,7 @@ internal sealed class QuestData
             // SB
             EClassJob.Samurai => [110, 111],
             EClassJob.RedMage => [131, 132],
-            EClassJob.BlueMage => [134, 135, 146],
+            EClassJob.BlueMage => [134, 135, 146, 170],
 
             // ShB
             EClassJob.Gunbreaker => [84],

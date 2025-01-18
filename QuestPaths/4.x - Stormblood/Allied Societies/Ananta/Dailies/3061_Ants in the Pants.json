@@ -1,7 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
-  "Disabled": true,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -22,6 +21,37 @@
     {
       "Sequence": 1,
       "Steps": [
+        {
+          "DataId": 1024777,
+          "Position": {
+            "X": -41.641907,
+            "Y": 55.97816,
+            "Z": 211.38318
+          },
+          "TerritoryId": 612,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "Position": {
+            "X": 482.93036,
+            "Y": 42.43753,
+            "Z": 350.85095
+          },
+          "StopDistance": 0.5,
+          "TerritoryId": 612,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "AutoOnEnterArea",
+          "KillEnemyDataIds": [
+            8593
+          ],
+          "Fly": true,
+          "Land": true
+        }
       ]
     },
     {
