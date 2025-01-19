@@ -183,7 +183,8 @@
             "null"
           ],
           "description": "The Item to use",
-          "exclusiveMinimum": 0
+          "exclusiveMinimum": 0,
+          "maximum": 2010000
         },
         "SkipConditions": {
           "type": "object",
@@ -648,13 +649,15 @@
                 "type": "object",
                 "properties": {
                   "ItemId": {
-                    "type": "integer"
+                    "type": "integer",
+                    "maximum": 2010000
                   },
                   "Condition": {
                     "type": "string",
                     "enum": [
                       "Incapacitated",
-                      "Health%"
+                      "Health%",
+                      "MissingStatus"
                     ]
                   },
                   "Value": {
