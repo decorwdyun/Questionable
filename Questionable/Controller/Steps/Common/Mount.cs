@@ -110,6 +110,8 @@ internal static class Mount
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
         }
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 
     internal enum MountResult
@@ -197,6 +199,8 @@ internal static class Mount
 
             return false;
         }
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 
     public enum EMountIf

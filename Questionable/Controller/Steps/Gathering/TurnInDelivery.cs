@@ -80,5 +80,8 @@ internal static class TurnInDelivery
             addon->FireCallback(2, pickGatheringItem);
             return ETaskResult.StillRunning;
         }
+
+        // not even sure if any turn-in npcs are NEAR mobs; but we also need to be on a gathering/crafting job
+        public override bool ShouldInterruptOnDamage() => false;
     }
 }

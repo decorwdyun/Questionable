@@ -205,6 +205,8 @@ internal static class UseItem
             else
                 return TimeSpan.FromSeconds(5);
         }
+
+        public override bool ShouldInterruptOnDamage() => true;
     }
 
     internal sealed record UseOnGround(

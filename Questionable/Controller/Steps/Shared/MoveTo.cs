@@ -286,6 +286,8 @@ internal static class MoveTo
             return base.WasInterrupted();
         }
 
+        public override bool ShouldInterruptOnDamage() => false;
+
         public bool OnErrorToast(SeString message)
         {
             if (GameFunctions.GameStringEquals(_cannotExecuteAtThisTime, message.TextValue))
@@ -302,6 +304,8 @@ internal static class MoveTo
         protected override bool Start() => true;
 
         public override ETaskResult Update() => ETaskResult.TaskComplete;
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 
     internal sealed record MoveTask(
@@ -361,6 +365,8 @@ internal static class MoveTo
 
             return ETaskResult.TaskComplete;
         }
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 
     internal sealed class LandTask : ITask
@@ -421,5 +427,7 @@ internal static class MoveTo
 
             return false;
         }
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 }

@@ -53,5 +53,7 @@ internal static class AethernetShard
             aetheryteFunctions.IsAetheryteUnlocked(Task.AetheryteLocation)
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
+
+        public override bool ShouldInterruptOnDamage() => true;
     }
 }

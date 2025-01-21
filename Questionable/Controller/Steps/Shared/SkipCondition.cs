@@ -315,5 +315,7 @@ internal static class SkipCondition
         }
 
         public override ETaskResult Update() => ETaskResult.SkipRemainingTasksForStep;
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 }

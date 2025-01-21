@@ -43,5 +43,7 @@ internal static class StatusOff
         {
             return gameFunctions.HasStatus(Task.Status) ? ETaskResult.StillRunning : ETaskResult.TaskComplete;
         }
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 }

@@ -65,5 +65,7 @@ internal static class AetherCurrent
             gameFunctions.IsAetherCurrentUnlocked(Task.AetherCurrentId)
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
+
+        public override bool ShouldInterruptOnDamage() => true;
     }
 }

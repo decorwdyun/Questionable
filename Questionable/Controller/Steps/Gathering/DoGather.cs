@@ -236,6 +236,8 @@ internal static class DoGather
             EAction action = PickAction(minerAction, botanistAction);
             return ActionManager.Instance()->GetActionStatus(ActionType.Action, (uint)action) == 0;
         }
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 
     [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local")]

@@ -31,5 +31,7 @@ internal static class StepDisabled
             logger.LogInformation("Skipping step, as it is disabled");
             return ETaskResult.SkipRemainingTasksForStep;
         }
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 }

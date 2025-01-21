@@ -71,6 +71,8 @@ internal static class Dive
             return base.Update();
         }
 
+        public override bool ShouldInterruptOnDamage() => false;
+
         protected override ETaskResult UpdateInternal()
         {
             if (condition[ConditionFlag.Diving])
