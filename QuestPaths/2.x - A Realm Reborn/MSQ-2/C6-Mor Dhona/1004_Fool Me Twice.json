@@ -72,7 +72,7 @@
             "Z": -609.4606
           },
           "TerritoryId": 156,
-          "InteractionType": "UseItem",
+          "InteractionType": "SinglePlayerDuty",
           "ItemId": 2000771
         }
       ]

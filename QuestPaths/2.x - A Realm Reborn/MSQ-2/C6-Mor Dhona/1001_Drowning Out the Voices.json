@@ -19,6 +19,7 @@
     },
     {
       "Sequence": 1,
+      "Comment": "'Invalid target' messages can just be bad positioning?",
       "Steps": [
         {
           "Position": {
@@ -52,7 +53,6 @@
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterItemUse",
           "ItemId": 2000766,
-          "GroundTarget": true,
           "KillEnemyDataIds": [
             46
           ],
@@ -85,6 +85,27 @@
             null,
             64
           ]
+        },
+        {
+          "Position": {
+            "X": -219.34567,
+            "Y": 4.551038,
+            "Z": -637.8296
+          },
+          "TerritoryId": 156,
+          "InteractionType": "WalkTo",
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                8
+              ]
+            }
+          }
         },
         {
           "DataId": 2002234,
@@ -161,7 +182,6 @@
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterItemUse",
           "ItemId": 2000766,
-          "GroundTarget": true,
           "KillEnemyDataIds": [
             46
           ],
