@@ -157,7 +157,7 @@ internal sealed class CombatController : IDisposable
         {
             int currentTargetPriority = GetKillPriority(target);
             var nextTarget = FindNextTarget();
-            int nextTargetPriority = GetKillPriority(target);
+            int nextTargetPriority = nextTarget != null ? GetKillPriority(nextTarget) : 0;
 
             if (nextTarget != null && nextTarget.Equals(target))
             {
@@ -176,7 +176,7 @@ internal sealed class CombatController : IDisposable
             }
             else if (nextTarget != null)
             {
-                if (nextTargetPriority > currentTargetPriority)
+                if (nextTargetPriority > currentTargetPriority || currentTargetPriority == 0)
                     SetTarget(nextTarget);
             }
             else
