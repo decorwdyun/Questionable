@@ -103,7 +103,8 @@
           },
           "TerritoryId": 155,
           "InteractionType": "WalkTo",
-          "$": "NW Skyfire Locks door (inside)"
+          "$": "NW Skyfire Locks door (inside)",
+          "Mount": true
         },
         {
           "Position": {

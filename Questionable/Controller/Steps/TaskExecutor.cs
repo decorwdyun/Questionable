@@ -13,6 +13,8 @@ internal interface ITaskExecutor
 
     bool Start(ITask task);
 
+    bool ShouldInterruptOnDamage();
+
     bool WasInterrupted();
 
     ETaskResult Update();
@@ -56,4 +58,6 @@ internal abstract class TaskExecutor<T> : ITaskExecutor
     }
 
     public abstract ETaskResult Update();
+
+    public abstract bool ShouldInterruptOnDamage();
 }

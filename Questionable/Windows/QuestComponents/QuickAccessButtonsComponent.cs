@@ -91,8 +91,10 @@ internal sealed class QuickAccessButtonsComponent
             Reload?.Invoke(this, EventArgs.Empty);
 
         ImGui.SameLine();
-        if (ImGuiComponents.IconButton(FontAwesomeIcon.ChartColumn))
+        if (ImGuiComponents.IconButton(FontAwesomeIcon.BookBookmark))
             _journalProgressWindow.IsOpen = true;
+        if (ImGui.IsItemHovered())
+            ImGui.SetTooltip("Journal Progress");
 
 
         if (_questRegistry.ValidationIssueCount > 0)

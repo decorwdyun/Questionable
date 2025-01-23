@@ -52,5 +52,8 @@ internal static class SwitchClassJob
         }
 
         protected override ETaskResult UpdateInternal() => ETaskResult.TaskComplete;
+
+        // can we even take damage while switching jobs? we should be out of combat...
+        public override bool ShouldInterruptOnDamage() => false;
     }
 }

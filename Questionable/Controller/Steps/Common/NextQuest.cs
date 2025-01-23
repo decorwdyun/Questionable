@@ -61,5 +61,7 @@ internal static class NextQuest
         }
 
         public override ETaskResult Update() => ETaskResult.TaskComplete;
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 }

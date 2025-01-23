@@ -221,6 +221,8 @@ internal static class AetheryteShortcut
         }
 
         public override bool WasInterrupted() => condition[ConditionFlag.InCombat] || base.WasInterrupted();
+
+        public override bool ShouldInterruptOnDamage() => true;
     }
 
     internal sealed record MoveAwayFromAetheryte(EAetheryteLocation TargetAetheryte) : ITask
@@ -264,5 +266,7 @@ internal static class AetheryteShortcut
         }
 
         public override ETaskResult Update() => moveExecutor.Update();
+
+        public override bool ShouldInterruptOnDamage() => true;
     }
 }

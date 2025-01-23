@@ -35,10 +35,13 @@
             "Z": 89.58569
           },
           "TerritoryId": 155,
-          "InteractionType": "Instruction",
-          "Comment": "Use Quest item on enemy to weaken it first",
-          "$": "Status Effects: 22 (HP Penalty) + 62 (Damage Down)",
+          "InteractionType": "Combat",
           "EnemySpawnType": "AfterInteraction",
+          "CombatItemUse": {
+            "ItemId": 2000961,
+            "Condition": "MissingStatus",
+            "Value": 22
+          },
           "ComplexCombatData": [
             {
               "DataId": 2196

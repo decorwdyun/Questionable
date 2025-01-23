@@ -49,9 +49,10 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
         ILogger<GatheringController> logger,
         ICondition condition,
         IServiceProvider serviceProvider,
+        InterruptHandler interruptHandler,
         IDataManager dataManager,
         IPluginLog pluginLog)
-        : base(chatGui, condition, serviceProvider, dataManager, logger)
+        : base(chatGui, condition, serviceProvider, interruptHandler, dataManager, logger)
     {
         _movementController = movementController;
         _gatheringPointRegistry = gatheringPointRegistry;

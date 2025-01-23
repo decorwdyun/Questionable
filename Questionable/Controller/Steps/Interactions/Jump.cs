@@ -80,6 +80,8 @@ internal static class Jump
 
             return ETaskResult.TaskComplete;
         }
+
+        public override bool ShouldInterruptOnDamage() => true;
     }
 
     internal sealed class DoSingleJump(

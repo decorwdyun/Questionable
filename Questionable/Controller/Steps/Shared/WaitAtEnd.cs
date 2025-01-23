@@ -157,6 +157,8 @@ internal static class WaitAtEnd
             Delay = Task.Delay;
             return true;
         }
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 
     internal sealed class WaitNextStepOrSequence : ITask
@@ -169,6 +171,8 @@ internal static class WaitAtEnd
         protected override bool Start() => true;
 
         public override ETaskResult Update() => ETaskResult.StillRunning;
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 
     internal sealed record WaitForCompletionFlags(QuestId Quest, QuestStep Step) : ITask
@@ -190,6 +194,8 @@ internal static class WaitAtEnd
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
         }
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 
     internal sealed record WaitObjectAtPosition(
@@ -209,6 +215,8 @@ internal static class WaitAtEnd
             gameFunctions.IsObjectAtPosition(Task.DataId, Task.Destination, Task.Distance)
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 
     internal sealed record WaitQuestAccepted(ElementId ElementId) : ITask
@@ -226,6 +234,8 @@ internal static class WaitAtEnd
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
         }
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 
     internal sealed record WaitQuestCompleted(ElementId ElementId) : ITask
@@ -241,6 +251,8 @@ internal static class WaitAtEnd
         {
             return questFunctions.IsQuestComplete(Task.ElementId) ? ETaskResult.TaskComplete : ETaskResult.StillRunning;
         }
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 
     internal sealed record NextStep(ElementId ElementId, int Sequence) : ILastTask
@@ -253,6 +265,8 @@ internal static class WaitAtEnd
         protected override bool Start() => true;
 
         public override ETaskResult Update() => ETaskResult.NextStep;
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 
     internal sealed class EndAutomation : ILastTask
@@ -268,5 +282,7 @@ internal static class WaitAtEnd
         protected override bool Start() => true;
 
         public override ETaskResult Update() => ETaskResult.End;
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 }

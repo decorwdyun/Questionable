@@ -17,26 +17,29 @@ using Mount = Questionable.Controller.Steps.Common.Mount;
 
 namespace Questionable.Controller;
 
-internal abstract class MiniTaskController<T>
+internal abstract class MiniTaskController<T> : IDisposable
 {
     protected readonly TaskQueue _taskQueue = new();
 
     private readonly IChatGui _chatGui;
     private readonly ICondition _condition;
     private readonly IServiceProvider _serviceProvider;
+    private readonly InterruptHandler _interruptHandler;
     private readonly ILogger<T> _logger;
 
     private readonly string _actionCanceledText;
 
     protected MiniTaskController(IChatGui chatGui, ICondition condition, IServiceProvider serviceProvider,
-        IDataManager dataManager, ILogger<T> logger)
+        InterruptHandler interruptHandler, IDataManager dataManager, ILogger<T> logger)
     {
         _chatGui = chatGui;
         _logger = logger;
         _serviceProvider = serviceProvider;
+        _interruptHandler = interruptHandler;
         _condition = condition;
 
         _actionCanceledText = dataManager.GetString<LogMessage>(1314, x => x.Text)!;
+        _interruptHandler.Interrupted += HandleInterruption;
     }
 
     protected virtual void UpdateCurrentTask()
@@ -173,7 +176,7 @@ internal abstract class MiniTaskController<T>
             if (_condition[ConditionFlag.Mounted])
                 tasks.Add(new Mount.UnmountTask());
 
-            tasks.Add(Combat.Factory.CreateTask(null, false, EEnemySpawnType.QuestInterruption, [], [], [], null));
+            tasks.Add(Combat.Factory.CreateTask(null, -1, false, EEnemySpawnType.QuestInterruption, [], [], [], null));
             tasks.Add(new WaitAtEnd.WaitDelay());
             _taskQueue.InterruptWith(tasks);
         }
@@ -198,8 +201,21 @@ internal abstract class MiniTaskController<T>
         if (!isHandled)
         {
             if (GameFunctions.GameStringEquals(_actionCanceledText, message.TextValue) &&
-                !_condition[ConditionFlag.InFlight])
+                !_condition[ConditionFlag.InFlight] &&
+                _taskQueue.CurrentTaskExecutor?.ShouldInterruptOnDamage() == true)
                 InterruptQueueWithCombat();
         }
+    }
+
+    protected virtual void HandleInterruption(object? sender, EventArgs e)
+    {
+        if (!_condition[ConditionFlag.InFlight] &&
+            _taskQueue.CurrentTaskExecutor?.ShouldInterruptOnDamage() == true)
+            InterruptQueueWithCombat();
+    }
+
+    public virtual void Dispose()
+    {
+        _interruptHandler.Interrupted -= HandleInterruption;
     }
 }

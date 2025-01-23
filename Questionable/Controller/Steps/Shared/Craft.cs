@@ -133,5 +133,8 @@ internal static class Craft
             return inventoryManager->GetInventoryItemCount(Task.ItemId, isHq: false, checkEquipped: false)
                    + inventoryManager->GetInventoryItemCount(Task.ItemId, isHq: true, checkEquipped: false);
         }
+
+        // we're on a crafting class, so combat doesn't make much sense (we also can't change classes in combat...)
+        public override bool ShouldInterruptOnDamage() => false;
     }
 }

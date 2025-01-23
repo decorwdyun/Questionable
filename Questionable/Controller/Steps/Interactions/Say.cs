@@ -48,5 +48,7 @@ internal static class Say
             chatFunctions.ExecuteCommand($"/say {Task.ChatMessage}");
             return true;
         }
+
+        public override bool ShouldInterruptOnDamage() => true;
     }
 }

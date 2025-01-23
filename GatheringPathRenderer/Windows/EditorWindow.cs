@@ -6,6 +6,7 @@ using System.Numerics;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.Types;
+using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin.Services;
@@ -32,8 +33,8 @@ internal sealed class EditorWindow : Window
         _targetLocation;
 
     public EditorWindow(RendererPlugin plugin, EditorCommands editorCommands, IDataManager dataManager,
-        ITargetManager targetManager, IClientState clientState, IObjectTable objectTable)
-        : base("Gathering Path Editor###QuestionableGatheringPathEditor",
+        ITargetManager targetManager, IClientState clientState, IObjectTable objectTable, ConfigWindow configWindow)
+        : base($"Gathering Path Editor {typeof(EditorWindow).Assembly.GetName().Version!.ToString(2)}###QuestionableGatheringPathEditor",
             ImGuiWindowFlags.NoFocusOnAppearing | ImGuiWindowFlags.NoNavFocus | ImGuiWindowFlags.AlwaysAutoResize)
     {
         _plugin = plugin;
@@ -47,6 +48,20 @@ internal sealed class EditorWindow : Window
         {
             MinimumSize = new Vector2(300, 100),
         };
+
+        TitleBarButtons.Add(new TitleBarButton
+        {
+            Icon = FontAwesomeIcon.Cog,
+            IconOffset = new Vector2(1.5f, 1),
+            Click = _ => configWindow.IsOpen = true,
+            Priority = int.MinValue,
+            ShowTooltip = () =>
+            {
+                ImGui.BeginTooltip();
+                ImGui.Text("Open Configuration");
+                ImGui.EndTooltip();
+            }
+        });
 
         RespectCloseHotkey = false;
         ShowCloseButton = false;

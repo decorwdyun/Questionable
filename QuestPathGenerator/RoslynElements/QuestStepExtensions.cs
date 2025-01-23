@@ -107,6 +107,9 @@ internal static class QuestStepExtensions
                                 .AsSyntaxNodeOrToken(),
                             AssignmentList(nameof(QuestStep.ComplexCombatData), step.ComplexCombatData)
                                 .AsSyntaxNodeOrToken(),
+                            Assignment(nameof(QuestStep.CombatItemUse), step.CombatItemUse,
+                                emptyStep.CombatItemUse)
+                                .AsSyntaxNodeOrToken(),
                             Assignment(nameof(QuestStep.CombatDelaySecondsAtStart),
                                     step.CombatDelaySecondsAtStart,
                                     emptyStep.CombatDelaySecondsAtStart)

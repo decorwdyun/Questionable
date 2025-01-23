@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text.Encodings.Web;
@@ -17,11 +18,11 @@ using ECommons.Schedulers;
 using ECommons.SplatoonAPI;
 using GatheringPathRenderer.Windows;
 using LLib.GameData;
-using Questionable.Model;
 using Questionable.Model.Gathering;
 
 namespace GatheringPathRenderer;
 
+[SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
 public sealed class RendererPlugin : IDalamudPlugin
 {
     private const long OnTerritoryChange = -2;
@@ -56,8 +57,10 @@ public sealed class RendererPlugin : IDalamudPlugin
 
         _editorCommands = new EditorCommands(this, dataManager, commandManager, targetManager, clientState, chatGui,
             configuration);
-        _editorWindow = new EditorWindow(this, _editorCommands, dataManager, targetManager, clientState, objectTable)
+        var configWindow = new ConfigWindow(pluginInterface, configuration);
+        _editorWindow = new EditorWindow(this, _editorCommands, dataManager, targetManager, clientState, objectTable, configWindow)
             { IsOpen = true };
+        _windowSystem.AddWindow(configWindow);
         _windowSystem.AddWindow(_editorWindow);
         _currentClassJob = (EClassJob?)_clientState.LocalPlayer?.ClassJob.RowId ?? EClassJob.Adventurer;
 
@@ -78,6 +81,7 @@ public sealed class RendererPlugin : IDalamudPlugin
     {
         get
         {
+#if DEBUG
             DirectoryInfo? solutionDirectory = _pluginInterface.AssemblyLocation.Directory?.Parent?.Parent?.Parent;
             if (solutionDirectory != null)
             {
@@ -88,6 +92,12 @@ public sealed class RendererPlugin : IDalamudPlugin
             }
 
             throw new Exception("Unable to resolve project path");
+#else
+            var allPluginsDirectory = _pluginInterface.ConfigFile.Directory ?? throw new Exception("Unknown directory for plugin configs");
+            return allPluginsDirectory
+                .CreateSubdirectory("Questionable")
+                .CreateSubdirectory("GatheringPaths");
+#endif
         }
     }
 
@@ -103,12 +113,18 @@ public sealed class RendererPlugin : IDalamudPlugin
 
         try
         {
-            foreach (var expansionFolder in ExpansionData.ExpansionFolders.Values)
+#if DEBUG
+            foreach (var expansionFolder in Questionable.Model.ExpansionData.ExpansionFolders.Values)
                 LoadFromDirectory(
                     new DirectoryInfo(Path.Combine(PathsDirectory.FullName, expansionFolder)));
-
             _pluginLog.Information(
                 $"Loaded {_gatheringLocations.Count} gathering root locations from project directory");
+#else
+            LoadFromDirectory(PathsDirectory);
+            _pluginLog.Information(
+                $"Loaded {_gatheringLocations.Count} gathering root locations from {PathsDirectory.FullName} directory");
+#endif
+
         }
         catch (Exception e)
         {

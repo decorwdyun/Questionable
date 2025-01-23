@@ -198,6 +198,8 @@ internal static class DoGatherCollectable
             else
                 return botanistAction;
         }
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 
     [SuppressMessage("ReSharper", "NotAccessedPositionalProperty.Local")]
