@@ -51,6 +51,7 @@
           },
           "TerritoryId": 156,
           "InteractionType": "Combat",
+          "DelaySecondsAtStart": 2,
           "EnemySpawnType": "AfterItemUse",
           "ItemId": 2000766,
           "KillEnemyDataIds": [
@@ -180,6 +181,7 @@
           },
           "TerritoryId": 156,
           "InteractionType": "Combat",
+          "DelaySecondsAtStart": 2,
           "EnemySpawnType": "AfterItemUse",
           "ItemId": 2000766,
           "KillEnemyDataIds": [
@@ -238,7 +240,8 @@
           },
           "TerritoryId": 156,
           "InteractionType": "UseItem",
-          "ItemId": 2000766
+          "ItemId": 2000766,
+          "DelaySecondsAtStart": 2
         }
       ]
     },
