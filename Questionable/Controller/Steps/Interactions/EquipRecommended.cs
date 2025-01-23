@@ -40,7 +40,8 @@ internal static class EquipRecommended
         public override string ToString() => "EquipRecommended";
     }
 
-    internal sealed unsafe class DoEquipRecommended(IClientState clientState, IChatGui chatGui, ICondition condition) : TaskExecutor<EquipTask>
+    internal sealed unsafe class DoEquipRecommended(IClientState clientState, IChatGui chatGui, ICondition condition)
+        : TaskExecutor<EquipTask>
     {
         private bool _equipped;
 
@@ -88,7 +89,7 @@ internal static class EquipRecommended
 
                 if (!isAllEquipped)
                 {
-                    chatGui.Print("Equipping recommended gear.", "Questionable");
+                    chatGui.Print("Equipping recommended gear.", CommandHandler.MessageTag, CommandHandler.TagColor);
                     recommendedEquipModule->EquipRecommendedGear();
                 }
 

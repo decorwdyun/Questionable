@@ -623,7 +623,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
         catch (Exception e)
         {
             _logger.LogError(e, "Failed to create tasks");
-            _chatGui.PrintError("[Questionable] Failed to start next task sequence, please check /xllog for details.");
+            _chatGui.PrintError("Failed to start next task sequence, please check /xllog for details.", CommandHandler.MessageTag, CommandHandler.TagColor);
             Stop("Tasks failed to create");
         }
     }

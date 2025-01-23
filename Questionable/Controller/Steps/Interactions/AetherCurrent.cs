@@ -26,7 +26,8 @@ internal static class AetherCurrent
             if (!aetherCurrentData.IsValidAetherCurrent(step.TerritoryId, step.AetherCurrentId.Value))
             {
                 chatGui.PrintError(
-                    $"[Questionable] Aether current with id {step.AetherCurrentId} is referencing an invalid aether current, will skip attunement");
+                    $"Aether current with id {step.AetherCurrentId} is referencing an invalid aether current, will skip attunement",
+                    CommandHandler.MessageTag, CommandHandler.TagColor);
                 return null;
             }
 
