@@ -31,6 +31,7 @@ internal static class WaitAtStart
             Delay = Task.Delay;
             return true;
         }
-    }
 
+        public override bool ShouldInterruptOnDamage() => false;
+    }
 }

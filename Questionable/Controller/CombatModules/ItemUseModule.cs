@@ -108,6 +108,7 @@ internal sealed class ItemUseModule : ICombatModule
                     _delegate.Stop();
                     unsafe
                     {
+                        _logger.LogInformation("Using item {ItemId}", _combatData.CombatItemUse.ItemId);
                         AgentInventoryContext.Instance()->UseItem(_combatData.CombatItemUse.ItemId);
                     }
                     _continueAt = DateTime.Now.AddSeconds(2);
@@ -147,6 +148,9 @@ internal sealed class ItemUseModule : ICombatModule
 
             if (_combatData.CombatItemUse.Condition == ECombatItemUseCondition.HealthPercent)
                 return (100f * battleChara->Health / battleChara->MaxHealth) < _combatData.CombatItemUse.Value;
+
+            if (_combatData.CombatItemUse.Condition == ECombatItemUseCondition.MissingStatus)
+                return !battleChara->StatusManager.HasStatus((uint)_combatData.CombatItemUse.Value);
         }
 
         return false;

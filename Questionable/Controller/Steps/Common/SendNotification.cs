@@ -104,5 +104,7 @@ internal static class SendNotification
         }
 
         public override ETaskResult Update() => ETaskResult.TaskComplete;
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 }

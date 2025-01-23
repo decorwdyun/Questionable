@@ -22,13 +22,16 @@ internal sealed class TextAdvanceIpc : IDisposable
     private readonly string _pluginName;
     private readonly ExternalTerritoryConfig _externalTerritoryConfig = new();
 
-    public TextAdvanceIpc(IDalamudPluginInterface pluginInterface, IFramework framework, QuestController questController, Configuration configuration)
+    public TextAdvanceIpc(IDalamudPluginInterface pluginInterface, IFramework framework,
+        QuestController questController, Configuration configuration)
     {
         _framework = framework;
         _questController = questController;
         _configuration = configuration;
         _isInExternalControl = pluginInterface.GetIpcSubscriber<bool>("TextAdvance.IsInExternalControl");
-        _enableExternalControl = pluginInterface.GetIpcSubscriber<string, ExternalTerritoryConfig, bool>("TextAdvance.EnableExternalControl");
+        _enableExternalControl =
+            pluginInterface.GetIpcSubscriber<string, ExternalTerritoryConfig, bool>(
+                "TextAdvance.EnableExternalControl");
         _disableExternalControl = pluginInterface.GetIpcSubscriber<string, bool>("TextAdvance.DisableExternalControl");
         _pluginName = pluginInterface.InternalName;
         _framework.Update += OnUpdate;
@@ -37,7 +40,7 @@ internal sealed class TextAdvanceIpc : IDisposable
     public void Dispose()
     {
         _framework.Update -= OnUpdate;
-        if(_isExternalControlActivated)
+        if (_isExternalControlActivated)
         {
             _disableExternalControl.InvokeFunc(_pluginName);
         }
@@ -45,11 +48,13 @@ internal sealed class TextAdvanceIpc : IDisposable
 
     private void OnUpdate(IFramework framework)
     {
-        if(_configuration.General.ConfigureTextAdvance && _questController.IsRunning)
+        bool hasActiveQuest = _questController.IsRunning ||
+                              _questController.AutomationType != QuestController.EAutomationType.Manual;
+        if (_configuration.General.ConfigureTextAdvance && hasActiveQuest)
         {
-            if(!_isInExternalControl.InvokeFunc())
+            if (!_isInExternalControl.InvokeFunc())
             {
-                if(_enableExternalControl.InvokeFunc(_pluginName, _externalTerritoryConfig))
+                if (_enableExternalControl.InvokeFunc(_pluginName, _externalTerritoryConfig))
                 {
                     _isExternalControlActivated = true;
                 }
@@ -57,9 +62,9 @@ internal sealed class TextAdvanceIpc : IDisposable
         }
         else
         {
-            if(_isExternalControlActivated)
+            if (_isExternalControlActivated)
             {
-                if(_disableExternalControl.InvokeFunc(_pluginName) || !_isInExternalControl.InvokeFunc())
+                if (_disableExternalControl.InvokeFunc(_pluginName) || !_isInExternalControl.InvokeFunc())
                 {
                     _isExternalControlActivated = false;
                 }

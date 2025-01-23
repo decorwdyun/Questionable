@@ -44,6 +44,7 @@ public enum EEmote
     Flex = 139,
     Respect = 140,
     Box = 166,
+    Greeting = 172,
     Uchiwasshoi = 278
 }
 

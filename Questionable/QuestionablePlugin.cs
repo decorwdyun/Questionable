@@ -247,6 +247,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<GatheringController>();
         serviceCollection.AddSingleton<ContextMenuController>();
         serviceCollection.AddSingleton<ShopController>();
+        serviceCollection.AddSingleton<InterruptHandler>();
 
         serviceCollection.AddSingleton<CraftworksSupplyController>();
         serviceCollection.AddSingleton<CreditsController>();

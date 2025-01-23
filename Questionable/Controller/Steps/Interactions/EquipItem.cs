@@ -183,5 +183,7 @@ internal static class EquipItem
 
             return false;
         }
+
+        public override bool ShouldInterruptOnDamage() => true;
     }
 }

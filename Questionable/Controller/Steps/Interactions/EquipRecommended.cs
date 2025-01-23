@@ -98,5 +98,7 @@ internal static class EquipRecommended
 
             return ETaskResult.TaskComplete;
         }
+
+        public override bool ShouldInterruptOnDamage() => true;
     }
 }

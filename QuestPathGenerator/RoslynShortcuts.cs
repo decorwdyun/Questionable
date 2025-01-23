@@ -71,6 +71,7 @@ public static class RoslynShortcuts
                 GatheringNodeGroup nodeGroup => nodeGroup.ToExpressionSyntax(),
                 GatheringNode nodeLocation => nodeLocation.ToExpressionSyntax(),
                 GatheringLocation location => location.ToExpressionSyntax(),
+                CombatItemUse combatItemUse => combatItemUse.ToExpressionSyntax(),
                 not null when value.GetType().IsEnum => MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression,
                     IdentifierName(value.GetType().Name), IdentifierName(value.GetType().GetEnumName(value)!)),
                 _ => throw new Exception($"Unsupported data type {value.GetType()} = {value}")

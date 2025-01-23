@@ -1,4 +1,11 @@
 <Project Sdk="Dalamud.NET.Sdk/11.0.0">
+    <PropertyGroup>
+        <Version>0.1</Version>
+        <OutputPath>dist</OutputPath>
+        <PathMap Condition="$(SolutionDir) != ''">$(SolutionDir)=X:\</PathMap>
+        <Platforms>x64</Platforms>
+    </PropertyGroup>
+
     <ItemGroup>
       <ProjectReference Include="..\LLib\LLib.csproj" />
       <ProjectReference Include="..\Questionable.Model\Questionable.Model.csproj" />
@@ -6,4 +13,5 @@
     </ItemGroup>
 
     <Import Project="..\LLib\LLib.targets"/>
+    <Import Project="..\LLib\RenameZip.targets"/>
 </Project>

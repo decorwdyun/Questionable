@@ -50,6 +50,8 @@ internal static class InitiateLeve
 
             return ETaskResult.TaskComplete;
         }
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 
     internal sealed record OpenJournal(ElementId ElementId) : ITask
@@ -85,6 +87,8 @@ internal static class InitiateLeve
 
             return ETaskResult.StillRunning;
         }
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 
     internal sealed record Initiate(ElementId ElementId) : ITask
@@ -111,6 +115,8 @@ internal static class InitiateLeve
 
             return ETaskResult.StillRunning;
         }
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 
     internal sealed class SelectDifficulty : ITask
@@ -138,5 +144,7 @@ internal static class InitiateLeve
 
             return ETaskResult.StillRunning;
         }
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 }

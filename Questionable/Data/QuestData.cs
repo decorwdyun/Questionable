@@ -40,6 +40,12 @@ internal sealed class QuestData
 
     public QuestData(IDataManager dataManager)
     {
+        JournalGenreOverrides journalGenreOverrides = new()
+        {
+            RadzAtHanSideQuests = dataManager.GetExcelSheet<Quest>().GetRow(69805).JournalGenre.RowId,
+            ThavnairSideQuests = dataManager.GetExcelSheet<Quest>().GetRow(70025).JournalGenre.RowId,
+        };
+
         Dictionary<uint, uint> questChapters =
             dataManager.GetExcelSheet<QuestChapter>()
                 .Where(x => x.RowId > 0 && x.Quest.RowId > 0)
@@ -59,7 +65,7 @@ internal sealed class QuestData
                 .Where(x => x.RowId > 0)
                 .Where(x => x.IssuerLocation.RowId > 0)
                 .Select(x => new QuestInfo(x, questChapters.GetValueOrDefault(x.RowId),
-                    startingCities.GetValueOrDefault(x.RowId))),
+                    startingCities.GetValueOrDefault(x.RowId), journalGenreOverrides)),
             ..dataManager.GetExcelSheet<SatisfactionNpc>()
                 .Where(x => x is { RowId: > 0, Npc.RowId: > 0 })
                 .Select(x => new SatisfactionSupplyInfo(x)),

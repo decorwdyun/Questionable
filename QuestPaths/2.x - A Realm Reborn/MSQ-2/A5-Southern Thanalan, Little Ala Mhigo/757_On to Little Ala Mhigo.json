@@ -37,6 +37,16 @@
           "TargetTerritoryId": 146
         },
         {
+          "Position": {
+            "X": -47.50145,
+            "Y": 16.362688,
+            "Z": -439.62503
+          },
+          "TerritoryId": 146,
+          "InteractionType": "WalkTo",
+          "$": "vnav sometimes attempts to walk to the aetheryte using exactly one waypoint between zone boundary and aetheryte, which means walking into walls"
+        },
+        {
           "TerritoryId": 146,
           "InteractionType": "AttuneAetheryte",
           "StopDistance": 7,

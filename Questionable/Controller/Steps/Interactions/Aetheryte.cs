@@ -52,5 +52,7 @@ internal static class Aetheryte
             aetheryteFunctions.IsAetheryteUnlocked(Task.AetheryteLocation)
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
+
+        public override bool ShouldInterruptOnDamage() => true;
     }
 }

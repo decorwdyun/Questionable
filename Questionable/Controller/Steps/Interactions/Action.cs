@@ -124,6 +124,8 @@ internal static class Action
 
             return ETaskResult.TaskComplete;
         }
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 
     internal sealed record UseMudraOnObject(uint DataId, EAction Action) : ITask
@@ -187,5 +189,7 @@ internal static class Action
             logger.LogError("Unable to find relevant combo for {Action}", Task.Action);
             return ETaskResult.TaskComplete;
         }
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 }

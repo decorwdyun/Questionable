@@ -228,6 +228,17 @@ internal static class MoveTo
                             }
                         }
                     }
+                    else if (!ShouldResolveCombatBeforeNextInteraction() &&
+                             _movementController is { IsPathfinding: false, IsPathRunning: false } &&
+                             mountExecutor.EvaluateMountState() == Mount.MountResult.DontMount)
+                    {
+                        // except for e.g. jumping which would maybe break if combat navigates us away, if we don't
+                        // need a mount anymore we can just skip combat and assume that the interruption is handled
+                        // later.
+                        //
+                        // without this, the character would just stand around while getting hit
+                        _nestedExecutor = (new NoOpTaskExecutor(), new NoOpTask(), true);
+                    }
                 }
                 else if (nestedExecutor.Executor.Update() == ETaskResult.TaskComplete)
                 {
@@ -286,6 +297,17 @@ internal static class MoveTo
             return base.WasInterrupted();
         }
 
+        public override bool ShouldInterruptOnDamage()
+        {
+            // have we stopped moving, and are we
+            // (a) waiting for a mount to complete, or
+            // (b) want combat to be done before any other interaction?
+            return _movementController is { IsPathfinding: false, IsPathRunning: false } &&
+                   (_nestedExecutor is { Triggered: false, Executor: Mount.MountExecutor } || ShouldResolveCombatBeforeNextInteraction());
+        }
+
+        private bool ShouldResolveCombatBeforeNextInteraction() => Task.InteractionType is EInteractionType.Jump;
+
         public bool OnErrorToast(SeString message)
         {
             if (GameFunctions.GameStringEquals(_cannotExecuteAtThisTime, message.TextValue))
@@ -302,6 +324,8 @@ internal static class MoveTo
         protected override bool Start() => true;
 
         public override ETaskResult Update() => ETaskResult.TaskComplete;
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 
     internal sealed record MoveTask(
@@ -361,6 +385,8 @@ internal static class MoveTo
 
             return ETaskResult.TaskComplete;
         }
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 
     internal sealed class LandTask : ITask
@@ -421,5 +447,7 @@ internal static class MoveTo
 
             return false;
         }
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 }
