@@ -37,22 +37,6 @@
           }
         },
         {
-          "DataId": 2001715,
-          "Position": {
-            "X": 23.23944,
-            "Y": 2.090454,
-            "Z": -0.015319824
-          },
-          "TerritoryId": 212,
-          "InteractionType": "Interact",
-          "TargetTerritoryId": 212,
-          "SkipConditions": {
-            "StepIf": {
-              "ExtraCondition": "WakingSandsSolar"
-            }
-          }
-        },
-        {
           "DataId": 2001711,
           "Position": {
             "X": -480.9181,
@@ -67,6 +51,22 @@
               "InTerritory": [
                 212
               ]
+            }
+          }
+        },
+        {
+          "DataId": 2001715,
+          "Position": {
+            "X": 23.23944,
+            "Y": 2.090454,
+            "Z": -0.015319824
+          },
+          "TerritoryId": 212,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 212,
+          "SkipConditions": {
+            "StepIf": {
+              "ExtraCondition": "WakingSandsSolar"
             }
           }
         },
