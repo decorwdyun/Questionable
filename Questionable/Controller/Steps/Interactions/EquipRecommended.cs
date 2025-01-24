@@ -43,7 +43,8 @@ internal static class EquipRecommended
     internal sealed unsafe class DoEquipRecommended(IClientState clientState, IChatGui chatGui, ICondition condition)
         : TaskExecutor<EquipTask>
     {
-        private bool _equipped;
+        private bool _checkedOrTriggeredEquipmentUpdate;
+        private DateTime _continueAt = DateTime.MinValue;
 
         protected override bool Start()
         {
@@ -60,44 +61,51 @@ internal static class EquipRecommended
             if (recommendedEquipModule->IsUpdating)
                 return ETaskResult.StillRunning;
 
-            if (!_equipped)
+            if (!_checkedOrTriggeredEquipmentUpdate)
             {
-                InventoryManager* inventoryManager = InventoryManager.Instance();
-                InventoryContainer* equippedItems =
-                    inventoryManager->GetInventoryContainer(InventoryType.EquippedItems);
-                bool isAllEquipped = true;
-                foreach (var recommendedItemPtr in recommendedEquipModule->RecommendedItems)
-                {
-                    var recommendedItem = recommendedItemPtr.Value;
-                    if (recommendedItem == null || recommendedItem->ItemId == 0)
-                        continue;
-
-                    bool isEquipped = false;
-                    for (int i = 0; i < equippedItems->Size; ++i)
-                    {
-                        var equippedItem = equippedItems->Items[i];
-                        if (equippedItem.ItemId != 0 && equippedItem.ItemId == recommendedItem->ItemId)
-                        {
-                            isEquipped = true;
-                            break;
-                        }
-                    }
-
-                    if (!isEquipped)
-                        isAllEquipped = false;
-                }
-
-                if (!isAllEquipped)
+                if (!IsAllRecommendeGearEquipped())
                 {
                     chatGui.Print("Equipping recommended gear.", CommandHandler.MessageTag, CommandHandler.TagColor);
                     recommendedEquipModule->EquipRecommendedGear();
+                    _continueAt = DateTime.Now.AddSeconds(1);
                 }
 
-                _equipped = true;
+                _checkedOrTriggeredEquipmentUpdate = true;
                 return ETaskResult.StillRunning;
             }
 
-            return ETaskResult.TaskComplete;
+            return DateTime.Now >= _continueAt ? ETaskResult.TaskComplete : ETaskResult.StillRunning;
+        }
+
+        private bool IsAllRecommendeGearEquipped()
+        {
+            var recommendedEquipModule = RecommendEquipModule.Instance();
+            InventoryManager* inventoryManager = InventoryManager.Instance();
+            InventoryContainer* equippedItems =
+                inventoryManager->GetInventoryContainer(InventoryType.EquippedItems);
+            bool isAllEquipped = true;
+            foreach (var recommendedItemPtr in recommendedEquipModule->RecommendedItems)
+            {
+                var recommendedItem = recommendedItemPtr.Value;
+                if (recommendedItem == null || recommendedItem->ItemId == 0)
+                    continue;
+
+                bool isEquipped = false;
+                for (int i = 0; i < equippedItems->Size; ++i)
+                {
+                    var equippedItem = equippedItems->Items[i];
+                    if (equippedItem.ItemId != 0 && equippedItem.ItemId == recommendedItem->ItemId)
+                    {
+                        isEquipped = true;
+                        break;
+                    }
+                }
+
+                if (!isEquipped)
+                    isAllEquipped = false;
+            }
+
+            return isAllEquipped;
         }
 
         public override bool ShouldInterruptOnDamage() => true;
