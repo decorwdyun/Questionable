@@ -111,8 +111,12 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
             _logger.LogInformation("Setting automation type to {NewAutomationType} (previous: {OldAutomationType})",
                 value, _automationType);
             _automationType = value;
+            AutomationTypeChanged?.Invoke(this, value);
         }
     }
+
+    public delegate void AutomationTypeChangedEventHandler(object sender, EAutomationType e);
+    public event AutomationTypeChangedEventHandler? AutomationTypeChanged;
 
     public (QuestProgress Progress, ECurrentQuestType Type)? CurrentQuestDetails
     {
