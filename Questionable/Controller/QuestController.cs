@@ -19,7 +19,7 @@ using Quest = Questionable.Model.Quest;
 
 namespace Questionable.Controller;
 
-internal sealed class QuestController : MiniTaskController<QuestController>, IDisposable
+internal sealed class QuestController : MiniTaskController<QuestController>
 {
     private readonly IClientState _clientState;
     private readonly GameFunctions _gameFunctions;
