@@ -123,7 +123,8 @@
               }
             }
           },
-          "Fly": true
+          "Fly": true,
+          "NextQuestId": 2738
         }
       ]
     }
