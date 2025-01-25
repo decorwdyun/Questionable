@@ -82,7 +82,7 @@ public sealed class RendererPlugin : IDalamudPlugin
         get
         {
 #if DEBUG
-            DirectoryInfo? solutionDirectory = _pluginInterface.AssemblyLocation.Directory?.Parent?.Parent?.Parent;
+            DirectoryInfo? solutionDirectory = _pluginInterface.AssemblyLocation.Directory?.Parent?.Parent;
             if (solutionDirectory != null)
             {
                 DirectoryInfo pathProjectDirectory =
@@ -91,7 +91,7 @@ public sealed class RendererPlugin : IDalamudPlugin
                     return pathProjectDirectory;
             }
 
-            throw new Exception("Unable to resolve project path");
+            throw new Exception($"Unable to resolve project path ({_pluginInterface.AssemblyLocation.Directory})");
 #else
             var allPluginsDirectory = _pluginInterface.ConfigFile.Directory ?? throw new Exception("Unknown directory for plugin configs");
             return allPluginsDirectory
