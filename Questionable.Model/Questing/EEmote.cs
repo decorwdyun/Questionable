@@ -8,6 +8,7 @@ public enum EEmote
 {
     None = 0,
 
+    Angry = 2,
     Bow = 5,
     Cheer = 6,
     Clap = 7,
@@ -45,6 +46,7 @@ public enum EEmote
     Respect = 140,
     Box = 166,
     Greeting = 172,
-    Uchiwasshoi = 278
+    Uchiwasshoi = 278,
+    Unbound = 282,
 }
 

@@ -189,6 +189,12 @@ internal sealed class QuestData
         AddPreviousQuest(new QuestId(3833), new QuestId(spearfishing));
         */
 
+        // Shadow Walk with Me
+        AddPreviousQuest(new QuestId(3629), new QuestId(3248));
+        AddPreviousQuest(new QuestId(3629), new QuestId(3272));
+        AddPreviousQuest(new QuestId(3629), new QuestId(3278));
+        AddPreviousQuest(new QuestId(3629), new QuestId(3628));
+
         // The Hero's Journey
         AddPreviousQuest(new QuestId(3986), new QuestId(2115));
         AddPreviousQuest(new QuestId(3986), new QuestId(2116));
@@ -196,6 +202,11 @@ internal sealed class QuestData
         AddPreviousQuest(new QuestId(3986), new QuestId(2333));
         AddPreviousQuest(new QuestId(3986), new QuestId(2395));
         AddPreviousQuest(new QuestId(3986), new QuestId(3985));
+
+        // Picking up the Torch has half the quests in the sheets(??)
+        AddPreviousQuest(new QuestId(5188), new QuestId(4841));
+        AddPreviousQuest(new QuestId(5188), new QuestId(4847));
+        AddPreviousQuest(new QuestId(5188), new QuestId(4959));
 
         // initial city quests are side quests
         // unclear if 470 can be started as the required quest isn't available anymore
