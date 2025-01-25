@@ -17,7 +17,15 @@
           "AetheryteShortcut": "Azim Steppe - Dawn Throne",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true
+              "NearPosition": {
+                "Position": {
+                  "X": 79.24011,
+                  "Y": 114.90497,
+                  "Z": 95.994385
+                },
+                "TerritoryId": 622,
+                "MaximumDistance": 50
+              }
             }
           }
         }
