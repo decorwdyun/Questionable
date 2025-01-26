@@ -349,7 +349,8 @@
           },
           "TerritoryId": 813,
           "InteractionType": "WalkTo",
-          "Fly": true
+          "Fly": true,
+          "AetheryteShortcut": "Lakeland - Ostall Imperative"
         },
         {
           "DataId": 1033712,
