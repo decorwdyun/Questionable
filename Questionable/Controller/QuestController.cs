@@ -19,7 +19,7 @@ using Quest = Questionable.Model.Quest;
 
 namespace Questionable.Controller;
 
-internal sealed class QuestController : MiniTaskController<QuestController>, IDisposable
+internal sealed class QuestController : MiniTaskController<QuestController>
 {
     private readonly IClientState _clientState;
     private readonly GameFunctions _gameFunctions;
@@ -75,8 +75,9 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
         YesAlreadyIpc yesAlreadyIpc,
         TaskCreator taskCreator,
         IServiceProvider serviceProvider,
+        InterruptHandler interruptHandler,
         IDataManager dataManager)
-        : base(chatGui, condition, serviceProvider, dataManager, logger)
+        : base(chatGui, condition, serviceProvider, interruptHandler, dataManager, logger)
     {
         _clientState = clientState;
         _gameFunctions = gameFunctions;
@@ -110,8 +111,12 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
             _logger.LogInformation("Setting automation type to {NewAutomationType} (previous: {OldAutomationType})",
                 value, _automationType);
             _automationType = value;
+            AutomationTypeChanged?.Invoke(this, value);
         }
     }
+
+    public delegate void AutomationTypeChangedEventHandler(object sender, EAutomationType e);
+    public event AutomationTypeChangedEventHandler? AutomationTypeChanged;
 
     public (QuestProgress Progress, ECurrentQuestType Type)? CurrentQuestDetails
     {
@@ -622,7 +627,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
         catch (Exception e)
         {
             _logger.LogError(e, "Failed to create tasks");
-            _chatGui.PrintError("[Questionable] Failed to start next task sequence, please check /xllog for details.");
+            _chatGui.PrintError("Failed to start next task sequence, please check /xllog for details.", CommandHandler.MessageTag, CommandHandler.TagColor);
             Stop("Tasks failed to create");
         }
     }
@@ -801,11 +806,23 @@ internal sealed class QuestController : MiniTaskController<QuestController>, IDi
         _gatheringController.OnNormalToast(message);
     }
 
-    public void Dispose()
+    protected override void HandleInterruption(object? sender, EventArgs e)
+    {
+        if (!IsRunning)
+            return;
+
+        if (AutomationType == EAutomationType.Manual)
+            return;
+
+        base.HandleInterruption(sender, e);
+    }
+
+    public override void Dispose()
     {
         _toastGui.ErrorToast -= OnErrorToast;
         _toastGui.Toast -= OnNormalToast;
         _condition.ConditionChange -= OnConditionChange;
+        base.Dispose();
     }
 
     public sealed record StepProgress(

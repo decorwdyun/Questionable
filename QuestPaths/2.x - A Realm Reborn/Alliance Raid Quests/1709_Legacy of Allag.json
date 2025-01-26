@@ -329,9 +329,9 @@
         },
         {
           "Position": {
-            "X": -0.75614685,
+            "X": 3.8795898,
             "Y": 38.80212,
-            "Z": -11.007636
+            "Z": 0.40251642
           },
           "TerritoryId": 146,
           "InteractionType": "WalkTo",
@@ -359,7 +359,8 @@
             null,
             128
           ],
-          "Fly": true
+          "Fly": true,
+          "DisableNavmesh": true
         },
         {
           "DataId": 2000078,

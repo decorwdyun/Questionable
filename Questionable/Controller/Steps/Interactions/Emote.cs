@@ -51,6 +51,8 @@ internal static class Emote
             chatFunctions.UseEmote(Task.DataId, Task.Emote);
             return true;
         }
+
+        public override bool ShouldInterruptOnDamage() => true;
     }
 
     internal sealed record UseOnSelf(EEmote Emote) : ITask
@@ -65,5 +67,7 @@ internal static class Emote
             chatFunctions.UseEmote(Task.Emote);
             return true;
         }
+
+        public override bool ShouldInterruptOnDamage() => true;
     }
 }

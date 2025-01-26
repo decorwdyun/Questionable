@@ -228,6 +228,8 @@ internal static class Interact
             }
         }
 
+        public override bool ShouldInterruptOnDamage() => true;
+
         private enum EInteractionState
         {
             None,

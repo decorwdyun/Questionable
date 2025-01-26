@@ -35,13 +35,163 @@
             "Z": -225.17743
           },
           "TerritoryId": 147,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Northern Thanalan - Ceruleum Processing Plant",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
+          }
         }
       ]
     },
     {
       "Sequence": 2,
+      "$": "This doesn't include the DRK/MCH/AST coffers that exist at level 50, but you cannot obtain them until HW",
       "Steps": [
+        {
+          "TerritoryId": 147,
+          "InteractionType": "UseItem",
+          "ItemId": 31337,
+          "$": "Lv49 Weapon Coffer",
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
+        },
+        {
+          "TerritoryId": 147,
+          "InteractionType": "UseItem",
+          "ItemId": 20642,
+          "$": "Lv50 PLD Coffer",
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
+        },
+        {
+          "TerritoryId": 147,
+          "InteractionType": "UseItem",
+          "ItemId": 20643,
+          "$": "Lv50 MNK Coffer",
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
+        },
+        {
+          "TerritoryId": 147,
+          "InteractionType": "UseItem",
+          "ItemId": 20644,
+          "$": "Lv50 WAR Coffer",
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
+        },
+        {
+          "TerritoryId": 147,
+          "InteractionType": "UseItem",
+          "ItemId": 20645,
+          "$": "Lv50 DRG Coffer",
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
+        },
+        {
+          "TerritoryId": 147,
+          "InteractionType": "UseItem",
+          "ItemId": 20646,
+          "$": "Lv50 BRD Coffer",
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
+        },
+        {
+          "TerritoryId": 147,
+          "InteractionType": "UseItem",
+          "ItemId": 20647,
+          "$": "Lv50 NIN Coffer",
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
+        },
+        {
+          "TerritoryId": 147,
+          "InteractionType": "UseItem",
+          "ItemId": 20648,
+          "$": "Lv50 WHM Coffer",
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
+        },
+        {
+          "TerritoryId": 147,
+          "InteractionType": "UseItem",
+          "ItemId": 20649,
+          "$": "Lv50 BLM Coffer",
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
+        },
+        {
+          "TerritoryId": 147,
+          "InteractionType": "UseItem",
+          "ItemId": 20650,
+          "$": "Lv50 SMN Coffer",
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
+        },
+        {
+          "TerritoryId": 147,
+          "InteractionType": "UseItem",
+          "ItemId": 20651,
+          "$": "Lv50 SCH Coffer",
+          "SkipConditions": {
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
+        },
         {
           "TerritoryId": 147,
           "InteractionType": "Duty",

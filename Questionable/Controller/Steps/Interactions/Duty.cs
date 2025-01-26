@@ -93,6 +93,8 @@ internal static class Duty
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
         }
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 
     internal sealed record WaitAutoDutyTask(uint ContentFinderConditionId) : ITask
@@ -117,6 +119,8 @@ internal static class Duty
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
         }
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 
     internal sealed record OpenDutyFinderTask(uint ContentFinderConditionId) : ITask
@@ -138,5 +142,7 @@ internal static class Duty
         }
 
         public override ETaskResult Update() => ETaskResult.TaskComplete;
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 }

@@ -9,5 +9,6 @@ public sealed class CombatItemUseConditionConverter() : EnumConverter<ECombatIte
     {
         { ECombatItemUseCondition.Incapacitated, "Incapacitated" },
         { ECombatItemUseCondition.HealthPercent, "Health%" },
+        { ECombatItemUseCondition.MissingStatus, "MissingStatus" },
     };
 }

@@ -25,5 +25,7 @@ internal static class WaitCondition
 
             return DateTime.Now >= _continueAt ? ETaskResult.TaskComplete : ETaskResult.StillRunning;
         }
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 }

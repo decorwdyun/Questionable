@@ -59,5 +59,6 @@ internal static class MoveToLandingLocation
 
         public override ETaskResult Update() => moveExecutor.Update();
         public bool OnErrorToast(SeString message) => moveExecutor.OnErrorToast(message);
+        public override bool ShouldInterruptOnDamage() => moveExecutor.ShouldInterruptOnDamage();
     }
 }

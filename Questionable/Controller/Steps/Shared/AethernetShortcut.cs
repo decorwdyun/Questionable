@@ -269,5 +269,7 @@ internal static class AethernetShortcut
 
             return ETaskResult.TaskComplete;
         }
+
+        public override bool ShouldInterruptOnDamage() => true;
     }
 }

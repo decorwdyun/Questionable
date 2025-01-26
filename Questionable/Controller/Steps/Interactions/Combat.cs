@@ -190,5 +190,7 @@ internal static class Combat
                 return ETaskResult.TaskComplete;
             }
         }
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 }

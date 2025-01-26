@@ -100,6 +100,8 @@ internal static class Gather
                        minCollectability: (short)itemToGather.Collectability) >=
                    itemToGather.ItemCount;
         }
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 
     internal sealed record GatheringTask(
@@ -140,6 +142,9 @@ internal static class Gather
             gatheringController.OnErrorToast(ref message, ref isHandled);
             return isHandled;
         }
+
+        // we're on a gathering class, so combat doesn't make much sense (we also can't change classes in combat...)
+        public override bool ShouldInterruptOnDamage() => false;
     }
 
     /// <summary>
@@ -154,5 +159,7 @@ internal static class Gather
     {
         protected override bool Start() => true;
         public override ETaskResult Update() => ETaskResult.TaskComplete;
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 }

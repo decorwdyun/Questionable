@@ -17,26 +17,31 @@ using Mount = Questionable.Controller.Steps.Common.Mount;
 
 namespace Questionable.Controller;
 
-internal abstract class MiniTaskController<T>
+internal abstract class MiniTaskController<T> : IDisposable
 {
     protected readonly TaskQueue _taskQueue = new();
 
     private readonly IChatGui _chatGui;
     private readonly ICondition _condition;
     private readonly IServiceProvider _serviceProvider;
+    private readonly InterruptHandler _interruptHandler;
     private readonly ILogger<T> _logger;
 
     private readonly string _actionCanceledText;
+    private readonly string _cantExecuteDueToStatusText;
 
     protected MiniTaskController(IChatGui chatGui, ICondition condition, IServiceProvider serviceProvider,
-        IDataManager dataManager, ILogger<T> logger)
+        InterruptHandler interruptHandler, IDataManager dataManager, ILogger<T> logger)
     {
         _chatGui = chatGui;
         _logger = logger;
         _serviceProvider = serviceProvider;
+        _interruptHandler = interruptHandler;
         _condition = condition;
 
         _actionCanceledText = dataManager.GetString<LogMessage>(1314, x => x.Text)!;
+        _cantExecuteDueToStatusText = dataManager.GetString<LogMessage>(7728, x => x.Text)!;
+        _interruptHandler.Interrupted += HandleInterruption;
     }
 
     protected virtual void UpdateCurrentTask()
@@ -65,7 +70,7 @@ internal abstract class MiniTaskController<T>
                 {
                     _logger.LogError(e, "Failed to start task {TaskName}", upcomingTask.ToString());
                     _chatGui.PrintError(
-                        $"[Questionable] Failed to start task '{upcomingTask}', please check /xllog for details.");
+                        $"Failed to start task '{upcomingTask}', please check /xllog for details.", CommandHandler.MessageTag, CommandHandler.TagColor);
                     Stop("Task failed to start");
                     return;
                 }
@@ -90,7 +95,7 @@ internal abstract class MiniTaskController<T>
             _logger.LogError(e, "Failed to update task {TaskName}",
                 _taskQueue.CurrentTaskExecutor.CurrentTask.ToString());
             _chatGui.PrintError(
-                $"[Questionable] Failed to update task '{_taskQueue.CurrentTaskExecutor.CurrentTask}', please check /xllog for details.");
+                $"Failed to update task '{_taskQueue.CurrentTaskExecutor.CurrentTask}', please check /xllog for details.", CommandHandler.MessageTag, CommandHandler.TagColor);
             Stop("Task failed to update");
             return;
         }
@@ -180,6 +185,19 @@ internal abstract class MiniTaskController<T>
         else
             _taskQueue.InterruptWith([new WaitAtEnd.WaitDelay()]);
 
+        LogTasksAfterInterruption();
+    }
+
+    private void InterruptWithoutCombat()
+    {
+        _logger.LogWarning("Interrupted, attempting to redo previous tasks (not in combat)");
+        _taskQueue.InterruptWith([new WaitAtEnd.WaitDelay()]);
+
+        LogTasksAfterInterruption();
+    }
+
+    private void LogTasksAfterInterruption()
+    {
         _logger.LogInformation("Remaining tasks after interruption:");
         foreach (ITask task in _taskQueue.RemainingTasks)
             _logger.LogInformation("- {TaskName}", task);
@@ -198,8 +216,23 @@ internal abstract class MiniTaskController<T>
         if (!isHandled)
         {
             if (GameFunctions.GameStringEquals(_actionCanceledText, message.TextValue) &&
-                !_condition[ConditionFlag.InFlight])
+                !_condition[ConditionFlag.InFlight] &&
+                _taskQueue.CurrentTaskExecutor?.ShouldInterruptOnDamage() == true)
                 InterruptQueueWithCombat();
+            else if (GameFunctions.GameStringEquals(_cantExecuteDueToStatusText, message.TextValue))
+                InterruptWithoutCombat();
         }
+    }
+
+    protected virtual void HandleInterruption(object? sender, EventArgs e)
+    {
+        if (!_condition[ConditionFlag.InFlight] &&
+            _taskQueue.CurrentTaskExecutor?.ShouldInterruptOnDamage() == true)
+            InterruptQueueWithCombat();
+    }
+
+    public virtual void Dispose()
+    {
+        _interruptHandler.Interrupted -= HandleInterruption;
     }
 }

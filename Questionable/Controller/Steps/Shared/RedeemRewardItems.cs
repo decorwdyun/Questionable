@@ -74,5 +74,7 @@ internal static class RedeemRewardItems
 
             return DateTime.Now <= _continueAt ? ETaskResult.StillRunning : ETaskResult.TaskComplete;
         }
+
+        public override bool ShouldInterruptOnDamage() => true;
     }
 }

@@ -307,6 +307,7 @@ internal static class SkipCondition
             return condition switch
             {
                 EExtraSkipCondition.WakingSandsMainArea => territoryType == 212 && position.X < 24,
+                EExtraSkipCondition.WakingSandsSolar => territoryType == 212 && position.X >= 24,
                 EExtraSkipCondition.RisingStonesSolar => territoryType == 351 && position.Z <= -28,
                 EExtraSkipCondition.RoguesGuild => territoryType == 129 && position.Y <= -115,
                 EExtraSkipCondition.DockStorehouse => territoryType == 137 && position.Y <= -20,
@@ -315,5 +316,7 @@ internal static class SkipCondition
         }
 
         public override ETaskResult Update() => ETaskResult.SkipRemainingTasksForStep;
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 }
