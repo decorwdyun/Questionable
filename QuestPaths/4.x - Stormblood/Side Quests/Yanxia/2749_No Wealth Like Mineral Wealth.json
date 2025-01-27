@@ -38,6 +38,21 @@
       "Sequence": 2,
       "Steps": [
         {
+          "Position": {
+            "X": -239.56377,
+            "Y": 49.354053,
+            "Z": 284.94565
+          },
+          "TerritoryId": 614,
+          "InteractionType": "WalkTo",
+          "Fly": true,
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Locked"
+            }
+          }
+        },
+        {
           "DataId": 1023240,
           "Position": {
             "X": -258.6557,
@@ -59,6 +74,7 @@
             "Y": 39.150906,
             "Z": 206.95801
           },
+          "StopDistance": 0.5,
           "TerritoryId": 614,
           "InteractionType": "Combat",
           "Fly": true,
@@ -113,7 +129,8 @@
           },
           "TerritoryId": 614,
           "InteractionType": "CompleteQuest",
-          "Fly": true
+          "Fly": true,
+          "NextQuestId": 2750
         }
       ]
     }

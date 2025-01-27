@@ -201,7 +201,7 @@ internal static class AetheryteShortcut
 
             if (!aetheryteFunctions.IsAetheryteUnlocked(Task.TargetAetheryte))
             {
-                chatGui.PrintError($"[Questionable] Aetheryte {Task.TargetAetheryte} is not unlocked.");
+                chatGui.PrintError($"Aetheryte {Task.TargetAetheryte} is not unlocked.", CommandHandler.MessageTag, CommandHandler.TagColor);
                 throw new TaskException("Aetheryte is not unlocked");
             }
 
@@ -215,7 +215,7 @@ internal static class AetheryteShortcut
             }
             else
             {
-                chatGui.Print("[Questionable] Unable to teleport to aetheryte.");
+                chatGui.Print("Unable to teleport to aetheryte.", CommandHandler.MessageTag, CommandHandler.TagColor);
                 throw new TaskException("Unable to teleport to aetheryte");
             }
         }

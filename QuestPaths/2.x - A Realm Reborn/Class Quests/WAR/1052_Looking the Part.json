@@ -112,9 +112,18 @@
           "SkipConditions": {
             "AetheryteShortcutIf": {
               "InSameTerritory": true
+            },
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                64
+              ]
             }
-          },
-          "Comment": "TODO Verify enemy id"
+          }
         },
         {
           "DataId": 2002309,

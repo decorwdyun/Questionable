@@ -94,7 +94,6 @@ internal sealed unsafe class InterruptHandler : IDisposable
         [FieldOffset(6)] public ushort Value;
 
         public byte AttackType => (byte)(Param1 & 0xF);
-        public uint Damage => Mult == 0 ? Value : Value + ((uint)ushort.MaxValue + 1) * Mult;
 
         public override string ToString()
         {

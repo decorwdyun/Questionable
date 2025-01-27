@@ -47,6 +47,10 @@
           },
           "Comment": {
             "type": "string"
+          },
+          "$": {
+            "type": "string",
+            "description": "Dev Comment (not visible in-game)"
           }
         },
         "required": [
@@ -292,6 +296,7 @@
                   "type": "string",
                   "enum": [
                     "WakingSandsMainArea",
+                    "WakingSandsSolar",
                     "RisingStonesSolar",
                     "RoguesGuild",
                     "DockStorehouse"
@@ -698,9 +703,7 @@
                 "const": "UseItem"
               },
               "ItemId": {
-                "not": {
-                  "const": 30362
-                }
+                "minimum": 2000000
               }
             }
           },
@@ -863,7 +866,9 @@
                   "mogdance",
                   "salute",
                   "laugh",
-                  "greeting"
+                  "greeting",
+                  "angry",
+                  "unbound"
                 ]
               }
             }

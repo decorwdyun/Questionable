@@ -28,6 +28,7 @@ internal abstract class MiniTaskController<T> : IDisposable
     private readonly ILogger<T> _logger;
 
     private readonly string _actionCanceledText;
+    private readonly string _cantExecuteDueToStatusText;
 
     protected MiniTaskController(IChatGui chatGui, ICondition condition, IServiceProvider serviceProvider,
         InterruptHandler interruptHandler, IDataManager dataManager, ILogger<T> logger)
@@ -39,6 +40,7 @@ internal abstract class MiniTaskController<T> : IDisposable
         _condition = condition;
 
         _actionCanceledText = dataManager.GetString<LogMessage>(1314, x => x.Text)!;
+        _cantExecuteDueToStatusText = dataManager.GetString<LogMessage>(7728, x => x.Text)!;
         _interruptHandler.Interrupted += HandleInterruption;
     }
 
@@ -68,7 +70,7 @@ internal abstract class MiniTaskController<T> : IDisposable
                 {
                     _logger.LogError(e, "Failed to start task {TaskName}", upcomingTask.ToString());
                     _chatGui.PrintError(
-                        $"[Questionable] Failed to start task '{upcomingTask}', please check /xllog for details.");
+                        $"Failed to start task '{upcomingTask}', please check /xllog for details.", CommandHandler.MessageTag, CommandHandler.TagColor);
                     Stop("Task failed to start");
                     return;
                 }
@@ -93,7 +95,7 @@ internal abstract class MiniTaskController<T> : IDisposable
             _logger.LogError(e, "Failed to update task {TaskName}",
                 _taskQueue.CurrentTaskExecutor.CurrentTask.ToString());
             _chatGui.PrintError(
-                $"[Questionable] Failed to update task '{_taskQueue.CurrentTaskExecutor.CurrentTask}', please check /xllog for details.");
+                $"Failed to update task '{_taskQueue.CurrentTaskExecutor.CurrentTask}', please check /xllog for details.", CommandHandler.MessageTag, CommandHandler.TagColor);
             Stop("Task failed to update");
             return;
         }
@@ -183,6 +185,19 @@ internal abstract class MiniTaskController<T> : IDisposable
         else
             _taskQueue.InterruptWith([new WaitAtEnd.WaitDelay()]);
 
+        LogTasksAfterInterruption();
+    }
+
+    private void InterruptWithoutCombat()
+    {
+        _logger.LogWarning("Interrupted, attempting to redo previous tasks (not in combat)");
+        _taskQueue.InterruptWith([new WaitAtEnd.WaitDelay()]);
+
+        LogTasksAfterInterruption();
+    }
+
+    private void LogTasksAfterInterruption()
+    {
         _logger.LogInformation("Remaining tasks after interruption:");
         foreach (ITask task in _taskQueue.RemainingTasks)
             _logger.LogInformation("- {TaskName}", task);
@@ -204,6 +219,8 @@ internal abstract class MiniTaskController<T> : IDisposable
                 !_condition[ConditionFlag.InFlight] &&
                 _taskQueue.CurrentTaskExecutor?.ShouldInterruptOnDamage() == true)
                 InterruptQueueWithCombat();
+            else if (GameFunctions.GameStringEquals(_cantExecuteDueToStatusText, message.TextValue))
+                InterruptWithoutCombat();
         }
     }
 

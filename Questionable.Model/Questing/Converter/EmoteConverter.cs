@@ -7,6 +7,7 @@ public sealed class EmoteConverter() : EnumConverter<EEmote>(Values)
 {
     private static readonly Dictionary<EEmote, string> Values = new()
     {
+        { EEmote.Angry, "angry" },
         { EEmote.Bow, "bow" },
         { EEmote.Cheer, "cheer" },
         { EEmote.Clap, "clap" },
@@ -45,5 +46,6 @@ public sealed class EmoteConverter() : EnumConverter<EEmote>(Values)
         { EEmote.Box, "box" },
         { EEmote.Greeting, "greeting" },
         { EEmote.Uchiwasshoi, "uchiwasshoi" },
+        { EEmote.Unbound, "unbound" },
     };
 }
