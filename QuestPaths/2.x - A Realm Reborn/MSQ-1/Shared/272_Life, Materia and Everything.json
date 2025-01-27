@@ -21,16 +21,30 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 1001426,
           "Position": {
-            "X": 123.33862,
-            "Y": 30.999996,
-            "Z": -384.9394
+            "X": 2.7922537,
+            "Y": 8.206551,
+            "Z": -274.32318
           },
           "TerritoryId": 141,
-          "InteractionType": "Interact",
-          "Comment": "'Forging the Spirit'",
-          "AetheryteShortcut": "Central Thanalan - Black Brush Station"
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Central Thanalan - Black Brush Station",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            },
+            "StepIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": 123.33862,
+                  "Y": 30.999996,
+                  "Z": -384.9394
+                },
+                "TerritoryId": 141,
+                "MaximumDistance": 30
+              }
+            }
+          }
         },
         {
           "DataId": 1001426,
@@ -40,8 +54,8 @@
             "Z": -384.9394
           },
           "TerritoryId": 141,
-          "InteractionType": "Interact",
-          "Comment": "Quest Turn-In 'Forging the Spirit'"
+          "InteractionType": "AcceptQuest",
+          "PickUpQuestId": 638
         },
         {
           "DataId": 1001425,
