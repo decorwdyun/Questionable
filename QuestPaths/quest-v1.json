@@ -217,7 +217,10 @@
                   ]
                 },
                 "Diving": {
-                  "type": ["boolean", "null"]
+                  "type": [
+                    "boolean",
+                    "null"
+                  ]
                 },
                 "NotTargetable": {
                   "type": "boolean"
@@ -715,25 +718,37 @@
         },
         {
           "if": {
-            "anyOf": [
-              {
-                "properties": {
-                  "InteractionType": {
-                    "const": "UseItem"
-                  }
-                }
-              },
-              {
-                "properties": {
-                  "InteractionType": {
-                    "const": "Combat"
-                  },
-                  "EnemySpawnType": {
-                    "const": "AfterItemUse"
-                  }
-                }
+            "properties": {
+              "InteractionType": {
+                "const": "UseItem"
               }
+            }
+          },
+          "then": {
+            "properties": {
+              "GroundTarget": {
+                "type": [
+                  "boolean",
+                  "null"
+                ],
+                "default": false
+              }
+            },
+            "required": [
+              "ItemId"
             ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "InteractionType": {
+                "const": "Combat"
+              },
+              "EnemySpawnType": {
+                "const": "AfterItemUse"
+              }
+            }
           },
           "then": {
             "properties": {
