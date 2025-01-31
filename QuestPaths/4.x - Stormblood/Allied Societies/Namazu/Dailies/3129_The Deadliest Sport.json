@@ -1,6 +1,6 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "plogon_enjoyer",
+  "Author": "Theo",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -36,65 +36,27 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 1025925,
+          "DataId": 1025858,
           "Position": {
-            "X": -702.17444,
-            "Y": 127.5686,
-            "Z": 112.291016
+            "X": -534.7219,
+            "Y": 66.33932,
+            "Z": -409.75055
           },
           "TerritoryId": 622,
           "InteractionType": "Interact",
-          "TargetTerritoryId": 622,
-          "Mount": true,
-          "SkipConditions": {
-            "StepIf": {
-              "Flying": "Unlocked"
-            }
-          }
-        },
-        {
-          "DataId": 1025797,
-          "Position": {
-            "X": -364.7975,
-            "Y": 76.98169,
-            "Z": -579.2172
-          },
-          "TerritoryId": 622,
-          "InteractionType": "Interact",
-          "Mount": true,
-          "SkipConditions": {
-            "StepIf": {
-              "Flying": "Unlocked"
-            }
-          }
-        },
-        {
-          "DataId": 1025797,
-          "Position": {
-            "X": -364.7975,
-            "Y": 76.98169,
-            "Z": -579.2172
-          },
-          "TerritoryId": 622,
-          "InteractionType": "Interact",
-          "Fly": true,
-          "SkipConditions": {
-            "StepIf": {
-              "Flying": "Locked"
-            }
-          }
+          "Fly": true
         }
       ]
     },
     {
-      "Sequence": 255,
+      "Sequence": 2,
       "Steps": [
         {
-          "DataId": 1025798,
+          "DataId": 1025816,
           "Position": {
-            "X": -366.2318,
-            "Y": 76.98169,
-            "Z": -580.31586
+            "X": -535.3323,
+            "Y": 66.453,
+            "Z": -412.71082
           },
           "TerritoryId": 622,
           "InteractionType": "Interact",
@@ -105,8 +67,8 @@
         {
           "TerritoryId": 622,
           "InteractionType": "Craft",
-          "ItemId": 22736,
-          "ItemCount": 2,
+          "ItemId": 22745,
+          "ItemCount": 1,
           "RequiredQuestAcceptedJob": [
             "DoH"
           ]
@@ -116,7 +78,7 @@
           "InteractionType": "Gather",
           "ItemsToGather": [
             {
-              "ItemId": 22632,
+              "ItemId": 22641,
               "ItemCount": 1
             }
           ],
@@ -129,7 +91,7 @@
           "InteractionType": "Gather",
           "ItemsToGather": [
             {
-              "ItemId": 22658,
+              "ItemId": 22667,
               "ItemCount": 1
             }
           ],
@@ -137,6 +99,36 @@
             "Botanist"
           ]
         },
+        {
+          "DataId": 1021784,
+          "Position": {
+            "X": -750.05725,
+            "Y": 127.240875,
+            "Z": 143.72461
+          },
+          "TerritoryId": 622,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "AetheryteShortcut": "Azim Steppe - Dhoro Iloh",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": -750.05725,
+                  "Y": 127.240875,
+                  "Z": 143.72461
+                },
+                "TerritoryId": 622,
+                "MaximumDistance": 50
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
         {
           "DataId": 1025602,
           "Position": {
@@ -157,7 +149,7 @@
                   "Z": 97.154175
                 },
                 "TerritoryId": 622,
-                "MaximumDistance": 50
+                "MaximumDistance": 150
               }
             }
           }

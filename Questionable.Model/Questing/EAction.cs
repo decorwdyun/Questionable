@@ -54,6 +54,7 @@ public enum EAction
     Fire3 = 152,
     Adloquium = 185,
     WaterCannon = 11385,
+    Wasshoi = 11499,
 
     CollectMiner = 240,
     ScourMiner = 22182,
@@ -94,6 +95,7 @@ public static class EActionExtensions
             or EAction.BlueGulal
             or EAction.ElectrixFlux
             or EAction.HopStep
-            or EAction.BosomBrook;
+            or EAction.BosomBrook
+            or EAction.Wasshoi;
     }
 }
