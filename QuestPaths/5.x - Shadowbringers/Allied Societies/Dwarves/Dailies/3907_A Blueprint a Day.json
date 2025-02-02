@@ -65,7 +65,21 @@
           },
           "TerritoryId": 813,
           "InteractionType": "WalkTo",
-          "Fly": true
+          "Fly": true,
+          "AetheryteShortcut": "Lakeland - Ostall Imperative",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": -615.73865,
+                  "Y": 65.602264,
+                  "Z": -423.84705
+                },
+                "TerritoryId": 813,
+                "MaximumDistance": 50
+              }
+            }
+          }
         },
         {
           "DataId": 1033712,
