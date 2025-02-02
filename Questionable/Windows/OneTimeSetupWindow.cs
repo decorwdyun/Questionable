@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
@@ -8,7 +9,6 @@ using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin;
 using Dalamud.Utility;
 using ImGuiNET;
-using LLib;
 using LLib.ImGui;
 using Microsoft.Extensions.Logging;
 using Questionable.External;
@@ -44,7 +44,7 @@ internal sealed class OneTimeSetupWindow : LWindow
             new Uri("https://github.com/NightmareXIV/MyDalamudPlugins/raw/main/pluginmaster.json")),
     ];
 
-    private static readonly IReadOnlyDictionary<Configuration.ECombatModule, PluginInfo> CombatPlugins = new Dictionary<Configuration.ECombatModule, PluginInfo>
+    private static readonly ReadOnlyDictionary<Configuration.ECombatModule, PluginInfo> CombatPlugins = new Dictionary<Configuration.ECombatModule, PluginInfo>
     {
         {
             Configuration.ECombatModule.BossMod,

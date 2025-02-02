@@ -7,7 +7,6 @@ using Dalamud.Game.Addon.Lifecycle;
 using Dalamud.Game.Addon.Lifecycle.AddonArgTypes;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Plugin.Services;
-using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Event;
 using FFXIVClientStructs.FFXIV.Client.Game.InstanceContent;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
@@ -22,11 +21,8 @@ using Questionable.Controller.Steps.Interactions;
 using Questionable.Data;
 using Questionable.Functions;
 using Questionable.Model;
-using Questionable.Model.Common;
 using Questionable.Model.Gathering;
 using Questionable.Model.Questing;
-using AethernetShortcut = Questionable.Controller.Steps.Shared.AethernetShortcut;
-using EAetheryteLocationExtensions = Questionable.Model.Common.EAetheryteLocationExtensions;
 using Quest = Questionable.Model.Quest;
 using ValueType = FFXIVClientStructs.FFXIV.Component.GUI.ValueType;
 
@@ -634,7 +630,7 @@ internal sealed class InteractionUiController : IDisposable
     }
 
     private unsafe bool HandleDefaultYesNo(AddonSelectYesno* addonSelectYesno, Quest quest,
-        IList<DialogueChoice> dialogueChoices, string actualPrompt)
+        List<DialogueChoice> dialogueChoices, string actualPrompt)
     {
         _logger.LogTrace("DefaultYesNo: Choice count: {Count}", dialogueChoices.Count);
         foreach (var dialogueChoice in dialogueChoices)

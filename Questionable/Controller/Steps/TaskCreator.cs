@@ -25,7 +25,7 @@ internal sealed class TaskCreator
         var newTasks = scope.ServiceProvider.GetRequiredService<IEnumerable<ITaskFactory>>()
             .SelectMany(x =>
             {
-                IList<ITask> tasks = x.CreateAllTasks(quest, sequence, step).ToList();
+                List<ITask> tasks = x.CreateAllTasks(quest, sequence, step).ToList();
 
                 if (tasks.Count > 0 && _logger.IsEnabled(LogLevel.Trace))
                 {
