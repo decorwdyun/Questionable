@@ -48,5 +48,6 @@ public sealed class ActionConverter() : EnumConverter<EAction>(Values)
         { EAction.Fire3, "Fire III" },
         { EAction.Adloquium, "Adloquium" },
         { EAction.WaterCannon, "Water Cannon" },
+        { EAction.Wasshoi, "Wasshoi" },
     };
 }

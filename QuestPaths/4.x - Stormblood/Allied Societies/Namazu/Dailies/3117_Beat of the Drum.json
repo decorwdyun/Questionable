@@ -45,7 +45,12 @@
           "TerritoryId": 622,
           "InteractionType": "Interact",
           "TargetTerritoryId": 622,
-          "Mount": true
+          "Mount": true,
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
         },
         {
           "DataId": 1025799,
@@ -56,7 +61,28 @@
           },
           "TerritoryId": 622,
           "InteractionType": "Interact",
-          "Mount": true
+          "Mount": true,
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
+        },
+        {
+          "DataId": 1025799,
+          "Position": {
+            "X": -175.03625,
+            "Y": 66.81902,
+            "Z": -437.43042
+          },
+          "TerritoryId": 622,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Locked"
+            }
+          }
         }
       ]
     },
@@ -72,14 +98,18 @@
           },
           "TerritoryId": 622,
           "InteractionType": "Interact",
-          "RequiredCurrentJob": ["DoH"]
+          "RequiredCurrentJob": [
+            "DoH"
+          ]
         },
         {
           "TerritoryId": 622,
           "InteractionType": "Craft",
           "ItemId": 22737,
           "ItemCount": 1,
-          "RequiredCurrentJob": ["DoH"]
+          "RequiredCurrentJob": [
+            "DoH"
+          ]
         },
         {
           "TerritoryId": 622,
@@ -90,7 +120,9 @@
               "ItemCount": 2
             }
           ],
-          "RequiredQuestAcceptedJob": ["Miner"]
+          "RequiredQuestAcceptedJob": [
+            "Miner"
+          ]
         },
         {
           "TerritoryId": 622,
@@ -101,7 +133,9 @@
               "ItemCount": 2
             }
           ],
-          "RequiredQuestAcceptedJob": ["Botanist"]
+          "RequiredQuestAcceptedJob": [
+            "Botanist"
+          ]
         },
         {
           "DataId": 1025602,

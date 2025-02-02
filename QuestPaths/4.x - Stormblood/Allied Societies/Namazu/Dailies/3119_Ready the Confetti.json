@@ -1,6 +1,6 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "plogon_enjoyer",
+  "Author": "Theo",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -36,65 +36,41 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 1025925,
+          "DataId": 1025803,
           "Position": {
-            "X": -702.17444,
-            "Y": 127.5686,
-            "Z": 112.291016
-          },
-          "TerritoryId": 622,
-          "InteractionType": "Interact",
-          "TargetTerritoryId": 622,
-          "Mount": true,
-          "SkipConditions": {
-            "StepIf": {
-              "Flying": "Unlocked"
-            }
-          }
-        },
-        {
-          "DataId": 1025797,
-          "Position": {
-            "X": -364.7975,
-            "Y": 76.98169,
-            "Z": -579.2172
-          },
-          "TerritoryId": 622,
-          "InteractionType": "Interact",
-          "Mount": true,
-          "SkipConditions": {
-            "StepIf": {
-              "Flying": "Unlocked"
-            }
-          }
-        },
-        {
-          "DataId": 1025797,
-          "Position": {
-            "X": -364.7975,
-            "Y": 76.98169,
-            "Z": -579.2172
+            "X": 275.59314,
+            "Y": 2.410636,
+            "Z": 279.31628
           },
           "TerritoryId": 622,
           "InteractionType": "Interact",
           "Fly": true,
+          "AetheryteShortcut": "Azim Steppe - Dawn Throne",
           "SkipConditions": {
-            "StepIf": {
-              "Flying": "Locked"
+            "AetheryteShortcutIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": 275.35706,
+                  "Y": 2.4109652,
+                  "Z": 281.2354
+                },
+                "TerritoryId": 622,
+                "MaximumDistance": 50
+              }
             }
           }
         }
       ]
     },
     {
-      "Sequence": 255,
+      "Sequence": 2,
       "Steps": [
         {
-          "DataId": 1025798,
+          "DataId": 1025804,
           "Position": {
-            "X": -366.2318,
-            "Y": 76.98169,
-            "Z": -580.31586
+            "X": 272.9076,
+            "Y": 2.39563,
+            "Z": 280.8423
           },
           "TerritoryId": 622,
           "InteractionType": "Interact",
@@ -105,8 +81,8 @@
         {
           "TerritoryId": 622,
           "InteractionType": "Craft",
-          "ItemId": 22736,
-          "ItemCount": 2,
+          "ItemId": 22738,
+          "ItemCount": 3,
           "RequiredQuestAcceptedJob": [
             "DoH"
           ]
@@ -116,8 +92,8 @@
           "InteractionType": "Gather",
           "ItemsToGather": [
             {
-              "ItemId": 22632,
-              "ItemCount": 1
+              "ItemId": 22634,
+              "ItemCount": 2
             }
           ],
           "RequiredQuestAcceptedJob": [
@@ -129,14 +105,30 @@
           "InteractionType": "Gather",
           "ItemsToGather": [
             {
-              "ItemId": 22658,
-              "ItemCount": 1
+              "ItemId": 22660,
+              "ItemCount": 2
             }
           ],
           "RequiredQuestAcceptedJob": [
             "Botanist"
           ]
         },
+        {
+          "DataId": 1025803,
+          "Position": {
+            "X": 275.59314,
+            "Y": 2.410636,
+            "Z": 279.31628
+          },
+          "TerritoryId": 622,
+          "InteractionType": "Interact",
+          "Fly": true
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
         {
           "DataId": 1025602,
           "Position": {

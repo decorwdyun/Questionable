@@ -1,16 +1,16 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "plogon_enjoyer",
+  "Author": "Theo",
   "QuestSequence": [
     {
       "Sequence": 0,
       "Steps": [
         {
-          "DataId": 1025602,
+          "DataId": 1025601,
           "Position": {
-            "X": -780.148,
-            "Y": 128.25195,
-            "Z": 97.154175
+            "X": -766.7506,
+            "Y": 127.43907,
+            "Z": 91.11157
           },
           "TerritoryId": 622,
           "InteractionType": "AcceptQuest",
@@ -20,9 +20,9 @@
             "AetheryteShortcutIf": {
               "NearPosition": {
                 "Position": {
-                  "X": -780.148,
-                  "Y": 128.25195,
-                  "Z": 97.154175
+                  "X": -766.7506,
+                  "Y": 127.43907,
+                  "Z": 91.11157
                 },
                 "TerritoryId": 622,
                 "MaximumDistance": 50
@@ -36,53 +36,110 @@
       "Sequence": 1,
       "Steps": [
         {
-          "DataId": 1025925,
           "Position": {
-            "X": -702.17444,
-            "Y": 127.5686,
-            "Z": 112.291016
+            "X": 73.05273,
+            "Y": 205,
+            "Z": 143.30833
           },
-          "TerritoryId": 622,
-          "InteractionType": "Interact",
-          "TargetTerritoryId": 622,
+          "TerritoryId": 478,
+          "InteractionType": "WalkTo",
           "Mount": true,
+          "AetheryteShortcut": "Idyllshire",
           "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InTerritory": [
+                478,
+                399,
+                463
+              ]
+            },
             "StepIf": {
-              "Flying": "Unlocked"
+              "InTerritory": [
+                399,
+                463
+              ]
             }
           }
         },
         {
-          "DataId": 1025797,
           "Position": {
-            "X": -364.7975,
-            "Y": 76.98169,
-            "Z": -579.2172
+            "X": -488.692,
+            "Y": 139.95807,
+            "Z": 734.253
           },
-          "TerritoryId": 622,
-          "InteractionType": "Interact",
-          "Mount": true,
-          "SkipConditions": {
-            "StepIf": {
-              "Flying": "Unlocked"
-            }
-          }
-        },
-        {
-          "DataId": 1025797,
-          "Position": {
-            "X": -364.7975,
-            "Y": 76.98169,
-            "Z": -579.2172
-          },
-          "TerritoryId": 622,
-          "InteractionType": "Interact",
+          "TerritoryId": 399,
+          "InteractionType": "WalkTo",
           "Fly": true,
           "SkipConditions": {
             "StepIf": {
-              "Flying": "Locked"
+              "InTerritory": [
+                463
+              ]
             }
           }
+        },
+        {
+          "DataId": 2005336,
+          "Position": {
+            "X": -488.79227,
+            "Y": 138.93335,
+            "Z": 741.0543
+          },
+          "TerritoryId": 399,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 463,
+          "Mount": false,
+          "SkipConditions": {
+            "StepIf": {
+              "InTerritory": [
+                463
+              ]
+            }
+          }
+        },
+        {
+          "DataId": 2009488,
+          "Position": {
+            "X": 17.837708,
+            "Y": 38.406982,
+            "Z": 15.030029
+          },
+          "TerritoryId": 463,
+          "InteractionType": "UseItem",
+          "ItemId": 2002474
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 2009510,
+          "Position": {
+            "X": -736.5072,
+            "Y": 127.39758,
+            "Z": 101.548706
+          },
+          "TerritoryId": 622,
+          "InteractionType": "UseItem",
+          "ItemId": 2002474,
+          "AetheryteShortcut": "Azim Steppe - Dhoro Iloh"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1025844,
+          "Position": {
+            "X": -790.82935,
+            "Y": 127.2799,
+            "Z": 123.948975
+          },
+          "TerritoryId": 622,
+          "InteractionType": "Interact",
+          "Mount": true
         }
       ]
     },
@@ -90,11 +147,11 @@
       "Sequence": 255,
       "Steps": [
         {
-          "DataId": 1025798,
+          "DataId": 1025609,
           "Position": {
-            "X": -366.2318,
-            "Y": 76.98169,
-            "Z": -580.31586
+            "X": -770.4738,
+            "Y": 127.42798,
+            "Z": 85.28259
           },
           "TerritoryId": 622,
           "InteractionType": "Interact",
@@ -105,8 +162,8 @@
         {
           "TerritoryId": 622,
           "InteractionType": "Craft",
-          "ItemId": 22736,
-          "ItemCount": 2,
+          "ItemId": 22724,
+          "ItemCount": 1,
           "RequiredQuestAcceptedJob": [
             "DoH"
           ]
@@ -116,7 +173,7 @@
           "InteractionType": "Gather",
           "ItemsToGather": [
             {
-              "ItemId": 22632,
+              "ItemId": 22620,
               "ItemCount": 1
             }
           ],
@@ -129,7 +186,7 @@
           "InteractionType": "Gather",
           "ItemsToGather": [
             {
-              "ItemId": 22658,
+              "ItemId": 22646,
               "ItemCount": 1
             }
           ],
@@ -138,23 +195,22 @@
           ]
         },
         {
-          "DataId": 1025602,
+          "DataId": 1025845,
           "Position": {
-            "X": -780.148,
-            "Y": 128.25195,
-            "Z": 97.154175
+            "X": -790.98193,
+            "Y": 127.28478,
+            "Z": 122.697754
           },
           "TerritoryId": 622,
           "InteractionType": "CompleteQuest",
-          "Mount": true,
           "AetheryteShortcut": "Azim Steppe - Dhoro Iloh",
           "SkipConditions": {
             "AetheryteShortcutIf": {
               "NearPosition": {
                 "Position": {
-                  "X": -780.148,
-                  "Y": 128.25195,
-                  "Z": 97.154175
+                  "X": -790.98193,
+                  "Y": 127.28478,
+                  "Z": 122.697754
                 },
                 "TerritoryId": 622,
                 "MaximumDistance": 50
