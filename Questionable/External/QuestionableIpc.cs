@@ -14,6 +14,7 @@ internal sealed class QuestionableIpc : IDisposable
     private const string IpcIsRunning = "Questionable.IsRunning";
     private const string IpcGetCurrentQuestId = "Questionable.GetCurrentQuestId";
     private const string IpcGetCurrentlyActiveEventQuests = "Questionable.GetCurrentlyActiveEventQuests";
+    private const string IpcStartQuest = "Questionable.StartQuest";
 
     private readonly ICallGateProvider<bool> _isRunning;
     private readonly ICallGateProvider<string?> _getCurrentQuestId;
@@ -37,7 +38,7 @@ internal sealed class QuestionableIpc : IDisposable
         _getCurrentlyActiveEventQuests.RegisterFunc(() =>
             eventInfoComponent.GetCurrentlyActiveEventQuests().Select(q => q.ToString()).ToList());
 
-        _startQuest = pluginInterface.GetIpcProvider<string, bool>("Questionable.StartQuest");
+        _startQuest = pluginInterface.GetIpcProvider<string, bool>(IpcStartQuest);
         _startQuest.RegisterFunc((string questId) => StartQuest(questController, questRegistry, questId));
     }
 
