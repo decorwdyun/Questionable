@@ -16,9 +16,25 @@
 
 
     <ItemGroup>
-        <None Remove="common-schema.json" />
-        <EmbeddedResource Include="common-schema.json">
-            <LogicalName>Questionable.Model.CommonSchema</LogicalName>
+        <None Remove="common-aethernetshard.json" />
+        <None Remove="common-aetheryte.json" />
+        <None Remove="common-classjob.json" />
+        <None Remove="common-completionflags.json" />
+        <None Remove="common-vector3.json" />
+        <EmbeddedResource Include="common-aethernetshard.json">
+            <LogicalName>Questionable.Model.CommonAethernetShard</LogicalName>
+        </EmbeddedResource>
+        <EmbeddedResource Include="common-aetheryte.json">
+            <LogicalName>Questionable.Model.CommonAetheryte</LogicalName>
+        </EmbeddedResource>
+        <EmbeddedResource Include="common-classjob.json">
+            <LogicalName>Questionable.Model.CommonClassJob</LogicalName>
+        </EmbeddedResource>
+        <EmbeddedResource Include="common-completionflags.json">
+            <LogicalName>Questionable.Model.CommonCompletionFlags</LogicalName>
+        </EmbeddedResource>
+        <EmbeddedResource Include="common-vector3.json">
+            <LogicalName>Questionable.Model.CommonVector3</LogicalName>
         </EmbeddedResource>
     </ItemGroup>
 </Project>

@@ -17,8 +17,20 @@ internal sealed class JsonSchemaValidator : IQuestValidator
     public JsonSchemaValidator()
     {
         SchemaRegistry.Global.Register(
-            new Uri("https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json"),
-            JsonSchema.FromStream(AssemblyModelLoader.CommonSchema).AsTask().Result);
+            new Uri("https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-aethernetshard.json"),
+            JsonSchema.FromStream(AssemblyModelLoader.CommonAethernetShard).AsTask().Result);
+        SchemaRegistry.Global.Register(
+            new Uri("https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-aetheryte.json"),
+            JsonSchema.FromStream(AssemblyModelLoader.CommonAetheryte).AsTask().Result);
+        SchemaRegistry.Global.Register(
+            new Uri("https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-classjob.json"),
+            JsonSchema.FromStream(AssemblyModelLoader.CommonClassJob).AsTask().Result);
+        SchemaRegistry.Global.Register(
+            new Uri("https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-completionflags.json"),
+            JsonSchema.FromStream(AssemblyModelLoader.CommonCompletionFlags).AsTask().Result);
+        SchemaRegistry.Global.Register(
+            new Uri("https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-vector3.json"),
+            JsonSchema.FromStream(AssemblyModelLoader.CommonVector3).AsTask().Result);
     }
 
     public IEnumerable<ValidationIssue> Validate(Quest quest)

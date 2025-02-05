@@ -55,7 +55,7 @@
                     "type": "object",
                     "properties": {
                       "Position": {
-                        "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Vector3"
+                        "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-vector3.json"
                       },
                       "MinimumAngle": {
                         "type": "number",

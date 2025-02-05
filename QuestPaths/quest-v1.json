@@ -76,7 +76,7 @@
           "exclusiveMinimum": 0
         },
         "Position": {
-          "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Vector3"
+          "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-vector3.json"
         },
         "StopDistance": {
           "type": [
@@ -170,7 +170,7 @@
         },
         "AetheryteShortcut": {
           "description": "The Aetheryte to teleport to (before moving)",
-          "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Aetheryte"
+          "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-aetheryte.json"
         },
         "AethernetShortcut": {
           "type": "array",
@@ -178,7 +178,7 @@
           "minItems": 2,
           "maxItems": 2,
           "items": {
-            "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/AethernetShard"
+            "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-aethernetshard.json"
           }
         },
         "ItemId": {
@@ -200,7 +200,7 @@
                   "type": "boolean"
                 },
                 "CompletionQuestVariablesFlags": {
-                  "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/CompletionFlags"
+                  "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-completionflags.json"
                 },
                 "Flying": {
                   "type": "string",
@@ -270,16 +270,16 @@
                   }
                 },
                 "AetheryteLocked": {
-                  "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Aetheryte"
+                  "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-aetheryte.json"
                 },
                 "AetheryteUnlocked": {
-                  "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Aetheryte"
+                  "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-aetheryte.json"
                 },
                 "NearPosition": {
                   "type": "object",
                   "properties": {
                     "Position": {
-                      "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Vector3"
+                      "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-vector3.json"
                     },
                     "MaximumDistance": {
                       "type": "number"
@@ -342,10 +342,10 @@
                   }
                 },
                 "AetheryteLocked": {
-                  "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Aetheryte"
+                  "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-aetheryte.json"
                 },
                 "AetheryteUnlocked": {
-                  "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Aetheryte"
+                  "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-aetheryte.json"
                 },
                 "RequiredQuestVariablesNotMet": {
                   "type": "boolean"
@@ -354,7 +354,7 @@
                   "type": "object",
                   "properties": {
                     "Position": {
-                      "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Vector3"
+                      "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-vector3.json"
                     },
                     "MaximumDistance": {
                       "type": "number"
@@ -383,10 +383,10 @@
                   "type": "boolean"
                 },
                 "AetheryteLocked": {
-                  "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Aetheryte"
+                  "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-aetheryte.json"
                 },
                 "AetheryteUnlocked": {
-                  "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Aetheryte"
+                  "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-aetheryte.json"
                 }
               },
               "additionalProperties": false
@@ -395,7 +395,7 @@
           "additionalProperties": false
         },
         "CompletionQuestVariablesFlags": {
-          "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/CompletionFlags"
+          "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-completionflags.json"
         },
         "RequiredQuestVariables": {
           "type": "array",
@@ -439,14 +439,14 @@
           "description": "Which class or job you are using whenever this step gets executed",
           "type": "array",
           "items": {
-            "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/ClassJob"
+            "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-classjob.json"
           }
         },
         "RequiredQuestAcceptedJob": {
           "description": "Which class or job you were using when accepting this quest (e.g. for beast tribes)",
           "type": "array",
           "items": {
-            "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/ClassJob"
+            "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-classjob.json"
           }
         },
         "DelaySecondsAtStart": {
@@ -509,7 +509,7 @@
           "then": {
             "properties": {
               "Aetheryte": {
-                "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Aetheryte"
+                "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-aetheryte.json"
               },
               "DataId": {
                 "type": "null"
@@ -541,7 +541,7 @@
           "then": {
             "properties": {
               "AethernetShard": {
-                "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/AethernetShard"
+                "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-aethernetshard.json"
               },
               "DataId": {
                 "type": "null"
@@ -641,7 +641,7 @@
                       "type": "integer"
                     },
                     "CompletionQuestVariablesFlags": {
-                      "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/CompletionFlags"
+                      "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-completionflags.json"
                     },
                     "IgnoreQuestMarker": {
                       "type": "boolean"
@@ -1054,7 +1054,7 @@
                 "type": "object",
                 "properties": {
                   "Position": {
-                    "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/Vector3"
+                    "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-vector3.json"
                   },
                   "StopDistance": {
                     "type": [
@@ -1424,7 +1424,7 @@
           "then": {
             "properties": {
               "TargetClass": {
-                "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-schema.json#/$defs/ClassJob"
+                "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-classjob.json"
               }
             },
             "required": [

@@ -24,7 +24,11 @@
         </EmbeddedResource>
         <AdditionalFiles Include="4.x - Stormblood\Class Quests\BTN\2623_The White Death.json" />
         <AdditionalFiles Include="quest-v1.json" />
-        <AdditionalFiles Include="..\Questionable.Model\common-schema.json" />
+        <AdditionalFiles Include="..\Questionable.Model\common-aethernetshard.json" />
+        <AdditionalFiles Include="..\Questionable.Model\common-aetheryte.json" />
+        <AdditionalFiles Include="..\Questionable.Model\common-classjob.json" />
+        <AdditionalFiles Include="..\Questionable.Model\common-completionflags.json" />
+        <AdditionalFiles Include="..\Questionable.Model\common-vector3.json" />
     </ItemGroup>
 
     <ItemGroup Condition="'$(Configuration)' == 'Release'">
