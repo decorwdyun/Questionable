@@ -136,5 +136,12 @@ internal sealed class EventInfoComponent
         return !eventQuest.QuestIds.All(x => _questFunctions.IsQuestComplete(x));
     }
 
+    public IEnumerable<QuestId> GetCurrentlyActiveEventQuests()
+    {
+        return _eventQuests
+            .Where(x => x.EndsAtUtc <= DateTime.UtcNow)
+            .SelectMany(x => x.QuestIds);
+    }
+
     private sealed record EventQuest(string Name, List<QuestId> QuestIds, DateTime EndsAtUtc);
 }
