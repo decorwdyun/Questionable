@@ -1,39 +1,34 @@
 {
-  "schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "Theo",
   "QuestSequence": [
     {
       "Sequence": 0,
       "Steps": [
         {
-          "Sequence": 0,
-          "Steps": [
-            {
-              "DataId": 1025602,
-              "Position": {
-                "X": -780.148,
-                "Y": 128.25195,
-                "Z": 97.154175
-              },
-              "TerritoryId": 622,
-              "InteractionType": "AcceptQuest",
-              "Mount": true,
-              "AetheryteShortcut": "Azim Steppe - Dhoro Iloh",
-              "SkipConditions": {
-                "AetheryteShortcutIf": {
-                  "NearPosition": {
-                    "Position": {
-                      "X": -780.148,
-                      "Y": 128.25195,
-                      "Z": 97.154175
-                    },
-                    "TerritoryId": 622,
-                    "MaximumDistance": 50
-                  }
-                }
+          "DataId": 1025602,
+          "Position": {
+            "X": -780.148,
+            "Y": 128.25195,
+            "Z": 97.154175
+          },
+          "TerritoryId": 622,
+          "InteractionType": "AcceptQuest",
+          "Mount": true,
+          "AetheryteShortcut": "Azim Steppe - Dhoro Iloh",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": -780.148,
+                  "Y": 128.25195,
+                  "Z": 97.154175
+                },
+                "TerritoryId": 622,
+                "MaximumDistance": 50
               }
             }
-          ]
+          }
         }
       ]
     },
