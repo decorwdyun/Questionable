@@ -4,6 +4,7 @@ using System.Linq;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Ipc;
 using Questionable.Controller;
+using Questionable.Model.Questing;
 using Questionable.Windows.QuestComponents;
 
 namespace Questionable.External;
@@ -17,10 +18,11 @@ internal sealed class QuestionableIpc : IDisposable
     private readonly ICallGateProvider<bool> _isRunning;
     private readonly ICallGateProvider<string?> _getCurrentQuestId;
     private readonly ICallGateProvider<List<string>> _getCurrentlyActiveEventQuests;
+    private readonly ICallGateProvider<string, bool> _startQuest;
 
     public QuestionableIpc(
         QuestController questController,
-        EventInfoComponent eventInfoComponent,
+        EventInfoComponent eventInfoComponent, QuestRegistry questRegistry,
         IDalamudPluginInterface pluginInterface)
     {
         _isRunning = pluginInterface.GetIpcProvider<bool>(IpcIsRunning);
@@ -34,11 +36,25 @@ internal sealed class QuestionableIpc : IDisposable
             pluginInterface.GetIpcProvider<List<string>>(IpcGetCurrentlyActiveEventQuests);
         _getCurrentlyActiveEventQuests.RegisterFunc(() =>
             eventInfoComponent.GetCurrentlyActiveEventQuests().Select(q => q.ToString()).ToList());
+
+        _startQuest = pluginInterface.GetIpcProvider<string, bool>("Questionable.StartQuest");
+        _startQuest.RegisterFunc((string questId) => StartQuest(questController, questRegistry, questId));
     }
 
+    private static bool StartQuest(QuestController qc, QuestRegistry qr, string questId)
+    {
+        if (ElementId.TryFromString(questId, out var elementId) && elementId != null && qr.TryGetQuest(elementId, out var quest))
+        {
+            qc.SetNextQuest(quest);
+            qc.Start("IPCQuestSelection");
+            return true;
+        }
+        return false;
+    }
 
     public void Dispose()
     {
+        _startQuest.UnregisterFunc();
         _getCurrentlyActiveEventQuests.UnregisterFunc();
         _getCurrentQuestId.UnregisterFunc();
         _isRunning.UnregisterFunc();
