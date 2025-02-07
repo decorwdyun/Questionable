@@ -49,7 +49,7 @@ internal static class Duty
         TerritoryData territoryData,
         IClientState clientState,
         IChatGui chatGui,
-        SendNotification.Executor sendNotificationExecutor) : TaskExecutor<StartAutoDutyTask>
+        SendNotification.Executor sendNotificationExecutor) : TaskExecutor<StartAutoDutyTask>, IStoppableTaskExecutor
     {
         protected override bool Start()
         {
@@ -94,6 +94,8 @@ internal static class Duty
                 : ETaskResult.StillRunning;
         }
 
+        public void StopNow() => autoDutyIpc.Stop();
+
         public override bool ShouldInterruptOnDamage() => false;
     }
 
@@ -105,7 +107,7 @@ internal static class Duty
     internal sealed class WaitAutoDutyExecutor(
         AutoDutyIpc autoDutyIpc,
         TerritoryData territoryData,
-        IClientState clientState) : TaskExecutor<WaitAutoDutyTask>
+        IClientState clientState) : TaskExecutor<WaitAutoDutyTask>, IStoppableTaskExecutor
     {
         protected override bool Start() => true;
 
@@ -119,6 +121,8 @@ internal static class Duty
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
         }
+
+        public void StopNow() => autoDutyIpc.Stop();
 
         public override bool ShouldInterruptOnDamage() => false;
     }

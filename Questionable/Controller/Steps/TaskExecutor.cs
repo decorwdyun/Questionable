@@ -25,6 +25,11 @@ internal interface IExtraTaskCreator : ITaskExecutor
     IEnumerable<ITask> CreateExtraTasks();
 }
 
+internal interface IStoppableTaskExecutor : ITaskExecutor
+{
+    void StopNow();
+}
+
 internal abstract class TaskExecutor<T> : ITaskExecutor
     where T : class, ITask
 {

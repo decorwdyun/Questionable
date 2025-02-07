@@ -473,6 +473,9 @@ internal sealed class QuestController : MiniTaskController<QuestController>
     private void ClearTasksInternal()
     {
         //_logger.LogDebug("Clearing task (internally)");
+        if (_taskQueue.CurrentTaskExecutor is IStoppableTaskExecutor stoppableTaskExecutor)
+            stoppableTaskExecutor.StopNow();
+
         _taskQueue.Reset();
 
         _yesAlreadyIpc.RestoreYesAlready();
