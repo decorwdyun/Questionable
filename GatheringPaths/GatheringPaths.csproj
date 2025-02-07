@@ -45,8 +45,4 @@
         <AdditionalFiles Include="6.x - Endwalker\**\*.json" />
         <AdditionalFiles Include="7.x - Dawntrail\**\*.json" />
     </ItemGroup>
-
-    <ItemGroup>
-      <EditorConfigFiles Include=".editorconfig" />
-    </ItemGroup>
 </Project>
