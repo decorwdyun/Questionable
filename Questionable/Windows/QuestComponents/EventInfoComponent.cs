@@ -139,7 +139,7 @@ internal sealed class EventInfoComponent
     public IEnumerable<QuestId> GetCurrentlyActiveEventQuests()
     {
         return _eventQuests
-            .Where(x => x.EndsAtUtc <= DateTime.UtcNow)
+            .Where(x => x.EndsAtUtc >= DateTime.UtcNow)
             .SelectMany(x => x.QuestIds);
     }
 
