@@ -292,6 +292,12 @@
         "Option": "Manual"
       }
     ],
+    "BossMod.Autorotation.VeynWAR": [
+      {
+        "Track": "AOE",
+        "Option": "AutoFinishCombo"
+      }
+    ],
     "BossMod.Autorotation.MiscAI.NormalMovement": [
       {
         "Track": "Destination",
