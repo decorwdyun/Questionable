@@ -1,15 +1,25 @@
 {
   "Name": "Questionable",
   "Modules": {
+    "BossMod.Autorotation.MiscAI.AutoFarm": [],
+    "BossMod.Autorotation.MiscAI.AutoPull": [
+      {
+        "Track": "Automatically attack hunt marks once they are below 95% HP",
+        "Option": "Disabled"
+      },
+      {
+        "Track": "Automatically attack deep dungeon bosses when solo",
+        "Option": "Disabled"
+      },
+      {
+        "Track": "Automatically attack all targets if the Epic Echo status is present (i.e. when unsynced)",
+        "Option": "Disabled"
+      }
+    ],
     "BossMod.Autorotation.xan.DNC": [
       {
         "Track": "Buffs",
         "Option": "Auto"
-      },
-      {
-        "Track": "Buffs",
-        "Option": "Delay",
-        "Mod": "Shift, Ctrl"
       },
       {
         "Track": "AOE",
@@ -24,11 +34,6 @@
       {
         "Track": "Buffs",
         "Option": "Auto"
-      },
-      {
-        "Track": "Buffs",
-        "Option": "Delay",
-        "Mod": "Shift, Ctrl"
       },
       {
         "Track": "AOE",
@@ -55,11 +60,6 @@
         "Option": "Auto"
       },
       {
-        "Track": "Buffs",
-        "Option": "Delay",
-        "Mod": "Shift, Ctrl"
-      },
-      {
         "Track": "AOE",
         "Option": "AOE"
       },
@@ -78,11 +78,6 @@
         "Option": "Auto"
       },
       {
-        "Track": "Buffs",
-        "Option": "Delay",
-        "Mod": "Shift, Ctrl"
-      },
-      {
         "Track": "AOE",
         "Option": "AOE"
       },
@@ -95,11 +90,6 @@
       {
         "Track": "Buffs",
         "Option": "Auto"
-      },
-      {
-        "Track": "Buffs",
-        "Option": "Delay",
-        "Mod": "Shift, Ctrl"
       },
       {
         "Track": "AOE",
@@ -126,11 +116,6 @@
         "Option": "Auto"
       },
       {
-        "Track": "Buffs",
-        "Option": "Delay",
-        "Mod": "Shift, Ctrl"
-      },
-      {
         "Track": "AOE",
         "Option": "AOE"
       },
@@ -143,11 +128,6 @@
       {
         "Track": "Buffs",
         "Option": "Auto"
-      },
-      {
-        "Track": "Buffs",
-        "Option": "Delay",
-        "Mod": "Shift, Ctrl"
       },
       {
         "Track": "AOE",
@@ -164,11 +144,6 @@
         "Option": "Auto"
       },
       {
-        "Track": "Buffs",
-        "Option": "Delay",
-        "Mod": "Shift, Ctrl"
-      },
-      {
         "Track": "AOE",
         "Option": "AOE"
       },
@@ -181,11 +156,6 @@
       {
         "Track": "Buffs",
         "Option": "Auto"
-      },
-      {
-        "Track": "Buffs",
-        "Option": "Delay",
-        "Mod": "Shift, Ctrl"
       },
       {
         "Track": "AOE",
@@ -202,11 +172,6 @@
         "Option": "Auto"
       },
       {
-        "Track": "Buffs",
-        "Option": "Delay",
-        "Mod": "Shift, Ctrl"
-      },
-      {
         "Track": "AOE",
         "Option": "AOE"
       },
@@ -219,11 +184,6 @@
       {
         "Track": "Buffs",
         "Option": "Auto"
-      },
-      {
-        "Track": "Buffs",
-        "Option": "Delay",
-        "Mod": "Shift, Ctrl"
       },
       {
         "Track": "AOE",
@@ -240,11 +200,6 @@
         "Option": "Auto"
       },
       {
-        "Track": "Buffs",
-        "Option": "Delay",
-        "Mod": "Shift, Ctrl"
-      },
-      {
         "Track": "AOE",
         "Option": "AOE"
       },
@@ -257,11 +212,6 @@
       {
         "Track": "Buffs",
         "Option": "Auto"
-      },
-      {
-        "Track": "Buffs",
-        "Option": "Delay",
-        "Mod": "Shift, Ctrl"
       },
       {
         "Track": "AOE",
@@ -278,11 +228,6 @@
         "Option": "Auto"
       },
       {
-        "Track": "Buffs",
-        "Option": "Delay",
-        "Mod": "Shift, Ctrl"
-      },
-      {
         "Track": "AOE",
         "Option": "AOE"
       },
@@ -295,11 +240,6 @@
       {
         "Track": "Buffs",
         "Option": "Auto"
-      },
-      {
-        "Track": "Buffs",
-        "Option": "Delay",
-        "Mod": "Shift, Ctrl"
       },
       {
         "Track": "AOE",
@@ -316,11 +256,6 @@
         "Option": "Auto"
       },
       {
-        "Track": "Buffs",
-        "Option": "Delay",
-        "Mod": "Shift, Ctrl"
-      },
-      {
         "Track": "AOE",
         "Option": "AOE"
       },
@@ -329,21 +264,10 @@
         "Option": "Manual"
       }
     ],
-    "BossMod.Autorotation.StandardWAR": [
-      {
-        "Track": "AOE",
-        "Option": "AutoFinishCombo"
-      }
-    ],
     "BossMod.Autorotation.xan.RDM": [
       {
         "Track": "Buffs",
         "Option": "Auto"
-      },
-      {
-        "Track": "Buffs",
-        "Option": "Delay",
-        "Mod": "Shift, Ctrl"
       },
       {
         "Track": "AOE",
@@ -360,17 +284,24 @@
         "Option": "Auto"
       },
       {
-        "Track": "Buffs",
-        "Option": "Delay",
-        "Mod": "Shift, Ctrl"
-      },
-      {
         "Track": "AOE",
         "Option": "AOE"
       },
       {
         "Track": "Targeting",
         "Option": "Manual"
+      }
+    ],
+    "BossMod.Autorotation.VeynWAR": [
+      {
+        "Track": "AOE",
+        "Option": "AutoFinishCombo"
+      }
+    ],
+    "BossMod.Autorotation.MiscAI.NormalMovement": [
+      {
+        "Track": "Destination",
+        "Option": "Pathfind"
       }
     ]
   }
