@@ -27,6 +27,28 @@
       "Sequence": 1,
       "Steps": [
         {
+          "Position": {
+            "X": -225.94685,
+            "Y": 26.139933,
+            "Z": -340.8984
+          },
+          "TerritoryId": 146,
+          "InteractionType": "WalkTo",
+          "Mount": true,
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                16
+              ]
+            }
+          }
+        },
+        {
           "DataId": 2001980,
           "Position": {
             "X": -202.22784,
