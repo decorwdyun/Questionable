@@ -9,7 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\LLib\LLib.csproj" />
       <ProjectReference Include="..\Questionable.Model\Questionable.Model.csproj" />
-      <ProjectReference Include="..\vendor\ECommons\ECommons\ECommons.csproj" />
+      <ProjectReference Include="..\vendor\pictomancy\Pictomancy\Pictomancy.csproj" />
     </ItemGroup>
 
     <Import Project="..\LLib\LLib.targets"/>

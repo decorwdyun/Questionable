@@ -154,7 +154,6 @@ internal sealed class EditorWindow : Window
             {
                 locationOverride.MinimumAngle = minAngle;
                 locationOverride.MaximumAngle = maxAngle;
-                _plugin.Redraw();
             }
 
             float minDistance = locationOverride.MinimumDistance ?? location.CalculateMinimumDistance();
@@ -163,7 +162,6 @@ internal sealed class EditorWindow : Window
             {
                 locationOverride.MinimumDistance = minDistance;
                 locationOverride.MaximumDistance = maxDistance;
-                _plugin.Redraw();
             }
 
             bool unsaved = locationOverride.NeedsSave();
@@ -194,7 +192,6 @@ internal sealed class EditorWindow : Window
             if (ImGui.Button("Reset"))
             {
                 _changes[location.InternalId] = new LocationOverride();
-                _plugin.Redraw();
             }
 
             ImGui.EndDisabled();
