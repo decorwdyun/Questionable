@@ -757,6 +757,10 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         if (ManualPriorityQuests.Contains(currentQuest.Quest))
             return false;
 
+        // "ifrit bleeds, we can kill it" isn't listed as priority quest, as we accept it during the MSQ 'Moving On'
+        if (currentQuest.Quest.Id is QuestId { Value: 1048 })
+            return false;
+
         if (currentQuest.Quest.Info.AlliedSociety != EAlliedSociety.None)
             return false;
 

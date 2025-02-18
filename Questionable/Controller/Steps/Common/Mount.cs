@@ -37,7 +37,7 @@ internal static class Mount
         private bool _mountTriggered;
         private DateTime _retryAt = DateTime.MinValue;
 
-        public MountResult EvaluateMountState()
+        public unsafe MountResult EvaluateMountState()
         {
             if (condition[ConditionFlag.Mounted])
                 return MountResult.DontMount;
@@ -58,7 +58,7 @@ internal static class Mount
             {
                 Vector3 playerPosition = clientState.LocalPlayer?.Position ?? Vector3.Zero;
                 float distance = System.Numerics.Vector3.Distance(playerPosition, Task.Position.GetValueOrDefault());
-                if (Task.TerritoryId == clientState.TerritoryType && distance < 30f && !Conditions.IsDiving)
+                if (Task.TerritoryId == clientState.TerritoryType && distance < 30f && !Conditions.Instance()->Diving)
                 {
                     logger.LogInformation("Not using mount, as we're close to the target");
                     return MountResult.DontMount;

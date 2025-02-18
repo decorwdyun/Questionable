@@ -80,7 +80,8 @@
           },
           "TerritoryId": 148,
           "InteractionType": "UseItem",
-          "ItemId": 4868
+          "ItemId": 4868,
+          "Fly": true
         },
         {
           "Position": {
