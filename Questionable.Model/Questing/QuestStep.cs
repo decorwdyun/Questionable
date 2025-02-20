@@ -75,6 +75,7 @@ public sealed class QuestStep
     public JumpDestination? JumpDestination { get; set; }
     public uint? ContentFinderConditionId { get; set; }
     public bool AutoDutyEnabled { get; set; }
+    public bool BossModEnabled { get; set; }
     public SkipConditions? SkipConditions { get; set; }
 
     public List<List<QuestWorkValue>?> RequiredQuestVariables { get; set; } = new();

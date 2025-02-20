@@ -74,7 +74,9 @@
             "Z": 37.247192
           },
           "TerritoryId": 418,
-          "InteractionType": "SinglePlayerDuty"
+          "InteractionType": "SinglePlayerDuty",
+          "ContentFinderConditionId": 398,
+          "BossModEnabled": true
         }
       ]
     },

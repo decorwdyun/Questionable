@@ -9,33 +9,26 @@ using Questionable.Model;
 using System;
 using System.IO;
 using System.Numerics;
+using Questionable.External;
 
 namespace Questionable.Controller.CombatModules;
 
 internal sealed class BossModModule : ICombatModule, IDisposable
 {
-    private const string Name = "BossMod";
     private readonly ILogger<BossModModule> _logger;
+    private readonly BossModIpc _bossModIpc;
     private readonly Configuration _configuration;
-    private readonly ICallGateSubscriber<string, string?> _getPreset;
-    private readonly ICallGateSubscriber<string, bool, bool> _createPreset;
-    private readonly ICallGateSubscriber<string, bool> _setPreset;
-    private readonly ICallGateSubscriber<bool> _clearPreset;
 
     private static Stream Preset => typeof(BossModModule).Assembly.GetManifestResourceStream("Questionable.Controller.CombatModules.BossModPreset")!;
 
     public BossModModule(
         ILogger<BossModModule> logger,
-        IDalamudPluginInterface pluginInterface,
+        BossModIpc bossModIpc,
         Configuration configuration)
     {
         _logger = logger;
+        _bossModIpc = bossModIpc;
         _configuration = configuration;
-
-        _getPreset = pluginInterface.GetIpcSubscriber<string, string?>($"{Name}.Presets.Get");
-        _createPreset = pluginInterface.GetIpcSubscriber<string, bool, bool>($"{Name}.Presets.Create");
-        _setPreset = pluginInterface.GetIpcSubscriber<string, bool>($"{Name}.Presets.SetActive");
-        _clearPreset = pluginInterface.GetIpcSubscriber<bool>($"{Name}.Presets.ClearActive");
     }
 
     public bool CanHandleFight(CombatController.CombatData combatData)
@@ -43,26 +36,19 @@ internal sealed class BossModModule : ICombatModule, IDisposable
         if (_configuration.General.CombatModule != Configuration.ECombatModule.BossMod)
             return false;
 
-        try
-        {
-            return _getPreset.HasFunction;
-        }
-        catch (IpcError)
-        {
-            return false;
-        }
+        return _bossModIpc.IsSupported();
     }
 
     public bool Start(CombatController.CombatData combatData)
     {
         try
         {
-            if (_getPreset.InvokeFunc("Questionable") == null)
+            if (_bossModIpc.GetPreset("Questionable") == null)
             {
                 using var reader = new StreamReader(Preset);
-                _logger.LogInformation("Loading Questionable BossMod Preset: {LoadedState}", _createPreset.InvokeFunc(reader.ReadToEnd(), true));
+                _logger.LogInformation("Loading Questionable BossMod Preset: {LoadedState}", _bossModIpc.CreatePreset(reader.ReadToEnd(), true));
             }
-            _setPreset.InvokeFunc("Questionable");
+            _bossModIpc.SetPreset("Questionable");
             return true;
         }
         catch (IpcError e)
@@ -76,7 +62,7 @@ internal sealed class BossModModule : ICombatModule, IDisposable
     {
         try
         {
-            _clearPreset.InvokeFunc();
+            _bossModIpc.ClearPreset();
             return true;
         }
         catch (IpcError e)

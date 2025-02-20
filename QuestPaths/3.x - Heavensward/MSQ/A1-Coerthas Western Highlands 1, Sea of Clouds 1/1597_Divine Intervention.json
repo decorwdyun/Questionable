@@ -78,7 +78,9 @@
           "AethernetShortcut": [
             "[Ishgard] The Forgotten Knight",
             "[Ishgard] The Tribunal"
-          ]
+          ],
+          "ContentFinderConditionId": 396,
+          "BossModEnabled": true
         }
       ]
     },

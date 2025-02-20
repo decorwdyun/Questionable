@@ -45,7 +45,7 @@ internal sealed class TerritoryData
             .ToImmutableDictionary(x => x.Content.RowId, x => x.Name.ToDalamudString().ToString());
 
         _contentFinderConditions = dataManager.GetExcelSheet<ContentFinderCondition>()
-            .Where(x => x.RowId > 0 && x.Content.RowId != 0 && x.ContentLinkType == 1 && x.ContentType.RowId != 6)
+            .Where(x => x.RowId > 0 && x.Content.RowId != 0 && x.ContentLinkType is 1 or 5 && x.ContentType.RowId != 6)
             .Select(x => new ContentFinderConditionData(x, dataManager.Language))
             .ToImmutableDictionary(x => x.ContentFinderConditionId, x => x);
     }

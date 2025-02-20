@@ -131,6 +131,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<NotificationMasterIpc>();
         serviceCollection.AddSingleton<AutomatonIpc>();
         serviceCollection.AddSingleton<AutoDutyIpc>();
+        serviceCollection.AddSingleton<BossModIpc>();
 
         serviceCollection.AddSingleton<GearStatsCalculator>();
     }
@@ -221,6 +222,14 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTaskExecutor<InitiateLeve.OpenJournal, InitiateLeve.OpenJournalExecutor>();
         serviceCollection.AddTaskExecutor<InitiateLeve.Initiate, InitiateLeve.InitiateExecutor>();
         serviceCollection.AddTaskExecutor<InitiateLeve.SelectDifficulty, InitiateLeve.SelectDifficultyExecutor>();
+
+        serviceCollection.AddTaskFactory<SinglePlayerDuty.Factory>();
+        serviceCollection
+            .AddTaskExecutor<SinglePlayerDuty.StartSinglePlayerDuty, SinglePlayerDuty.StartSinglePlayerDutyExecutor>();
+        serviceCollection.AddTaskExecutor<SinglePlayerDuty.EnableAi, SinglePlayerDuty.EnableAiExecutor>();
+        serviceCollection
+            .AddTaskExecutor<SinglePlayerDuty.WaitSinglePlayerDuty, SinglePlayerDuty.WaitSinglePlayerDutyExecutor>();
+        serviceCollection.AddTaskExecutor<SinglePlayerDuty.DisableAi, SinglePlayerDuty.DisableAiExecutor>();
 
         serviceCollection.AddTaskExecutor<WaitCondition.Task, WaitCondition.WaitConditionExecutor>();
         serviceCollection.AddTaskFactory<WaitAtEnd.Factory>();

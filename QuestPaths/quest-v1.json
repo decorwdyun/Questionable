@@ -1261,6 +1261,27 @@
           "if": {
             "properties": {
               "InteractionType": {
+                "const": "SinglePlayerDuty"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "ContentFinderConditionId": {
+                "type": "integer",
+                "exclusiveMinimum": 0,
+                "exclusiveMaximum": 3000
+              },
+              "BossModEnabled": {
+                "type": "boolean"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "InteractionType": {
                 "const": "WaitForNpcAtPosition"
               }
             }

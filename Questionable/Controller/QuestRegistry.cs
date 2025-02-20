@@ -150,7 +150,8 @@ internal sealed class QuestRegistry
         foreach (var quest in _quests.Values)
         {
             foreach (var dutyStep in quest.AllSteps().Where(x =>
-                         x.Step.InteractionType == EInteractionType.Duty && x.Step.ContentFinderConditionId != null))
+                         x.Step.InteractionType is EInteractionType.Duty or EInteractionType.SinglePlayerDuty
+                         && x.Step.ContentFinderConditionId != null))
             {
                 _contentFinderConditionIds[dutyStep.Step.ContentFinderConditionId!.Value] = (quest.Id, dutyStep.Step);
             }

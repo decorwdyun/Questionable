@@ -598,14 +598,14 @@ internal sealed class InteractionUiController : IDisposable
         if (checkAllSteps)
         {
             var sequence = quest.FindSequence(currentQuest.Sequence);
-            if (sequence != null && HandleDefaultYesNo(addonSelectYesno, quest,
-                    sequence.Steps.SelectMany(x => x.DialogueChoices).ToList(), actualPrompt))
+            if (sequence != null &&
+                sequence.Steps.Any(step => HandleDefaultYesNo(addonSelectYesno, quest, step, step.DialogueChoices, actualPrompt)))
                 return true;
         }
         else
         {
             var step = quest.FindSequence(currentQuest.Sequence)?.FindStep(currentQuest.Step);
-            if (step != null && HandleDefaultYesNo(addonSelectYesno, quest, step.DialogueChoices, actualPrompt))
+            if (step != null && HandleDefaultYesNo(addonSelectYesno, quest, step, step.DialogueChoices, actualPrompt))
                 return true;
         }
 
@@ -619,7 +619,7 @@ internal sealed class InteractionUiController : IDisposable
                 Yes = true
             };
 
-            if (HandleDefaultYesNo(addonSelectYesno, quest, [dialogueChoice], actualPrompt))
+            if (HandleDefaultYesNo(addonSelectYesno, quest, null, [dialogueChoice], actualPrompt))
                 return true;
         }
 
@@ -630,7 +630,7 @@ internal sealed class InteractionUiController : IDisposable
     }
 
     private unsafe bool HandleDefaultYesNo(AddonSelectYesno* addonSelectYesno, Quest quest,
-        List<DialogueChoice> dialogueChoices, string actualPrompt)
+        QuestStep? step, List<DialogueChoice> dialogueChoices, string actualPrompt)
     {
         _logger.LogTrace("DefaultYesNo: Choice count: {Count}", dialogueChoices.Count);
         foreach (var dialogueChoice in dialogueChoices)
@@ -656,6 +656,13 @@ internal sealed class InteractionUiController : IDisposable
             }
 
             addonSelectYesno->AtkUnitBase.FireCallbackInt(dialogueChoice.Yes ? 0 : 1);
+            return true;
+        }
+
+        if (step is { InteractionType: EInteractionType.SinglePlayerDuty, BossModEnabled: true })
+        {
+            _logger.LogTrace("DefaultYesNo: probably Single Player Duty");
+            addonSelectYesno->AtkUnitBase.FireCallbackInt(0);
             return true;
         }
 
