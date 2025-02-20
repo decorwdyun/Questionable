@@ -96,7 +96,6 @@
           "TerritoryId": 138,
           "InteractionType": "SinglePlayerDuty",
           "Fly": true,
-          "ContentFinderConditionId": 393,
           "BossModEnabled": true
         }
       ]

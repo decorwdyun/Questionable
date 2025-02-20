@@ -14,6 +14,7 @@ internal static class SendNotification
     internal sealed class Factory(
         AutomatonIpc automatonIpc,
         AutoDutyIpc autoDutyIpc,
+        BossModIpc bossModIpc,
         TerritoryData territoryData) : SimpleTaskFactory
     {
         public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
@@ -26,7 +27,7 @@ internal static class SendNotification
                     new Task(step.InteractionType, step.ContentFinderConditionId.HasValue
                         ? territoryData.GetContentFinderCondition(step.ContentFinderConditionId.Value)?.Name
                         : step.Comment),
-                EInteractionType.SinglePlayerDuty when !step.BossModEnabled =>
+                EInteractionType.SinglePlayerDuty when !bossModIpc.IsConfiguredToRunSoloInstance(quest.Id, step.SinglePlayerDutyIndex, step.BossModEnabled) =>
                     new Task(step.InteractionType, quest.Info.Name),
                 _ => null,
             };

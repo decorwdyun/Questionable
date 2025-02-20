@@ -7,6 +7,7 @@ using Lumina.Excel.Sheets;
 using Questionable.Model.Questing;
 using ExcelQuest = Lumina.Excel.Sheets.Quest;
 using GrandCompany = FFXIVClientStructs.FFXIV.Client.UI.Agent.GrandCompany;
+using QQuestId = Questionable.Model.Questing.QuestId;
 
 namespace Questionable.Model;
 
@@ -14,7 +15,7 @@ internal sealed class QuestInfo : IQuestInfo
 {
     public QuestInfo(ExcelQuest quest, uint newGamePlusChapter, byte startingCity, JournalGenreOverrides journalGenreOverrides)
     {
-        QuestId = new QuestId((ushort)(quest.RowId & 0xFFFF));
+        QuestId = QQuestId.FromRowId(quest.RowId);
 
         string suffix = QuestId.Value switch
         {
@@ -41,15 +42,15 @@ internal sealed class QuestInfo : IQuestInfo
         PreviousQuests =
             new List<PreviousQuestInfo>
                 {
-                    new(ReplaceOldQuestIds((ushort)(quest.PreviousQuest[0].RowId & 0xFFFF)), quest.Unknown7),
-                    new(ReplaceOldQuestIds((ushort)(quest.PreviousQuest[1].RowId & 0xFFFF))),
-                    new(ReplaceOldQuestIds((ushort)(quest.PreviousQuest[2].RowId & 0xFFFF)))
+                    new(ReplaceOldQuestIds(QQuestId.FromRowId(quest.PreviousQuest[0].RowId)), quest.Unknown7),
+                    new(ReplaceOldQuestIds(QQuestId.FromRowId(quest.PreviousQuest[1].RowId))),
+                    new(ReplaceOldQuestIds(QQuestId.FromRowId(quest.PreviousQuest[2].RowId)))
                 }
                 .Where(x => x.QuestId.Value != 0)
                 .ToImmutableList();
         PreviousQuestJoin = (EQuestJoin)quest.PreviousQuestJoin;
         QuestLocks = quest.QuestLock
-            .Select(x => new QuestId((ushort)(x.RowId & 0xFFFFF)))
+            .Select(x => QQuestId.FromRowId(x.RowId))
             .Where(x => x.Value != 0)
             .ToImmutableList();
         QuestLockJoin = (EQuestJoin)quest.QuestLockJoin;
@@ -85,13 +86,13 @@ internal sealed class QuestInfo : IQuestInfo
         Expansion = (EExpansionVersion)quest.Expansion.RowId;
     }
 
-    private static QuestId ReplaceOldQuestIds(ushort questId)
+    private static QuestId ReplaceOldQuestIds(QuestId questId)
     {
-        return new QuestId(questId switch
+        return questId.Value switch
         {
-            524 => 4522,
+            524 => new QuestId(4522),
             _ => questId,
-        });
+        };
     }
 
     public ElementId QuestId { get; }

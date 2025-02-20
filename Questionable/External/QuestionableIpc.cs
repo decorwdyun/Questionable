@@ -41,10 +41,10 @@ internal sealed class QuestionableIpc : IDisposable
             eventInfoComponent.GetCurrentlyActiveEventQuests().Select(q => q.ToString()).ToList());
 
         _startQuest = pluginInterface.GetIpcProvider<string, bool>(IpcStartQuest);
-        _startQuest.RegisterFunc((string questId) => StartQuest(questController, questRegistry, questId, false));
+        _startQuest.RegisterFunc((questId) => StartQuest(questController, questRegistry, questId, false));
 
         _startSingleQuest = pluginInterface.GetIpcProvider<string, bool>(IpcStartSingleQuest);
-        _startSingleQuest.RegisterFunc((string questId) => StartQuest(questController, questRegistry, questId, true));
+        _startSingleQuest.RegisterFunc((questId) => StartQuest(questController, questRegistry, questId, true));
     }
 
     private static bool StartQuest(QuestController qc, QuestRegistry qr, string questId, bool single)
@@ -63,6 +63,7 @@ internal sealed class QuestionableIpc : IDisposable
 
     public void Dispose()
     {
+        _startSingleQuest.UnregisterFunc();
         _startQuest.UnregisterFunc();
         _getCurrentlyActiveEventQuests.UnregisterFunc();
         _getCurrentQuestId.UnregisterFunc();

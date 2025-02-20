@@ -1267,13 +1267,14 @@
           },
           "then": {
             "properties": {
-              "ContentFinderConditionId": {
-                "type": "integer",
-                "exclusiveMinimum": 0,
-                "exclusiveMaximum": 3000
-              },
               "BossModEnabled": {
                 "type": "boolean"
+              },
+              "SinglePlayerDutyIndex": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "If a quest has multiple solo instances (which affects 5 quests total), indicates which one this is"
               }
             }
           }

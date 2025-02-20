@@ -14,6 +14,7 @@ internal sealed class Configuration : IPluginConfiguration
     public int PluginSetupCompleteVersion { get; set; }
     public GeneralConfiguration General { get; } = new();
     public DutyConfiguration Duties { get; } = new();
+    public SoloDutyConfiguration SoloDuties { get; } = new();
     public NotificationConfiguration Notifications { get; } = new();
     public AdvancedConfiguration Advanced { get; } = new();
     public WindowConfig DebugWindowConfig { get; } = new();
@@ -39,6 +40,13 @@ internal sealed class Configuration : IPluginConfiguration
         public bool RunInstancedContentWithAutoDuty { get; set; }
         public HashSet<uint> WhitelistedDutyCfcIds { get; set; } = [];
         public HashSet<uint> BlacklistedDutyCfcIds { get; set; } = [];
+    }
+
+    internal sealed class SoloDutyConfiguration
+    {
+        public bool RunSoloInstancesWithBossMod { get; set; }
+        public HashSet<uint> WhitelistedSoloDutyCfcIds { get; set; } = [];
+        public HashSet<uint> BlacklistedSoloDutyCfcIds { get; set; } = [];
     }
 
     internal sealed class NotificationConfiguration

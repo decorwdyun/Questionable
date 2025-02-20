@@ -2,22 +2,33 @@ using Dalamud.Plugin;
 using Dalamud.Plugin.Ipc;
 using Dalamud.Plugin.Ipc.Exceptions;
 using Dalamud.Plugin.Services;
+using Questionable.Data;
+using Questionable.Model.Questing;
 
 namespace Questionable.External;
 
 internal sealed class BossModIpc
 {
-    private readonly ICommandManager _commandManager;
     private const string Name = "BossMod";
 
+    private readonly Configuration _configuration;
+    private readonly ICommandManager _commandManager;
+    private readonly TerritoryData _territoryData;
     private readonly ICallGateSubscriber<string, string?> _getPreset;
     private readonly ICallGateSubscriber<string, bool, bool> _createPreset;
     private readonly ICallGateSubscriber<string, bool> _setPreset;
     private readonly ICallGateSubscriber<bool> _clearPreset;
 
-    public BossModIpc(IDalamudPluginInterface pluginInterface, ICommandManager commandManager)
+    public BossModIpc(
+        IDalamudPluginInterface pluginInterface,
+        Configuration configuration,
+        ICommandManager commandManager,
+        TerritoryData territoryData)
     {
+        _configuration = configuration;
         _commandManager = commandManager;
+        _territoryData = territoryData;
+
         _getPreset = pluginInterface.GetIpcSubscriber<string, string?>($"{Name}.Presets.Get");
         _createPreset = pluginInterface.GetIpcSubscriber<string, bool, bool>($"{Name}.Presets.Create");
         _setPreset = pluginInterface.GetIpcSubscriber<string, bool>($"{Name}.Presets.SetActive");
@@ -69,5 +80,22 @@ internal sealed class BossModIpc
         _commandManager.ProcessCommand("/vbmai off");
         _commandManager.ProcessCommand("/vbm cfg ZoneModuleConfig EnableQuestBattles false");
         ClearPreset();
+    }
+
+    public bool IsConfiguredToRunSoloInstance(ElementId questId, byte dutyIndex, bool enabledByDefault)
+    {
+        if (!_configuration.SoloDuties.RunSoloInstancesWithBossMod)
+            return false;
+
+        if (!_territoryData.TryGetContentFinderConditionForSoloInstance(questId, dutyIndex, out var cfcData))
+            return false;
+
+        if (_configuration.SoloDuties.BlacklistedSoloDutyCfcIds.Contains(cfcData.ContentFinderConditionId))
+            return false;
+
+        if (_configuration.SoloDuties.WhitelistedSoloDutyCfcIds.Contains(cfcData.ContentFinderConditionId))
+            return true;
+
+        return enabledByDefault;
     }
 }

@@ -29,7 +29,6 @@
           },
           "TerritoryId": 145,
           "InteractionType": "SinglePlayerDuty",
-          "ContentFinderConditionId": 400,
           "BossModEnabled": true
         }
       ]

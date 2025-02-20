@@ -274,7 +274,7 @@ public sealed class RendererPlugin : IDalamudPlugin
                             locationOverride?.MaximumDistance ?? x.CalculateMaximumDistance(),
                             minimumAngle, maximumAngle, color | 0xFF000000);
 
-                        drawList.AddText(x.Position, 0xFFFFFFFF, $"{location.Root.Groups.IndexOf(group)} // {node.DataId} / {node.Locations.IndexOf(x)} || {minimumAngle}, {maximumAngle}", 1f);
+                        drawList.AddText(x.Position, isUnsaved ? 0xFFFF0000 : 0xFFFFFFFF, $"{location.Root.Groups.IndexOf(group)} // {node.DataId} / {node.Locations.IndexOf(x)} || {minimumAngle}, {maximumAngle}", 1f);
 #if false
                         var a = GatheringMath.CalculateLandingLocation(x, 0, 0);
                         var b = GatheringMath.CalculateLandingLocation(x, 1, 1);

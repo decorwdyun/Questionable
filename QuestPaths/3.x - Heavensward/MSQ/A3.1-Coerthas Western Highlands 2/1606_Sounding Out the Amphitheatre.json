@@ -79,7 +79,6 @@
           "TerritoryId": 397,
           "InteractionType": "SinglePlayerDuty",
           "DisableNavmesh": true,
-          "ContentFinderConditionId": 397,
           "BossModEnabled": true
         }
       ]

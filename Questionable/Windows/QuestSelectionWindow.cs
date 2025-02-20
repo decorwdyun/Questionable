@@ -119,7 +119,7 @@ internal sealed class QuestSelectionWindow : LWindow
 
         foreach (var unacceptedQuest in Map.Instance()->UnacceptedQuestMarkers)
         {
-            QuestId questId = new QuestId((ushort)(unacceptedQuest.ObjectiveId & 0xFFFF));
+            QuestId questId = QuestId.FromRowId(unacceptedQuest.ObjectiveId);
             if (_quests.All(q => q.QuestId != questId))
                 _quests.Add(_questData.GetQuestInfo(questId));
         }

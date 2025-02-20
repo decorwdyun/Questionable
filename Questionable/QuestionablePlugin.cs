@@ -311,6 +311,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<IQuestValidator, AethernetShortcutValidator>();
         serviceCollection.AddSingleton<IQuestValidator, DialogueChoiceValidator>();
         serviceCollection.AddSingleton<IQuestValidator, ClassQuestShouldHaveShortcutValidator>();
+        serviceCollection.AddSingleton<IQuestValidator, UniqueSinglePlayerInstanceValidator>();
         serviceCollection.AddSingleton<JsonSchemaValidator>();
         serviceCollection.AddSingleton<IQuestValidator>(sp => sp.GetRequiredService<JsonSchemaValidator>());
     }

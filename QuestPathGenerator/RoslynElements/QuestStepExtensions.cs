@@ -126,6 +126,9 @@ internal static class QuestStepExtensions
                             Assignment(nameof(QuestStep.BossModEnabled),
                                     step.BossModEnabled, emptyStep.BossModEnabled)
                                 .AsSyntaxNodeOrToken(),
+                            Assignment(nameof(QuestStep.SinglePlayerDutyIndex),
+                                    step.SinglePlayerDutyIndex, emptyStep.SinglePlayerDutyIndex)
+                                .AsSyntaxNodeOrToken(),
                             Assignment(nameof(QuestStep.SkipConditions), step.SkipConditions,
                                     emptyStep.SkipConditions)
                                 .AsSyntaxNodeOrToken(),

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using Questionable.Controller.Steps.Shared;
 using Questionable.Data;
 using Questionable.External;
@@ -11,20 +12,23 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class SinglePlayerDuty
 {
-    internal sealed class Factory : ITaskFactory
+    internal sealed class Factory(
+        BossModIpc bossModIpc,
+        TerritoryData territoryData) : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
             if (step.InteractionType != EInteractionType.SinglePlayerDuty)
                 yield break;
 
-            if (step.BossModEnabled)
+            if (bossModIpc.IsConfiguredToRunSoloInstance(quest.Id, step.SinglePlayerDutyIndex, step.BossModEnabled))
             {
-                ArgumentNullException.ThrowIfNull(step.ContentFinderConditionId);
+                if (!territoryData.TryGetContentFinderConditionForSoloInstance(quest.Id, step.SinglePlayerDutyIndex, out var cfcData))
+                    throw new TaskException("Failed to get content finder condition for solo instance");
 
-                yield return new StartSinglePlayerDuty(step.ContentFinderConditionId.Value);
+                yield return new StartSinglePlayerDuty(cfcData.ContentFinderConditionId);
                 yield return new EnableAi();
-                yield return new WaitSinglePlayerDuty(step.ContentFinderConditionId.Value);
+                yield return new WaitSinglePlayerDuty(cfcData.ContentFinderConditionId);
                 yield return new DisableAi();
                 yield return new WaitAtEnd.WaitNextStepOrSequence();
             }
@@ -36,19 +40,13 @@ internal static class SinglePlayerDuty
         public override string ToString() => $"Wait(BossMod, entered instance {ContentFinderConditionId})";
     }
 
-    internal sealed class StartSinglePlayerDutyExecutor(
-        TerritoryData territoryData,
-        IClientState clientState) : TaskExecutor<StartSinglePlayerDuty>
+    internal sealed class StartSinglePlayerDutyExecutor : TaskExecutor<StartSinglePlayerDuty>
     {
         protected override bool Start() => true;
 
-        public override ETaskResult Update()
+        public override unsafe ETaskResult Update()
         {
-            if (!territoryData.TryGetContentFinderCondition(Task.ContentFinderConditionId,
-                    out var cfcData))
-                throw new TaskException("Failed to get territory ID for content finder condition");
-
-            return clientState.TerritoryType == cfcData.TerritoryId
+            return GameMain.Instance()->CurrentContentFinderConditionId == Task.ContentFinderConditionId
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
         }
@@ -81,19 +79,13 @@ internal static class SinglePlayerDuty
     }
 
     internal sealed class WaitSinglePlayerDutyExecutor(
-        TerritoryData territoryData,
-        IClientState clientState,
         BossModIpc bossModIpc) : TaskExecutor<WaitSinglePlayerDuty>, IStoppableTaskExecutor
     {
         protected override bool Start() => true;
 
-        public override ETaskResult Update()
+        public override unsafe ETaskResult Update()
         {
-            if (!territoryData.TryGetContentFinderCondition(Task.ContentFinderConditionId,
-                 out var cfcData))
-            throw new TaskException("Failed to get territory ID for content finder condition");
-
-            return clientState.TerritoryType != cfcData.TerritoryId
+            return GameMain.Instance()->CurrentContentFinderConditionId != Task.ContentFinderConditionId
                 ? ETaskResult.TaskComplete
                 : ETaskResult.StillRunning;
         }
