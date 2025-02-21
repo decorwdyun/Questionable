@@ -28,7 +28,11 @@
             "Z": -309.55975
           },
           "TerritoryId": 148,
-          "InteractionType": "SinglePlayerDuty"
+          "InteractionType": "SinglePlayerDuty",
+          "BossModEnabled": false,
+          "BossModNotes": [
+            "AI doesn't automatically target newly spawning adds and dies until after the boss died (tested on CNJ)"
+          ]
         }
       ]
     },

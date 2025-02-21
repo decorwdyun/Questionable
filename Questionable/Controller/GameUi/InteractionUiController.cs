@@ -47,6 +47,7 @@ internal sealed class InteractionUiController : IDisposable
     private readonly IClientState _clientState;
     private readonly ShopController _shopController;
     private readonly BossModIpc _bossModIpc;
+    private readonly Configuration _configuration;
     private readonly ILogger<InteractionUiController> _logger;
     private readonly Regex _returnRegex;
     private readonly Regex _purchaseItemRegex;
@@ -71,6 +72,7 @@ internal sealed class InteractionUiController : IDisposable
         IClientState clientState,
         ShopController shopController,
         BossModIpc bossModIpc,
+        Configuration configuration,
         ILogger<InteractionUiController> logger)
     {
         _addonLifecycle = addonLifecycle;
@@ -89,6 +91,7 @@ internal sealed class InteractionUiController : IDisposable
         _clientState = clientState;
         _shopController = shopController;
         _bossModIpc = bossModIpc;
+        _configuration = configuration;
         _logger = logger;
 
         _returnRegex = _dataManager.GetExcelSheet<Addon>().GetRow(196).GetRegex(addon => addon.Text, pluginLog)!;
@@ -98,6 +101,7 @@ internal sealed class InteractionUiController : IDisposable
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "CutSceneSelectString", CutsceneSelectStringPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "SelectIconString", SelectIconStringPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "SelectYesno", SelectYesnoPostSetup);
+        _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "DifficultySelectYesNo", DifficultySelectYesNoPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "PointMenu", PointMenuPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "HousingSelectBlock", HousingSelectBlockPostSetup);
 
@@ -142,6 +146,12 @@ internal sealed class InteractionUiController : IDisposable
             {
                 _logger.LogInformation("SelectYesno window is open");
                 SelectYesnoPostSetup(addonSelectYesno, true);
+            }
+
+            if (_gameGui.TryGetAddonByName("DifficultySelectYesNo", out AtkUnitBase* addonDifficultySelectYesNo))
+            {
+                _logger.LogInformation("DifficultySelectYesNo window is open");
+                DifficultySelectYesNoPostSetup(addonDifficultySelectYesNo, true);
             }
 
             if (_gameGui.TryGetAddonByName("PointMenu", out AtkUnitBase* addonPointMenu))
@@ -669,8 +679,19 @@ internal sealed class InteractionUiController : IDisposable
             return true;
         }
 
+        if (CheckSinglePlayerDutyYesNo(quest.Id, step))
+        {
+            addonSelectYesno->AtkUnitBase.FireCallbackInt(0);
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool CheckSinglePlayerDutyYesNo(ElementId questId, QuestStep? step)
+    {
         if (step is { InteractionType: EInteractionType.SinglePlayerDuty } &&
-            _bossModIpc.IsConfiguredToRunSoloInstance(quest.Id, step.SinglePlayerDutyIndex, step.BossModEnabled))
+            _bossModIpc.IsConfiguredToRunSoloInstance(questId, step.SinglePlayerDutyIndex, step.BossModEnabled))
         {
             // Most of these are yes/no dialogs "Duty calls, ...".
             //
@@ -678,8 +699,7 @@ internal sealed class InteractionUiController : IDisposable
             // after you confirm 'Wait for Krile?'. However, if you fail that duty, you'll get a DifficultySelectYesNo.
 
             // DifficultySelectYesNo → [0, 2] for very easy
-            _logger.LogInformation("DefaultYesNo: probably Single Player Duty");
-            addonSelectYesno->AtkUnitBase.FireCallbackInt(0);
+            _logger.LogInformation("SinglePlayerDutyYesNo: probably Single Player Duty");
             return true;
         }
 
@@ -714,6 +734,44 @@ internal sealed class InteractionUiController : IDisposable
         }
 
         return false;
+    }
+
+
+    private unsafe void DifficultySelectYesNoPostSetup(AddonEvent type, AddonArgs args)
+    {
+        AtkUnitBase* addonDifficultySelectYesNo = (AtkUnitBase*)args.Addon;
+        DifficultySelectYesNoPostSetup(addonDifficultySelectYesNo, false);
+    }
+
+    private unsafe void DifficultySelectYesNoPostSetup(AtkUnitBase* addonDifficultySelectYesNo, bool checkAllSteps)
+    {
+        var currentQuest = _questController.StartedQuest;
+        if (currentQuest == null)
+            return;
+
+        var quest = currentQuest.Quest;
+        bool autoConfirm;
+        if (checkAllSteps)
+        {
+            var sequence = quest.FindSequence(currentQuest.Sequence);
+            autoConfirm = sequence != null && sequence.Steps.Any(step => CheckSinglePlayerDutyYesNo(quest.Id, step));
+        }
+        else
+        {
+            var step = quest.FindSequence(currentQuest.Sequence)?.FindStep(currentQuest.Step);
+            autoConfirm = step != null && CheckSinglePlayerDutyYesNo(quest.Id, step);
+        }
+
+        if (autoConfirm)
+        {
+            _logger.LogInformation("Confirming difficulty ({Difficulty}) for quest battle", _configuration.SinglePlayerDuties.RetryDifficulty);
+            var selectChoice = stackalloc AtkValue[]
+            {
+                new() { Type = ValueType.Int, Int = 0 },
+                new() { Type = ValueType.Int, Int = _configuration.SinglePlayerDuties.RetryDifficulty }
+            };
+            addonDifficultySelectYesNo->FireCallback(2, selectChoice);
+        }
     }
 
     private ushort? FindTargetTerritoryFromQuestStep(QuestController.QuestProgress currentQuest)
@@ -888,6 +946,7 @@ internal sealed class InteractionUiController : IDisposable
     {
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "HousingSelectBlock", HousingSelectBlockPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "PointMenu", PointMenuPostSetup);
+        _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "DifficultySelectYesNo", DifficultySelectYesNoPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "SelectYesno", SelectYesnoPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "SelectIconString", SelectIconStringPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "CutSceneSelectString", CutsceneSelectStringPostSetup);

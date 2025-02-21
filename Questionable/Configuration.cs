@@ -45,6 +45,7 @@ internal sealed class Configuration : IPluginConfiguration
     internal sealed class SinglePlayerDutyConfiguration
     {
         public bool RunSoloInstancesWithBossMod { get; set; }
+        public byte RetryDifficulty { get; set; } = 2;
         public HashSet<uint> WhitelistedSinglePlayerDutyCfcIds { get; set; } = [];
         public HashSet<uint> BlacklistedSinglePlayerDutyCfcIds { get; set; } = [];
     }

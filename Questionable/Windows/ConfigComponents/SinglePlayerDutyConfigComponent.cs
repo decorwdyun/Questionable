@@ -25,12 +25,6 @@ namespace Questionable.Windows.ConfigComponents;
 
 internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
 {
-    private readonly TerritoryData _territoryData;
-    private readonly QuestRegistry _questRegistry;
-    private readonly QuestData _questData;
-    private readonly IDataManager _dataManager;
-    private readonly ILogger<SinglePlayerDutyConfigComponent> _logger;
-
     private static readonly List<(EClassJob ClassJob, string Name)> RoleQuestCategories =
     [
         (EClassJob.Paladin, "Tank Role Quests"),
@@ -39,6 +33,15 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
         (EClassJob.Bard, "Physical Ranged Role Quests"),
         (EClassJob.BlackMage, "Magical Ranged Role Quests"),
     ];
+
+    private readonly string[] _retryDifficulties = ["Normal", "Easy", "Very Easy"];
+
+    private readonly TerritoryData _territoryData;
+    private readonly QuestRegistry _questRegistry;
+    private readonly QuestData _questData;
+    private readonly IDataManager _dataManager;
+    private readonly ILogger<SinglePlayerDutyConfigComponent> _logger;
+    private readonly List<(EClassJob ClassJob, int Category)> _sortedClassJobs;
 
     private ImmutableDictionary<EAetheryteLocation, List<SinglePlayerDutyInfo>> _startingCityBattles =
         ImmutableDictionary<EAetheryteLocation, List<SinglePlayerDutyInfo>>.Empty;
@@ -72,6 +75,13 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
         _questData = questData;
         _dataManager = dataManager;
         _logger = logger;
+
+        _sortedClassJobs = dataManager.GetExcelSheet<ClassJob>()
+            .Where(x => x is { RowId: > 0, UIPriority: < 100 })
+            .Select(x => (ClassJob: (EClassJob)x.RowId, Priority: x.UIPriority))
+            .OrderBy(x => x.Priority)
+            .Select(x => (x.ClassJob, x.Priority / 10))
+            .ToList();
     }
 
     public void Reload()
@@ -256,8 +266,23 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
             Save();
         }
 
-        ImGui.TextColored(ImGuiColors.DalamudRed,
-            "Work in Progress: For now, this will always use BossMod for combat.");
+        using (ImRaii.PushIndent(ImGui.GetFrameHeight() + ImGui.GetStyle().ItemInnerSpacing.X))
+        {
+            ImGui.AlignTextToFramePadding();
+            ImGui.TextColored(ImGuiColors.DalamudRed,
+                "Work in Progress: For now, this will always use BossMod for combat.");
+
+            using (ImRaii.Disabled(!runSoloInstancesWithBossMod))
+            {
+                int retryDifficulty = Configuration.SinglePlayerDuties.RetryDifficulty;
+                if (ImGui.Combo("Difficulty when retrying a quest battle", ref retryDifficulty, _retryDifficulties,
+                        _retryDifficulties.Length))
+                {
+                    Configuration.SinglePlayerDuties.RetryDifficulty = (byte)retryDifficulty;
+                    Save();
+                }
+            }
+        }
 
         ImGui.Separator();
 
@@ -286,7 +311,7 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
 
     private void DrawMainScenarioConfigTable()
     {
-        using var tab = ImRaii.TabItem("MSQ###MSQ");
+        using var tab = ImRaii.TabItem("Main Scenario Quests###MSQ");
         if (!tab)
             return;
 
@@ -323,10 +348,19 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
         if (!child)
             return;
 
-        foreach (EClassJob classJob in Enum.GetValues<EClassJob>())
+        int oldPriority = 0;
+        foreach (var (classJob, priority) in _sortedClassJobs)
         {
             if (_jobQuestBattles.TryGetValue(classJob, out var dutyInfos))
             {
+                if (priority != oldPriority)
+                {
+                    oldPriority = priority;
+                    ImGui.Spacing();
+                    ImGui.Separator();
+                    ImGui.Spacing();
+                }
+
                 string jobName = classJob.ToFriendlyString();
                 if (classJob.IsClass())
                     jobName += $" / {classJob.AsJob().ToFriendlyString()}";
@@ -434,7 +468,8 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
                         {
                             using var _ = ImRaii.Tooltip();
 
-                            ImGui.TextColored(ImGuiColors.DalamudYellow, "While testing, the following issues have been found:");
+                            ImGui.TextColored(ImGuiColors.DalamudYellow,
+                                "While testing, the following issues have been found:");
                             foreach (string note in dutyInfo.Notes)
                                 ImGui.BulletText(note);
                         }
