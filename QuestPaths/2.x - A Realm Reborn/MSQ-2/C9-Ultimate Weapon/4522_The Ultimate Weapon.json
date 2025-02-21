@@ -104,10 +104,12 @@
           },
           "TerritoryId": 1053,
           "InteractionType": "SinglePlayerDuty",
-          "BossModEnabled": false,
-          "BossModNotes": [
-            "Doesn't handle death properly"
-          ]
+          "SinglePlayerDutyOptions": {
+            "Enabled": false,
+            "Notes": [
+              "Doesn't handle death properly"
+            ]
+          }
         }
       ]
     },

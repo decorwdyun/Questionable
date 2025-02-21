@@ -122,70 +122,24 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
         foreach (var (questId, index, cfcData) in _territoryData.GetAllQuestsWithQuestBattles())
         {
             IQuestInfo questInfo = _questData.GetQuestInfo(questId);
-            QuestStep questStep = new QuestStep
-            {
-                SinglePlayerDutyIndex = 0,
-                BossModEnabled = false,
-            };
-            bool enabled;
-            if (_questRegistry.TryGetQuest(questId, out var quest))
-            {
-                if (quest.Root.Disabled)
-                {
-                    _logger.LogDebug("Disabling quest battle for quest {QuestId}, quest is disabled", questId);
-                    enabled = false;
-                }
-                else
-                {
-                    var foundStep = quest.AllSteps().FirstOrDefault(x =>
-                        x.Step.InteractionType == EInteractionType.SinglePlayerDuty &&
-                        x.Step.SinglePlayerDutyIndex == index);
-                    if (foundStep == default)
-                    {
-                        _logger.LogWarning(
-                            "Disabling quest battle for quest {QuestId}, no battle with index {Index} found", questId,
-                            index);
-                        enabled = false;
-                    }
-                    else
-                    {
-                        questStep = foundStep.Step;
-                        enabled = true;
-                    }
-                }
-            }
-            else
-            {
-                _logger.LogDebug("Disabling quest battle for quest {QuestId}, unknown quest", questId);
-                enabled = false;
-            }
+            (bool enabled, SinglePlayerDutyOptions options) = FindDutyOptions(questId, index);
 
             string name = $"{FormatLevel(questInfo.Level)} {questInfo.Name}";
             if (!string.IsNullOrEmpty(cfcData.Name) && !questInfo.Name.EndsWith(cfcData.Name, StringComparison.Ordinal))
                 name += $" ({cfcData.Name})";
 
             if (questsWithMultipleBattles.Contains(questId))
-                name += $" (Part {questStep.SinglePlayerDutyIndex + 1})";
+                name += $" (Part {options.Index + 1})";
             else if (cfcData.ContentFinderConditionId is 674 or 691)
                 name += " (Melee/Phys. Ranged)";
 
-            var dutyInfo = new SinglePlayerDutyInfo(
-                cfcData.ContentFinderConditionId,
-                cfcData.TerritoryId,
-                name,
-                questInfo.Expansion,
-                questInfo.JournalGenre ?? uint.MaxValue,
-                questInfo.SortKey,
-                questStep.SinglePlayerDutyIndex,
-                enabled,
-                questStep.BossModEnabled,
-                questStep.BossModNotes);
+            var dutyInfo = new SinglePlayerDutyInfo(name, questInfo, cfcData, options, enabled);
 
-            if (cfcData.ContentFinderConditionId is 332 or 333 or 313 or 334)
+            if (dutyInfo.IsLimsaStart)
                 startingCityBattles[EAetheryteLocation.Limsa].Add(dutyInfo);
-            else if (cfcData.ContentFinderConditionId is 296 or 297 or 299 or 298)
+            else if (dutyInfo.IsGridaniaStart)
                 startingCityBattles[EAetheryteLocation.Gridania].Add(dutyInfo);
-            else if (cfcData.ContentFinderConditionId is 335 or 312 or 337 or 336)
+            else if (dutyInfo.IsUldahStart)
                 startingCityBattles[EAetheryteLocation.Uldah].Add(dutyInfo);
             else if (questInfo.IsMainScenarioQuest)
                 mainScenarioBattles.Add(dutyInfo);
@@ -196,7 +150,7 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
                 foreach (var roleClassJob in classJobs)
                     roleQuestBattles[roleClassJob].Add(dutyInfo);
             }
-            else if (dutyInfo.CfcId is 845 or 1016)
+            else if (dutyInfo.IsOtherRoleQuest)
                 otherRoleQuestBattles.Add(dutyInfo);
             else
                 otherBattles.Add(dutyInfo);
@@ -220,7 +174,7 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
                 x =>
                     x.Value
                         // level 10 quests use the same quest battle for [you started as this class] and [you picked this class up later]
-                        .DistinctBy(y => y.CfcId)
+                        .DistinctBy(y => y.ContentFinderConditionId)
                         .OrderBy(y => y.JournalGenreId)
                         .ThenBy(y => y.SortKey)
                         .ThenBy(y => y.Index)
@@ -242,6 +196,47 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
             .ToImmutableList();
     }
 
+    private (bool Enabled, SinglePlayerDutyOptions Options) FindDutyOptions(ElementId questId, byte index)
+    {
+        SinglePlayerDutyOptions options = new()
+        {
+            Index = 0,
+            Enabled = false,
+        };
+        if (_questRegistry.TryGetQuest(questId, out var quest))
+        {
+            if (quest.Root.Disabled)
+            {
+                _logger.LogDebug("Disabling quest battle for quest {QuestId}, quest is disabled", questId);
+                return (false, options);
+            }
+            else
+            {
+                var foundStep = quest.AllSteps()
+                    .Select(x => x.Step)
+                    .FirstOrDefault(x =>
+                        x.InteractionType == EInteractionType.SinglePlayerDuty &&
+                        x.SinglePlayerDutyIndex == index);
+                if (foundStep == null)
+                {
+                    _logger.LogWarning(
+                        "Disabling quest battle for quest {QuestId}, no battle with index {Index} found", questId,
+                        index);
+                    return (false, options);
+                }
+                else
+                {
+                    return (true, foundStep.SinglePlayerDutyOptions ?? options);
+                }
+            }
+        }
+        else
+        {
+            _logger.LogDebug("Disabling quest battle for quest {QuestId}, unknown quest", questId);
+            return (false, options);
+        }
+    }
+
     private string BuildJournalGenreLabel(uint journalGenreId)
     {
         var journalGenre = _dataManager.GetExcelSheet<JournalGenre>().GetRow(journalGenreId);
@@ -250,7 +245,7 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
         string genreName = journalGenre.Name.ExtractText();
         string categoryName = journalCategory.Name.ExtractText();
 
-        return $"{categoryName} {SeIconChar.ArrowRight.ToIconString()} {genreName}";
+        return $"{categoryName} \u203B {genreName}";
     }
 
     public override void DrawTab()
@@ -423,13 +418,13 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
             {
                 ImGui.TableNextRow();
 
-                string[] labels = dutyInfo.BossModEnabledByDefault
+                string[] labels = dutyInfo.EnabledByDefault
                     ? SupportedCfcOptions
                     : UnsupportedCfcOptions;
                 int value = 0;
-                if (Configuration.SinglePlayerDuties.WhitelistedSinglePlayerDutyCfcIds.Contains(dutyInfo.CfcId))
+                if (Configuration.SinglePlayerDuties.WhitelistedSinglePlayerDutyCfcIds.Contains(dutyInfo.ContentFinderConditionId))
                     value = 1;
-                if (Configuration.SinglePlayerDuties.BlacklistedSinglePlayerDutyCfcIds.Contains(dutyInfo.CfcId))
+                if (Configuration.SinglePlayerDuties.BlacklistedSinglePlayerDutyCfcIds.Contains(dutyInfo.ContentFinderConditionId))
                     value = 2;
 
                 if (ImGui.TableNextColumn())
@@ -445,7 +440,7 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
                             ImGui.TextUnformatted(dutyInfo.Name);
                             ImGui.Separator();
                             ImGui.BulletText($"TerritoryId: {dutyInfo.TerritoryId}");
-                            ImGui.BulletText($"ContentFinderConditionId: {dutyInfo.CfcId}");
+                            ImGui.BulletText($"ContentFinderConditionId: {dutyInfo.ContentFinderConditionId}");
                         }
                     }
 
@@ -457,11 +452,18 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
                     else if (dutyInfo.Notes.Count > 0)
                     {
                         using var color = new ImRaii.Color();
-                        color.Push(ImGuiCol.TextDisabled, ImGuiColors.DalamudYellow);
+                        if (!dutyInfo.EnabledByDefault)
+                            color.Push(ImGuiCol.TextDisabled, ImGuiColors.DalamudYellow);
+                        else
+                            color.Push(ImGuiCol.TextDisabled, ImGuiColors.ParsedBlue);
+
                         ImGui.SameLine();
                         using (ImRaii.PushFont(UiBuilder.IconFont))
                         {
-                            ImGui.TextDisabled(FontAwesomeIcon.ExclamationTriangle.ToIconString());
+                            if (!dutyInfo.EnabledByDefault)
+                                ImGui.TextDisabled(FontAwesomeIcon.ExclamationTriangle.ToIconString());
+                            else
+                                ImGui.TextDisabled(FontAwesomeIcon.InfoCircle.ToIconString());
                         }
 
                         if (ImGui.IsItemHovered())
@@ -478,19 +480,19 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
 
                 if (ImGui.TableNextColumn())
                 {
-                    using var _ = ImRaii.PushId($"##Duty{dutyInfo.CfcId}");
+                    using var _ = ImRaii.PushId($"##Duty{dutyInfo.ContentFinderConditionId}");
                     using (ImRaii.Disabled(!dutyInfo.Enabled))
                     {
                         ImGui.SetNextItemWidth(200);
                         if (ImGui.Combo(string.Empty, ref value, labels, labels.Length))
                         {
-                            Configuration.SinglePlayerDuties.WhitelistedSinglePlayerDutyCfcIds.Remove(dutyInfo.CfcId);
-                            Configuration.SinglePlayerDuties.BlacklistedSinglePlayerDutyCfcIds.Remove(dutyInfo.CfcId);
+                            Configuration.SinglePlayerDuties.WhitelistedSinglePlayerDutyCfcIds.Remove(dutyInfo.ContentFinderConditionId);
+                            Configuration.SinglePlayerDuties.BlacklistedSinglePlayerDutyCfcIds.Remove(dutyInfo.ContentFinderConditionId);
 
                             if (value == 1)
-                                Configuration.SinglePlayerDuties.WhitelistedSinglePlayerDutyCfcIds.Add(dutyInfo.CfcId);
+                                Configuration.SinglePlayerDuties.WhitelistedSinglePlayerDutyCfcIds.Add(dutyInfo.ContentFinderConditionId);
                             else if (value == 2)
-                                Configuration.SinglePlayerDuties.BlacklistedSinglePlayerDutyCfcIds.Add(dutyInfo.CfcId);
+                                Configuration.SinglePlayerDuties.BlacklistedSinglePlayerDutyCfcIds.Add(dutyInfo.ContentFinderConditionId);
 
                             Save();
                         }
@@ -519,14 +521,28 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
     }
 
     private sealed record SinglePlayerDutyInfo(
-        uint CfcId,
-        uint TerritoryId,
         string Name,
-        EExpansionVersion Expansion,
-        uint JournalGenreId,
-        ushort SortKey,
-        byte Index,
-        bool Enabled,
-        bool BossModEnabledByDefault,
-        List<string> Notes);
+        IQuestInfo QuestInfo,
+        TerritoryData.ContentFinderConditionData ContentFinderConditionData,
+        SinglePlayerDutyOptions Options,
+        bool Enabled)
+    {
+        public EExpansionVersion Expansion => QuestInfo.Expansion;
+        public uint JournalGenreId => QuestInfo.JournalGenre ?? uint.MaxValue;
+        public ushort SortKey => QuestInfo.SortKey;
+        public uint ContentFinderConditionId => ContentFinderConditionData.ContentFinderConditionId;
+        public uint TerritoryId => ContentFinderConditionData.TerritoryId;
+        public byte Index => Options.Index;
+        public bool EnabledByDefault => Options.Enabled;
+        public IReadOnlyList<string> Notes => Options.Notes;
+
+        public bool IsLimsaStart => ContentFinderConditionId is 332 or 333 or 313 or 334;
+        public bool IsGridaniaStart => ContentFinderConditionId is 296 or 297 or 299 or 298;
+        public bool IsUldahStart => ContentFinderConditionId is 335 or 312 or 337 or 336;
+
+        /// <summary>
+        /// 'Other' role quest is the post-EW/DT role quests.
+        /// </summary>
+        public bool IsOtherRoleQuest => ContentFinderConditionId is 845 or 1016;
+    }
 }

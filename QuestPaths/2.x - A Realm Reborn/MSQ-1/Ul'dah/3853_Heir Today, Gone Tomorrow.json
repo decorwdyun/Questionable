@@ -29,7 +29,7 @@
           },
           "TerritoryId": 141,
           "InteractionType": "Combat",
-          "EnemySpawnType": "OverworldEnemies",
+          "EnemySpawnType": "FinishCombatIfAny",
           "KillEnemyDataIds": [
             352,
             353
@@ -53,6 +53,25 @@
     {
       "Sequence": 255,
       "Steps": [
+        {
+          "Position": {
+            "X": 131.78122,
+            "Y": 20.119337,
+            "Z": -115.27284
+          },
+          "TerritoryId": 141,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "Position": {
+            "X": 127.7017,
+            "Y": -0.15994573,
+            "Z": -161.89238
+          },
+          "TerritoryId": 141,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true
+        },
         {
           "DataId": 1001605,
           "Position": {

@@ -69,7 +69,9 @@
           },
           "TerritoryId": 402,
           "InteractionType": "SinglePlayerDuty",
-          "BossModEnabled": true
+          "SinglePlayerDutyOptions": {
+            "Enabled": true
+          }
         }
       ]
     },

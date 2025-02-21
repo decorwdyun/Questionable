@@ -48,7 +48,9 @@
             "[Idyllshire] Aetheryte Plaza",
             "[Idyllshire] Epilogue Gate (Eastern Hinterlands)"
           ],
-          "BossModEnabled": true
+          "SinglePlayerDutyOptions": {
+            "Enabled": true
+          }
         }
       ]
     },

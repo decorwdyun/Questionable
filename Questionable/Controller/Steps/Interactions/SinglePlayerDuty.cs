@@ -21,7 +21,7 @@ internal static class SinglePlayerDuty
             if (step.InteractionType != EInteractionType.SinglePlayerDuty)
                 yield break;
 
-            if (bossModIpc.IsConfiguredToRunSoloInstance(quest.Id, step.SinglePlayerDutyIndex, step.BossModEnabled))
+            if (bossModIpc.IsConfiguredToRunSoloInstance(quest.Id, step.SinglePlayerDutyOptions))
             {
                 if (!territoryData.TryGetContentFinderConditionForSoloInstance(quest.Id, step.SinglePlayerDutyIndex, out var cfcData))
                     throw new TaskException("Failed to get content finder condition for solo instance");

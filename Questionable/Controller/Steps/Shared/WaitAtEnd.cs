@@ -54,7 +54,7 @@ internal static class WaitAtEnd
                     return [new WaitNextStepOrSequence()];
 
                 case EInteractionType.Duty when !autoDutyIpc.IsConfiguredToRunContent(step.ContentFinderConditionId, step.AutoDutyEnabled):
-                case EInteractionType.SinglePlayerDuty when !bossModIpc.IsConfiguredToRunSoloInstance(quest.Id, step.SinglePlayerDutyIndex, step.BossModEnabled):
+                case EInteractionType.SinglePlayerDuty when !bossModIpc.IsConfiguredToRunSoloInstance(quest.Id, step.SinglePlayerDutyOptions):
                     return [new EndAutomation()];
 
                 case EInteractionType.WalkTo:

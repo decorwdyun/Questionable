@@ -58,6 +58,12 @@
           },
           "TerritoryId": 138,
           "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "Notes": [
+              "(Phase 1) Kills PGL NPCs and then the boss - allied NPCs will kill most other NPCs eventually; all NPCs need to be killed for the duty to complete"
+            ]
+          },
           "AetheryteShortcut": "Western La Noscea - Swiftperch"
         }
       ]

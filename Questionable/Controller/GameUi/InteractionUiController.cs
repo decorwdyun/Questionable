@@ -691,7 +691,7 @@ internal sealed class InteractionUiController : IDisposable
     private bool CheckSinglePlayerDutyYesNo(ElementId questId, QuestStep? step)
     {
         if (step is { InteractionType: EInteractionType.SinglePlayerDuty } &&
-            _bossModIpc.IsConfiguredToRunSoloInstance(questId, step.SinglePlayerDutyIndex, step.BossModEnabled))
+            _bossModIpc.IsConfiguredToRunSoloInstance(questId, step.SinglePlayerDutyOptions))
         {
             // Most of these are yes/no dialogs "Duty calls, ...".
             //

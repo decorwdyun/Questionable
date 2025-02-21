@@ -108,7 +108,7 @@ internal static class QuestStepExtensions
                             AssignmentList(nameof(QuestStep.ComplexCombatData), step.ComplexCombatData)
                                 .AsSyntaxNodeOrToken(),
                             Assignment(nameof(QuestStep.CombatItemUse), step.CombatItemUse,
-                                emptyStep.CombatItemUse)
+                                    emptyStep.CombatItemUse)
                                 .AsSyntaxNodeOrToken(),
                             Assignment(nameof(QuestStep.CombatDelaySecondsAtStart),
                                     step.CombatDelaySecondsAtStart,
@@ -123,14 +123,8 @@ internal static class QuestStepExtensions
                             Assignment(nameof(QuestStep.AutoDutyEnabled),
                                     step.AutoDutyEnabled, emptyStep.AutoDutyEnabled)
                                 .AsSyntaxNodeOrToken(),
-                            Assignment(nameof(QuestStep.BossModEnabled),
-                                    step.BossModEnabled, emptyStep.BossModEnabled)
-                                .AsSyntaxNodeOrToken(),
-                            Assignment(nameof(QuestStep.BossModNotes),
-                                    step.BossModNotes, emptyStep.BossModNotes)
-                                .AsSyntaxNodeOrToken(),
-                            Assignment(nameof(QuestStep.SinglePlayerDutyIndex),
-                                    step.SinglePlayerDutyIndex, emptyStep.SinglePlayerDutyIndex)
+                            Assignment(nameof(QuestStep.SinglePlayerDutyOptions), step.SinglePlayerDutyOptions,
+                                emptyStep.SinglePlayerDutyOptions)
                                 .AsSyntaxNodeOrToken(),
                             Assignment(nameof(QuestStep.SkipConditions), step.SkipConditions,
                                     emptyStep.SkipConditions)

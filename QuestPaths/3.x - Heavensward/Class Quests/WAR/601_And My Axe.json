@@ -96,7 +96,9 @@
           "TerritoryId": 138,
           "InteractionType": "SinglePlayerDuty",
           "Fly": true,
-          "BossModEnabled": true
+          "SinglePlayerDutyOptions": {
+            "Enabled": true
+          }
         }
       ]
     },

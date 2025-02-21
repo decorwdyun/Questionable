@@ -1267,20 +1267,32 @@
           },
           "then": {
             "properties": {
-              "BossModEnabled": {
-                "type": "boolean"
-              },
-              "BossModNotes": {
-                "type": "array",
-                "items": {
-                  "type": "string"
-                }
-              },
-              "SinglePlayerDutyIndex": {
-                "type": "integer",
-                "minimum": 0,
-                "maximum": 1,
-                "description": "If a quest has multiple solo instances (which affects 5 quests total), indicates which one this is"
+              "SinglePlayerDutyOptions": {
+                "type": "object",
+                "properties": {
+                  "Enabled": {
+                    "type": "boolean"
+                  },
+                  "Notes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "Index": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 1,
+                    "description": "If a quest has multiple solo instances (which affects 5 quests total), indicates which one this is"
+                  },
+                  "$": {
+                    "type": "string"
+                  }
+                },
+                "TODO_required": [
+                  "Enabled"
+                ],
+                "additionalProperties": false
               }
             }
           }

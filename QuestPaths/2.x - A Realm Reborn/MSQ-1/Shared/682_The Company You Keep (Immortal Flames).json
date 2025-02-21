@@ -59,6 +59,9 @@
           },
           "TerritoryId": 140,
           "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": true
+          },
           "AetheryteShortcut": "Western Thanalan - Horizon"
         }
       ]

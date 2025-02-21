@@ -116,6 +116,9 @@
           },
           "TerritoryId": 152,
           "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": true
+          },
           "Fly": true
         }
       ]

@@ -57,7 +57,9 @@
           "InteractionType": "SinglePlayerDuty",
           "Emote": "lookout",
           "StopDistance": 0.25,
-          "BossModEnabled": true
+          "SinglePlayerDutyOptions": {
+            "Enabled": true
+          }
         }
       ]
     },

@@ -79,7 +79,9 @@
             "[Ishgard] The Forgotten Knight",
             "[Ishgard] The Tribunal"
           ],
-          "BossModEnabled": true
+          "SinglePlayerDutyOptions": {
+            "Enabled": true
+          }
         }
       ]
     },

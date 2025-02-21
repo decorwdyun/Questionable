@@ -82,7 +82,7 @@ internal sealed class BossModIpc
         ClearPreset();
     }
 
-    public bool IsConfiguredToRunSoloInstance(ElementId questId, byte dutyIndex, bool enabledByDefault)
+    public bool IsConfiguredToRunSoloInstance(ElementId questId, SinglePlayerDutyOptions? dutyOptions)
     {
         if (!IsSupported())
             return false;
@@ -90,7 +90,8 @@ internal sealed class BossModIpc
         if (!_configuration.SinglePlayerDuties.RunSoloInstancesWithBossMod)
             return false;
 
-        if (!_territoryData.TryGetContentFinderConditionForSoloInstance(questId, dutyIndex, out var cfcData))
+        dutyOptions ??= new();
+        if (!_territoryData.TryGetContentFinderConditionForSoloInstance(questId, dutyOptions.Index, out var cfcData))
             return false;
 
         if (_configuration.SinglePlayerDuties.BlacklistedSinglePlayerDutyCfcIds.Contains(cfcData.ContentFinderConditionId))
@@ -99,6 +100,6 @@ internal sealed class BossModIpc
         if (_configuration.SinglePlayerDuties.WhitelistedSinglePlayerDutyCfcIds.Contains(cfcData.ContentFinderConditionId))
             return true;
 
-        return enabledByDefault;
+        return dutyOptions.Enabled;
     }
 }

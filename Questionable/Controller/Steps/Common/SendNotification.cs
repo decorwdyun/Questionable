@@ -27,7 +27,7 @@ internal static class SendNotification
                     new Task(step.InteractionType, step.ContentFinderConditionId.HasValue
                         ? territoryData.GetContentFinderCondition(step.ContentFinderConditionId.Value)?.Name
                         : step.Comment),
-                EInteractionType.SinglePlayerDuty when !bossModIpc.IsConfiguredToRunSoloInstance(quest.Id, step.SinglePlayerDutyIndex, step.BossModEnabled) =>
+                EInteractionType.SinglePlayerDuty when !bossModIpc.IsConfiguredToRunSoloInstance(quest.Id, step.SinglePlayerDutyOptions) =>
                     new Task(step.InteractionType, quest.Info.Name),
                 _ => null,
             };

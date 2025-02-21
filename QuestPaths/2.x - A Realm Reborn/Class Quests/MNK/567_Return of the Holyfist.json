@@ -92,7 +92,9 @@
           },
           "TerritoryId": 130,
           "InteractionType": "SinglePlayerDuty",
-          "SinglePlayerDutyIndex": 1,
+          "SinglePlayerDutyOptions": {
+            "Index": 1
+          },
           "AetheryteShortcut": "Ul'dah"
         }
       ]
