@@ -302,6 +302,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
 
         serviceCollection.AddSingleton<GeneralConfigComponent>();
         serviceCollection.AddSingleton<DutyConfigComponent>();
+        serviceCollection.AddSingleton<SinglePlayerDutyConfigComponent>();
         serviceCollection.AddSingleton<NotificationConfigComponent>();
         serviceCollection.AddSingleton<DebugConfigComponent>();
     }
@@ -317,6 +318,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<IQuestValidator, AethernetShortcutValidator>();
         serviceCollection.AddSingleton<IQuestValidator, DialogueChoiceValidator>();
         serviceCollection.AddSingleton<IQuestValidator, ClassQuestShouldHaveShortcutValidator>();
+        serviceCollection.AddSingleton<IQuestValidator, SinglePlayerInstanceValidator>();
         serviceCollection.AddSingleton<IQuestValidator, UniqueSinglePlayerInstanceValidator>();
         serviceCollection.AddSingleton<JsonSchemaValidator>();
         serviceCollection.AddSingleton<IQuestValidator>(sp => sp.GetRequiredService<JsonSchemaValidator>());
@@ -326,6 +328,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
     {
         serviceProvider.GetRequiredService<QuestRegistry>().Reload();
         serviceProvider.GetRequiredService<GatheringPointRegistry>().Reload();
+        serviceProvider.GetRequiredService<SinglePlayerDutyConfigComponent>().Reload();
         serviceProvider.GetRequiredService<CommandHandler>();
         serviceProvider.GetRequiredService<ContextMenuController>();
         serviceProvider.GetRequiredService<CraftworksSupplyController>();

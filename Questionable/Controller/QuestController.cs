@@ -15,6 +15,7 @@ using Questionable.External;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
+using Questionable.Windows.ConfigComponents;
 using Quest = Questionable.Model.Quest;
 
 namespace Questionable.Controller;
@@ -35,6 +36,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
     private readonly Configuration _configuration;
     private readonly YesAlreadyIpc _yesAlreadyIpc;
     private readonly TaskCreator _taskCreator;
+    private readonly SinglePlayerDutyConfigComponent _singlePlayerDutyConfigComponent;
     private readonly ILogger<QuestController> _logger;
 
     private readonly object _progressLock = new();
@@ -76,7 +78,8 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         TaskCreator taskCreator,
         IServiceProvider serviceProvider,
         InterruptHandler interruptHandler,
-        IDataManager dataManager)
+        IDataManager dataManager,
+        SinglePlayerDutyConfigComponent singlePlayerDutyConfigComponent)
         : base(chatGui, condition, serviceProvider, interruptHandler, dataManager, logger)
     {
         _clientState = clientState;
@@ -93,6 +96,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         _configuration = configuration;
         _yesAlreadyIpc = yesAlreadyIpc;
         _taskCreator = taskCreator;
+        _singlePlayerDutyConfigComponent = singlePlayerDutyConfigComponent;
         _logger = logger;
 
         _condition.ConditionChange += OnConditionChange;
@@ -169,6 +173,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
             DebugState = null;
 
             _questRegistry.Reload();
+            _singlePlayerDutyConfigComponent.Reload();
         }
     }
 

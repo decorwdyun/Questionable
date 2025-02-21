@@ -84,16 +84,16 @@ internal sealed class BossModIpc
 
     public bool IsConfiguredToRunSoloInstance(ElementId questId, byte dutyIndex, bool enabledByDefault)
     {
-        if (!_configuration.SoloDuties.RunSoloInstancesWithBossMod)
+        if (!_configuration.SinglePlayerDuties.RunSoloInstancesWithBossMod)
             return false;
 
         if (!_territoryData.TryGetContentFinderConditionForSoloInstance(questId, dutyIndex, out var cfcData))
             return false;
 
-        if (_configuration.SoloDuties.BlacklistedSoloDutyCfcIds.Contains(cfcData.ContentFinderConditionId))
+        if (_configuration.SinglePlayerDuties.BlacklistedSinglePlayerDutyCfcIds.Contains(cfcData.ContentFinderConditionId))
             return false;
 
-        if (_configuration.SoloDuties.WhitelistedSoloDutyCfcIds.Contains(cfcData.ContentFinderConditionId))
+        if (_configuration.SinglePlayerDuties.WhitelistedSinglePlayerDutyCfcIds.Contains(cfcData.ContentFinderConditionId))
             return true;
 
         return enabledByDefault;

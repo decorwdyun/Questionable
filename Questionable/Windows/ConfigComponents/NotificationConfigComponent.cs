@@ -25,7 +25,7 @@ internal sealed class NotificationConfigComponent : ConfigComponent
 
     public override void DrawTab()
     {
-        using var tab = ImRaii.TabItem("Notifications");
+        using var tab = ImRaii.TabItem("Notifications###Notifications");
         if (!tab)
             return;
 

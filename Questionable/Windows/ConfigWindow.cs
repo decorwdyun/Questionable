@@ -2,6 +2,7 @@
 using Dalamud.Plugin;
 using ImGuiNET;
 using LLib.ImGui;
+using Questionable.Controller.Steps.Interactions;
 using Questionable.Windows.ConfigComponents;
 
 namespace Questionable.Windows;
@@ -11,6 +12,7 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly GeneralConfigComponent _generalConfigComponent;
     private readonly DutyConfigComponent _dutyConfigComponent;
+    private readonly SinglePlayerDutyConfigComponent _singlePlayerDutyConfigComponent;
     private readonly NotificationConfigComponent _notificationConfigComponent;
     private readonly DebugConfigComponent _debugConfigComponent;
     private readonly Configuration _configuration;
@@ -19,6 +21,7 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
         IDalamudPluginInterface pluginInterface,
         GeneralConfigComponent generalConfigComponent,
         DutyConfigComponent dutyConfigComponent,
+        SinglePlayerDutyConfigComponent singlePlayerDutyConfigComponent,
         NotificationConfigComponent notificationConfigComponent,
         DebugConfigComponent debugConfigComponent,
         Configuration configuration)
@@ -27,6 +30,7 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
         _pluginInterface = pluginInterface;
         _generalConfigComponent = generalConfigComponent;
         _dutyConfigComponent = dutyConfigComponent;
+        _singlePlayerDutyConfigComponent = singlePlayerDutyConfigComponent;
         _notificationConfigComponent = notificationConfigComponent;
         _debugConfigComponent = debugConfigComponent;
         _configuration = configuration;
@@ -42,6 +46,7 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
 
         _generalConfigComponent.DrawTab();
         _dutyConfigComponent.DrawTab();
+        _singlePlayerDutyConfigComponent.DrawTab();
         _notificationConfigComponent.DrawTab();
         _debugConfigComponent.DrawTab();
     }

@@ -240,11 +240,11 @@ internal sealed class QuestRegistry
     public bool TryGetQuest(ElementId questId, [NotNullWhen(true)] out Quest? quest)
         => _quests.TryGetValue(questId, out quest);
 
-    public List<QuestInfo> GetKnownClassJobQuests(EClassJob classJob)
+    public List<QuestInfo> GetKnownClassJobQuests(EClassJob classJob, bool includeRoleQuests = true)
     {
-        List<QuestInfo> allQuests = [.._questData.GetClassJobQuests(classJob)];
+        List<QuestInfo> allQuests = [.._questData.GetClassJobQuests(classJob, includeRoleQuests)];
         if (classJob.AsJob() != classJob)
-            allQuests.AddRange(_questData.GetClassJobQuests(classJob.AsJob()));
+            allQuests.AddRange(_questData.GetClassJobQuests(classJob.AsJob(), includeRoleQuests));
 
         return allQuests
             .Where(x => IsKnownQuest(x.QuestId))

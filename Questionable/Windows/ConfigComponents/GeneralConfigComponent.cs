@@ -45,7 +45,7 @@ internal sealed class GeneralConfigComponent : ConfigComponent
 
     public override void DrawTab()
     {
-        using var tab = ImRaii.TabItem("General");
+        using var tab = ImRaii.TabItem("General###General");
         if (!tab)
             return;
 

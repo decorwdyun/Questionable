@@ -60,14 +60,13 @@ internal sealed class DutyConfigComponent : ConfigComponent
             .GroupBy(x => x.Expansion)
             .ToDictionary(x => x.Key,
                 x => x
-                    .Select(y => new DutyInfo(y.CfcId, y.TerritoryId,
-                        $"{SeIconChar.LevelEn.ToIconChar()}{FormatLevel(y.Level)} {y.Name}"))
+                    .Select(y => new DutyInfo(y.CfcId, y.TerritoryId, $"{FormatLevel(y.Level)} {y.Name}"))
                     .ToList());
     }
 
     public override void DrawTab()
     {
-        using var tab = ImRaii.TabItem("Duties");
+        using var tab = ImRaii.TabItem("Duties###Duties");
         if (!tab)
             return;
 
@@ -96,37 +95,25 @@ internal sealed class DutyConfigComponent : ConfigComponent
                     "https://docs.google.com/spreadsheets/d/151RlpqRcCpiD_VbQn6Duf-u-S71EP7d0mx3j1PDNoNA/edit?pli=1#gid=0");
 
             ImGui.Separator();
-            ImGui.Text("You can override the dungeon settings for each individual dungeon/trial:");
+            ImGui.Text("You can override the settings for each individual dungeon/trial:");
 
             DrawConfigTable(runInstancedContentWithAutoDuty);
+
             DrawClipboardButtons();
-
             ImGui.SameLine();
-
-            using (var unused = ImRaii.Disabled(!ImGui.IsKeyDown(ImGuiKey.ModCtrl)))
-            {
-                if (ImGui.Button("Reset to default"))
-                {
-                    Configuration.Duties.WhitelistedDutyCfcIds.Clear();
-                    Configuration.Duties.BlacklistedDutyCfcIds.Clear();
-                    Save();
-                }
-            }
-
-            if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
-                ImGui.SetTooltip("Hold CTRL to enable this button.");
+            DrawResetButton();
         }
     }
 
     private void DrawConfigTable(bool runInstancedContentWithAutoDuty)
     {
-        using var child = ImRaii.Child("DutyConfiguration", new Vector2(-1, 400), true);
+        using var child = ImRaii.Child("DutyConfiguration", new Vector2(650, 400), true);
         if (!child)
             return;
 
         foreach (EExpansionVersion expansion in Enum.GetValues<EExpansionVersion>())
         {
-            if (ImGui.CollapsingHeader(expansion.ToString()))
+            if (ImGui.CollapsingHeader(expansion.ToFriendlyString()))
             {
                 using var table = ImRaii.Table($"Duties{expansion}", 2, ImGuiTableFlags.SizingFixedFit);
                 if (table)
@@ -243,6 +230,22 @@ internal sealed class DutyConfigComponent : ConfigComponent
                 }
             }
         }
+    }
+
+    private void DrawResetButton()
+    {
+        using (ImRaii.Disabled(!ImGui.IsKeyDown(ImGuiKey.ModCtrl)))
+        {
+            if (ImGui.Button("Reset to default"))
+            {
+                Configuration.Duties.WhitelistedDutyCfcIds.Clear();
+                Configuration.Duties.BlacklistedDutyCfcIds.Clear();
+                Save();
+            }
+        }
+
+        if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
+            ImGui.SetTooltip("Hold CTRL to enable this button.");
     }
 
     private sealed record DutyInfo(uint CfcId, uint TerritoryId, string Name);

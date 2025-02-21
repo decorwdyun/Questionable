@@ -99,6 +99,11 @@ internal sealed class TerritoryData
         }
     }
 
+    public IEnumerable<(ElementId QuestId, byte Index, ContentFinderConditionData Data)> GetAllQuestsWithQuestBattles()
+    {
+        return _questsToCfc.Select(x => (x.Key.QuestId, x.Key.Index, _contentFinderConditions[x.Value]));
+    }
+
     private static string FixName(string name, ClientLanguage language)
     {
         if (string.IsNullOrEmpty(name) || language != ClientLanguage.English)

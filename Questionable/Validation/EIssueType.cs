@@ -19,4 +19,5 @@ public enum EIssueType
     InvalidExcelRef,
     ClassQuestWithoutAetheryteShortcut,
     DuplicateSinglePlayerInstance,
+    UnusedSinglePlayerInstance,
 }

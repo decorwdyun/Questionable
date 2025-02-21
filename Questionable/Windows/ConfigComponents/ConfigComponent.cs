@@ -39,12 +39,12 @@ internal abstract class ConfigComponent
 
     protected void Save() => _pluginInterface.SavePluginConfig(Configuration);
 
-    protected static string FormatLevel(int level)
+    protected static string FormatLevel(int level, bool includePrefix = true)
     {
         if (level == 0)
             return string.Empty;
 
-        return $"{FormatLevel(level / 10)}{(SeIconChar.Number0 + level % 10).ToIconChar()}";
+        return $"{(includePrefix ? SeIconChar.LevelEn.ToIconString() : string.Empty)}{FormatLevel(level / 10, false)}{(SeIconChar.Number0 + level % 10).ToIconChar()}";
     }
 
     /// <summary>
