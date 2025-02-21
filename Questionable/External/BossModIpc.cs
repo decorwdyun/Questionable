@@ -84,6 +84,9 @@ internal sealed class BossModIpc
 
     public bool IsConfiguredToRunSoloInstance(ElementId questId, byte dutyIndex, bool enabledByDefault)
     {
+        if (!IsSupported())
+            return false;
+
         if (!_configuration.SinglePlayerDuties.RunSoloInstancesWithBossMod)
             return false;
 

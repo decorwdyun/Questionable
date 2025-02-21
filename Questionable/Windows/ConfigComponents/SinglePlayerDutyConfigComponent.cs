@@ -40,12 +40,22 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
         (EClassJob.BlackMage, "Magical Ranged Role Quests"),
     ];
 
-    private ImmutableDictionary<EAetheryteLocation, List<SinglePlayerDutyInfo>> _startingCityBattles = ImmutableDictionary<EAetheryteLocation, List<SinglePlayerDutyInfo>>.Empty;
-    private ImmutableDictionary<EExpansionVersion, List<SinglePlayerDutyInfo>> _mainScenarioBattles = ImmutableDictionary<EExpansionVersion, List<SinglePlayerDutyInfo>>.Empty;
-    private ImmutableDictionary<EClassJob, List<SinglePlayerDutyInfo>> _jobQuestBattles = ImmutableDictionary<EClassJob, List<SinglePlayerDutyInfo>>.Empty;
-    private ImmutableDictionary<EClassJob, List<SinglePlayerDutyInfo>> _roleQuestBattles = ImmutableDictionary<EClassJob, List<SinglePlayerDutyInfo>>.Empty;
+    private ImmutableDictionary<EAetheryteLocation, List<SinglePlayerDutyInfo>> _startingCityBattles =
+        ImmutableDictionary<EAetheryteLocation, List<SinglePlayerDutyInfo>>.Empty;
+
+    private ImmutableDictionary<EExpansionVersion, List<SinglePlayerDutyInfo>> _mainScenarioBattles =
+        ImmutableDictionary<EExpansionVersion, List<SinglePlayerDutyInfo>>.Empty;
+
+    private ImmutableDictionary<EClassJob, List<SinglePlayerDutyInfo>> _jobQuestBattles =
+        ImmutableDictionary<EClassJob, List<SinglePlayerDutyInfo>>.Empty;
+
+    private ImmutableDictionary<EClassJob, List<SinglePlayerDutyInfo>> _roleQuestBattles =
+        ImmutableDictionary<EClassJob, List<SinglePlayerDutyInfo>>.Empty;
+
     private ImmutableList<SinglePlayerDutyInfo> _otherRoleQuestBattles = ImmutableList<SinglePlayerDutyInfo>.Empty;
-    private ImmutableList<(string Label, List<SinglePlayerDutyInfo>)> _otherQuestBattles = ImmutableList<(string Label, List<SinglePlayerDutyInfo>)>.Empty;
+
+    private ImmutableList<(string Label, List<SinglePlayerDutyInfo>)> _otherQuestBattles =
+        ImmutableList<(string Label, List<SinglePlayerDutyInfo>)>.Empty;
 
     public SinglePlayerDutyConfigComponent(
         IDalamudPluginInterface pluginInterface,
@@ -103,10 +113,10 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
         {
             IQuestInfo questInfo = _questData.GetQuestInfo(questId);
             QuestStep questStep = new QuestStep
-                {
-                    SinglePlayerDutyIndex = 0,
-                    BossModEnabled = false,
-                };
+            {
+                SinglePlayerDutyIndex = 0,
+                BossModEnabled = false,
+            };
             bool enabled;
             if (_questRegistry.TryGetQuest(questId, out var quest))
             {
@@ -122,7 +132,9 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
                         x.Step.SinglePlayerDutyIndex == index);
                     if (foundStep == default)
                     {
-                        _logger.LogWarning("Disabling quest battle for quest {QuestId}, no battle with index {Index} found", questId, index);
+                        _logger.LogWarning(
+                            "Disabling quest battle for quest {QuestId}, no battle with index {Index} found", questId,
+                            index);
                         enabled = false;
                     }
                     else
@@ -156,7 +168,8 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
                 questInfo.SortKey,
                 questStep.SinglePlayerDutyIndex,
                 enabled,
-                questStep.BossModEnabled);
+                questStep.BossModEnabled,
+                questStep.BossModNotes);
 
             if (cfcData.ContentFinderConditionId is 332 or 333 or 313 or 334)
                 startingCityBattles[EAetheryteLocation.Limsa].Add(dutyInfo);
@@ -343,7 +356,7 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
             }
         }
 
-        if(ImGui.CollapsingHeader("General Role Quests"))
+        if (ImGui.CollapsingHeader("General Role Quests"))
             DrawQuestTable("RoleQuestsGeneral", _otherRoleQuestBattles);
     }
 
@@ -380,9 +393,9 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
                     ? SupportedCfcOptions
                     : UnsupportedCfcOptions;
                 int value = 0;
-                if (Configuration.Duties.WhitelistedDutyCfcIds.Contains(dutyInfo.CfcId))
+                if (Configuration.SinglePlayerDuties.WhitelistedSinglePlayerDutyCfcIds.Contains(dutyInfo.CfcId))
                     value = 1;
-                if (Configuration.Duties.BlacklistedDutyCfcIds.Contains(dutyInfo.CfcId))
+                if (Configuration.SinglePlayerDuties.BlacklistedSinglePlayerDutyCfcIds.Contains(dutyInfo.CfcId))
                     value = 2;
 
                 if (ImGui.TableNextColumn())
@@ -407,6 +420,25 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
                         ImGuiComponents.HelpMarker("Questionable doesn't include support for this quest.",
                             FontAwesomeIcon.Times, ImGuiColors.DalamudRed);
                     }
+                    else if (dutyInfo.Notes.Count > 0)
+                    {
+                        using var color = new ImRaii.Color();
+                        color.Push(ImGuiCol.TextDisabled, ImGuiColors.DalamudYellow);
+                        ImGui.SameLine();
+                        using (ImRaii.PushFont(UiBuilder.IconFont))
+                        {
+                            ImGui.TextDisabled(FontAwesomeIcon.ExclamationTriangle.ToIconString());
+                        }
+
+                        if (ImGui.IsItemHovered())
+                        {
+                            using var _ = ImRaii.Tooltip();
+
+                            ImGui.TextColored(ImGuiColors.DalamudYellow, "While testing, the following issues have been found:");
+                            foreach (string note in dutyInfo.Notes)
+                                ImGui.BulletText(note);
+                        }
+                    }
                 }
 
                 if (ImGui.TableNextColumn())
@@ -417,13 +449,13 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
                         ImGui.SetNextItemWidth(200);
                         if (ImGui.Combo(string.Empty, ref value, labels, labels.Length))
                         {
-                            Configuration.Duties.WhitelistedDutyCfcIds.Remove(dutyInfo.CfcId);
-                            Configuration.Duties.BlacklistedDutyCfcIds.Remove(dutyInfo.CfcId);
+                            Configuration.SinglePlayerDuties.WhitelistedSinglePlayerDutyCfcIds.Remove(dutyInfo.CfcId);
+                            Configuration.SinglePlayerDuties.BlacklistedSinglePlayerDutyCfcIds.Remove(dutyInfo.CfcId);
 
                             if (value == 1)
-                                Configuration.Duties.WhitelistedDutyCfcIds.Add(dutyInfo.CfcId);
+                                Configuration.SinglePlayerDuties.WhitelistedSinglePlayerDutyCfcIds.Add(dutyInfo.CfcId);
                             else if (value == 2)
-                                Configuration.Duties.BlacklistedDutyCfcIds.Add(dutyInfo.CfcId);
+                                Configuration.SinglePlayerDuties.BlacklistedSinglePlayerDutyCfcIds.Add(dutyInfo.CfcId);
 
                             Save();
                         }
@@ -460,5 +492,6 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
         ushort SortKey,
         byte Index,
         bool Enabled,
-        bool BossModEnabledByDefault);
+        bool BossModEnabledByDefault,
+        List<string> Notes);
 }

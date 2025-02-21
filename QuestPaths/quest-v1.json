@@ -1270,6 +1270,12 @@
               "BossModEnabled": {
                 "type": "boolean"
               },
+              "BossModNotes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
               "SinglePlayerDutyIndex": {
                 "type": "integer",
                 "minimum": 0,

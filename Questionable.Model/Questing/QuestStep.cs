@@ -76,6 +76,7 @@ public sealed class QuestStep
     public uint? ContentFinderConditionId { get; set; }
     public bool AutoDutyEnabled { get; set; }
     public bool BossModEnabled { get; set; }
+    public List<string> BossModNotes { get; set; } = [];
     public byte SinglePlayerDutyIndex { get; set; }
     public SkipConditions? SkipConditions { get; set; }
 

@@ -19,6 +19,7 @@ using Lumina.Excel.Sheets;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Interactions;
 using Questionable.Data;
+using Questionable.External;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Gathering;
@@ -45,6 +46,7 @@ internal sealed class InteractionUiController : IDisposable
     private readonly ITargetManager _targetManager;
     private readonly IClientState _clientState;
     private readonly ShopController _shopController;
+    private readonly BossModIpc _bossModIpc;
     private readonly ILogger<InteractionUiController> _logger;
     private readonly Regex _returnRegex;
     private readonly Regex _purchaseItemRegex;
@@ -68,6 +70,7 @@ internal sealed class InteractionUiController : IDisposable
         IPluginLog pluginLog,
         IClientState clientState,
         ShopController shopController,
+        BossModIpc bossModIpc,
         ILogger<InteractionUiController> logger)
     {
         _addonLifecycle = addonLifecycle;
@@ -85,6 +88,7 @@ internal sealed class InteractionUiController : IDisposable
         _targetManager = targetManager;
         _clientState = clientState;
         _shopController = shopController;
+        _bossModIpc = bossModIpc;
         _logger = logger;
 
         _returnRegex = _dataManager.GetExcelSheet<Addon>().GetRow(196).GetRegex(addon => addon.Text, pluginLog)!;
@@ -176,7 +180,10 @@ internal sealed class InteractionUiController : IDisposable
 
         int? answer = HandleListChoice(actualPrompt, answers, checkAllSteps) ?? HandleInstanceListChoice(actualPrompt);
         if (answer != null)
+        {
+            _logger.LogInformation("Using choice {Choice} for list prompt '{Prompt}'", answer, actualPrompt);
             addonSelectString->AtkUnitBase.FireCallbackInt(answer.Value);
+        }
     }
 
     private unsafe void CutsceneSelectStringPostSetup(AddonEvent type, AddonArgs args)
@@ -224,6 +231,7 @@ internal sealed class InteractionUiController : IDisposable
         int? answer = HandleListChoice(actualPrompt, answers, checkAllSteps);
         if (answer != null)
         {
+            _logger.LogInformation("Using choice {Choice} for list prompt '{Prompt}'", answer, actualPrompt);
             addonSelectIconString->AtkUnitBase.FireCallbackInt(answer.Value);
             return;
         }
@@ -266,6 +274,7 @@ internal sealed class InteractionUiController : IDisposable
         int questSelection = answers.FindIndex(x => GameFunctions.GameStringEquals(questName, x));
         if (questSelection >= 0)
         {
+            _logger.LogInformation("Selecting quest {QuestName}", questName);
             addonSelectIconString->AtkUnitBase.FireCallbackInt(questSelection);
             return true;
         }
@@ -655,13 +664,21 @@ internal sealed class InteractionUiController : IDisposable
                 continue;
             }
 
+            _logger.LogInformation("Returning {YesNo} for '{Prompt}'", dialogueChoice.Yes ? "Yes" : "No", actualPrompt);
             addonSelectYesno->AtkUnitBase.FireCallbackInt(dialogueChoice.Yes ? 0 : 1);
             return true;
         }
 
-        if (step is { InteractionType: EInteractionType.SinglePlayerDuty, BossModEnabled: true })
+        if (step is { InteractionType: EInteractionType.SinglePlayerDuty } &&
+            _bossModIpc.IsConfiguredToRunSoloInstance(quest.Id, step.SinglePlayerDutyIndex, step.BossModEnabled))
         {
-            _logger.LogTrace("DefaultYesNo: probably Single Player Duty");
+            // Most of these are yes/no dialogs "Duty calls, ...".
+            //
+            // For 'Vows of Virtue, Deeds of Cruelty', there's no such dialog, and it just puts you into the instance
+            // after you confirm 'Wait for Krile?'. However, if you fail that duty, you'll get a DifficultySelectYesNo.
+
+            // DifficultySelectYesNo → [0, 2] for very easy
+            _logger.LogInformation("DefaultYesNo: probably Single Player Duty");
             addonSelectYesno->AtkUnitBase.FireCallbackInt(0);
             return true;
         }
