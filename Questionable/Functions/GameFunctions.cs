@@ -16,6 +16,7 @@ using FFXIVClientStructs.FFXIV.Component.GUI;
 using LLib.GameUI;
 using Lumina.Excel.Sheets;
 using Microsoft.Extensions.Logging;
+using Questionable.Controller.Steps.Interactions;
 using Questionable.Model;
 using Questionable.Model.Questing;
 using Action = Lumina.Excel.Sheets.Action;
@@ -426,6 +427,11 @@ internal sealed unsafe class GameFunctions
             if (!_condition[ConditionFlag.PreparingToCraft])
                 return true;
         }
+
+        if (_condition[ConditionFlag.Unconscious] &&
+            _condition[ConditionFlag.SufferingStatusAffliction63] &&
+            _clientState.TerritoryType == SinglePlayerDuty.LahabreaTerritoryId)
+            return false; // needed to process the tasks
 
         return _condition[ConditionFlag.Occupied] || _condition[ConditionFlag.Occupied30] ||
                _condition[ConditionFlag.Occupied33] || _condition[ConditionFlag.Occupied38] ||

@@ -105,10 +105,7 @@
           "TerritoryId": 1053,
           "InteractionType": "SinglePlayerDuty",
           "SinglePlayerDutyOptions": {
-            "Enabled": false,
-            "Notes": [
-              "Doesn't handle death properly"
-            ]
+            "Enabled": true
           }
         }
       ]

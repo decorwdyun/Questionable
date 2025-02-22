@@ -1,7 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Dalamud.Game.ClientState.Conditions;
+using Dalamud.Game.ClientState.Objects;
+using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using Questionable.Controller.Steps.Common;
 using Questionable.Controller.Steps.Shared;
 using Questionable.Data;
 using Questionable.External;
@@ -12,9 +17,13 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class SinglePlayerDuty
 {
+    public const int LahabreaTerritoryId = 1052;
+
     internal sealed class Factory(
         BossModIpc bossModIpc,
-        TerritoryData territoryData) : ITaskFactory
+        TerritoryData territoryData,
+        ICondition condition,
+        IClientState clientState) : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -28,6 +37,14 @@ internal static class SinglePlayerDuty
 
                 yield return new StartSinglePlayerDuty(cfcData.ContentFinderConditionId);
                 yield return new EnableAi();
+                if (cfcData.TerritoryId == LahabreaTerritoryId)
+                {
+                    yield return new SetTarget(14643);
+                    yield return new WaitCondition.Task(() => condition[ConditionFlag.Unconscious] || clientState.TerritoryType != LahabreaTerritoryId, "Wait(death)");
+                    yield return new DisableAi();
+                    yield return new WaitCondition.Task(() => !condition[ConditionFlag.Unconscious] || clientState.TerritoryType != LahabreaTerritoryId, "Wait(resurrection)");
+                    yield return new EnableAi();
+                }
                 yield return new WaitSinglePlayerDuty(cfcData.ContentFinderConditionId);
                 yield return new DisableAi();
                 yield return new WaitAtEnd.WaitNextStepOrSequence();
@@ -110,6 +127,34 @@ internal static class SinglePlayerDuty
         }
 
         public override ETaskResult Update() => ETaskResult.TaskComplete;
+
+        public override bool ShouldInterruptOnDamage() => false;
+    }
+
+    // TODO this should be handled in VBM
+    internal sealed record SetTarget(uint DataId) : ITask
+    {
+        public override string ToString() => $"SetTarget({DataId})";
+    }
+
+    internal sealed class SetTargetExecutor(
+        ITargetManager targetManager,
+        IObjectTable objectTable) : TaskExecutor<SetTarget>
+    {
+        protected override bool Start() => true;
+
+        public override ETaskResult Update()
+        {
+            if (targetManager.Target?.DataId == Task.DataId)
+                return ETaskResult.TaskComplete;
+
+            IGameObject? gameObject = objectTable.FirstOrDefault(x => x.DataId == Task.DataId);
+            if (gameObject == null)
+                return ETaskResult.StillRunning;
+
+            targetManager.Target = gameObject;
+            return ETaskResult.StillRunning;
+        }
 
         public override bool ShouldInterruptOnDamage() => false;
     }

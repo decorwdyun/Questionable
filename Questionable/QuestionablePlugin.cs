@@ -231,6 +231,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection
             .AddTaskExecutor<SinglePlayerDuty.WaitSinglePlayerDuty, SinglePlayerDuty.WaitSinglePlayerDutyExecutor>();
         serviceCollection.AddTaskExecutor<SinglePlayerDuty.DisableAi, SinglePlayerDuty.DisableAiExecutor>();
+        serviceCollection.AddTaskExecutor<SinglePlayerDuty.SetTarget, SinglePlayerDuty.SetTargetExecutor>();
 
         serviceCollection.AddTaskExecutor<WaitCondition.Task, WaitCondition.WaitConditionExecutor>();
         serviceCollection.AddTaskFactory<WaitAtEnd.Factory>();

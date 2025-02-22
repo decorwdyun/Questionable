@@ -10,6 +10,7 @@ using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps;
+using Questionable.Controller.Steps.Interactions;
 using Questionable.Controller.Steps.Shared;
 using Questionable.External;
 using Questionable.Functions;
@@ -200,7 +201,13 @@ internal sealed class QuestController : MiniTaskController<QuestController>
 
         if (!_clientState.IsLoggedIn || _condition[ConditionFlag.Unconscious])
         {
-            if (!_taskQueue.AllTasksComplete)
+            if (_condition[ConditionFlag.Unconscious] &&
+                _condition[ConditionFlag.SufferingStatusAffliction63] &&
+                _clientState.TerritoryType == SinglePlayerDuty.LahabreaTerritoryId)
+            {
+                // ignore, we're in the lahabrea fight
+            }
+            else if (!_taskQueue.AllTasksComplete)
             {
                 Stop("HP = 0");
                 _movementController.Stop();
