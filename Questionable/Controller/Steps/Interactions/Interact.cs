@@ -96,6 +96,12 @@ internal static class Interact
         private EInteractionState _interactionState = EInteractionState.None;
         private DateTime _continueAt = DateTime.MinValue;
 
+        /// <summary>
+        /// A slight delay when we think an interaction has ended, to make sure that we're processing "Action cancelled"
+        /// prior to the next step (in case we're attacked).
+        /// </summary>
+        private bool delayedFinalCheck;
+
         public Quest? Quest => Task.Quest;
         public EInteractionType InteractionType { get; set; }
 
@@ -179,7 +185,14 @@ internal static class Interact
                     return ETaskResult.StillRunning;
                 else if (ProgressContext.WasSuccessful() ||
                          _interactionState == EInteractionState.InteractionConfirmed)
-                    return ETaskResult.TaskComplete;
+                {
+                    if (delayedFinalCheck)
+                        return ETaskResult.TaskComplete;
+
+                    _continueAt = DateTime.Now.AddSeconds(0.2);
+                    delayedFinalCheck = true;
+                    return ETaskResult.StillRunning;
+                }
             }
 
             IGameObject? gameObject = gameFunctions.FindObjectByDataId(Task.DataId);
