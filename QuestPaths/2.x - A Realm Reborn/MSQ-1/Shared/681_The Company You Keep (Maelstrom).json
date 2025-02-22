@@ -65,7 +65,8 @@
           "TerritoryId": 135,
           "InteractionType": "SinglePlayerDuty",
           "SinglePlayerDutyOptions": {
-            "Enabled": true
+            "Enabled": true,
+            "TestedBossModVersion": 292
           },
           "AethernetShortcut": [
             "[Limsa Lominsa] The Aftcastle",

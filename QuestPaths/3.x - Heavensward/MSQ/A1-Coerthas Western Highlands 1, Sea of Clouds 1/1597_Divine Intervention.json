@@ -80,7 +80,8 @@
             "[Ishgard] The Tribunal"
           ],
           "SinglePlayerDutyOptions": {
-            "Enabled": true
+            "Enabled": true,
+            "TestedBossModVersion": 292
           }
         }
       ]

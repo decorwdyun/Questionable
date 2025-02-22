@@ -48,6 +48,7 @@
           "InteractionType": "SinglePlayerDuty",
           "SinglePlayerDutyOptions": {
             "Enabled": false,
+            "TestedBossModVersion": 292,
             "Notes": [
               "Doesn't walk to the teleporter to finish the duty"
             ]

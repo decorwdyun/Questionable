@@ -140,7 +140,8 @@
           "TerritoryId": 148,
           "InteractionType": "SinglePlayerDuty",
           "SinglePlayerDutyOptions": {
-            "Enabled": true
+            "Enabled": true,
+            "TestedBossModVersion": 292
           }
         }
       ]

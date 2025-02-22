@@ -97,7 +97,8 @@
           "InteractionType": "SinglePlayerDuty",
           "Fly": true,
           "SinglePlayerDutyOptions": {
-            "Enabled": true
+            "Enabled": true,
+            "TestedBossModVersion": 292
           }
         }
       ]

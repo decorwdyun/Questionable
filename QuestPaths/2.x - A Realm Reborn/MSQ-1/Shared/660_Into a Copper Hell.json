@@ -80,7 +80,8 @@
           "TerritoryId": 130,
           "InteractionType": "SinglePlayerDuty",
           "SinglePlayerDutyOptions": {
-            "Enabled": true
+            "Enabled": true,
+            "TestedBossModVersion": 292
           },
           "AetheryteShortcut": "Ul'dah",
           "AethernetShortcut": [
