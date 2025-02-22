@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Linq;
+using Microsoft.Extensions.Logging;
+using Questionable.Data;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
@@ -21,7 +23,7 @@ internal static class NextQuest
                 return null;
 
             // probably irrelevant, since pick up is handled elsewhere (and, in particular, checks for aetherytes and stuff)
-            if (questFunctions.GetPriorityQuests().Contains(step.NextQuestId))
+            if (questFunctions.GetPriorityQuests(onlyClassAndRoleQuests: true).Contains(step.NextQuestId))
                 return null;
 
             return new SetQuestTask(step.NextQuestId, quest.Id);

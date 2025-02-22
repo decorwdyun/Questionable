@@ -401,14 +401,15 @@ internal sealed unsafe class QuestFunctions
             return 1000 * quest.AllSteps().Count(x => x.Step.AetheryteShortcut != null);
     }
 
-    public List<ElementId> GetPriorityQuests()
+    public List<ElementId> GetPriorityQuests(bool onlyClassAndRoleQuests = false)
     {
-        List<ElementId> priorityQuests =
-        [
-            new QuestId(1157), // Garuda (Hard)
-            new QuestId(1158), // Titan (Hard)
-            ..QuestData.CrystalTowerQuests
-        ];
+        List<ElementId> priorityQuests = [];
+        if (!onlyClassAndRoleQuests)
+        {
+            priorityQuests.Add(new QuestId(1157)); // Garuda (Hard)
+            priorityQuests.Add(new QuestId(1158)); // Titan (Hard)
+            priorityQuests.AddRange(QuestData.CrystalTowerQuests);
+        }
 
         EClassJob classJob = (EClassJob?)_clientState.LocalPlayer?.ClassJob.RowId ?? EClassJob.Adventurer;
         uint[] shadowbringersRoleQuestChapters = QuestData.AllRoleQuestChapters.Select(x => x[0]).ToArray();
