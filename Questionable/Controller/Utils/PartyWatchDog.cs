@@ -81,8 +81,10 @@ internal sealed class PartyWatchDog : IDisposable
                 return;
 
             byte memberCount = groupManager->MainGroup.MemberCount;
-            _logger.LogDebug("Terrritory {TerritoryId} with {MemberCount} members", _uncheckedTeritoryId, memberCount);
-            if (memberCount > 1)
+            bool isInAlliance = groupManager->MainGroup.IsAlliance;
+            _logger.LogDebug("Territory {TerritoryId} with {MemberCount} members, alliance: {IsInAlliance}",
+                _uncheckedTeritoryId, memberCount, isInAlliance);
+            if (memberCount > 1 || isInAlliance)
                 StopIfRunning("Other party members present");
 
             _uncheckedTeritoryId = null;

@@ -271,7 +271,7 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
                 ImGui.BulletText("Will always use BossMod for combat (ignoring the configured combat module).");
                 ImGui.BulletText("Only a small subset of quest battles have been tested - most of which are in the MSQ.");
                 ImGui.BulletText("When retrying a failed battle, it will always start at 'Normal' difficulty.");
-                ImGui.BulletText("Please don't enable this option when using a BossMod fork (such as Reborn);\nwith the combat changes, it is unlikely to be compatible.");
+                ImGui.BulletText("Please don't enable this option when using a BossMod fork (such as Reborn);\nwith the missing combat module configuration, it is unlikely to be compatible.");
             }
 
 #if false
