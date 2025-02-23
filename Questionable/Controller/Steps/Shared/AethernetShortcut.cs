@@ -20,7 +20,6 @@ namespace Questionable.Controller.Steps.Shared;
 internal static class AethernetShortcut
 {
     internal sealed class Factory(
-        MovementController movementController,
         AetheryteData aetheryteData,
         TerritoryData territoryData,
         IClientState clientState)
@@ -31,8 +30,7 @@ internal static class AethernetShortcut
             if (step.AethernetShortcut == null)
                 yield break;
 
-            yield return new WaitCondition.Task(() => movementController.IsNavmeshReady,
-                "Wait(navmesh ready)");
+            yield return new WaitNavmesh.Task();
             yield return new Task(step.AethernetShortcut.From, step.AethernetShortcut.To,
                 step.SkipConditions?.AethernetShortcutIf ?? new());
 

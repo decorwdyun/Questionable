@@ -96,7 +96,9 @@ internal static class SinglePlayerDuty
     }
 
     internal sealed class WaitSinglePlayerDutyExecutor(
-        BossModIpc bossModIpc) : TaskExecutor<WaitSinglePlayerDuty>, IStoppableTaskExecutor
+        BossModIpc bossModIpc,
+        MovementController movementController)
+        : TaskExecutor<WaitSinglePlayerDuty>, IStoppableTaskExecutor, IDebugStateProvider
     {
         protected override bool Start() => true;
 
@@ -110,6 +112,14 @@ internal static class SinglePlayerDuty
         public void StopNow() => bossModIpc.DisableAi();
 
         public override bool ShouldInterruptOnDamage() => false;
+
+        public string? GetDebugState()
+        {
+            if (!movementController.IsNavmeshReady)
+                return $"Navmesh: {movementController.BuiltNavmeshPercent}%";
+            else
+                return null;
+        }
     }
 
     internal sealed record DisableAi : ITask

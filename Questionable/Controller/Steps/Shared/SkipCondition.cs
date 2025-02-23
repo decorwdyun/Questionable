@@ -310,6 +310,7 @@ internal static class SkipCondition
                 EExtraSkipCondition.WakingSandsSolar => territoryType == 212 && position.X >= 24,
                 EExtraSkipCondition.RisingStonesSolar => territoryType == 351 && position.Z <= -28,
                 EExtraSkipCondition.RoguesGuild => territoryType == 129 && position.Y <= -115,
+                EExtraSkipCondition.NotRoguesGuild => territoryType == 129 && position.Y > -115,
                 EExtraSkipCondition.DockStorehouse => territoryType == 137 && position.Y <= -20,
                 _ => throw new ArgumentOutOfRangeException(nameof(condition), condition, null)
             };

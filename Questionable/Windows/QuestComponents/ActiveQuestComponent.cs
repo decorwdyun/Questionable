@@ -73,25 +73,34 @@ internal sealed partial class ActiveQuestComponent
 
             if (_combatController.IsRunning)
                 ImGui.TextColored(ImGuiColors.DalamudOrange, "In Combat");
+            else if (_questController.CurrentTaskState is { } currentTaskState)
+            {
+                using var _ = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudOrange);
+                ImGui.TextUnformatted(currentTaskState);
+            }
             else
             {
-                ImGui.BeginDisabled();
+                using var _ = ImRaii.Disabled();
                 ImGui.TextUnformatted(_questController.DebugState ?? string.Empty);
-                ImGui.EndDisabled();
             }
 
             QuestSequence? currentSequence = currentQuest.Quest.FindSequence(currentQuest.Sequence);
             QuestStep? currentStep = currentSequence?.FindStep(currentQuest.Step);
             if (!isMinimized)
             {
-                bool colored = currentStep is
-                    { InteractionType: EInteractionType.Instruction or EInteractionType.WaitForManualProgress or EInteractionType.Snipe };
-                if (colored)
-                    ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.DalamudOrange);
-                ImGui.TextUnformatted(currentStep?.Comment ??
-                                      currentSequence?.Comment ?? currentQuest.Quest.Root.Comment ?? string.Empty);
-                if (colored)
-                    ImGui.PopStyleColor();
+                using (var color = new ImRaii.Color())
+                {
+                    bool colored = currentStep is
+                    {
+                        InteractionType: EInteractionType.Instruction or EInteractionType.WaitForManualProgress
+                        or EInteractionType.Snipe
+                    };
+                    if (colored)
+                        color.Push(ImGuiCol.Text, ImGuiColors.DalamudOrange);
+
+                    ImGui.TextUnformatted(currentStep?.Comment ??
+                                          currentSequence?.Comment ?? currentQuest.Quest.Root.Comment ?? string.Empty);
+                }
 
                 //var nextStep = _questController.GetNextStep();
                 //ImGui.BeginDisabled(nextStep.Step == null);
