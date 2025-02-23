@@ -30,7 +30,11 @@
           },
           "TerritoryId": 397,
           "InteractionType": "SinglePlayerDuty",
-          "Comment": "Walk straight to Gorgagne Mills basement, ignore footprints"
+          "Comment": "Walk straight to Gorgagne Mills basement, ignore footprints",
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": 292
+          }
         }
       ]
     },
