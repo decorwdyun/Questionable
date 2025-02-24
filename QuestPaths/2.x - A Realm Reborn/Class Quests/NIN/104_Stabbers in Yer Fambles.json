@@ -6,6 +6,26 @@
       "Sequence": 0,
       "Steps": [
         {
+          "TerritoryId": 129,
+          "InteractionType": "EquipItem",
+          "ItemId": 7952,
+          "AetheryteShortcut": "Limsa Lominsa",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            },
+            "StepIf": {
+              "Item": {
+                "NotInInventory": true
+              }
+            }
+          }
+        },
+        {
+          "TerritoryId": 129,
+          "InteractionType": "EquipRecommended"
+        },
+        {
           "DataId": 1009944,
           "Position": {
             "X": -152.66656,
@@ -14,16 +34,12 @@
           },
           "TerritoryId": 129,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "Limsa Lominsa",
           "TargetTerritoryId": 129,
           "AethernetShortcut": [
             "[Limsa Lominsa] Aetheryte Plaza",
             "[Limsa Lominsa] Fishermens' Guild"
           ],
           "SkipConditions": {
-            "AetheryteShortcutIf": {
-              "InSameTerritory": true
-            },
             "StepIf": {
               "ExtraCondition": "RoguesGuild"
             }
@@ -45,6 +61,25 @@
     {
       "Sequence": 1,
       "Steps": [
+        {
+          "DataId": 2004936,
+          "Position": {
+            "X": -151.90363,
+            "Y": -128.16058,
+            "Z": 256.8551
+          },
+          "TerritoryId": 129,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 129,
+          "SkipConditions": {
+            "StepIf": {
+              "InTerritory": [
+                134
+              ],
+              "ExtraCondition": "NotRoguesGuild"
+            }
+          }
+        },
         {
           "Position": {
             "X": 31.662792,
