@@ -31,7 +31,7 @@ internal sealed class AutoDutyIpc
         _stop = pluginInterface.GetIpcSubscriber<object>("AutoDuty.Stop");
     }
 
-    public bool IsConfiguredToRunContent(uint? cfcId, bool autoDutyEnabled)
+    public bool IsConfiguredToRunContent(uint? cfcId, bool enabledByDefault)
     {
         if (cfcId == null)
             return false;
@@ -46,7 +46,7 @@ internal sealed class AutoDutyIpc
             _territoryData.TryGetContentFinderCondition(cfcId.Value, out _))
             return true;
 
-        return autoDutyEnabled && HasPath(cfcId.Value);
+        return enabledByDefault && HasPath(cfcId.Value);
     }
 
     public bool HasPath(uint cfcId)

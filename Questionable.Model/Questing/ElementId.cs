@@ -91,6 +91,8 @@ public abstract class ElementId : IComparable<ElementId>, IEquatable<ElementId>
 
 public sealed class QuestId(ushort value) : ElementId(value)
 {
+    public static QuestId FromRowId(uint rowId) => new((ushort)(rowId & 0xFFFF));
+
     public override string ToString()
     {
         return Value.ToString(CultureInfo.InvariantCulture);

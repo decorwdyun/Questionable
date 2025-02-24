@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -13,11 +14,9 @@ using Dalamud.Game.ClientState.Objects;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
-using ECommons;
-using ECommons.Schedulers;
-using ECommons.SplatoonAPI;
 using GatheringPathRenderer.Windows;
 using LLib.GameData;
+using Pictomancy;
 using Questionable.Model.Gathering;
 
 namespace GatheringPathRenderer;
@@ -25,10 +24,8 @@ namespace GatheringPathRenderer;
 [SuppressMessage("ReSharper", "ClassNeverInstantiated.Global")]
 public sealed class RendererPlugin : IDalamudPlugin
 {
-    private const long OnTerritoryChange = -2;
-
     private readonly WindowSystem _windowSystem = new(nameof(RendererPlugin));
-    private readonly List<uint> _colors = [0xFFFF2020, 0xFF20FF20, 0xFF2020FF, 0xFFFFFF20, 0xFFFF20FF, 0xFF20FFFF];
+    private readonly List<uint> _colors = [0x40FF2020, 0x4020FF20, 0x402020FF, 0x40FFFF20, 0x40FF20FF, 0x4020FFFF];
 
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly IClientState _clientState;
@@ -58,7 +55,8 @@ public sealed class RendererPlugin : IDalamudPlugin
         _editorCommands = new EditorCommands(this, dataManager, commandManager, targetManager, clientState, chatGui,
             configuration);
         var configWindow = new ConfigWindow(pluginInterface, configuration);
-        _editorWindow = new EditorWindow(this, _editorCommands, dataManager, targetManager, clientState, objectTable, configWindow)
+        _editorWindow = new EditorWindow(this, _editorCommands, dataManager, targetManager, clientState, objectTable,
+                configWindow)
             { IsOpen = true };
         _windowSystem.AddWindow(configWindow);
         _windowSystem.AddWindow(_editorWindow);
@@ -67,14 +65,12 @@ public sealed class RendererPlugin : IDalamudPlugin
         _pluginInterface.GetIpcSubscriber<object>("Questionable.ReloadData")
             .Subscribe(Reload);
 
-        ECommonsMain.Init(pluginInterface, this, Module.SplatoonAPI);
+        PictoService.Initialize(pluginInterface);
         LoadGatheringLocationsFromDirectory();
 
         _pluginInterface.UiBuilder.Draw += _windowSystem.Draw;
-        _clientState.TerritoryChanged += TerritoryChanged;
+        _pluginInterface.UiBuilder.Draw += Draw;
         _clientState.ClassJobChanged += ClassJobChanged;
-        if (_clientState.IsLoggedIn)
-            TerritoryChanged(_clientState.TerritoryType);
     }
 
     internal DirectoryInfo PathsDirectory
@@ -93,7 +89,8 @@ public sealed class RendererPlugin : IDalamudPlugin
 
             throw new Exception($"Unable to resolve project path ({_pluginInterface.AssemblyLocation.Directory})");
 #else
-            var allPluginsDirectory = _pluginInterface.ConfigFile.Directory ?? throw new Exception("Unknown directory for plugin configs");
+            var allPluginsDirectory =
+ _pluginInterface.ConfigFile.Directory ?? throw new Exception("Unknown directory for plugin configs");
             return allPluginsDirectory
                 .CreateSubdirectory("Questionable")
                 .CreateSubdirectory("GatheringPaths");
@@ -104,7 +101,6 @@ public sealed class RendererPlugin : IDalamudPlugin
     internal void Reload()
     {
         LoadGatheringLocationsFromDirectory();
-        Redraw();
     }
 
     private void LoadGatheringLocationsFromDirectory()
@@ -124,7 +120,6 @@ public sealed class RendererPlugin : IDalamudPlugin
             _pluginLog.Information(
                 $"Loaded {_gatheringLocations.Count} gathering root locations from {PathsDirectory.FullName} directory");
 #endif
-
         }
         catch (Exception e)
         {
@@ -209,142 +204,114 @@ public sealed class RendererPlugin : IDalamudPlugin
         }
     }
 
-    private void TerritoryChanged(ushort territoryId) => Redraw();
-
     private void ClassJobChanged(uint classJobId)
     {
         _currentClassJob = (EClassJob)classJobId;
-        Redraw(_currentClassJob);
     }
 
-    internal void Redraw() => Redraw(_currentClassJob);
-
-    private void Redraw(EClassJob classJob)
+    private void Draw()
     {
-        Splatoon.RemoveDynamicElements("GatheringPathRenderer");
-        if (!classJob.IsGatherer())
+        if (!_currentClassJob.IsGatherer())
             return;
 
-        var elements = GetLocationsInTerritory(_clientState.TerritoryType)
-            .SelectMany(location =>
-                location.Root.Groups.SelectMany(group =>
-                    group.Nodes.SelectMany(node => node.Locations
-                        .SelectMany(x =>
-                        {
-                            bool isUnsaved = false;
-                            bool isCone = false;
-                            int minimumAngle = 0;
-                            int maximumAngle = 0;
-                            if (_editorWindow.TryGetOverride(x.InternalId, out LocationOverride? locationOverride) &&
-                                locationOverride != null)
-                            {
-                                isUnsaved = locationOverride.NeedsSave();
-                                if (locationOverride.IsCone())
-                                {
-                                    isCone = true;
-                                    minimumAngle = locationOverride.MinimumAngle.GetValueOrDefault();
-                                    maximumAngle = locationOverride.MaximumAngle.GetValueOrDefault();
-                                }
-                            }
+        using var drawList = PictoService.Draw();
+        if (drawList == null)
+            return;
 
-                            if (!isCone && x.IsCone())
+        Vector3 position = _clientState.LocalPlayer?.Position ?? Vector3.Zero;
+        foreach (var location in GetLocationsInTerritory(_clientState.TerritoryType))
+        {
+            if (!location.Root.Groups.Any(gr =>
+                    gr.Nodes.Any(
+                        no => no.Locations.Any(
+                            loc => Vector3.Distance(loc.Position, position) < 200f))))
+                continue;
+
+            foreach (var group in location.Root.Groups)
+            {
+                foreach (GatheringNode node in group.Nodes)
+                {
+                    foreach (var x in node.Locations)
+                    {
+                        bool isUnsaved = false;
+                        bool isCone = false;
+                        float minimumAngle = 0;
+                        float maximumAngle = 0;
+                        if (_editorWindow.TryGetOverride(x.InternalId, out LocationOverride? locationOverride) &&
+                            locationOverride != null)
+                        {
+                            isUnsaved = locationOverride.NeedsSave();
+                            if (locationOverride.IsCone())
                             {
                                 isCone = true;
-                                minimumAngle = x.MinimumAngle.GetValueOrDefault();
-                                maximumAngle = x.MaximumAngle.GetValueOrDefault();
+                                minimumAngle = locationOverride.MinimumAngle.GetValueOrDefault();
+                                maximumAngle = locationOverride.MaximumAngle.GetValueOrDefault();
                             }
+                        }
 
-#if false
-                            var a = GatheringMath.CalculateLandingLocation(x, 0, 0);
-                            var b = GatheringMath.CalculateLandingLocation(x, 1, 1);
-#endif
-                            return new List<Element>
-                            {
-                                new Element(isCone
-                                    ? ElementType.ConeAtFixedCoordinates
-                                    : ElementType.CircleAtFixedCoordinates)
-                                {
-                                    refX = x.Position.X,
-                                    refY = x.Position.Z,
-                                    refZ = x.Position.Y,
-                                    Filled = true,
-                                    radius = locationOverride?.MinimumDistance ?? x.CalculateMinimumDistance(),
-                                    Donut = (locationOverride?.MaximumDistance ?? x.CalculateMaximumDistance()) -
-                                            (locationOverride?.MinimumDistance ?? x.CalculateMinimumDistance()),
-                                    color = _colors[location.Root.Groups.IndexOf(group) % _colors.Count],
-                                    Enabled = true,
-                                    coneAngleMin = minimumAngle,
-                                    coneAngleMax = maximumAngle,
-                                    tether = false,
-                                },
-                                new Element(ElementType.CircleAtFixedCoordinates)
-                                {
-                                    refX = x.Position.X,
-                                    refY = x.Position.Z,
-                                    refZ = x.Position.Y,
-                                    color = 0xFFFFFFFF,
-                                    radius = 0.1f,
-                                    Enabled = true,
-                                    overlayText =
-                                        $"{location.Root.Groups.IndexOf(group)} // {node.DataId} / {node.Locations.IndexOf(x)}",
-                                    overlayBGColor = isUnsaved ? 0xFF2020FF : 0xFF000000,
-                                },
-#if false
-                                new Element(ElementType.CircleAtFixedCoordinates)
-                                {
-                                    refX = a.X,
-                                    refY = a.Z,
-                                    refZ = a.Y,
-                                    color = _colors[0],
-                                    radius = 0.1f,
-                                    Enabled = true,
-                                    overlayText = "Min Angle"
-                                },
-                                new Element(ElementType.CircleAtFixedCoordinates)
-                                {
-                                    refX = b.X,
-                                    refY = b.Z,
-                                    refZ = b.Y,
-                                    color = _colors[1],
-                                    radius = 0.1f,
-                                    Enabled = true,
-                                    overlayText = "Max Angle"
-                                }
-#endif
-                            };
-                        }))))
-            .ToList();
+                        if (!isCone && x.IsCone())
+                        {
+                            isCone = true;
+                            minimumAngle = x.MinimumAngle.GetValueOrDefault();
+                            maximumAngle = x.MaximumAngle.GetValueOrDefault();
+                        }
 
-        if (elements.Count == 0)
-        {
-            _pluginLog.Information("No new elements to render.");
-            return;
+                        minimumAngle *= (float)Math.PI / 180;
+                        maximumAngle *= (float)Math.PI / 180;
+                        if (!isCone || maximumAngle - minimumAngle >= 2 * Math.PI)
+                        {
+                            minimumAngle = 0;
+                            maximumAngle = (float)Math.PI * 2;
+                        }
+
+                        uint color = _colors[location.Root.Groups.IndexOf(group) % _colors.Count];
+                        drawList.AddFanFilled(x.Position,
+                            locationOverride?.MinimumDistance ?? x.CalculateMinimumDistance(),
+                            locationOverride?.MaximumDistance ?? x.CalculateMaximumDistance(),
+                            minimumAngle, maximumAngle, color);
+                        drawList.AddFan(x.Position,
+                            locationOverride?.MinimumDistance ?? x.CalculateMinimumDistance(),
+                            locationOverride?.MaximumDistance ?? x.CalculateMaximumDistance(),
+                            minimumAngle, maximumAngle, color | 0xFF000000);
+
+                        drawList.AddText(x.Position, isUnsaved ? 0xFFFF0000 : 0xFFFFFFFF, $"{location.Root.Groups.IndexOf(group)} // {node.DataId} / {node.Locations.IndexOf(x)} || {minimumAngle}, {maximumAngle}", 1f);
+#if false
+                        var a = GatheringMath.CalculateLandingLocation(x, 0, 0);
+                        var b = GatheringMath.CalculateLandingLocation(x, 1, 1);
+                        new Element(ElementType.CircleAtFixedCoordinates)
+                        {
+                            refX = a.X,
+                            refY = a.Z,
+                            refZ = a.Y,
+                            color = _colors[0],
+                            radius = 0.1f,
+                            Enabled = true,
+                            overlayText = "Min Angle"
+                        },
+                        new Element(ElementType.CircleAtFixedCoordinates)
+                        {
+                            refX = b.X,
+                            refY = b.Z,
+                            refZ = b.Y,
+                            color = _colors[1],
+                            radius = 0.1f,
+                            Enabled = true,
+                            overlayText = "Max Angle"
+                        }
+#endif
+                    }
+                }
+            }
         }
-
-        _ = new TickScheduler(delegate
-        {
-            try
-            {
-                Splatoon.AddDynamicElements("GatheringPathRenderer",
-                    elements.ToArray(),
-                    new[] { OnTerritoryChange });
-                _pluginLog.Information($"Created {elements.Count} splatoon elements.");
-            }
-            catch (Exception e)
-            {
-                _pluginLog.Error(e, "Unable to create splatoon layer");
-            }
-        });
     }
 
     public void Dispose()
     {
         _clientState.ClassJobChanged -= ClassJobChanged;
-        _clientState.TerritoryChanged -= TerritoryChanged;
+        _pluginInterface.UiBuilder.Draw -= Draw;
         _pluginInterface.UiBuilder.Draw -= _windowSystem.Draw;
 
-        Splatoon.RemoveDynamicElements("GatheringPathRenderer");
-        ECommonsMain.Dispose();
+        PictoService.Dispose();
 
         _pluginInterface.GetIpcSubscriber<object>("Questionable.ReloadData")
             .Unsubscribe(Reload);

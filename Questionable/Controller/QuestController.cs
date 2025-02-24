@@ -10,11 +10,13 @@ using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps;
+using Questionable.Controller.Steps.Interactions;
 using Questionable.Controller.Steps.Shared;
 using Questionable.External;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
+using Questionable.Windows.ConfigComponents;
 using Quest = Questionable.Model.Quest;
 
 namespace Questionable.Controller;
@@ -35,6 +37,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
     private readonly Configuration _configuration;
     private readonly YesAlreadyIpc _yesAlreadyIpc;
     private readonly TaskCreator _taskCreator;
+    private readonly SinglePlayerDutyConfigComponent _singlePlayerDutyConfigComponent;
     private readonly ILogger<QuestController> _logger;
 
     private readonly object _progressLock = new();
@@ -76,7 +79,8 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         TaskCreator taskCreator,
         IServiceProvider serviceProvider,
         InterruptHandler interruptHandler,
-        IDataManager dataManager)
+        IDataManager dataManager,
+        SinglePlayerDutyConfigComponent singlePlayerDutyConfigComponent)
         : base(chatGui, condition, serviceProvider, interruptHandler, dataManager, logger)
     {
         _clientState = clientState;
@@ -93,6 +97,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         _configuration = configuration;
         _yesAlreadyIpc = yesAlreadyIpc;
         _taskCreator = taskCreator;
+        _singlePlayerDutyConfigComponent = singlePlayerDutyConfigComponent;
         _logger = logger;
 
         _condition.ConditionChange += OnConditionChange;
@@ -169,6 +174,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
             DebugState = null;
 
             _questRegistry.Reload();
+            _singlePlayerDutyConfigComponent.Reload();
         }
     }
 
@@ -195,7 +201,13 @@ internal sealed class QuestController : MiniTaskController<QuestController>
 
         if (!_clientState.IsLoggedIn || _condition[ConditionFlag.Unconscious])
         {
-            if (!_taskQueue.AllTasksComplete)
+            if (_condition[ConditionFlag.Unconscious] &&
+                _condition[ConditionFlag.SufferingStatusAffliction63] &&
+                _clientState.TerritoryType == SinglePlayerDuty.LahabreaTerritoryId)
+            {
+                // ignore, we're in the lahabrea fight
+            }
+            else if (!_taskQueue.AllTasksComplete)
             {
                 Stop("HP = 0");
                 _movementController.Stop();
@@ -755,6 +767,10 @@ internal sealed class QuestController : MiniTaskController<QuestController>
             return false;
 
         if (ManualPriorityQuests.Contains(currentQuest.Quest))
+            return false;
+
+        // "ifrit bleeds, we can kill it" isn't listed as priority quest, as we accept it during the MSQ 'Moving On'
+        if (currentQuest.Quest.Id is QuestId { Value: 1048 })
             return false;
 
         if (currentQuest.Quest.Info.AlliedSociety != EAlliedSociety.None)

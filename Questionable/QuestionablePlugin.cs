@@ -20,12 +20,14 @@ using Questionable.Controller.Steps.Common;
 using Questionable.Controller.Steps.Gathering;
 using Questionable.Controller.Steps.Interactions;
 using Questionable.Controller.Steps.Leves;
+using Questionable.Controller.Utils;
 using Questionable.Data;
 using Questionable.External;
 using Questionable.Functions;
 using Questionable.Validation;
 using Questionable.Validation.Validators;
 using Questionable.Windows;
+using Questionable.Windows.ConfigComponents;
 using Questionable.Windows.JournalComponents;
 using Questionable.Windows.QuestComponents;
 using Action = Questionable.Controller.Steps.Interactions.Action;
@@ -131,6 +133,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<NotificationMasterIpc>();
         serviceCollection.AddSingleton<AutomatonIpc>();
         serviceCollection.AddSingleton<AutoDutyIpc>();
+        serviceCollection.AddSingleton<BossModIpc>();
 
         serviceCollection.AddSingleton<GearStatsCalculator>();
     }
@@ -222,6 +225,15 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTaskExecutor<InitiateLeve.Initiate, InitiateLeve.InitiateExecutor>();
         serviceCollection.AddTaskExecutor<InitiateLeve.SelectDifficulty, InitiateLeve.SelectDifficultyExecutor>();
 
+        serviceCollection.AddTaskFactory<SinglePlayerDuty.Factory>();
+        serviceCollection
+            .AddTaskExecutor<SinglePlayerDuty.StartSinglePlayerDuty, SinglePlayerDuty.StartSinglePlayerDutyExecutor>();
+        serviceCollection.AddTaskExecutor<SinglePlayerDuty.EnableAi, SinglePlayerDuty.EnableAiExecutor>();
+        serviceCollection
+            .AddTaskExecutor<SinglePlayerDuty.WaitSinglePlayerDuty, SinglePlayerDuty.WaitSinglePlayerDutyExecutor>();
+        serviceCollection.AddTaskExecutor<SinglePlayerDuty.DisableAi, SinglePlayerDuty.DisableAiExecutor>();
+        serviceCollection.AddTaskExecutor<SinglePlayerDuty.SetTarget, SinglePlayerDuty.SetTargetExecutor>();
+
         serviceCollection.AddTaskExecutor<WaitCondition.Task, WaitCondition.WaitConditionExecutor>();
         serviceCollection.AddTaskFactory<WaitAtEnd.Factory>();
         serviceCollection.AddTaskExecutor<WaitAtEnd.WaitDelay, WaitAtEnd.WaitDelayExecutor>();
@@ -248,6 +260,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<ContextMenuController>();
         serviceCollection.AddSingleton<ShopController>();
         serviceCollection.AddSingleton<InterruptHandler>();
+
+        serviceCollection.AddSingleton<PartyWatchDog>();
 
         serviceCollection.AddSingleton<CraftworksSupplyController>();
         serviceCollection.AddSingleton<CreditsController>();
@@ -289,6 +303,12 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<QuestValidationWindow>();
         serviceCollection.AddSingleton<JournalProgressWindow>();
         serviceCollection.AddSingleton<PriorityWindow>();
+
+        serviceCollection.AddSingleton<GeneralConfigComponent>();
+        serviceCollection.AddSingleton<DutyConfigComponent>();
+        serviceCollection.AddSingleton<SinglePlayerDutyConfigComponent>();
+        serviceCollection.AddSingleton<NotificationConfigComponent>();
+        serviceCollection.AddSingleton<DebugConfigComponent>();
     }
 
     private static void AddQuestValidators(ServiceCollection serviceCollection)
@@ -302,6 +322,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<IQuestValidator, AethernetShortcutValidator>();
         serviceCollection.AddSingleton<IQuestValidator, DialogueChoiceValidator>();
         serviceCollection.AddSingleton<IQuestValidator, ClassQuestShouldHaveShortcutValidator>();
+        serviceCollection.AddSingleton<IQuestValidator, SinglePlayerInstanceValidator>();
+        serviceCollection.AddSingleton<IQuestValidator, UniqueSinglePlayerInstanceValidator>();
         serviceCollection.AddSingleton<JsonSchemaValidator>();
         serviceCollection.AddSingleton<IQuestValidator>(sp => sp.GetRequiredService<JsonSchemaValidator>());
     }
@@ -310,6 +332,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
     {
         serviceProvider.GetRequiredService<QuestRegistry>().Reload();
         serviceProvider.GetRequiredService<GatheringPointRegistry>().Reload();
+        serviceProvider.GetRequiredService<SinglePlayerDutyConfigComponent>().Reload();
         serviceProvider.GetRequiredService<CommandHandler>();
         serviceProvider.GetRequiredService<ContextMenuController>();
         serviceProvider.GetRequiredService<CraftworksSupplyController>();

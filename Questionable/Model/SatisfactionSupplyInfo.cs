@@ -3,6 +3,7 @@ using System.Collections.Immutable;
 using LLib.GameData;
 using Lumina.Excel.Sheets;
 using Questionable.Model.Questing;
+using QQuestId = Questionable.Model.Questing.QuestId;
 
 namespace Questionable.Model;
 
@@ -16,7 +17,7 @@ internal sealed class SatisfactionSupplyInfo : IQuestInfo
         Level = npc.LevelUnlock;
         SortKey = QuestId.Value;
         Expansion = (EExpansionVersion)npc.QuestRequired.Value.Expansion.RowId;
-        PreviousQuests = [new PreviousQuestInfo(new QuestId((ushort)(npc.QuestRequired.RowId & 0xFFFF)))];
+        PreviousQuests = [new PreviousQuestInfo(QQuestId.FromRowId(npc.QuestRequired.RowId))];
     }
 
     public ElementId QuestId { get; }

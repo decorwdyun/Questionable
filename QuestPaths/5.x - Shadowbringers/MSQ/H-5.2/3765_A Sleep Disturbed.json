@@ -46,6 +46,13 @@
           },
           "TerritoryId": 817,
           "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": false,
+            "TestedBossModVersion": 292,
+            "Notes": [
+              "Doesn't walk to the teleporter to finish the duty"
+            ]
+          },
           "Fly": true,
           "Comment": "A Sleep Disturbed (Opo-Opo, Wolf, Serpent)",
           "$": "The dialogue choices and data ids here are recycled",

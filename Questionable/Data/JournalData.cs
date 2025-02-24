@@ -23,17 +23,17 @@ internal sealed class JournalData
         var genreLimsa = new Genre(uint.MaxValue - 3, "Starting in Limsa Lominsa", 1,
             new uint[] { 108, 109 }.Concat(limsaStart.QuestRedoParam.Select(x => x.Quest.RowId))
                 .Where(x => x != 0)
-                .Select(x => questData.GetQuestInfo(new QuestId((ushort)(x & 0xFFFF))))
+                .Select(x => questData.GetQuestInfo(QuestId.FromRowId(x)))
                 .ToList());
         var genreGridania = new Genre(uint.MaxValue - 2, "Starting in Gridania", 1,
             new uint[] { 85, 123, 124 }.Concat(gridaniaStart.QuestRedoParam.Select(x => x.Quest.RowId))
                 .Where(x => x != 0)
-                .Select(x => questData.GetQuestInfo(new QuestId((ushort)(x & 0xFFFF))))
+                .Select(x => questData.GetQuestInfo(QuestId.FromRowId(x)))
                 .ToList());
         var genreUldah = new Genre(uint.MaxValue - 1, "Starting in Ul'dah", 1,
             new uint[] { 568, 569, 570 }.Concat(uldahStart.QuestRedoParam.Select(x => x.Quest.RowId))
                 .Where(x => x != 0)
-                .Select(x => questData.GetQuestInfo(new QuestId((ushort)(x & 0xFFFF))))
+                .Select(x => questData.GetQuestInfo(QuestId.FromRowId(x)))
                 .ToList());
         genres.InsertRange(0, [genreLimsa, genreGridania, genreUldah]);
         genres.Single(x => x.Id == 1)

@@ -46,7 +46,8 @@
           },
           "StopDistance": 7,
           "TerritoryId": 141,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DelaySecondsAtStart": 2
         }
       ]
     },

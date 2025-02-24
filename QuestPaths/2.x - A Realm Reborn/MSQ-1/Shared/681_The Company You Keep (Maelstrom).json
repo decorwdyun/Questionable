@@ -64,6 +64,10 @@
           },
           "TerritoryId": 135,
           "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": 292
+          },
           "AethernetShortcut": [
             "[Limsa Lominsa] The Aftcastle",
             "[Limsa Lominsa] Tempest Gate (Lower La Noscea)"

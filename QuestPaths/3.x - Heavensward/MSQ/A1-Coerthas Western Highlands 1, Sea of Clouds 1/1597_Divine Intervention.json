@@ -78,7 +78,11 @@
           "AethernetShortcut": [
             "[Ishgard] The Forgotten Knight",
             "[Ishgard] The Tribunal"
-          ]
+          ],
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": 292
+          }
         }
       ]
     },

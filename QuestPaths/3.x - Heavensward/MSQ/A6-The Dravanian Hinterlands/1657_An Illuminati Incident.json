@@ -47,7 +47,11 @@
           "AethernetShortcut": [
             "[Idyllshire] Aetheryte Plaza",
             "[Idyllshire] Epilogue Gate (Eastern Hinterlands)"
-          ]
+          ],
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": 292
+          }
         }
       ]
     },

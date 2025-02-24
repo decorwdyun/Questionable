@@ -34,6 +34,39 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1001263,
+          "Position": {
+            "X": 181.41443,
+            "Y": -2.3519497,
+            "Z": -240.40594
+          },
+          "TerritoryId": 133,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 152,
+          "AethernetShortcut": [
+            "[Gridania] Conjurers' Guild",
+            "[Gridania] Lancers' Guild"
+          ],
+          "SkipConditions": {
+            "StepIf": {
+              "AetheryteUnlocked": "East Shroud - Hawthorne Hut",
+              "InTerritory": [
+                152
+              ]
+            }
+          }
+        },
+        {
+          "TerritoryId": 152,
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "East Shroud - Hawthorne Hut",
+          "SkipConditions": {
+            "StepIf": {
+              "AetheryteUnlocked": "East Shroud - Hawthorne Hut"
+            }
+          }
+        },
+        {
           "Position": {
             "X": -276.804,
             "Y": 11.2529,
@@ -42,7 +75,12 @@
           "TerritoryId": 152,
           "InteractionType": "WalkTo",
           "AetheryteShortcut": "East Shroud - Hawthorne Hut",
-          "Fly": true
+          "Fly": true,
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "AetheryteLocked": "East Shroud - Hawthorne Hut"
+            }
+          }
         },
         {
           "DataId": 2000889,
@@ -212,6 +250,10 @@
           },
           "TerritoryId": 152,
           "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": 292
+          },
           "Fly": true
         }
       ]

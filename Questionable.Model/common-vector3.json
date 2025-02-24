@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "/liza/Questionable/raw/branch/master/Questionable.Model/common-vector3.json",
+  "$id": "https://git.carvel.li//liza/Questionable/raw/branch/master/Questionable.Model/common-vector3.json",
   "type": "object",
   "description": "Position in the world",
   "properties": {

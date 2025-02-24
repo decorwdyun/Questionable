@@ -62,6 +62,9 @@
           },
           "TerritoryId": 154,
           "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Index": 1
+          },
           "AetheryteShortcut": "North Shroud - Fallgourd Float",
           "Fly": true
         }

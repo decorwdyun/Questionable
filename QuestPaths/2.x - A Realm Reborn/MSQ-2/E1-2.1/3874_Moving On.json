@@ -102,7 +102,7 @@
           },
           "TerritoryId": 137,
           "InteractionType": "WalkTo",
-          "Fly": true
+          "Mount": true
         },
         {
           "Position": {

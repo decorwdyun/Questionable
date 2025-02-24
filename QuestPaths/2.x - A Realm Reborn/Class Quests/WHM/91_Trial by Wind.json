@@ -65,7 +65,8 @@
           "AetheryteShortcut": "East Shroud - Hawthorne Hut",
           "SkipConditions": {
             "AetheryteShortcutIf": {
-              "InSameTerritory": true
+              "InSameTerritory": true,
+              "AetheryteLocked": "East Shroud - Hawthorne Hut"
             }
           }
         }
@@ -116,7 +117,11 @@
             "Z": 35.568726
           },
           "TerritoryId": 152,
-          "InteractionType": "SinglePlayerDuty"
+          "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": 292
+          }
         }
       ]
     },

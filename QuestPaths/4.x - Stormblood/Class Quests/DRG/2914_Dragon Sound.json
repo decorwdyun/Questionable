@@ -34,7 +34,7 @@
             "Z": -509.51404
           },
           "TerritoryId": 622,
-          "InteractionType": "Interact",
+          "InteractionType": "SinglePlayerDuty",
           "Fly": true
         }
       ]

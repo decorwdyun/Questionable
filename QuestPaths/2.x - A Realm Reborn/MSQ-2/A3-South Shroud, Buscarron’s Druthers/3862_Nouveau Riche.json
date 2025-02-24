@@ -83,7 +83,14 @@
             "Z": -12.985474
           },
           "TerritoryId": 153,
-          "InteractionType": "SinglePlayerDuty"
+          "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": 292,
+            "Notes": [
+              "AI will kill initial adds before the boss, but not switch target whenever new enemies spawn; all NPCs need to be killed for the duty to complete"
+            ]
+          }
         }
       ]
     },

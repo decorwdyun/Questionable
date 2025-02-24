@@ -21,7 +21,8 @@ internal static class WaitAtEnd
         IClientState clientState,
         ICondition condition,
         TerritoryData territoryData,
-        AutoDutyIpc autoDutyIpc)
+        AutoDutyIpc autoDutyIpc,
+        BossModIpc bossModIpc)
         : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
@@ -53,7 +54,7 @@ internal static class WaitAtEnd
                     return [new WaitNextStepOrSequence()];
 
                 case EInteractionType.Duty when !autoDutyIpc.IsConfiguredToRunContent(step.ContentFinderConditionId, step.AutoDutyEnabled):
-                case EInteractionType.SinglePlayerDuty:
+                case EInteractionType.SinglePlayerDuty when !bossModIpc.IsConfiguredToRunSoloInstance(quest.Id, step.SinglePlayerDutyOptions):
                     return [new EndAutomation()];
 
                 case EInteractionType.WalkTo:

@@ -75,6 +75,8 @@ public sealed class QuestStep
     public JumpDestination? JumpDestination { get; set; }
     public uint? ContentFinderConditionId { get; set; }
     public bool AutoDutyEnabled { get; set; }
+    public SinglePlayerDutyOptions? SinglePlayerDutyOptions { get; set; }
+    public byte SinglePlayerDutyIndex => SinglePlayerDutyOptions?.Index ?? 0;
     public SkipConditions? SkipConditions { get; set; }
 
     public List<List<QuestWorkValue>?> RequiredQuestVariables { get; set; } = new();

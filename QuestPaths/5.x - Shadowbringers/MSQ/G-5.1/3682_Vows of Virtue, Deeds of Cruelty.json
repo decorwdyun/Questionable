@@ -61,7 +61,19 @@
           "TerritoryId": 156,
           "InteractionType": "Interact",
           "AetheryteShortcut": "Mor Dhona",
-          "TargetTerritoryId": 351
+          "TargetTerritoryId": 351,
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InTerritory": [
+                351
+              ]
+            },
+            "StepIf": {
+              "InTerritory": [
+                351
+              ]
+            }
+          }
         },
         {
           "DataId": 1032081,
@@ -73,13 +85,17 @@
           "TerritoryId": 351,
           "InteractionType": "SinglePlayerDuty",
           "Comment": "Estinien vs. Arch Ultima",
-          "DialogueChoices": [
-            {
-              "Type": "YesNo",
-              "Prompt": "TEXT_LUCKMG110_03682_Q1_100_125",
-              "Yes": true
-            }
-          ]
+          "SinglePlayerDutyOptions": {
+            "Enabled": false,
+            "TestedBossModVersion": 292,
+            "Notes": [
+              "AI doesn't move automatically for the first boss",
+              "AI doesn't move automatically for the dialogue with gaius on the bridge",
+              "After walking downstairs automatically, AI tries to run back towards the stairs (ignoring the arena boudnary)",
+              "After moving from the arena boundary, AI doesn't move into melee range and stops too far away when initially attacking"
+            ]
+          },
+          "$": "This doesn't have a duty confirmation dialog, so we're treating TEXT_LUCKMG110_03682_Q1_100_125 as one"
         }
       ]
     },

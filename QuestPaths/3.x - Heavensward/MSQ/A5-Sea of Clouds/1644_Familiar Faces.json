@@ -56,7 +56,11 @@
           "TerritoryId": 401,
           "InteractionType": "SinglePlayerDuty",
           "Emote": "lookout",
-          "StopDistance": 0.25
+          "StopDistance": 0.25,
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": 292
+          }
         }
       ]
     },

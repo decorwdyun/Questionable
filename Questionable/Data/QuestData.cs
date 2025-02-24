@@ -247,8 +247,8 @@ internal sealed class QuestData
 
     private void AddPreviousQuest(QuestId questToUpdate, QuestId requiredQuestId)
     {
-        QuestInfo quest = (QuestInfo)_quests[questToUpdate];
-        quest.AddPreviousQuest(new PreviousQuestInfo(requiredQuestId));
+        if (_quests.TryGetValue(questToUpdate, out IQuestInfo? quest) && quest is QuestInfo questInfo)
+            questInfo.AddPreviousQuest(new PreviousQuestInfo(requiredQuestId));
     }
 
     private void AddGcFollowUpQuests()
@@ -300,7 +300,7 @@ internal sealed class QuestData
             .ToList();
     }
 
-    public List<QuestInfo> GetClassJobQuests(EClassJob classJob)
+    public List<QuestInfo> GetClassJobQuests(EClassJob classJob, bool includeRoleQuests = false)
     {
         List<uint> chapterIds = classJob switch
         {
@@ -367,7 +367,20 @@ internal sealed class QuestData
             _ => throw new ArgumentOutOfRangeException(nameof(classJob)),
         };
 
-        chapterIds.AddRange(classJob switch
+        if (includeRoleQuests)
+        {
+            chapterIds.AddRange(GetRoleQuestIds(classJob));
+        }
+
+        return GetQuestsInNewGamePlusChapters(chapterIds);
+    }
+
+    public List<QuestInfo> GetRoleQuests(EClassJob referenceClassJob) =>
+        GetQuestsInNewGamePlusChapters(GetRoleQuestIds(referenceClassJob).ToList());
+
+    private static IEnumerable<uint> GetRoleQuestIds(EClassJob classJob)
+    {
+        return classJob switch
         {
             _ when classJob.IsTank() => TankRoleQuests,
             _ when classJob.IsHealer() => HealerRoleQuests,
@@ -375,9 +388,7 @@ internal sealed class QuestData
             _ when classJob.IsPhysicalRanged() => PhysicalRangedRoleQuests,
             _ when classJob.IsCaster() && classJob != EClassJob.BlueMage => CasterRoleQuests,
             _ => []
-        });
-
-        return GetQuestsInNewGamePlusChapters(chapterIds);
+        };
     }
 
     private List<QuestInfo> GetQuestsInNewGamePlusChapters(List<uint> chapterIds)

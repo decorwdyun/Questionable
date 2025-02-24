@@ -28,7 +28,14 @@
             "Z": 388.63196
           },
           "TerritoryId": 145,
-          "InteractionType": "SinglePlayerDuty"
+          "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": 292,
+            "Notes": [
+              "Will not move into melee range to kill the gate; Alphinaud will kill it after a while"
+            ]
+          }
         }
       ]
     },

@@ -18,4 +18,6 @@ public enum EIssueType
     InvalidAethernetShortcut,
     InvalidExcelRef,
     ClassQuestWithoutAetheryteShortcut,
+    DuplicateSinglePlayerInstance,
+    UnusedSinglePlayerInstance,
 }

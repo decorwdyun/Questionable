@@ -23,13 +23,22 @@
       "Steps": [
         {
           "Position": {
+            "X": 474.62885,
+            "Y": 200.2377,
+            "Z": 657.9519
+          },
+          "TerritoryId": 397,
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Coerthas Western Highlands - Falcon's Nest"
+        },
+        {
+          "Position": {
             "X": 486.38373,
             "Y": 163.58846,
             "Z": 239.54294
           },
           "TerritoryId": 397,
-          "InteractionType": "WalkTo",
-          "AetheryteShortcut": "Coerthas Western Highlands - Falcon's Nest"
+          "InteractionType": "WalkTo"
         },
         {
           "Position": {
@@ -69,7 +78,11 @@
           },
           "TerritoryId": 397,
           "InteractionType": "SinglePlayerDuty",
-          "DisableNavmesh": true
+          "DisableNavmesh": true,
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": 292
+          }
         }
       ]
     },

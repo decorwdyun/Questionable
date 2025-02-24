@@ -101,6 +101,28 @@
           ]
         },
         {
+          "Position": {
+            "X": 86.662384,
+            "Y": 28.34813,
+            "Z": -627.5218
+          },
+          "TerritoryId": 156,
+          "InteractionType": "WalkTo",
+          "Fly": true,
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                32
+              ]
+            }
+          }
+        },
+        {
           "DataId": 1009143,
           "Position": {
             "X": 86.778076,
@@ -109,7 +131,6 @@
           },
           "TerritoryId": 156,
           "InteractionType": "Interact",
-          "Fly": true,
           "$": "1 112  0 0  0 2 -> 2 96  0 0  0 34",
           "CompletionQuestVariablesFlags": [
             null,

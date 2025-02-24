@@ -79,6 +79,10 @@
           },
           "TerritoryId": 130,
           "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": 292
+          },
           "AetheryteShortcut": "Ul'dah",
           "AethernetShortcut": [
             "[Ul'dah] Aetheryte Plaza",
@@ -86,6 +90,9 @@
           ]
         }
       ]
+    },
+    {
+      "Sequence": 5
     },
     {
       "Sequence": 255,

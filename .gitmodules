@@ -1,9 +1,9 @@
 [submodule "LLib"]
 	path = LLib
 	url = https://git.carvel.li/liza/LLib.git
-[submodule "vendor/ECommons"]
-	path = vendor/ECommons
-	url = https://github.com/NightmareXIV/ECommons.git
 [submodule "vendor/NotificationMasterAPI"]
 	path = vendor/NotificationMasterAPI
 	url = https://github.com/NightmareXIV/NotificationMasterAPI.git
+[submodule "vendor/pictomancy"]
+	path = vendor/pictomancy
+	url = https://github.com/sourpuh/ffxiv_pictomancy

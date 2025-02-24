@@ -59,7 +59,14 @@
           "KillEnemyDataIds": [
             4015
           ],
-          "$": "0 0 0 0 0 0 -> "
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "Position": {
@@ -72,6 +79,14 @@
           "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
             4015
+          ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
           ]
         }
       ]

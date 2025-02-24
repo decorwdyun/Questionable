@@ -69,6 +69,13 @@
           },
           "TerritoryId": 135,
           "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": false,
+            "TestedBossModVersion": 292,
+            "Notes": [
+              "(Phase 1, second enemy group) Stuck with enemy being out of sight -- but still able to attack you (tested on ACN)"
+            ]
+          },
           "AetheryteShortcut": "Lower La Noscea - Moraby Drydocks"
         }
       ]
