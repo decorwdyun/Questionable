@@ -16,31 +16,31 @@ internal sealed class DebugConfigComponent : ConfigComponent
 
     public override void DrawTab()
     {
-        using var tab = ImRaii.TabItem("Advanced###Debug");
+        using var tab = ImRaii.TabItem("高级###Debug");
         if (!tab)
             return;
 
         ImGui.TextColored(ImGuiColors.DalamudRed,
-            "Enabling any option here may cause unexpected behavior. Use at your own risk.");
+            "启用此处的任何选项都可能会产生非预期行为。请谨慎使用。");
 
         ImGui.Separator();
 
         bool debugOverlay = Configuration.Advanced.DebugOverlay;
-        if (ImGui.Checkbox("Enable debug overlay", ref debugOverlay))
+        if (ImGui.Checkbox("启用 Debug 覆盖层", ref debugOverlay))
         {
             Configuration.Advanced.DebugOverlay = debugOverlay;
             Save();
         }
 
         bool neverFly = Configuration.Advanced.NeverFly;
-        if (ImGui.Checkbox("Disable flying (even if unlocked for the zone)", ref neverFly))
+        if (ImGui.Checkbox("禁用飞行（即使该区域已解锁飞行）", ref neverFly))
         {
             Configuration.Advanced.NeverFly = neverFly;
             Save();
         }
 
         bool additionalStatusInformation = Configuration.Advanced.AdditionalStatusInformation;
-        if (ImGui.Checkbox("Draw additional status information", ref additionalStatusInformation))
+        if (ImGui.Checkbox("显示额外的状态信息", ref additionalStatusInformation))
         {
             Configuration.Advanced.AdditionalStatusInformation = additionalStatusInformation;
             Save();
@@ -48,12 +48,12 @@ internal sealed class DebugConfigComponent : ConfigComponent
 
         ImGui.Separator();
 
-        ImGui.Text("AutoDuty options");
+        ImGui.Text("AutoDuty 选项");
         using (var _ = ImRaii.PushIndent())
         {
             ImGui.AlignTextToFramePadding();
             bool disableAutoDutyBareMode = Configuration.Advanced.DisableAutoDutyBareMode;
-            if (ImGui.Checkbox("Use Pre-Loop/Loop/Post-Loop settings", ref disableAutoDutyBareMode))
+            if (ImGui.Checkbox("使用 Pre-Loop/Loop/Post-Loop 设置", ref disableAutoDutyBareMode))
             {
                 Configuration.Advanced.DisableAutoDutyBareMode = disableAutoDutyBareMode;
                 Save();
@@ -61,7 +61,7 @@ internal sealed class DebugConfigComponent : ConfigComponent
 
             ImGui.SameLine();
             ImGuiComponents.HelpMarker(
-                "Typically, the loop settings for AutoDuty are disabled when running dungeons with Questionable, since they can cause issues (or even shut down your PC).");
+                "通常情况下，在使用 Questionable 运行副本时，AutoDuty 的循环设置会被禁用，因为它们可能会导致问题（甚至关闭您的电脑）。");
         }
 
         ImGui.EndTabItem();

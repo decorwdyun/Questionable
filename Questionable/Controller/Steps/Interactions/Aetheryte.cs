@@ -25,7 +25,7 @@ internal static class Aetheryte
     internal sealed record Attune(EAetheryteLocation AetheryteLocation) : ITask
     {
         public bool ShouldRedoOnInterrupt() => true;
-        public override string ToString() => $"AttuneAetheryte({AetheryteLocation})";
+        public override string ToString() => $"共鸣({AetheryteLocation})";
     }
 
     internal sealed class DoAttune(

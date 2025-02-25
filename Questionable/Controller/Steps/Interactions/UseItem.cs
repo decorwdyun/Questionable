@@ -57,7 +57,7 @@ internal static class UseItem
                 [
                     task,
                     new WaitCondition.Task(() => clientState.TerritoryType == 140,
-                        $"Wait(territory: {territoryData.GetNameAndId(140)})"),
+                        $"等待(区域: {territoryData.GetNameAndId(140)})"),
                     new Mount.MountTask(140,
                         nextPosition != null ? Mount.EMountIf.AwayFromPosition : Mount.EMountIf.Always,
                         nextPosition),
@@ -216,7 +216,7 @@ internal static class UseItem
         IList<QuestWorkValue?> CompletionQuestVariablesFlags,
         bool StartingCombat = false) : IUseItemBase
     {
-        public override string ToString() => $"UseItem({ItemId} on ground at {DataId})";
+        public override string ToString() => $"(对着{DataId}在地面使用物品{ItemId})";
     }
 
     internal sealed class UseOnGroundExecutor(
@@ -239,7 +239,7 @@ internal static class UseItem
         public bool StartingCombat => false;
 
         public override string ToString() =>
-            $"UseItem({ItemId} on ground at {Position.ToString("G", CultureInfo.InvariantCulture)})";
+            $"使用物品({ItemId} 位置: {Position.ToString("G", CultureInfo.InvariantCulture)})";
     }
 
     internal sealed class UseOnPositionExecutor(
@@ -259,7 +259,7 @@ internal static class UseItem
         IList<QuestWorkValue?> CompletionQuestVariablesFlags,
         bool StartingCombat = false) : IUseItemBase
     {
-        public override string ToString() => $"UseItem({ItemId} on {DataId})";
+        public override string ToString() => $"使用物品({ItemId} -> {DataId})";
     }
 
     internal sealed class UseOnObjectExecutor(
@@ -278,7 +278,7 @@ internal static class UseItem
         IList<QuestWorkValue?> CompletionQuestVariablesFlags) : IUseItemBase
     {
         public bool StartingCombat => false;
-        public override string ToString() => $"UseItem({ItemId})";
+        public override string ToString() => $"使用物品({ItemId})";
     }
 
     internal sealed class UseOnSelfExecutor(

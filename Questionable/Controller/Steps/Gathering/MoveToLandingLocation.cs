@@ -20,7 +20,7 @@ internal static class MoveToLandingLocation
         bool FlyBetweenNodes,
         GatheringNode GatheringNode) : ITask
     {
-        public override string ToString() => $"Land/{FlyBetweenNodes}";
+        public override string ToString() => $"降落/{(FlyBetweenNodes ? "飞行" : "不飞行")}";
     }
 
     internal sealed class MoveToLandingLocationExecutor(

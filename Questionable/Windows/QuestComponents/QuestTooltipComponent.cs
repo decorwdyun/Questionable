@@ -54,13 +54,13 @@ internal sealed class QuestTooltipComponent
         if (questInfo is QuestInfo { IsSeasonalEvent: true })
         {
             ImGui.SameLine();
-            ImGui.TextUnformatted("Event");
+            ImGui.TextUnformatted("季节活动");
         }
 
         if (questInfo.IsRepeatable)
         {
             ImGui.SameLine();
-            ImGui.TextUnformatted("Repeatable");
+            ImGui.TextUnformatted("可重复接取");
         }
 
         if (questInfo is QuestInfo { CompletesInstantly: true })
@@ -74,18 +74,18 @@ internal sealed class QuestTooltipComponent
             if (quest.Root.Disabled)
             {
                 ImGui.SameLine();
-                ImGui.TextColored(ImGuiColors.DalamudRed, "Disabled");
+                ImGui.TextColored(ImGuiColors.DalamudRed, "已禁用");
             }
 
             if (quest.Root.Author.Count == 1)
-                ImGui.Text($"Author: {quest.Root.Author[0]}");
+                ImGui.Text($"作者: {quest.Root.Author[0]}");
             else
-                ImGui.Text($"Authors: {string.Join(", ", quest.Root.Author)}");
+                ImGui.Text($"作者: {string.Join(", ", quest.Root.Author)}");
         }
         else
         {
             ImGui.SameLine();
-            ImGui.TextColored(ImGuiColors.DalamudRed, "NoQuestPath");
+            ImGui.TextColored(ImGuiColors.DalamudRed, "暂无任务预设");
         }
 
         DrawQuestUnlocks(questInfo, 0, showItemRewards);
@@ -110,9 +110,9 @@ internal sealed class QuestTooltipComponent
             if (questInfo.PreviousQuests.Count > 1)
             {
                 if (questInfo.PreviousQuestJoin == EQuestJoin.All)
-                    ImGui.Text("Requires all:");
+                    ImGui.Text("前置任务（所有）:");
                 else if (questInfo.PreviousQuestJoin == EQuestJoin.AtLeastOne)
-                    ImGui.Text("Requires one:");
+                    ImGui.Text("前置任务（其一）:");
             }
 
             foreach (var q in questInfo.PreviousQuests)
@@ -175,12 +175,12 @@ internal sealed class QuestTooltipComponent
                 if (actualQuestInfo.PreviousInstanceContent.Count > 1)
                 {
                     if (questInfo.PreviousQuestJoin == EQuestJoin.All)
-                        ImGui.Text("Requires all:");
+                        ImGui.Text("前置任务（所有）:");
                     else if (questInfo.PreviousQuestJoin == EQuestJoin.AtLeastOne)
-                        ImGui.Text("Requires one:");
+                        ImGui.Text("前置任务（其一）:");
                 }
                 else
-                    ImGui.Text("Requires:");
+                    ImGui.Text("前置任务:");
 
                 foreach (var instanceId in actualQuestInfo.PreviousInstanceContent)
                 {

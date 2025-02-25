@@ -232,7 +232,7 @@ internal sealed class QuestSelectionWindow : LWindow
 
                     bool startNextQuest = ImGuiComponents.IconButton(FontAwesomeIcon.Play);
                     if (ImGui.IsItemHovered())
-                        ImGui.SetTooltip("Start as next quest");
+                        ImGui.SetTooltip("开始任务");
                     if (startNextQuest)
                     {
                         _questController.SetNextQuest(knownQuest);
