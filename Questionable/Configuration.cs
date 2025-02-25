@@ -75,5 +75,6 @@ internal sealed class Configuration : IPluginConfiguration
         BossMod,
         WrathCombo,
         RotationSolverReborn,
+        AEAssist,
     }
 }

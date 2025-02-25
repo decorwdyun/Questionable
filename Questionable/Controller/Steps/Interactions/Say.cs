@@ -38,7 +38,7 @@ internal static class Say
 
     internal sealed record Task(string ChatMessage) : ITask
     {
-        public override string ToString() => $"Say({ChatMessage})";
+        public override string ToString() => $"说话({ChatMessage})";
     }
 
     internal sealed class UseChat(ChatFunctions chatFunctions) : AbstractDelayedTaskExecutor<Task>

@@ -13,16 +13,16 @@ internal abstract class ConfigComponent
 
     protected readonly string[] SupportedCfcOptions =
     [
-        $"{SeIconChar.Circle.ToIconChar()} Enabled (Default)",
-        $"{SeIconChar.Circle.ToIconChar()} Enabled",
-        $"{SeIconChar.Cross.ToIconChar()} Disabled"
+        $"{SeIconChar.Circle.ToIconChar()} 启用 (默认)",
+        $"{SeIconChar.Circle.ToIconChar()} 启用",
+        $"{SeIconChar.Cross.ToIconChar()} 禁用"
     ];
 
     protected readonly string[] UnsupportedCfcOptions =
     [
-        $"{SeIconChar.Cross.ToIconChar()} Disabled (Default)",
-        $"{SeIconChar.Circle.ToIconChar()} Enabled",
-        $"{SeIconChar.Cross.ToIconChar()} Disabled"
+        $"{SeIconChar.Cross.ToIconChar()} 禁用 (默认)",
+        $"{SeIconChar.Circle.ToIconChar()} 启用",
+        $"{SeIconChar.Cross.ToIconChar()} 禁用"
     ];
 
     private readonly IDalamudPluginInterface _pluginInterface;

@@ -114,9 +114,9 @@ internal sealed partial class ActiveQuestComponent
         }
         else
         {
-            ImGui.Text("No active quest");
+            ImGui.Text("空闲中");
             if (!isMinimized)
-                ImGui.TextColored(ImGuiColors.DalamudGrey, $"{_questRegistry.Count} quests loaded");
+                ImGui.TextColored(ImGuiColors.DalamudGrey, $"已支持 {_questRegistry.Count} 个任务");
 
             if (ImGuiComponents.IconButton(FontAwesomeIcon.Stop))
             {
@@ -164,7 +164,7 @@ internal sealed partial class ActiveQuestComponent
                 }
 
                 ImGui.TextUnformatted(
-                    $"Quest: {Shorten(startedQuest.Quest.Info.Name)} ({startedQuest.Quest.Id}) / {startedQuest.Sequence} / {startedQuest.Step}");
+                    $"任务： {Shorten(startedQuest.Quest.Info.Name)} ({startedQuest.Quest.Id}) / {startedQuest.Sequence} / {startedQuest.Step}");
 
                 if (startedQuest.Quest.Root.Disabled)
                 {
@@ -181,11 +181,10 @@ internal sealed partial class ActiveQuestComponent
                         using var tooltip = ImRaii.Tooltip();
                         if (tooltip)
                         {
-                            ImGui.Text("This quest sequence starts with a teleport to an Aetheryte.");
-                            ImGui.Text(
-                                "Certain priority quest (e.g. class quests) may be started/completed by the plugin prior to continuing with this quest.");
+                            ImGui.Text("该任务序列从传送到一处以太之光开始。");
+                            ImGui.Text("某些优先任务（例如职业任务）可能会在当前任务之前，由插件自动优先完成。");
                             ImGui.Separator();
-                            ImGui.Text("Available priority quests:");
+                            ImGui.Text("可用的优先任务：");
 
                             List<ElementId> priorityQuests = _questFunctions.GetNextPriorityQuestsThatCanBeAccepted();
                             if (priorityQuests.Count > 0)
@@ -197,7 +196,7 @@ internal sealed partial class ActiveQuestComponent
                                 }
                             }
                             else
-                                ImGui.BulletText("(none)");
+                                ImGui.BulletText("(无)");
                         }
                     }
                 }
@@ -240,7 +239,7 @@ internal sealed partial class ActiveQuestComponent
             {
                 string progressText = MultipleWhitespaceRegex().Replace(questWork.ToString(), " ");
                 ImGui.SetClipboardText(progressText);
-                _chatGui.Print($"Copied '{progressText}' to clipboard");
+                _chatGui.Print($"'{progressText}' 已经复制到剪切板");
             }
 
             if (ImGui.IsItemHovered())
@@ -262,9 +261,10 @@ internal sealed partial class ActiveQuestComponent
             using var disabled = ImRaii.Disabled();
 
             if (currentQuest.Quest.Id == _questController.NextQuest?.Quest.Id)
-                ImGui.TextUnformatted("(Next quest in story line not accepted)");
+                ImGui.TextUnformatted("(故事线中的下一个任务尚未接取)");
             else
-                ImGui.TextUnformatted("(Not accepted)");
+                ImGui.TextUnformatted("(未接取)");
+
         }
 
         return questWork;

@@ -52,17 +52,15 @@ internal sealed class QuestJournalComponent
 
     public void DrawQuests()
     {
-        using var tab = ImRaii.TabItem("Quests");
+        using var tab = ImRaii.TabItem("任务");
         if (!tab)
             return;
 
-        if (ImGui.CollapsingHeader("Explanation", ImGuiTreeNodeFlags.DefaultOpen))
+        if (ImGui.CollapsingHeader("说明", ImGuiTreeNodeFlags.DefaultOpen))
         {
-            ImGui.Text("The list below contains all quests that appear in your journal.");
-            ImGui.BulletText("'Supported' lists quests that Questionable can do for you");
-            ImGui.BulletText("'Completed' lists quests your current character has completed.");
-            ImGui.BulletText(
-                "Not all quests can be completed even if they're listed as available, e.g. starting city quest chains.");
+            ImGui.Text("下方的列表包含了所有出现在你任务日志中的任务。");
+            ImGui.BulletText("'已支持的' 列出 Questionable 可以为你完成的任务");
+            ImGui.BulletText("'已完成的' 列出当前角色已完成的任务。");
 
             ImGui.Spacing();
             ImGui.Separator();
@@ -73,25 +71,25 @@ internal sealed class QuestJournalComponent
 
         ImGui.SameLine();
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
-        if (ImGui.InputTextWithHint(string.Empty, "Search quests and categories", ref Filter.SearchText, 256))
+        if (ImGui.InputTextWithHint(string.Empty, "搜索任务和类别", ref Filter.SearchText, 256))
             UpdateFilter();
 
         if (_filteredSections.Count > 0)
         {
-            using var table = ImRaii.Table("Quests", 3, ImGuiTableFlags.NoSavedSettings);
+            using var table = ImRaii.Table("任务", 3, ImGuiTableFlags.NoSavedSettings);
             if (!table)
                 return;
 
-            ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.NoHide);
-            ImGui.TableSetupColumn("Supported", ImGuiTableColumnFlags.WidthFixed, 120 * ImGui.GetIO().FontGlobalScale);
-            ImGui.TableSetupColumn("Completed", ImGuiTableColumnFlags.WidthFixed, 120 * ImGui.GetIO().FontGlobalScale);
+            ImGui.TableSetupColumn("名称", ImGuiTableColumnFlags.NoHide);
+            ImGui.TableSetupColumn("已支持的", ImGuiTableColumnFlags.WidthFixed, 120 * ImGui.GetIO().FontGlobalScale);
+            ImGui.TableSetupColumn("已完成的", ImGuiTableColumnFlags.WidthFixed, 120 * ImGui.GetIO().FontGlobalScale);
             ImGui.TableHeadersRow();
 
             foreach (var section in _filteredSections)
                 DrawSection(section);
         }
         else
-            ImGui.Text("No quest or category matches your search.");
+            ImGui.Text("没有任务或类别符合你的搜索。");
     }
 
     private void DrawSection(FilteredSection filter)
