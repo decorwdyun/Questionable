@@ -29,7 +29,12 @@ public static class ExpansionData
     {
         return expansionVersion switch
         {
-            EExpansionVersion.ARealmReborn => "A Realm Reborn",
+            EExpansionVersion.ARealmReborn => "重生之境",
+            EExpansionVersion.Heavensward => "苍穹之禁城",
+            EExpansionVersion.Stormblood => "红莲之狂潮",
+            EExpansionVersion.Shadowbringers => "暗影之逆焰",
+            EExpansionVersion.Endwalker => "晓月之终途",
+            EExpansionVersion.Dawntrail => "金曦之遗辉",
             _ => expansionVersion.ToString(),
         };
     }

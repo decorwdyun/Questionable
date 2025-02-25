@@ -4,7 +4,7 @@ internal sealed class WaitNavmesh
 {
     internal sealed record Task : ITask
     {
-        public override string ToString() => "Wait(navmesh)";
+        public override string ToString() => "等待(navmesh 就绪)";
     }
 
     internal sealed class Executor(MovementController movementController) : TaskExecutor<Task>, IDebugStateProvider
@@ -19,7 +19,7 @@ internal sealed class WaitNavmesh
         public string? GetDebugState()
         {
             if (!movementController.IsNavmeshReady)
-                return $"Navmesh: {movementController.BuiltNavmeshPercent}%";
+                return $"导航构建进度: {movementController.BuiltNavmeshPercent}%";
             else
                 return null;
         }

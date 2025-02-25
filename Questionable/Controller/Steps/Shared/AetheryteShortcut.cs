@@ -35,7 +35,7 @@ internal static class AetheryteShortcut
             {
                 yield return new WaitCondition.Task(
                     () => clientState.TerritoryType == aetheryteData.TerritoryIds[step.AetheryteShortcut.Value],
-                    $"Wait(territory: {territoryData.GetNameAndId(aetheryteData.TerritoryIds[step.AetheryteShortcut.Value])})");
+                    $"等待(区域: {territoryData.GetNameAndId(aetheryteData.TerritoryIds[step.AetheryteShortcut.Value])})");
                 yield return new MoveAwayFromAetheryte(step.AetheryteShortcut.Value);
             }
         }
@@ -48,7 +48,7 @@ internal static class AetheryteShortcut
         EAetheryteLocation TargetAetheryte,
         ushort ExpectedTerritoryId) : ISkippableTask
     {
-        public override string ToString() => $"UseAetheryte({TargetAetheryte})";
+        public override string ToString() => $"使用以太之光({TargetAetheryte})";
     }
 
     internal sealed class UseAetheryteShortcut(

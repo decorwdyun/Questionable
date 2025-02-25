@@ -14,16 +14,16 @@ namespace Questionable.Windows.ConfigComponents;
 
 internal sealed class GeneralConfigComponent : ConfigComponent
 {
-    private static readonly List<(uint Id, string Name)> DefaultMounts = [(0, "Mount Roulette")];
+    private static readonly List<(uint Id, string Name)> DefaultMounts = [(0, "随机坐骑")];
 
     private readonly CombatController _combatController;
 
     private readonly uint[] _mountIds;
     private readonly string[] _mountNames;
-    private readonly string[] _combatModuleNames = ["None", "Boss Mod (VBM)", "Wrath Combo", "Rotation Solver Reborn"];
+    private readonly string[] _combatModuleNames = ["未选择", "Boss Mod (VBM)", "Wrath Combo", "Rotation Solver Reborn", "AEAssist"];
 
     private readonly string[] _grandCompanyNames =
-        ["None (manually pick quest)", "Maelstrom", "Twin Adder", "Immortal Flames"];
+        ["未选择（需要时再手动）", "黑涡团", "双蛇党", "恒辉队"];
 
     public GeneralConfigComponent(
         IDalamudPluginInterface pluginInterface,
@@ -46,14 +46,14 @@ internal sealed class GeneralConfigComponent : ConfigComponent
 
     public override void DrawTab()
     {
-        using var tab = ImRaii.TabItem("General###General");
+        using var tab = ImRaii.TabItem("通用###General");
         if (!tab)
             return;
 
         using (ImRaii.Disabled(_combatController.IsRunning))
         {
             int selectedCombatModule = (int)Configuration.General.CombatModule;
-            if (ImGui.Combo("Preferred Combat Module", ref selectedCombatModule, _combatModuleNames,
+            if (ImGui.Combo("首选战斗模块", ref selectedCombatModule, _combatModuleNames,
                     _combatModuleNames.Length))
             {
                 Configuration.General.CombatModule = (Configuration.ECombatModule)selectedCombatModule;
@@ -69,14 +69,14 @@ internal sealed class GeneralConfigComponent : ConfigComponent
             Save();
         }
 
-        if (ImGui.Combo("Preferred Mount", ref selectedMount, _mountNames, _mountNames.Length))
+        if (ImGui.Combo("首选坐骑", ref selectedMount, _mountNames, _mountNames.Length))
         {
             Configuration.General.MountId = _mountIds[selectedMount];
             Save();
         }
 
         int grandCompany = (int)Configuration.General.GrandCompany;
-        if (ImGui.Combo("Preferred Grand Company", ref grandCompany, _grandCompanyNames,
+        if (ImGui.Combo("首选部队阵营", ref grandCompany, _grandCompanyNames,
                 _grandCompanyNames.Length))
         {
             Configuration.General.GrandCompany = (GrandCompany)grandCompany;
@@ -84,28 +84,28 @@ internal sealed class GeneralConfigComponent : ConfigComponent
         }
 
         bool hideInAllInstances = Configuration.General.HideInAllInstances;
-        if (ImGui.Checkbox("Hide quest window in all instanced duties", ref hideInAllInstances))
+        if (ImGui.Checkbox("在所有实例副本中隐藏任务窗口", ref hideInAllInstances))
         {
             Configuration.General.HideInAllInstances = hideInAllInstances;
             Save();
         }
 
         bool useEscToCancelQuesting = Configuration.General.UseEscToCancelQuesting;
-        if (ImGui.Checkbox("Use ESC to cancel questing/movement", ref useEscToCancelQuesting))
+        if (ImGui.Checkbox("使用 ESC 键取消任务/移动", ref useEscToCancelQuesting))
         {
             Configuration.General.UseEscToCancelQuesting = useEscToCancelQuesting;
             Save();
         }
 
         bool showIncompleteSeasonalEvents = Configuration.General.ShowIncompleteSeasonalEvents;
-        if (ImGui.Checkbox("Show details for incomplete seasonal events", ref showIncompleteSeasonalEvents))
+        if (ImGui.Checkbox("显示未完成的季节活动详情", ref showIncompleteSeasonalEvents))
         {
             Configuration.General.ShowIncompleteSeasonalEvents = showIncompleteSeasonalEvents;
             Save();
         }
 
         bool configureTextAdvance = Configuration.General.ConfigureTextAdvance;
-        if (ImGui.Checkbox("Automatically configure TextAdvance with the recommended settings",
+        if (ImGui.Checkbox("自动配置 TextAdvance 为推荐设置",
                 ref configureTextAdvance))
         {
             Configuration.General.ConfigureTextAdvance = configureTextAdvance;
@@ -113,11 +113,11 @@ internal sealed class GeneralConfigComponent : ConfigComponent
         }
 
         ImGui.Separator();
-        ImGui.TextColored(ImGuiColors.DalamudYellow, "Patch 7.1 exclusive content");
+        ImGui.TextColored(ImGuiColors.DalamudYellow, "版本 7.1 独有内容（国际服）");
         using (_ = ImRaii.PushIndent())
         {
             bool pickUpFreeFantasia = Configuration.General.PickUpFreeFantasia;
-            if (ImGui.Checkbox("Try to pick up free limited-time fantasia during 'Little Ladies' Day' quests",
+            if (ImGui.Checkbox("尝试在“女儿节”任务期间领取免费限时幻想药",
                     ref pickUpFreeFantasia))
             {
                 Configuration.General.PickUpFreeFantasia = pickUpFreeFantasia;
