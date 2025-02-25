@@ -1,12 +1,16 @@
 ﻿{
   "Name": "Questionable",
-  "Author": "Liza Carvelli",
-  "Punchline": "A tiny quest helper plugin.",
-  "Description": "A tiny little quest helper plugin, which does quests for you automatically where possible. Uses navmesh to automatically walk to all quest waypoints, and tries to automatically complete all steps along the way (excluding dungeons, single player duties and combat).\n\nNot all quests are supported, check the discord or git repository for an up-to-date list.\n\nRequired Plugins: vnavmesh, TextAdvance, Lifestream",
+  "Author": "Liza Carvelli, decorwdyun(国服支持)",
+  "Punchline": "一个小小的的自动任务插件。.",
+  "Description": "一个小小的的自动任务插件，可以在尽可能的情况下自动完成游戏任务。使用寻路自动前面任务目标点，并尽量自动完成所有步骤。\n\n但是并非所有任务都受支持，请查看Discord或Git仓库以获取最新的支持任务列表。\n\n所需插件：vnavmesh, TextAdvance, Lifestream",
   "Tags": [
+    "qst",
     "quests",
-    "msq"
+    "msq",
+    "Questionable",
+    "任务",
+    "主线任务"
   ],
-  "RepoUrl": "https://git.carvel.li/liza/Questionable",
+  "RepoUrl": "https://github.com/decorwdyun/Questionable",
   "IconUrl": "https://plugins.carvel.li/icons/Questionable.png"
 }

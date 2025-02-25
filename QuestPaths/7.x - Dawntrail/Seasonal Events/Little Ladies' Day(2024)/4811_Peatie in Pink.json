@@ -1,0 +1,194 @@
+{
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+  "Author": "decorwdyun",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1046098,
+          "Position": {
+            "X": 50.43103,
+            "Y": -7.4616427,
+            "Z": 79.545166
+          },
+          "TerritoryId": 148,
+          "InteractionType": "AcceptQuest",
+          "Fly": true,
+          "AetheryteShortcut": "Central Shroud - Bentbranch Meadows",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": 50.43103,
+                  "Y": -7.4616427,
+                  "Z": 79.545166
+                },
+                "TerritoryId": 148,
+                "MaximumDistance": 150
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1046104,
+          "Position": {
+            "X": -35.111023,
+            "Y": 5.000001,
+            "Z": -130.38837
+          },
+          "TerritoryId": 130,
+          "InteractionType": "Interact",
+          "Sprint": true,
+          "AetheryteShortcut": "Ul'dah",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1046106,
+          "Position": {
+            "X": 149.55359,
+            "Y": 4,
+            "Z": -11.093384
+          },
+          "TerritoryId": 131,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Ul'dah",
+          "AethernetShortcut": [
+            "[Ul'dah] Aetheryte Plaza",
+            "[Ul'dah] Sapphire Avenue Exchange"
+          ],
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": -144.51825,
+                  "Y": -1.3580933,
+                  "Z": -169.6651
+                },
+                "TerritoryId": 130,
+                "MaximumDistance": 20
+              }
+            }
+          },
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_FESPDY902_04811_Q1_000_000",
+              "Answer": "TEXT_FESPDY902_04811_A1_000_001"
+            }
+          ]
+        },
+        {
+          "DataId": 1046105,
+          "Position": {
+            "X": 124.3457,
+            "Y": 4,
+            "Z": -73.10602
+          },
+          "TerritoryId": 131,
+          "InteractionType": "Interact"
+        },
+        {
+          "DataId": 1046107,
+          "Position": {
+            "X": -0.10687256,
+            "Y": 15.000011,
+            "Z": 10.8185425
+          },
+          "TerritoryId": 131,
+          "InteractionType": "Interact",
+          "AethernetShortcut": [
+            "[Ul'dah] Sapphire Avenue Exchange",
+            "[Ul'dah] Gladiators' Guild"
+          ],
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "Prompt": "TEXT_FESPDY902_04811_Q2_000_000",
+              "Answer": "TEXT_FESPDY902_04811_A2_000_001"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1046108,
+          "Position": {
+            "X": -27.481506,
+            "Y": 3.9999993,
+            "Z": -147.60059
+          },
+          "TerritoryId": 130,
+          "InteractionType": "Interact",
+          "AethernetShortcut": [
+            "[Ul'dah] Gladiators' Guild",
+            "[Ul'dah] Aetheryte Plaza"
+          ]
+        }
+      ]
+    },
+    {
+      "Sequence": 4,
+      "Steps": [
+        {
+          "DataId": 1046110,
+          "Position": {
+            "X": -28.641174,
+            "Y": 3.999999,
+            "Z": -150.4082
+          },
+          "TerritoryId": 130,
+          "InteractionType": "Emote",
+          "Emote": "rally"
+        }
+      ]
+    },
+    {
+      "Sequence": 5,
+      "Steps": [
+        {
+          "DataId": 2013532,
+          "Position": {
+            "X": -37.766113,
+            "Y": 3.982544,
+            "Z": -141.37488
+          },
+          "TerritoryId": 130,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1046108,
+          "Position": {
+            "X": -27.481506,
+            "Y": 3.9999993,
+            "Z": -147.60059
+          },
+          "TerritoryId": 130,
+          "InteractionType": "CompleteQuest"
+        }
+      ]
+    }
+  ]
+}

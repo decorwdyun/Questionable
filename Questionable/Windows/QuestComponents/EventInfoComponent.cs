@@ -22,7 +22,7 @@ internal sealed class EventInfoComponent
     [SuppressMessage("ReSharper", "CollectionNeverUpdated.Local")]
     private readonly List<EventQuest> _eventQuests =
     [
-        new("Little Ladies' Day", [new(5237), new(5238)], AtDailyReset(new(2025, 3, 17))),
+        new("双重庆典——女儿节&彩蛋狩猎（国服特供）", [new(4810), new(4811)], AtDailyReset(new(2025, 4, 10))),
     ];
 
     private readonly QuestData _questData;
@@ -72,7 +72,7 @@ internal sealed class EventInfoComponent
             culture: CultureInfo.InvariantCulture,
             minUnit: TimeUnit.Minute,
             maxUnit: TimeUnit.Day);
-        ImGui.Text($"{eventQuest.Name} ({time})");
+        ImGui.Text($"{eventQuest.Name} ({time} 后结束)");
 
         float width;
         using (var _ = _pluginInterface.UiBuilder.IconFontHandle.Push())

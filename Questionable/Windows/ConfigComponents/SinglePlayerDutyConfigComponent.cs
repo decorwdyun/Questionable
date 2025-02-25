@@ -27,11 +27,11 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
 {
     private static readonly List<(EClassJob ClassJob, string Name)> RoleQuestCategories =
     [
-        (EClassJob.Paladin, "Tank Role Quests"),
-        (EClassJob.WhiteMage, "Healer Role Quests"),
-        (EClassJob.Lancer, "Melee Role Quests"),
-        (EClassJob.Bard, "Physical Ranged Role Quests"),
-        (EClassJob.BlackMage, "Magical Ranged Role Quests"),
+        (EClassJob.Paladin, "防护职业职能任务"),
+        (EClassJob.WhiteMage, "治疗职业职能任务"),
+        (EClassJob.Lancer, "近战职业职能任务"),
+        (EClassJob.Bard, "远程物理职业职能任务"),
+        (EClassJob.BlackMage, "远程魔法职业职能任务"),
     ];
 
 #if false
@@ -247,12 +247,12 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
 
     public override void DrawTab()
     {
-        using var tab = ImRaii.TabItem("Quest Battles###QuestBattles");
+        using var tab = ImRaii.TabItem("单人副本###QuestBattles");
         if (!tab)
             return;
 
         bool runSoloInstancesWithBossMod = Configuration.SinglePlayerDuties.RunSoloInstancesWithBossMod;
-        if (ImGui.Checkbox("Run quest battles with BossMod", ref runSoloInstancesWithBossMod))
+        if (ImGui.Checkbox("使用 BossMod 自动完成单人副本", ref runSoloInstancesWithBossMod))
         {
             Configuration.SinglePlayerDuties.RunSoloInstancesWithBossMod = runSoloInstancesWithBossMod;
             Save();
@@ -262,12 +262,13 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
         {
             using (_ = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudRed))
             {
-                ImGui.TextUnformatted("Work in Progress:");
-                ImGui.BulletText("Will always use BossMod for combat (ignoring the configured combat module).");
-                ImGui.BulletText("Only a small subset of quest battles have been tested - most of which are in the MSQ.");
-                ImGui.BulletText("When retrying a failed battle, it will always start at 'Normal' difficulty.");
-                ImGui.BulletText("Please don't enable this option when using a BossMod fork (such as Reborn);\nwith the missing combat module configuration, it is unlikely to be compatible.");
+                ImGui.TextUnformatted("此功能正在开发中，尚未完善：");
+                ImGui.BulletText("将始终使用 BossMod 进行战斗（忽略配置的战斗模块）。");
+                ImGui.BulletText("只有一小部分单人副本经过测试——其中大多数并不是主线任务。");
+                ImGui.BulletText("重新尝试失败的战斗时，将始终从‘正常’难度开始。");
+                ImGui.BulletText("请在使用 BossMod 的分支（如 Reborn）时不要启用此选项；\n由于缺少战斗模块配置，它可能不兼容。");
             }
+
 
 #if false
             using (ImRaii.Disabled(!runSoloInstancesWithBossMod))
@@ -289,11 +290,11 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
         using (ImRaii.Disabled(!runSoloInstancesWithBossMod))
         {
             ImGui.Text(
-                "Questionable includes a default list of quest battles that work if BossMod is installed.");
-            ImGui.Text("The included list of quest battles can change with each update.");
+                "Questionable 包含了一份默认的单人副本列表，适用于安装了 BossMod 的情况。");
+            ImGui.Text("每次更新后，包含的单人副本列表可能会发生变化。");
 
             ImGui.Separator();
-            ImGui.Text("You can override the settings for each individual quest battle:");
+            ImGui.Text("你可以单独调整每个单人副本的设置：");
 
 
             using var tabBar = ImRaii.TabBar("QuestionableConfigTabs");
@@ -311,7 +312,7 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
 
     private void DrawMainScenarioConfigTable()
     {
-        using var tab = ImRaii.TabItem("Main Scenario Quests###MSQ");
+        using var tab = ImRaii.TabItem("主线任务###MSQ");
         if (!tab)
             return;
 
@@ -319,13 +320,13 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
         if (!child)
             return;
 
-        if (ImGui.CollapsingHeader($"Limsa Lominsa ({FormatLevel(5)} - {FormatLevel(14)})"))
+        if (ImGui.CollapsingHeader($"利姆萨·罗敏萨 ({FormatLevel(5)} - {FormatLevel(14)})"))
             DrawQuestTable("LimsaLominsa", _startingCityBattles[EAetheryteLocation.Limsa]);
 
-        if (ImGui.CollapsingHeader($"Gridania ({FormatLevel(5)} - {FormatLevel(14)})"))
+        if (ImGui.CollapsingHeader($"格里达尼亚 ({FormatLevel(5)} - {FormatLevel(14)})"))
             DrawQuestTable("Gridania", _startingCityBattles[EAetheryteLocation.Gridania]);
 
-        if (ImGui.CollapsingHeader($"Ul'dah ({FormatLevel(4)} - {FormatLevel(14)})"))
+        if (ImGui.CollapsingHeader($"乌尔达哈 ({FormatLevel(4)} - {FormatLevel(14)})"))
             DrawQuestTable("Uldah", _startingCityBattles[EAetheryteLocation.Uldah]);
 
         foreach (EExpansionVersion expansion in Enum.GetValues<EExpansionVersion>())
@@ -340,7 +341,7 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
 
     private void DrawJobQuestConfigTable()
     {
-        using var tab = ImRaii.TabItem("Class/Job Quests###JobQuests");
+        using var tab = ImRaii.TabItem("职业任务###JobQuests");
         if (!tab)
             return;
 
@@ -376,7 +377,7 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
 
     private void DrawRoleQuestConfigTable()
     {
-        using var tab = ImRaii.TabItem("Role Quests###RoleQuests");
+        using var tab = ImRaii.TabItem("职能任务###RoleQuests");
         if (!tab)
             return;
 
@@ -393,13 +394,13 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
             }
         }
 
-        if (ImGui.CollapsingHeader("General Role Quests"))
+        if (ImGui.CollapsingHeader("通用职能任务"))
             DrawQuestTable("RoleQuestsGeneral", _otherRoleQuestBattles);
     }
 
     private void DrawOtherQuestConfigTable()
     {
-        using var tab = ImRaii.TabItem("Other Quests###MiscQuests");
+        using var tab = ImRaii.TabItem("其他任务###MiscQuests");
         if (!tab)
             return;
 
@@ -454,7 +455,7 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
 
                     if (!dutyInfo.Enabled)
                     {
-                        ImGuiComponents.HelpMarker("Questionable doesn't include support for this quest.",
+                        ImGuiComponents.HelpMarker("Questionable 尚未支持此任务.",
                             FontAwesomeIcon.Times, ImGuiColors.DalamudRed);
                     }
                     else if (dutyInfo.Notes.Count > 0)
@@ -491,7 +492,7 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
     {
         using (ImRaii.Disabled(!ImGui.IsKeyDown(ImGuiKey.ModCtrl)))
         {
-            if (ImGui.Button("Reset to default"))
+            if (ImGui.Button("重置全部"))
             {
                 Configuration.SinglePlayerDuties.WhitelistedSinglePlayerDutyCfcIds.Clear();
                 Configuration.SinglePlayerDuties.BlacklistedSinglePlayerDutyCfcIds.Clear();
@@ -500,7 +501,7 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
         }
 
         if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
-            ImGui.SetTooltip("Hold CTRL to enable this button.");
+            ImGui.SetTooltip("按住 Ctrl 解锁此按钮。");
     }
 
     private sealed record SinglePlayerDutyInfo(

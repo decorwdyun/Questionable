@@ -38,7 +38,7 @@ internal static class AetherCurrent
     internal sealed record Attune(uint DataId, uint AetherCurrentId) : ITask
     {
         public bool ShouldRedoOnInterrupt() => true;
-        public override string ToString() => $"AttuneAetherCurrent({AetherCurrentId})";
+        public override string ToString() => $"共鸣({AetherCurrentId})";
     }
 
     internal sealed class DoAttune(

@@ -29,7 +29,7 @@ internal static class EquipItem
 
     internal sealed record Task(uint ItemId) : ITask
     {
-        public override string ToString() => $"Equip({ItemId})";
+        public override string ToString() => $"装备({ItemId})";
     }
 
     internal sealed class DoEquip(

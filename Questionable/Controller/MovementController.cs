@@ -251,14 +251,14 @@ internal sealed class MovementController : IDisposable
                                     UpdatedAt = Environment.TickCount64,
                                 };
                             }
-                            else if (Environment.TickCount64 - Destination.LastWaypoint.UpdatedAt > 500)
+                            else if (Environment.TickCount64 - Destination.LastWaypoint.UpdatedAt > 2000)
                             {
                                 // check whether we've made any progress of any kind
                                 if (Math.Abs(distance - Destination.LastWaypoint.Distance2DAtLastUpdate) < 0.5f)
                                 {
                                     int calculations = Destination.NavmeshCalculations;
                                     _logger.LogWarning("Recalculating navmesh (n = {Calculations})", calculations);
-                                    Restart(Destination);
+                                    Restart(Destination, Destination.IsFlying && calculations <= 5);
                                     Destination.NavmeshCalculations = calculations + 1;
                                 }
                                 else
@@ -296,18 +296,18 @@ internal sealed class MovementController : IDisposable
         }
     }
 
-    private void Restart(DestinationData destination)
+    private void Restart(DestinationData destination, bool fly = false)
     {
         Stop();
 
         if (destination.UseNavmesh)
         {
-            NavigateTo(EMovementType.None, destination.DataId, destination.Position, false, false,
+            NavigateTo(EMovementType.None, destination.DataId, destination.Position, fly, false,
                 destination.StopDistance, destination.IgnoreDistanceToObject);
         }
         else
         {
-            NavigateTo(EMovementType.None, destination.DataId, [destination.Position], false, false,
+            NavigateTo(EMovementType.None, destination.DataId, [destination.Position], fly, false,
                 destination.StopDistance, destination.IgnoreDistanceToObject);
         }
     }

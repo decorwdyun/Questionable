@@ -1,0 +1,140 @@
+{
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+  "Author": "decorwdyun",
+  "QuestSequence": [
+    {
+      "Sequence": 0,
+      "Steps": [
+        {
+          "DataId": 1046093,
+          "Position": {
+            "X": -49.42401,
+            "Y": 6.4999976,
+            "Z": -90.013
+          },
+          "TerritoryId": 133,
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Gridania",
+          "AethernetShortcut": [
+            "[Gridania] Aetheryte Plaza",
+            "[Gridania] Mih Khetto's Amphitheatre"
+          ],
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true,
+              "InTerritory": [
+                133
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1046249,
+          "Position": {
+            "X": 50.43103,
+            "Y": -7.2139735,
+            "Z": 82.352905
+          },
+          "TerritoryId": 148,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "AetheryteShortcut": "Central Shroud - Bentbranch Meadows",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": 50.43103,
+                  "Y": -7.2139735,
+                  "Z": 82.352905
+                },
+                "TerritoryId": 148,
+                "MaximumDistance": 150
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 1046096,
+          "Position": {
+            "X": 50.43103,
+            "Y": -7.2139735,
+            "Z": 82.352905
+          },
+          "TerritoryId": 148,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1046099,
+          "Position": {
+            "X": 29.984009,
+            "Y": -6.00144,
+            "Z": 57.602783
+          },
+          "TerritoryId": 148,
+          "InteractionType": "Action",
+          "Fly": true,
+          "Land": true,
+          "Action": "Egg Surprise"
+        },
+        {
+          "DataId": 1046102,
+          "Position": {
+            "X": 14.846985,
+            "Y": -1.1238526,
+            "Z": 21.042175
+          },
+          "TerritoryId": 148,
+          "InteractionType": "Action",
+          "Fly": true,
+          "Land": true,
+          "Action": "Egg Surprise"
+        },
+        {
+          "DataId": 1046100,
+          "Position": {
+            "X": -42.648987,
+            "Y": 0,
+            "Z": 17.502075
+          },
+          "TerritoryId": 148,
+          "InteractionType": "Action",
+          "Fly": true,
+          "Land": true,
+          "Action": "Egg Surprise"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1046096,
+          "Position": {
+            "X": 50.43103,
+            "Y": -7.2139735,
+            "Z": 82.352905
+          },
+          "TerritoryId": 148,
+          "Fly": true,
+          "InteractionType": "CompleteQuest",
+          "NextQuestId": 4811
+        }
+      ]
+    }
+  ]
+}

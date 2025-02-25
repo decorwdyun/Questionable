@@ -38,7 +38,8 @@ namespace Questionable;
 public sealed class QuestionablePlugin : IDalamudPlugin
 {
     private readonly ServiceProvider? _serviceProvider;
-
+    internal static IDalamudPluginInterface pi;
+    
     public QuestionablePlugin(IDalamudPluginInterface pluginInterface,
         IClientState clientState,
         ITargetManager targetManager,
@@ -55,11 +56,30 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         IKeyState keyState,
         IContextMenu contextMenu,
         IToastGui toastGui,
+        INotificationManager notificationManager,
         IGameInteropProvider gameInteropProvider)
     {
         ArgumentNullException.ThrowIfNull(pluginInterface);
         ArgumentNullException.ThrowIfNull(chatGui);
-
+        ArgumentNullException.ThrowIfNull(notificationManager);
+        pi = pluginInterface;
+#if !DEBUG
+        bool RepoCheck()
+        {
+            var sourceRepository = pi.SourceRepository;
+            return sourceRepository == "https://gp.xuolu.com/love.json" || sourceRepository.Contains("decorwdyun/DalamudPlugins", StringComparison.OrdinalIgnoreCase);
+        }
+        if ((pi.IsDev || !RepoCheck()))
+        {
+            notificationManager.AddNotification(new Dalamud.Interface.ImGuiNotification.Notification()
+            {
+                Type = Dalamud.Interface.ImGuiNotification.NotificationType.Error,
+                Title = "加载验证",
+                Content = "由于本地加载或安装来源仓库非 decorwdyun 个人仓库，插件禁止加载。",
+            });
+            return;
+        }
+#endif
         try
         {
             ServiceCollection serviceCollection = new();
@@ -101,7 +121,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         }
         catch (Exception)
         {
-            chatGui.PrintError("Unable to load plugin, check /xllog for details", "Questionable");
+            chatGui.PrintError("插件加载失败, 请输入 /xllog 查看日志", "Questionable");
             throw;
         }
     }
@@ -135,6 +155,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<BossModIpc>();
 
         serviceCollection.AddSingleton<GearStatsCalculator>();
+
+        serviceCollection.AddSingleton<DailyRoutinesIpc>();
     }
 
     private static void AddTaskFactories(ServiceCollection serviceCollection)
@@ -278,6 +300,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<ICombatModule, BossModModule>();
         serviceCollection.AddSingleton<ICombatModule, WrathComboModule>();
         serviceCollection.AddSingleton<ICombatModule, RotationSolverRebornModule>();
+        serviceCollection.AddSingleton<ICombatModule, AeAssistModule>();
     }
 
     private static void AddWindows(ServiceCollection serviceCollection)
@@ -347,10 +370,22 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceProvider.GetRequiredService<DalamudInitializer>();
         serviceProvider.GetRequiredService<TextAdvanceIpc>();
         serviceProvider.GetRequiredService<AutomatonIpc>();
+        serviceProvider.GetRequiredService<DailyRoutinesIpc>();
     }
 
     public void Dispose()
     {
+        bool RepoCheck()
+        {
+            var sourceRepository = pi.SourceRepository;
+            return sourceRepository == "https://gp.xuolu.com/love.json" || sourceRepository.Contains("decorwdyun/DalamudPlugins", StringComparison.OrdinalIgnoreCase);
+        }
+#if !DEBUG
+        if (pi.IsDev || !RepoCheck())
+        {
+            return;
+        }
+#endif
         _serviceProvider?.Dispose();
     }
 }

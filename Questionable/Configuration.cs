@@ -37,6 +37,7 @@ internal sealed class Configuration : IPluginConfiguration
         public bool UseEscToCancelQuesting { get; set; } = true;
         public bool ShowIncompleteSeasonalEvents { get; set; } = true;
         public bool ConfigureTextAdvance { get; set; } = true;
+        public bool ConfigureDailyRoutines { get; set; } = true;
 
         // TODO Temporary setting, 7.2 adds another fantasia
         public bool PickUpFreeFantasia { get; set; } = true;
@@ -82,5 +83,6 @@ internal sealed class Configuration : IPluginConfiguration
         BossMod,
         WrathCombo,
         RotationSolverReborn,
+        AEAssist,
     }
 }
