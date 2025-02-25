@@ -81,7 +81,7 @@ internal static class Gather
 
             ushort territoryId = gatheringRoot.Steps.Last().TerritoryId;
             yield return new WaitCondition.Task(() => clientState.TerritoryType == territoryId,
-                $"Wait(territory: {territoryData.GetNameAndId(territoryId)})");
+                $"等待(区域: {territoryData.GetNameAndId(territoryId)})");
 
             yield return new WaitNavmesh.Task();
 

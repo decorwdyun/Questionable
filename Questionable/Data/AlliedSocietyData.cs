@@ -19,6 +19,7 @@ internal sealed class AlliedSocietyData
             { 89, new([1017322], EAetheryteLocation.ChurningMistsZenith) },
             { 147, new([1024777], EAetheryteLocation.FringesPeeringStones) },
             { 369, new([1051798], EAetheryteLocation.KozamaukaDockPoga) },
+            { 221, new([1032663], EAetheryteLocation.RaktikaFanow) },
         }.AsReadOnly();
 
     public EAlliedSociety GetCommonAlliedSocietyTurnIn(ElementId elementId)
@@ -31,6 +32,7 @@ internal sealed class AlliedSocietyData
                 >= 2261 and <= 2280 => EAlliedSociety.Vath,
                 >= 2290 and <= 2319 => EAlliedSociety.Moogles,
                 >= 5199 and <= 5226 => EAlliedSociety.Pelupelu,
+                >= 3806 and <= 3833 => EAlliedSociety.Qitari,
                 _ => EAlliedSociety.None,
             };
         }
@@ -54,6 +56,16 @@ internal sealed class AlliedSocietyData
         {
             normalNpcs = [];
             mountNpcs = [1017322, 1017470, 1017471];
+        }
+        else if (alliedSociety == EAlliedSociety.Qitari)
+        {
+            normalNpcs = [];
+            mountNpcs = [1032663];
+        }
+        else if (alliedSociety == EAlliedSociety.Pelupelu)
+        {
+            normalNpcs = [];
+            mountNpcs = [1051798];
         }
         else
         {
