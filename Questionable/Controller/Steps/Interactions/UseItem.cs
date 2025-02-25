@@ -57,7 +57,7 @@ internal static class UseItem
                 [
                     task,
                     new WaitCondition.Task(() => clientState.TerritoryType == 140,
-                        $"Wait(territory: {territoryData.GetNameAndId(140)})"),
+                        $"等待(区域: {territoryData.GetNameAndId(140)})"),
                     new Mount.MountTask(140,
                         nextPosition != null ? Mount.EMountIf.AwayFromPosition : Mount.EMountIf.Always,
                         nextPosition),

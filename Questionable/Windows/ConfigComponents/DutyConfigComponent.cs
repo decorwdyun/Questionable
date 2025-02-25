@@ -66,12 +66,12 @@ internal sealed class DutyConfigComponent : ConfigComponent
 
     public override void DrawTab()
     {
-        using var tab = ImRaii.TabItem("Duties###Duties");
+        using var tab = ImRaii.TabItem("副本###Duties");
         if (!tab)
             return;
 
         bool runInstancedContentWithAutoDuty = Configuration.Duties.RunInstancedContentWithAutoDuty;
-        if (ImGui.Checkbox("Run instanced content with AutoDuty and BossMod", ref runInstancedContentWithAutoDuty))
+        if (ImGui.Checkbox("使用 AutoDuty 和 BossMod 自动通过副本", ref runInstancedContentWithAutoDuty))
         {
             Configuration.Duties.RunInstancedContentWithAutoDuty = runInstancedContentWithAutoDuty;
             Save();
@@ -79,23 +79,23 @@ internal sealed class DutyConfigComponent : ConfigComponent
 
         ImGui.SameLine();
         ImGuiComponents.HelpMarker(
-            "The combat module used for this is configured by AutoDuty, ignoring whichever selection you've made in Questionable's \"General\" configuration.");
+            "此功能使用的战斗模块由 AutoDuty 配置，将忽略在 Questionable 的\"通用\"设置中所做的选择。");
 
         ImGui.Separator();
 
         using (ImRaii.Disabled(!runInstancedContentWithAutoDuty))
         {
             ImGui.Text(
-                "Questionable includes a default list of duties that work if AutoDuty and BossMod are installed.");
+                "Questionable 包含一个默认的副本列表，如果安装了 AutoDuty 和 BossMod，副本任务就会自动进行。");
 
             ImGui.Text(
-                "The included list of duties can change with each update, and is based on the following spreadsheet:");
+                "此副本列表可能会随着每次更新而变化，并基于以下表格：:");
             if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.GlobeEurope, "Open AutoDuty spreadsheet"))
                 Util.OpenLink(
                     "https://docs.google.com/spreadsheets/d/151RlpqRcCpiD_VbQn6Duf-u-S71EP7d0mx3j1PDNoNA/edit?pli=1#gid=0");
 
             ImGui.Separator();
-            ImGui.Text("You can override the settings for each individual dungeon/trial:");
+            ImGui.Text("您可以覆盖每个副本/试炼的设置：");
 
             DrawConfigTable(runInstancedContentWithAutoDuty);
 
@@ -236,7 +236,7 @@ internal sealed class DutyConfigComponent : ConfigComponent
     {
         using (ImRaii.Disabled(!ImGui.IsKeyDown(ImGuiKey.ModCtrl)))
         {
-            if (ImGui.Button("Reset to default"))
+            if (ImGui.Button("重置为默认设置"))
             {
                 Configuration.Duties.WhitelistedDutyCfcIds.Clear();
                 Configuration.Duties.BlacklistedDutyCfcIds.Clear();
@@ -245,7 +245,7 @@ internal sealed class DutyConfigComponent : ConfigComponent
         }
 
         if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
-            ImGui.SetTooltip("Hold CTRL to enable this button.");
+            ImGui.SetTooltip("按住 CTRL 启用此按钮");
     }
 
     private sealed record DutyInfo(uint CfcId, uint TerritoryId, string Name);
