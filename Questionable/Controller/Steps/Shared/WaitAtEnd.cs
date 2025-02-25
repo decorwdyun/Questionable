@@ -148,7 +148,7 @@ internal static class WaitAtEnd
 
         public bool ShouldRedoOnInterrupt() => true;
 
-        public override string ToString() => $"Wait(seconds: {Delay.TotalSeconds})";
+        public override string ToString() => $"等待({Delay.TotalSeconds}秒)";
     }
 
     internal sealed class WaitDelayExecutor : AbstractDelayedTaskExecutor<WaitDelay>
@@ -222,7 +222,7 @@ internal static class WaitAtEnd
 
     internal sealed record WaitQuestAccepted(ElementId ElementId) : ITask
     {
-        public override string ToString() => $"WaitQuestAccepted({ElementId})";
+        public override string ToString() => $"等待接取任务({ElementId})";
     }
 
     internal sealed class WaitQuestAcceptedExecutor(QuestFunctions questFunctions) : TaskExecutor<WaitQuestAccepted>

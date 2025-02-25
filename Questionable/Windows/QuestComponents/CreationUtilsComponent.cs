@@ -206,12 +206,12 @@ internal sealed class CreationUtilsComponent
 
         ImGui.Separator();
         ImGui.Text(string.Create(CultureInfo.InvariantCulture,
-            $"Target: {target.Name}  ({target.ObjectKind}; {target.DataId}{nameId})"));
+            $"目标: {target.Name}  ({target.ObjectKind}; {target.DataId}{nameId})"));
 
         if (_clientState.LocalPlayer != null)
         {
             ImGui.Text(string.Create(CultureInfo.InvariantCulture,
-                $"Distance: {(target.Position - _clientState.LocalPlayer.Position).Length():F2}"));
+                $"距离: {(target.Position - _clientState.LocalPlayer.Position).Length():F2}"));
             ImGui.SameLine();
 
             float verticalDistance = target.Position.Y - _clientState.LocalPlayer.Position.Y;
@@ -280,7 +280,7 @@ internal sealed class CreationUtilsComponent
         bool copy = ImGuiComponents.IconButton(FontAwesomeIcon.Copy);
         if (ImGui.IsItemHovered())
             ImGui.SetTooltip(
-                "Left click: Copy target position as JSON.\nRight click: Copy target position as C# code.");
+                "左键点击：将目标位置复制为 JSON。\n右键点击：将目标位置复制为 C# 代码。");
         if (copy)
         {
             if (target.ObjectKind == ObjectKind.GatheringPoint)
@@ -337,7 +337,7 @@ internal sealed class CreationUtilsComponent
         bool copy = ImGuiComponents.IconButton(FontAwesomeIcon.Copy);
         if (ImGui.IsItemHovered())
             ImGui.SetTooltip(
-                "Left click: Copy your position as JSON.\nRight click: Copy your position as C# code.");
+                "左键点击：将当前位置复制为 JSON。\n右键点击：将当前位置复制为 C# 代码。");
         if (copy)
         {
             ImGui.SetClipboardText($$"""

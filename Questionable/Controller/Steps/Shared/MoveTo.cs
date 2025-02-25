@@ -64,12 +64,12 @@ internal static class MoveTo
             }
 
             yield return new WaitCondition.Task(() => clientState.TerritoryType == step.TerritoryId,
-                $"Wait(territory: {territoryData.GetNameAndId(step.TerritoryId)})");
+                $"等待(区域: {territoryData.GetNameAndId(step.TerritoryId)})");
 
             if (!step.DisableNavmesh)
             {
                 yield return new WaitCondition.Task(() => movementController.IsNavmeshReady,
-                    "Wait(navmesh ready)");
+                    "等待导航就绪");
             }
 
             yield return new MoveTask(step, destination);
@@ -360,7 +360,7 @@ internal static class MoveTo
 
         public bool ShouldRedoOnInterrupt() => true;
 
-        public override string ToString() => $"MoveTo({Destination.ToString("G", CultureInfo.InvariantCulture)})";
+        public override string ToString() => $"移动到({Destination.ToString("G", CultureInfo.InvariantCulture)})";
     }
 
     internal sealed record WaitForNearDataId(uint DataId, float StopDistance) : ITask

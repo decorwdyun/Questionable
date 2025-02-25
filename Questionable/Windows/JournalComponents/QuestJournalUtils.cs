@@ -50,15 +50,15 @@ internal sealed class QuestJournalUtils
 
     internal static void ShowFilterContextMenu(QuestJournalComponent journalUi)
     {
-        if (ImGuiComponents.IconButtonWithText(Dalamud.Interface.FontAwesomeIcon.Filter, "Filter"))
+        if (ImGuiComponents.IconButtonWithText(Dalamud.Interface.FontAwesomeIcon.Filter, "筛选"))
             ImGui.OpenPopup("##QuestFilters");
 
         using var popup = ImRaii.Popup("##QuestFilters");
         if (!popup)
             return;
 
-        if (ImGui.Checkbox("Show only Available Quests", ref journalUi.Filter.AvailableOnly) ||
-            ImGui.Checkbox("Hide Quests Without Path", ref journalUi.Filter.HideNoPaths))
+        if (ImGui.Checkbox("只显示可接取的任务", ref journalUi.Filter.AvailableOnly) ||
+            ImGui.Checkbox("隐藏尚未支持的任务", ref journalUi.Filter.HideNoPaths))
             journalUi.UpdateFilter();
     }
 }

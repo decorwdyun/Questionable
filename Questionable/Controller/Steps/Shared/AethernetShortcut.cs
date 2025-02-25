@@ -32,7 +32,7 @@ internal static class AethernetShortcut
                 yield break;
 
             yield return new WaitCondition.Task(() => movementController.IsNavmeshReady,
-                "Wait(navmesh ready)");
+                "等待导航就绪");
             yield return new Task(step.AethernetShortcut.From, step.AethernetShortcut.To,
                 step.SkipConditions?.AethernetShortcutIf ?? new());
 
@@ -40,7 +40,7 @@ internal static class AethernetShortcut
             {
                 yield return new WaitCondition.Task(
                     () => clientState.TerritoryType == aetheryteData.TerritoryIds[step.AethernetShortcut.To],
-                    $"Wait(territory: {territoryData.GetNameAndId(aetheryteData.TerritoryIds[step.AethernetShortcut.To])})");
+                    $"等待(区域: {territoryData.GetNameAndId(aetheryteData.TerritoryIds[step.AethernetShortcut.To])})");
                 yield return new AetheryteShortcut.MoveAwayFromAetheryte(step.AethernetShortcut.To);
             }
         }

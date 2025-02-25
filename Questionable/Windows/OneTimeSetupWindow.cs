@@ -22,23 +22,21 @@ internal sealed class OneTimeSetupWindow : LWindow
         new("vnavmesh",
             "vnavmesh",
             """
-            vnavmesh handles the navigation within a zone, moving
-            your character to the next quest-related objective.
+            vnavmesh 处理区域内的寻路，将你的角色移动到下一个与任务相关的目标。
             """,
             new Uri("https://github.com/awgil/ffxiv_navmesh/"),
             new Uri("https://puni.sh/api/repository/veyn")),
         new("Lifestream",
             "Lifestream",
             """
-            Used to travel to aethernet shards in cities.
+            用于在城市中传送到小型以太之光。
             """,
             new Uri("https://github.com/NightmareXIV/Lifestream"),
             new Uri("https://github.com/NightmareXIV/MyDalamudPlugins/raw/main/pluginmaster.json")),
         new("TextAdvance",
             "TextAdvance",
             """
-            Automatically accepts and turns in quests, skips cutscenes
-            and dialogue.
+            自动接受并交付任务，跳过过场动画和对话。
             """,
             new Uri("https://github.com/NightmareXIV/TextAdvance"),
             new Uri("https://github.com/NightmareXIV/MyDalamudPlugins/raw/main/pluginmaster.json")),
@@ -91,20 +89,10 @@ internal sealed class OneTimeSetupWindow : LWindow
         _logger = logger;
         _recommendedPlugins =
         [
-            new PluginInfo("CBT (formerly known as Automaton)",
-                "Automaton",
-                """
-                Automaton is a collection of automation-related tweaks.
-                The 'Sniper no sniping' tweak can complete snipe tasks automatically.
-                """,
-                new Uri("https://github.com/Jaksuhn/Automaton"),
-                new Uri("https://puni.sh/api/repository/croizat"),
-                [new PluginDetailInfo("'Sniper no sniping' enabled", () => automatonIpc.IsAutoSnipeEnabled)]),
-            new("NotificationMaster",
+           new("NotificationMaster",
                 "NotificationMaster",
                 """
-                Sends a configurable out-of-game notification if a quest
-                requires manual actions.
+                当任务需要手动操作时，发送可配置的游戏外通知。
                 """,
                 new Uri("https://github.com/NightmareXIV/NotificationMaster"),
                 null),
@@ -127,7 +115,10 @@ internal sealed class OneTimeSetupWindow : LWindow
                                ImGui.GetStyle().ItemSpacing.X;
         }
 
-        ImGui.Text("Questionable requires the following plugins to work:");
+        ImGui.Text("Questionable 需要以下插件才能正常工作：");
+        ImGui.TextColored(ImGuiColors.DalamudRed, "注意下方提供的所有链接均为国际服原始库，如果无法使用，请自行寻找国服特供。");
+        ImGui.TextColored(ImGuiColors.DalamudRed, "注意下方提供的所有链接均为国际服原始库，如果无法使用，请自行寻找国服特供。");
+        ImGui.TextColored(ImGuiColors.DalamudRed, "注意下方提供的所有链接均为国际服原始库，如果无法使用，请自行寻找国服特供。");
         bool allRequiredInstalled = true;
         using (ImRaii.PushIndent())
         {
@@ -139,11 +130,11 @@ internal sealed class OneTimeSetupWindow : LWindow
         ImGui.Separator();
         ImGui.Spacing();
 
-        ImGui.Text("Questionable supports multiple rotation/combat plugins, please pick the one\nyou want to use:");
+        ImGui.Text("Questionable 支持多个自动输出/循环插件，请选择你想要使用的:");
 
         using (ImRaii.PushIndent())
         {
-            if (ImGui.RadioButton("No rotation/combat plugin (combat must be done manually)",
+            if (ImGui.RadioButton("不使用自动输出/循环插件（战斗必须手动进行）",
                     _configuration.General.CombatModule == Configuration.ECombatModule.None))
             {
                 _configuration.General.CombatModule = Configuration.ECombatModule.None;
@@ -159,7 +150,7 @@ internal sealed class OneTimeSetupWindow : LWindow
         ImGui.Separator();
         ImGui.Spacing();
 
-        ImGui.Text("The following plugins are recommended, but not required:");
+        ImGui.Text("以下插件是推荐的，但不是必需的：");
         using (ImRaii.PushIndent())
         {
             foreach (var plugin in _recommendedPlugins)
@@ -174,9 +165,9 @@ internal sealed class OneTimeSetupWindow : LWindow
         {
             using (ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.ParsedGreen))
             {
-                if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Check, "Finish Setup"))
+                if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Check, "完成设置"))
                 {
-                    _logger.LogInformation("Marking setup as complete");
+                    _logger.LogInformation("标记设置完成");
                     _configuration.MarkPluginSetupComplete();
                     _pluginInterface.SavePluginConfig(_configuration);
                     IsOpen = false;
@@ -188,13 +179,13 @@ internal sealed class OneTimeSetupWindow : LWindow
             using (ImRaii.Disabled())
             {
                 using (ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudRed))
-                    ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Check, "Missing required plugins");
+                    ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Check, "缺少必需的插件");
             }
         }
 
         ImGui.SameLine();
 
-        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Times, "Close window & don't enable Questionable"))
+        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Times, "关闭窗口并不启用 Questionable"))
         {
             _logger.LogWarning("Closing window without all required plugins installed");
             IsOpen = false;
@@ -257,19 +248,19 @@ internal sealed class OneTimeSetupWindow : LWindow
 
             ImGui.Spacing();
 
-            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Globe, "Open Website"))
+            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Globe, "打开网站"))
                 Util.OpenLink(plugin.WebsiteUri.ToString());
 
             ImGui.SameLine();
             if (plugin.DalamudRepositoryUri != null)
             {
-                if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Code, "Open Repository"))
+                if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Code, "打开代码库"))
                     Util.OpenLink(plugin.DalamudRepositoryUri.ToString());
             }
             else
             {
                 ImGui.AlignTextToFramePadding();
-                ImGuiComponents.HelpMarker("Available on official Dalamud Repository");
+                ImGuiComponents.HelpMarker("可在官方 Dalamud 插件库中找到");
             }
         }
     }

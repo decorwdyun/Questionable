@@ -38,7 +38,8 @@ namespace Questionable;
 public sealed class QuestionablePlugin : IDalamudPlugin
 {
     private readonly ServiceProvider? _serviceProvider;
-
+    internal static IDalamudPluginInterface pi;
+    
     public QuestionablePlugin(IDalamudPluginInterface pluginInterface,
         IClientState clientState,
         ITargetManager targetManager,
@@ -55,11 +56,25 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         IKeyState keyState,
         IContextMenu contextMenu,
         IToastGui toastGui,
+        INotificationManager notificationManager,
         IGameInteropProvider gameInteropProvider)
     {
         ArgumentNullException.ThrowIfNull(pluginInterface);
         ArgumentNullException.ThrowIfNull(chatGui);
-
+        ArgumentNullException.ThrowIfNull(notificationManager);
+        pi = pluginInterface;
+#if !DEBUG
+        if ((pi.IsDev || !pi.SourceRepository.Contains("decorwdyun/DalamudPlugins")))
+        {
+            notificationManager.AddNotification(new Dalamud.Interface.ImGuiNotification.Notification()
+            {
+                Type = Dalamud.Interface.ImGuiNotification.NotificationType.Error,
+                Title = "加载验证",
+                Content = "由于本地加载或安装来源仓库非 decorwdyun 个人仓库，插件禁止加载。",
+            });
+            return;
+        }
+#endif
         try
         {
             ServiceCollection serviceCollection = new();
@@ -348,6 +363,12 @@ public sealed class QuestionablePlugin : IDalamudPlugin
 
     public void Dispose()
     {
+#if !DEBUG
+        if (pi.IsDev || !pi.SourceRepository.Contains("decorwdyun/DalamudPlugins"))
+        {
+            return;
+        }
+#endif
         _serviceProvider?.Dispose();
     }
 }

@@ -83,10 +83,10 @@ internal static class Gather
 
             ushort territoryId = gatheringRoot.Steps.Last().TerritoryId;
             yield return new WaitCondition.Task(() => clientState.TerritoryType == territoryId,
-                $"Wait(territory: {territoryData.GetNameAndId(territoryId)})");
+                $"等待(区域: {territoryData.GetNameAndId(territoryId)})");
 
             yield return new WaitCondition.Task(() => movementController.IsNavmeshReady,
-                "Wait(navmesh ready)");
+                "等待导航就绪");
 
             yield return new GatheringTask(gatheringPointId, Task.GatheredItem);
             yield return new WaitAtEnd.WaitDelay();

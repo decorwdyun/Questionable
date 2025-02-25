@@ -82,7 +82,7 @@ internal static class Interact
         public bool ShouldRedoOnInterrupt() => true;
 
         public override string ToString() =>
-            $"Interact{(HasCompletionQuestVariablesFlags ? "*" : "")}({DataId})";
+            $"交互{(HasCompletionQuestVariablesFlags ? "*" : "")}({DataId})";
     }
 
     internal sealed class DoInteract(
