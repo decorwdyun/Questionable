@@ -37,7 +37,7 @@ internal static class EquipRecommended
 
     internal sealed class EquipTask : ITask
     {
-        public override string ToString() => "EquipRecommended";
+        public override string ToString() => "装备（一键最强）";
     }
 
     internal sealed unsafe class DoEquipRecommended(IClientState clientState, IChatGui chatGui, ICondition condition)
@@ -65,7 +65,7 @@ internal static class EquipRecommended
             {
                 if (!IsAllRecommendeGearEquipped())
                 {
-                    chatGui.Print("Equipping recommended gear.", CommandHandler.MessageTag, CommandHandler.TagColor);
+                    chatGui.Print("正在穿上推荐装备（一键最强）", CommandHandler.MessageTag, CommandHandler.TagColor);
                     recommendedEquipModule->EquipRecommendedGear();
                     _continueAt = DateTime.Now.AddSeconds(1);
                 }

@@ -138,13 +138,13 @@ internal sealed class ContextMenuController : IDisposable
 
         string lockedReasonn = string.Empty;
         if (!_questFunctions.IsClassJobUnlocked(classJob))
-            lockedReasonn = $"{classJob} not unlocked";
+            lockedReasonn = $"{classJob} 职业未解锁";
         else if (quantityToGather == 0)
-            lockedReasonn = "No allowances";
+            lockedReasonn = "无受理限额";
         else if (quantityToGather > _gameFunctions.GetFreeInventorySlots())
-            lockedReasonn = "Inventory full";
+            lockedReasonn = "背包空间不足";
         else if (_gameFunctions.IsOccupied())
-            lockedReasonn = "Can't be used while interacting";
+            lockedReasonn = "交互时无法使用";
 
         string name = $"{verb} with Questionable";
         if (!string.IsNullOrEmpty(lockedReasonn))
