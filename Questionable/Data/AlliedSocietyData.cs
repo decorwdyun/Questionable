@@ -63,4 +63,4 @@ internal sealed class AlliedSocietyData
     }
 }
 
-public sealed record AlliedSocietyMountConfiguration(List<uint> IssuerDataIds, EAetheryteLocation ClosestAetheryte);
+public sealed record AlliedSocietyMountConfiguration(IReadOnlyList<uint> IssuerDataIds, EAetheryteLocation ClosestAetheryte);
