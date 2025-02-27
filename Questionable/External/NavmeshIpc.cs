@@ -20,6 +20,7 @@ internal sealed class NavmeshIpc
     private readonly ICallGateSubscriber<List<Vector3>> _pathListWaypoints;
     private readonly ICallGateSubscriber<float, object> _pathSetTolerance;
     private readonly ICallGateSubscriber<Vector3, bool, float, Vector3?> _queryPointOnFloor;
+    private readonly ICallGateSubscriber<float> _buildProgress;
 
     public NavmeshIpc(IDalamudPluginInterface pluginInterface, ILogger<NavmeshIpc> logger)
     {
@@ -35,6 +36,7 @@ internal sealed class NavmeshIpc
         _pathSetTolerance = pluginInterface.GetIpcSubscriber<float, object>("vnavmesh.Path.SetTolerance");
         _queryPointOnFloor =
             pluginInterface.GetIpcSubscriber<Vector3, bool, float, Vector3?>("vnavmesh.Query.Mesh.PointOnFloor");
+        _buildProgress = pluginInterface.GetIpcSubscriber<float>("vnavmesh.Nav.BuildProgress");
     }
 
     public bool IsReady
@@ -135,5 +137,20 @@ internal sealed class NavmeshIpc
         }
         else
             return [];
+    }
+
+    public int GetBuildProgress()
+    {
+        try
+        {
+            float progress = _buildProgress.InvokeFunc();
+            if (progress < 0)
+                return 100;
+            return (int)(progress * 100);
+        }
+        catch (IpcError)
+        {
+            return 0;
+        }
     }
 }

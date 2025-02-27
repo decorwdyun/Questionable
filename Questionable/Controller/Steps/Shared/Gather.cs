@@ -38,7 +38,6 @@ internal static class Gather
     }
 
     internal sealed class DelayedGatheringExecutor(
-        MovementController movementController,
         GatheringData gatheringData,
         GatheringPointRegistry gatheringPointRegistry,
         TerritoryData territoryData,
@@ -85,8 +84,7 @@ internal static class Gather
             yield return new WaitCondition.Task(() => clientState.TerritoryType == territoryId,
                 $"Wait(territory: {territoryData.GetNameAndId(territoryId)})");
 
-            yield return new WaitCondition.Task(() => movementController.IsNavmeshReady,
-                "Wait(navmesh ready)");
+            yield return new WaitNavmesh.Task();
 
             yield return new GatheringTask(gatheringPointId, Task.GatheredItem);
             yield return new WaitAtEnd.WaitDelay();

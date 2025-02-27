@@ -89,6 +89,7 @@ internal sealed class MovementController : IDisposable
     public bool IsPathfinding => _pathfindTask is { IsCompleted: false };
     public DestinationData? Destination { get; set; }
     public DateTime MovementStartedAt { get; private set; } = DateTime.Now;
+    public int BuiltNavmeshPercent => _navmeshIpc.GetBuildProgress();
 
     public void Update()
     {

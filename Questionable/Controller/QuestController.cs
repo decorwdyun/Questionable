@@ -687,6 +687,17 @@ internal sealed class QuestController : MiniTaskController<QuestController>
     public bool IsRunning => !_taskQueue.AllTasksComplete;
     public TaskQueue TaskQueue => _taskQueue;
 
+    public string? CurrentTaskState
+    {
+        get
+        {
+            if (_taskQueue.CurrentTaskExecutor is IDebugStateProvider debugStateProvider)
+                return debugStateProvider.GetDebugState();
+            else
+                return null;
+        }
+    }
+
     public sealed class QuestProgress
     {
         public Quest Quest { get; }

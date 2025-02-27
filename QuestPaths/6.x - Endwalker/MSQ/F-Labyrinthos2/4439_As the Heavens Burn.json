@@ -29,8 +29,11 @@
           },
           "TerritoryId": 958,
           "InteractionType": "SinglePlayerDuty",
-          "AetheryteShortcut": "Garlemald - Camp Broken Glass",
-          "Comment": "As the Heavens Burn"
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": 294
+          },
+          "AetheryteShortcut": "Garlemald - Camp Broken Glass"
         }
       ]
     },

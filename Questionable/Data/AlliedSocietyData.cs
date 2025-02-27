@@ -13,12 +13,12 @@ internal sealed class AlliedSocietyData
     public ReadOnlyDictionary<ushort, AlliedSocietyMountConfiguration> Mounts { get; } =
         new Dictionary<ushort, AlliedSocietyMountConfiguration>
         {
-            { 66, new(1016093, EAetheryteLocation.SeaOfCloudsOkZundu) },
-            { 79, new(1017031, EAetheryteLocation.DravanianForelandsAnyxTrine) },
-            { 88, new(1017470, EAetheryteLocation.ChurningMistsZenith) },
-            { 89, new(1017322, EAetheryteLocation.ChurningMistsZenith) },
-            { 147, new(1024777, EAetheryteLocation.FringesPeeringStones) },
-            { 369, new(1051798, EAetheryteLocation.KozamaukaDockPoga) },
+            { 66, new([1016093], EAetheryteLocation.SeaOfCloudsOkZundu) },
+            { 79, new([1017031], EAetheryteLocation.DravanianForelandsAnyxTrine) },
+            { 88, new([1017470, 1017432], EAetheryteLocation.ChurningMistsZenith) },
+            { 89, new([1017322], EAetheryteLocation.ChurningMistsZenith) },
+            { 147, new([1024777], EAetheryteLocation.FringesPeeringStones) },
+            { 369, new([1051798], EAetheryteLocation.KozamaukaDockPoga) },
         }.AsReadOnly();
 
     public EAlliedSociety GetCommonAlliedSocietyTurnIn(ElementId elementId)
@@ -63,4 +63,4 @@ internal sealed class AlliedSocietyData
     }
 }
 
-public sealed record AlliedSocietyMountConfiguration(uint IssuerDataId, EAetheryteLocation ClosestAetheryte);
+public sealed record AlliedSocietyMountConfiguration(IReadOnlyList<uint> IssuerDataIds, EAetheryteLocation ClosestAetheryte);
