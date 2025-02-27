@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Keys;
 using Dalamud.Game.Gui.Toast;
@@ -817,6 +818,15 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         }
 
         return false;
+    }
+
+    public void ImportQuestPriority(List<ElementId> questElements)
+    {
+        foreach (ElementId elementId in questElements)
+        {
+            if (_questRegistry.TryGetQuest(elementId, out Quest? quest) && !ManualPriorityQuests.Contains(quest))
+                ManualPriorityQuests.Add(quest);
+        }
     }
 
     public bool WasLastTaskUpdateWithin(TimeSpan timeSpan)

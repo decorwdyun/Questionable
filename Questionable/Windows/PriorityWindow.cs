@@ -250,10 +250,15 @@ internal sealed class PriorityWindow : LWindow
 
     private List<ElementId> ParseClipboardItems()
     {
+        string? clipboardText = GetClipboardText();
+        return ParseQuestPriority(clipboardText);
+    }
+
+    public static List<ElementId> ParseQuestPriority(string? clipboardText)
+    {
         List<ElementId> clipboardItems = new List<ElementId>();
         try
         {
-            string? clipboardText = GetClipboardText();
             if (clipboardText != null && clipboardText.StartsWith(ClipboardPrefix, StringComparison.InvariantCulture))
             {
                 clipboardText = clipboardText.Substring(ClipboardPrefix.Length);
@@ -281,14 +286,9 @@ internal sealed class PriorityWindow : LWindow
         _chatGui.Print("Copied quests to clipboard.", CommandHandler.MessageTag, CommandHandler.TagColor);
     }
 
-    private void ImportFromClipboard(List<ElementId> clipboardItems)
+    private void ImportFromClipboard(List<ElementId> questElements)
     {
-        foreach (ElementId elementId in clipboardItems)
-        {
-            if (_questRegistry.TryGetQuest(elementId, out Quest? quest) &&
-                !_questController.ManualPriorityQuests.Contains(quest))
-                _questController.ManualPriorityQuests.Add(quest);
-        }
+        _questController.ImportQuestPriority(questElements);
     }
 
     /// <summary>
