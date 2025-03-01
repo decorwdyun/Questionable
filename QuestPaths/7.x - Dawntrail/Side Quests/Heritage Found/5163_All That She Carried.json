@@ -113,7 +113,8 @@
             "Z": -446.7079
           },
           "TerritoryId": 1191,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "Fly": true
         }
       ]
     }
