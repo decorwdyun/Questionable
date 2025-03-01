@@ -40,7 +40,10 @@
           },
           "TerritoryId": 1189,
           "InteractionType": "SinglePlayerDuty",
-          "Comment": "Taking a Stand",
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": 294
+          },
           "AetheryteShortcut": "Yak T'el - Iq Br'aax"
         }
       ]

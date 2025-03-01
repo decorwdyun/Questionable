@@ -71,7 +71,10 @@
           },
           "TerritoryId": 1089,
           "InteractionType": "SinglePlayerDuty",
-          "Comment": "Where Everything Begins"
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": 294
+          }
         }
       ]
     },
