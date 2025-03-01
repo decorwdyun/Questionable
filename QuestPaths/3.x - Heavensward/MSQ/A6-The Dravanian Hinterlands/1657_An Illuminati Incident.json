@@ -50,7 +50,7 @@
           ],
           "SinglePlayerDutyOptions": {
             "Enabled": true,
-            "TestedBossModVersion": 292
+            "TestedBossModVersion": "0.0.0.292"
           }
         }
       ]

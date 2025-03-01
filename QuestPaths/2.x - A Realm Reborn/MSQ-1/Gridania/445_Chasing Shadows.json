@@ -31,7 +31,7 @@
           "InteractionType": "SinglePlayerDuty",
           "SinglePlayerDutyOptions": {
             "Enabled": false,
-            "TestedBossModVersion": 292,
+            "TestedBossModVersion": "0.0.0.292",
             "Notes": [
               "AI doesn't automatically target newly spawning adds until after the boss died, and dies (tested on CNJ)"
             ]
