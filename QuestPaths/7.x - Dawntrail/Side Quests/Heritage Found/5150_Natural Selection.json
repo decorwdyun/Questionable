@@ -13,7 +13,21 @@
             "Z": -643.64087
           },
           "TerritoryId": 1191,
-          "InteractionType": "AcceptQuest"
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Heritage Found - The Outskirts",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": -272.23627,
+                  "Y": 30.001156,
+                  "Z": -577.59973
+                },
+                "TerritoryId": 1191,
+                "MaximumDistance": 50
+              }
+            }
+          }
         }
       ]
     },
