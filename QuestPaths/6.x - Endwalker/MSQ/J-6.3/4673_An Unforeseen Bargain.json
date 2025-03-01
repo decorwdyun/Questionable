@@ -30,7 +30,10 @@
           "StopDistance": 5,
           "TerritoryId": 958,
           "InteractionType": "SinglePlayerDuty",
-          "Comment": "An Unforeseen Bargain"
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": "0.0.0.294"
+          }
         }
       ]
     },

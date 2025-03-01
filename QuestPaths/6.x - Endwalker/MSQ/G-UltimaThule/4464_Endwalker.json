@@ -80,7 +80,11 @@
           },
           "TerritoryId": 1026,
           "InteractionType": "SinglePlayerDuty",
-          "Comment": "Zenos"
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": "0.0.0.294"
+          },
+          "DisableNavmesh": true
         }
       ]
     },
@@ -120,8 +124,7 @@
             null,
             1
           ],
-          "$.0": "[1]",
-          "$.1": "QuestVariables if done first: 1 0 0 0 0 1"
+          "DelaySecondsAtStart": 3
         },
         {
           "DataId": 1041181,
@@ -140,9 +143,7 @@
             null,
             null,
             128
-          ],
-          "$.0": "[2]",
-          "$.1": "QuestVariables if done after [1]: 2 0 0 0 0 129"
+          ]
         },
         {
           "DataId": 1041182,
@@ -160,9 +161,7 @@
             null,
             null,
             64
-          ],
-          "$.0": "[3]",
-          "$.1": "QuestVariables if done after [1, 2]: 3 0 0 0 0 193"
+          ]
         },
         {
           "DataId": 1041184,
@@ -181,9 +180,7 @@
             null,
             null,
             16
-          ],
-          "$.0": "[4]",
-          "$.1": "QuestVariables if done after [1, 2, 3]: 4 0 0 0 0 209"
+          ]
         },
         {
           "DataId": 1041183,
@@ -201,9 +198,7 @@
             null,
             null,
             32
-          ],
-          "$.0": "[5]",
-          "$.1": "QuestVariables if done after [1, 2, 3, 4]: 5 0 0 0 0 241"
+          ]
         },
         {
           "DataId": 1041187,
@@ -221,9 +216,7 @@
             null,
             null,
             2
-          ],
-          "$.0": "[6]",
-          "$.1": "QuestVariables if done after [1, 2, 3, 4, 5]: 6 0 0 0 0 243"
+          ]
         },
         {
           "DataId": 1041185,
@@ -241,9 +234,7 @@
             null,
             null,
             8
-          ],
-          "$.0": "[7]",
-          "$.1": "QuestVariables if done after [1, 2, 3, 4, 5, 6]: 7 0 0 0 0 251"
+          ]
         },
         {
           "DataId": 1041186,
@@ -261,8 +252,7 @@
             null,
             null,
             4
-          ],
-          "$.2": "QuestVariables if done first: 1 0 0 0 0 0 4"
+          ]
         }
       ]
     },

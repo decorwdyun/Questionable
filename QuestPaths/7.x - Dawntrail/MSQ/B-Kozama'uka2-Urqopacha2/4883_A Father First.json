@@ -57,6 +57,10 @@
           },
           "TerritoryId": 1185,
           "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": "0.0.0.294"
+          },
           "AethernetShortcut": [
             "[Tuliyollal] The For'ard Cabins",
             "[Tuliyollal] Vollok Shoonsa"

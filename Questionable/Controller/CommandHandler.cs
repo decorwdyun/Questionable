@@ -4,7 +4,6 @@ using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.Command;
 using Dalamud.Plugin.Services;
 using Lumina.Excel.Sheets;
-using Microsoft.Extensions.Logging;
 using Questionable.Functions;
 using Questionable.Model.Questing;
 using Questionable.Windows;
@@ -77,18 +76,18 @@ internal sealed class CommandHandler : IDisposable
                 "/qst which - shows all quests starting with your selected target",
                 "/qst zone - shows all quests starting in the current zone (only includes quests with a known quest path, and currently visible unaccepted quests)")
         });
+#if DEBUG
+        _commandManager.AddHandler("/qst@", new CommandInfo(ProcessDebugCommand)
+        {
+            ShowInHelp = false,
+        });
+#endif
     }
 
     private void ProcessCommand(string command, string arguments)
     {
-        if (!_configuration.IsPluginSetupComplete())
-        {
-            if (string.IsNullOrEmpty(arguments))
-                _oneTimeSetupWindow.IsOpen = true;
-            else
-                _chatGui.PrintError("Please complete the one-time setup first.", MessageTag, TagColor);
+        if (OpenSetupIfNeeded(arguments))
             return;
-        }
 
         string[] parts = arguments.Split(' ');
         switch (parts[0])
@@ -149,6 +148,34 @@ internal sealed class CommandHandler : IDisposable
                 _chatGui.PrintError($"Unknown subcommand {parts[0]}", MessageTag, TagColor);
                 break;
         }
+    }
+
+    private void ProcessDebugCommand(string command, string arguments)
+    {
+        if (OpenSetupIfNeeded(arguments))
+            return;
+
+        string[] parts = arguments.Split(' ');
+        switch (parts[0])
+        {
+            case "abandon-duty":
+                _gameFunctions.AbandonDuty();
+                break;
+        }
+    }
+
+    private bool OpenSetupIfNeeded(string arguments)
+    {
+        if (!_configuration.IsPluginSetupComplete())
+        {
+            if (string.IsNullOrEmpty(arguments))
+                _oneTimeSetupWindow.IsOpen = true;
+            else
+                _chatGui.PrintError("Please complete the one-time setup first.", MessageTag, TagColor);
+            return true;
+        }
+
+        return false;
     }
 
     private void ConfigureDebugOverlay(string[] arguments)
@@ -251,6 +278,9 @@ internal sealed class CommandHandler : IDisposable
 
     public void Dispose()
     {
+#if DEBUG
+        _commandManager.RemoveHandler("/qst@");
+#endif
         _commandManager.RemoveHandler("/qst");
     }
 }

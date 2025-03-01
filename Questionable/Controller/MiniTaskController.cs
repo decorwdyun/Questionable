@@ -28,6 +28,7 @@ internal abstract class MiniTaskController<T> : IDisposable
     private readonly ILogger<T> _logger;
 
     private readonly string _actionCanceledText;
+    private readonly string _eventCanceledText;
     private readonly string _cantExecuteDueToStatusText;
 
     protected MiniTaskController(IChatGui chatGui, ICondition condition, IServiceProvider serviceProvider,
@@ -39,6 +40,7 @@ internal abstract class MiniTaskController<T> : IDisposable
         _interruptHandler = interruptHandler;
         _condition = condition;
 
+        _eventCanceledText = dataManager.GetString<LogMessage>(1318, x => x.Text)!;
         _actionCanceledText = dataManager.GetString<LogMessage>(1314, x => x.Text)!;
         _cantExecuteDueToStatusText = dataManager.GetString<LogMessage>(7728, x => x.Text)!;
         _interruptHandler.Interrupted += HandleInterruption;
@@ -190,10 +192,13 @@ internal abstract class MiniTaskController<T> : IDisposable
 
     private void InterruptWithoutCombat()
     {
-        _logger.LogWarning("Interrupted, attempting to redo previous tasks (not in combat)");
-        _taskQueue.InterruptWith([new WaitAtEnd.WaitDelay()]);
+        if (_taskQueue.CurrentTaskExecutor is not SinglePlayerDuty.WaitSinglePlayerDutyExecutor)
+        {
+            _logger.LogWarning("Interrupted, attempting to redo previous tasks (not in combat)");
 
-        LogTasksAfterInterruption();
+            _taskQueue.InterruptWith([new WaitAtEnd.WaitDelay()]);
+            LogTasksAfterInterruption();
+        }
     }
 
     private void LogTasksAfterInterruption()
@@ -219,7 +224,8 @@ internal abstract class MiniTaskController<T> : IDisposable
                 !_condition[ConditionFlag.InFlight] &&
                 _taskQueue.CurrentTaskExecutor?.ShouldInterruptOnDamage() == true)
                 InterruptQueueWithCombat();
-            else if (GameFunctions.GameStringEquals(_cantExecuteDueToStatusText, message.TextValue))
+            else if (GameFunctions.GameStringEquals(_cantExecuteDueToStatusText, message.TextValue) ||
+                     GameFunctions.GameStringEquals(_eventCanceledText, message.TextValue))
                 InterruptWithoutCombat();
         }
     }

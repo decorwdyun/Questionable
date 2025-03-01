@@ -31,7 +31,7 @@
           "InteractionType": "SinglePlayerDuty",
           "SinglePlayerDutyOptions": {
             "Enabled": false,
-            "TestedBossModVersion": 292,
+            "TestedBossModVersion": "0.0.0.292",
             "Notes": [
               "WIP: Needs to be re-tested",
               "AI doesn't move after starting the instance, so enemies won't be triggered",

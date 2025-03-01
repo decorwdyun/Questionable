@@ -6,6 +6,7 @@ using Dalamud.Plugin;
 using Dalamud.Plugin.Ipc;
 using JetBrains.Annotations;
 using Questionable.Controller;
+using Questionable.Functions;
 using Questionable.Model.Questing;
 using Questionable.Windows.QuestComponents;
 
@@ -19,9 +20,11 @@ internal sealed class QuestionableIpc : IDisposable
     private const string IpcGetCurrentlyActiveEventQuests = "Questionable.GetCurrentlyActiveEventQuests";
     private const string IpcStartQuest = "Questionable.StartQuest";
     private const string IpcStartSingleQuest = "Questionable.StartSingleQuest";
+    private const string IpcIsQuestLocked = "Questionable.IsQuestLocked";
 
     private readonly QuestController _questController;
     private readonly QuestRegistry _questRegistry;
+    private readonly QuestFunctions _questFunctions;
 
     private readonly ICallGateProvider<bool> _isRunning;
     private readonly ICallGateProvider<string?> _getCurrentQuestId;
@@ -29,15 +32,18 @@ internal sealed class QuestionableIpc : IDisposable
     private readonly ICallGateProvider<List<string>> _getCurrentlyActiveEventQuests;
     private readonly ICallGateProvider<string, bool> _startQuest;
     private readonly ICallGateProvider<string, bool> _startSingleQuest;
+    private readonly ICallGateProvider<string, bool> _isQuestLocked;
 
     public QuestionableIpc(
         QuestController questController,
         EventInfoComponent eventInfoComponent,
         QuestRegistry questRegistry,
+        QuestFunctions questFunctions,
         IDalamudPluginInterface pluginInterface)
     {
         _questController = questController;
         _questRegistry = questRegistry;
+        _questFunctions = questFunctions;
 
         _isRunning = pluginInterface.GetIpcProvider<bool>(IpcIsRunning);
         _isRunning.RegisterFunc(() =>
@@ -59,6 +65,10 @@ internal sealed class QuestionableIpc : IDisposable
 
         _startSingleQuest = pluginInterface.GetIpcProvider<string, bool>(IpcStartSingleQuest);
         _startSingleQuest.RegisterFunc(questId => StartQuest(questId, true));
+        //_startSingleQuest.RegisterFunc((questId) => StartQuest(questController, questRegistry, questId, true));
+
+        _isQuestLocked = pluginInterface.GetIpcProvider<string, bool>(IpcIsQuestLocked);
+        _isQuestLocked.RegisterFunc((questId) => IsQuestLocked(questId));
     }
 
     private bool StartQuest(string questId, bool single)
@@ -100,6 +110,16 @@ internal sealed class QuestionableIpc : IDisposable
             Position = step.Position,
             TerritoryId = step.TerritoryId
         };
+    }
+
+    private bool IsQuestLocked(string questId)
+    {
+        if (ElementId.TryFromString(questId, out var elementId) && elementId != null &&
+            _questRegistry.TryGetQuest(elementId, out var quest))
+        {
+            return _questFunctions.IsQuestLocked(elementId);
+        }
+        return true;
     }
 
     public void Dispose()
