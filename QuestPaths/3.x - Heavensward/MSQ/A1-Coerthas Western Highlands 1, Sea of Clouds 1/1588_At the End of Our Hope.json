@@ -33,7 +33,7 @@
           "Comment": "Walk straight to Gorgagne Mills basement, ignore footprints",
           "SinglePlayerDutyOptions": {
             "Enabled": true,
-            "TestedBossModVersion": 292
+            "TestedBossModVersion": "0.0.0.292"
           }
         }
       ]

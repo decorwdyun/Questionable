@@ -87,7 +87,7 @@
           "Comment": "Estinien vs. Arch Ultima",
           "SinglePlayerDutyOptions": {
             "Enabled": false,
-            "TestedBossModVersion": 292,
+            "TestedBossModVersion": "0.0.0.292",
             "Notes": [
               "AI doesn't move automatically for the first boss",
               "AI doesn't move automatically for the dialogue with gaius on the bridge",

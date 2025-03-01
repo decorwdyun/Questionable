@@ -71,7 +71,7 @@
           "InteractionType": "SinglePlayerDuty",
           "SinglePlayerDutyOptions": {
             "Enabled": false,
-            "TestedBossModVersion": 292,
+            "TestedBossModVersion": "0.0.0.292",
             "Notes": [
               "(Phase 1, second enemy group) Stuck with enemy being out of sight -- but still able to attack you (tested on ACN)"
             ]
