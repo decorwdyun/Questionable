@@ -100,6 +100,13 @@
           "AethernetShortcut": [
             "[Kugane] Kogane Dori Markets",
             "[Kugane] Bokairo Inn"
+          ],
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_BANALL240_03164_Q1_000_000",
+              "Yes": true
+            }
           ]
         }
       ]

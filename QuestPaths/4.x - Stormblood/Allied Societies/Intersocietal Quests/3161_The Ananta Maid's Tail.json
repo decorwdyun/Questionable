@@ -87,7 +87,14 @@
             "Z": -140.73401
           },
           "TerritoryId": 628,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DialogueChoices": [
+            {
+              "Type": "YesNo",
+              "Prompt": "TEXT_BANALL210_03161_Q3_000_000",
+              "Yes": true
+            }
+          ]
         }
       ]
     },
@@ -170,13 +177,9 @@
             "Z": 62.91284
           },
           "TerritoryId": 628,
-          "InteractionType": "UseItem",
-          "ItemId": 2002488,
-          "GroundTarget": true
-        },
-        {
-          "TerritoryId": 628,
           "InteractionType": "CompleteQuest",
+          "ItemId": 2002488,
+          "GroundTarget": true,
           "NextQuestId": 3162
         }
       ]
