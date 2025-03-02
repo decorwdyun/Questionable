@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Dalamud.Game.ClientState.Objects;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Ipc;
 using JetBrains.Annotations;
@@ -23,10 +24,15 @@ internal sealed class QuestionableIpc : IDisposable
     private const string IpcStartSingleQuest = "Questionable.StartSingleQuest";
     private const string IpcIsQuestLocked = "Questionable.IsQuestLocked";
     private const string IpcImportQuestPriority = "Questionable.ImportQuestPriority";
+    private const string IpcClearQuestPriority = "Questionable.ClearQuestPriority";
+    private const string IpcAddQuestPriority = "Questionable.AddQuestPriority";
+    private const string IpcInsertQuestPriority = "Questionable.InsertQuestPriority";
+    private const string IpcExportQuestPriority = "Questionable.ExportQuestPriority";
 
     private readonly QuestController _questController;
     private readonly QuestRegistry _questRegistry;
     private readonly QuestFunctions _questFunctions;
+    private readonly PriorityWindow _priorityWindow;
 
     private readonly ICallGateProvider<bool> _isRunning;
     private readonly ICallGateProvider<string?> _getCurrentQuestId;
@@ -36,17 +42,23 @@ internal sealed class QuestionableIpc : IDisposable
     private readonly ICallGateProvider<string, bool> _startSingleQuest;
     private readonly ICallGateProvider<string, bool> _isQuestLocked;
     private readonly ICallGateProvider<string, bool> _importQuestPriority;
+    private readonly ICallGateProvider<string, bool> _addQuestPriority;
+    private readonly ICallGateProvider<bool> _clearQuestPriority;
+    private readonly ICallGateProvider<int, string, bool> _insertQuestPriority;
+    private readonly ICallGateProvider<string> _exportQuestPriority;
 
     public QuestionableIpc(
         QuestController questController,
         EventInfoComponent eventInfoComponent,
         QuestRegistry questRegistry,
         QuestFunctions questFunctions,
+        PriorityWindow priorityWindow,
         IDalamudPluginInterface pluginInterface)
     {
         _questController = questController;
         _questRegistry = questRegistry;
         _questFunctions = questFunctions;
+        _priorityWindow = priorityWindow;
 
         _isRunning = pluginInterface.GetIpcProvider<bool>(IpcIsRunning);
         _isRunning.RegisterFunc(() =>
@@ -68,13 +80,24 @@ internal sealed class QuestionableIpc : IDisposable
 
         _startSingleQuest = pluginInterface.GetIpcProvider<string, bool>(IpcStartSingleQuest);
         _startSingleQuest.RegisterFunc(questId => StartQuest(questId, true));
-        //_startSingleQuest.RegisterFunc((questId) => StartQuest(questController, questRegistry, questId, true));
 
         _isQuestLocked = pluginInterface.GetIpcProvider<string, bool>(IpcIsQuestLocked);
         _isQuestLocked.RegisterFunc((questId) => IsQuestLocked(questId));
 
         _importQuestPriority = pluginInterface.GetIpcProvider<string, bool>(IpcImportQuestPriority);
         _importQuestPriority.RegisterFunc((encodedQuestPriority) => ImportQuestPriority(encodedQuestPriority));
+
+        _importQuestPriority = pluginInterface.GetIpcProvider<string, bool>(IpcAddQuestPriority);
+        _importQuestPriority.RegisterFunc((questId) => AddQuestPriority(questId));
+
+        _clearQuestPriority = pluginInterface.GetIpcProvider<bool>(IpcClearQuestPriority);
+        _clearQuestPriority.RegisterFunc(ClearQuestPriority);
+
+        _insertQuestPriority = pluginInterface.GetIpcProvider<int, string, bool>(IpcInsertQuestPriority);
+        _insertQuestPriority.RegisterFunc((index, questId) => InsertQuestPriority(index, questId));
+
+        _exportQuestPriority = pluginInterface.GetIpcProvider<string>(IpcExportQuestPriority);
+        _exportQuestPriority.RegisterFunc(_priorityWindow.EncodeQuestPriority);
     }
 
     private bool StartQuest(string questId, bool single)
@@ -130,8 +153,34 @@ internal sealed class QuestionableIpc : IDisposable
 
     private bool ImportQuestPriority(string encodedQuestPriority)
     {
-        List<ElementId> questElements = PriorityWindow.ParseQuestPriority(encodedQuestPriority);
+        List<ElementId> questElements = PriorityWindow.DecodeQuestPriority(encodedQuestPriority);
         _questController.ImportQuestPriority(questElements);
+        return true;
+    }
+
+    private bool ClearQuestPriority()
+    {
+        _questController.ClearQuestPriority();
+        return true;
+    }
+    
+    private bool AddQuestPriority(string questId)
+    {
+        if (ElementId.TryFromString(questId, out var elementId) && elementId != null &&
+            _questRegistry.TryGetQuest(elementId, out var quest))
+        {
+            return _questController.AddQuestPriority(elementId);
+        }
+        return true;
+    }
+    
+    private bool InsertQuestPriority(int index, string questId)
+    {
+        if (ElementId.TryFromString(questId, out var elementId) && elementId != null &&
+            _questRegistry.TryGetQuest(elementId, out var quest))
+        {
+            return _questController.InsertQuestPriority(index, elementId);
+        }
         return true;
     }
 

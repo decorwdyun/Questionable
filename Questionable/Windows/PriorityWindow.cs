@@ -76,7 +76,7 @@ internal sealed class PriorityWindow : LWindow
             _questController.ManualPriorityQuests.RemoveAll(q => _questFunctions.IsQuestComplete(q.Id));
         ImGui.SameLine();
         if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Trash, "Clear"))
-            _questController.ManualPriorityQuests.Clear();
+            _questController.ClearQuestPriority();
         ImGui.EndDisabled();
 
         ImGui.Spacing();
@@ -251,10 +251,10 @@ internal sealed class PriorityWindow : LWindow
     private List<ElementId> ParseClipboardItems()
     {
         string? clipboardText = GetClipboardText();
-        return ParseQuestPriority(clipboardText);
+        return DecodeQuestPriority(clipboardText);
     }
 
-    public static List<ElementId> ParseQuestPriority(string? clipboardText)
+    public static List<ElementId> DecodeQuestPriority(string? clipboardText)
     {
         List<ElementId> clipboardItems = new List<ElementId>();
         try
@@ -278,10 +278,15 @@ internal sealed class PriorityWindow : LWindow
         return clipboardItems;
     }
 
+    public string EncodeQuestPriority()
+    {
+        return ClipboardPrefix + Convert.ToBase64String(Encoding.UTF8.GetBytes(
+            string.Join(ClipboardSeparator, _questController.ManualPriorityQuests.Select(x => x.Id.ToString()))));
+    }
+
     private void ExportToClipboard()
     {
-        string clipboardText = ClipboardPrefix + Convert.ToBase64String(Encoding.UTF8.GetBytes(
-            string.Join(ClipboardSeparator, _questController.ManualPriorityQuests.Select(x => x.Id.ToString()))));
+        string clipboardText = EncodeQuestPriority();
         ImGui.SetClipboardText(clipboardText);
         _chatGui.Print("Copied quests to clipboard.", CommandHandler.MessageTag, CommandHandler.TagColor);
     }
