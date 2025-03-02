@@ -199,7 +199,11 @@ internal sealed class QuestController : MiniTaskController<QuestController>
 
         UpdateCurrentQuest();
 
-        if (!_clientState.IsLoggedIn || _condition[ConditionFlag.Unconscious])
+        if (!_clientState.IsLoggedIn)
+        {
+            StopAllDueToConditionFailed("Logged out");
+        }
+        if (_condition[ConditionFlag.Unconscious])
         {
             if (_condition[ConditionFlag.Unconscious] &&
                 _condition[ConditionFlag.SufferingStatusAffliction63] &&
@@ -207,22 +211,20 @@ internal sealed class QuestController : MiniTaskController<QuestController>
             {
                 // ignore, we're in the lahabrea fight
             }
+            else if (_taskQueue.CurrentTaskExecutor is Duty.WaitAutoDutyExecutor)
+            {
+                // ignoring death in a dungeon if it is being run by AD
+            }
             else if (!_taskQueue.AllTasksComplete)
             {
-                Stop("HP = 0");
-                _movementController.Stop();
-                _combatController.Stop("HP = 0");
-                _gatheringController.Stop("HP = 0");
+                StopAllDueToConditionFailed("HP = 0");
             }
         }
         else if (_configuration.General.UseEscToCancelQuesting && _keyState[VirtualKey.ESCAPE])
         {
             if (!_taskQueue.AllTasksComplete)
             {
-                Stop("ESC pressed");
-                _movementController.Stop();
-                _combatController.Stop("ESC pressed");
-                _gatheringController.Stop("ESC pressed");
+                StopAllDueToConditionFailed("ESC pressed");
             }
         }
 
@@ -507,6 +509,14 @@ internal sealed class QuestController : MiniTaskController<QuestController>
             _gatheringQuest = null;
             _lastTaskUpdate = DateTime.Now;
         }
+    }
+
+    private void StopAllDueToConditionFailed(string label)
+    {
+        Stop(label);
+        _movementController.Stop();
+        _combatController.Stop(label);
+        _gatheringController.Stop(label);
     }
 
     private void CheckNextTasks(string label)
