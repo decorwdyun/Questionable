@@ -22,7 +22,7 @@ internal sealed class EventInfoComponent
     [SuppressMessage("ReSharper", "CollectionNeverUpdated.Local")]
     private readonly List<EventQuest> _eventQuests =
     [
-        new("Valentione's Day", [new(5251)], AtDailyReset(new(2025, 2, 17))),
+        new("Valentione's Day", [new(5237), new(5238)], AtDailyReset(new(2025, 3, 17))),
     ];
 
     private readonly QuestData _questData;

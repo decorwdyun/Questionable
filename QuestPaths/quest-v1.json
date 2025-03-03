@@ -303,7 +303,8 @@
                     "RisingStonesSolar",
                     "RoguesGuild",
                     "NotRoguesGuild",
-                    "DockStorehouse"
+                    "DockStorehouse",
+                    "SkipFreeFantasia"
                   ]
                 }
               },
@@ -370,6 +371,12 @@
                     "TerritoryId"
                   ],
                   "additionalProperties": false
+                },
+                "ExtraCondition": {
+                  "type": "string",
+                  "enum": [
+                    "SkipFreeFantasia"
+                  ]
                 }
               },
               "additionalProperties": false

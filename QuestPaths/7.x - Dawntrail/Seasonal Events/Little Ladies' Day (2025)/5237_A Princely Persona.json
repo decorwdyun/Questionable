@@ -27,6 +27,33 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 1052475,
+          "Position": {
+            "X": -22.354492,
+            "Y": 10.13581,
+            "Z": -241.41296
+          },
+          "TerritoryId": 133,
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Gridania",
+          "AethernetShortcut": [
+            "[Gridania] Aetheryte Plaza",
+            "[Gridania] Mih Khetto's Amphitheatre"
+          ],
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "ExtraCondition": "SkipFreeFantasia",
+              "InSameTerritory": true,
+              "InTerritory": [
+                133
+              ]
+            },
+            "StepIf": {
+              "ExtraCondition": "SkipFreeFantasia"
+            }
+          }
+        },
+        {
           "DataId": 1051889,
           "Position": {
             "X": -51.499268,
@@ -35,10 +62,16 @@
           },
           "TerritoryId": 131,
           "InteractionType": "Interact",
+          "AetheryteShortcut": "Ul'dah",
           "AethernetShortcut": [
-            "[Ul'dah] Adventurers' Guild",
+            "[Ul'dah] Aetheryte Plaza",
             "[Ul'dah] Goldsmiths' Guild"
-          ]
+          ],
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
+          }
         }
       ]
     },

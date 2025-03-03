@@ -58,7 +58,7 @@ internal static class Interact
 
             yield return new Task(step.DataId.Value, quest, step.InteractionType,
                 step.TargetTerritoryId != null || quest.Id is SatisfactionSupplyNpcId ||
-                step.SkipConditions is { StepIf.Never: true } || step.InteractionType == EInteractionType.PurchaseItem,
+                step.SkipConditions is { StepIf.Never: true } || step.InteractionType == EInteractionType.PurchaseItem || step.DataId == 1052475,
                 step.PickUpItemId, step.SkipConditions?.StepIf, step.CompletionQuestVariablesFlags);
         }
     }

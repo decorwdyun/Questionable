@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Game.ClientState.Conditions;
@@ -56,9 +55,10 @@ internal static class SkipCondition
         GameFunctions gameFunctions,
         QuestFunctions questFunctions,
         IClientState clientState,
-        ICondition condition) : TaskExecutor<SkipTask>
+        ICondition condition,
+        ExtraConditionUtils extraConditionUtils) : TaskExecutor<SkipTask>
     {
-        protected override unsafe bool Start()
+        protected override bool Start()
         {
             var skipConditions = Task.SkipConditions;
             var step = Task.Step;
@@ -66,6 +66,60 @@ internal static class SkipCondition
 
             logger.LogInformation("Checking skip conditions; {ConfiguredConditions}", string.Join(",", skipConditions));
 
+            if (CheckFlyingCondition(step, skipConditions))
+                return true;
+
+            if (CheckUnlockedMountCondition(skipConditions))
+                return true;
+
+            if (CheckDivingCondition(skipConditions))
+                return true;
+
+            if (CheckTerritoryCondition(skipConditions))
+                return true;
+
+            if (CheckQuestConditions(skipConditions))
+                return true;
+
+            if (CheckTargetableCondition(step, skipConditions))
+                return true;
+
+            if (CheckNameplateCondition(step, skipConditions))
+                return true;
+
+            if (CheckItemCondition(step, skipConditions))
+                return true;
+
+            if (CheckAetheryteCondition(step, skipConditions))
+                return true;
+
+            if (CheckAethernetCondition(step))
+                return true;
+
+            if (CheckQuestWorkConditions(elementId, step))
+                return true;
+
+            if (CheckJobCondition(step))
+                return true;
+
+            if (CheckPositionCondition(skipConditions))
+                return true;
+
+            if (skipConditions.ExtraCondition != null && skipConditions.ExtraCondition != EExtraSkipCondition.None &&
+                extraConditionUtils.MatchesExtraCondition(skipConditions.ExtraCondition.Value))
+            {
+                logger.LogInformation("Skipping step, extra condition {} matches", skipConditions.ExtraCondition);
+                return true;
+            }
+
+            if (CheckPickUpTurnInQuestIds(step))
+                return true;
+
+            return false;
+        }
+
+        private bool CheckFlyingCondition(QuestStep step, SkipStepConditions skipConditions)
+        {
             if (skipConditions.Flying == ELockedSkipCondition.Unlocked &&
                 gameFunctions.IsFlyingUnlocked(step.TerritoryId))
             {
@@ -80,6 +134,11 @@ internal static class SkipCondition
                 return true;
             }
 
+            return false;
+        }
+
+        private unsafe bool CheckUnlockedMountCondition(SkipStepConditions skipConditions)
+        {
             if (skipConditions.Chocobo == ELockedSkipCondition.Unlocked &&
                 PlayerState.Instance()->IsMountUnlocked(1))
             {
@@ -87,18 +146,11 @@ internal static class SkipCondition
                 return true;
             }
 
-            if (skipConditions.Diving == true && condition[ConditionFlag.Diving])
-            {
-                logger.LogInformation("Skipping step, as you're currently diving underwater");
-                return true;
-            }
+            return false;
+        }
 
-            if (skipConditions.Diving == false && !condition[ConditionFlag.Diving])
-            {
-                logger.LogInformation("Skipping step, as you're not currently diving underwater");
-                return true;
-            }
-
+        private bool CheckTerritoryCondition(SkipStepConditions skipConditions)
+        {
             if (skipConditions.InTerritory.Count > 0 &&
                 skipConditions.InTerritory.Contains(clientState.TerritoryType))
             {
@@ -113,6 +165,28 @@ internal static class SkipCondition
                 return true;
             }
 
+            return false;
+        }
+
+        private bool CheckDivingCondition(SkipStepConditions skipConditions)
+        {
+            if (skipConditions.Diving == true && condition[ConditionFlag.Diving])
+            {
+                logger.LogInformation("Skipping step, as you're currently diving underwater");
+                return true;
+            }
+
+            if (skipConditions.Diving == false && !condition[ConditionFlag.Diving])
+            {
+                logger.LogInformation("Skipping step, as you're not currently diving underwater");
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool CheckQuestConditions(SkipStepConditions skipConditions)
+        {
             if (skipConditions.QuestsCompleted.Count > 0 &&
                 skipConditions.QuestsCompleted.All(questFunctions.IsQuestComplete))
             {
@@ -127,6 +201,11 @@ internal static class SkipCondition
                 return true;
             }
 
+            return false;
+        }
+
+        private bool CheckTargetableCondition(QuestStep step, SkipStepConditions skipConditions)
+        {
             if (skipConditions.NotTargetable &&
                 step is { DataId: not null })
             {
@@ -146,6 +225,11 @@ internal static class SkipCondition
                 }
             }
 
+            return false;
+        }
+
+        private unsafe bool CheckNameplateCondition(QuestStep step, SkipStepConditions skipConditions)
+        {
             if (skipConditions.NotNamePlateIconId.Count > 0 &&
                 step is { DataId: not null })
             {
@@ -162,6 +246,11 @@ internal static class SkipCondition
                 }
             }
 
+            return false;
+        }
+
+        private unsafe bool CheckItemCondition(QuestStep step, SkipStepConditions skipConditions)
+        {
             if (skipConditions.Item is { NotInInventory: true } && step is { ItemId: not null })
             {
                 InventoryManager* inventoryManager = InventoryManager.Instance();
@@ -174,6 +263,11 @@ internal static class SkipCondition
                 }
             }
 
+            return false;
+        }
+
+        private bool CheckAetheryteCondition(QuestStep step, SkipStepConditions skipConditions)
+        {
             if (step is
                 {
                     DataId: not null,
@@ -199,6 +293,11 @@ internal static class SkipCondition
                 return true;
             }
 
+            return false;
+        }
+
+        private bool CheckAethernetCondition(QuestStep step)
+        {
             if (step is { DataId: not null, InteractionType: EInteractionType.AttuneAetherCurrent } &&
                 gameFunctions.IsAetherCurrentUnlocked(step.DataId.Value))
             {
@@ -206,6 +305,11 @@ internal static class SkipCondition
                 return true;
             }
 
+            return false;
+        }
+
+        private bool CheckQuestWorkConditions(ElementId elementId, QuestStep step)
+        {
             QuestProgressInfo? questWork = questFunctions.GetQuestProgressInfo(elementId);
             if (questWork != null)
             {
@@ -249,6 +353,11 @@ internal static class SkipCondition
                 }
             }
 
+            return false;
+        }
+
+        private bool CheckJobCondition(QuestStep step)
+        {
             if (step is { RequiredCurrentJob.Count: > 0 })
             {
                 List<EClassJob> expectedJobs =
@@ -263,6 +372,11 @@ internal static class SkipCondition
                 }
             }
 
+            return false;
+        }
+
+        private bool CheckPositionCondition(SkipStepConditions skipConditions)
+        {
             if (skipConditions.NearPosition is { } nearPosition &&
                 clientState.TerritoryType == nearPosition.TerritoryId)
             {
@@ -274,19 +388,11 @@ internal static class SkipCondition
                 }
             }
 
-            if (skipConditions.ExtraCondition != null && skipConditions.ExtraCondition != EExtraSkipCondition.None)
-            {
-                var position = clientState.LocalPlayer?.Position;
-                if (position != null &&
-                    clientState.TerritoryType != 0 &&
-                    MatchesExtraCondition(skipConditions.ExtraCondition.Value, position.Value,
-                        clientState.TerritoryType))
-                {
-                    logger.LogInformation("Skipping step, extra condition {} matches", skipConditions.ExtraCondition);
-                    return true;
-                }
-            }
+            return false;
+        }
 
+        private bool CheckPickUpTurnInQuestIds(QuestStep step)
+        {
             if (step.PickUpQuestId != null && questFunctions.IsQuestAcceptedOrComplete(step.PickUpQuestId))
             {
                 logger.LogInformation("Skipping step, as we have already picked up the relevant quest");
@@ -300,20 +406,6 @@ internal static class SkipCondition
             }
 
             return false;
-        }
-
-        private static bool MatchesExtraCondition(EExtraSkipCondition condition, Vector3 position, ushort territoryType)
-        {
-            return condition switch
-            {
-                EExtraSkipCondition.WakingSandsMainArea => territoryType == 212 && position.X < 24,
-                EExtraSkipCondition.WakingSandsSolar => territoryType == 212 && position.X >= 24,
-                EExtraSkipCondition.RisingStonesSolar => territoryType == 351 && position.Z <= -28,
-                EExtraSkipCondition.RoguesGuild => territoryType == 129 && position.Y <= -115,
-                EExtraSkipCondition.NotRoguesGuild => territoryType == 129 && position.Y > -115,
-                EExtraSkipCondition.DockStorehouse => territoryType == 137 && position.Y <= -20,
-                _ => throw new ArgumentOutOfRangeException(nameof(condition), condition, null)
-            };
         }
 
         public override ETaskResult Update() => ETaskResult.SkipRemainingTasksForStep;
