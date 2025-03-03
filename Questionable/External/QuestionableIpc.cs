@@ -7,6 +7,7 @@ using Dalamud.Plugin.Ipc;
 using JetBrains.Annotations;
 using Questionable.Controller;
 using Questionable.Functions;
+using Questionable.Model;
 using Questionable.Model.Questing;
 using Questionable.Windows.QuestComponents;
 
@@ -115,7 +116,7 @@ internal sealed class QuestionableIpc : IDisposable
     private bool IsQuestLocked(string questId)
     {
         if (ElementId.TryFromString(questId, out var elementId) && elementId != null &&
-            _questRegistry.TryGetQuest(elementId, out var quest))
+            _questRegistry.TryGetQuest(elementId, out _))
         {
             return _questFunctions.IsQuestLocked(elementId);
         }
@@ -124,6 +125,7 @@ internal sealed class QuestionableIpc : IDisposable
 
     public void Dispose()
     {
+        _isQuestLocked.UnregisterFunc();
         _startSingleQuest.UnregisterFunc();
         _startQuest.UnregisterFunc();
         _getCurrentlyActiveEventQuests.UnregisterFunc();

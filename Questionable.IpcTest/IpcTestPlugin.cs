@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Numerics;
 using Dalamud.Game.Command;
 using Dalamud.Game.Text.SeStringHandling;
@@ -50,6 +51,8 @@ public sealed class IpcTestPlugin : IDalamudPlugin
         _commandManager.RemoveHandler("/qipc");
     }
 
+    [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local")]
+    [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
     private sealed class IpcStepData
     {
         public required string InteractionType { get; set; }
