@@ -52,7 +52,10 @@
         {
           "TerritoryId": 1028,
           "InteractionType": "Duty",
-          "ContentFinderConditionId": 802,
+          "DutyOptions": {
+            "ContentFinderConditionId": 802,
+            "Enabled": false
+          },
           "Comment": "The Dark Inside"
         }
       ]
