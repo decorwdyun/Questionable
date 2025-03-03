@@ -41,7 +41,14 @@
             5537,
             5538
           ],
-          "$": "0 0 0 0 0 0 -> 16 48 0 0 0 128"
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 2006870,
@@ -56,6 +63,14 @@
           "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
             5539
+          ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
           ]
         }
       ]
