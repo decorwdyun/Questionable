@@ -460,32 +460,7 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
                             FontAwesomeIcon.Times, ImGuiColors.DalamudRed);
                     }
                     else if (dutyInfo.Notes.Count > 0)
-                    {
-                        using var color = new ImRaii.Color();
-                        if (!dutyInfo.EnabledByDefault)
-                            color.Push(ImGuiCol.TextDisabled, ImGuiColors.DalamudYellow);
-                        else
-                            color.Push(ImGuiCol.TextDisabled, ImGuiColors.ParsedBlue);
-
-                        ImGui.SameLine();
-                        using (ImRaii.PushFont(UiBuilder.IconFont))
-                        {
-                            if (!dutyInfo.EnabledByDefault)
-                                ImGui.TextDisabled(FontAwesomeIcon.ExclamationTriangle.ToIconString());
-                            else
-                                ImGui.TextDisabled(FontAwesomeIcon.InfoCircle.ToIconString());
-                        }
-
-                        if (ImGui.IsItemHovered())
-                        {
-                            using var _ = ImRaii.Tooltip();
-
-                            ImGui.TextColored(ImGuiColors.DalamudYellow,
-                                "While testing, the following issues have been found:");
-                            foreach (string note in dutyInfo.Notes)
-                                ImGui.BulletText(note);
-                        }
-                    }
+                        DrawNotes(dutyInfo.EnabledByDefault, dutyInfo.Notes);
                 }
 
                 if (ImGui.TableNextColumn())

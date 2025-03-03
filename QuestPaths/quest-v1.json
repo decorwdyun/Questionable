@@ -1238,13 +1238,35 @@
           },
           "then": {
             "properties": {
-              "ContentFinderConditionId": {
-                "type": "integer",
-                "exclusiveMinimum": 0,
-                "exclusiveMaximum": 3000
-              },
-              "AutoDutyEnabled": {
-                "type": "boolean"
+              "DutyOptions": {
+                "type": "object",
+                "properties": {
+                  "ContentFinderConditionId": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "exclusiveMaximum": 3000
+                  },
+                  "Enabled": {
+                    "type": "boolean"
+                  },
+                  "Notes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "TestedAutoDutyVersion": {
+                    "type": "string",
+                    "pattern": "^0\\.\\d+\\.\\d+\\.\\d+$"
+                  },
+                  "$": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "ContentFinderConditionId",
+                  "Enabled"
+                ]
               },
               "DataId": {
                 "type": "null"
@@ -1254,7 +1276,7 @@
               }
             },
             "required": [
-              "ContentFinderConditionId"
+              "DutyOptions"
             ]
           }
         },

@@ -122,8 +122,14 @@
         {
           "TerritoryId": 1191,
           "InteractionType": "Duty",
-          "ContentFinderConditionId": 1008,
-          "AutoDutyEnabled": true
+          "DutyOptions": {
+            "ContentFinderConditionId": 1008,
+            "Enabled": true,
+            "Notes": [
+              "(boss 2) Requires vbm's auto-turn gaze option",
+              "(boss 3) Dashes (such as on SMN) will dash into the hole"
+            ]
+          }
         }
       ]
     },

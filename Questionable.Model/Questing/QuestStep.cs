@@ -73,8 +73,7 @@ public sealed class QuestStep
     public float? CombatDelaySecondsAtStart { get; set; }
 
     public JumpDestination? JumpDestination { get; set; }
-    public uint? ContentFinderConditionId { get; set; }
-    public bool AutoDutyEnabled { get; set; }
+    public DutyOptions? DutyOptions { get; set; }
     public SinglePlayerDutyOptions? SinglePlayerDutyOptions { get; set; }
     public byte SinglePlayerDutyIndex => SinglePlayerDutyOptions?.Index ?? 0;
     public SkipConditions? SkipConditions { get; set; }

@@ -165,8 +165,8 @@ internal sealed class QuestRegistry
             foreach (var dutyStep in quest.AllSteps().Where(x =>
                          x.Step.InteractionType is EInteractionType.Duty or EInteractionType.SinglePlayerDuty))
             {
-                if (dutyStep.Step is { InteractionType: EInteractionType.Duty, ContentFinderConditionId: not null })
-                    _contentFinderConditionIds[dutyStep.Step.ContentFinderConditionId!.Value] =
+                if (dutyStep.Step is { InteractionType: EInteractionType.Duty, DutyOptions: { } dutyOptions })
+                    _contentFinderConditionIds[dutyOptions.ContentFinderConditionId] =
                         (quest.Id, dutyStep.Step);
                 else if (dutyStep.Step.InteractionType == EInteractionType.SinglePlayerDuty &&
                          _territoryData.TryGetContentFinderConditionForSoloInstance(quest.Id,
@@ -262,15 +262,15 @@ internal sealed class QuestRegistry
             .ToList();
     }
 
-    public bool TryGetDutyByContentFinderConditionId(uint cfcId, out bool autoDutyEnabledByDefault)
+    public bool TryGetDutyByContentFinderConditionId(uint cfcId, [NotNullWhen(true)] out DutyOptions? dutyOptions)
     {
         if (_contentFinderConditionIds.TryGetValue(cfcId, out var value))
         {
-            autoDutyEnabledByDefault = value.Step.AutoDutyEnabled;
-            return true;
+            dutyOptions = value.Step.DutyOptions;
+            return dutyOptions != null;
         }
 
-        autoDutyEnabledByDefault = false;
+        dutyOptions = null;
         return false;
     }
 }

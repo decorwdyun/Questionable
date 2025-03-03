@@ -62,6 +62,7 @@ public static class RoslynShortcuts
                 ComplexCombatData complexCombatData => complexCombatData.ToExpressionSyntax(),
                 QuestWorkValue questWorkValue => questWorkValue.ToExpressionSyntax(),
                 List<QuestWorkValue> list => list.ToExpressionSyntax(), // TODO fix in AssignmentList
+                DutyOptions dutyOptions => dutyOptions.ToExpressionSyntax(),
                 SinglePlayerDutyOptions dutyOptions => dutyOptions.ToExpressionSyntax(),
                 SkipConditions skipConditions => skipConditions.ToExpressionSyntax(),
                 SkipStepConditions skipStepConditions => skipStepConditions.ToExpressionSyntax(),

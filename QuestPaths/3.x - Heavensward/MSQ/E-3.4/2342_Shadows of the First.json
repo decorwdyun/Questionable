@@ -57,8 +57,14 @@
         {
           "TerritoryId": 155,
           "InteractionType": "Duty",
-          "ContentFinderConditionId": 182,
-          "AutoDutyEnabled": false
+          "DutyOptions": {
+            "ContentFinderConditionId": 182,
+            "Enabled": false,
+            "Notes": [
+              "(after boss 1) the drawbridges being up will lead you to die from the spikes",
+              "(after boss 1) the lift isn't working properly"
+            ]
+          }
         }
       ]
     },
