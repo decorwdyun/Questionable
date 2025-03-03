@@ -36,6 +36,10 @@
           },
           "TerritoryId": 135,
           "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": "0.1.0.1"
+          },
           "AetheryteShortcut": "Lower La Noscea - Moraby Drydocks"
         }
       ]

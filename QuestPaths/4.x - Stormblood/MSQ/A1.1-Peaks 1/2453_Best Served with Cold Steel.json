@@ -66,6 +66,10 @@
           },
           "TerritoryId": 612,
           "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": "0.1.0.1"
+          },
           "AetheryteShortcut": "Fringes - Castrum Oriens"
         }
       ]
