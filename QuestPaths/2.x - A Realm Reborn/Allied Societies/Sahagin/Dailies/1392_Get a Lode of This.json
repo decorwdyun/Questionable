@@ -71,16 +71,6 @@
                     "KillEnemyDataIds": [
                         2843
                     ],
-                    "RequiredQuestVariables": [
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        [
-                            128
-                        ]
-                    ],
                     "CompletionQuestVariablesFlags": [
                         null,
                         null,
@@ -102,16 +92,6 @@
                     "EnemySpawnType": "AfterInteraction",
                     "KillEnemyDataIds": [
                         2843
-                    ],
-                    "RequiredQuestVariables": [
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        [
-                            192
-                        ]
                     ]
                 }
             ]
