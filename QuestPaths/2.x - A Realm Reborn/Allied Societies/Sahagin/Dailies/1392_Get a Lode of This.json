@@ -48,15 +48,7 @@
                     "KillEnemyDataIds": [
                         2843
                     ],
-                    "Fly": true,
-                    "CompletionQuestVariablesFlags": [
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        128
-                    ]
+                    "Fly": true
                 },
                 {
                     "DataId": 2003765,
@@ -70,14 +62,6 @@
                     "EnemySpawnType": "AfterInteraction",
                     "KillEnemyDataIds": [
                         2843
-                    ],
-                    "CompletionQuestVariablesFlags": [
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        64
                     ]
                 },
                 {
