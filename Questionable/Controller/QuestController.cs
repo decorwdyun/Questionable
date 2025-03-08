@@ -325,7 +325,8 @@ internal sealed class QuestController : MiniTaskController<QuestController>
                         .Select(x =>
                             ((ElementId?, byte)?)(x.Id, _questFunctions.GetQuestProgressInfo(x.Id)?.Sequence ?? 0))
                         .FirstOrDefault() ??
-                    _questFunctions.GetCurrentQuest();
+                    _questFunctions.GetCurrentQuest(allowNewMsq: AutomationType != EAutomationType.SingleQuestB);
+
                 if (currentQuestId == null || currentQuestId.Value == 0)
                 {
                     if (_startedQuest != null)
@@ -411,7 +412,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
             {
                 questToRun.SetSequence(currentSequence);
                 CheckNextTasks(
-                    $"New sequence {questToRun == _startedQuest}/{_questFunctions.GetCurrentQuestInternal()}");
+                    $"New sequence {questToRun == _startedQuest}/{_questFunctions.GetCurrentQuestInternal(true)}");
             }
 
             var q = questToRun.Quest;
