@@ -516,6 +516,26 @@ internal sealed unsafe class GameFunctions
     /// </summary>
     public void AbandonDuty() => _abandonDuty(false);
 
+    public int DumpUnlockLinks()
+    {
+        UIState* uiState = UIState.Instance();
+        if (uiState == null)
+        {
+            _logger.LogError("Could not query unlock links");
+            return -1;
+        }
+
+        List<uint> unlockedUnlockLinks = [];
+        for (uint unlockLink = 0; unlockLink < uiState->UnlockLinkBitmask.Length * 8; ++unlockLink)
+        {
+            if (uiState->IsUnlockLinkUnlocked(unlockLink))
+                unlockedUnlockLinks.Add(unlockLink);
+        }
+
+        _logger.LogInformation("Unlocked unlock links: {UnlockedUnlockLinks}", string.Join(", ", unlockedUnlockLinks));
+        return unlockedUnlockLinks.Count;
+    }
+
 #if false
     private byte ExecuteCommand(int id, int a, int b, int c, int d)
     {
