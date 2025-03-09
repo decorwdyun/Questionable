@@ -65,7 +65,8 @@
           },
           "TerritoryId": 152,
           "InteractionType": "Emote",
-          "Emote": "dance"
+          "Emote": "dance",
+          "DelaySecondsAtStart": 1
         }
       ]
     },
