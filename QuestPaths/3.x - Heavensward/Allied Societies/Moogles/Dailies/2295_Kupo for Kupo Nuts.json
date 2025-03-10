@@ -60,7 +60,15 @@
                                 "MaximumDistance": 50
                             }
                         }
-                    }
+                    },
+                    "CompletionQuestVariablesFlags": [
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        128
+                    ]
                 },
                 {
                     "DataId": 1017366,
@@ -73,7 +81,15 @@
                     "InteractionType": "Say",
                     "ChatMessage": {
                         "Key": "TEXT_BANMOG202_02295_SYSTEM_000_019"
-                    }
+                    },
+                    "CompletionQuestVariablesFlags": [
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        64
+                    ]
                 },
                 {
                     "DataId": 1017368,
@@ -87,7 +103,15 @@
                     "Fly": true,
                     "ChatMessage": {
                         "Key": "TEXT_BANMOG202_02295_SYSTEM_000_019"
-                    }
+                    },
+                    "CompletionQuestVariablesFlags": [
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        16
+                    ]
                 },
                 {
                     "DataId": 1017367,

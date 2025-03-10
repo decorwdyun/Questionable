@@ -94,16 +94,6 @@
                     "TerritoryId": 400,
                     "InteractionType": "Interact",
                     "Fly": true,
-                    "RequiredQuestVariables": [
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        [
-                            32
-                        ]
-                    ],
                     "CompletionQuestVariablesFlags": [
                         null,
                         null,
@@ -122,17 +112,7 @@
                     },
                     "TerritoryId": 400,
                     "InteractionType": "Interact",
-                    "Fly": true,
-                    "RequiredQuestVariables": [
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        [
-                            96
-                        ]
-                    ]
+                    "Fly": true
                 }
             ]
         },
