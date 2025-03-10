@@ -77,14 +77,6 @@
           "TerritoryId": 400,
           "InteractionType": "Interact",
           "Fly": true,
-          "RequiredQuestVariables": [
-            null,
-            [16],
-            null,
-            null,
-            null,
-            null
-          ],
           "AetheryteShortcut": "The Churning Mists - Moghome",
           "SkipConditions": {
             "AetheryteShortcutIf": {

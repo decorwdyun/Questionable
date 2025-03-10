@@ -142,15 +142,7 @@
             },
             "TerritoryId": 813,
             "InteractionType": "Interact",
-            "Fly": true,
-            "RequiredQuestVariables": [
-                null,
-                null,
-                [48],
-                null,
-                null,
-                null
-            ]
+            "Fly": true
           },
           {
             "DataId": 2011068,
@@ -160,15 +152,7 @@
                 "Z": -116.68579
             },
             "TerritoryId": 813,
-            "InteractionType": "Interact",
-            "RequiredQuestVariables": [
-                [16],
-                [16],
-                [32],
-                null,
-                null,
-                [32]
-            ]
+            "InteractionType": "Interact"
           },
           {
             "DataId": 2011067,
@@ -178,15 +162,7 @@
                 "Z": -115.58716
             },
             "TerritoryId": 813,
-            "InteractionType": "Interact",
-            "RequiredQuestVariables": [
-                [33],
-                [16],
-                [16],
-                null,
-                null,
-                [96]
-            ]
+            "InteractionType": "Interact"
           }
         ]   
       },
