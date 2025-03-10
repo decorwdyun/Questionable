@@ -33,7 +33,6 @@ internal sealed class QuestionableIpc : IDisposable
     private readonly QuestController _questController;
     private readonly QuestRegistry _questRegistry;
     private readonly QuestFunctions _questFunctions;
-    private readonly PriorityWindow _priorityWindow;
 
     private readonly ICallGateProvider<bool> _isRunning;
     private readonly ICallGateProvider<string?> _getCurrentQuestId;
@@ -59,7 +58,6 @@ internal sealed class QuestionableIpc : IDisposable
         _questController = questController;
         _questRegistry = questRegistry;
         _questFunctions = questFunctions;
-        _priorityWindow = priorityWindow;
 
         _isRunning = pluginInterface.GetIpcProvider<bool>(IpcIsRunning);
         _isRunning.RegisterFunc(() =>
@@ -83,22 +81,22 @@ internal sealed class QuestionableIpc : IDisposable
         _startSingleQuest.RegisterFunc(questId => StartQuest(questId, true));
 
         _isQuestLocked = pluginInterface.GetIpcProvider<string, bool>(IpcIsQuestLocked);
-        _isQuestLocked.RegisterFunc((questId) => IsQuestLocked(questId));
+        _isQuestLocked.RegisterFunc(IsQuestLocked);
 
         _importQuestPriority = pluginInterface.GetIpcProvider<string, bool>(IpcImportQuestPriority);
-        _importQuestPriority.RegisterFunc((encodedQuestPriority) => ImportQuestPriority(encodedQuestPriority));
+        _importQuestPriority.RegisterFunc(ImportQuestPriority);
 
-        _importQuestPriority = pluginInterface.GetIpcProvider<string, bool>(IpcAddQuestPriority);
-        _importQuestPriority.RegisterFunc((questId) => AddQuestPriority(questId));
+        _addQuestPriority = pluginInterface.GetIpcProvider<string, bool>(IpcAddQuestPriority);
+        _addQuestPriority.RegisterFunc(AddQuestPriority);
 
         _clearQuestPriority = pluginInterface.GetIpcProvider<bool>(IpcClearQuestPriority);
         _clearQuestPriority.RegisterFunc(ClearQuestPriority);
 
         _insertQuestPriority = pluginInterface.GetIpcProvider<int, string, bool>(IpcInsertQuestPriority);
-        _insertQuestPriority.RegisterFunc((index, questId) => InsertQuestPriority(index, questId));
+        _insertQuestPriority.RegisterFunc(InsertQuestPriority);
 
         _exportQuestPriority = pluginInterface.GetIpcProvider<string>(IpcExportQuestPriority);
-        _exportQuestPriority.RegisterFunc(_priorityWindow.EncodeQuestPriority);
+        _exportQuestPriority.RegisterFunc(priorityWindow.EncodeQuestPriority);
     }
 
     private bool StartQuest(string questId, bool single)
@@ -149,6 +147,7 @@ internal sealed class QuestionableIpc : IDisposable
         {
             return _questFunctions.IsQuestLocked(elementId);
         }
+
         return true;
     }
 
@@ -164,29 +163,36 @@ internal sealed class QuestionableIpc : IDisposable
         _questController.ClearQuestPriority();
         return true;
     }
-    
+
     private bool AddQuestPriority(string questId)
     {
         if (ElementId.TryFromString(questId, out var elementId) && elementId != null &&
-            _questRegistry.TryGetQuest(elementId, out var quest))
+            _questRegistry.IsKnownQuest(elementId))
         {
             return _questController.AddQuestPriority(elementId);
         }
+
         return true;
     }
-    
+
     private bool InsertQuestPriority(int index, string questId)
     {
         if (ElementId.TryFromString(questId, out var elementId) && elementId != null &&
-            _questRegistry.TryGetQuest(elementId, out var quest))
+            _questRegistry.IsKnownQuest(elementId))
         {
             return _questController.InsertQuestPriority(index, elementId);
         }
+
         return true;
     }
 
     public void Dispose()
     {
+        _exportQuestPriority.UnregisterFunc();
+        _insertQuestPriority.UnregisterFunc();
+        _clearQuestPriority.UnregisterFunc();
+        _addQuestPriority.UnregisterFunc();
+        _importQuestPriority.UnregisterFunc();
         _isQuestLocked.UnregisterFunc();
         _startSingleQuest.UnregisterFunc();
         _startQuest.UnregisterFunc();
