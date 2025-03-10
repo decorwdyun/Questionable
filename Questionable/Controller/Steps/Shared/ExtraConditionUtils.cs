@@ -2,6 +2,7 @@ using System;
 using System.Numerics;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using Microsoft.Extensions.Logging;
 using Questionable.Model.Questing;
 
@@ -67,6 +68,13 @@ internal sealed class ExtraConditionUtils
         if (!foundFestival)
         {
             _logger.LogInformation("Skipping fantasia step, as free fantasia moogle is not available");
+            return true;
+        }
+
+        UIState* uiState = UIState.Instance();
+        if (uiState != null && uiState->IsUnlockLinkUnlocked(505))
+        {
+            _logger.LogInformation("Already picked up free fantasia");
             return true;
         }
 

@@ -281,9 +281,13 @@ internal sealed class QuestController : MiniTaskController<QuestController>
                     _logger.LogInformation("Next quest {QuestId} accepted or completed",
                         _nextQuest.Quest.Id);
 
-                    // if (_nextQuest.Quest.Id is LeveId)
-                    //  _startedQuest = _nextQuest;
+                    if (AutomationType == EAutomationType.SingleQuestA)
+                    {
+                        _startedQuest = _nextQuest;
+                        AutomationType = EAutomationType.SingleQuestB;
+                    }
 
+                    _logger.LogDebug("Started: {StartedQuest}", _startedQuest?.Quest.Id);
                     _nextQuest = null;
                 }
             }
@@ -321,7 +325,8 @@ internal sealed class QuestController : MiniTaskController<QuestController>
                         .Select(x =>
                             ((ElementId?, byte)?)(x.Id, _questFunctions.GetQuestProgressInfo(x.Id)?.Sequence ?? 0))
                         .FirstOrDefault() ??
-                    _questFunctions.GetCurrentQuest();
+                    _questFunctions.GetCurrentQuest(allowNewMsq: AutomationType != EAutomationType.SingleQuestB);
+
                 if (currentQuestId == null || currentQuestId.Value == 0)
                 {
                     if (_startedQuest != null)
@@ -349,7 +354,15 @@ internal sealed class QuestController : MiniTaskController<QuestController>
                             Stop("Quest level too high");
                         }
                         else
+                        {
+                            if (AutomationType == EAutomationType.SingleQuestB)
+                            {
+                                _logger.LogInformation("Single quest is finished");
+                                AutomationType = EAutomationType.Manual;
+                            }
+
                             CheckNextTasks("Different Quest");
+                        }
                     }
                     else if (_startedQuest != null)
                     {
@@ -399,7 +412,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
             {
                 questToRun.SetSequence(currentSequence);
                 CheckNextTasks(
-                    $"New sequence {questToRun == _startedQuest}/{_questFunctions.GetCurrentQuestInternal()}");
+                    $"New sequence {questToRun == _startedQuest}/{_questFunctions.GetCurrentQuestInternal(true)}");
             }
 
             var q = questToRun.Quest;
@@ -521,7 +534,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
 
     private void CheckNextTasks(string label)
     {
-        if (AutomationType == EAutomationType.Automatic)
+        if (AutomationType is EAutomationType.Automatic or EAutomationType.SingleQuestA or EAutomationType.SingleQuestB)
         {
             using var scope = _logger.BeginScope(label);
 
@@ -597,10 +610,17 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         ExecuteNextStep();
     }
 
+    public void StartGatheringQuest(string label)
+    {
+        using var scope = _logger.BeginScope($"GQ/{label}");
+        AutomationType = EAutomationType.GatheringOnly;
+        ExecuteNextStep();
+    }
+
     public void StartSingleQuest(string label)
     {
         using var scope = _logger.BeginScope($"SQ/{label}");
-        AutomationType = EAutomationType.CurrentQuestOnly;
+        AutomationType = EAutomationType.SingleQuestA;
         ExecuteNextStep();
     }
 
@@ -881,6 +901,8 @@ internal sealed class QuestController : MiniTaskController<QuestController>
     {
         Manual,
         Automatic,
-        CurrentQuestOnly,
+        GatheringOnly,
+        SingleQuestA,
+        SingleQuestB,
     }
 }

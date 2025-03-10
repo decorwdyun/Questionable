@@ -44,9 +44,15 @@ internal static class NextQuest
     {
         protected override bool Start()
         {
-            if (questFunctions.IsQuestLocked(Task.NextQuestId, Task.CurrentQuestId))
+            if (questController.AutomationType is QuestController.EAutomationType.SingleQuestA or QuestController.EAutomationType.SingleQuestB)
+            {
+                logger.LogInformation("Won't set next quest to {QuestId}, automation type is CurrentQuestOnly", Task.NextQuestId);
+                questController.SetNextQuest(null);
+            }
+            else if (questFunctions.IsQuestLocked(Task.NextQuestId, Task.CurrentQuestId))
             {
                 logger.LogInformation("Can't set next quest to {QuestId}, quest is locked", Task.NextQuestId);
+                questController.SetNextQuest(null);
             }
             else if (questRegistry.TryGetQuest(Task.NextQuestId, out Quest? quest))
             {

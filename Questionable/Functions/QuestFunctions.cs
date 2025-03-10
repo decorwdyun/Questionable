@@ -56,9 +56,9 @@ internal sealed unsafe class QuestFunctions
         _gameGui = gameGui;
     }
 
-    public (ElementId? CurrentQuest, byte Sequence) GetCurrentQuest()
+    public (ElementId? CurrentQuest, byte Sequence) GetCurrentQuest(bool allowNewMsq = true)
     {
-        var (currentQuest, sequence) = GetCurrentQuestInternal();
+        var (currentQuest, sequence) = GetCurrentQuestInternal(allowNewMsq);
         PlayerState* playerState = PlayerState.Instance();
 
         if (currentQuest == null || currentQuest.Value == 0)
@@ -110,7 +110,7 @@ internal sealed unsafe class QuestFunctions
         return (currentQuest, sequence);
     }
 
-    public (ElementId? CurrentQuest, byte Sequence) GetCurrentQuestInternal()
+    public (ElementId? CurrentQuest, byte Sequence) GetCurrentQuestInternal(bool allowNewMsq)
     {
         var questManager = QuestManager.Instance();
         if (questManager != null)
@@ -122,7 +122,12 @@ internal sealed unsafe class QuestFunctions
                 msqQuest = default;
 
             if (msqQuest.CurrentQuest != null && !IsQuestAccepted(msqQuest.CurrentQuest))
-                return msqQuest;
+            {
+                if (allowNewMsq)
+                    return msqQuest;
+                else
+                    msqQuest = default;
+            }
 
             // Use the quests in the same order as they're shown in the to-do list, e.g. if the MSQ is the first item,
             // do the MSQ; if a side quest is the first item do that side quest.

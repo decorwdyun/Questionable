@@ -161,6 +161,14 @@ internal sealed class CommandHandler : IDisposable
             case "abandon-duty":
                 _gameFunctions.AbandonDuty();
                 break;
+
+            case "unlock-links":
+                int foundUnlockLinks = _gameFunctions.DumpUnlockLinks();
+                if (foundUnlockLinks >= 0)
+                    _chatGui.Print($"Saved {foundUnlockLinks} unlock links to log.", MessageTag, TagColor);
+                else
+                    _chatGui.PrintError("Could not query unlock links.", MessageTag, TagColor);
+                break;
         }
     }
 

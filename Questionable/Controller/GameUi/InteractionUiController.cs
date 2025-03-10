@@ -525,7 +525,7 @@ internal sealed class InteractionUiController : IDisposable
                             return null;
 
                         _questController.GatheringQuest.SetSequence(1);
-                        _questController.StartSingleQuest("SatisfactionSupply turn in");
+                        _questController.StartGatheringQuest("SatisfactionSupply turn in");
                     }
 
                     return i;

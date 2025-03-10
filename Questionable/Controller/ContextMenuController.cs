@@ -181,7 +181,7 @@ internal sealed class ContextMenuController : IDisposable
                 }
             ];
             _questController.SetGatheringQuest(quest);
-            _questController.StartSingleQuest("SatisfactionSupply prepare gathering");
+            _questController.StartGatheringQuest("SatisfactionSupply prepare gathering");
         }
         else
             _chatGui.PrintError($"No associated quest ({info.QuestId}).", "Questionable");
