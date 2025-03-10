@@ -119,9 +119,6 @@
                     "InteractionType": "Craft",
                     "ItemId": 8101,
                     "ItemCount": 2,
-                    "RequiredCurrentJob": [
-                        "DoH"
-                    ],
                     "SkipConditions": {
                         "StepIf": {
                             "Item": {
