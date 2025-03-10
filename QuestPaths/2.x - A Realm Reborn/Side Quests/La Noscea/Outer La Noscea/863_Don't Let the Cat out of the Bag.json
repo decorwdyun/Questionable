@@ -1,0 +1,66 @@
+{
+    "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
+    "Author": "skiaz",
+    "QuestSequence": [
+      {
+        "Sequence": 0,
+        "Steps": [
+          {
+            "DataId": 1006331,
+            "Position": {
+                "X": -144.15204,
+                "Y": 64.989944,
+                "Z": -209.88788
+            },
+            "TerritoryId": 180,
+            "InteractionType": "AcceptQuest",            
+            "Fly": true
+          }
+        ]
+      },
+      {
+        "Sequence": 1,
+        "Steps": [
+          {
+            "DataId": 2269,
+            "Position": {
+                "X": -268.5741,
+                "Y": 64.49246,
+                "Z": -322.04163
+            },
+            "TerritoryId": 180,
+            "InteractionType": "WalkTo",            
+            "Fly": true
+          },
+          {
+            "DataId": 1006331,
+            "Position": {
+                "X": -268.5741,
+                "Y": 64.49246,
+                "Z": -322.04163
+            },
+            "TerritoryId": 180,
+            "InteractionType": "WaitForManualProgress",
+            "Comment": "Weaken the Coerl and use quest item on it (BLU: 'Missile' works great here, if overleveled)"
+          }
+        ]
+      },
+      {
+        "Sequence": 255,
+        "Steps": [
+          {
+            "DataId": 1006331,
+            "Position": {
+                "X": -144.15204,
+                "Y": 64.989944,
+                "Z": -209.88788
+            },
+            "TerritoryId": 180,
+            "InteractionType": "CompleteQuest",
+            "Fly": true
+          }
+        ]
+      }
+    ]
+  }
+  
