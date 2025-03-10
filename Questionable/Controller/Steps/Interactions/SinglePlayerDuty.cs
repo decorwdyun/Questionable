@@ -6,6 +6,8 @@ using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using FFXIVClientStructs.FFXIV.Client.Game.Event;
+using FFXIVClientStructs.FFXIV.Client.Game.InstanceContent;
 using Questionable.Controller.Steps.Common;
 using Questionable.Controller.Steps.Shared;
 using Questionable.Data;
@@ -17,7 +19,11 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class SinglePlayerDuty
 {
-    public const int LahabreaTerritoryId = 1052;
+    private static class SpecialTerritories
+    {
+        public const ushort Lahabrea = 1052;
+        public const ushort ItsProbablyATrap = 665;
+    }
 
     internal sealed class Factory(
         BossModIpc bossModIpc,
@@ -32,23 +38,41 @@ internal static class SinglePlayerDuty
 
             if (bossModIpc.IsConfiguredToRunSoloInstance(quest.Id, step.SinglePlayerDutyOptions))
             {
-                if (!territoryData.TryGetContentFinderConditionForSoloInstance(quest.Id, step.SinglePlayerDutyIndex, out var cfcData))
+                if (!territoryData.TryGetContentFinderConditionForSoloInstance(quest.Id, step.SinglePlayerDutyIndex,
+                        out var cfcData))
                     throw new TaskException("Failed to get content finder condition for solo instance");
 
                 yield return new StartSinglePlayerDuty(cfcData.ContentFinderConditionId);
                 yield return new EnableAi();
-                if (cfcData.TerritoryId == LahabreaTerritoryId)
+                if (cfcData.TerritoryId == SpecialTerritories.Lahabrea)
                 {
                     yield return new SetTarget(14643);
-                    yield return new WaitCondition.Task(() => condition[ConditionFlag.Unconscious] || clientState.TerritoryType != LahabreaTerritoryId, "Wait(death)");
+                    yield return new WaitCondition.Task(
+                        () => condition[ConditionFlag.Unconscious] || clientState.TerritoryType != SpecialTerritories.Lahabrea,
+                        "Wait(death)");
                     yield return new DisableAi();
-                    yield return new WaitCondition.Task(() => !condition[ConditionFlag.Unconscious] || clientState.TerritoryType != LahabreaTerritoryId, "Wait(resurrection)");
+                    yield return new WaitCondition.Task(
+                        () => !condition[ConditionFlag.Unconscious] || clientState.TerritoryType != SpecialTerritories.Lahabrea,
+                        "Wait(resurrection)");
                     yield return new EnableAi();
                 }
+                else if (cfcData.TerritoryId == SpecialTerritories.ItsProbablyATrap)
+                {
+                    yield return new WaitCondition.Task(() => DutyActionsAvailable() || clientState.TerritoryType != SpecialTerritories.ItsProbablyATrap,
+                        "Wait(Phase 2)");
+                    yield return new EnableAi(true);
+                }
+
                 yield return new WaitSinglePlayerDuty(cfcData.ContentFinderConditionId);
                 yield return new DisableAi();
                 yield return new WaitAtEnd.WaitNextStepOrSequence();
             }
+        }
+
+        private unsafe bool DutyActionsAvailable()
+        {
+            ContentDirector* contentDirector = EventFramework.Instance()->GetContentDirector();
+            return contentDirector != null && contentDirector->DutyActionManager.ActionsPresent;
         }
     }
 
@@ -71,9 +95,9 @@ internal static class SinglePlayerDuty
         public override bool ShouldInterruptOnDamage() => false;
     }
 
-    internal sealed record EnableAi : ITask
+    internal sealed record EnableAi(bool Passive = false) : ITask
     {
-        public override string ToString() => "BossMod.EnableAi";
+        public override string ToString() => $"BossMod.EnableAi({(Passive ? "Passive" : "AutoPull")})";
     }
 
     internal sealed class EnableAiExecutor(
@@ -81,7 +105,7 @@ internal static class SinglePlayerDuty
     {
         protected override bool Start()
         {
-            bossModIpc.EnableAi();
+            bossModIpc.EnableAi(Task.Passive);
             return true;
         }
 
