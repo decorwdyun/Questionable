@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using Dalamud.Plugin;
+using LLib.GameData;
 using Microsoft.Extensions.Logging;
+using Questionable.Data;
 using Questionable.GatheringPaths;
 using Questionable.Model;
 using Questionable.Model.Gathering;
@@ -16,15 +19,19 @@ internal sealed class GatheringPointRegistry : IDisposable
 {
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly QuestRegistry _questRegistry;
+    private readonly GatheringData _gatheringData;
     private readonly ILogger<QuestRegistry> _logger;
 
     private readonly Dictionary<GatheringPointId, GatheringRoot> _gatheringPoints = new();
 
-    public GatheringPointRegistry(IDalamudPluginInterface pluginInterface, QuestRegistry questRegistry,
+    public GatheringPointRegistry(IDalamudPluginInterface pluginInterface,
+        QuestRegistry questRegistry,
+        GatheringData gatheringData,
         ILogger<QuestRegistry> logger)
     {
         _pluginInterface = pluginInterface;
         _questRegistry = questRegistry;
+        _gatheringData = gatheringData;
         _logger = logger;
 
         _questRegistry.Reloaded += OnReloaded;
@@ -140,6 +147,38 @@ internal sealed class GatheringPointRegistry : IDisposable
 
     public bool TryGetGatheringPoint(GatheringPointId gatheringPointId, [NotNullWhen(true)] out GatheringRoot? gatheringRoot)
         => _gatheringPoints.TryGetValue(gatheringPointId, out gatheringRoot);
+
+    public bool TryGetGatheringPointId(uint itemId, EClassJob classJobId,
+        [NotNullWhen(true)] out GatheringPointId? gatheringPointId)
+    {
+        if (classJobId == EClassJob.Miner)
+        {
+            if (_gatheringData.TryGetMinerGatheringPointByItemId(itemId, out gatheringPointId))
+                return true;
+
+            gatheringPointId = _gatheringPoints
+                .Where(x => x.Value.ExtraQuestItems.Contains(itemId))
+                .Select(x => x.Key)
+                .FirstOrDefault(x => _gatheringData.MinerGatheringPoints.Contains(x));
+            return gatheringPointId != null;
+        }
+        else if (classJobId == EClassJob.Botanist)
+        {
+            if (_gatheringData.TryGetBotanistGatheringPointByItemId(itemId, out gatheringPointId))
+                return true;
+
+            gatheringPointId = _gatheringPoints
+                .Where(x => x.Value.ExtraQuestItems.Contains(itemId))
+                .Select(x => x.Key)
+                .FirstOrDefault(x => _gatheringData.BotanistGatheringPoints.Contains(x));
+            return gatheringPointId != null;
+        }
+        else
+        {
+            gatheringPointId = null;
+            return false;
+        }
+    }
 
     public void Dispose()
     {

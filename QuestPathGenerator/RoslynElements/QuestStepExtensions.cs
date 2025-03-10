@@ -117,11 +117,8 @@ internal static class QuestStepExtensions
                             Assignment(nameof(QuestStep.JumpDestination), step.JumpDestination,
                                     emptyStep.JumpDestination)
                                 .AsSyntaxNodeOrToken(),
-                            Assignment(nameof(QuestStep.ContentFinderConditionId),
-                                    step.ContentFinderConditionId, emptyStep.ContentFinderConditionId)
-                                .AsSyntaxNodeOrToken(),
-                            Assignment(nameof(QuestStep.AutoDutyEnabled),
-                                    step.AutoDutyEnabled, emptyStep.AutoDutyEnabled)
+                            Assignment(nameof(QuestStep.DutyOptions), step.DutyOptions,
+                                    emptyStep.DutyOptions)
                                 .AsSyntaxNodeOrToken(),
                             Assignment(nameof(QuestStep.SinglePlayerDutyOptions), step.SinglePlayerDutyOptions,
                                 emptyStep.SinglePlayerDutyOptions)

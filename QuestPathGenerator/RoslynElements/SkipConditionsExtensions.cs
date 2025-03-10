@@ -152,6 +152,10 @@ internal static class SkipConditionsExtensions
                                     emptyAetheryte.RequiredQuestVariablesNotMet)
                                 .AsSyntaxNodeOrToken(),
                             Assignment(nameof(skipAetheryteCondition.NearPosition), skipAetheryteCondition.NearPosition,
-                                emptyAetheryte.NearPosition).AsSyntaxNodeOrToken()))));
+                                emptyAetheryte.NearPosition)
+                                .AsSyntaxNodeOrToken(),
+                            Assignment(nameof(skipAetheryteCondition.ExtraCondition), skipAetheryteCondition.ExtraCondition,
+                                emptyAetheryte.ExtraCondition)
+                                .AsSyntaxNodeOrToken()))));
     }
 }

@@ -18,6 +18,7 @@ using Questionable.Controller;
 using Questionable.Data;
 using Questionable.External;
 using Questionable.Model;
+using Questionable.Model.Questing;
 
 namespace Questionable.Windows.ConfigComponents;
 
@@ -125,12 +126,11 @@ internal sealed class DutyConfigComponent : ConfigComponent
                     {
                         foreach (var (cfcId, territoryId, name) in cfcNames)
                         {
-                            if (_questRegistry.TryGetDutyByContentFinderConditionId(cfcId,
-                                    out bool autoDutyEnabledByDefault))
+                            if (_questRegistry.TryGetDutyByContentFinderConditionId(cfcId, out DutyOptions? dutyOptions))
                             {
                                 ImGui.TableNextRow();
 
-                                string[] labels = autoDutyEnabledByDefault
+                                string[] labels = dutyOptions.Enabled
                                     ? SupportedCfcOptions
                                     : UnsupportedCfcOptions;
                                 int value = 0;
@@ -159,6 +159,8 @@ internal sealed class DutyConfigComponent : ConfigComponent
                                     if (runInstancedContentWithAutoDuty && !_autoDutyIpc.HasPath(cfcId))
                                         ImGuiComponents.HelpMarker("This duty is not supported by AutoDuty",
                                             FontAwesomeIcon.Times, ImGuiColors.DalamudRed);
+                                    else if (dutyOptions.Notes.Count > 0)
+                                        DrawNotes(dutyOptions.Enabled, dutyOptions.Notes);
                                 }
 
                                 if (ImGui.TableNextColumn())

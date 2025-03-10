@@ -71,8 +71,13 @@
         {
           "TerritoryId": 1056,
           "InteractionType": "Duty",
-          "ContentFinderConditionId": 869,
-          "AutoDutyEnabled": false
+          "DutyOptions": {
+            "ContentFinderConditionId": 869,
+            "Enabled": false,
+            "Notes": [
+              "No VBM module"
+            ]
+          }
         }
       ]
     },

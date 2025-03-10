@@ -61,7 +61,10 @@
           },
           "TerritoryId": 1189,
           "InteractionType": "SinglePlayerDuty",
-          "Comment": "The Feat of Brotherhood"
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": "0.0.0.294"
+          }
         }
       ]
     },

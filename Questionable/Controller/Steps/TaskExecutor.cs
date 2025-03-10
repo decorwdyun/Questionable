@@ -30,6 +30,11 @@ internal interface IStoppableTaskExecutor : ITaskExecutor
     void StopNow();
 }
 
+internal interface IDebugStateProvider : ITaskExecutor
+{
+    string? GetDebugState();
+}
+
 internal abstract class TaskExecutor<T> : ITaskExecutor
     where T : class, ITask
 {

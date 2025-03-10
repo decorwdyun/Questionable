@@ -38,8 +38,6 @@ internal static class Gather
     }
 
     internal sealed class DelayedGatheringExecutor(
-        MovementController movementController,
-        GatheringData gatheringData,
         GatheringPointRegistry gatheringPointRegistry,
         TerritoryData territoryData,
         IClientState clientState,
@@ -53,7 +51,7 @@ internal static class Gather
         public IEnumerable<ITask> CreateExtraTasks()
         {
             EClassJob currentClassJob = (EClassJob)clientState.LocalPlayer!.ClassJob.RowId;
-            if (!gatheringData.TryGetGatheringPointId(Task.GatheredItem.ItemId, currentClassJob,
+            if (!gatheringPointRegistry.TryGetGatheringPointId(Task.GatheredItem.ItemId, currentClassJob,
                     out GatheringPointId? gatheringPointId))
                 throw new TaskException($"No gathering point found for item {Task.GatheredItem.ItemId}");
 
@@ -85,8 +83,7 @@ internal static class Gather
             yield return new WaitCondition.Task(() => clientState.TerritoryType == territoryId,
                 $"Wait(territory: {territoryData.GetNameAndId(territoryId)})");
 
-            yield return new WaitCondition.Task(() => movementController.IsNavmeshReady,
-                "Wait(navmesh ready)");
+            yield return new WaitNavmesh.Task();
 
             yield return new GatheringTask(gatheringPointId, Task.GatheredItem);
             yield return new WaitAtEnd.WaitDelay();

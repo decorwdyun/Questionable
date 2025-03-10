@@ -1,3 +1,7 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.IO;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Ipc;
 using Dalamud.Plugin.Ipc.Exceptions;
@@ -9,7 +13,13 @@ namespace Questionable.External;
 
 internal sealed class BossModIpc
 {
-    private const string Name = "BossMod";
+    private const string PluginName = "BossMod";
+
+    private static readonly ReadOnlyDictionary<EPreset, PresetDefinition> PresetDefinitions = new Dictionary<EPreset, PresetDefinition>
+        {
+            { EPreset.Overworld, new PresetDefinition("Questionable", "Overworld") },
+            { EPreset.QuestBattle, new PresetDefinition("Questionable - Quest Battles", "QuestBattle") },
+        }.AsReadOnly();
 
     private readonly Configuration _configuration;
     private readonly ICommandManager _commandManager;
@@ -29,10 +39,10 @@ internal sealed class BossModIpc
         _commandManager = commandManager;
         _territoryData = territoryData;
 
-        _getPreset = pluginInterface.GetIpcSubscriber<string, string?>($"{Name}.Presets.Get");
-        _createPreset = pluginInterface.GetIpcSubscriber<string, bool, bool>($"{Name}.Presets.Create");
-        _setPreset = pluginInterface.GetIpcSubscriber<string, bool>($"{Name}.Presets.SetActive");
-        _clearPreset = pluginInterface.GetIpcSubscriber<bool>($"{Name}.Presets.ClearActive");
+        _getPreset = pluginInterface.GetIpcSubscriber<string, string?>($"{PluginName}.Presets.Get");
+        _createPreset = pluginInterface.GetIpcSubscriber<string, bool, bool>($"{PluginName}.Presets.Create");
+        _setPreset = pluginInterface.GetIpcSubscriber<string, bool>($"{PluginName}.Presets.SetActive");
+        _clearPreset = pluginInterface.GetIpcSubscriber<bool>($"{PluginName}.Presets.ClearActive");
     }
 
     public bool IsSupported()
@@ -47,19 +57,13 @@ internal sealed class BossModIpc
         }
     }
 
-    public string? GetPreset(string name)
+    public void SetPreset(EPreset preset)
     {
-        return _getPreset.InvokeFunc(name);
-    }
+        var definition = PresetDefinitions[preset];
+        if (_getPreset.InvokeFunc(definition.Name) == null)
+            _createPreset.InvokeFunc(definition.Content, true);
 
-    public bool CreatePreset(string name, bool overwrite)
-    {
-        return _createPreset.InvokeFunc(name, overwrite);
-    }
-
-    public void SetPreset(string name)
-    {
-        _setPreset.InvokeFunc(name);
+        _setPreset.InvokeFunc(definition.Name);
     }
 
     public void ClearPreset()
@@ -68,11 +72,11 @@ internal sealed class BossModIpc
     }
 
     // TODO this should use your actual rotation plugin, not always vbm
-    public void EnableAi(string presetName = "VBM Default")
+    public void EnableAi()
     {
         _commandManager.ProcessCommand("/vbmai on");
         _commandManager.ProcessCommand("/vbm cfg ZoneModuleConfig EnableQuestBattles true");
-        SetPreset(presetName);
+        SetPreset(EPreset.QuestBattle);
     }
 
     public void DisableAi()
@@ -94,12 +98,36 @@ internal sealed class BossModIpc
         if (!_territoryData.TryGetContentFinderConditionForSoloInstance(questId, dutyOptions.Index, out var cfcData))
             return false;
 
-        if (_configuration.SinglePlayerDuties.BlacklistedSinglePlayerDutyCfcIds.Contains(cfcData.ContentFinderConditionId))
+        if (_configuration.SinglePlayerDuties.BlacklistedSinglePlayerDutyCfcIds.Contains(cfcData
+                .ContentFinderConditionId))
             return false;
 
-        if (_configuration.SinglePlayerDuties.WhitelistedSinglePlayerDutyCfcIds.Contains(cfcData.ContentFinderConditionId))
+        if (_configuration.SinglePlayerDuties.WhitelistedSinglePlayerDutyCfcIds.Contains(cfcData
+                .ContentFinderConditionId))
             return true;
 
         return dutyOptions.Enabled;
+    }
+
+    public enum EPreset
+    {
+        Overworld,
+        QuestBattle,
+    }
+
+    private sealed class PresetDefinition(string name, string fileName)
+    {
+        public string Name { get; } = name;
+        public string Content { get; } = LoadPreset(fileName);
+
+        private static string LoadPreset(string name)
+        {
+            Stream stream =
+                typeof(BossModIpc).Assembly.GetManifestResourceStream(
+                    $"Questionable.Controller.CombatModules.BossModPreset.{name}") ??
+                throw new InvalidOperationException($"Preset {name} was not found");
+            using var reader = new StreamReader(stream);
+            return reader.ReadToEnd();
+        }
     }
 }

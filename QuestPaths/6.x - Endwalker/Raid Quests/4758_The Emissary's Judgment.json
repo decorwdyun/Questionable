@@ -24,7 +24,10 @@
         {
           "TerritoryId": 1158,
           "InteractionType": "Duty",
-          "ContentFinderConditionId": 940
+          "DutyOptions": {
+            "ContentFinderConditionId": 940,
+            "Enabled": false
+          }
         }
       ]
     },

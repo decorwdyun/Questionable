@@ -11,6 +11,8 @@ public sealed class SkipConditionConverter() : EnumConverter<EExtraSkipCondition
         { EExtraSkipCondition.WakingSandsSolar, "WakingSandsSolar" },
         { EExtraSkipCondition.RisingStonesSolar, "RisingStonesSolar"},
         { EExtraSkipCondition.RoguesGuild, "RoguesGuild"},
+        { EExtraSkipCondition.NotRoguesGuild, "NotRoguesGuild"},
         { EExtraSkipCondition.DockStorehouse, "DockStorehouse"},
+        { EExtraSkipCondition.SkipFreeFantasia, "SkipFreeFantasia" },
     };
 }

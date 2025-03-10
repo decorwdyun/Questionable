@@ -58,7 +58,8 @@
           "Emote": "lookout",
           "StopDistance": 0.25,
           "SinglePlayerDutyOptions": {
-            "Enabled": true
+            "Enabled": true,
+            "TestedBossModVersion": "0.0.0.292"
           }
         }
       ]

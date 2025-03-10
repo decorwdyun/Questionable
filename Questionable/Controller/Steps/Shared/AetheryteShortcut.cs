@@ -58,7 +58,8 @@ internal static class AetheryteShortcut
         IClientState clientState,
         IChatGui chatGui,
         ICondition condition,
-        AetheryteData aetheryteData) : TaskExecutor<Task>
+        AetheryteData aetheryteData,
+        ExtraConditionUtils extraConditionUtils) : TaskExecutor<Task>
     {
         private bool _teleported;
         private DateTime _continueAt;
@@ -147,6 +148,13 @@ internal static class AetheryteShortcut
                             logger.LogInformation("Skipping aetheryte shortcut, as we're near the position");
                             return true;
                         }
+                    }
+
+                    if (skipConditions.ExtraCondition != null && skipConditions.ExtraCondition != EExtraSkipCondition.None &&
+                        extraConditionUtils.MatchesExtraCondition(skipConditions.ExtraCondition.Value))
+                    {
+                        logger.LogInformation("Skipping step, extra condition {} matches", skipConditions.ExtraCondition);
+                        return true;
                     }
                 }
 

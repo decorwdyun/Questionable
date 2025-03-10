@@ -53,7 +53,7 @@ internal static class WaitAtEnd
                 case EInteractionType.Snipe:
                     return [new WaitNextStepOrSequence()];
 
-                case EInteractionType.Duty when !autoDutyIpc.IsConfiguredToRunContent(step.ContentFinderConditionId, step.AutoDutyEnabled):
+                case EInteractionType.Duty when !autoDutyIpc.IsConfiguredToRunContent(step.DutyOptions):
                 case EInteractionType.SinglePlayerDuty when !bossModIpc.IsConfiguredToRunSoloInstance(quest.Id, step.SinglePlayerDutyOptions):
                     return [new EndAutomation()];
 

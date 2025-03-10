@@ -45,12 +45,13 @@ internal static class QuestCleanUp
                 }
 
                 // have any of the previous sequences interacted with the issuer?
-                var previousSequences =
+                var previousSteps =
                     quest.AllSequences()
                         .Where(x => x.Sequence > 0 // quest accept doesn't ever put us into a mount
                                     && x.Sequence < sequence.Sequence)
+                        .SelectMany(x => x.Steps)
                         .ToList();
-                if (previousSequences.SelectMany(x => x.Steps).All(x => x.DataId != mountConfiguration.IssuerDataId))
+                if (!previousSteps.Any(x => x.DataId != null && mountConfiguration.IssuerDataIds.Contains(x.DataId.Value)))
                 {
                     // this quest hasn't given us a mount yet
                     logger.LogInformation("Haven't talked to mount NPC for this allied society quest; {Aetheryte}", mountConfiguration.ClosestAetheryte);

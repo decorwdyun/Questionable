@@ -23,17 +23,17 @@ internal static class Duty
             if (step.InteractionType != EInteractionType.Duty)
                 yield break;
 
-            ArgumentNullException.ThrowIfNull(step.ContentFinderConditionId);
+            ArgumentNullException.ThrowIfNull(step.DutyOptions);
 
-            if (autoDutyIpc.IsConfiguredToRunContent(step.ContentFinderConditionId, step.AutoDutyEnabled))
+            if (autoDutyIpc.IsConfiguredToRunContent(step.DutyOptions))
             {
-                yield return new StartAutoDutyTask(step.ContentFinderConditionId.Value);
-                yield return new WaitAutoDutyTask(step.ContentFinderConditionId.Value);
+                yield return new StartAutoDutyTask(step.DutyOptions.ContentFinderConditionId);
+                yield return new WaitAutoDutyTask(step.DutyOptions.ContentFinderConditionId);
                 yield return new WaitAtEnd.WaitNextStepOrSequence();
             }
             else
             {
-                yield return new OpenDutyFinderTask(step.ContentFinderConditionId.Value);
+                yield return new OpenDutyFinderTask(step.DutyOptions.ContentFinderConditionId);
             }
         }
     }

@@ -54,7 +54,10 @@
           },
           "TerritoryId": 961,
           "InteractionType": "SinglePlayerDuty",
-          "Comment": "Venat"
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": "0.0.0.294"
+          }
         }
       ]
     },

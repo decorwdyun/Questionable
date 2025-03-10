@@ -46,7 +46,8 @@
           "TerritoryId": 145,
           "InteractionType": "SinglePlayerDuty",
           "SinglePlayerDutyOptions": {
-            "Enabled": true
+            "Enabled": true,
+            "TestedBossModVersion": "0.0.0.292"
           }
         }
       ]
@@ -74,8 +75,10 @@
         {
           "TerritoryId": 146,
           "InteractionType": "Duty",
-          "ContentFinderConditionId": 56,
-          "AutoDutyEnabled": true
+          "DutyOptions": {
+            "ContentFinderConditionId": 56,
+            "Enabled": true
+          }
         }
       ]
     },

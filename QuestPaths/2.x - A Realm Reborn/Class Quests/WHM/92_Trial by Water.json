@@ -251,7 +251,8 @@
           "TerritoryId": 152,
           "InteractionType": "SinglePlayerDuty",
           "SinglePlayerDutyOptions": {
-            "Enabled": true
+            "Enabled": true,
+            "TestedBossModVersion": "0.0.0.292"
           },
           "Fly": true
         }
