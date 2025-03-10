@@ -12,7 +12,14 @@
                     "AethernetShortcut": [
                         "[Ishgard] Aetheryte Plaza",
                         "[Ishgard] Firmament"
-                    ]
+                    ],
+                    "SkipConditions": {
+                        "StepIf": {
+                            "InTerritory": [
+                                154
+                            ]
+                        }
+                    }
                 },
                 {
                     "DataId": 1033543,
