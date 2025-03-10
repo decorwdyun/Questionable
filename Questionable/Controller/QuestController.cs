@@ -799,6 +799,9 @@ internal sealed class QuestController : MiniTaskController<QuestController>
 
     public bool IsInterruptible()
     {
+        if (AutomationType is EAutomationType.SingleQuestA or EAutomationType.SingleQuestB)
+            return false;
+
         var details = CurrentQuestDetails;
         if (details == null)
             return false;
