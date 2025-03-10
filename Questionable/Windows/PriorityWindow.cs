@@ -76,7 +76,7 @@ internal sealed class PriorityWindow : LWindow
             _questController.ManualPriorityQuests.RemoveAll(q => _questFunctions.IsQuestComplete(q.Id));
         ImGui.SameLine();
         if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Trash, "Clear"))
-            _questController.ManualPriorityQuests.Clear();
+            _questController.ClearQuestPriority();
         ImGui.EndDisabled();
 
         ImGui.Spacing();
@@ -250,10 +250,15 @@ internal sealed class PriorityWindow : LWindow
 
     private List<ElementId> ParseClipboardItems()
     {
+        string? clipboardText = GetClipboardText();
+        return DecodeQuestPriority(clipboardText);
+    }
+
+    public static List<ElementId> DecodeQuestPriority(string? clipboardText)
+    {
         List<ElementId> clipboardItems = new List<ElementId>();
         try
         {
-            string? clipboardText = GetClipboardText();
             if (clipboardText != null && clipboardText.StartsWith(ClipboardPrefix, StringComparison.InvariantCulture))
             {
                 clipboardText = clipboardText.Substring(ClipboardPrefix.Length);
@@ -273,22 +278,22 @@ internal sealed class PriorityWindow : LWindow
         return clipboardItems;
     }
 
+    public string EncodeQuestPriority()
+    {
+        return ClipboardPrefix + Convert.ToBase64String(Encoding.UTF8.GetBytes(
+            string.Join(ClipboardSeparator, _questController.ManualPriorityQuests.Select(x => x.Id.ToString()))));
+    }
+
     private void ExportToClipboard()
     {
-        string clipboardText = ClipboardPrefix + Convert.ToBase64String(Encoding.UTF8.GetBytes(
-            string.Join(ClipboardSeparator, _questController.ManualPriorityQuests.Select(x => x.Id.ToString()))));
+        string clipboardText = EncodeQuestPriority();
         ImGui.SetClipboardText(clipboardText);
         _chatGui.Print("Copied quests to clipboard.", CommandHandler.MessageTag, CommandHandler.TagColor);
     }
 
-    private void ImportFromClipboard(List<ElementId> clipboardItems)
+    private void ImportFromClipboard(List<ElementId> questElements)
     {
-        foreach (ElementId elementId in clipboardItems)
-        {
-            if (_questRegistry.TryGetQuest(elementId, out Quest? quest) &&
-                !_questController.ManualPriorityQuests.Contains(quest))
-                _questController.ManualPriorityQuests.Add(quest);
-        }
+        _questController.ImportQuestPriority(questElements);
     }
 
     /// <summary>
