@@ -80,10 +80,7 @@
                                 "NotInInventory": false
                             }
                         }
-                    },
-                    "RequiredCurrentJob": [
-                        "DoH"
-                    ]
+                    }
                 },
                 {
                     "DataId": 1009211,
