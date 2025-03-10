@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using Dalamud.Configuration;
 using Dalamud.Game.Text;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
+using LLib.GameData;
 using LLib.ImGui;
 
 namespace Questionable;
@@ -30,6 +31,7 @@ internal sealed class Configuration : IPluginConfiguration
         public ECombatModule CombatModule { get; set; } = ECombatModule.None;
         public uint MountId { get; set; } = 71;
         public GrandCompany GrandCompany { get; set; } = GrandCompany.None;
+        public EClassJob CombatJob { get; set; } = EClassJob.Adventurer;
         public bool HideInAllInstances { get; set; } = true;
         public bool UseEscToCancelQuesting { get; set; } = true;
         public bool ShowIncompleteSeasonalEvents { get; set; } = true;

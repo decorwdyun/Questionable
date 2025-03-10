@@ -38,7 +38,7 @@ internal sealed class QuestData
 
     private readonly Dictionary<ElementId, IQuestInfo> _quests;
 
-    public QuestData(IDataManager dataManager)
+    public QuestData(IDataManager dataManager, ClassJobUtils classJobUtils)
     {
         JournalGenreOverrides journalGenreOverrides = new()
         {
@@ -89,11 +89,11 @@ internal sealed class QuestData
                                     .Cast<QuestInfo>()
                                     .Select(y => (byte)y.AlliedSocietyRank).Distinct()
                             ])
-                            .Select(rank => new AlliedSocietyDailyInfo(x, rank));
+                            .Select(rank => new AlliedSocietyDailyInfo(x, rank, classJobUtils));
                     }
                     else
                     {
-                        return [new AlliedSocietyDailyInfo(x, 0)];
+                        return [new AlliedSocietyDailyInfo(x, 0, classJobUtils)];
                     }
                 }));
 

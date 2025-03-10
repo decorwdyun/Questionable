@@ -3,7 +3,6 @@ using System.Linq;
 using Dalamud.Game.Gui.ContextMenu;
 using Dalamud.Game.Text;
 using Dalamud.Plugin.Services;
-using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using LLib.GameData;
@@ -44,6 +43,7 @@ internal sealed class ContextMenuController : IDisposable
         IGameGui gameGui,
         IChatGui chatGui,
         IClientState clientState,
+        ClassJobUtils classJobUtils,
         ILogger<ContextMenuController> logger)
     {
         _contextMenu = contextMenu;
@@ -83,8 +83,8 @@ internal sealed class ContextMenuController : IDisposable
 
         if (_gatheringData.TryGetCustomDeliveryNpc(itemId, out uint npcId))
         {
-            AddContextMenuEntry(args, itemId, npcId, EExtendedClassJob.Miner, "Mine");
-            AddContextMenuEntry(args, itemId, npcId, EExtendedClassJob.Botanist, "Harvest");
+            AddContextMenuEntry(args, itemId, npcId, EClassJob.Miner, "Mine");
+            AddContextMenuEntry(args, itemId, npcId, EClassJob.Botanist, "Harvest");
         }
         else
             _logger.LogDebug("No custom delivery NPC found for item {ItemId}.", itemId);
@@ -107,11 +107,10 @@ internal sealed class ContextMenuController : IDisposable
         return 0;
     }
 
-    private void AddContextMenuEntry(IMenuOpenedArgs args, uint itemId, uint npcId, EExtendedClassJob extendedClassJob,
+    private void AddContextMenuEntry(IMenuOpenedArgs args, uint itemId, uint npcId, EClassJob classJob,
         string verb)
     {
         EClassJob currentClassJob = (EClassJob)_clientState.LocalPlayer!.ClassJob.RowId;
-        EClassJob classJob = ClassJobUtils.AsIndividualJobs(extendedClassJob).Single();
         if (classJob != currentClassJob && currentClassJob is EClassJob.Miner or EClassJob.Botanist)
             return;
 
@@ -156,13 +155,13 @@ internal sealed class ContextMenuController : IDisposable
             Prefix = SeIconChar.Hyadelyn,
             PrefixColor = 52,
             Name = name,
-            OnClicked = _ => StartGathering(npcId, itemId, quantityToGather, collectability, extendedClassJob),
+            OnClicked = _ => StartGathering(npcId, itemId, quantityToGather, collectability, classJob),
             IsEnabled = string.IsNullOrEmpty(lockedReasonn),
         });
     }
 
     private void StartGathering(uint npcId, uint itemId, int quantity, ushort collectability,
-        EExtendedClassJob extendedClassJob)
+        EClassJob classJob)
     {
         var info = (SatisfactionSupplyInfo)_questData.GetAllByIssuerDataId(npcId)
             .Single(x => x is SatisfactionSupplyInfo);
@@ -171,7 +170,12 @@ internal sealed class ContextMenuController : IDisposable
             var sequence = quest.FindSequence(0)!;
 
             var switchClassStep = sequence.Steps.Single(x => x.InteractionType == EInteractionType.SwitchClass);
-            switchClassStep.TargetClass = extendedClassJob;
+            switchClassStep.TargetClass = classJob switch
+            {
+                EClassJob.Miner => EExtendedClassJob.Miner,
+                EClassJob.Botanist => EExtendedClassJob.Botanist,
+                _ => throw new ArgumentOutOfRangeException(nameof(classJob), classJob, null),
+            };
 
             var gatherStep = sequence.Steps.Single(x => x.InteractionType == EInteractionType.Gather);
             gatherStep.ItemsToGather =

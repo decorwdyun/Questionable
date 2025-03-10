@@ -248,6 +248,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
 
         serviceCollection.AddSingleton<TaskCreator>();
         serviceCollection.AddSingleton<ExtraConditionUtils>();
+        serviceCollection.AddSingleton<ClassJobUtils>();
     }
 
     private static void AddControllers(ServiceCollection serviceCollection)

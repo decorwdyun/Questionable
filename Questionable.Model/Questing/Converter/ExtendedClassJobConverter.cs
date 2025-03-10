@@ -54,5 +54,7 @@ internal sealed class ExtendedClassJobConverter() : EnumConverter<EExtendedClass
         { EExtendedClassJob.DoM, "DoM" },
         { EExtendedClassJob.DoH, "DoH" },
         { EExtendedClassJob.DoL, "DoL" },
+        { EExtendedClassJob.ConfiguredCombatJob, "ConfiguredCombatJob" },
+        { EExtendedClassJob.QuestStartJob, "QuestStartJob" },
     };
 }

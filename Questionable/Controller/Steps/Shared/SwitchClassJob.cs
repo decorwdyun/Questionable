@@ -11,14 +11,14 @@ namespace Questionable.Controller.Steps.Shared;
 
 internal static class SwitchClassJob
 {
-    internal sealed class Factory : SimpleTaskFactory
+    internal sealed class Factory(ClassJobUtils classJobUtils) : SimpleTaskFactory
     {
         public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
             if (step.InteractionType != EInteractionType.SwitchClass)
                 return null;
 
-            EClassJob classJob = ClassJobUtils.AsIndividualJobs(step.TargetClass).Single();
+            EClassJob classJob = classJobUtils.AsIndividualJobs(step.TargetClass, quest.Id).Single();
             return new Task(classJob);
         }
     }

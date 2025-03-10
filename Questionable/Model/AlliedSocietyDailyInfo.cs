@@ -11,7 +11,7 @@ namespace Questionable.Model;
 
 internal sealed class AlliedSocietyDailyInfo : IQuestInfo
 {
-    public AlliedSocietyDailyInfo(BeastTribe beastTribe, byte rank)
+    public AlliedSocietyDailyInfo(BeastTribe beastTribe, byte rank, ClassJobUtils classJobUtils)
     {
         QuestId = new AlliedSocietyDailyId((byte)beastTribe.RowId, rank);
         Name = beastTribe.Name.ToString();
@@ -24,19 +24,19 @@ internal sealed class AlliedSocietyDailyInfo : IQuestInfo
                 EAlliedSociety.Arkasodara or
                 EAlliedSociety.Pelupelu =>
                 [
-                    ..ClassJobUtils.AsIndividualJobs(EExtendedClassJob.DoW),
-                    ..ClassJobUtils.AsIndividualJobs(EExtendedClassJob.DoM)
+                    ..classJobUtils.AsIndividualJobs(EExtendedClassJob.DoW, null),
+                    ..classJobUtils.AsIndividualJobs(EExtendedClassJob.DoM, null)
                 ],
             EAlliedSociety.Ixal or EAlliedSociety.Moogles or EAlliedSociety.Dwarves or EAlliedSociety.Loporrits =>
-                ClassJobUtils.AsIndividualJobs(EExtendedClassJob.DoH).ToList(),
+                classJobUtils.AsIndividualJobs(EExtendedClassJob.DoH, null).ToList(),
 
             EAlliedSociety.Qitari or EAlliedSociety.Omicrons =>
-                ClassJobUtils.AsIndividualJobs(EExtendedClassJob.DoL).ToList(),
+                classJobUtils.AsIndividualJobs(EExtendedClassJob.DoL, null).ToList(),
 
             EAlliedSociety.Namazu =>
             [
-                ..ClassJobUtils.AsIndividualJobs(EExtendedClassJob.DoH),
-                ..ClassJobUtils.AsIndividualJobs(EExtendedClassJob.DoL)
+                ..classJobUtils.AsIndividualJobs(EExtendedClassJob.DoH, null),
+                ..classJobUtils.AsIndividualJobs(EExtendedClassJob.DoL, null)
             ],
 
             _ => throw new ArgumentOutOfRangeException(nameof(beastTribe))
