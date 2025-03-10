@@ -247,6 +247,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTaskExecutor<WaitAtEnd.EndAutomation, WaitAtEnd.EndAutomationExecutor>();
 
         serviceCollection.AddSingleton<TaskCreator>();
+        serviceCollection.AddSingleton<ExtraConditionUtils>();
     }
 
     private static void AddControllers(ServiceCollection serviceCollection)

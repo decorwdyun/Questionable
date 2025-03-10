@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Keys;
 using Dalamud.Game.Gui.Toast;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using Lumina.Excel.Sheets;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps;
 using Questionable.Controller.Steps.Interactions;
@@ -281,9 +283,13 @@ internal sealed class QuestController : MiniTaskController<QuestController>
                     _logger.LogInformation("Next quest {QuestId} accepted or completed",
                         _nextQuest.Quest.Id);
 
-                    // if (_nextQuest.Quest.Id is LeveId)
-                    //  _startedQuest = _nextQuest;
+                    if (AutomationType == EAutomationType.SingleQuestA)
+                    {
+                        _startedQuest = _nextQuest;
+                        AutomationType = EAutomationType.SingleQuestB;
+                    }
 
+                    _logger.LogDebug("Started: {StartedQuest}", _startedQuest?.Quest.Id);
                     _nextQuest = null;
                 }
             }
@@ -321,7 +327,8 @@ internal sealed class QuestController : MiniTaskController<QuestController>
                         .Select(x =>
                             ((ElementId?, byte)?)(x.Id, _questFunctions.GetQuestProgressInfo(x.Id)?.Sequence ?? 0))
                         .FirstOrDefault() ??
-                    _questFunctions.GetCurrentQuest();
+                    _questFunctions.GetCurrentQuest(allowNewMsq: AutomationType != EAutomationType.SingleQuestB);
+
                 if (currentQuestId == null || currentQuestId.Value == 0)
                 {
                     if (_startedQuest != null)
@@ -349,7 +356,15 @@ internal sealed class QuestController : MiniTaskController<QuestController>
                             Stop("Quest level too high");
                         }
                         else
+                        {
+                            if (AutomationType == EAutomationType.SingleQuestB)
+                            {
+                                _logger.LogInformation("Single quest is finished");
+                                AutomationType = EAutomationType.Manual;
+                            }
+
                             CheckNextTasks("Different Quest");
+                        }
                     }
                     else if (_startedQuest != null)
                     {
@@ -399,7 +414,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
             {
                 questToRun.SetSequence(currentSequence);
                 CheckNextTasks(
-                    $"New sequence {questToRun == _startedQuest}/{_questFunctions.GetCurrentQuestInternal()}");
+                    $"New sequence {questToRun == _startedQuest}/{_questFunctions.GetCurrentQuestInternal(true)}");
             }
 
             var q = questToRun.Quest;
@@ -521,7 +536,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
 
     private void CheckNextTasks(string label)
     {
-        if (AutomationType == EAutomationType.Automatic)
+        if (AutomationType is EAutomationType.Automatic or EAutomationType.SingleQuestA or EAutomationType.SingleQuestB)
         {
             using var scope = _logger.BeginScope(label);
 
@@ -597,10 +612,17 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         ExecuteNextStep();
     }
 
+    public void StartGatheringQuest(string label)
+    {
+        using var scope = _logger.BeginScope($"GQ/{label}");
+        AutomationType = EAutomationType.GatheringOnly;
+        ExecuteNextStep();
+    }
+
     public void StartSingleQuest(string label)
     {
         using var scope = _logger.BeginScope($"SQ/{label}");
-        AutomationType = EAutomationType.CurrentQuestOnly;
+        AutomationType = EAutomationType.SingleQuestA;
         ExecuteNextStep();
     }
 
@@ -779,6 +801,9 @@ internal sealed class QuestController : MiniTaskController<QuestController>
 
     public bool IsInterruptible()
     {
+        if (AutomationType is EAutomationType.SingleQuestA or EAutomationType.SingleQuestB)
+            return false;
+
         var details = CurrentQuestDetails;
         if (details == null)
             return false;
@@ -827,6 +852,48 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         }
 
         return false;
+    }
+
+    public void ImportQuestPriority(List<ElementId> questElements)
+    {
+        foreach (ElementId elementId in questElements)
+        {
+            if (_questRegistry.TryGetQuest(elementId, out Quest? quest) && !ManualPriorityQuests.Contains(quest))
+                ManualPriorityQuests.Add(quest);
+        }
+    }
+
+    private const char ClipboardSeparator = ';';
+    public string ExportQuestPriority()
+    {
+        return string.Join(ClipboardSeparator, ManualPriorityQuests.Select(x => x.Id.ToString()));
+    }
+
+    public void ClearQuestPriority()
+    {
+        ManualPriorityQuests.Clear();
+    }
+
+    public bool AddQuestPriority(ElementId elementId)
+    {
+        if (_questRegistry.TryGetQuest(elementId, out Quest? quest) && !ManualPriorityQuests.Contains(quest))
+            ManualPriorityQuests.Add(quest);
+        return true;
+    }
+
+    public bool InsertQuestPriority(int index, ElementId elementId)
+    {
+        try
+        {
+            if (_questRegistry.TryGetQuest(elementId, out Quest? quest) && !ManualPriorityQuests.Contains(quest))
+                ManualPriorityQuests.Insert(index, quest);
+            return true;
+        }
+        catch (Exception e) {
+            _logger.LogError(e, "Failed to insert quest in priority list");
+            _chatGui.PrintError("Failed to insert quest in priority list, please check /xllog for details.", CommandHandler.MessageTag, CommandHandler.TagColor);
+            return false;
+        }
     }
 
     public bool WasLastTaskUpdateWithin(TimeSpan timeSpan)
@@ -881,6 +948,8 @@ internal sealed class QuestController : MiniTaskController<QuestController>
     {
         Manual,
         Automatic,
-        CurrentQuestOnly,
+        GatheringOnly,
+        SingleQuestA,
+        SingleQuestB,
     }
 }

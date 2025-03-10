@@ -60,7 +60,11 @@
             "Z": 329.76257
           },
           "TerritoryId": 137,
-          "InteractionType": "SinglePlayerDuty"
+          "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": "0.1.0.1"
+          }
         }
       ]
     },

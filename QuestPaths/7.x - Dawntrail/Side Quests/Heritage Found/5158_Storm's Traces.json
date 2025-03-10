@@ -13,7 +13,22 @@
             "Z": 134.7218
           },
           "TerritoryId": 1191,
-          "InteractionType": "AcceptQuest"
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Heritage Found - Electrope Strike",
+          "Fly": true,
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": -250.04962,
+                  "Y": 31.000015,
+                  "Z": 134.7218
+                },
+                "TerritoryId": 1191,
+                "MaximumDistance": 50
+              }
+            }
+          }
         }
       ]
     },
