@@ -75,7 +75,7 @@ internal sealed class AutoDutyIpc
         try
         {
             _setConfig.InvokeAction("dutyModeEnum", "Support");
-            _run.InvokeAction(cfcData.TerritoryId, 1, true);
+            _run.InvokeAction(cfcData.TerritoryId, 1, !_configuration.Advanced.DisableAutoDutyBareMode);
         }
         catch (IpcError e)
         {
