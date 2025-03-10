@@ -36,7 +36,8 @@
           "TerritoryId": 137,
           "InteractionType": "SinglePlayerDuty",
           "SinglePlayerDutyOptions": {
-            "Enabled": true
+            "Enabled": true,
+            "TestedBossModVersion": "0.0.0.292"
           },
           "AetheryteShortcut": "Eastern La Noscea - Wineport",
           "Fly": true

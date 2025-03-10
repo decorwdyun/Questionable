@@ -164,6 +164,7 @@ public class GatheringSourceGenerator : ISourceGenerator
                                 Assignment(nameof(GatheringRoot.FlyBetweenNodes), root.FlyBetweenNodes,
                                         emptyRoot.FlyBetweenNodes)
                                     .AsSyntaxNodeOrToken(),
+                                AssignmentList(nameof(GatheringRoot.ExtraQuestItems), root.ExtraQuestItems).AsSyntaxNodeOrToken(),
                                 AssignmentList(nameof(GatheringRoot.Groups), root.Groups).AsSyntaxNodeOrToken()))));
         }
         catch (Exception e)

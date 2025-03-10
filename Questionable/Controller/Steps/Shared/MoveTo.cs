@@ -25,7 +25,6 @@ namespace Questionable.Controller.Steps.Shared;
 internal static class MoveTo
 {
     internal sealed class Factory(
-        MovementController movementController,
         IClientState clientState,
         AetheryteData aetheryteData,
         TerritoryData territoryData,
@@ -67,10 +66,7 @@ internal static class MoveTo
                 $"Wait(territory: {territoryData.GetNameAndId(step.TerritoryId)})");
 
             if (!step.DisableNavmesh)
-            {
-                yield return new WaitCondition.Task(() => movementController.IsNavmeshReady,
-                    "Wait(navmesh ready)");
-            }
+                yield return new WaitNavmesh.Task();
 
             yield return new MoveTask(step, destination);
 

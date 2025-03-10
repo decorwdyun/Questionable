@@ -54,6 +54,11 @@
           },
           "TerritoryId": 816,
           "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": "0.0.0.293",
+            "$": "test: Redacted"
+          },
           "ItemId": 2002569
         }
       ]

@@ -73,8 +73,7 @@ public sealed class QuestStep
     public float? CombatDelaySecondsAtStart { get; set; }
 
     public JumpDestination? JumpDestination { get; set; }
-    public uint? ContentFinderConditionId { get; set; }
-    public bool AutoDutyEnabled { get; set; }
+    public DutyOptions? DutyOptions { get; set; }
     public SinglePlayerDutyOptions? SinglePlayerDutyOptions { get; set; }
     public byte SinglePlayerDutyIndex => SinglePlayerDutyOptions?.Index ?? 0;
     public SkipConditions? SkipConditions { get; set; }
@@ -113,12 +112,15 @@ public sealed class QuestStep
 
     public float CalculateActualStopDistance()
     {
-        if (InteractionType == EInteractionType.WalkTo)
-            return StopDistance ?? 0.25f;
-        if (InteractionType == EInteractionType.AttuneAetheryte)
-            return StopDistance ?? 10f;
-        else
-            return StopDistance ?? DefaultStopDistance;
+        if (StopDistance is { } stopDistance)
+            return stopDistance;
+
+        return InteractionType switch
+        {
+            EInteractionType.WalkTo => 0.25f,
+            EInteractionType.AttuneAetheryte => 10f,
+            _ => DefaultStopDistance
+        };
     }
 
     /// <summary>

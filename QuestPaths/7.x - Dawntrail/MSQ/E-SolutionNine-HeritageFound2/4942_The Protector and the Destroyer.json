@@ -45,7 +45,13 @@
           },
           "TerritoryId": 1191,
           "InteractionType": "SinglePlayerDuty",
-          "Comment": "The Protector and the Destroyer",
+          "SinglePlayerDutyOptions": {
+            "Enabled": false,
+            "TestedBossModVersion": "0.0.0.294",
+            "Notes": [
+              "(phase 1) Gets stuck in the wall while walking to the evacuee NPCs"
+            ]
+          },
           "DialogueChoices": [
             {
               "Type": "List",

@@ -4,6 +4,7 @@ using Dalamud.Plugin.Ipc.Exceptions;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps;
 using Questionable.Data;
+using Questionable.Model.Questing;
 
 namespace Questionable.External;
 
@@ -31,22 +32,22 @@ internal sealed class AutoDutyIpc
         _stop = pluginInterface.GetIpcSubscriber<object>("AutoDuty.Stop");
     }
 
-    public bool IsConfiguredToRunContent(uint? cfcId, bool enabledByDefault)
+    public bool IsConfiguredToRunContent(DutyOptions? dutyOptions)
     {
-        if (cfcId == null)
+        if (dutyOptions == null || dutyOptions.ContentFinderConditionId == 0)
             return false;
 
         if (!_configuration.Duties.RunInstancedContentWithAutoDuty)
             return false;
 
-        if (_configuration.Duties.BlacklistedDutyCfcIds.Contains(cfcId.Value))
+        if (_configuration.Duties.BlacklistedDutyCfcIds.Contains(dutyOptions.ContentFinderConditionId))
             return false;
 
-        if (_configuration.Duties.WhitelistedDutyCfcIds.Contains(cfcId.Value) &&
-            _territoryData.TryGetContentFinderCondition(cfcId.Value, out _))
+        if (_configuration.Duties.WhitelistedDutyCfcIds.Contains(dutyOptions.ContentFinderConditionId) &&
+            _territoryData.TryGetContentFinderCondition(dutyOptions.ContentFinderConditionId, out _))
             return true;
 
-        return enabledByDefault && HasPath(cfcId.Value);
+        return dutyOptions.Enabled && HasPath(dutyOptions.ContentFinderConditionId);
     }
 
     public bool HasPath(uint cfcId)
@@ -74,7 +75,7 @@ internal sealed class AutoDutyIpc
         try
         {
             _setConfig.InvokeAction("dutyModeEnum", "Support");
-            _run.InvokeAction(cfcData.TerritoryId, 1, true);
+            _run.InvokeAction(cfcData.TerritoryId, 1, !_configuration.Advanced.DisableAutoDutyBareMode);
         }
         catch (IpcError e)
         {

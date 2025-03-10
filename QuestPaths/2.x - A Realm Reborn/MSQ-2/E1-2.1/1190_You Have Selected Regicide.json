@@ -69,6 +69,15 @@
       "Sequence": 3,
       "Steps": [
         {
+          "Position": {
+            "X": -561.9863,
+            "Y": 9.919454,
+            "Z": 66.29564
+          },
+          "TerritoryId": 152,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 1008276,
           "Position": {
             "X": -542.9313,
@@ -270,7 +279,10 @@
         {
           "TerritoryId": 152,
           "InteractionType": "Duty",
-          "ContentFinderConditionId": 66
+          "DutyOptions": {
+            "ContentFinderConditionId": 66,
+            "Enabled": false
+          }
         }
       ]
     },

@@ -34,7 +34,9 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
         (EClassJob.BlackMage, "Magical Ranged Role Quests"),
     ];
 
+#if false
     private readonly string[] _retryDifficulties = ["Normal", "Easy", "Very Easy"];
+#endif
 
     private readonly TerritoryData _territoryData;
     private readonly QuestRegistry _questRegistry;
@@ -263,12 +265,19 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
 
         using (ImRaii.PushIndent(ImGui.GetFrameHeight() + ImGui.GetStyle().ItemInnerSpacing.X))
         {
-            ImGui.AlignTextToFramePadding();
-            ImGui.TextColored(ImGuiColors.DalamudRed,
-                "Work in Progress: For now, this will always use BossMod for combat.");
+            using (_ = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudRed))
+            {
+                ImGui.TextUnformatted("Work in Progress:");
+                ImGui.BulletText("Will always use BossMod for combat (ignoring the configured combat module).");
+                ImGui.BulletText("Only a small subset of quest battles have been tested - most of which are in the MSQ.");
+                ImGui.BulletText("When retrying a failed battle, it will always start at 'Normal' difficulty.");
+                ImGui.BulletText("Please don't enable this option when using a BossMod fork (such as Reborn);\nwith the missing combat module configuration, it is unlikely to be compatible.");
+            }
 
+#if false
             using (ImRaii.Disabled(!runSoloInstancesWithBossMod))
             {
+                ImGui.Spacing();
                 int retryDifficulty = Configuration.SinglePlayerDuties.RetryDifficulty;
                 if (ImGui.Combo("Difficulty when retrying a quest battle", ref retryDifficulty, _retryDifficulties,
                         _retryDifficulties.Length))
@@ -277,6 +286,7 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
                     Save();
                 }
             }
+#endif
         }
 
         ImGui.Separator();
@@ -450,32 +460,7 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
                             FontAwesomeIcon.Times, ImGuiColors.DalamudRed);
                     }
                     else if (dutyInfo.Notes.Count > 0)
-                    {
-                        using var color = new ImRaii.Color();
-                        if (!dutyInfo.EnabledByDefault)
-                            color.Push(ImGuiCol.TextDisabled, ImGuiColors.DalamudYellow);
-                        else
-                            color.Push(ImGuiCol.TextDisabled, ImGuiColors.ParsedBlue);
-
-                        ImGui.SameLine();
-                        using (ImRaii.PushFont(UiBuilder.IconFont))
-                        {
-                            if (!dutyInfo.EnabledByDefault)
-                                ImGui.TextDisabled(FontAwesomeIcon.ExclamationTriangle.ToIconString());
-                            else
-                                ImGui.TextDisabled(FontAwesomeIcon.InfoCircle.ToIconString());
-                        }
-
-                        if (ImGui.IsItemHovered())
-                        {
-                            using var _ = ImRaii.Tooltip();
-
-                            ImGui.TextColored(ImGuiColors.DalamudYellow,
-                                "While testing, the following issues have been found:");
-                            foreach (string note in dutyInfo.Notes)
-                                ImGui.BulletText(note);
-                        }
-                    }
+                        DrawNotes(dutyInfo.EnabledByDefault, dutyInfo.Notes);
                 }
 
                 if (ImGui.TableNextColumn())

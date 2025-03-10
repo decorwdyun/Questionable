@@ -1,14 +1,7 @@
 ﻿using Dalamud.Game.ClientState.Objects.Types;
-using Dalamud.Plugin;
-using Dalamud.Plugin.Ipc;
 using Dalamud.Plugin.Ipc.Exceptions;
-using Dalamud.Plugin.Services;
-using Json.Schema;
 using Microsoft.Extensions.Logging;
-using Questionable.Model;
 using System;
-using System.IO;
-using System.Numerics;
 using Questionable.External;
 
 namespace Questionable.Controller.CombatModules;
@@ -18,8 +11,6 @@ internal sealed class BossModModule : ICombatModule, IDisposable
     private readonly ILogger<BossModModule> _logger;
     private readonly BossModIpc _bossModIpc;
     private readonly Configuration _configuration;
-
-    private static Stream Preset => typeof(BossModModule).Assembly.GetManifestResourceStream("Questionable.Controller.CombatModules.BossModPreset")!;
 
     public BossModModule(
         ILogger<BossModModule> logger,
@@ -43,12 +34,7 @@ internal sealed class BossModModule : ICombatModule, IDisposable
     {
         try
         {
-            if (_bossModIpc.GetPreset("Questionable") == null)
-            {
-                using var reader = new StreamReader(Preset);
-                _logger.LogInformation("Loading Questionable BossMod Preset: {LoadedState}", _bossModIpc.CreatePreset(reader.ReadToEnd(), true));
-            }
-            _bossModIpc.SetPreset("Questionable");
+            _bossModIpc.SetPreset(BossModIpc.EPreset.Overworld);
             return true;
         }
         catch (IpcError e)

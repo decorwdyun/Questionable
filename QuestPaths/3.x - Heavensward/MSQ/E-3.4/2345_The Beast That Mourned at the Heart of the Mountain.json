@@ -198,7 +198,10 @@
         {
           "TerritoryId": 180,
           "InteractionType": "Duty",
-          "ContentFinderConditionId": 60
+          "DutyOptions": {
+            "ContentFinderConditionId": 60,
+            "Enabled": false
+          }
         }
       ]
     },

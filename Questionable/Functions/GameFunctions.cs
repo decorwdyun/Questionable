@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.InteropServices;
+using Dalamud.Game;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.ClientState.Objects.Types;
@@ -29,8 +31,7 @@ namespace Questionable.Functions;
 
 internal sealed unsafe class GameFunctions
 {
-    private readonly ReadOnlyDictionary<ushort, byte> _territoryToAetherCurrentCompFlgSet;
-    private readonly ReadOnlyDictionary<uint, uint> _contentFinderConditionToContentId;
+    private delegate void AbandonDutyDelegate(bool a1);
 
     private readonly QuestFunctions _questFunctions;
     private readonly IDataManager _dataManager;
@@ -41,6 +42,10 @@ internal sealed unsafe class GameFunctions
     private readonly IGameGui _gameGui;
     private readonly Configuration _configuration;
     private readonly ILogger<GameFunctions> _logger;
+    private readonly AbandonDutyDelegate _abandonDuty;
+
+    private readonly ReadOnlyDictionary<ushort, byte> _territoryToAetherCurrentCompFlgSet;
+    private readonly ReadOnlyDictionary<uint, uint> _contentFinderConditionToContentId;
 
     public GameFunctions(
         QuestFunctions questFunctions,
@@ -51,6 +56,7 @@ internal sealed unsafe class GameFunctions
         IClientState clientState,
         IGameGui gameGui,
         Configuration configuration,
+        ISigScanner sigScanner,
         ILogger<GameFunctions> logger)
     {
         _questFunctions = questFunctions;
@@ -62,6 +68,8 @@ internal sealed unsafe class GameFunctions
         _gameGui = gameGui;
         _configuration = configuration;
         _logger = logger;
+        _abandonDuty =
+            Marshal.GetDelegateForFunctionPointer<AbandonDutyDelegate>(sigScanner.ScanText(Signatures.AbandonDuty));
 
         _territoryToAetherCurrentCompFlgSet = dataManager.GetExcelSheet<TerritoryType>()
             .Where(x => x.RowId > 0)
@@ -502,6 +510,32 @@ internal sealed unsafe class GameFunctions
         return slots;
     }
 
+    /// <summary>
+    /// Abandons <em>some</em> quest battles/duties; but not all? Useful for debugging some quest battle/vbm related
+    /// issues.
+    /// </summary>
+    public void AbandonDuty() => _abandonDuty(false);
+
+    public int DumpUnlockLinks()
+    {
+        UIState* uiState = UIState.Instance();
+        if (uiState == null)
+        {
+            _logger.LogError("Could not query unlock links");
+            return -1;
+        }
+
+        List<uint> unlockedUnlockLinks = [];
+        for (uint unlockLink = 0; unlockLink < uiState->UnlockLinkBitmask.Length * 8; ++unlockLink)
+        {
+            if (uiState->IsUnlockLinkUnlocked(unlockLink))
+                unlockedUnlockLinks.Add(unlockLink);
+        }
+
+        _logger.LogInformation("Unlocked unlock links: {UnlockedUnlockLinks}", string.Join(", ", unlockedUnlockLinks));
+        return unlockedUnlockLinks.Count;
+    }
+
 #if false
     private byte ExecuteCommand(int id, int a, int b, int c, int d)
     {
@@ -513,4 +547,9 @@ internal sealed unsafe class GameFunctions
         return 0;
     }
 #endif
+
+    private static class Signatures
+    {
+        internal const string AbandonDuty = "E8 ?? ?? ?? ?? 41 B2 01 EB 39";
+    }
 }

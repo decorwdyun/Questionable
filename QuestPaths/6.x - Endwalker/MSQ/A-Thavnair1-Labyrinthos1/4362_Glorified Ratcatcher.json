@@ -146,7 +146,8 @@
           "TerritoryId": 956,
           "InteractionType": "UseItem",
           "ItemId": 2003129,
-          "Mount": false
+          "Mount": false,
+          "DelaySecondsAtStart": 2
         }
       ]
     },

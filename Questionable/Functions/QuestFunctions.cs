@@ -56,9 +56,9 @@ internal sealed unsafe class QuestFunctions
         _gameGui = gameGui;
     }
 
-    public (ElementId? CurrentQuest, byte Sequence) GetCurrentQuest()
+    public (ElementId? CurrentQuest, byte Sequence) GetCurrentQuest(bool allowNewMsq = true)
     {
-        var (currentQuest, sequence) = GetCurrentQuestInternal();
+        var (currentQuest, sequence) = GetCurrentQuestInternal(allowNewMsq);
         PlayerState* playerState = PlayerState.Instance();
 
         if (currentQuest == null || currentQuest.Value == 0)
@@ -110,7 +110,7 @@ internal sealed unsafe class QuestFunctions
         return (currentQuest, sequence);
     }
 
-    public (ElementId? CurrentQuest, byte Sequence) GetCurrentQuestInternal()
+    public (ElementId? CurrentQuest, byte Sequence) GetCurrentQuestInternal(bool allowNewMsq)
     {
         var questManager = QuestManager.Instance();
         if (questManager != null)
@@ -122,7 +122,12 @@ internal sealed unsafe class QuestFunctions
                 msqQuest = default;
 
             if (msqQuest.CurrentQuest != null && !IsQuestAccepted(msqQuest.CurrentQuest))
-                return msqQuest;
+            {
+                if (allowNewMsq)
+                    return msqQuest;
+                else
+                    msqQuest = default;
+            }
 
             // Use the quests in the same order as they're shown in the to-do list, e.g. if the MSQ is the first item,
             // do the MSQ; if a side quest is the first item do that side quest.
@@ -286,10 +291,14 @@ internal sealed unsafe class QuestFunctions
         else if (!IsReadyToAcceptQuest(currentQuest))
             return default;
 
+        var currentLevel = _clientState.LocalPlayer?.Level;
+
+        // are we in a loading screen?
+        if (currentLevel == null)
+            return default;
+
         // if we're not at a high enough level to continue, we also ignore it
-        var currentLevel = _clientState.LocalPlayer?.Level ?? 0;
-        if (currentLevel != 0 &&
-            _questRegistry.TryGetQuest(currentQuest, out Quest? quest)
+        if (_questRegistry.TryGetQuest(currentQuest, out Quest? quest)
             && quest.Info.Level > currentLevel)
             return default;
 
@@ -401,14 +410,15 @@ internal sealed unsafe class QuestFunctions
             return 1000 * quest.AllSteps().Count(x => x.Step.AetheryteShortcut != null);
     }
 
-    public List<ElementId> GetPriorityQuests()
+    public List<ElementId> GetPriorityQuests(bool onlyClassAndRoleQuests = false)
     {
-        List<ElementId> priorityQuests =
-        [
-            new QuestId(1157), // Garuda (Hard)
-            new QuestId(1158), // Titan (Hard)
-            ..QuestData.CrystalTowerQuests
-        ];
+        List<ElementId> priorityQuests = [];
+        if (!onlyClassAndRoleQuests)
+        {
+            priorityQuests.Add(new QuestId(1157)); // Garuda (Hard)
+            priorityQuests.Add(new QuestId(1158)); // Titan (Hard)
+            priorityQuests.AddRange(QuestData.CrystalTowerQuests);
+        }
 
         EClassJob classJob = (EClassJob?)_clientState.LocalPlayer?.ClassJob.RowId ?? EClassJob.Adventurer;
         uint[] shadowbringersRoleQuestChapters = QuestData.AllRoleQuestChapters.Select(x => x[0]).ToArray();

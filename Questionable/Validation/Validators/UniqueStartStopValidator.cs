@@ -9,7 +9,7 @@ internal sealed class UniqueStartStopValidator : IQuestValidator
 {
     public IEnumerable<ValidationIssue> Validate(Quest quest)
     {
-        if (quest.Id is SatisfactionSupplyNpcId)
+        if (quest.Id is SatisfactionSupplyNpcId or AlliedSocietyDailyId)
             yield break;
 
         var questAccepts =

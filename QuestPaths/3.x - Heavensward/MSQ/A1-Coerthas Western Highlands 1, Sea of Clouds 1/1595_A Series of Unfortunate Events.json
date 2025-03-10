@@ -60,7 +60,8 @@
           "TerritoryId": 401,
           "InteractionType": "SinglePlayerDuty",
           "SinglePlayerDutyOptions": {
-            "Enabled": true
+            "Enabled": true,
+            "TestedBossModVersion": "0.0.0.292"
           }
         }
       ]

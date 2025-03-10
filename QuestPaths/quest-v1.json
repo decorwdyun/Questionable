@@ -302,7 +302,9 @@
                     "WakingSandsSolar",
                     "RisingStonesSolar",
                     "RoguesGuild",
-                    "DockStorehouse"
+                    "NotRoguesGuild",
+                    "DockStorehouse",
+                    "SkipFreeFantasia"
                   ]
                 }
               },
@@ -369,6 +371,12 @@
                     "TerritoryId"
                   ],
                   "additionalProperties": false
+                },
+                "ExtraCondition": {
+                  "type": "string",
+                  "enum": [
+                    "SkipFreeFantasia"
+                  ]
                 }
               },
               "additionalProperties": false
@@ -1237,13 +1245,35 @@
           },
           "then": {
             "properties": {
-              "ContentFinderConditionId": {
-                "type": "integer",
-                "exclusiveMinimum": 0,
-                "exclusiveMaximum": 3000
-              },
-              "AutoDutyEnabled": {
-                "type": "boolean"
+              "DutyOptions": {
+                "type": "object",
+                "properties": {
+                  "ContentFinderConditionId": {
+                    "type": "integer",
+                    "exclusiveMinimum": 0,
+                    "exclusiveMaximum": 3000
+                  },
+                  "Enabled": {
+                    "type": "boolean"
+                  },
+                  "Notes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "TestedAutoDutyVersion": {
+                    "type": "string",
+                    "pattern": "^0\\.\\d+\\.\\d+\\.\\d+$"
+                  },
+                  "$": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "ContentFinderConditionId",
+                  "Enabled"
+                ]
               },
               "DataId": {
                 "type": "null"
@@ -1253,7 +1283,7 @@
               }
             },
             "required": [
-              "ContentFinderConditionId"
+              "DutyOptions"
             ]
           }
         },
@@ -1284,6 +1314,10 @@
                     "minimum": 0,
                     "maximum": 1,
                     "description": "If a quest has multiple solo instances (which affects 5 quests total), indicates which one this is"
+                  },
+                  "TestedBossModVersion": {
+                    "type": "string",
+                    "pattern": "^0\\.\\d+\\.\\d+\\.\\d+$"
                   },
                   "$": {
                     "type": "string"

@@ -1,5 +1,9 @@
+using System.Collections.Generic;
 using System.Text;
 using Dalamud.Game.Text;
+using Dalamud.Interface;
+using Dalamud.Interface.Colors;
+using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin;
 using ImGuiNET;
 
@@ -60,5 +64,30 @@ internal abstract class ConfigComponent
         while (ptr[byteCount] != 0)
             ++byteCount;
         return Encoding.UTF8.GetString(ptr, byteCount);
+    }
+
+    protected static void DrawNotes(bool enabledByDefault, IReadOnlyList<string> notes)
+    {
+        using var color = new ImRaii.Color();
+        color.Push(ImGuiCol.TextDisabled, !enabledByDefault ? ImGuiColors.DalamudYellow : ImGuiColors.ParsedBlue);
+
+        ImGui.SameLine();
+        using (ImRaii.PushFont(UiBuilder.IconFont))
+        {
+            if (!enabledByDefault)
+                ImGui.TextDisabled(FontAwesomeIcon.ExclamationTriangle.ToIconString());
+            else
+                ImGui.TextDisabled(FontAwesomeIcon.InfoCircle.ToIconString());
+        }
+
+        if (!ImGui.IsItemHovered())
+            return;
+
+        using var _ = ImRaii.Tooltip();
+
+        ImGui.TextColored(ImGuiColors.DalamudYellow,
+            "While testing, the following issues have been found:");
+        foreach (string note in notes)
+            ImGui.BulletText(note);
     }
 }

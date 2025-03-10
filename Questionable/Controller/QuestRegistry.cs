@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Ipc;
+using Dalamud.Plugin.Services;
 using LLib.GameData;
 using Microsoft.Extensions.Logging;
 using Questionable.Data;
@@ -28,14 +29,21 @@ internal sealed class QuestRegistry
     private readonly ILogger<QuestRegistry> _logger;
     private readonly LeveData _leveData;
     private readonly TerritoryData _territoryData;
+    private readonly IChatGui _chatGui;
 
     private readonly ICallGateProvider<object> _reloadDataIpc;
     private readonly Dictionary<ElementId, Quest> _quests = [];
     private readonly Dictionary<uint, (ElementId QuestId, QuestStep Step)> _contentFinderConditionIds = [];
 
-    public QuestRegistry(IDalamudPluginInterface pluginInterface, QuestData questData,
-        QuestValidator questValidator, JsonSchemaValidator jsonSchemaValidator,
-        ILogger<QuestRegistry> logger, LeveData leveData, TerritoryData territoryData)
+    public QuestRegistry(
+        IDalamudPluginInterface pluginInterface,
+        QuestData questData,
+        QuestValidator questValidator,
+        JsonSchemaValidator jsonSchemaValidator,
+        ILogger<QuestRegistry> logger,
+        LeveData leveData,
+        TerritoryData territoryData,
+        IChatGui chatGui)
     {
         _pluginInterface = pluginInterface;
         _questData = questData;
@@ -44,6 +52,7 @@ internal sealed class QuestRegistry
         _logger = logger;
         _leveData = leveData;
         _territoryData = territoryData;
+        _chatGui = chatGui;
         _reloadDataIpc = _pluginInterface.GetIpcProvider<object>("Questionable.ReloadData");
     }
 
@@ -141,6 +150,8 @@ internal sealed class QuestRegistry
                 catch (Exception e)
                 {
                     _quests.Clear();
+
+                    _chatGui.PrintError($"Unable to load quests - {e.GetType().Name}: {e.Message}", CommandHandler.MessageTag, CommandHandler.TagColor);
                     _logger.LogError(e, "Failed to load quests from project directory");
                 }
             }
@@ -154,8 +165,8 @@ internal sealed class QuestRegistry
             foreach (var dutyStep in quest.AllSteps().Where(x =>
                          x.Step.InteractionType is EInteractionType.Duty or EInteractionType.SinglePlayerDuty))
             {
-                if (dutyStep.Step is { InteractionType: EInteractionType.Duty, ContentFinderConditionId: not null })
-                    _contentFinderConditionIds[dutyStep.Step.ContentFinderConditionId!.Value] =
+                if (dutyStep.Step is { InteractionType: EInteractionType.Duty, DutyOptions: { } dutyOptions })
+                    _contentFinderConditionIds[dutyOptions.ContentFinderConditionId] =
                         (quest.Id, dutyStep.Step);
                 else if (dutyStep.Step.InteractionType == EInteractionType.SinglePlayerDuty &&
                          _territoryData.TryGetContentFinderConditionForSoloInstance(quest.Id,
@@ -251,15 +262,15 @@ internal sealed class QuestRegistry
             .ToList();
     }
 
-    public bool TryGetDutyByContentFinderConditionId(uint cfcId, out bool autoDutyEnabledByDefault)
+    public bool TryGetDutyByContentFinderConditionId(uint cfcId, [NotNullWhen(true)] out DutyOptions? dutyOptions)
     {
         if (_contentFinderConditionIds.TryGetValue(cfcId, out var value))
         {
-            autoDutyEnabledByDefault = value.Step.AutoDutyEnabled;
-            return true;
+            dutyOptions = value.Step.DutyOptions;
+            return dutyOptions != null;
         }
 
-        autoDutyEnabledByDefault = false;
+        dutyOptions = null;
         return false;
     }
 }

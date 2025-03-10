@@ -152,15 +152,9 @@
           "TerritoryId": 129,
           "InteractionType": "Interact",
           "TargetTerritoryId": 129,
-          "AethernetShortcut": [
-            "[Limsa Lominsa] Fishermens' Guild",
-            "[Limsa Lominsa] The Aftcastle"
-          ],
           "SkipConditions": {
             "StepIf": {
-              "InTerritory": [
-                128
-              ]
+              "ExtraCondition": "NotRoguesGuild"
             }
           }
         },
@@ -173,6 +167,10 @@
           },
           "TerritoryId": 128,
           "InteractionType": "Interact",
+          "AethernetShortcut": [
+            "[Limsa Lominsa] Fishermens' Guild",
+            "[Limsa Lominsa] The Aftcastle"
+          ],
           "DialogueChoices": [
             {
               "Type": "List",

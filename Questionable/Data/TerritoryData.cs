@@ -19,7 +19,7 @@ internal sealed class TerritoryData
     private readonly ImmutableDictionary<ushort, uint> _dutyTerritories;
     private readonly ImmutableDictionary<uint, string> _instanceNames;
     private readonly ImmutableDictionary<uint, ContentFinderConditionData> _contentFinderConditions;
-    private readonly ImmutableDictionary<(ElementId QuestId, byte Index), uint> _questsToCfc;
+    private readonly ImmutableDictionary<(ElementId QuestId, byte Index), uint> _questBattlesToContentFinderCondition;
 
     public TerritoryData(IDataManager dataManager)
     {
@@ -52,7 +52,7 @@ internal sealed class TerritoryData
             .Select(x => new ContentFinderConditionData(x, dataManager.Language))
             .ToImmutableDictionary(x => x.ContentFinderConditionId, x => x);
 
-        _questsToCfc = dataManager.GetExcelSheet<Quest>()
+        _questBattlesToContentFinderCondition = dataManager.GetExcelSheet<Quest>()
             .Where(x => x is { RowId: > 0, IssuerLocation.RowId: > 0 })
             .SelectMany(GetQuestBattles)
             .Select(x => (x.QuestId, x.Index,
@@ -90,7 +90,7 @@ internal sealed class TerritoryData
     public bool TryGetContentFinderConditionForSoloInstance(ElementId questId, byte index,
         [NotNullWhen(true)] out ContentFinderConditionData? contentFinderConditionData)
     {
-        if (_questsToCfc.TryGetValue((questId, index), out uint cfcId))
+        if (_questBattlesToContentFinderCondition.TryGetValue((questId, index), out uint cfcId))
             return _contentFinderConditions.TryGetValue(cfcId, out contentFinderConditionData);
         else
         {
@@ -101,7 +101,7 @@ internal sealed class TerritoryData
 
     public IEnumerable<(ElementId QuestId, byte Index, ContentFinderConditionData Data)> GetAllQuestsWithQuestBattles()
     {
-        return _questsToCfc.Select(x => (x.Key.QuestId, x.Key.Index, _contentFinderConditions[x.Value]));
+        return _questBattlesToContentFinderCondition.Select(x => (x.Key.QuestId, x.Key.Index, _contentFinderConditions[x.Value]));
     }
 
     private static string FixName(string name, ClientLanguage language)

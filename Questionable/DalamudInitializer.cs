@@ -7,6 +7,7 @@ using Dalamud.Plugin.Services;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller;
 using Questionable.Controller.GameUi;
+using Questionable.Controller.Utils;
 using Questionable.Windows;
 
 namespace Questionable;
@@ -23,6 +24,7 @@ internal sealed class DalamudInitializer : IDisposable
     private readonly ConfigWindow _configWindow;
     private readonly IToastGui _toastGui;
     private readonly Configuration _configuration;
+    private readonly PartyWatchDog _partyWatchDog;
     private readonly ILogger<DalamudInitializer> _logger;
 
     public DalamudInitializer(
@@ -42,6 +44,7 @@ internal sealed class DalamudInitializer : IDisposable
         PriorityWindow priorityWindow,
         IToastGui toastGui,
         Configuration configuration,
+        PartyWatchDog partyWatchDog,
         ILogger<DalamudInitializer> logger)
     {
         _pluginInterface = pluginInterface;
@@ -54,6 +57,7 @@ internal sealed class DalamudInitializer : IDisposable
         _configWindow = configWindow;
         _toastGui = toastGui;
         _configuration = configuration;
+        _partyWatchDog = partyWatchDog;
         _logger = logger;
 
         _windowSystem.AddWindow(oneTimeSetupWindow);
@@ -77,6 +81,7 @@ internal sealed class DalamudInitializer : IDisposable
 
     private void FrameworkUpdate(IFramework framework)
     {
+        _partyWatchDog.Update();
         _questController.Update();
 
         try

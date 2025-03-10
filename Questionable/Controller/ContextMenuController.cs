@@ -21,6 +21,7 @@ internal sealed class ContextMenuController : IDisposable
 {
     private readonly IContextMenu _contextMenu;
     private readonly QuestController _questController;
+    private readonly GatheringPointRegistry _gatheringPointRegistry;
     private readonly GatheringData _gatheringData;
     private readonly QuestRegistry _questRegistry;
     private readonly QuestData _questData;
@@ -34,6 +35,7 @@ internal sealed class ContextMenuController : IDisposable
     public ContextMenuController(
         IContextMenu contextMenu,
         QuestController questController,
+        GatheringPointRegistry gatheringPointRegistry,
         GatheringData gatheringData,
         QuestRegistry questRegistry,
         QuestData questData,
@@ -46,6 +48,7 @@ internal sealed class ContextMenuController : IDisposable
     {
         _contextMenu = contextMenu;
         _questController = questController;
+        _gatheringPointRegistry = gatheringPointRegistry;
         _gatheringData = gatheringData;
         _questRegistry = questRegistry;
         _questData = questData;
@@ -112,7 +115,7 @@ internal sealed class ContextMenuController : IDisposable
         if (classJob != currentClassJob && currentClassJob is EClassJob.Miner or EClassJob.Botanist)
             return;
 
-        if (!_gatheringData.TryGetGatheringPointId(itemId, classJob, out _))
+        if (!_gatheringPointRegistry.TryGetGatheringPointId(itemId, classJob, out _))
         {
             _logger.LogInformation("No gathering point found for {ClassJob}.", classJob);
             return;
@@ -181,7 +184,7 @@ internal sealed class ContextMenuController : IDisposable
                 }
             ];
             _questController.SetGatheringQuest(quest);
-            _questController.StartSingleQuest("SatisfactionSupply prepare gathering");
+            _questController.StartGatheringQuest("SatisfactionSupply prepare gathering");
         }
         else
             _chatGui.PrintError($"No associated quest ({info.QuestId}).", "Questionable");

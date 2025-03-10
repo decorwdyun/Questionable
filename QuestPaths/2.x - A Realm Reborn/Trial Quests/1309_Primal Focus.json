@@ -23,7 +23,10 @@
         {
           "TerritoryId": 155,
           "InteractionType": "Duty",
-          "ContentFinderConditionId": 65,
+          "DutyOptions": {
+            "ContentFinderConditionId": 65,
+            "Enabled": false
+          },
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -36,7 +39,10 @@
         {
           "TerritoryId": 180,
           "InteractionType": "Duty",
-          "ContentFinderConditionId": 64,
+          "DutyOptions": {
+            "ContentFinderConditionId": 64,
+            "Enabled": false
+          },
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -49,7 +55,10 @@
         {
           "TerritoryId": 146,
           "InteractionType": "Duty",
-          "ContentFinderConditionId": 63,
+          "DutyOptions": {
+            "ContentFinderConditionId": 63,
+            "Enabled": false
+          },
           "CompletionQuestVariablesFlags": [
             null,
             null,

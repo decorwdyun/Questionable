@@ -59,8 +59,14 @@
         {
           "TerritoryId": 155,
           "InteractionType": "Duty",
-          "ContentFinderConditionId": 11,
-          "AutoDutyEnabled": true
+          "DutyOptions": {
+            "ContentFinderConditionId": 11,
+            "Enabled": false,
+            "Notes": [
+              "(boss 1) AI will not face cleaves away from healer, typically killing them",
+              "(boss 3) AI will not face cleaves away from healer, which doesn't always kill them"
+            ]
+          }
         }
       ]
     },

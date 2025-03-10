@@ -92,7 +92,10 @@
         {
           "TerritoryId": 145,
           "InteractionType": "Duty",
-          "ContentFinderConditionId": 81
+          "DutyOptions": {
+            "ContentFinderConditionId": 81,
+            "Enabled": false
+          }
         }
       ]
     },
