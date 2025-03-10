@@ -31,6 +31,14 @@
       "type": "boolean",
       "default": true
     },
+    "ExtraQuestItems": {
+      "description": "Some quests (such as Ixal) add quest items to gathering nodes, but there's no clear connection between the item and the node in the sheets",
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 2000000
+      }
+    },
     "Groups": {
       "type": "array",
       "items": {

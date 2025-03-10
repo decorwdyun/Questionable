@@ -70,6 +70,7 @@ internal sealed class Configuration : IPluginConfiguration
         public bool DebugOverlay { get; set; }
         public bool NeverFly { get; set; }
         public bool AdditionalStatusInformation { get; set; }
+        public bool DisableAutoDutyBareMode { get; set; }
     }
 
     internal enum ECombatModule

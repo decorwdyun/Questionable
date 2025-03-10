@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Keys;
 using Dalamud.Game.Gui.Toast;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using Lumina.Excel.Sheets;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps;
 using Questionable.Controller.Steps.Interactions;
@@ -799,6 +801,9 @@ internal sealed class QuestController : MiniTaskController<QuestController>
 
     public bool IsInterruptible()
     {
+        if (AutomationType is EAutomationType.SingleQuestA or EAutomationType.SingleQuestB)
+            return false;
+
         var details = CurrentQuestDetails;
         if (details == null)
             return false;
@@ -847,6 +852,48 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         }
 
         return false;
+    }
+
+    public void ImportQuestPriority(List<ElementId> questElements)
+    {
+        foreach (ElementId elementId in questElements)
+        {
+            if (_questRegistry.TryGetQuest(elementId, out Quest? quest) && !ManualPriorityQuests.Contains(quest))
+                ManualPriorityQuests.Add(quest);
+        }
+    }
+
+    private const char ClipboardSeparator = ';';
+    public string ExportQuestPriority()
+    {
+        return string.Join(ClipboardSeparator, ManualPriorityQuests.Select(x => x.Id.ToString()));
+    }
+
+    public void ClearQuestPriority()
+    {
+        ManualPriorityQuests.Clear();
+    }
+
+    public bool AddQuestPriority(ElementId elementId)
+    {
+        if (_questRegistry.TryGetQuest(elementId, out Quest? quest) && !ManualPriorityQuests.Contains(quest))
+            ManualPriorityQuests.Add(quest);
+        return true;
+    }
+
+    public bool InsertQuestPriority(int index, ElementId elementId)
+    {
+        try
+        {
+            if (_questRegistry.TryGetQuest(elementId, out Quest? quest) && !ManualPriorityQuests.Contains(quest))
+                ManualPriorityQuests.Insert(index, quest);
+            return true;
+        }
+        catch (Exception e) {
+            _logger.LogError(e, "Failed to insert quest in priority list");
+            _chatGui.PrintError("Failed to insert quest in priority list, please check /xllog for details.", CommandHandler.MessageTag, CommandHandler.TagColor);
+            return false;
+        }
     }
 
     public bool WasLastTaskUpdateWithin(TimeSpan timeSpan)

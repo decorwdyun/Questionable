@@ -291,10 +291,14 @@ internal sealed unsafe class QuestFunctions
         else if (!IsReadyToAcceptQuest(currentQuest))
             return default;
 
+        var currentLevel = _clientState.LocalPlayer?.Level;
+
+        // are we in a loading screen?
+        if (currentLevel == null)
+            return default;
+
         // if we're not at a high enough level to continue, we also ignore it
-        var currentLevel = _clientState.LocalPlayer?.Level ?? 0;
-        if (currentLevel != 0 &&
-            _questRegistry.TryGetQuest(currentQuest, out Quest? quest)
+        if (_questRegistry.TryGetQuest(currentQuest, out Quest? quest)
             && quest.Info.Level > currentLevel)
             return default;
 
