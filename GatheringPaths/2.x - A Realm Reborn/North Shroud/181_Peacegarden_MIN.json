@@ -1,6 +1,10 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
   "Author": "Redacted",
+  "ExtraQuestItems": [
+    2001391,
+    2001392
+  ],
   "Steps": [
     {
       "TerritoryId": 154,
