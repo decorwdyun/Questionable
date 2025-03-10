@@ -38,7 +38,6 @@ internal static class Gather
     }
 
     internal sealed class DelayedGatheringExecutor(
-        GatheringData gatheringData,
         GatheringPointRegistry gatheringPointRegistry,
         TerritoryData territoryData,
         IClientState clientState,
@@ -52,7 +51,7 @@ internal static class Gather
         public IEnumerable<ITask> CreateExtraTasks()
         {
             EClassJob currentClassJob = (EClassJob)clientState.LocalPlayer!.ClassJob.RowId;
-            if (!gatheringData.TryGetGatheringPointId(Task.GatheredItem.ItemId, currentClassJob,
+            if (!gatheringPointRegistry.TryGetGatheringPointId(Task.GatheredItem.ItemId, currentClassJob,
                     out GatheringPointId? gatheringPointId))
                 throw new TaskException($"No gathering point found for item {Task.GatheredItem.ItemId}");
 

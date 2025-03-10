@@ -14,5 +14,6 @@ public sealed class GatheringRoot
 
     public List<QuestStep> Steps { get; set; } = [];
     public bool? FlyBetweenNodes { get; set; }
+    public List<uint> ExtraQuestItems { get; set; } = [];
     public List<GatheringNodeGroup> Groups { get; set; } = [];
 }

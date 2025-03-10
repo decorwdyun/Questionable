@@ -37,7 +37,6 @@ internal sealed class InteractionUiController : IDisposable
     private readonly AetheryteFunctions _aetheryteFunctions;
     private readonly ExcelFunctions _excelFunctions;
     private readonly QuestController _questController;
-    private readonly GatheringData _gatheringData;
     private readonly GatheringPointRegistry _gatheringPointRegistry;
     private readonly QuestRegistry _questRegistry;
     private readonly QuestData _questData;
@@ -61,7 +60,6 @@ internal sealed class InteractionUiController : IDisposable
         AetheryteFunctions aetheryteFunctions,
         ExcelFunctions excelFunctions,
         QuestController questController,
-        GatheringData gatheringData,
         GatheringPointRegistry gatheringPointRegistry,
         QuestRegistry questRegistry,
         QuestData questData,
@@ -81,7 +79,6 @@ internal sealed class InteractionUiController : IDisposable
         _aetheryteFunctions = aetheryteFunctions;
         _excelFunctions = excelFunctions;
         _questController = questController;
-        _gatheringData = gatheringData;
         _gatheringPointRegistry = gatheringPointRegistry;
         _questRegistry = questRegistry;
         _questData = questData;
@@ -791,7 +788,7 @@ internal sealed class InteractionUiController : IDisposable
         if (step != null && (step.TerritoryId != _clientState.TerritoryType || step.TargetTerritoryId == null) &&
             step.InteractionType == EInteractionType.Gather)
         {
-            if (_gatheringData.TryGetGatheringPointId(step.ItemsToGather[0].ItemId,
+            if (_gatheringPointRegistry.TryGetGatheringPointId(step.ItemsToGather[0].ItemId,
                     (EClassJob?)_clientState.LocalPlayer?.ClassJob.RowId ?? EClassJob.Adventurer,
                     out GatheringPointId? gatheringPointId) &&
                 _gatheringPointRegistry.TryGetGatheringPoint(gatheringPointId, out GatheringRoot? root))
