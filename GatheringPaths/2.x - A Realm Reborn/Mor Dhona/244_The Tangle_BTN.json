@@ -1,0 +1,111 @@
+{
+  "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
+  "Author": "Redacted",
+  "ExtraQuestItems": [
+    2001412,
+    2001413
+  ],
+  "Steps": [
+    {
+      "TerritoryId": 156,
+      "InteractionType": "None"
+    }
+  ],
+  "Groups": [
+    {
+      "Nodes": [
+        {
+          "DataId": 31043,
+          "Locations": [
+            {
+              "Position": {
+                "X": -371.8556,
+                "Y": -15.86567,
+                "Z": -363.9182
+              },
+              "MinimumAngle": -185,
+              "MaximumAngle": -10
+            },
+            {
+              "Position": {
+                "X": -372.1209,
+                "Y": -16.00947,
+                "Z": -351.6216
+              },
+              "MinimumAngle": -160,
+              "MaximumAngle": 45
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Nodes": [
+        {
+          "DataId": 31044,
+          "Locations": [
+            {
+              "Position": {
+                "X": -344.8759,
+                "Y": -16.46771,
+                "Z": -338.7833
+              },
+              "MinimumAngle": -115,
+              "MaximumAngle": 100
+            },
+            {
+              "Position": {
+                "X": -332.5748,
+                "Y": -16.07329,
+                "Z": -337.0371
+              },
+              "MinimumAngle": -80,
+              "MaximumAngle": 130
+            }
+          ]
+        },
+        {
+          "DataId": 31042,
+          "Locations": [
+            {
+              "Position": {
+                "X": -317.5309,
+                "Y": -16.18071,
+                "Z": -338.7262
+              },
+              "MinimumAngle": -50,
+              "MaximumAngle": 140
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "Nodes": [
+        {
+          "DataId": 31041,
+          "Locations": [
+            {
+              "Position": {
+                "X": -347.2882,
+                "Y": -15.12936,
+                "Z": -346.8752
+              },
+              "MinimumAngle": -240,
+              "MaximumAngle": -60
+            },
+            {
+              "Position": {
+                "X": -348.3911,
+                "Y": -16.14678,
+                "Z": -363.7992
+              },
+              "MinimumAngle": -50,
+              "MaximumAngle": 175
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
