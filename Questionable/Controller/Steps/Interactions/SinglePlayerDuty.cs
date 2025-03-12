@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.ClientState.Objects.Types;
@@ -19,10 +20,11 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class SinglePlayerDuty
 {
-    private static class SpecialTerritories
+    internal static class SpecialTerritories
     {
         public const ushort Lahabrea = 1052;
         public const ushort ItsProbablyATrap = 665;
+        public const ushort Naadam = 688;
     }
 
     internal sealed class Factory(
@@ -43,7 +45,7 @@ internal static class SinglePlayerDuty
                     throw new TaskException("Failed to get content finder condition for solo instance");
 
                 yield return new StartSinglePlayerDuty(cfcData.ContentFinderConditionId);
-                yield return new EnableAi();
+                yield return new EnableAi(cfcData.TerritoryId == SpecialTerritories.Naadam);
                 if (cfcData.TerritoryId == SpecialTerritories.Lahabrea)
                 {
                     yield return new SetTarget(14643);
@@ -56,11 +58,26 @@ internal static class SinglePlayerDuty
                         "Wait(resurrection)");
                     yield return new EnableAi();
                 }
-                else if (cfcData.TerritoryId == SpecialTerritories.ItsProbablyATrap)
+                else if (cfcData.TerritoryId is SpecialTerritories.ItsProbablyATrap)
                 {
                     yield return new WaitCondition.Task(() => DutyActionsAvailable() || clientState.TerritoryType != SpecialTerritories.ItsProbablyATrap,
                         "Wait(Phase 2)");
                     yield return new EnableAi(true);
+                }
+                else if (cfcData.TerritoryId is SpecialTerritories.Naadam)
+                {
+                    yield return new WaitCondition.Task(
+                        () =>
+                        {
+                            if (clientState.TerritoryType != SpecialTerritories.Naadam)
+                                return true;
+
+                            var pos = clientState.LocalPlayer?.Position ?? default;
+                            return (new Vector3(352.01f, -1.45f, 288.59f) - pos).Length() < 10f;
+                        },
+                        "Wait(moving to Ovoo)");
+                    yield return new Mount.UnmountTask();
+                    yield return new EnableAi();
                 }
 
                 yield return new WaitSinglePlayerDuty(cfcData.ContentFinderConditionId);

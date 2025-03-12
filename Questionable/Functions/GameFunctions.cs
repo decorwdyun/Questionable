@@ -438,7 +438,7 @@ internal sealed unsafe class GameFunctions
 
         if (_condition[ConditionFlag.Unconscious] &&
             _condition[ConditionFlag.SufferingStatusAffliction63] &&
-            _clientState.TerritoryType == SinglePlayerDuty.LahabreaTerritoryId)
+            _clientState.TerritoryType == SinglePlayerDuty.SpecialTerritories.Lahabrea)
             return false; // needed to process the tasks
 
         return _condition[ConditionFlag.Occupied] || _condition[ConditionFlag.Occupied30] ||

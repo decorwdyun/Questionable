@@ -55,7 +55,6 @@
               "Answer": "TEXT_STMBDA416_02515_A1_000_103"
             }
           ],
-          "$": "QW: 0 0    0 0    0 0 -> QW: 17 0    0 0    0 32",
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -81,7 +80,6 @@
               "Answer": "TEXT_STMBDA416_02515_A1_120_070"
             }
           ],
-          "$": "QW: 17 0    0 0    0 32 -> QW: 33 0    16 0    0 96",
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -100,7 +98,6 @@
           },
           "TerritoryId": 622,
           "InteractionType": "Interact",
-          "$": "QW: 33 0    16 0    0 96 -> QW: 49 16    16 0    0 112",
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -138,7 +135,11 @@
             "Z": -508.20172
           },
           "TerritoryId": 622,
-          "InteractionType": "SinglePlayerDuty"
+          "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": "0.1.0.1"
+          }
         }
       ]
     },

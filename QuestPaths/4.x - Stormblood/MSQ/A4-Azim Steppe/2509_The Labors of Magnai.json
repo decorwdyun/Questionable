@@ -80,8 +80,18 @@
             "Z": 23.111439
           },
           "TerritoryId": 622,
-          "InteractionType": "Dive",
+          "InteractionType": "WalkTo",
           "DisableNavmesh": true
+        },
+        {
+          "Position": {
+            "X": 65.04901,
+            "Y": 1.9869974,
+            "Z": 23.111439
+          },
+          "TerritoryId": 622,
+          "InteractionType": "Dive",
+          "DelaySecondsAtStart": 2
         },
         {
           "DataId": 2008252,

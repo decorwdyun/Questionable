@@ -209,7 +209,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         {
             if (_condition[ConditionFlag.Unconscious] &&
                 _condition[ConditionFlag.SufferingStatusAffliction63] &&
-                _clientState.TerritoryType == SinglePlayerDuty.LahabreaTerritoryId)
+                _clientState.TerritoryType == SinglePlayerDuty.SpecialTerritories.Lahabrea)
             {
                 // ignore, we're in the lahabrea fight
             }
