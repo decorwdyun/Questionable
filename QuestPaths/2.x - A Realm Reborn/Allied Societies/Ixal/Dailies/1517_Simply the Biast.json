@@ -6,17 +6,18 @@
             "Sequence": 0,
             "Steps": [
                 {
-                    "DataId": 1009213,
                     "Position": {
-                        "X": 159.28894,
-                        "Y": -3.6960998,
-                        "Z": 64.286255
+                        "X": 161.94475,
+                        "Y": -4.690532,
+                        "Z": 63.927406
                     },
                     "TerritoryId": 154,
-                    "InteractionType": "AcceptQuest",
+                    "InteractionType": "WalkTo",
                     "AetheryteShortcut": "North Shroud - Fallgourd Float",
+                    "Fly": true,
+                    "Land": true,
                     "SkipConditions": {
-                        "AetheryteShortcutIf": {
+                        "StepIf": {
                             "NearPosition": {
                                 "Position": {
                                     "X": 159.28894,
@@ -28,6 +29,16 @@
                             }
                         }
                     }
+                },
+                {
+                    "DataId": 1009213,
+                    "Position": {
+                        "X": 159.28894,
+                        "Y": -3.6960998,
+                        "Z": 64.286255
+                    },
+                    "TerritoryId": 154,
+                    "InteractionType": "AcceptQuest"
                 }
             ]
         },
@@ -115,17 +126,6 @@
                     "Fly": true,
                     "Land": true,
                     "SkipConditions": {
-                        "AetheryteShortcutIf": {
-                            "NearPosition": {
-                                "Position": {
-                                    "X": 159.28894,
-                                    "Y": -3.6960998,
-                                    "Z": 64.286255
-                                },
-                                "TerritoryId": 154,
-                                "MaximumDistance": 50
-                            }
-                        },
                         "StepIf": {
                             "NearPosition": {
                                 "Position": {
