@@ -87,6 +87,7 @@
                     },
                     "TerritoryId": 156,
                     "InteractionType": "Combat",
+                    "AetheryteShortcut": "Mor Dhona",
                     "EnemySpawnType": "OverworldEnemies",
                     "KillEnemyDataIds": [
                         140
