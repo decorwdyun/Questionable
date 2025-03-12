@@ -71,17 +71,7 @@
                     "ChatMessage": {
                         "Key": "TEXT_BANIXA302_01515_SYSTEM_100_062"
                     },
-                    "Fly": true,
-                    "RequiredQuestVariables": [
-                        null,
-                        null,
-                        null,
-                        null,
-                        null,
-                        [
-                            64
-                        ]
-                    ]
+                    "Fly": true
                 }
             ]
         },
