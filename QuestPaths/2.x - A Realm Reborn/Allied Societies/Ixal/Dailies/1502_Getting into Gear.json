@@ -92,7 +92,6 @@
                     "KillEnemyDataIds": [
                         170
                     ],
-                    "Fly": true,
                     "CompletionQuestVariablesFlags": [
                         null,
                         null,
@@ -114,8 +113,7 @@
                     "EnemySpawnType": "AfterInteraction",
                     "KillEnemyDataIds": [
                         170
-                    ],
-                    "Fly": true
+                    ]
                 }
             ]
         },
