@@ -52,7 +52,15 @@
                     "KillEnemyDataIds": [
                         749
                     ],
-                    "Fly": true
+                    "Fly": true,
+                    "CompletionQuestVariablesFlags": [
+                        1,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                    ]
                 },
                 {
                     "DataId": 2004457,
