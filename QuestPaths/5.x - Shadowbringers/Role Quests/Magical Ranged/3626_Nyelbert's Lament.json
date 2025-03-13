@@ -49,7 +49,7 @@
             "Enabled": true,
             "TestedBossModVersion": "0.1.0.1",
             "Notes": [
-              "It can fail at the first try, but it works."
+              "Sometimes the movement is the cause of a duty failing."
             ]
           }
         }
