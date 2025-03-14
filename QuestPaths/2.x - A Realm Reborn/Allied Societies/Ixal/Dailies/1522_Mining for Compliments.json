@@ -38,6 +38,11 @@
             "Steps": [
                 {
                     "TerritoryId": 155,
+                    "InteractionType": "SwitchClass",
+                    "TargetClass": "Miner"
+                },
+                {
+                    "TerritoryId": 155,
                     "InteractionType": "Gather",
                     "ItemsToGather": [
                         {
