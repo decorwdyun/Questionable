@@ -33,8 +33,16 @@
             "Z": 135.44316
           },
           "TerritoryId": 612,
-          "InteractionType": "WaitForManualProgress",
-          "Comment": "Use item 2002324 on 6655 after \"weakening\""
+          "InteractionType": "Combat",
+          "EnemySpawnType": "OverworldEnemies",
+          "KillEnemyDataIds": [
+            6655
+          ],
+          "CombatItemUse": {
+            "ItemId": 2002324,
+            "Condition": "Health%",
+            "Value": 50
+          }
         }
       ]
     },

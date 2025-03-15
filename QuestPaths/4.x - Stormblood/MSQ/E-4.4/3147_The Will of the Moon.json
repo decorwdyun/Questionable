@@ -88,6 +88,13 @@
           },
           "TerritoryId": 622,
           "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": false,
+            "TestedBossModVersion": "0.1.0.1",
+            "Notes": [
+              "(Magnai) Keeps focussing the boss instead of the axes, thus getting killed by the AOEs"
+            ]
+          },
           "Fly": true
         }
       ]

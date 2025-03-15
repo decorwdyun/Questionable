@@ -55,7 +55,6 @@
           },
           "TerritoryId": 635,
           "InteractionType": "Interact",
-          "$": "QW: 0 0    0 0    0 0 -> QW: 17 0    0 0    0 64",
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -74,7 +73,6 @@
           },
           "TerritoryId": 635,
           "InteractionType": "Interact",
-          "$": "QW: 17 0    0 0    0 64 -> QW: 33 1    0 0    0 192",
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -135,6 +133,10 @@
           },
           "TerritoryId": 612,
           "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": "0.1.0.1"
+          },
           "AethernetShortcut": [
             "[Rhalgr's Reach] Northeastern Rhalgr's Reach",
             "[Rhalgr's Reach] Fringes Gate"
