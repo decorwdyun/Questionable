@@ -180,7 +180,7 @@ internal sealed class MovementController : IDisposable
             if (Destination.MovementType == EMovementType.Landing)
             {
                 if (!_condition[ConditionFlag.InFlight])
-                Stop();
+                    Stop();
             }
             else if ((localPlayerPosition - Destination.Position).Length() < Destination.StopDistance)
             {

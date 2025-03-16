@@ -43,7 +43,6 @@ internal sealed class ContextMenuController : IDisposable
         IGameGui gameGui,
         IChatGui chatGui,
         IClientState clientState,
-        ClassJobUtils classJobUtils,
         ILogger<ContextMenuController> logger)
     {
         _contextMenu = contextMenu;
