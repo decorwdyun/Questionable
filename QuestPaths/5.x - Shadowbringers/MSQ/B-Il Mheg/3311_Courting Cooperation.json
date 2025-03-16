@@ -46,8 +46,16 @@
             "Z": -173.54001
           },
           "TerritoryId": 816,
-          "InteractionType": "Instruction",
-          "Comment": "Reduce health, use item"
+          "InteractionType": "Combat",
+          "EnemySpawnType": "OverworldEnemies",
+          "KillEnemyDataIds": [
+            10258
+          ],
+          "CombatItemUse": {
+            "ItemId": 2002572,
+            "Condition": "Health%",
+            "Value": 50
+          }
         }
       ]
     },

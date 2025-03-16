@@ -28,7 +28,14 @@
             "Z": -890.62335
           },
           "TerritoryId": 817,
-          "InteractionType": "SinglePlayerDuty"
+          "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": false,
+            "TestedBossModVersion": "0.1.0.1",
+            "Notes": [
+              "(room 2) AI tries to walk straight to the next door, ignoring all walls"
+            ]
+          }
         }
       ]
     },
