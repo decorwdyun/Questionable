@@ -80,7 +80,11 @@ internal static class Mount
                 return MountResult.WhenOutOfCombat;
         }
 
-        protected override bool Start() => EvaluateMountState() == MountResult.Mount;
+        protected override bool Start()
+        {
+            _mountTriggered = false;
+            return EvaluateMountState() == MountResult.Mount;
+        }
 
         public override ETaskResult Update()
         {

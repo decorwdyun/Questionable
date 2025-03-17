@@ -248,6 +248,16 @@ internal static class MoveTo
                     else
                         return ETaskResult.TaskComplete;
                 }
+                else if (!_condition[ConditionFlag.Mounted] && _condition[ConditionFlag.InCombat] &&
+                         nestedExecutor is { Triggered: true, Executor: Mount.MountExecutor })
+                {
+                    // if the problem wasn't caused by combat, the normal mount retry should handle it
+                    _logger.LogDebug("Resetting mount trigger state");
+                    _nestedExecutor = nestedExecutor with { Triggered = false };
+
+                    // however, we're also explicitly ignoring combat here and walking away
+                    _startAction?.Invoke();
+                }
 
                 return ETaskResult.StillRunning;
             }
