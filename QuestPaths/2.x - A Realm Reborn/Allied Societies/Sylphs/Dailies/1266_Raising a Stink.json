@@ -36,8 +36,12 @@
                     "TerritoryId": 152,
                     "InteractionType": "Combat",
                     "EnemySpawnType": "OverworldEnemies",
-                    "KillEnemyDataIds": [
-                        2660
+                    "ComplexCombatData": [
+                        {
+                            "DataId": 2660,
+                            "NameId": 2314,
+                            "MinimumKillCount": 2
+                        }
                     ],
                     "Fly": true
                 }
