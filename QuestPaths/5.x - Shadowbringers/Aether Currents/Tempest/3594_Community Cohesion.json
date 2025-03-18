@@ -77,11 +77,16 @@
             "Z": 423.48425
           },
           "TerritoryId": 818,
-          "InteractionType": "Instruction",
-          "Comment": "Requires item usage at low health (tested with < 20 percent)",
+          "InteractionType": "Combat",
           "KillEnemyDataIds": [
             10304
-          ]
+          ],
+          "EnemySpawnType": "OverworldEnemies",
+          "CombatItemUse": {
+            "ItemId": 2002613,
+            "Condition": "Health%",
+            "Value": 30
+          }
         }
       ]
     },

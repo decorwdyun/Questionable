@@ -76,7 +76,16 @@
           },
           "StopDistance": 5,
           "TerritoryId": 819,
-          "InteractionType": "SinglePlayerDuty"
+          "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": false,
+            "TestedBossModVersion": "0.1.0.1",
+            "Notes": [
+              "(phase 1) AI gets stuck on trees/posts/walls.",
+              "(phase 1) AI will never reach the Ostall Imperative, it instead walks circles around Radisca's Round even with all enemies dead.",
+              "(phase 2) AI will still try to walk to Radisca's Round, but (usually) prioritizes fighting enemies."
+            ]
+          }
         }
       ]
     },
