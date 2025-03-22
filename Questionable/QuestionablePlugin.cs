@@ -126,7 +126,6 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<TerritoryData>();
         serviceCollection.AddSingleton<NavmeshIpc>();
         serviceCollection.AddSingleton<LifestreamIpc>();
-        serviceCollection.AddSingleton<YesAlreadyIpc>();
         serviceCollection.AddSingleton<ArtisanIpc>();
         serviceCollection.AddSingleton<QuestionableIpc>();
         serviceCollection.AddSingleton<TextAdvanceIpc>();

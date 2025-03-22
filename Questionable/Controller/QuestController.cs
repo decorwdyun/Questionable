@@ -37,7 +37,6 @@ internal sealed class QuestController : MiniTaskController<QuestController>
     private readonly ICondition _condition;
     private readonly IToastGui _toastGui;
     private readonly Configuration _configuration;
-    private readonly YesAlreadyIpc _yesAlreadyIpc;
     private readonly TaskCreator _taskCreator;
     private readonly SinglePlayerDutyConfigComponent _singlePlayerDutyConfigComponent;
     private readonly ILogger<QuestController> _logger;
@@ -77,7 +76,6 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         ICondition condition,
         IToastGui toastGui,
         Configuration configuration,
-        YesAlreadyIpc yesAlreadyIpc,
         TaskCreator taskCreator,
         IServiceProvider serviceProvider,
         InterruptHandler interruptHandler,
@@ -97,7 +95,6 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         _condition = condition;
         _toastGui = toastGui;
         _configuration = configuration;
-        _yesAlreadyIpc = yesAlreadyIpc;
         _taskCreator = taskCreator;
         _singlePlayerDutyConfigComponent = singlePlayerDutyConfigComponent;
         _logger = logger;
@@ -507,7 +504,6 @@ internal sealed class QuestController : MiniTaskController<QuestController>
 
         _taskQueue.Reset();
 
-        _yesAlreadyIpc.RestoreYesAlready();
         _combatController.Stop("ClearTasksInternal");
         _gatheringController.Stop("ClearTasksInternal");
     }
