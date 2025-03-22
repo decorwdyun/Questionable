@@ -45,6 +45,24 @@
       "Sequence": 2,
       "Steps": [
         {
+          "Position": {
+            "X": -550.3511,
+            "Y": -173.7904,
+            "Z": -486.51318
+          },
+          "TerritoryId": 402,
+          "InteractionType": "WalkTo"
+        },
+        {
+          "Position": {
+            "X": -517.79803,
+            "Y": -169.71143,
+            "Z": -456.97668
+          },
+          "TerritoryId": 402,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 1012797,
           "Position": {
             "X": -166.36914,
