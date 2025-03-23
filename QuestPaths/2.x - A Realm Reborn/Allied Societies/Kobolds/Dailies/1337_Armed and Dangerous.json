@@ -13,7 +13,22 @@
             "Z": -183.76447
           },
           "TerritoryId": 180,
-          "InteractionType": "AcceptQuest"
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Outer La Noscea - Camp Overlook",
+          "Fly": true,
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": 21.560913,
+                  "Y": 16.342407,
+                  "Z": -183.76447
+                },
+                "TerritoryId": 180,
+                "MaximumDistance": 50
+              }
+            }
+          }
         }
       ]
     },
