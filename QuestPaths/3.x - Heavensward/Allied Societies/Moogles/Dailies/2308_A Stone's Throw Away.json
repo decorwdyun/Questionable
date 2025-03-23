@@ -1,7 +1,7 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "liza",
-  "Disabled": true,
+  "Author": "skiaz",
+  "Disabled": false,
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -19,6 +19,82 @@
       ]
     },
     {
+      "Sequence": 1,
+      "Steps": [
+        {
+          "DataId": 1017414,
+          "Position": {
+              "X": 420.37073,
+              "Y": -10.765623,
+              "Z": 705.4398
+          },
+          "TerritoryId": 400,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "AetheryteShortcut": "The Churning Mists - Moghome",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": 420.37073,
+                  "Y": -10.765623,
+                  "Z": 705.4398
+                },
+                "TerritoryId": 400,
+                "MaximumDistance": 50
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 2007249,
+          "Position": {
+              "X": 73.77734,
+              "Y": -32.73065,
+              "Z": -183.0625
+          },
+          "TerritoryId": 400,
+          "InteractionType": "Interact",
+          "Fly": true
+        }
+      ]
+    },
+    {
+      "Sequence": 3,
+      "Steps": [
+        {
+          "DataId": 1017414,
+          "Position": {
+              "X": 420.37073,
+              "Y": -10.765623,
+              "Z": 705.4398
+          },
+          "TerritoryId": 400,
+          "InteractionType": "Interact",
+          "Fly": true,
+          "AetheryteShortcut": "The Churning Mists - Moghome",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": 420.37073,
+                  "Y": -10.765623,
+                  "Z": 705.4398
+                },
+                "TerritoryId": 400,
+                "MaximumDistance": 50
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
       "Sequence": 255,
       "Steps": [
         {
@@ -30,8 +106,8 @@
           },
           "TerritoryId": 400,
           "InteractionType": "CompleteQuest",
-          "AetheryteShortcut": "The Churning Mists - Zenith",
           "Fly": true,
+          "AetheryteShortcut": "The Churning Mists - Zenith",
           "SkipConditions": {
             "AetheryteShortcutIf": {
               "NearPosition": {
