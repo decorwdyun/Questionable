@@ -76,7 +76,11 @@
           "TerritoryId": 815,
           "InteractionType": "SinglePlayerDuty",
           "AetheryteShortcut": "Amh Araeng - Twine",
-          "Fly": true
+          "Fly": true,
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": "0.1.0.1"
+          }
         }
       ]
     },
