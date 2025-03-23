@@ -1,16 +1,21 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
   "Author": "Redacted",
-  "ExtraQuestItems": [
-    2001412,
-    2001413
-  ],
   "Steps": [
     {
       "TerritoryId": 156,
       "InteractionType": "None",
-      "AetheryteShortcut": "Mor Dhona"
+      "AetheryteShortcut": "Mor Dhona",
+      "SkipConditions": {
+        "AetheryteShortcutIf": {
+          "InSameTerritory": true
+        }
+      }
     }
+  ],
+  "ExtraQuestItems": [
+    2001412,
+    2001413
   ],
   "Groups": [
     {
@@ -24,8 +29,8 @@
                 "Y": -15.86567,
                 "Z": -363.9182
               },
-              "MinimumAngle": -185,
-              "MaximumAngle": -10
+              "MinimumAngle": -145,
+              "MaximumAngle": -35
             },
             {
               "Position": {
@@ -33,8 +38,8 @@
                 "Y": -16.00947,
                 "Z": -351.6216
               },
-              "MinimumAngle": -160,
-              "MaximumAngle": 45
+              "MinimumAngle": -125,
+              "MaximumAngle": 30
             }
           ]
         }
@@ -51,8 +56,8 @@
                 "Y": -16.46771,
                 "Z": -338.7833
               },
-              "MinimumAngle": -115,
-              "MaximumAngle": 100
+              "MinimumAngle": -90,
+              "MaximumAngle": 75
             },
             {
               "Position": {
@@ -60,8 +65,8 @@
                 "Y": -16.07329,
                 "Z": -337.0371
               },
-              "MinimumAngle": -80,
-              "MaximumAngle": 130
+              "MinimumAngle": -65,
+              "MaximumAngle": 105
             }
           ]
         },
@@ -74,7 +79,7 @@
                 "Y": -16.18071,
                 "Z": -338.7262
               },
-              "MinimumAngle": -50,
+              "MinimumAngle": -35,
               "MaximumAngle": 140
             }
           ]
@@ -92,8 +97,8 @@
                 "Y": -15.12936,
                 "Z": -346.8752
               },
-              "MinimumAngle": -240,
-              "MaximumAngle": -60
+              "MinimumAngle": -195,
+              "MaximumAngle": -110
             },
             {
               "Position": {
@@ -101,8 +106,8 @@
                 "Y": -16.14678,
                 "Z": -363.7992
               },
-              "MinimumAngle": -50,
-              "MaximumAngle": 175
+              "MinimumAngle": -20,
+              "MaximumAngle": 145
             }
           ]
         }

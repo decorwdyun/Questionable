@@ -1,16 +1,21 @@
 {
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/GatheringPaths/gatheringlocation-v1.json",
-  "ExtraQuestItems": [
-    2001415,
-    2001416
-  ],
   "Author": "Redacted",
   "Steps": [
     {
       "TerritoryId": 156,
       "InteractionType": "None",
-      "AetheryteShortcut": "Mor Dhona"
+      "AetheryteShortcut": "Mor Dhona",
+      "SkipConditions": {
+        "AetheryteShortcutIf": {
+          "InSameTerritory": true
+        }
+      }
     }
+  ],
+  "ExtraQuestItems": [
+    2001415,
+    2001416
   ],
   "Groups": [
     {
@@ -24,8 +29,8 @@
                 "Y": -15.49291,
                 "Z": -326.9827
               },
-              "MinimumAngle": -295,
-              "MaximumAngle": -100
+              "MinimumAngle": -250,
+              "MaximumAngle": -115
             },
             {
               "Position": {
@@ -33,8 +38,8 @@
                 "Y": -15.7935,
                 "Z": -321.7334
               },
-              "MinimumAngle": -235,
-              "MaximumAngle": -60
+              "MinimumAngle": -190,
+              "MaximumAngle": -100
             }
           ]
         }
@@ -51,8 +56,10 @@
                 "Y": -13.83647,
                 "Z": -329.9288
               },
-              "MinimumAngle": -90,
-              "MaximumAngle": 100
+              "MinimumAngle": -55,
+              "MaximumAngle": 70,
+              "MinimumDistance": 1.4,
+              "MaximumDistance": 3
             },
             {
               "Position": {
@@ -60,8 +67,8 @@
                 "Y": -11.39756,
                 "Z": -323.1493
               },
-              "MinimumAngle": -90,
-              "MaximumAngle": 125
+              "MinimumAngle": -65,
+              "MaximumAngle": 95
             }
           ]
         }
@@ -78,8 +85,8 @@
                 "Y": -8.5558,
                 "Z": -326.8167
               },
-              "MinimumAngle": -160,
-              "MaximumAngle": 40
+              "MinimumAngle": -135,
+              "MaximumAngle": 5
             },
             {
               "Position": {
@@ -87,8 +94,10 @@
                 "Y": -6.345774,
                 "Z": -325.4775
               },
-              "MinimumAngle": 95,
-              "MaximumAngle": 290
+              "MinimumAngle": 135,
+              "MaximumAngle": 250,
+              "MinimumDistance": 1.4,
+              "MaximumDistance": 3
             }
           ]
         }
@@ -105,8 +114,8 @@
                 "Y": -5.395673,
                 "Z": -317.087
               },
-              "MinimumAngle": 145,
-              "MaximumAngle": 305
+              "MinimumAngle": 180,
+              "MaximumAngle": 275
             },
             {
               "Position": {
@@ -114,8 +123,10 @@
                 "Y": -5.140871,
                 "Z": -324.9326
               },
-              "MinimumAngle": -55,
-              "MaximumAngle": 110
+              "MinimumAngle": -10,
+              "MaximumAngle": 60,
+              "MinimumDistance": 1.8,
+              "MaximumDistance": 3
             }
           ]
         }

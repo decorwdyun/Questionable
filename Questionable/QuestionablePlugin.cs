@@ -141,6 +141,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
     {
         // individual tasks
         serviceCollection.AddTaskFactory<QuestCleanUp.CheckAlliedSocietyMount>();
+        serviceCollection.AddTaskFactoryAndExecutor<QuestCleanUp.CloseGatheringAddonTask, QuestCleanUp.CloseGatheringAddonFactory, QuestCleanUp.DoCloseAddon>();
         serviceCollection
             .AddTaskExecutor<MoveToLandingLocation.Task, MoveToLandingLocation.MoveToLandingLocationExecutor>();
         serviceCollection
