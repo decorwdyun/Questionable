@@ -141,19 +141,6 @@ internal sealed class GeneralConfigComponent : ConfigComponent
             Configuration.General.ConfigureTextAdvance = configureTextAdvance;
             Save();
         }
-
-        ImGui.Separator();
-        ImGui.TextColored(ImGuiColors.DalamudYellow, "Patch 7.1 exclusive content");
-        using (_ = ImRaii.PushIndent())
-        {
-            bool pickUpFreeFantasia = Configuration.General.PickUpFreeFantasia;
-            if (ImGui.Checkbox("Try to pick up free limited-time fantasia during 'Little Ladies' Day' quests",
-                    ref pickUpFreeFantasia))
-            {
-                Configuration.General.PickUpFreeFantasia = pickUpFreeFantasia;
-                Save();
-            }
-        }
     }
 
     private void DrawCombatModule()

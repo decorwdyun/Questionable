@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Dalamud.Configuration;
 using Dalamud.Game.Text;
@@ -37,7 +38,7 @@ internal sealed class Configuration : IPluginConfiguration
         public bool ShowIncompleteSeasonalEvents { get; set; } = true;
         public bool ConfigureTextAdvance { get; set; } = true;
 
-        // TODO Temporary setting for 7.1
+        // TODO Temporary setting, 7.2 adds another fantasia
         public bool PickUpFreeFantasia { get; set; } = true;
     }
 
