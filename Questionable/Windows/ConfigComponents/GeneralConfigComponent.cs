@@ -189,7 +189,7 @@ internal sealed class GeneralConfigComponent : ConfigComponent
         using var indent = ImRaii.PushIndent();
 
         ImGui.TextColored(ImGuiColors.DalamudYellow, "The 'Rotation Solver Reborn' module is unsupported, obsolete and will be removed in Patch 7.3.");
-        ImGui.Text("According to the RSR development team, RSR is not meant to run without human inputs/automatically/as bot.");
+        ImGui.Text("According to the RSR development team, RSR is not meant to run without human inputs/automatically/as a bot.");
         ImGui.Text("Additionally, they have considered disabling RSR if it detects that Questionable is installed.");
         ImGui.Text("Please consider switching to 'Wrath Combo' or 'Boss Mod (VBM)'.");
 
