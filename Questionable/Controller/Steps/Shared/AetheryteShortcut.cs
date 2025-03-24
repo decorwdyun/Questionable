@@ -150,6 +150,17 @@ internal static class AetheryteShortcut
                         }
                     }
 
+                    if (skipConditions.NotNearPosition is { } notNearPosition &&
+                        clientState.TerritoryType == notNearPosition.TerritoryId)
+                    {
+                        if (notNearPosition.MaximumDistance <=
+                            Vector3.Distance(notNearPosition.Position, clientState.LocalPlayer!.Position))
+                        {
+                            logger.LogInformation("Skipping step, as we're not near the position");
+                            return true;
+                        }
+                    }
+
                     if (skipConditions.ExtraCondition != null && skipConditions.ExtraCondition != EExtraSkipCondition.None &&
                         extraConditionUtils.MatchesExtraCondition(skipConditions.ExtraCondition.Value))
                     {
