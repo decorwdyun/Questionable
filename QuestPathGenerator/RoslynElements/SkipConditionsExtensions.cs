@@ -79,6 +79,9 @@ internal static class SkipConditionsExtensions
                             Assignment(nameof(SkipStepConditions.NearPosition),
                                     skipStepConditions.NearPosition, emptyStep.NearPosition)
                                 .AsSyntaxNodeOrToken(),
+                            Assignment(nameof(SkipStepConditions.NotNearPosition),
+                                    skipStepConditions.NotNearPosition, emptyStep.NotNearPosition)
+                                .AsSyntaxNodeOrToken(),
                             Assignment(nameof(SkipStepConditions.ExtraCondition),
                                     skipStepConditions.ExtraCondition, emptyStep.ExtraCondition)
                                 .AsSyntaxNodeOrToken()))));
@@ -153,6 +156,9 @@ internal static class SkipConditionsExtensions
                                 .AsSyntaxNodeOrToken(),
                             Assignment(nameof(skipAetheryteCondition.NearPosition), skipAetheryteCondition.NearPosition,
                                 emptyAetheryte.NearPosition)
+                                .AsSyntaxNodeOrToken(),
+                            Assignment(nameof(skipAetheryteCondition.NotNearPosition), skipAetheryteCondition.NotNearPosition,
+                                    emptyAetheryte.NotNearPosition)
                                 .AsSyntaxNodeOrToken(),
                             Assignment(nameof(skipAetheryteCondition.ExtraCondition), skipAetheryteCondition.ExtraCondition,
                                 emptyAetheryte.ExtraCondition)
