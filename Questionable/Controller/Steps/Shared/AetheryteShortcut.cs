@@ -156,7 +156,7 @@ internal static class AetheryteShortcut
                         if (notNearPosition.MaximumDistance <=
                             Vector3.Distance(notNearPosition.Position, clientState.LocalPlayer!.Position))
                         {
-                            logger.LogInformation("Skipping step, as we're not near the position");
+                            logger.LogInformation("Skipping aetheryte shortcut, as we're not near the position");
                             return true;
                         }
                     }
