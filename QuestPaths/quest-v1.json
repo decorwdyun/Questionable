@@ -295,6 +295,26 @@
                   ],
                   "additionalProperties": false
                 },
+                "NotNearPosition": {
+                  "type": "object",
+                  "properties": {
+                    "Position": {
+                      "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-vector3.json"
+                    },
+                    "MaximumDistance": {
+                      "type": "number"
+                    },
+                    "TerritoryId": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "Position",
+                    "MaximumDistance",
+                    "TerritoryId"
+                  ],
+                  "additionalProperties": false
+                },
                 "ExtraCondition": {
                   "type": "string",
                   "enum": [
@@ -353,6 +373,26 @@
                   "type": "boolean"
                 },
                 "NearPosition": {
+                  "type": "object",
+                  "properties": {
+                    "Position": {
+                      "$ref": "https://git.carvel.li/liza/Questionable/raw/branch/master/Questionable.Model/common-vector3.json"
+                    },
+                    "MaximumDistance": {
+                      "type": "number"
+                    },
+                    "TerritoryId": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "Position",
+                    "MaximumDistance",
+                    "TerritoryId"
+                  ],
+                  "additionalProperties": false
+                },
+                "NotNearPosition": {
                   "type": "object",
                   "properties": {
                     "Position": {

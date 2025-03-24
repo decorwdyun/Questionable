@@ -389,6 +389,17 @@ internal static class SkipCondition
                 }
             }
 
+            if (skipConditions.NotNearPosition is { } notNearPosition &&
+                clientState.TerritoryType == notNearPosition.TerritoryId)
+            {
+                if (notNearPosition.MaximumDistance <=
+                    Vector3.Distance(notNearPosition.Position, clientState.LocalPlayer!.Position))
+                {
+                    logger.LogInformation("Skipping step, as we're not near the position");
+                    return true;
+                }
+            }
+
             return false;
         }
 
