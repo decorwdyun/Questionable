@@ -20,7 +20,6 @@ steps:
     image: mcr.microsoft.com/dotnet/sdk:8.0-jammy
     commands:
       - export DALAMUD_HOME=$CI_WORKSPACE/.dalamud/
-      - echo "dotnet build Questionable/Questionable.csproj -c Release -f net8.0-windows -p:DalamudLibPath=$DALAMUD_HOME -maxcpucount:1 --source $CI_WORKSPACE/.nuget --no-restore"
       - dotnet build Questionable/Questionable.csproj -c Release -f net8.0-windows -p:DalamudLibPath=$DALAMUD_HOME -maxcpucount:1 --source $CI_WORKSPACE/.nuget --no-restore
 
   - name: prepare release files
