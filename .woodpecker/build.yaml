@@ -5,11 +5,7 @@ when:
 
 steps:
   - name: prepare dalamud
-    image: alpine
-    commands:
-      - apk add --no-cache unzip
-      - wget https://goatcorp.github.io/dalamud-distrib/latest.zip -O /tmp/dalamud.zip
-      - unzip /tmp/dalamud.zip -d $CI_WORKSPACE/.dalamud
+    image: git.carvel.li/actions/download-dalamud
 
   - name: dotnet restore
     image: mcr.microsoft.com/dotnet/sdk:9.0-noble
