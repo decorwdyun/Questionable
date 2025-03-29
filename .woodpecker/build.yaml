@@ -1,5 +1,6 @@
 when:
   - event: tag
+    ref: refs/tags/v*
   - event: push
   - event: pull_request
 
@@ -10,7 +11,7 @@ steps:
   - name: dotnet restore
     image: mcr.microsoft.com/dotnet/sdk:9.0-noble
     commands:
-      - dotnet restore --packages $CI_WORKSPACE/.nuget
+      - dotnet restore /p:Configuration=Release --packages $CI_WORKSPACE/.nuget
 
   - name: dotnet build
     image: mcr.microsoft.com/dotnet/sdk:9.0-noble
@@ -23,9 +24,10 @@ steps:
     commands:
       - mkdir release
       - mv Questionable/dist/Questionable/latest.zip release/Questionable-${CI_COMMIT_TAG##v}.zip
-      - mv Questionable/dist/Questionable/Questionable.json release/Questionable-${CI_COMMIT_TAG##v}.json
+      - mv Questionable/dist/Questionable/Questionable.json release/Questionable-${CI_COMMIT_TAG##v}.json.d12
     when:
       - event: tag
+        ref: refs/tags/v*
 
   - name: prepare release
     image: woodpeckerci/plugin-release
@@ -34,9 +36,10 @@ steps:
       draft: true
       files:
         - "release/*.zip"
-        - "release/*.json"
+        - "release/*.json.*"
       api_key:
         from_secret: ACCESS_TOKEN
       checksum: sha256
     when:
       - event: tag
+        ref: refs/tags/v*

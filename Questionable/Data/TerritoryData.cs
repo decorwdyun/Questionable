@@ -128,7 +128,7 @@ internal sealed class TerritoryData
     private static uint LookupContentFinderConditionForQuestBattle(IDataManager dataManager, uint questBattleId)
     {
         if (questBattleId >= 5000)
-            return dataManager.GetExcelSheet<InstanceContent>().GetRow(questBattleId).Order;
+            return dataManager.GetExcelSheet<InstanceContent>().GetRow(questBattleId).ContentFinderCondition.RowId;
         else
             return dataManager.GetExcelSheet<QuestBattleResident>().GetRow(questBattleId).Unknown0;
     }

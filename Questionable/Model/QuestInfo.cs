@@ -67,7 +67,7 @@ internal sealed class QuestInfo : IQuestInfo
         PreviousInstanceContentJoin = (EQuestJoin)quest.InstanceContentJoin;
         GrandCompany = (GrandCompany)quest.GrandCompany.RowId;
         AlliedSociety = (EAlliedSociety)quest.BeastTribe.RowId;
-        AlliedSocietyQuestGroup = quest.Unknown11;
+        AlliedSocietyQuestGroup = quest.DailyQuestPool;
         AlliedSocietyRank = (int)quest.BeastReputationRank.RowId;
         ClassJobs = QuestInfoUtils.AsList(quest.ClassJobCategory0.ValueNullable!);
         IsSeasonalEvent = quest.Festival.RowId != 0;
