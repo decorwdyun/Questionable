@@ -44,7 +44,7 @@ internal static class InitiateLeve
         {
             var director = UIState.Instance()->DirectorTodo.Director;
             if (director != null &&
-                director->Info.EventId.ContentId == EventHandlerType.GatheringLeveDirector &&
+                director->Info.EventId.ContentId == EventHandlerContent.GatheringLeveDirector &&
                 director->ContentId == Task.ElementId.Value)
                 return ETaskResult.SkipRemainingTasksForStep;
 

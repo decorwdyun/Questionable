@@ -136,7 +136,7 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
             return;
 
         var director = UIState.Instance()->DirectorTodo.Director;
-        if (director != null && director->Info.EventId.ContentId == EventHandlerType.GatheringLeveDirector)
+        if (director != null && director->Info.EventId.ContentId == EventHandlerContent.GatheringLeveDirector)
         {
             if (director->Sequence == 254)
                 return;
