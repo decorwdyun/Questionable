@@ -66,7 +66,7 @@ internal abstract class ConfigComponent
         return Encoding.UTF8.GetString(ptr, byteCount);
     }
 
-    protected static void DrawNotes(bool enabledByDefault, IReadOnlyList<string> notes)
+    protected static void DrawNotes(bool enabledByDefault, IEnumerable<string> notes)
     {
         using var color = new ImRaii.Color();
         color.Push(ImGuiCol.TextDisabled, !enabledByDefault ? ImGuiColors.DalamudYellow : ImGuiColors.ParsedBlue);

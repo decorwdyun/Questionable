@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Game.Text;
@@ -517,7 +518,7 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
         public uint TerritoryId => ContentFinderConditionData.TerritoryId;
         public byte Index => Options.Index;
         public bool EnabledByDefault => Options.Enabled;
-        public IReadOnlyList<string> Notes => Options.Notes;
+        public ReadOnlyCollection<string> Notes => Options.Notes.AsReadOnly();
 
         public bool IsLimsaStart => ContentFinderConditionId is 332 or 333 or 313 or 334;
         public bool IsGridaniaStart => ContentFinderConditionId is 296 or 297 or 299 or 298;
