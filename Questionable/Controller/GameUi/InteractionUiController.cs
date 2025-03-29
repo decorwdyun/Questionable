@@ -583,7 +583,7 @@ internal sealed class InteractionUiController : IDisposable
 
         var director = UIState.Instance()->DirectorTodo.Director;
         if (director != null &&
-            director->Info.EventId.ContentId == EventHandlerType.GatheringLeveDirector &&
+            director->Info.EventId.ContentId == EventHandlerContent.GatheringLeveDirector &&
             director->Sequence == 254)
         {
             // just close the dialogue for 'do you want to return to next settlement', should prolly be different for
