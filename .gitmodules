@@ -6,4 +6,4 @@
 	url = https://github.com/NightmareXIV/NotificationMasterAPI.git
 [submodule "vendor/pictomancy"]
 	path = vendor/pictomancy
-	url = https://git.carvel.li/forks/pictomancy
+	url = https://github.com/sourpuh/ffxiv_pictomancy.git
