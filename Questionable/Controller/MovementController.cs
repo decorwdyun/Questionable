@@ -237,67 +237,13 @@ internal sealed class MovementController : IDisposable
                 {
                     if (Destination.ShouldRecalculateNavmesh())
                     {
-                        var nextWaypoint = navPoints.FirstOrDefault();
-                        if (nextWaypoint != default)
-                        {
-                            var distance = Vector2.Distance(new Vector2(start.Value.X, start.Value.Z),
-                                new Vector2(nextWaypoint.X, nextWaypoint.Z));
-                            if (Destination.LastWaypoint == null ||
-                                (Destination.LastWaypoint.Position - nextWaypoint).Length() > 0.1f)
-                            {
-                                Destination.LastWaypoint = new LastWaypointData(nextWaypoint)
-                                {
-                                    Distance2DAtLastUpdate = distance,
-                                    UpdatedAt = Environment.TickCount64,
-                                };
-                            }
-                            else if (Environment.TickCount64 - Destination.LastWaypoint.UpdatedAt > 500)
-                            {
-                                // check whether we've made any progress of any kind
-                                if (Math.Abs(distance - Destination.LastWaypoint.Distance2DAtLastUpdate) < 0.5f)
-                                {
-                                    int calculations = Destination.NavmeshCalculations;
-                                    _logger.LogWarning("Recalculating navmesh (n = {Calculations})", calculations);
-                                    Restart(Destination);
-                                    Destination.NavmeshCalculations = calculations + 1;
-                                }
-                                else
-                                {
-                                    Destination.LastWaypoint.Distance2DAtLastUpdate = distance;
-                                    Destination.LastWaypoint.UpdatedAt = Environment.TickCount64;
-                                }
-                            }
-                        }
+                        RecalculateNavmesh(navPoints, start.Value);
                     }
 
                     if (!Destination.IsFlying && !_condition[ConditionFlag.Mounted] &&
                         !_gameFunctions.HasStatusPreventingSprint() && Destination.CanSprint)
                     {
-                        float actualDistance = 0;
-                        foreach (Vector3 end in navPoints)
-                        {
-                            actualDistance += (start.Value - end).Length();
-                            start = end;
-                        }
-
-                        unsafe
-                        {
-                            // 70 is ~10 seconds of sprint
-                            float sprintDistance = 100f;
-
-                            // if we're in towns/event areas, jog is a neat fallback (if we're not already jogging,
-                            // if we're too close then sprinting will barely benefit us)
-                            if (!_gameFunctions.HasStatus(EStatus.Jog) &&
-                                GameMain.Instance()->CurrentTerritoryIntendedUseId is 0 or 7 or 13 or 14 or 15 or 19 or 23 or 29)
-                                sprintDistance = 30f;
-
-                            if (actualDistance > sprintDistance &&
-                                ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, 4) == 0)
-                            {
-                                _logger.LogInformation("Triggering Sprint");
-                                ActionManager.Instance()->UseAction(ActionType.GeneralAction, 4);
-                            }
-                        }
+                        TriggerSprintIfNeeded(navPoints, start.Value);
                     }
                 }
             }
@@ -407,6 +353,73 @@ internal sealed class MovementController : IDisposable
         }
 
         _pathfindTask = null;
+    }
+
+    private void RecalculateNavmesh(List<Vector3> navPoints, Vector3 start)
+    {
+        if (Destination == null)
+            throw new InvalidOperationException("Destination is null");
+
+        var nextWaypoint = navPoints.FirstOrDefault();
+        if (nextWaypoint != default)
+        {
+            var distance = Vector2.Distance(new Vector2(start.X, start.Z),
+                new Vector2(nextWaypoint.X, nextWaypoint.Z));
+            if (Destination.LastWaypoint == null ||
+                (Destination.LastWaypoint.Position - nextWaypoint).Length() > 0.1f)
+            {
+                Destination.LastWaypoint = new LastWaypointData(nextWaypoint)
+                {
+                    Distance2DAtLastUpdate = distance,
+                    UpdatedAt = Environment.TickCount64,
+                };
+            }
+            else if (Environment.TickCount64 - Destination.LastWaypoint.UpdatedAt > 500)
+            {
+                // check whether we've made any progress of any kind
+                if (Math.Abs(distance - Destination.LastWaypoint.Distance2DAtLastUpdate) < 0.5f)
+                {
+                    int calculations = Destination.NavmeshCalculations;
+                    _logger.LogWarning("Recalculating navmesh (n = {Calculations})", calculations);
+                    Restart(Destination);
+                    Destination.NavmeshCalculations = calculations + 1;
+                }
+                else
+                {
+                    Destination.LastWaypoint.Distance2DAtLastUpdate = distance;
+                    Destination.LastWaypoint.UpdatedAt = Environment.TickCount64;
+                }
+            }
+        }
+    }
+
+    private void TriggerSprintIfNeeded(IEnumerable<Vector3> navPoints, Vector3 start)
+    {
+        float actualDistance = 0;
+        foreach (Vector3 end in navPoints)
+        {
+            actualDistance += (start - end).Length();
+            start = end;
+        }
+
+        unsafe
+        {
+            // 70 is ~10 seconds of sprint
+            float sprintDistance = 100f;
+
+            // if we're in towns/event areas, jog is a neat fallback (if we're not already jogging,
+            // if we're too close then sprinting will barely benefit us)
+            if (!_gameFunctions.HasStatus(EStatus.Jog) &&
+                GameMain.Instance()->CurrentTerritoryIntendedUseId is 0 or 7 or 13 or 14 or 15 or 19 or 23 or 29)
+                sprintDistance = 30f;
+
+            if (actualDistance > sprintDistance &&
+                ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, 4) == 0)
+            {
+                _logger.LogInformation("Triggering Sprint");
+                ActionManager.Instance()->UseAction(ActionType.GeneralAction, 4);
+            }
+        }
     }
 
     public void Stop()
