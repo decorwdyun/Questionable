@@ -37,18 +37,6 @@ internal sealed class QuestProgressInfo
         _asString = $"QW: {vars.Trim()}";
     }
 
-    public QuestProgressInfo(LeveWork leveWork)
-    {
-        Id = new LeveId(leveWork.LeveId);
-        Sequence = leveWork.Sequence;
-        Flags = leveWork.Flags;
-        Variables = [0, 0, 0, 0, 0, 0];
-        IsHidden = leveWork.IsHidden;
-        ClassJob = (EClassJob)leveWork.ClearClass;
-
-        _asString = $"Seed: {leveWork.LeveSeed}, Flags: {Flags:X}";
-    }
-
     public ElementId Id { get; }
     public byte Sequence { get; }
     public ushort Flags { get; init; }

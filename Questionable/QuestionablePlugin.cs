@@ -19,7 +19,6 @@ using Questionable.Controller.Steps.Shared;
 using Questionable.Controller.Steps.Common;
 using Questionable.Controller.Steps.Gathering;
 using Questionable.Controller.Steps.Interactions;
-using Questionable.Controller.Steps.Leves;
 using Questionable.Controller.Steps.Movement;
 using Questionable.Controller.Utils;
 using Questionable.Data;
@@ -121,7 +120,6 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<AetheryteData>();
         serviceCollection.AddSingleton<AlliedSocietyData>();
         serviceCollection.AddSingleton<GatheringData>();
-        serviceCollection.AddSingleton<LeveData>();
         serviceCollection.AddSingleton<JournalData>();
         serviceCollection.AddSingleton<QuestData>();
         serviceCollection.AddSingleton<TerritoryData>();
@@ -219,13 +217,6 @@ public sealed class QuestionablePlugin : IDalamudPlugin
             .AddTaskFactoryAndExecutor<TurnInDelivery.Task, TurnInDelivery.Factory,
                 TurnInDelivery.SatisfactionSupplyTurnIn>();
 
-        serviceCollection.AddTaskFactory<InitiateLeve.Factory>();
-        serviceCollection
-            .AddTaskExecutor<InitiateLeve.SkipInitiateIfActive, InitiateLeve.SkipInitiateIfActiveExecutor>();
-        serviceCollection.AddTaskExecutor<InitiateLeve.OpenJournal, InitiateLeve.OpenJournalExecutor>();
-        serviceCollection.AddTaskExecutor<InitiateLeve.Initiate, InitiateLeve.InitiateExecutor>();
-        serviceCollection.AddTaskExecutor<InitiateLeve.SelectDifficulty, InitiateLeve.SelectDifficultyExecutor>();
-
         serviceCollection.AddTaskFactory<SinglePlayerDuty.Factory>();
         serviceCollection
             .AddTaskExecutor<SinglePlayerDuty.StartSinglePlayerDuty, SinglePlayerDuty.StartSinglePlayerDutyExecutor>();
@@ -271,7 +262,6 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<CreditsController>();
         serviceCollection.AddSingleton<HelpUiController>();
         serviceCollection.AddSingleton<InteractionUiController>();
-        serviceCollection.AddSingleton<LeveUiController>();
 
         serviceCollection.AddSingleton<ICombatModule, Mount128Module>();
         serviceCollection.AddSingleton<ICombatModule, Mount147Module>();
@@ -342,7 +332,6 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceProvider.GetRequiredService<CraftworksSupplyController>();
         serviceProvider.GetRequiredService<CreditsController>();
         serviceProvider.GetRequiredService<HelpUiController>();
-        serviceProvider.GetRequiredService<LeveUiController>();
         serviceProvider.GetRequiredService<ShopController>();
         serviceProvider.GetRequiredService<QuestionableIpc>();
         serviceProvider.GetRequiredService<DalamudInitializer>();

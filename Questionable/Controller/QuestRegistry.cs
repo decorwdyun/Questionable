@@ -27,7 +27,6 @@ internal sealed class QuestRegistry
     private readonly QuestValidator _questValidator;
     private readonly JsonSchemaValidator _jsonSchemaValidator;
     private readonly ILogger<QuestRegistry> _logger;
-    private readonly LeveData _leveData;
     private readonly TerritoryData _territoryData;
     private readonly IChatGui _chatGui;
 
@@ -41,7 +40,6 @@ internal sealed class QuestRegistry
         QuestValidator questValidator,
         JsonSchemaValidator jsonSchemaValidator,
         ILogger<QuestRegistry> logger,
-        LeveData leveData,
         TerritoryData territoryData,
         IChatGui chatGui)
     {
@@ -50,7 +48,6 @@ internal sealed class QuestRegistry
         _questValidator = questValidator;
         _jsonSchemaValidator = jsonSchemaValidator;
         _logger = logger;
-        _leveData = leveData;
         _territoryData = territoryData;
         _chatGui = chatGui;
         _reloadDataIpc = _pluginInterface.GetIpcProvider<object>("Questionable.ReloadData");
@@ -109,8 +106,6 @@ internal sealed class QuestRegistry
             try
             {
                 var questInfo = _questData.GetQuestInfo(questId);
-                if (questInfo is LeveInfo leveInfo)
-                    _leveData.AddQuestSteps(leveInfo, questRoot);
                 Quest quest = new()
                 {
                     Id = questId,
@@ -194,8 +189,6 @@ internal sealed class QuestRegistry
 
         var questRoot = questNode.Deserialize<QuestRoot>()!;
         var questInfo = _questData.GetQuestInfo(questId);
-        if (questInfo is LeveInfo leveInfo)
-            _leveData.AddQuestSteps(leveInfo, questRoot);
         Quest quest = new Quest
         {
             Id = questId,

@@ -52,9 +52,7 @@ public abstract class ElementId : IComparable<ElementId>, IEquatable<ElementId>
 
     public static ElementId FromString(string value)
     {
-        if (value.StartsWith("L"))
-            return new LeveId(ushort.Parse(value.Substring(1), CultureInfo.InvariantCulture));
-        else if (value.StartsWith("S"))
+        if (value.StartsWith("S"))
             return new SatisfactionSupplyNpcId(ushort.Parse(value.Substring(1), CultureInfo.InvariantCulture));
         else if (value.StartsWith("A"))
         {
@@ -96,14 +94,6 @@ public sealed class QuestId(ushort value) : ElementId(value)
     public override string ToString()
     {
         return Value.ToString(CultureInfo.InvariantCulture);
-    }
-}
-
-public sealed class LeveId(ushort value) : ElementId(value)
-{
-    public override string ToString()
-    {
-        return "L" + Value.ToString(CultureInfo.InvariantCulture);
     }
 }
 

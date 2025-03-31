@@ -251,7 +251,7 @@ internal sealed partial class ActiveQuestComponent
                 ImGui.PopFont();
             }
 
-            if (currentQuest.Quest.Id is LeveId || currentQuest.Quest.Info.AlliedSociety != EAlliedSociety.None)
+            if (currentQuest.Quest.Info.AlliedSociety != EAlliedSociety.None)
             {
                 ImGui.SameLine();
                 ImGui.Text($"/ {questWork.ClassJob}");

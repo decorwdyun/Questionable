@@ -39,7 +39,4 @@ public enum EInteractionType
 
     AcceptQuest,
     CompleteQuest,
-    AcceptLeve,
-    InitiateLeve,
-    CompleteLeve,
 }

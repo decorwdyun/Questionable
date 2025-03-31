@@ -70,10 +70,6 @@ internal sealed class QuestData
             ..dataManager.GetExcelSheet<SatisfactionNpc>()
                 .Where(x => x is { RowId: > 0, Npc.RowId: > 0 })
                 .Select(x => new SatisfactionSupplyInfo(x)),
-            ..dataManager.GetExcelSheet<Leve>()
-                .Where(x => x.RowId > 0)
-                .Where(x => x.LevelLevemete.RowId != 0)
-                .Select(x => new LeveInfo(x)),
         ];
 
         quests.AddRange(

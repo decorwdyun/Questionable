@@ -302,37 +302,6 @@ internal sealed class InteractionUiController : IDisposable
     {
         List<DialogueChoiceInfo> dialogueChoices = [];
 
-        // levequest choices have some vague sort of priority
-        if (_questController.HasCurrentTaskExecutorMatching<Interact.DoInteract>(out var interact) &&
-            interact.Quest != null &&
-            interact.InteractionType is EInteractionType.AcceptLeve or EInteractionType.CompleteLeve)
-        {
-            if (interact.InteractionType == EInteractionType.AcceptLeve)
-            {
-                dialogueChoices.Add(new DialogueChoiceInfo(interact.Quest,
-                    new DialogueChoice
-                    {
-                        Type = EDialogChoiceType.List,
-                        ExcelSheet = "leve/GuildleveAssignment",
-                        Prompt = new ExcelRef("TEXT_GUILDLEVEASSIGNMENT_SELECT_MENU_TITLE"),
-                        Answer = new ExcelRef("TEXT_GUILDLEVEASSIGNMENT_SELECT_MENU_01"),
-                    }));
-                interact.InteractionType = EInteractionType.None;
-            }
-            else if (interact.InteractionType == EInteractionType.CompleteLeve)
-            {
-                dialogueChoices.Add(new DialogueChoiceInfo(interact.Quest,
-                    new DialogueChoice
-                    {
-                        Type = EDialogChoiceType.List,
-                        ExcelSheet = "leve/GuildleveAssignment",
-                        Prompt = new ExcelRef("TEXT_GUILDLEVEASSIGNMENT_SELECT_MENU_TITLE"),
-                        Answer = new ExcelRef("TEXT_GUILDLEVEASSIGNMENT_SELECT_MENU_REWARD"),
-                    }));
-                interact.InteractionType = EInteractionType.None;
-            }
-        }
-
         var currentQuest = _questController.SimulatedQuest ??
                            _questController.GatheringQuest ??
                            _questController.StartedQuest;
@@ -418,24 +387,6 @@ internal sealed class InteractionUiController : IDisposable
                             questChoices.Count, questInfo.Name);
                         dialogueChoices.AddRange(questChoices.Select(x => new DialogueChoiceInfo(knownQuest, x)));
                     }
-                }
-            }
-
-            if ((_questController.IsRunning || _questController.WasLastTaskUpdateWithin(TimeSpan.FromSeconds(5)))
-                && _questController.NextQuest == null)
-            {
-                // make sure to always close the leve dialogue
-                if (_questData.GetAllByIssuerDataId(target.DataId).Any(x => x.QuestId is LeveId))
-                {
-                    _logger.LogInformation("Adding close leve dialogue as option");
-                    dialogueChoices.Add(new DialogueChoiceInfo(null,
-                        new DialogueChoice
-                        {
-                            Type = EDialogChoiceType.List,
-                            ExcelSheet = "leve/GuildleveAssignment",
-                            Prompt = new ExcelRef("TEXT_GUILDLEVEASSIGNMENT_SELECT_MENU_TITLE"),
-                            Answer = new ExcelRef("TEXT_GUILDLEVEASSIGNMENT_SELECT_MENU_07"),
-                        }));
                 }
             }
         }
@@ -622,20 +573,6 @@ internal sealed class InteractionUiController : IDisposable
         {
             var step = quest.FindSequence(currentQuest.Sequence)?.FindStep(currentQuest.Step);
             if (step != null && HandleDefaultYesNo(addonSelectYesno, quest, step, step.DialogueChoices, actualPrompt))
-                return true;
-        }
-
-        if (currentQuest.Quest.Id is LeveId)
-        {
-            var dialogueChoice = new DialogueChoice
-            {
-                Type = EDialogChoiceType.YesNo,
-                ExcelSheet = "Addon",
-                Prompt = new ExcelRef(608),
-                Yes = true
-            };
-
-            if (HandleDefaultYesNo(addonSelectYesno, quest, null, [dialogueChoice], actualPrompt))
                 return true;
         }
 
