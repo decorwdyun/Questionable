@@ -176,8 +176,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection
             .AddTaskFactoryAndExecutor<WaitAtStart.WaitDelay, WaitAtStart.Factory, WaitAtStart.WaitDelayExecutor>();
         serviceCollection.AddTaskFactoryAndExecutor<MoveTask, MoveTo.Factory, MoveExecutor>();
-        serviceCollection.AddTaskExecutor<MoveTo.WaitForNearDataId, MoveTo.WaitForNearDataIdExecutor>();
-        serviceCollection.AddTaskExecutor<MoveTo.LandTask, MoveTo.LandExecutor>();
+        serviceCollection.AddTaskExecutor<WaitForNearDataId, WaitForNearDataIdExecutor>();
+        serviceCollection.AddTaskExecutor<LandTask, LandExecutor>();
         serviceCollection
             .AddTaskFactoryAndExecutor<SendNotification.Task, SendNotification.Factory, SendNotification.Executor>();
 
