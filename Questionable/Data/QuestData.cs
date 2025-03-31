@@ -42,6 +42,7 @@ internal sealed class QuestData
     {
         JournalGenreOverrides journalGenreOverrides = new()
         {
+            ARelicRebornQuests = dataManager.GetExcelSheet<Quest>().GetRow(65742).JournalGenre.RowId,
             RadzAtHanSideQuests = dataManager.GetExcelSheet<Quest>().GetRow(69805).JournalGenre.RowId,
             ThavnairSideQuests = dataManager.GetExcelSheet<Quest>().GetRow(70025).JournalGenre.RowId,
         };
@@ -227,15 +228,6 @@ internal sealed class QuestData
 
         // follow-up quests to picking a GC
         AddGcFollowUpQuests();
-
-        // update relic quests to be in a different journal category
-        ushort[] zodiacStartingQuests = [1119, 1120, 1121, 1122, 1123, 1124, 1125, 1126, 1127, 1579];
-        foreach (var questId in zodiacStartingQuests)
-        {
-            var quest = ((QuestInfo)_quests[new QuestId(questId)]);
-            quest.JournalGenre = 82;
-            quest.SortKey = 0;
-        }
 
         RedeemableItems = quests.Where(x => x is QuestInfo)
             .Cast<QuestInfo>()
