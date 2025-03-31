@@ -65,7 +65,7 @@ internal sealed class MoveExecutor : TaskExecutor<MoveTask>, IToastAware
             _startAction = () =>
                 _movementController.NavigateTo(EMovementType.Quest, Task.DataId, _destination,
                     fly: Task.Fly,
-                    sprint: Task.Sprint,
+                    sprint: Task.Sprint != false,
                     stopDistance: Task.StopDistance,
                     ignoreDistanceToObject: Task.IgnoreDistanceToObject,
                     land: Task.Land);
@@ -75,7 +75,7 @@ internal sealed class MoveExecutor : TaskExecutor<MoveTask>, IToastAware
             _startAction = () =>
                 _movementController.NavigateTo(EMovementType.Quest, Task.DataId, [_destination],
                     fly: Task.Fly,
-                    sprint: Task.Sprint,
+                    sprint: Task.Sprint != false,
                     stopDistance: Task.StopDistance,
                     ignoreDistanceToObject: Task.IgnoreDistanceToObject,
                     land: Task.Land);
