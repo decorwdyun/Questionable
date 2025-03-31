@@ -97,13 +97,15 @@ internal sealed class MoveExecutor : TaskExecutor<MoveTask>, IToastAware
         {
             var mountTask = new Mount.MountTask(Task.TerritoryId, Mount.EMountIf.Always);
             _mountBeforeMovement = (_serviceProvider.GetRequiredService<Mount.MountExecutor>(), mountTask);
-            _mountBeforeMovement.Value.Executor.Start(mountTask);
+            if (!_mountBeforeMovement.Value.Executor.Start(mountTask))
+                _mountBeforeMovement = null;
         }
         else if (Task.Mount == false)
         {
             var unmountTask = new Mount.UnmountTask();
             _unmountBeforeMovement = (_serviceProvider.GetRequiredService<Mount.UnmountExecutor>(), unmountTask);
-            _unmountBeforeMovement.Value.Executor.Start(unmountTask);
+            if (!_unmountBeforeMovement.Value.Executor.Start(unmountTask))
+                _unmountBeforeMovement = null;
         }
         else
         {
@@ -116,7 +118,10 @@ internal sealed class MoveExecutor : TaskExecutor<MoveTask>, IToastAware
                         : Mount.EMountIf.AwayFromPosition;
                 var mountTask = new Mount.MountTask(Task.TerritoryId, mountIf, _destination);
                 _mountDuringMovement = (_serviceProvider.GetRequiredService<Mount.MountExecutor>(), mountTask);
-                _mountDuringMovement.Value.Executor.Start(mountTask);
+                if (_mountDuringMovement.Value.Executor.EvaluateMountState(true) != Mount.MountResult.DontMount)
+                    _mountDuringMovement.Value.Executor.Start(mountTask);
+                else
+                    _mountDuringMovement = null;
             }
         }
 
