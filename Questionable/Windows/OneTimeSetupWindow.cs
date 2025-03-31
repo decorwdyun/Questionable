@@ -62,6 +62,15 @@ internal sealed class OneTimeSetupWindow : LWindow
                 new Uri("https://github.com/PunishXIV/WrathCombo"),
                 new Uri("https://puni.sh/api/plugins"))
         },
+        {
+            Configuration.ECombatModule.RotationSolverReborn,
+            new("Rotation Solver Reborn",
+                "RotationSolver",
+                string.Empty,
+                new Uri("https://github.com/FFXIV-CombatReborn/RotationSolverReborn"),
+                new Uri(
+                    "https://raw.githubusercontent.com/FFXIV-CombatReborn/CombatRebornRepo/main/pluginmaster.json"))
+        },
     }.AsReadOnly();
 
     private readonly IReadOnlyList<PluginInfo> _recommendedPlugins;
@@ -143,6 +152,7 @@ internal sealed class OneTimeSetupWindow : LWindow
 
             DrawCombatPlugin(Configuration.ECombatModule.BossMod, checklistPadding);
             DrawCombatPlugin(Configuration.ECombatModule.WrathCombo, checklistPadding);
+            DrawCombatPlugin(Configuration.ECombatModule.RotationSolverReborn, checklistPadding);
         }
 
         ImGui.Spacing();

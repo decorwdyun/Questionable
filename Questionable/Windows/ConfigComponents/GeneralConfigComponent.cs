@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Dalamud.Interface;
 using Dalamud.Interface.Colors;
-using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
@@ -32,8 +30,6 @@ internal sealed class GeneralConfigComponent : ConfigComponent
 
     private readonly EClassJob[] _classJobIds;
     private readonly string[] _classJobNames;
-
-    private Configuration.ECombatModule? _pendingCombatModule;
 
     public GeneralConfigComponent(
         IDalamudPluginInterface pluginInterface,
@@ -73,7 +69,13 @@ internal sealed class GeneralConfigComponent : ConfigComponent
 
         using (ImRaii.Disabled(_combatController.IsRunning))
         {
-            DrawCombatModule();
+            int selectedCombatModule = (int)Configuration.General.CombatModule;
+            if (ImGui.Combo("Preferred Combat Module", ref selectedCombatModule, _combatModuleNames,
+                    _combatModuleNames.Length))
+            {
+                Configuration.General.CombatModule = (Configuration.ECombatModule)selectedCombatModule;
+                Save();
+            }
         }
 
         int selectedMount = Array.FindIndex(_mountIds, x => x == Configuration.General.MountId);
@@ -141,71 +143,5 @@ internal sealed class GeneralConfigComponent : ConfigComponent
             Configuration.General.ConfigureTextAdvance = configureTextAdvance;
             Save();
         }
-    }
-
-    private void DrawCombatModule()
-    {
-        using (_ = ImRaii.Disabled(_pendingCombatModule != null))
-        {
-            int selectedCombatModule = (int)Configuration.General.CombatModule;
-            if (ImGui.Combo("Preferred Combat Module", ref selectedCombatModule, _combatModuleNames,
-                    _combatModuleNames.Length))
-            {
-                if (selectedCombatModule == (int)Configuration.ECombatModule.RotationSolverReborn)
-                {
-                    Configuration.General.CombatModule = Configuration.ECombatModule.None;
-                    _pendingCombatModule = Configuration.ECombatModule.RotationSolverReborn;
-                }
-                else
-                {
-                    Configuration.General.CombatModule = (Configuration.ECombatModule)selectedCombatModule;
-                    _pendingCombatModule = null;
-                }
-                Save();
-            }
-
-            if (Configuration.General.CombatModule == Configuration.ECombatModule.RotationSolverReborn)
-            {
-                ImGuiComponents.HelpMarker("The 'Rotation Solver Reborn' module will be removed in Patch 7.3.", FontAwesomeIcon.ExclamationTriangle, ImGuiColors.DalamudYellow);
-            }
-        }
-
-        if (_pendingCombatModule == null)
-            return;
-
-        using var indent = ImRaii.PushIndent();
-
-        ImGui.TextColored(ImGuiColors.DalamudYellow, "The 'Rotation Solver Reborn' module is unsupported, obsolete and will be removed in Patch 7.3.");
-        ImGui.Text("According to the RSR development team, RSR is not meant to run without human inputs/automatically/as a bot.");
-        ImGui.Text("Additionally, they have considered disabling RSR if it detects that Questionable is installed.");
-        ImGui.Text("Please consider switching to 'Wrath Combo' or 'Boss Mod (VBM)'.");
-
-        if (ImGui.Button("Use 'Wrath Combo'"))
-        {
-            Configuration.General.CombatModule = Configuration.ECombatModule.WrathCombo;
-            _pendingCombatModule = null;
-            Save();
-        }
-
-        ImGui.SameLine();
-
-        if (ImGui.Button("Use 'Boss Mod (VBM)'"))
-        {
-            Configuration.General.CombatModule = Configuration.ECombatModule.BossMod;
-            _pendingCombatModule = null;
-            Save();
-        }
-
-        ImGui.SameLine();
-
-        if (ImGui.Button("Use 'Rotation Solver Reborn'"))
-        {
-            Configuration.General.CombatModule = Configuration.ECombatModule.RotationSolverReborn;
-            _pendingCombatModule = null;
-            Save();
-        }
-
-
-        ImGui.Separator();
     }
 }
