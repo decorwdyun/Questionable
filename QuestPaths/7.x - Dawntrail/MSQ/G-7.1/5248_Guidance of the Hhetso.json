@@ -178,13 +178,32 @@
       "Steps": [
         {
           "Position": {
+            "X": 301.4884,
+            "Y": -15.679954,
+            "Z": -504.85742
+          },
+          "TerritoryId": 1190,
+          "InteractionType": "WalkTo",
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Unlocked"
+            }
+          }
+        },
+        {
+          "Position": {
             "X": 302.1455,
             "Y": -15.629961,
             "Z": -516.2348
           },
           "TerritoryId": 1190,
           "InteractionType": "WalkTo",
-          "Fly": true
+          "Fly": true,
+          "SkipConditions": {
+            "StepIf": {
+              "Flying": "Locked"
+            }
+          }
         },
         {
           "DataId": 1051013,
