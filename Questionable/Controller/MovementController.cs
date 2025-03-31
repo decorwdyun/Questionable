@@ -283,7 +283,15 @@ internal sealed class MovementController : IDisposable
                         unsafe
                         {
                             // 70 is ~10 seconds of sprint
-                            if (actualDistance > 100f &&
+                            float sprintDistance = 100f;
+
+                            // if we're in towns/event areas, jog is a neat fallback (if we're not already jogging,
+                            // if we're too close then sprinting will barely benefit us)
+                            if (!_gameFunctions.HasStatus(EStatus.Jog) &&
+                                GameMain.Instance()->CurrentTerritoryIntendedUseId is 0 or 7 or 13 or 14 or 15 or 19 or 23 or 29)
+                                sprintDistance = 30f;
+
+                            if (actualDistance > sprintDistance &&
                                 ActionManager.Instance()->GetActionStatus(ActionType.GeneralAction, 4) == 0)
                             {
                                 _logger.LogInformation("Triggering Sprint");
