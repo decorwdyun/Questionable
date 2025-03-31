@@ -7,6 +7,7 @@ using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Common;
+using Questionable.Controller.Steps.Movement;
 using Questionable.Controller.Utils;
 using Questionable.Data;
 using Questionable.Functions;
@@ -250,7 +251,7 @@ internal static class AetheryteShortcut
     }
 
     internal sealed class MoveAwayFromAetheryteExecutor(
-        MoveTo.MoveExecutor moveExecutor,
+        MoveExecutor moveExecutor,
         AetheryteData aetheryteData,
         IClientState clientState) : TaskExecutor<MoveAwayFromAetheryte>
     {
@@ -278,7 +279,7 @@ internal static class AetheryteShortcut
 
             Vector3 closestPoint = AetherytesToMoveFrom[Task.TargetAetheryte]
                 .MinBy(x => Vector3.Distance(x, playerPosition));
-            MoveTo.MoveTask task = new MoveTo.MoveTask(aetheryteData.TerritoryIds[Task.TargetAetheryte],
+            MoveTask task = new MoveTask(aetheryteData.TerritoryIds[Task.TargetAetheryte],
                 closestPoint, Mount: false, StopDistance: 0.25f, DisableNavmesh: true,
                 InteractionType: EInteractionType.None, RestartNavigation: false);
             return moveExecutor.Start(task);

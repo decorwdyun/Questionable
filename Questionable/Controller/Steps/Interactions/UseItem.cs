@@ -8,6 +8,7 @@ using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Common;
+using Questionable.Controller.Steps.Movement;
 using Questionable.Controller.Steps.Shared;
 using Questionable.Controller.Utils;
 using Questionable.Data;
@@ -61,7 +62,7 @@ internal static class UseItem
                     new Mount.MountTask(140,
                         nextPosition != null ? Mount.EMountIf.AwayFromPosition : Mount.EMountIf.Always,
                         nextPosition),
-                    new MoveTo.MoveTask(140, new(-408.92343f, 23.167036f, -351.16223f), null, 0.25f,
+                    new MoveTask(140, new(-408.92343f, 23.167036f, -351.16223f), null, 0.25f,
                         DataId: null, DisableNavmesh: true, Sprint: false, Fly: false,
                         InteractionType: EInteractionType.WalkTo)
                 ];
@@ -106,7 +107,7 @@ internal static class UseItem
             yield return new AetheryteShortcut.Task(null, null, EAetheryteLocation.Limsa, territoryId);
             yield return new AethernetShortcut.Task(EAetheryteLocation.Limsa, EAetheryteLocation.LimsaArcanist);
             yield return new WaitAtEnd.WaitDelay();
-            yield return new MoveTo.MoveTask(territoryId, destination, DataId: npcId, Sprint: false,
+            yield return new MoveTask(territoryId, destination, DataId: npcId, Sprint: false,
                 InteractionType: EInteractionType.WalkTo);
             yield return new Interact.Task(npcId, null, EInteractionType.None, true);
         }

@@ -20,6 +20,7 @@ using Questionable.Controller.Steps.Common;
 using Questionable.Controller.Steps.Gathering;
 using Questionable.Controller.Steps.Interactions;
 using Questionable.Controller.Steps.Leves;
+using Questionable.Controller.Steps.Movement;
 using Questionable.Controller.Utils;
 using Questionable.Data;
 using Questionable.External;
@@ -174,7 +175,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
                 AethernetShortcut.UseAethernetShortcut>();
         serviceCollection
             .AddTaskFactoryAndExecutor<WaitAtStart.WaitDelay, WaitAtStart.Factory, WaitAtStart.WaitDelayExecutor>();
-        serviceCollection.AddTaskFactoryAndExecutor<MoveTo.MoveTask, MoveTo.Factory, MoveTo.MoveExecutor>();
+        serviceCollection.AddTaskFactoryAndExecutor<MoveTask, MoveTo.Factory, MoveExecutor>();
         serviceCollection.AddTaskExecutor<MoveTo.WaitForNearDataId, MoveTo.WaitForNearDataIdExecutor>();
         serviceCollection.AddTaskExecutor<MoveTo.LandTask, MoveTo.LandExecutor>();
         serviceCollection
