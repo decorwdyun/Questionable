@@ -37,20 +37,22 @@ internal static class Mount
         private bool _mountTriggered;
         private DateTime _retryAt = DateTime.MinValue;
 
-        public unsafe MountResult EvaluateMountState()
+        public unsafe MountResult EvaluateMountState(bool dryRun)
         {
             if (condition[ConditionFlag.Mounted])
                 return MountResult.DontMount;
 
+            LogLevel logLevel = dryRun ? LogLevel.None : LogLevel.Information;
+
             if (!territoryData.CanUseMount(Task.TerritoryId))
             {
-                logger.LogInformation("Can't use mount in current territory {Id}", Task.TerritoryId);
+                logger.Log(logLevel, "Can't use mount in current territory {Id}", Task.TerritoryId);
                 return MountResult.DontMount;
             }
 
             if (gameFunctions.HasStatusPreventingMount())
             {
-                logger.LogInformation("Can't mount due to status preventing sprint or mount");
+                logger.Log(logLevel, "Can't mount due to status preventing sprint or mount");
                 return MountResult.DontMount;
             }
 
@@ -60,20 +62,21 @@ internal static class Mount
                 float distance = System.Numerics.Vector3.Distance(playerPosition, Task.Position.GetValueOrDefault());
                 if (Task.TerritoryId == clientState.TerritoryType && distance < 30f && !Conditions.Instance()->Diving)
                 {
-                    logger.LogInformation("Not using mount, as we're close to the target");
+                    logger.Log(logLevel, "Not using mount, as we're close to the target");
                     return MountResult.DontMount;
                 }
 
-                logger.LogInformation(
+                logger.Log(logLevel,
                     "Want to use mount if away from destination ({Distance} yalms), trying (in territory {Id})...",
                     distance, Task.TerritoryId);
             }
             else
-                logger.LogInformation("Want to use mount, trying (in territory {Id})...", Task.TerritoryId);
+                logger.Log(logLevel, "Want to use mount, trying (in territory {Id})...", Task.TerritoryId);
 
             if (!condition[ConditionFlag.InCombat])
             {
-                _retryAt = DateTime.Now.AddSeconds(0.5);
+                if (dryRun)
+                    _retryAt = DateTime.Now.AddSeconds(0.5);
                 return MountResult.Mount;
             }
             else
@@ -83,7 +86,7 @@ internal static class Mount
         protected override bool Start()
         {
             _mountTriggered = false;
-            return EvaluateMountState() == MountResult.Mount;
+            return EvaluateMountState(false) == MountResult.Mount;
         }
 
         public override ETaskResult Update()

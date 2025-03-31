@@ -1,11 +1,11 @@
 using System;
-using System.Globalization;
 using System.Numerics;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
 using LLib;
 using Lumina.Excel.Sheets;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Functions;
 using Questionable.Model;
@@ -23,15 +23,15 @@ internal sealed class MoveExecutor : TaskExecutor<MoveTask>, IToastAware
     private readonly ILogger<MoveExecutor> _logger;
     private readonly IClientState _clientState;
     private readonly ICondition _condition;
-    private readonly Mount.MountExecutor _mountExecutor;
-    private readonly Mount.UnmountExecutor _unmountExecutor;
+    private readonly IServiceProvider _serviceProvider;
 
     private Action? _startAction;
     private Vector3 _destination;
     private bool _canRestart;
 
-    private (ITaskExecutor Executor, ITask Task, bool Triggered)? _nestedExecutor =
-        (new NoOpTaskExecutor(), new NoOpTask(), true);
+    private (Mount.MountExecutor Executor, Mount.MountTask Task)? _mountBeforeMovement;
+    private (Mount.UnmountExecutor Executor, Mount.UnmountTask Task)? _unmountBeforeMovement;
+    private (Mount.MountExecutor Executor, Mount.MountTask Task)? _mountDuringMovement;
 
     public MoveExecutor(
         MovementController movementController,
@@ -40,16 +40,14 @@ internal sealed class MoveExecutor : TaskExecutor<MoveTask>, IToastAware
         IClientState clientState,
         ICondition condition,
         IDataManager dataManager,
-        Mount.MountExecutor mountExecutor,
-        Mount.UnmountExecutor unmountExecutor)
+        IServiceProvider serviceProvider)
     {
         _movementController = movementController;
         _gameFunctions = gameFunctions;
         _logger = logger;
         _clientState = clientState;
         _condition = condition;
-        _mountExecutor = mountExecutor;
-        _unmountExecutor = unmountExecutor;
+        _serviceProvider = serviceProvider;
         _cannotExecuteAtThisTime = dataManager.GetString<LogMessage>(579, x => x.Text)!;
     }
 
@@ -65,7 +63,7 @@ internal sealed class MoveExecutor : TaskExecutor<MoveTask>, IToastAware
             _startAction = () =>
                 _movementController.NavigateTo(EMovementType.Quest, Task.DataId, _destination,
                     fly: Task.Fly,
-                    sprint: Task.Sprint != false,
+                    sprint: Task.Sprint ?? _mountDuringMovement == null,
                     stopDistance: Task.StopDistance,
                     ignoreDistanceToObject: Task.IgnoreDistanceToObject,
                     land: Task.Land);
@@ -75,7 +73,7 @@ internal sealed class MoveExecutor : TaskExecutor<MoveTask>, IToastAware
             _startAction = () =>
                 _movementController.NavigateTo(EMovementType.Quest, Task.DataId, [_destination],
                     fly: Task.Fly,
-                    sprint: Task.Sprint != false,
+                    sprint: Task.Sprint ?? _mountDuringMovement == null,
                     stopDistance: Task.StopDistance,
                     ignoreDistanceToObject: Task.IgnoreDistanceToObject,
                     land: Task.Land);
@@ -95,31 +93,21 @@ internal sealed class MoveExecutor : TaskExecutor<MoveTask>, IToastAware
         if (requiresMovement)
             PrepareMovementIfNeeded();
 
-        // might be able to make this optional
-        if (Task.Mount == true)
+        if (Task.Mount == true || Task.Fly)
         {
             var mountTask = new Mount.MountTask(Task.TerritoryId, Mount.EMountIf.Always);
-            if (_mountExecutor.Start(mountTask))
-            {
-                _nestedExecutor = (_mountExecutor, mountTask, true);
-                return true;
-            }
-            else if (_mountExecutor.EvaluateMountState() == Mount.MountResult.WhenOutOfCombat)
-                _nestedExecutor = (_mountExecutor, mountTask, false);
+            _mountBeforeMovement = (_serviceProvider.GetRequiredService<Mount.MountExecutor>(), mountTask);
+            _mountBeforeMovement.Value.Executor.Start(mountTask);
         }
         else if (Task.Mount == false)
         {
-            var mountTask = new Mount.UnmountTask();
-            if (_unmountExecutor.Start(mountTask))
-            {
-                _nestedExecutor = (_unmountExecutor, mountTask, true);
-                return true;
-            }
+            var unmountTask = new Mount.UnmountTask();
+            _unmountBeforeMovement = (_serviceProvider.GetRequiredService<Mount.UnmountExecutor>(), unmountTask);
+            _unmountBeforeMovement.Value.Executor.Start(unmountTask);
         }
-
-        if (!Task.DisableNavmesh)
+        else
         {
-            if (Task.Mount == null)
+            if (!Task.DisableNavmesh)
             {
                 Mount.EMountIf mountIf =
                     actualDistance > stopDistance && Task.Fly &&
@@ -127,80 +115,22 @@ internal sealed class MoveExecutor : TaskExecutor<MoveTask>, IToastAware
                         ? Mount.EMountIf.Always
                         : Mount.EMountIf.AwayFromPosition;
                 var mountTask = new Mount.MountTask(Task.TerritoryId, mountIf, _destination);
-                if (_mountExecutor.Start(mountTask))
-                {
-                    _nestedExecutor = (_mountExecutor, mountTask, true);
-                    return true;
-                }
-                else if (_mountExecutor.EvaluateMountState() == Mount.MountResult.WhenOutOfCombat)
-                    _nestedExecutor = (_mountExecutor, mountTask, false);
+                _mountDuringMovement = (_serviceProvider.GetRequiredService<Mount.MountExecutor>(), mountTask);
+                _mountDuringMovement.Value.Executor.Start(mountTask);
             }
         }
 
-        if (_startAction != null && (_nestedExecutor == null || _nestedExecutor.Value.Triggered == false))
+        if (_mountBeforeMovement == null &&
+            _unmountBeforeMovement == null &&
+            _startAction != null)
             _startAction();
         return true;
     }
 
     public override ETaskResult Update()
     {
-        if (_nestedExecutor is { } nestedExecutor)
-        {
-            if (nestedExecutor is { Triggered: false, Executor: Mount.MountExecutor mountExecutor })
-            {
-                if (!_condition[ConditionFlag.InCombat])
-                {
-                    if (mountExecutor.EvaluateMountState() == Mount.MountResult.DontMount)
-                        _nestedExecutor = (new NoOpTaskExecutor(), new NoOpTask(), true);
-                    else
-                    {
-                        if (_movementController.IsPathfinding || _movementController.IsPathRunning)
-                            _movementController.Stop();
-
-                        if (nestedExecutor.Executor.Start(nestedExecutor.Task))
-                        {
-                            _nestedExecutor = nestedExecutor with { Triggered = true };
-                            return ETaskResult.StillRunning;
-                        }
-                    }
-                }
-                else if (!ShouldResolveCombatBeforeNextInteraction() &&
-                         _movementController is { IsPathfinding: false, IsPathRunning: false } &&
-                         mountExecutor.EvaluateMountState() == Mount.MountResult.DontMount)
-                {
-                    // except for e.g. jumping which would maybe break if combat navigates us away, if we don't
-                    // need a mount anymore we can just skip combat and assume that the interruption is handled
-                    // later.
-                    //
-                    // without this, the character would just stand around while getting hit
-                    _nestedExecutor = (new NoOpTaskExecutor(), new NoOpTask(), true);
-                }
-            }
-            else if (nestedExecutor.Executor.Update() == ETaskResult.TaskComplete)
-            {
-                _nestedExecutor = null;
-                if (_startAction != null)
-                {
-                    _logger.LogInformation("Moving to {Destination}",
-                        _destination.ToString("G", CultureInfo.InvariantCulture));
-                    _startAction();
-                }
-                else
-                    return ETaskResult.TaskComplete;
-            }
-            else if (!_condition[ConditionFlag.Mounted] && _condition[ConditionFlag.InCombat] &&
-                     nestedExecutor is { Triggered: true, Executor: Mount.MountExecutor })
-            {
-                // if the problem wasn't caused by combat, the normal mount retry should handle it
-                _logger.LogDebug("Resetting mount trigger state");
-                _nestedExecutor = nestedExecutor with { Triggered = false };
-
-                // however, we're also explicitly ignoring combat here and walking away
-                _startAction?.Invoke();
-            }
-
-            return ETaskResult.StillRunning;
-        }
+        if (UpdateMountState() is {} mountStateResult)
+            return mountStateResult;
 
         if (_startAction == null)
             return ETaskResult.TaskComplete;
@@ -231,11 +161,59 @@ internal sealed class MoveExecutor : TaskExecutor<MoveTask>, IToastAware
         return ETaskResult.TaskComplete;
     }
 
+    private ETaskResult? UpdateMountState()
+    {
+        if (_mountBeforeMovement is { Executor: {} mountBeforeMoveExecutor })
+        {
+            if (mountBeforeMoveExecutor.Update() == ETaskResult.TaskComplete)
+            {
+                _logger.LogInformation("MountBeforeMovement complete");
+                _mountBeforeMovement = null;
+                _startAction?.Invoke();
+                return null;
+            }
+
+            return ETaskResult.StillRunning;
+        }
+        else if (_unmountBeforeMovement is { Executor: { } unmountBeforeMoveExecutor })
+        {
+            if (unmountBeforeMoveExecutor.Update() == ETaskResult.TaskComplete)
+            {
+                _logger.LogInformation("UnmountBeforeMovement complete");
+                _unmountBeforeMovement = null;
+                _startAction?.Invoke();
+                return null;
+            }
+
+            return ETaskResult.StillRunning;
+        }
+        else if (_mountDuringMovement is { Executor: { } mountDuringMoveExecutor })
+        {
+            if (mountDuringMoveExecutor.Update() == ETaskResult.TaskComplete)
+            {
+                _logger.LogInformation("MountDuringMovement complete (mounted)");
+                _mountDuringMovement = null;
+                return null;
+            }
+
+            if (mountDuringMoveExecutor.EvaluateMountState(true) == Mount.MountResult.DontMount)
+            {
+                _logger.LogInformation("MountDuringMovement implicitly complete (shouldn't mount anymore)");
+                _mountDuringMovement = null;
+                return null;
+            }
+
+            return null; // still keep moving
+        }
+        else
+            return null;
+    }
+
     public override bool WasInterrupted()
     {
         if (Task.Fly && _condition[ConditionFlag.InCombat] && !_condition[ConditionFlag.Mounted] &&
-            _nestedExecutor is { Triggered: false, Executor: Mount.MountExecutor mountExecutor } &&
-            mountExecutor.EvaluateMountState() == Mount.MountResult.WhenOutOfCombat)
+            _mountBeforeMovement is { Executor: {} mountExecutor } &&
+            mountExecutor.EvaluateMountState(true) == Mount.MountResult.WhenOutOfCombat)
         {
             return true;
         }
@@ -245,11 +223,9 @@ internal sealed class MoveExecutor : TaskExecutor<MoveTask>, IToastAware
 
     public override bool ShouldInterruptOnDamage()
     {
-        // have we stopped moving, and are we
         // (a) waiting for a mount to complete, or
         // (b) want combat to be done before any other interaction?
-        return _movementController is { IsPathfinding: false, IsPathRunning: false } &&
-               (_nestedExecutor is { Triggered: false, Executor: Mount.MountExecutor } || ShouldResolveCombatBeforeNextInteraction());
+        return _mountBeforeMovement != null || ShouldResolveCombatBeforeNextInteraction();
     }
 
     private bool ShouldResolveCombatBeforeNextInteraction() => Task.InteractionType is EInteractionType.Jump;
