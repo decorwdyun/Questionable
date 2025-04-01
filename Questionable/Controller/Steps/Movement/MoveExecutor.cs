@@ -23,6 +23,7 @@ internal sealed class MoveExecutor : TaskExecutor<MoveTask>, IToastAware
     private readonly ILogger<MoveExecutor> _logger;
     private readonly IClientState _clientState;
     private readonly ICondition _condition;
+    private readonly Mount.MountEvaluator _mountEvaluator;
     private readonly IServiceProvider _serviceProvider;
 
     private Action? _startAction;
@@ -40,6 +41,7 @@ internal sealed class MoveExecutor : TaskExecutor<MoveTask>, IToastAware
         IClientState clientState,
         ICondition condition,
         IDataManager dataManager,
+        Mount.MountEvaluator mountEvaluator,
         IServiceProvider serviceProvider)
     {
         _movementController = movementController;
@@ -48,6 +50,7 @@ internal sealed class MoveExecutor : TaskExecutor<MoveTask>, IToastAware
         _clientState = clientState;
         _condition = condition;
         _serviceProvider = serviceProvider;
+        _mountEvaluator = mountEvaluator;
         _cannotExecuteAtThisTime = dataManager.GetString<LogMessage>(579, x => x.Text)!;
     }
 
@@ -117,8 +120,9 @@ internal sealed class MoveExecutor : TaskExecutor<MoveTask>, IToastAware
                         ? Mount.EMountIf.Always
                         : Mount.EMountIf.AwayFromPosition;
                 var mountTask = new Mount.MountTask(Task.TerritoryId, mountIf, _destination);
+                DateTime retryAt = DateTime.Now;
                 _mountDuringMovement = (_serviceProvider.GetRequiredService<Mount.MountExecutor>(), mountTask);
-                if (_mountDuringMovement.Value.Executor.EvaluateMountState(true) != Mount.MountResult.DontMount)
+                if (_mountEvaluator.EvaluateMountState(mountTask, true, ref retryAt) != Mount.MountResult.DontMount)
                     _mountDuringMovement.Value.Executor.Start(mountTask);
                 else
                     _mountDuringMovement = null;
@@ -192,7 +196,7 @@ internal sealed class MoveExecutor : TaskExecutor<MoveTask>, IToastAware
 
             return ETaskResult.StillRunning;
         }
-        else if (_mountDuringMovement is { Executor: { } mountDuringMoveExecutor })
+        else if (_mountDuringMovement is { Executor: { } mountDuringMoveExecutor, Task: {} mountTask })
         {
             if (mountDuringMoveExecutor.Update() == ETaskResult.TaskComplete)
             {
@@ -201,7 +205,8 @@ internal sealed class MoveExecutor : TaskExecutor<MoveTask>, IToastAware
                 return null;
             }
 
-            if (mountDuringMoveExecutor.EvaluateMountState(true) == Mount.MountResult.DontMount)
+            DateTime retryAt = DateTime.Now;
+            if (_mountEvaluator.EvaluateMountState(mountTask, true, ref retryAt) == Mount.MountResult.DontMount)
             {
                 _logger.LogInformation("MountDuringMovement implicitly complete (shouldn't mount anymore)");
                 _mountDuringMovement = null;
@@ -216,9 +221,10 @@ internal sealed class MoveExecutor : TaskExecutor<MoveTask>, IToastAware
 
     public override bool WasInterrupted()
     {
+        DateTime retryAt = DateTime.Now;
         if (Task.Fly && _condition[ConditionFlag.InCombat] && !_condition[ConditionFlag.Mounted] &&
-            _mountBeforeMovement is { Executor: {} mountExecutor } &&
-            mountExecutor.EvaluateMountState(true) == Mount.MountResult.WhenOutOfCombat)
+            _mountBeforeMovement is { Task: {} mountTask } &&
+            _mountEvaluator.EvaluateMountState(mountTask, true, ref retryAt) == Mount.MountResult.WhenOutOfCombat)
         {
             return true;
         }
