@@ -363,7 +363,7 @@ internal sealed class QuestJournalComponent
     private bool IsQuestMatch(FilterConfiguration filter, IQuestInfo questInfo)
     {
         if (!string.IsNullOrEmpty(filter.SearchText) &&
-            !questInfo.Name.Contains(filter.SearchText, StringComparison.CurrentCultureIgnoreCase))
+            !(questInfo.Name.Contains(filter.SearchText, StringComparison.CurrentCultureIgnoreCase) || questInfo.QuestId.ToString() == filter.SearchText))
             return false;
 
         if (filter.AvailableOnly && !_questFunctions.IsReadyToAcceptQuest(questInfo.QuestId))
