@@ -360,6 +360,9 @@ internal sealed class MovementController : IDisposable
         if (Destination == null)
             throw new InvalidOperationException("Destination is null");
 
+        if (DateTime.Now - MovementStartedAt <= TimeSpan.FromSeconds(5))
+            return;
+
         var nextWaypoint = navPoints.FirstOrDefault();
         if (nextWaypoint != default)
         {

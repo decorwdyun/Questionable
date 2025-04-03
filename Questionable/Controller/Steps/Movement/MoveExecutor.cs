@@ -96,7 +96,7 @@ internal sealed class MoveExecutor : TaskExecutor<MoveTask>, IToastAware
         if (requiresMovement)
             PrepareMovementIfNeeded();
 
-        if (Task.Mount == true || Task.Fly)
+        if (Task.Mount == true)
         {
             var mountTask = new Mount.MountTask(Task.TerritoryId, Mount.EMountIf.Always);
             _mountBeforeMovement = (_serviceProvider.GetRequiredService<Mount.MountExecutor>(), mountTask);
@@ -121,11 +121,20 @@ internal sealed class MoveExecutor : TaskExecutor<MoveTask>, IToastAware
                         : Mount.EMountIf.AwayFromPosition;
                 var mountTask = new Mount.MountTask(Task.TerritoryId, mountIf, _destination);
                 DateTime retryAt = DateTime.Now;
-                _mountDuringMovement = (_serviceProvider.GetRequiredService<Mount.MountExecutor>(), mountTask);
+                (Mount.MountExecutor Executor, Mount.MountTask)? move;
+
                 if (_mountEvaluator.EvaluateMountState(mountTask, true, ref retryAt) != Mount.MountResult.DontMount)
-                    _mountDuringMovement.Value.Executor.Start(mountTask);
+                {
+                    move = (_serviceProvider.GetRequiredService<Mount.MountExecutor>(), mountTask);
+                    move.Value.Executor.Start(mountTask);
+                }
                 else
-                    _mountDuringMovement = null;
+                    move = null;
+
+                if (Task.Fly)
+                    _mountBeforeMovement = move;
+                else
+                    _mountDuringMovement = move;
             }
         }
 
