@@ -28,6 +28,17 @@
       "Sequence": 1,
       "Steps": [
         {
+          "Position": {
+            "X": 72.586075,
+            "Y": 226.66864,
+            "Z": 382.17618
+          },
+          "TerritoryId": 155,
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Coerthas Central Highlands - Camp Dragonhead",
+          "Fly": true
+        },
+        {
           "DataId": 2002373,
           "Position": {
             "X": 72.098755,
@@ -35,12 +46,12 @@
             "Z": 380.84985
           },
           "TerritoryId": 155,
-          "InteractionType": "UseItem",
-          "ItemId": 2000953,
-          "EnemySpawnType": "AutoOnEnterArea",
-          "AetheryteShortcut": "Coerthas Central Highlands - Camp Dragonhead",
-          "Fly": true,
-          "$": "Actually a SinglePlayerDuty"
+          "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": "0.1.1.8"
+          },
+          "ItemId": 2000953
         }
       ]
     },
