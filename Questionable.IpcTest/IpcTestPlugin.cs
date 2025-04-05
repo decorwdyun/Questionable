@@ -8,6 +8,7 @@ using Dalamud.Plugin.Services;
 
 namespace Questionable.IpcTest;
 
+// ReSharper disable once InconsistentNaming
 public sealed class IpcTestPlugin : IDalamudPlugin
 {
     //private readonly WindowSystem _windowSystem = new("Questionable/" + nameof(IpcTestPlugin));
@@ -53,6 +54,7 @@ public sealed class IpcTestPlugin : IDalamudPlugin
 
     [SuppressMessage("ReSharper", "ClassNeverInstantiated.Local")]
     [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
+    // ReSharper disable once InconsistentNaming
     private sealed class IpcStepData
     {
         public required string InteractionType { get; set; }

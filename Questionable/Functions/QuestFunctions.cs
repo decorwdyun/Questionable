@@ -13,7 +13,6 @@ using FFXIVClientStructs.FFXIV.Component.GUI;
 using LLib.GameData;
 using LLib.GameUI;
 using Lumina.Excel.Sheets;
-using Microsoft.Extensions.Logging;
 using Questionable.Controller;
 using Questionable.Data;
 using Questionable.Model;
