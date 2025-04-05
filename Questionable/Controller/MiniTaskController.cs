@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
@@ -27,7 +28,7 @@ internal abstract class MiniTaskController<T> : IDisposable
     private readonly InterruptHandler _interruptHandler;
     private readonly ILogger<T> _logger;
 
-    private readonly string _actionCanceledText;
+    private readonly Regex _actionCanceledText;
     private readonly string _eventCanceledText;
     private readonly string _cantExecuteDueToStatusText;
 
@@ -41,7 +42,7 @@ internal abstract class MiniTaskController<T> : IDisposable
         _condition = condition;
 
         _eventCanceledText = dataManager.GetString<LogMessage>(1318, x => x.Text)!;
-        _actionCanceledText = dataManager.GetString<LogMessage>(1314, x => x.Text)!;
+        _actionCanceledText = dataManager.GetRegex<LogMessage>(1314, x => x.Text)!;
         _cantExecuteDueToStatusText = dataManager.GetString<LogMessage>(7728, x => x.Text)!;
         _interruptHandler.Interrupted += HandleInterruption;
     }
@@ -220,7 +221,7 @@ internal abstract class MiniTaskController<T> : IDisposable
 
         if (!isHandled)
         {
-            if (GameFunctions.GameStringEquals(_actionCanceledText, message.TextValue) &&
+            if (_actionCanceledText.IsMatch(message.TextValue) &&
                 !_condition[ConditionFlag.InFlight] &&
                 _taskQueue.CurrentTaskExecutor?.ShouldInterruptOnDamage() == true)
                 InterruptQueueWithCombat();

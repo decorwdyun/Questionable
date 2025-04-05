@@ -30,7 +30,7 @@ internal sealed class ExcelFunctions
         if (isRegex)
             return new StringOrRegex(seString.ToRegex());
         else
-            return new StringOrRegex(seString?.ToDalamudString().ToString());
+            return new StringOrRegex(seString?.WithCertainMacroCodeReplacements());
     }
 
     public ReadOnlySeString? GetRawDialogueText(Quest? currentQuest, string? excelSheetName, string key)

@@ -773,8 +773,8 @@ internal sealed class InteractionUiController : IDisposable
             .Where(x => x.RowId > 0 && x.TerritoryType.RowId == targetTerritoryId);
         foreach (var entry in warps)
         {
-            string excelName = entry.Name.ToString();
-            string excelQuestion = entry.Question.ToString();
+            string excelName = entry.Name.WithCertainMacroCodeReplacements();
+            string excelQuestion = entry.Question.WithCertainMacroCodeReplacements();
 
             if (!string.IsNullOrEmpty(excelQuestion) && GameFunctions.GameStringEquals(excelQuestion, actualPrompt))
             {
