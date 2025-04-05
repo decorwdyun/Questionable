@@ -13,6 +13,7 @@ using FFXIVClientStructs.FFXIV.Component.GUI;
 using LLib.GameData;
 using LLib.GameUI;
 using Lumina.Excel.Sheets;
+using Microsoft.Extensions.Logging;
 using Questionable.Controller;
 using Questionable.Data;
 using Questionable.Model;
@@ -272,7 +273,42 @@ internal sealed unsafe class QuestFunctions
 
         QuestId currentQuest = new QuestId(scenarioTree->Data->CurrentScenarioQuest);
         if (currentQuest.Value == 0)
-            return default;
+        {
+            if (IsQuestComplete(_questData.LastMainScenarioQuestId))
+                return default;
+
+            // fallback lookup; find a quest which isn't completed but where all prequisites are met
+            // excluding branching quests
+
+            var playerState = PlayerState.Instance();
+            var potentialQuests = _questData.MainScenarioQuests
+                .Where(x => x.StartingCity == 0 || x.StartingCity == playerState->StartTown)
+                .Where(q => IsReadyToAcceptQuest(q.QuestId, true))
+                .ToList();
+            if (potentialQuests.Count == 0)
+                return default;
+            else if (potentialQuests.Count > 1)
+            {
+                // for all of these (except the GC quests), questionable normally auto-picks the next quest based on the
+                // agent data. This should (hopefully) pick the exact same quest when the agent does not know for a bit.
+                if (potentialQuests.All(x => x.QuestId.Value is 680 or 681 or 682))
+                    currentQuest = new QuestId(681); // The Company You Keep; actual quest will be resolved later in GetCurrentQuest
+                else if (potentialQuests.Any(x => x.QuestId.Value == 1583))
+                    currentQuest = new QuestId(1583); // HW: Over the Wall vs. Onwards and Upwards
+                else if (potentialQuests.Any(x => x.QuestId.Value == 2451))
+                    currentQuest = new QuestId(2451); // SB: A Friend of a Friend in Need vs. A Familiar Face Forgotten
+                else if (potentialQuests.Any(x => x.QuestId.Value == 3282))
+                    currentQuest = new QuestId(3282); // ShB: In Search of Alphinaud vs. In Search of Alisaie
+                else if (potentialQuests.Any(x => x.QuestId.Value == 4359))
+                    currentQuest = new QuestId(4359); // EW: Hitting the Books vs. For Thavnair Bound
+                else if (potentialQuests.Any(x => x.QuestId.Value == 4865))
+                    currentQuest = new QuestId(4865); // DT: To Kozama'uk vs. To Urqopacha
+                if (potentialQuests.Count != 1)
+                    return default;
+            }
+            else
+                currentQuest = (QuestId)potentialQuests.Single().QuestId;
+        }
 
         // if the MSQ is hidden, we generally ignore it
         QuestManager* questManager = QuestManager.Instance();
@@ -350,7 +386,7 @@ internal sealed unsafe class QuestFunctions
         int gil = inventoryManager->GetItemCountInContainer(1, InventoryType.Currency);
 
         return GetPriorityQuests()
-            .Where(IsReadyToAcceptQuest)
+            .Where(x => IsReadyToAcceptQuest(x))
             .Where(x =>
             {
                 if (!_questRegistry.TryGetQuest(x, out Quest? quest))
@@ -443,7 +479,7 @@ internal sealed unsafe class QuestFunctions
             .ToList();
     }
 
-    public bool IsReadyToAcceptQuest(ElementId questId)
+    public bool IsReadyToAcceptQuest(ElementId questId, bool ignoreLevel = false)
     {
         _questRegistry.TryGetQuest(questId, out var quest);
         if (quest is { Info.IsRepeatable: true })
@@ -474,10 +510,13 @@ internal sealed unsafe class QuestFunctions
         if (IsQuestLocked(questId))
             return false;
 
-        // if we're not at a high enough level to continue, we also ignore it
-        var currentLevel = _clientState.LocalPlayer?.Level ?? 0;
-        if (currentLevel != 0 && quest != null && quest.Info.Level > currentLevel)
-            return false;
+        if (!ignoreLevel)
+        {
+            // if we're not at a high enough level to continue, we also ignore it
+            var currentLevel = _clientState.LocalPlayer?.Level ?? 0;
+            if (currentLevel != 0 && quest != null && quest.Info.Level > currentLevel)
+                return false;
+        }
 
         return true;
     }

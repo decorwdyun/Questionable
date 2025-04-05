@@ -7,6 +7,7 @@ using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using LLib.GameData;
 using Lumina.Excel.Sheets;
+using Microsoft.Extensions.Logging;
 using Questionable.Model;
 using Questionable.Model.Questing;
 using Quest = Lumina.Excel.Sheets.Quest;
@@ -225,13 +226,23 @@ internal sealed class QuestData
         // follow-up quests to picking a GC
         AddGcFollowUpQuests();
 
+        MainScenarioQuests = _quests.Values.Where(x => x is QuestInfo { IsMainScenarioQuest: true })
+            .Cast<QuestInfo>()
+            .ToList();
+
+        LastMainScenarioQuestId = MainScenarioQuests
+            .Where(x => !MainScenarioQuests.Any(y => y.PreviousQuests.Any(z => z.QuestId == x.QuestId)))
+            .Select(x => (QuestId)x.QuestId)
+            .FirstOrDefault() ?? new QuestId(0);
         RedeemableItems = quests.Where(x => x is QuestInfo)
             .Cast<QuestInfo>()
             .SelectMany(x => x.ItemRewards)
             .ToImmutableHashSet();
     }
 
+    public IReadOnlyList<QuestInfo> MainScenarioQuests { get; }
     public ImmutableHashSet<ItemReward> RedeemableItems { get; }
+    public QuestId LastMainScenarioQuestId { get; }
 
     private void AddPreviousQuest(QuestId questToUpdate, QuestId requiredQuestId)
     {
