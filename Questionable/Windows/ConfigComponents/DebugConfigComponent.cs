@@ -32,6 +32,19 @@ internal sealed class DebugConfigComponent : ConfigComponent
             Save();
         }
 
+        using (ImRaii.Disabled(!debugOverlay))
+        {
+            using (ImRaii.PushIndent())
+            {
+                bool combatDataOverlay = Configuration.Advanced.CombatDataOverlay;
+                if (ImGui.Checkbox("Enable combat data overlay", ref combatDataOverlay))
+                {
+                    Configuration.Advanced.CombatDataOverlay = combatDataOverlay;
+                    Save();
+                }
+            }
+        }
+
         bool neverFly = Configuration.Advanced.NeverFly;
         if (ImGui.Checkbox("Disable flying (even if unlocked for the zone)", ref neverFly))
         {

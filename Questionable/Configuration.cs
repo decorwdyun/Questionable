@@ -71,6 +71,7 @@ internal sealed class Configuration : IPluginConfiguration
     internal sealed class AdvancedConfiguration
     {
         public bool DebugOverlay { get; set; }
+        public bool CombatDataOverlay { get; set; }
         public bool NeverFly { get; set; }
         public bool AdditionalStatusInformation { get; set; }
         public bool DisableAutoDutyBareMode { get; set; }

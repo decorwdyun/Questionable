@@ -26,7 +26,6 @@ namespace Questionable.Controller;
 internal sealed class CombatController : IDisposable
 {
     private const float MaxTargetRange = 55f;
-    private const float MaxNameplateRange = 50f;
 
     private readonly List<ICombatModule> _combatModules;
     private readonly MovementController _movementController;
@@ -155,9 +154,9 @@ internal sealed class CombatController : IDisposable
         var target = _targetManager.Target;
         if (target != null)
         {
-            int currentTargetPriority = GetKillPriority(target);
+            int currentTargetPriority = GetKillPriority(target).Priority;
             var nextTarget = FindNextTarget();
-            int nextTargetPriority = nextTarget != null ? GetKillPriority(nextTarget) : 0;
+            int nextTargetPriority = nextTarget != null ? GetKillPriority(nextTarget).Priority : 0;
 
             if (nextTarget != null && nextTarget.Equals(target))
             {
@@ -251,7 +250,7 @@ internal sealed class CombatController : IDisposable
         return _objectTable.Select(x => new
             {
                 GameObject = x,
-                Priority = GetKillPriority(x),
+                GetKillPriority(x).Priority,
                 Distance = Vector3.Distance(x.Position, _clientState.LocalPlayer!.Position),
             })
             .Where(x => x.Priority > 0)
@@ -261,24 +260,50 @@ internal sealed class CombatController : IDisposable
             .FirstOrDefault();
     }
 
-    public unsafe int GetKillPriority(IGameObject gameObject)
+    public unsafe (int Priority, string Reason) GetKillPriority(IGameObject gameObject)
+    {
+        (int? rawPriority, string reason) = GetRawKillPriority(gameObject);
+        if (rawPriority == null)
+            return (0, reason);
+
+        // priority is a value between 0 and 100 inclusive; we want to always kill enemies we have fight with on first
+        if (gameObject is IBattleNpc battleNpc && battleNpc.StatusFlags.HasFlag(StatusFlags.InCombat))
+        {
+            // stuff trying to kill us
+            if (gameObject.TargetObjectId == _clientState.LocalPlayer?.GameObjectId)
+                return (rawPriority.Value + 150, reason + "/Targeted");
+
+            // stuff on our enmity list that's not necessarily targeting us
+            var haters = UIState.Instance()->Hater;
+            for (int i = 0; i < haters.HaterCount; ++i)
+            {
+                var hater = haters.Haters[i];
+                if (hater.EntityId == gameObject.GameObjectId)
+                    return (rawPriority.Value + 125, reason + "/Enmity");
+            }
+        }
+
+        return (rawPriority.Value, reason);
+    }
+
+    private unsafe (int? Priority, string Reason) GetRawKillPriority(IGameObject gameObject)
     {
         if (_currentFight == null)
-            return 0;
+            return (null, "Not Fighting");
 
         if (gameObject is IBattleNpc battleNpc)
         {
             if (!_currentFight.Module.CanAttack(battleNpc))
-                return 0;
+                return (null, "Can't attack");
 
             if (battleNpc.IsDead)
-                return 0;
+                return (null, "Dead");
 
             if (!battleNpc.IsTargetable)
-                return 0;
+                return (null, "Untargetable");
 
             var complexCombatData = _currentFight.Data.ComplexCombatDatas;
-            if (complexCombatData.Count >= 0)
+            if (complexCombatData.Count > 0)
             {
                 for (int i = 0; i < complexCombatData.Count; ++i)
                 {
@@ -287,13 +312,13 @@ internal sealed class CombatController : IDisposable
 
                     if (complexCombatData[i].DataId == battleNpc.DataId &&
                         (complexCombatData[i].NameId == null || complexCombatData[i].NameId == battleNpc.NameId))
-                        return 100;
+                        return (100, "CCD");
                 }
             }
             else
             {
                 if (_currentFight.Data.KillEnemyDataIds.Contains(battleNpc.DataId))
-                    return 90;
+                    return (90, "KED");
             }
 
             // enemies that we have aggro on
@@ -303,53 +328,15 @@ internal sealed class CombatController : IDisposable
 
                 // npc that starts a fate or does turn-ins; not sure why they're marked as hostile
                 if (gameObjectStruct->NamePlateIconId is 60093 or 60732)
-                    return 0;
+                    return (null, "FATE NPC");
 
-                var enemyData = _currentFight.Data.ComplexCombatDatas
-                    .FirstOrDefault(x => x.DataId == battleNpc.DataId &&
-                                         (x.NameId == null || x.NameId == battleNpc.NameId));
-                if (enemyData is { IgnoreQuestMarker: true })
-                {
-                    if (battleNpc.StatusFlags.HasFlag(StatusFlags.InCombat))
-                        return 20;
-                }
-                else if (enemyData != null)
-                {
-                    if (gameObjectStruct->NamePlateIconId != 0)
-                        return 30;
-
-                    // for enemies that are very far away, their nameplate doesn't render but they're in the object table
-                    if (_currentFight?.Data.SpawnType == EEnemySpawnType.OverworldEnemies &&
-                        Vector3.Distance(_clientState.LocalPlayer?.Position ?? Vector3.Zero, battleNpc.Position) >
-                        MaxNameplateRange)
-                        return 25;
-                }
-                else
-                {
-                    // as part of KillEnemyDataIds, not ComplexCombatData
-                    // TODO maybe remove KillEnemyDataIds, rename ComplexCombatData to CombatData
-                    if (gameObjectStruct->NamePlateIconId != 0)
-                        return 29;
-                }
+                return (0, "Not part of quest");
             }
 
-            // stuff trying to kill us
-            if (battleNpc.TargetObjectId == _clientState.LocalPlayer?.GameObjectId)
-                return 10;
-
-            // stuff on our enmity list that's not necessarily targeting us
-            var haters = UIState.Instance()->Hater;
-            for (int i = 0; i < haters.HaterCount; ++i)
-            {
-                var hater = haters.Haters[i];
-                if (hater.EntityId == battleNpc.GameObjectId)
-                    return 5;
-            }
-
-            return 0;
+            return (null, "Wrong BattleNpcKind");
         }
         else
-            return 0;
+            return (null, "Not BattleNpc");
     }
 
     private void SetTarget(IGameObject? target)
