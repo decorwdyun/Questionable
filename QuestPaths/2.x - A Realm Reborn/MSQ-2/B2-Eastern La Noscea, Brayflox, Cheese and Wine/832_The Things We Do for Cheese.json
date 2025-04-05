@@ -106,7 +106,14 @@
             "Z": 153.79565
           },
           "TerritoryId": 137,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Eastern La Noscea - Wineport",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
+          },
+          "$": "You don't get teleported to Brayflox after the dungeon"
         }
       ]
     },
