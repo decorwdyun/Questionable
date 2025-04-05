@@ -238,6 +238,7 @@ internal sealed class MovementController : IDisposable
                     if (Destination.ShouldRecalculateNavmesh())
                     {
                         RecalculateNavmesh(navPoints, start.Value);
+                        return;
                     }
 
                     if (!Destination.IsFlying && !_condition[ConditionFlag.Mounted] &&
@@ -383,8 +384,23 @@ internal sealed class MovementController : IDisposable
                 if (Math.Abs(distance - Destination.LastWaypoint.Distance2DAtLastUpdate) < 0.5f)
                 {
                     int calculations = Destination.NavmeshCalculations;
-                    _logger.LogWarning("Recalculating navmesh (n = {Calculations})", calculations);
-                    Restart(Destination);
+                    if (calculations % 6 == 1)
+                    {
+                        _logger.LogWarning("Jumping to try and resolve navmesh problem (n = {Calculations})",
+                            calculations);
+                        unsafe
+                        {
+                            ActionManager.Instance()->UseAction(ActionType.GeneralAction, 2);
+                            Destination.NavmeshCalculations++;
+                            Destination.LastWaypoint.UpdatedAt = Environment.TickCount64;
+                        }
+                    }
+                    else
+                    {
+                        _logger.LogWarning("Recalculating navmesh (n = {Calculations})", calculations);
+                        Restart(Destination);
+                    }
+
                     Destination.NavmeshCalculations = calculations + 1;
                 }
                 else
