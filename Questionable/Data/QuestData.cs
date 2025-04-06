@@ -95,6 +95,8 @@ internal sealed class QuestData
                     }
                 }));
 
+        quests.Add(new UnlockLinkQuestInfo(new UnlockLinkId(506), "Patch 7.2 Fantasia", 1052475));
+
         _quests = quests.ToDictionary(x => x.QuestId, x => x);
 
         // workaround because the game doesn't require completion of the CT questline through normal means

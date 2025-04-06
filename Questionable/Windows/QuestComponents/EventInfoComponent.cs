@@ -22,6 +22,7 @@ internal sealed class EventInfoComponent
     [SuppressMessage("ReSharper", "CollectionNeverUpdated.Local")]
     private readonly List<EventQuest> _eventQuests =
     [
+        new EventQuest("Limited Time Items", [new UnlockLinkId(506)], DateTime.MaxValue),
     ];
 
     private readonly QuestData _questData;
@@ -66,12 +67,17 @@ internal sealed class EventInfoComponent
 
     private void DrawEventQuest(EventQuest eventQuest)
     {
-        string time = (eventQuest.EndsAtUtc - DateTime.UtcNow).Humanize(
-            precision: 1,
-            culture: CultureInfo.InvariantCulture,
-            minUnit: TimeUnit.Minute,
-            maxUnit: TimeUnit.Day);
-        ImGui.Text($"{eventQuest.Name} ({time})");
+        if (eventQuest.EndsAtUtc != DateTime.MaxValue)
+        {
+            string time = (eventQuest.EndsAtUtc - DateTime.UtcNow).Humanize(
+                precision: 1,
+                culture: CultureInfo.InvariantCulture,
+                minUnit: TimeUnit.Minute,
+                maxUnit: TimeUnit.Day);
+            ImGui.Text($"{eventQuest.Name} ({time})");
+        }
+        else
+            ImGui.Text(eventQuest.Name);
 
         float width;
         using (var _ = _pluginInterface.UiBuilder.IconFontHandle.Push())
@@ -80,7 +86,7 @@ internal sealed class EventInfoComponent
         using (var _ = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
             width -= ImGui.CalcTextSize(FontAwesomeIcon.Check.ToIconString()).X;
 
-        List<QuestId> startableQuests = eventQuest.QuestIds.Where(x =>
+        List<ElementId> startableQuests = eventQuest.QuestIds.Where(x =>
                 _questRegistry.IsKnownQuest(x) &&
                 _questFunctions.IsReadyToAcceptQuest(x) &&
                 x != _questController.StartedQuest?.Quest.Id &&
@@ -132,15 +138,19 @@ internal sealed class EventInfoComponent
         if (eventQuest.EndsAtUtc <= DateTime.UtcNow)
             return false;
 
-        return !eventQuest.QuestIds.All(x => _questFunctions.IsQuestComplete(x));
+        return eventQuest.QuestIds.Any(ShouldShowQuest);
     }
 
-    public IEnumerable<QuestId> GetCurrentlyActiveEventQuests()
+    public IEnumerable<ElementId> GetCurrentlyActiveEventQuests()
     {
         return _eventQuests
             .Where(x => x.EndsAtUtc >= DateTime.UtcNow)
-            .SelectMany(x => x.QuestIds);
+            .SelectMany(x => x.QuestIds)
+            .Where(ShouldShowQuest);
     }
 
-    private sealed record EventQuest(string Name, List<QuestId> QuestIds, DateTime EndsAtUtc);
+    private bool ShouldShowQuest(ElementId elementId) => !_questFunctions.IsQuestComplete(elementId) &&
+                                                         !_questFunctions.IsQuestUnobtainable(elementId);
+
+    private sealed record EventQuest(string Name, List<ElementId> QuestIds, DateTime EndsAtUtc);
 }

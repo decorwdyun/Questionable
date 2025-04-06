@@ -54,6 +54,8 @@ public abstract class ElementId : IComparable<ElementId>, IEquatable<ElementId>
     {
         if (value.StartsWith("S"))
             return new SatisfactionSupplyNpcId(ushort.Parse(value.Substring(1), CultureInfo.InvariantCulture));
+        else if (value.StartsWith("U"))
+            return new UnlockLinkId(ushort.Parse(value.Substring(1), CultureInfo.InvariantCulture));
         else if (value.StartsWith("A"))
         {
             value = value.Substring(1);
@@ -85,6 +87,8 @@ public abstract class ElementId : IComparable<ElementId>, IEquatable<ElementId>
             throw;
         }
     }
+
+    public abstract override string ToString();
 }
 
 public sealed class QuestId(ushort value) : ElementId(value)
@@ -102,6 +106,14 @@ public sealed class SatisfactionSupplyNpcId(ushort value) : ElementId(value)
     public override string ToString()
     {
         return "S" + Value.ToString(CultureInfo.InvariantCulture);
+    }
+}
+
+public sealed class UnlockLinkId(ushort value) : ElementId(value)
+{
+    public override string ToString()
+    {
+        return "U" + Value.ToString(CultureInfo.InvariantCulture);
     }
 }
 

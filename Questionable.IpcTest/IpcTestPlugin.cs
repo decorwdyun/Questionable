@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Numerics;
 using Dalamud.Game.Command;
@@ -41,6 +42,15 @@ public sealed class IpcTestPlugin : IDalamudPlugin
                 .AddUiForeground(stepData?.Position?.ToString("G", CultureInfo.InvariantCulture) ?? "?", 61)
                 .AddText(" - Territory: ")
                 .AddUiForeground(stepData?.TerritoryId.ToString() ?? "?", 61)
+                .Build());
+        }
+        else if (arguments == "events")
+        {
+            var eventQuests = _pluginInterface.GetIpcSubscriber<List<string>>("Questionable.GetCurrentlyActiveEventQuests").InvokeFunc();
+            _chatGui.Print(new SeStringBuilder()
+                .AddUiForeground("[IPC]", 576)
+                .AddText(": Quests: ")
+                .AddUiForeground(string.Join(", ", eventQuests), 61)
                 .Build());
         }
         else

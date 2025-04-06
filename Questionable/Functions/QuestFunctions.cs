@@ -533,6 +533,8 @@ internal sealed unsafe class QuestFunctions
             return false;
         else if (elementId is AlliedSocietyDailyId)
             return false;
+        else if (elementId is UnlockLinkId)
+            return false;
         else
             throw new ArgumentOutOfRangeException(nameof(elementId));
     }
@@ -551,6 +553,8 @@ internal sealed unsafe class QuestFunctions
             return false;
         else if (elementId is AlliedSocietyDailyId)
             return false;
+        else if (elementId is UnlockLinkId unlockLinkId)
+            return IsQuestComplete(unlockLinkId);
         else
             throw new ArgumentOutOfRangeException(nameof(elementId));
     }
@@ -561,6 +565,11 @@ internal sealed unsafe class QuestFunctions
         return QuestManager.IsQuestComplete(questId.Value);
     }
 
+    public bool IsQuestComplete(UnlockLinkId unlockLinkId)
+    {
+        return UIState.Instance()->IsUnlockLinkUnlocked(unlockLinkId.Value);
+    }
+
     public bool IsQuestLocked(ElementId elementId, ElementId? extraCompletedQuest = null)
     {
         if (elementId is QuestId questId)
@@ -569,6 +578,8 @@ internal sealed unsafe class QuestFunctions
             return IsQuestLocked(satisfactionSupplyNpcId);
         else if (elementId is AlliedSocietyDailyId alliedSocietyDailyId)
             return IsQuestLocked(alliedSocietyDailyId);
+        else if (elementId is UnlockLinkId unlockLinkId)
+            return IsQuestLocked(unlockLinkId);
         else
             throw new ArgumentOutOfRangeException(nameof(elementId));
     }
@@ -613,6 +624,11 @@ internal sealed unsafe class QuestFunctions
         return currentRank == 0 || currentRank < alliedSocietyDailyId.Rank;
     }
 
+    private static bool IsQuestLocked(UnlockLinkId unlockLinkId)
+    {
+        return IsQuestUnobtainable(unlockLinkId);
+    }
+
     public bool IsDailyAlliedSocietyQuest(QuestId questId)
     {
         var questInfo = (QuestInfo)_questData.GetQuestInfo(questId);
@@ -632,6 +648,8 @@ internal sealed unsafe class QuestFunctions
     {
         if (elementId is QuestId questId)
             return IsQuestUnobtainable(questId, extraCompletedQuest);
+        else if (elementId is UnlockLinkId unlockLinkId)
+            return IsQuestUnobtainable(unlockLinkId);
         else
             return false;
     }
@@ -692,6 +710,29 @@ internal sealed unsafe class QuestFunctions
 
         if (IsQuestRemoved(questId))
             return true;
+
+        return false;
+    }
+
+    /// <summary>
+    /// All unlock links (presumably) have unique conditions, be that quests or otherwise.
+    /// </summary>
+    private static bool IsQuestUnobtainable(UnlockLinkId unlockLinkId)
+    {
+        if (unlockLinkId.Value == 506)
+            return !IsFestivalActive(160, 2);
+        else
+            return true;
+    }
+
+    private static bool IsFestivalActive(ushort id, ushort? phase = null)
+    {
+        for (int i = 0; i < GameMain.Instance()->ActiveFestivals.Length; ++i)
+        {
+            var festival = GameMain.Instance()->ActiveFestivals[i];
+            if (festival.Id == id)
+                return phase == null || festival.Phase == phase;
+        }
 
         return false;
     }
