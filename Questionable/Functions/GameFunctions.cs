@@ -44,7 +44,7 @@ internal sealed unsafe class GameFunctions
     private readonly ILogger<GameFunctions> _logger;
     private readonly AbandonDutyDelegate _abandonDuty;
 
-    private readonly ReadOnlyDictionary<ushort, byte> _territoryToAetherCurrentCompFlgSet;
+    private readonly ReadOnlyDictionary<ushort, uint> _territoryToAetherCurrentCompFlgSet;
     private readonly ReadOnlyDictionary<uint, uint> _contentFinderConditionToContentId;
 
     public GameFunctions(
@@ -73,8 +73,8 @@ internal sealed unsafe class GameFunctions
 
         _territoryToAetherCurrentCompFlgSet = dataManager.GetExcelSheet<TerritoryType>()
             .Where(x => x.RowId > 0)
-            .Where(x => x.Unknown4 > 0)
-            .ToDictionary(x => (ushort)x.RowId, x => x.Unknown4)
+            .Where(x => x.AetherCurrentCompFlgSet.RowId > 0)
+            .ToDictionary(x => (ushort)x.RowId, x => x.AetherCurrentCompFlgSet.RowId)
             .AsReadOnly();
         _contentFinderConditionToContentId = dataManager.GetExcelSheet<ContentFinderCondition>()
             .Where(x => x.RowId > 0 && x.Content.RowId > 0)
@@ -97,7 +97,7 @@ internal sealed unsafe class GameFunctions
 
         var playerState = PlayerState.Instance();
         return playerState != null &&
-               _territoryToAetherCurrentCompFlgSet.TryGetValue(territoryId, out byte aetherCurrentCompFlgSet) &&
+               _territoryToAetherCurrentCompFlgSet.TryGetValue(territoryId, out uint aetherCurrentCompFlgSet) &&
                playerState->IsAetherCurrentZoneComplete(aetherCurrentCompFlgSet);
     }
 
@@ -438,7 +438,7 @@ internal sealed unsafe class GameFunctions
 
         if (_condition[ConditionFlag.Unconscious] &&
             _condition[ConditionFlag.SufferingStatusAffliction63] &&
-            _clientState.TerritoryType == SinglePlayerDuty.LahabreaTerritoryId)
+            _clientState.TerritoryType == SinglePlayerDuty.SpecialTerritories.Lahabrea)
             return false; // needed to process the tasks
 
         return _condition[ConditionFlag.Occupied] || _condition[ConditionFlag.Occupied30] ||
@@ -447,7 +447,8 @@ internal sealed unsafe class GameFunctions
                _condition[ConditionFlag.OccupiedInQuestEvent] || _condition[ConditionFlag.OccupiedInCutSceneEvent] ||
                _condition[ConditionFlag.Casting] || _condition[ConditionFlag.Unknown57] ||
                _condition[ConditionFlag.BetweenAreas] || _condition[ConditionFlag.BetweenAreas51] ||
-               _condition[ConditionFlag.Jumping61] || _condition[ConditionFlag.Gathering42];
+               _condition[ConditionFlag.Jumping61] || _condition[ConditionFlag.Gathering42] ||
+               _condition[ConditionFlag.Jumping];
     }
 
     public bool IsOccupiedWithCustomDeliveryNpc(Quest? currentQuest)

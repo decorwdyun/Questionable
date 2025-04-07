@@ -35,17 +35,19 @@
             "Z": 171.00781
           },
           "TerritoryId": 154,
-          "InteractionType": "UseItem",
+          "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": "0.1.1.8"
+          },
           "ItemId": 2000952,
-          "EnemySpawnType": "AutoOnEnterArea",
           "AetheryteShortcut": "North Shroud - Fallgourd Float",
           "Fly": true,
           "SkipConditions": {
             "AetheryteShortcutIf": {
               "InSameTerritory": true
             }
-          },
-          "$": "Actually a SinglePlayerDuty"
+          }
         }
       ]
     },

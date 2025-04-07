@@ -26,4 +26,5 @@ public enum EAlliedSociety : byte
     Omicrons = 16,
     Loporrits = 17,
     Pelupelu = 18,
+    MamoolJa = 19,
 }

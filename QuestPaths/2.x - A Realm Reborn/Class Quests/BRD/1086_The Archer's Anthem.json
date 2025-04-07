@@ -54,6 +54,9 @@
           "SkipConditions": {
             "AetheryteShortcutIf": {
               "AetheryteUnlocked": "Eastern La Noscea - Wineport"
+            },
+            "StepIf": {
+              "AetheryteUnlocked": "Eastern La Noscea - Wineport"
             }
           }
         },

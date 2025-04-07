@@ -19,7 +19,7 @@ using Questionable.Controller.Steps.Shared;
 using Questionable.Controller.Steps.Common;
 using Questionable.Controller.Steps.Gathering;
 using Questionable.Controller.Steps.Interactions;
-using Questionable.Controller.Steps.Leves;
+using Questionable.Controller.Steps.Movement;
 using Questionable.Controller.Utils;
 using Questionable.Data;
 using Questionable.External;
@@ -115,18 +115,17 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<QuestFunctions>();
         serviceCollection.AddSingleton<AlliedSocietyQuestFunctions>();
         serviceCollection.AddSingleton<DalamudReflector>();
+        serviceCollection.AddSingleton<Mount.MountEvaluator>();
 
         serviceCollection.AddSingleton<AetherCurrentData>();
         serviceCollection.AddSingleton<AetheryteData>();
         serviceCollection.AddSingleton<AlliedSocietyData>();
         serviceCollection.AddSingleton<GatheringData>();
-        serviceCollection.AddSingleton<LeveData>();
         serviceCollection.AddSingleton<JournalData>();
         serviceCollection.AddSingleton<QuestData>();
         serviceCollection.AddSingleton<TerritoryData>();
         serviceCollection.AddSingleton<NavmeshIpc>();
         serviceCollection.AddSingleton<LifestreamIpc>();
-        serviceCollection.AddSingleton<YesAlreadyIpc>();
         serviceCollection.AddSingleton<ArtisanIpc>();
         serviceCollection.AddSingleton<QuestionableIpc>();
         serviceCollection.AddSingleton<TextAdvanceIpc>();
@@ -142,6 +141,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
     {
         // individual tasks
         serviceCollection.AddTaskFactory<QuestCleanUp.CheckAlliedSocietyMount>();
+        serviceCollection.AddTaskFactoryAndExecutor<QuestCleanUp.CloseGatheringAddonTask, QuestCleanUp.CloseGatheringAddonFactory, QuestCleanUp.DoCloseAddon>();
         serviceCollection
             .AddTaskExecutor<MoveToLandingLocation.Task, MoveToLandingLocation.MoveToLandingLocationExecutor>();
         serviceCollection
@@ -174,9 +174,9 @@ public sealed class QuestionablePlugin : IDalamudPlugin
                 AethernetShortcut.UseAethernetShortcut>();
         serviceCollection
             .AddTaskFactoryAndExecutor<WaitAtStart.WaitDelay, WaitAtStart.Factory, WaitAtStart.WaitDelayExecutor>();
-        serviceCollection.AddTaskFactoryAndExecutor<MoveTo.MoveTask, MoveTo.Factory, MoveTo.MoveExecutor>();
-        serviceCollection.AddTaskExecutor<MoveTo.WaitForNearDataId, MoveTo.WaitForNearDataIdExecutor>();
-        serviceCollection.AddTaskExecutor<MoveTo.LandTask, MoveTo.LandExecutor>();
+        serviceCollection.AddTaskFactoryAndExecutor<MoveTask, MoveTo.Factory, MoveExecutor>();
+        serviceCollection.AddTaskExecutor<WaitForNearDataId, WaitForNearDataIdExecutor>();
+        serviceCollection.AddTaskExecutor<LandTask, LandExecutor>();
         serviceCollection
             .AddTaskFactoryAndExecutor<SendNotification.Task, SendNotification.Factory, SendNotification.Executor>();
 
@@ -218,13 +218,6 @@ public sealed class QuestionablePlugin : IDalamudPlugin
             .AddTaskFactoryAndExecutor<TurnInDelivery.Task, TurnInDelivery.Factory,
                 TurnInDelivery.SatisfactionSupplyTurnIn>();
 
-        serviceCollection.AddTaskFactory<InitiateLeve.Factory>();
-        serviceCollection
-            .AddTaskExecutor<InitiateLeve.SkipInitiateIfActive, InitiateLeve.SkipInitiateIfActiveExecutor>();
-        serviceCollection.AddTaskExecutor<InitiateLeve.OpenJournal, InitiateLeve.OpenJournalExecutor>();
-        serviceCollection.AddTaskExecutor<InitiateLeve.Initiate, InitiateLeve.InitiateExecutor>();
-        serviceCollection.AddTaskExecutor<InitiateLeve.SelectDifficulty, InitiateLeve.SelectDifficultyExecutor>();
-
         serviceCollection.AddTaskFactory<SinglePlayerDuty.Factory>();
         serviceCollection
             .AddTaskExecutor<SinglePlayerDuty.StartSinglePlayerDuty, SinglePlayerDuty.StartSinglePlayerDutyExecutor>();
@@ -248,6 +241,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
 
         serviceCollection.AddSingleton<TaskCreator>();
         serviceCollection.AddSingleton<ExtraConditionUtils>();
+        serviceCollection.AddSingleton<ClassJobUtils>();
     }
 
     private static void AddControllers(ServiceCollection serviceCollection)
@@ -269,7 +263,6 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<CreditsController>();
         serviceCollection.AddSingleton<HelpUiController>();
         serviceCollection.AddSingleton<InteractionUiController>();
-        serviceCollection.AddSingleton<LeveUiController>();
 
         serviceCollection.AddSingleton<ICombatModule, Mount128Module>();
         serviceCollection.AddSingleton<ICombatModule, Mount147Module>();
@@ -340,7 +333,6 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceProvider.GetRequiredService<CraftworksSupplyController>();
         serviceProvider.GetRequiredService<CreditsController>();
         serviceProvider.GetRequiredService<HelpUiController>();
-        serviceProvider.GetRequiredService<LeveUiController>();
         serviceProvider.GetRequiredService<ShopController>();
         serviceProvider.GetRequiredService<QuestionableIpc>();
         serviceProvider.GetRequiredService<DalamudInitializer>();

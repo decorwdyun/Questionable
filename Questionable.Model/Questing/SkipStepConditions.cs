@@ -29,6 +29,7 @@ public sealed class SkipStepConditions
     public EAetheryteLocation? AetheryteLocked { get; set; }
     public EAetheryteLocation? AetheryteUnlocked { get; set; }
     public NearPositionCondition? NearPosition { get; set; }
+    public NearPositionCondition? NotNearPosition { get; set; }
     public EExtraSkipCondition? ExtraCondition { get; set; }
 
     public bool HasSkipConditions()
@@ -49,6 +50,7 @@ public sealed class SkipStepConditions
                AetheryteLocked != null ||
                AetheryteUnlocked != null ||
                NearPosition != null ||
+               NotNearPosition != null ||
                ExtraCondition != null;
     }
 

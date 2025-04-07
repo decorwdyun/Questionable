@@ -48,6 +48,8 @@
     "DoW",
     "DoM",
     "DoH",
-    "DoL"
+    "DoL",
+    "ConfiguredCombatJob",
+    "QuestStartJob"
   ]
 }

@@ -147,10 +147,6 @@ internal sealed unsafe class QuestFunctions
                         break;
 
                     case 2: // leve
-                        currentQuest = new LeveId(questManager->LeveQuests[trackedQuest.Index].LeveId);
-                        if (_questRegistry.IsKnownQuest(currentQuest))
-                            trackedQuests.Add((currentQuest,
-                                questManager->GetLeveQuestById(currentQuest.Value)->Sequence));
                         break;
                 }
             }
@@ -276,7 +272,42 @@ internal sealed unsafe class QuestFunctions
 
         QuestId currentQuest = new QuestId(scenarioTree->Data->CurrentScenarioQuest);
         if (currentQuest.Value == 0)
-            return default;
+        {
+            if (IsQuestComplete(_questData.LastMainScenarioQuestId))
+                return default;
+
+            // fallback lookup; find a quest which isn't completed but where all prequisites are met
+            // excluding branching quests
+
+            var playerState = PlayerState.Instance();
+            var potentialQuests = _questData.MainScenarioQuests
+                .Where(x => x.StartingCity == 0 || x.StartingCity == playerState->StartTown)
+                .Where(q => IsReadyToAcceptQuest(q.QuestId, true))
+                .ToList();
+            if (potentialQuests.Count == 0)
+                return default;
+            else if (potentialQuests.Count > 1)
+            {
+                // for all of these (except the GC quests), questionable normally auto-picks the next quest based on the
+                // agent data. This should (hopefully) pick the exact same quest when the agent does not know for a bit.
+                if (potentialQuests.All(x => x.QuestId.Value is 680 or 681 or 682))
+                    currentQuest = new QuestId(681); // The Company You Keep; actual quest will be resolved later in GetCurrentQuest
+                else if (potentialQuests.Any(x => x.QuestId.Value == 1583))
+                    currentQuest = new QuestId(1583); // HW: Over the Wall vs. Onwards and Upwards
+                else if (potentialQuests.Any(x => x.QuestId.Value == 2451))
+                    currentQuest = new QuestId(2451); // SB: A Friend of a Friend in Need vs. A Familiar Face Forgotten
+                else if (potentialQuests.Any(x => x.QuestId.Value == 3282))
+                    currentQuest = new QuestId(3282); // ShB: In Search of Alphinaud vs. In Search of Alisaie
+                else if (potentialQuests.Any(x => x.QuestId.Value == 4359))
+                    currentQuest = new QuestId(4359); // EW: Hitting the Books vs. For Thavnair Bound
+                else if (potentialQuests.Any(x => x.QuestId.Value == 4865))
+                    currentQuest = new QuestId(4865); // DT: To Kozama'uk vs. To Urqopacha
+                if (potentialQuests.Count != 1)
+                    return default;
+            }
+            else
+                currentQuest = (QuestId)potentialQuests.Single().QuestId;
+        }
 
         // if the MSQ is hidden, we generally ignore it
         QuestManager* questManager = QuestManager.Instance();
@@ -291,10 +322,14 @@ internal sealed unsafe class QuestFunctions
         else if (!IsReadyToAcceptQuest(currentQuest))
             return default;
 
+        var currentLevel = _clientState.LocalPlayer?.Level;
+
+        // are we in a loading screen?
+        if (currentLevel == null)
+            return default;
+
         // if we're not at a high enough level to continue, we also ignore it
-        var currentLevel = _clientState.LocalPlayer?.Level ?? 0;
-        if (currentLevel != 0 &&
-            _questRegistry.TryGetQuest(currentQuest, out Quest? quest)
+        if (_questRegistry.TryGetQuest(currentQuest, out Quest? quest)
             && quest.Info.Level > currentLevel)
             return default;
 
@@ -331,11 +366,6 @@ internal sealed unsafe class QuestFunctions
             QuestWork* questWork = QuestManager.Instance()->GetQuestById(questId.Value);
             return questWork != null ? new QuestProgressInfo(*questWork) : null;
         }
-        else if (elementId is LeveId leveId)
-        {
-            LeveWork* leveWork = QuestManager.Instance()->GetLeveQuestById(leveId.Value);
-            return leveWork != null ? new QuestProgressInfo(*leveWork) : null;
-        }
         else
             return null;
     }
@@ -355,7 +385,7 @@ internal sealed unsafe class QuestFunctions
         int gil = inventoryManager->GetItemCountInContainer(1, InventoryType.Currency);
 
         return GetPriorityQuests()
-            .Where(IsReadyToAcceptQuest)
+            .Where(x => IsReadyToAcceptQuest(x))
             .Where(x =>
             {
                 if (!_questRegistry.TryGetQuest(x, out Quest? quest))
@@ -448,7 +478,7 @@ internal sealed unsafe class QuestFunctions
             .ToList();
     }
 
-    public bool IsReadyToAcceptQuest(ElementId questId)
+    public bool IsReadyToAcceptQuest(ElementId questId, bool ignoreLevel = false)
     {
         _questRegistry.TryGetQuest(questId, out var quest);
         if (quest is { Info.IsRepeatable: true })
@@ -479,10 +509,13 @@ internal sealed unsafe class QuestFunctions
         if (IsQuestLocked(questId))
             return false;
 
-        // if we're not at a high enough level to continue, we also ignore it
-        var currentLevel = _clientState.LocalPlayer?.Level ?? 0;
-        if (currentLevel != 0 && quest != null && quest.Info.Level > currentLevel)
-            return false;
+        if (!ignoreLevel)
+        {
+            // if we're not at a high enough level to continue, we also ignore it
+            var currentLevel = _clientState.LocalPlayer?.Level ?? 0;
+            if (currentLevel != 0 && quest != null && quest.Info.Level > currentLevel)
+                return false;
+        }
 
         return true;
     }
@@ -496,8 +529,6 @@ internal sealed unsafe class QuestFunctions
     {
         if (elementId is QuestId questId)
             return IsQuestAccepted(questId);
-        else if (elementId is LeveId leveId)
-            return IsQuestAccepted(leveId);
         else if (elementId is SatisfactionSupplyNpcId)
             return false;
         else if (elementId is AlliedSocietyDailyId)
@@ -512,24 +543,10 @@ internal sealed unsafe class QuestFunctions
         return questManager->IsQuestAccepted(questId.Value);
     }
 
-    public bool IsQuestAccepted(LeveId leveId)
-    {
-        QuestManager* questManager = QuestManager.Instance();
-        foreach (var leveQuest in questManager->LeveQuests)
-        {
-            if (leveQuest.LeveId == leveId.Value)
-                return true;
-        }
-
-        return false;
-    }
-
     public bool IsQuestComplete(ElementId elementId)
     {
         if (elementId is QuestId questId)
             return IsQuestComplete(questId);
-        else if (elementId is LeveId leveId)
-            return IsQuestComplete(leveId);
         else if (elementId is SatisfactionSupplyNpcId)
             return false;
         else if (elementId is AlliedSocietyDailyId)
@@ -544,17 +561,10 @@ internal sealed unsafe class QuestFunctions
         return QuestManager.IsQuestComplete(questId.Value);
     }
 
-    public bool IsQuestComplete(LeveId leveId)
-    {
-        return QuestManager.Instance()->IsLevequestComplete(leveId.Value);
-    }
-
     public bool IsQuestLocked(ElementId elementId, ElementId? extraCompletedQuest = null)
     {
         if (elementId is QuestId questId)
             return IsQuestLocked(questId, extraCompletedQuest);
-        else if (elementId is LeveId leveId)
-            return IsQuestLocked(leveId);
         else if (elementId is SatisfactionSupplyNpcId satisfactionSupplyNpcId)
             return IsQuestLocked(satisfactionSupplyNpcId);
         else if (elementId is AlliedSocietyDailyId alliedSocietyDailyId)
@@ -590,20 +600,6 @@ internal sealed unsafe class QuestFunctions
         return !HasCompletedPreviousQuests(questInfo, extraCompletedQuest) || !HasCompletedPreviousInstances(questInfo);
     }
 
-    private bool IsQuestLocked(LeveId leveId)
-    {
-        if (IsQuestUnobtainable(leveId))
-            return true;
-
-        // this only checks for the current class
-        IQuestInfo questInfo = _questData.GetQuestInfo(leveId);
-        if (!questInfo.ClassJobs.Contains((EClassJob)_clientState.LocalPlayer!.ClassJob.RowId) ||
-            questInfo.Level > _clientState.LocalPlayer.Level)
-            return true;
-
-        return !IsQuestAccepted(leveId) && QuestManager.Instance()->NumLeveAllowances == 0;
-    }
-
     private bool IsQuestLocked(SatisfactionSupplyNpcId satisfactionSupplyNpcId)
     {
         SatisfactionSupplyInfo questInfo = (SatisfactionSupplyInfo)_questData.GetQuestInfo(satisfactionSupplyNpcId);
@@ -636,8 +632,6 @@ internal sealed unsafe class QuestFunctions
     {
         if (elementId is QuestId questId)
             return IsQuestUnobtainable(questId, extraCompletedQuest);
-        else if (elementId is LeveId leveId)
-            return IsQuestUnobtainable(leveId);
         else
             return false;
     }
@@ -697,15 +691,6 @@ internal sealed unsafe class QuestFunctions
         }
 
         if (IsQuestRemoved(questId))
-            return true;
-
-        return false;
-    }
-
-    private bool IsQuestUnobtainable(LeveId leveId)
-    {
-        IQuestInfo questInfo = _questData.GetQuestInfo(leveId);
-        if (questInfo.Expansion > (EExpansionVersion)PlayerState.Instance()->MaxExpansion)
             return true;
 
         return false;

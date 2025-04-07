@@ -158,6 +158,10 @@
           },
           "TerritoryId": 134,
           "InteractionType": "Interact",
+          "AethernetShortcut": [
+            "[Limsa Lominsa] Marauders' Guild",
+            "[Limsa Lominsa] Zephyr Gate (Middle La Noscea)"
+          ],
           "Fly": true
         }
       ]

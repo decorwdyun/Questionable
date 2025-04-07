@@ -1,5 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Component.GUI;
+using LLib.GameUI;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Shared;
 using Questionable.Data;
@@ -61,5 +65,46 @@ internal static class QuestCleanUp
 
             return null;
         }
+    }
+
+
+    internal sealed class CloseGatheringAddonFactory(IGameGui gameGui) : ITaskFactory
+    {
+        public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
+        {
+            if (IsAddonOpen("GatheringMasterpiece"))
+                yield return new CloseGatheringAddonTask("GatheringMasterpiece");
+
+            if (IsAddonOpen("Gathering"))
+                yield return new CloseGatheringAddonTask("Gathering");
+        }
+
+        private unsafe bool IsAddonOpen(string name)
+        {
+            return gameGui.TryGetAddonByName(name, out AtkUnitBase* addon) && addon->IsVisible;
+        }
+    }
+
+    internal sealed record CloseGatheringAddonTask(string AddonName) : ITask
+    {
+        public override string ToString() => $"CloseAddon({AddonName})";
+    }
+
+    internal sealed class DoCloseAddon(IGameGui gameGui) : TaskExecutor<CloseGatheringAddonTask>
+    {
+        protected override unsafe bool Start()
+        {
+            if (gameGui.TryGetAddonByName(Task.AddonName, out AtkUnitBase* addon))
+            {
+                addon->FireCallbackInt(-1);
+                return true;
+            }
+
+            return false;
+        }
+
+        public override ETaskResult Update() => ETaskResult.TaskComplete;
+
+        public override bool ShouldInterruptOnDamage() => false;
     }
 }

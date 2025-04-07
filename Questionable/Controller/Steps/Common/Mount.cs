@@ -27,60 +27,74 @@ internal static class Mount
         public override string ToString() => "Mount";
     }
 
-    internal sealed class MountExecutor(
+    internal sealed class MountEvaluator(
         GameFunctions gameFunctions,
         ICondition condition,
         TerritoryData territoryData,
         IClientState clientState,
-        ILogger<MountTask> logger) : TaskExecutor<MountTask>
+        ILogger<MountEvaluator> logger)
     {
-        private bool _mountTriggered;
-        private DateTime _retryAt = DateTime.MinValue;
-
-        public unsafe MountResult EvaluateMountState()
+        public unsafe MountResult EvaluateMountState(MountTask task, bool dryRun, ref DateTime retryAt)
         {
             if (condition[ConditionFlag.Mounted])
                 return MountResult.DontMount;
 
-            if (!territoryData.CanUseMount(Task.TerritoryId))
+            LogLevel logLevel = dryRun ? LogLevel.None : LogLevel.Information;
+
+            if (!territoryData.CanUseMount(task.TerritoryId))
             {
-                logger.LogInformation("Can't use mount in current territory {Id}", Task.TerritoryId);
+                logger.Log(logLevel, "Can't use mount in current territory {Id}", task.TerritoryId);
                 return MountResult.DontMount;
             }
 
             if (gameFunctions.HasStatusPreventingMount())
             {
-                logger.LogInformation("Can't mount due to status preventing sprint or mount");
+                logger.Log(logLevel, "Can't mount due to status preventing sprint or mount");
                 return MountResult.DontMount;
             }
 
-            if (Task.MountIf == EMountIf.AwayFromPosition)
+            if (task.MountIf == EMountIf.AwayFromPosition)
             {
                 Vector3 playerPosition = clientState.LocalPlayer?.Position ?? Vector3.Zero;
-                float distance = System.Numerics.Vector3.Distance(playerPosition, Task.Position.GetValueOrDefault());
-                if (Task.TerritoryId == clientState.TerritoryType && distance < 30f && !Conditions.Instance()->Diving)
+                float distance = System.Numerics.Vector3.Distance(playerPosition, task.Position.GetValueOrDefault());
+                if (task.TerritoryId == clientState.TerritoryType && distance < 30f && !Conditions.Instance()->Diving)
                 {
-                    logger.LogInformation("Not using mount, as we're close to the target");
+                    logger.Log(logLevel, "Not using mount, as we're close to the target");
                     return MountResult.DontMount;
                 }
 
-                logger.LogInformation(
+                logger.Log(logLevel,
                     "Want to use mount if away from destination ({Distance} yalms), trying (in territory {Id})...",
-                    distance, Task.TerritoryId);
+                    distance, task.TerritoryId);
             }
             else
-                logger.LogInformation("Want to use mount, trying (in territory {Id})...", Task.TerritoryId);
+                logger.Log(logLevel, "Want to use mount, trying (in territory {Id})...", task.TerritoryId);
 
             if (!condition[ConditionFlag.InCombat])
             {
-                _retryAt = DateTime.Now.AddSeconds(0.5);
+                if (dryRun)
+                    retryAt = DateTime.Now.AddSeconds(0.5);
                 return MountResult.Mount;
             }
             else
                 return MountResult.WhenOutOfCombat;
         }
+    }
 
-        protected override bool Start() => EvaluateMountState() == MountResult.Mount;
+    internal sealed class MountExecutor(
+        GameFunctions gameFunctions,
+        ICondition condition,
+        MountEvaluator mountEvaluator,
+        ILogger<MountExecutor> logger) : TaskExecutor<MountTask>
+    {
+        private bool _mountTriggered;
+        private DateTime _retryAt = DateTime.MinValue;
+
+        protected override bool Start()
+        {
+            _mountTriggered = false;
+            return mountEvaluator.EvaluateMountState(Task, false, ref _retryAt) == MountResult.Mount;
+        }
 
         public override ETaskResult Update()
         {

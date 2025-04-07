@@ -104,6 +104,17 @@
           ]
         },
         {
+          "Position": {
+            "X": -324.11298,
+            "Y": 89.13572,
+            "Z": -135.54353
+          },
+          "TerritoryId": 147,
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "Northern Thanalan - Ceruleum Processing Plant",
+          "Fly": true
+        },
+        {
           "DataId": 2002529,
           "Position": {
             "X": -324.7273,
@@ -112,8 +123,6 @@
           },
           "TerritoryId": 147,
           "InteractionType": "Interact",
-          "Fly": true,
-          "AetheryteShortcut": "Northern Thanalan - Ceruleum Processing Plant",
           "CompletionQuestVariablesFlags": [
             null,
             null,

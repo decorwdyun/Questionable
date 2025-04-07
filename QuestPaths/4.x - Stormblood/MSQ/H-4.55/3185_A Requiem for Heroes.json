@@ -48,7 +48,16 @@
             "Z": 103.74609
           },
           "TerritoryId": 829,
-          "InteractionType": "SinglePlayerDuty"
+          "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": false,
+            "Notes": [
+              "(phase 1) Need to manually move in range to trigger combat",
+              "(phase 1) VBM doesn't know about some AOEs (e.g. Vein Splitter)",
+              "(phase 1) VBM ignores markers to stack on Lyse (she still survives)",
+              "(phase 2) AI can walk outside the arena to get a bleed + damage down when dodging mechanics"
+            ]
+          }
         }
       ]
     },

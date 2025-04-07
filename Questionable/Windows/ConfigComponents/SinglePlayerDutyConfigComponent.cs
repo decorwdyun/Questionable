@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Game.Text;
@@ -42,8 +43,8 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
     private readonly QuestRegistry _questRegistry;
     private readonly QuestData _questData;
     private readonly IDataManager _dataManager;
+    private readonly ClassJobUtils _classJobUtils;
     private readonly ILogger<SinglePlayerDutyConfigComponent> _logger;
-    private readonly List<(EClassJob ClassJob, int Category)> _sortedClassJobs;
 
     private ImmutableDictionary<EAetheryteLocation, List<SinglePlayerDutyInfo>> _startingCityBattles =
         ImmutableDictionary<EAetheryteLocation, List<SinglePlayerDutyInfo>>.Empty;
@@ -69,6 +70,7 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
         QuestRegistry questRegistry,
         QuestData questData,
         IDataManager dataManager,
+        ClassJobUtils classJobUtils,
         ILogger<SinglePlayerDutyConfigComponent> logger)
         : base(pluginInterface, configuration)
     {
@@ -76,14 +78,8 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
         _questRegistry = questRegistry;
         _questData = questData;
         _dataManager = dataManager;
+        _classJobUtils = classJobUtils;
         _logger = logger;
-
-        _sortedClassJobs = dataManager.GetExcelSheet<ClassJob>()
-            .Where(x => x is { RowId: > 0, UIPriority: < 100 })
-            .Select(x => (ClassJob: (EClassJob)x.RowId, Priority: x.UIPriority))
-            .OrderBy(x => x.Priority)
-            .Select(x => (x.ClassJob, x.Priority / 10))
-            .ToList();
     }
 
     public void Reload()
@@ -354,8 +350,11 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
             return;
 
         int oldPriority = 0;
-        foreach (var (classJob, priority) in _sortedClassJobs)
+        foreach (var (classJob, priority) in _classJobUtils.SortedClassJobs)
         {
+            if (classJob.IsCrafter() || classJob.IsGatherer())
+                continue;
+
             if (_jobQuestBattles.TryGetValue(classJob, out var dutyInfos))
             {
                 if (priority != oldPriority)
@@ -519,7 +518,7 @@ internal sealed class SinglePlayerDutyConfigComponent : ConfigComponent
         public uint TerritoryId => ContentFinderConditionData.TerritoryId;
         public byte Index => Options.Index;
         public bool EnabledByDefault => Options.Enabled;
-        public IReadOnlyList<string> Notes => Options.Notes;
+        public ReadOnlyCollection<string> Notes => Options.Notes.AsReadOnly();
 
         public bool IsLimsaStart => ContentFinderConditionId is 332 or 333 or 313 or 334;
         public bool IsGridaniaStart => ContentFinderConditionId is 296 or 297 or 299 or 298;

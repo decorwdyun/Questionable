@@ -1,8 +1,10 @@
 ﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.Linq;
 using System.Numerics;
 using Dalamud.Game.ClientState.Conditions;
+using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin.Services;
 using ImGuiNET;
@@ -69,7 +71,9 @@ internal sealed class DebugOverlay : Window
 
         DrawCurrentQuest();
         DrawHighlightedQuest();
-        DrawCombatTargets();
+
+        if (_configuration.Advanced.CombatDataOverlay)
+            DrawCombatTargets();
     }
 
     private void DrawCurrentQuest()
@@ -128,18 +132,23 @@ internal sealed class DebugOverlay : Window
             $"{counter}: {step.InteractionType}\n{position.ToString("G", CultureInfo.InvariantCulture)} [{(position - _clientState.LocalPlayer!.Position).Length():N2}]\n{step.Comment}");
     }
 
-    [Conditional("false")]
     private void DrawCombatTargets()
     {
-        foreach (var x in _objectTable)
+        if (!_combatController.IsRunning)
+            return;
+
+        foreach (var x in _objectTable.Skip(1))
         {
+            if (x is not IBattleNpc)
+                continue;
+
             bool visible = _gameGui.WorldToScreen(x.Position, out Vector2 screenPos);
             if (!visible)
                 continue;
 
-            int priority = _combatController.GetKillPriority(x);
+            var (priority, reason) = _combatController.GetKillPriority(x);
             ImGui.GetWindowDrawList().AddText(screenPos + new Vector2(10, -8), priority > 0 ? 0xFF00FF00 : 0xFFFFFFFF,
-                $"{x.Name}/{x.GameObjectId:X}, {x.DataId}, {priority}, {Vector3.Distance(x.Position, _clientState.LocalPlayer!.Position):N2}, {x.IsTargetable}");
+                $"{x.Name}/{x.GameObjectId:X}, {x.DataId}, {priority} - {reason}, {Vector3.Distance(x.Position, _clientState.LocalPlayer!.Position):N2}, {x.IsTargetable}");
         }
     }
 

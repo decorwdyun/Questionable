@@ -121,7 +121,6 @@ internal sealed class CreationUtilsComponent
                             break;
 
                         case 2:
-                            ImGui.Text($"Leve: {questManager->LeveQuests[trackedQuest.Index].LeveId}, {trackedQuest.Index}");
                             break;
                     }
                 }

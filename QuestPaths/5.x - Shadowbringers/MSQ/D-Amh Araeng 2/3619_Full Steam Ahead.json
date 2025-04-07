@@ -55,7 +55,14 @@
             "Z": -591.577
           },
           "TerritoryId": 815,
-          "InteractionType": "SinglePlayerDuty"
+          "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": false,
+            "TestedBossModVersion": "0.1.0.1",
+            "Notes": [
+              "(before Ran'jit wears the veil) AI doesn't pull, doesn't attack and VBM doesn't recognize any AOEs."
+            ]
+          }
         }
       ]
     },

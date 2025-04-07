@@ -49,7 +49,6 @@ public static class RoslynShortcuts
                 float f => LiteralExpression(SyntaxKind.NumericLiteralExpression, Literal(f)),
                 QuestStep step => step.ToExpressionSyntax(),
                 QuestId questId => questId.ToExpressionSyntax(),
-                LeveId leveId => leveId.ToExpressionSyntax(),
                 SatisfactionSupplyNpcId satisfactionSupplyNpcId => satisfactionSupplyNpcId.ToExpressionSyntax(),
                 AlliedSocietyDailyId alliedSocietyDailyId => alliedSocietyDailyId.ToExpressionSyntax(),
                 Vector3 vector => vector.ToExpressionSyntax(),

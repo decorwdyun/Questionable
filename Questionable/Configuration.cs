@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Dalamud.Configuration;
 using Dalamud.Game.Text;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
+using LLib.GameData;
 using LLib.ImGui;
 
 namespace Questionable;
@@ -30,12 +32,13 @@ internal sealed class Configuration : IPluginConfiguration
         public ECombatModule CombatModule { get; set; } = ECombatModule.None;
         public uint MountId { get; set; } = 71;
         public GrandCompany GrandCompany { get; set; } = GrandCompany.None;
+        public EClassJob CombatJob { get; set; } = EClassJob.Adventurer;
         public bool HideInAllInstances { get; set; } = true;
         public bool UseEscToCancelQuesting { get; set; } = true;
         public bool ShowIncompleteSeasonalEvents { get; set; } = true;
         public bool ConfigureTextAdvance { get; set; } = true;
 
-        // TODO Temporary setting for 7.1
+        // TODO Temporary setting, 7.2 adds another fantasia
         public bool PickUpFreeFantasia { get; set; } = true;
     }
 
@@ -68,8 +71,10 @@ internal sealed class Configuration : IPluginConfiguration
     internal sealed class AdvancedConfiguration
     {
         public bool DebugOverlay { get; set; }
+        public bool CombatDataOverlay { get; set; }
         public bool NeverFly { get; set; }
         public bool AdditionalStatusInformation { get; set; }
+        public bool DisableAutoDutyBareMode { get; set; }
     }
 
     internal enum ECombatModule

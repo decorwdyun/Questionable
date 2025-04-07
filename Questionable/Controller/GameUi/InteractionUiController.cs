@@ -37,7 +37,6 @@ internal sealed class InteractionUiController : IDisposable
     private readonly AetheryteFunctions _aetheryteFunctions;
     private readonly ExcelFunctions _excelFunctions;
     private readonly QuestController _questController;
-    private readonly GatheringData _gatheringData;
     private readonly GatheringPointRegistry _gatheringPointRegistry;
     private readonly QuestRegistry _questRegistry;
     private readonly QuestData _questData;
@@ -61,7 +60,6 @@ internal sealed class InteractionUiController : IDisposable
         AetheryteFunctions aetheryteFunctions,
         ExcelFunctions excelFunctions,
         QuestController questController,
-        GatheringData gatheringData,
         GatheringPointRegistry gatheringPointRegistry,
         QuestRegistry questRegistry,
         QuestData questData,
@@ -81,7 +79,6 @@ internal sealed class InteractionUiController : IDisposable
         _aetheryteFunctions = aetheryteFunctions;
         _excelFunctions = excelFunctions;
         _questController = questController;
-        _gatheringData = gatheringData;
         _gatheringPointRegistry = gatheringPointRegistry;
         _questRegistry = questRegistry;
         _questData = questData;
@@ -305,37 +302,6 @@ internal sealed class InteractionUiController : IDisposable
     {
         List<DialogueChoiceInfo> dialogueChoices = [];
 
-        // levequest choices have some vague sort of priority
-        if (_questController.HasCurrentTaskExecutorMatching<Interact.DoInteract>(out var interact) &&
-            interact.Quest != null &&
-            interact.InteractionType is EInteractionType.AcceptLeve or EInteractionType.CompleteLeve)
-        {
-            if (interact.InteractionType == EInteractionType.AcceptLeve)
-            {
-                dialogueChoices.Add(new DialogueChoiceInfo(interact.Quest,
-                    new DialogueChoice
-                    {
-                        Type = EDialogChoiceType.List,
-                        ExcelSheet = "leve/GuildleveAssignment",
-                        Prompt = new ExcelRef("TEXT_GUILDLEVEASSIGNMENT_SELECT_MENU_TITLE"),
-                        Answer = new ExcelRef("TEXT_GUILDLEVEASSIGNMENT_SELECT_MENU_01"),
-                    }));
-                interact.InteractionType = EInteractionType.None;
-            }
-            else if (interact.InteractionType == EInteractionType.CompleteLeve)
-            {
-                dialogueChoices.Add(new DialogueChoiceInfo(interact.Quest,
-                    new DialogueChoice
-                    {
-                        Type = EDialogChoiceType.List,
-                        ExcelSheet = "leve/GuildleveAssignment",
-                        Prompt = new ExcelRef("TEXT_GUILDLEVEASSIGNMENT_SELECT_MENU_TITLE"),
-                        Answer = new ExcelRef("TEXT_GUILDLEVEASSIGNMENT_SELECT_MENU_REWARD"),
-                    }));
-                interact.InteractionType = EInteractionType.None;
-            }
-        }
-
         var currentQuest = _questController.SimulatedQuest ??
                            _questController.GatheringQuest ??
                            _questController.StartedQuest;
@@ -421,24 +387,6 @@ internal sealed class InteractionUiController : IDisposable
                             questChoices.Count, questInfo.Name);
                         dialogueChoices.AddRange(questChoices.Select(x => new DialogueChoiceInfo(knownQuest, x)));
                     }
-                }
-            }
-
-            if ((_questController.IsRunning || _questController.WasLastTaskUpdateWithin(TimeSpan.FromSeconds(5)))
-                && _questController.NextQuest == null)
-            {
-                // make sure to always close the leve dialogue
-                if (_questData.GetAllByIssuerDataId(target.DataId).Any(x => x.QuestId is LeveId))
-                {
-                    _logger.LogInformation("Adding close leve dialogue as option");
-                    dialogueChoices.Add(new DialogueChoiceInfo(null,
-                        new DialogueChoice
-                        {
-                            Type = EDialogChoiceType.List,
-                            ExcelSheet = "leve/GuildleveAssignment",
-                            Prompt = new ExcelRef("TEXT_GUILDLEVEASSIGNMENT_SELECT_MENU_TITLE"),
-                            Answer = new ExcelRef("TEXT_GUILDLEVEASSIGNMENT_SELECT_MENU_07"),
-                        }));
                 }
             }
         }
@@ -586,7 +534,7 @@ internal sealed class InteractionUiController : IDisposable
 
         var director = UIState.Instance()->DirectorTodo.Director;
         if (director != null &&
-            director->Info.EventId.ContentId == EventHandlerType.GatheringLeveDirector &&
+            director->Info.EventId.ContentId == EventHandlerContent.GatheringLeveDirector &&
             director->Sequence == 254)
         {
             // just close the dialogue for 'do you want to return to next settlement', should prolly be different for
@@ -625,20 +573,6 @@ internal sealed class InteractionUiController : IDisposable
         {
             var step = quest.FindSequence(currentQuest.Sequence)?.FindStep(currentQuest.Step);
             if (step != null && HandleDefaultYesNo(addonSelectYesno, quest, step, step.DialogueChoices, actualPrompt))
-                return true;
-        }
-
-        if (currentQuest.Quest.Id is LeveId)
-        {
-            var dialogueChoice = new DialogueChoice
-            {
-                Type = EDialogChoiceType.YesNo,
-                ExcelSheet = "Addon",
-                Prompt = new ExcelRef(608),
-                Yes = true
-            };
-
-            if (HandleDefaultYesNo(addonSelectYesno, quest, null, [dialogueChoice], actualPrompt))
                 return true;
         }
 
@@ -791,7 +725,7 @@ internal sealed class InteractionUiController : IDisposable
         if (step != null && (step.TerritoryId != _clientState.TerritoryType || step.TargetTerritoryId == null) &&
             step.InteractionType == EInteractionType.Gather)
         {
-            if (_gatheringData.TryGetGatheringPointId(step.ItemsToGather[0].ItemId,
+            if (_gatheringPointRegistry.TryGetGatheringPointId(step.ItemsToGather[0].ItemId,
                     (EClassJob?)_clientState.LocalPlayer?.ClassJob.RowId ?? EClassJob.Adventurer,
                     out GatheringPointId? gatheringPointId) &&
                 _gatheringPointRegistry.TryGetGatheringPoint(gatheringPointId, out GatheringRoot? root))

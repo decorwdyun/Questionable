@@ -62,19 +62,14 @@ internal sealed class GatheringData
             .ToDictionary(x => x.ItemId, x => x.NpcId);
     }
 
-    public bool TryGetGatheringPointId(uint itemId, EClassJob classJobId,
-        [NotNullWhen(true)] out GatheringPointId? gatheringPointId)
-    {
-        if (classJobId == EClassJob.Miner)
-            return _minerGatheringPoints.TryGetValue(itemId, out gatheringPointId);
-        else if (classJobId == EClassJob.Botanist)
-            return _botanistGatheringPoints.TryGetValue(itemId, out gatheringPointId);
-        else
-        {
-            gatheringPointId = null;
-            return false;
-        }
-    }
+    public IEnumerable<GatheringPointId> MinerGatheringPoints => _minerGatheringPoints.Values;
+    public IEnumerable<GatheringPointId> BotanistGatheringPoints => _botanistGatheringPoints.Values;
+
+    public bool TryGetMinerGatheringPointByItemId(uint itemId, [NotNullWhen(true)] out GatheringPointId? gatheringPointId)
+        => _minerGatheringPoints.TryGetValue(itemId, out gatheringPointId);
+
+    public bool TryGetBotanistGatheringPointByItemId(uint itemId, [NotNullWhen(true)] out GatheringPointId? gatheringPointId)
+        => _botanistGatheringPoints.TryGetValue(itemId, out gatheringPointId);
 
     public ushort GetRecommendedCollectability(uint itemId)
         => _itemIdToCollectability.GetValueOrDefault(itemId);

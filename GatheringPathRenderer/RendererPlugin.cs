@@ -35,11 +35,11 @@ public sealed class RendererPlugin : IDalamudPlugin
     private readonly EditorWindow _editorWindow;
 
     private readonly List<GatheringLocationContext> _gatheringLocations = [];
-    private EClassJob _currentClassJob;
+    private EClassJob _currentClassJob = EClassJob.Adventurer;
 
     public RendererPlugin(IDalamudPluginInterface pluginInterface, IClientState clientState,
         ICommandManager commandManager, IDataManager dataManager, ITargetManager targetManager, IChatGui chatGui,
-        IObjectTable objectTable, IPluginLog pluginLog)
+        IObjectTable objectTable, IPluginLog pluginLog, IFramework framework)
     {
         _pluginInterface = pluginInterface;
         _clientState = clientState;
@@ -60,7 +60,11 @@ public sealed class RendererPlugin : IDalamudPlugin
             { IsOpen = true };
         _windowSystem.AddWindow(configWindow);
         _windowSystem.AddWindow(_editorWindow);
-        _currentClassJob = (EClassJob?)_clientState.LocalPlayer?.ClassJob.RowId ?? EClassJob.Adventurer;
+
+        framework.RunOnFrameworkThread(() =>
+        {
+            _currentClassJob = (EClassJob?)_clientState.LocalPlayer?.ClassJob.RowId ?? EClassJob.Adventurer;
+        });
 
         _pluginInterface.GetIpcSubscriber<object>("Questionable.ReloadData")
             .Subscribe(Reload);

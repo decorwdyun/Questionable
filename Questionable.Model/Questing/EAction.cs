@@ -57,11 +57,13 @@ public enum EAction
     Wasshoi = 11499,
 
     CollectMiner = 240,
+    LuckOfTheMountaineer = 4081,
     ScourMiner = 22182,
     MeticulousMiner = 22184,
     ScrutinyMiner = 22185,
 
     CollectBotanist = 815,
+    LuckOfThePioneer = 4095,
     ScourBotanist = 22186,
     MeticulousBotanist = 22188,
     ScrutinyBotanist = 22189,

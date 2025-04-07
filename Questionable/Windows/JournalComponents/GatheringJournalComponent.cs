@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Globalization;
 using System.Linq;
 using Dalamud.Interface;
@@ -57,56 +58,16 @@ internal sealed class GatheringJournalComponent
             .ToDictionary(x => x.Key, x => x.Select(y => y.GatheringPointId).ToList());
         var gatheringLeveSheet = dataManager.GetExcelSheet<GatheringLeve>();
         var territoryTypeSheet = dataManager.GetExcelSheet<TerritoryType>();
-        var gatheringPointToLeve = dataManager.GetExcelSheet<Leve>()
+        var leveGatheringPoints = dataManager.GetExcelSheet<Leve>()
             .Where(x => x.RowId > 0)
-            .Select(x =>
-            {
-                uint startZonePlaceName = x.PlaceNameStartZone.RowId;
-                startZonePlaceName = startZonePlaceName switch
-                {
-                    27 => 28, // limsa
-                    39 => 52, // gridania
-                    51 => 40, // uldah
-                    62 => 2300, // ishgard
-                    _ => startZonePlaceName
-                };
-
-                var territoryType = territoryTypeSheet.Cast<TerritoryType?>()
-                                        .FirstOrDefault(y => startZonePlaceName == y!.Value.PlaceName.RowId)
-                                    ?? throw new InvalidOperationException($"Unable to use {startZonePlaceName}");
-                return new
-                {
-                    LeveId = x.RowId,
-                    LeveName = x.Name.ToString(),
-                    TerritoryType = (ushort)territoryType.RowId,
-                    TerritoryName = territoryType.PlaceName.ValueNullable?.Name.ToString(),
-                    Expansion = (EExpansionVersion)territoryType.ExVersion.RowId,
-                    GatheringLeve = gatheringLeveSheet.GetRowOrDefault(x.DataId.RowId),
-                };
-            })
-            .Where(x => x.GatheringLeve != null)
-            .Select(x => new
-            {
-                x.LeveId,
-                x.LeveName,
-                x.TerritoryType,
-                x.TerritoryName,
-                x.Expansion,
-                GatheringPoints = x.GatheringLeve!.Value.Route
-                    .Where(y => y.RowId != 0)
-                    .SelectMany(y => routeToGatheringPoint[y.RowId]),
-            })
-            .SelectMany(x => x.GatheringPoints.Select(y => new
-            {
-                x.LeveId,
-                x.LeveName,
-                x.TerritoryType,
-                x.TerritoryName,
-                x.Expansion,
-                GatheringPointId = y
-            }))
-            .GroupBy(x => x.GatheringPointId)
-            .ToDictionary(x => x.Key, x => x.First());
+            .Select(x => gatheringLeveSheet.GetRowOrDefault(x.DataId.RowId))
+            .Where(x => x != null)
+            .Cast<GatheringLeve>()
+            .SelectMany(x => x.Route)
+            .Where(y => y.RowId != 0)
+            .SelectMany(y => routeToGatheringPoint[y.RowId])
+            .Distinct()
+            .ToHashSet();
 
         var itemSheet = dataManager.GetExcelSheet<Item>();
 
@@ -144,17 +105,8 @@ internal sealed class GatheringJournalComponent
             .Where(x => x.Point.ClassJob != EClassJob.Fisher)
             .Select(x =>
             {
-                if (gatheringPointToLeve.TryGetValue(x.GatheringPointId, out var leve))
-                {
-                    // it's a leve
-                    return x.Point with
-                    {
-                        Expansion = leve.Expansion,
-                        TerritoryType = leve.TerritoryType,
-                        TerritoryName = leve.TerritoryName,
-                        PlaceName = $"Leve: {leve.LeveName}",
-                    };
-                }
+                if (leveGatheringPoints.Contains(x.GatheringPointId))
+                    return null;
                 else if (x.Point.TerritoryType == 1 &&
                          _gatheringPointRegistry.TryGetGatheringPoint(x.Point.Id, out GatheringRoot? gatheringRoot))
                 {
@@ -170,6 +122,8 @@ internal sealed class GatheringJournalComponent
                 else
                     return x.Point;
             })
+            .Where(x => x != null)
+            .Cast<DefaultGatheringPoint>()
             .Where(x => x.Expansion != (EExpansionVersion)byte.MaxValue)
             .Where(x => x.GatheringItemIds.Count > 0)
             .Where(x => x.TerritoryType is not 901 and not 929) // exclude old diadem

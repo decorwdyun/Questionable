@@ -38,6 +38,7 @@ internal static class DoGather
         ILogger<GatherExecutor> logger) : TaskExecutor<Task>
     {
         private bool _wasGathering;
+        private bool _usedLuck;
         private SlotInfo? _slotToGather;
         private Queue<EAction>? _actionQueue;
 
@@ -99,10 +100,26 @@ internal static class DoGather
                             }
 
                             _actionQueue = GetNextActions(nodeCondition, slots);
-                            if (_actionQueue.Count == 0)
+                            if (_actionQueue == null)
                             {
-                                var slot = _slotToGather ?? slots.Single(x => x.ItemId == Task.Request.ItemId);
-                                addonGathering->FireCallbackInt(slot.Index);
+                                logger.LogInformation("Skipping the rest of gathering...");
+                                addonGathering->FireCallbackInt(-1);
+                                return ETaskResult.TaskComplete;
+                            }
+                            else if (_actionQueue.Count == 0)
+                            {
+                                var slot = _slotToGather ?? slots.SingleOrDefault(x => x.ItemId == Task.Request.ItemId) ?? slots.MinBy(x => x.ItemId);
+                                if (slot?.ItemId is >= 2 and <= 19)
+                                {
+                                    InventoryManager* inventoryManager = InventoryManager.Instance();
+                                    if (inventoryManager->GetInventoryItemCount(slot.ItemId) == 9999)
+                                        slot = null;
+                                }
+
+                                if (slot != null)
+                                    addonGathering->FireCallbackInt(slot.Index);
+                                else
+                                    addonGathering->FireCallbackInt(-1);
                             }
                         }
                     }
@@ -148,8 +165,12 @@ internal static class DoGather
         }
 
         [SuppressMessage("ReSharper", "UnusedParameter.Local")]
-        private Queue<EAction> GetNextActions(NodeCondition nodeCondition, List<SlotInfo> slots)
+        private Queue<EAction>? GetNextActions(NodeCondition nodeCondition, List<SlotInfo> slots)
         {
+            // it's possible the item has disappeared
+            if (_slotToGather != null && slots.All(x => x.Index != _slotToGather.Index))
+                _slotToGather = null;
+
             //uint gp = clientState.LocalPlayer!.CurrentGp;
             Queue<EAction> actions = new();
 
@@ -194,8 +215,31 @@ internal static class DoGather
                     }
                 }
 
-                var slot = slots.Single(x => x.ItemId == Task.Request.ItemId);
-                if (slot.GatheringChance > 0 && slot.GatheringChance < 100)
+                SlotInfo? slot = slots.SingleOrDefault(x => x.ItemId == Task.Request.ItemId);
+                if (slot == null)
+                {
+                    if (!_usedLuck &&
+                        nodeCondition.CurrentIntegrity == nodeCondition.MaxIntegrity &&
+                        CanUseAction(EAction.LuckOfTheMountaineer, EAction.LuckOfThePioneer))
+                    {
+                        _usedLuck = true;
+                        actions.Enqueue(PickAction(EAction.LuckOfTheMountaineer, EAction.LuckOfThePioneer));
+                        return actions;
+                    }
+                    else if (_usedLuck)
+                    {
+                        // we still can't find the item, if this node has been hit at least once we just close it
+                        if (nodeCondition.CurrentIntegrity != nodeCondition.MaxIntegrity)
+                            return null;
+
+                        // otherwise, there most likely is -any- other item available, probably a shard/crystal
+                        _slotToGather = slots.MinBy(x => x.ItemId);
+                        return actions;
+                    }
+                }
+
+                slot = slots.SingleOrDefault(x => x.ItemId == Task.Request.ItemId);
+                if (slot is { GatheringChance: > 0 and < 100 })
                 {
                     if (slot.GatheringChance >= 95 &&
                         CanUseAction(EAction.SharpVision1, EAction.FieldMastery1))

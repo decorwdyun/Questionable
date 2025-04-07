@@ -7,6 +7,7 @@ using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using LLib.GameData;
 using Lumina.Excel.Sheets;
+using Microsoft.Extensions.Logging;
 using Questionable.Model;
 using Questionable.Model.Questing;
 using Quest = Lumina.Excel.Sheets.Quest;
@@ -38,10 +39,11 @@ internal sealed class QuestData
 
     private readonly Dictionary<ElementId, IQuestInfo> _quests;
 
-    public QuestData(IDataManager dataManager)
+    public QuestData(IDataManager dataManager, ClassJobUtils classJobUtils)
     {
         JournalGenreOverrides journalGenreOverrides = new()
         {
+            ARelicRebornQuests = dataManager.GetExcelSheet<Quest>().GetRow(65742).JournalGenre.RowId,
             RadzAtHanSideQuests = dataManager.GetExcelSheet<Quest>().GetRow(69805).JournalGenre.RowId,
             ThavnairSideQuests = dataManager.GetExcelSheet<Quest>().GetRow(70025).JournalGenre.RowId,
         };
@@ -69,10 +71,6 @@ internal sealed class QuestData
             ..dataManager.GetExcelSheet<SatisfactionNpc>()
                 .Where(x => x is { RowId: > 0, Npc.RowId: > 0 })
                 .Select(x => new SatisfactionSupplyInfo(x)),
-            ..dataManager.GetExcelSheet<Leve>()
-                .Where(x => x.RowId > 0)
-                .Where(x => x.LevelLevemete.RowId != 0)
-                .Select(x => new LeveInfo(x)),
         ];
 
         quests.AddRange(
@@ -89,11 +87,11 @@ internal sealed class QuestData
                                     .Cast<QuestInfo>()
                                     .Select(y => (byte)y.AlliedSocietyRank).Distinct()
                             ])
-                            .Select(rank => new AlliedSocietyDailyInfo(x, rank));
+                            .Select(rank => new AlliedSocietyDailyInfo(x, rank, classJobUtils));
                     }
                     else
                     {
-                        return [new AlliedSocietyDailyInfo(x, 0)];
+                        return [new AlliedSocietyDailyInfo(x, 0, classJobUtils)];
                     }
                 }));
 
@@ -228,22 +226,23 @@ internal sealed class QuestData
         // follow-up quests to picking a GC
         AddGcFollowUpQuests();
 
-        // update relic quests to be in a different journal category
-        ushort[] zodiacStartingQuests = [1119, 1120, 1121, 1122, 1123, 1124, 1125, 1126, 1127, 1579];
-        foreach (var questId in zodiacStartingQuests)
-        {
-            var quest = ((QuestInfo)_quests[new QuestId(questId)]);
-            quest.JournalGenre = 82;
-            quest.SortKey = 0;
-        }
+        MainScenarioQuests = _quests.Values.Where(x => x is QuestInfo { IsMainScenarioQuest: true })
+            .Cast<QuestInfo>()
+            .ToList();
 
+        LastMainScenarioQuestId = MainScenarioQuests
+            .Where(x => !MainScenarioQuests.Any(y => y.PreviousQuests.Any(z => z.QuestId == x.QuestId)))
+            .Select(x => (QuestId)x.QuestId)
+            .FirstOrDefault() ?? new QuestId(0);
         RedeemableItems = quests.Where(x => x is QuestInfo)
             .Cast<QuestInfo>()
             .SelectMany(x => x.ItemRewards)
             .ToImmutableHashSet();
     }
 
+    public IReadOnlyList<QuestInfo> MainScenarioQuests { get; }
     public ImmutableHashSet<ItemReward> RedeemableItems { get; }
+    public QuestId LastMainScenarioQuestId { get; }
 
     private void AddPreviousQuest(QuestId questToUpdate, QuestId requiredQuestId)
     {

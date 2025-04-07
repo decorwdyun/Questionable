@@ -389,9 +389,15 @@
           },
           "TerritoryId": 813,
           "InteractionType": "SinglePlayerDuty",
-          "Comment": "The Oracle of Light"
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": "0.1.0.1"
+          }
         }
       ]
+    },
+    {
+      "Sequence": 5
     },
     {
       "Sequence": 255,

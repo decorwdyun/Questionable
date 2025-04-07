@@ -54,20 +54,24 @@ internal sealed class QuestInfo : IQuestInfo
             .Where(x => x.Value != 0)
             .ToImmutableList();
         QuestLockJoin = (EQuestJoin)quest.QuestLockJoin;
-        JournalGenre = QuestId.Value switch
+
+        ValueTuple<uint?, ushort?> genreAndSortKey = QuestId.Value switch
         {
-            >= 4196 and <= 4209 => journalGenreOverrides.ThavnairSideQuests,
-            4173 => journalGenreOverrides.RadzAtHanSideQuests,
-            _ => quest.JournalGenre.ValueNullable?.RowId,
+            >= 1119 and <= 1127 or 1579 => (journalGenreOverrides.ARelicRebornQuests, 0),
+            >= 4196 and <= 4209 => (journalGenreOverrides.ThavnairSideQuests, null),
+            4173 => (journalGenreOverrides.RadzAtHanSideQuests, null),
+            _ => (quest.JournalGenre.ValueNullable?.RowId, null),
         };
-        SortKey = quest.SortKey;
+        JournalGenre = genreAndSortKey.Item1;
+        SortKey = genreAndSortKey.Item2 ?? quest.SortKey;
+
         IsMainScenarioQuest = quest.JournalGenre.ValueNullable?.Icon == 61412;
         CompletesInstantly = quest.TodoParams[0].ToDoCompleteSeq == 0;
         PreviousInstanceContent = quest.InstanceContent.Select(x => (ushort)x.RowId).Where(x => x != 0).ToList();
         PreviousInstanceContentJoin = (EQuestJoin)quest.InstanceContentJoin;
         GrandCompany = (GrandCompany)quest.GrandCompany.RowId;
         AlliedSociety = (EAlliedSociety)quest.BeastTribe.RowId;
-        AlliedSocietyQuestGroup = quest.Unknown11;
+        AlliedSocietyQuestGroup = quest.DailyQuestPool;
         AlliedSocietyRank = (int)quest.BeastReputationRank.RowId;
         ClassJobs = QuestInfoUtils.AsList(quest.ClassJobCategory0.ValueNullable!);
         IsSeasonalEvent = quest.Festival.RowId != 0;

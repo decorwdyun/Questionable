@@ -22,7 +22,6 @@ internal static class Interact
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
             if (step.InteractionType is EInteractionType.AcceptQuest or EInteractionType.CompleteQuest
-                or EInteractionType.AcceptLeve or EInteractionType.CompleteLeve
                 or EInteractionType.SinglePlayerDuty)
             {
                 if (step.Emote != null)

@@ -75,7 +75,14 @@
           },
           "TerritoryId": 814,
           "InteractionType": "SinglePlayerDuty",
-          "Fly": true
+          "Fly": true,
+          "SinglePlayerDutyOptions": {
+            "Enabled": false,
+            "TestedBossModVersion": "0.1.0.1",
+            "Notes": [
+              "Currently it won't work, because the logic is missing NPC healing."
+            ]
+          }
         }
       ]
     },

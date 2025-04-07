@@ -132,13 +132,32 @@
         },
         {
           "Position": {
+            "X": -30.522272,
+            "Y": -32.192017,
+            "Z": -84.3334
+          },
+          "TerritoryId": 398,
+          "InteractionType": "WalkTo",
+          "AetheryteShortcut": "The Dravanian Forelands - Anyx Trine"
+        },
+        {
+          "Position": {
+            "X": -21.787895,
+            "Y": -30.428743,
+            "Z": -80.12713
+          },
+          "TerritoryId": 398,
+          "InteractionType": "WalkTo",
+          "DisableNavmesh": true
+        },
+        {
+          "Position": {
             "X": 22.235865,
             "Y": -24.754946,
             "Z": -119.65716
           },
           "TerritoryId": 398,
-          "InteractionType": "WalkTo",
-          "AetheryteShortcut": "The Dravanian Forelands - Anyx Trine"
+          "InteractionType": "WalkTo"
         },
         {
           "DataId": 1014544,

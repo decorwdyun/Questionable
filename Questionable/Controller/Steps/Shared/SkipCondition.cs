@@ -56,7 +56,8 @@ internal static class SkipCondition
         QuestFunctions questFunctions,
         IClientState clientState,
         ICondition condition,
-        ExtraConditionUtils extraConditionUtils) : TaskExecutor<SkipTask>
+        ExtraConditionUtils extraConditionUtils,
+        ClassJobUtils classJobUtils) : TaskExecutor<SkipTask>
     {
         protected override bool Start()
         {
@@ -99,7 +100,7 @@ internal static class SkipCondition
             if (CheckQuestWorkConditions(elementId, step))
                 return true;
 
-            if (CheckJobCondition(step))
+            if (CheckJobCondition(elementId, step))
                 return true;
 
             if (CheckPositionCondition(skipConditions))
@@ -341,7 +342,7 @@ internal static class SkipCondition
                 if (step is { RequiredQuestAcceptedJob.Count: > 0 })
                 {
                     List<EClassJob> expectedJobs = step.RequiredQuestAcceptedJob
-                        .SelectMany(ClassJobUtils.AsIndividualJobs).ToList();
+                        .SelectMany(x => classJobUtils.AsIndividualJobs(x, elementId)).ToList();
                     EClassJob questJob = questWork.ClassJob;
                     logger.LogInformation("Checking quest job {QuestJob} against {ExpectedJobs}", questJob,
                         string.Join(",", expectedJobs));
@@ -356,12 +357,12 @@ internal static class SkipCondition
             return false;
         }
 
-        private bool CheckJobCondition(QuestStep step)
+        private bool CheckJobCondition(ElementId elementId, QuestStep step)
         {
             if (step is { RequiredCurrentJob.Count: > 0 })
             {
                 List<EClassJob> expectedJobs =
-                    step.RequiredCurrentJob.SelectMany(ClassJobUtils.AsIndividualJobs).ToList();
+                    step.RequiredCurrentJob.SelectMany(x => classJobUtils.AsIndividualJobs(x, elementId)).ToList();
                 EClassJob currentJob = (EClassJob)clientState.LocalPlayer!.ClassJob.RowId;
                 logger.LogInformation("Checking current job {CurrentJob} against {ExpectedJobs}", currentJob,
                     string.Join(",", expectedJobs));
@@ -384,6 +385,17 @@ internal static class SkipCondition
                     nearPosition.MaximumDistance)
                 {
                     logger.LogInformation("Skipping step, as we're near the position");
+                    return true;
+                }
+            }
+
+            if (skipConditions.NotNearPosition is { } notNearPosition &&
+                clientState.TerritoryType == notNearPosition.TerritoryId)
+            {
+                if (notNearPosition.MaximumDistance <=
+                    Vector3.Distance(notNearPosition.Position, clientState.LocalPlayer!.Position))
+                {
+                    logger.LogInformation("Skipping step, as we're not near the position");
                     return true;
                 }
             }

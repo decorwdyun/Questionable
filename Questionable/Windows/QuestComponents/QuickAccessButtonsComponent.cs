@@ -62,7 +62,7 @@ internal sealed class QuickAccessButtonsComponent
     public unsafe void Draw()
     {
         var map = AgentMap.Instance();
-        using (var unused = ImRaii.Disabled(map == null || map->IsFlagMarkerSet == 0 ||
+        using (var unused = ImRaii.Disabled(map == null || !map->IsFlagMarkerSet ||
                                             map->FlagMapMarker.TerritoryId != _clientState.TerritoryType ||
                                             !_navmeshIpc.IsReady))
         {

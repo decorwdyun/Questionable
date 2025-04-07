@@ -5,7 +5,7 @@ using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.Logging;
-using Questionable.Controller.Steps.Shared;
+using Questionable.Controller.Steps.Movement;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Gathering;
@@ -24,7 +24,7 @@ internal static class MoveToLandingLocation
     }
 
     internal sealed class MoveToLandingLocationExecutor(
-        MoveTo.MoveExecutor moveExecutor,
+        MoveExecutor moveExecutor,
         GameFunctions gameFunctions,
         IObjectTable objectTable,
         ILogger<MoveToLandingLocationExecutor> logger) : TaskExecutor<Task>, IToastAware
@@ -51,7 +51,7 @@ internal static class MoveToLandingLocation
                 target.ToString("G", CultureInfo.InvariantCulture), degrees, range);
 
             bool fly = Task.FlyBetweenNodes && gameFunctions.IsFlyingUnlocked(Task.TerritoryId);
-            _moveTask = new MoveTo.MoveTask(Task.TerritoryId, target, null, 0.25f,
+            _moveTask = new MoveTask(Task.TerritoryId, target, null, 0.25f,
                 DataId: Task.GatheringNode.DataId, Fly: fly, IgnoreDistanceToObject: true,
                 InteractionType: EInteractionType.Gather);
             return moveExecutor.Start(_moveTask);

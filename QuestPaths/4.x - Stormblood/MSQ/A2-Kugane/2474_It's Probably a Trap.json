@@ -106,6 +106,10 @@
           },
           "TerritoryId": 628,
           "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": true,
+            "TestedBossModVersion": "0.1.0.1"
+          },
           "AethernetShortcut": [
             "[Kugane] The Ruby Bazaar",
             "[Kugane] Kogane Dori Markets"

@@ -17,6 +17,7 @@ using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps;
 using Questionable.Controller.Steps.Gathering;
 using Questionable.Controller.Steps.Interactions;
+using Questionable.Controller.Steps.Movement;
 using Questionable.Controller.Steps.Shared;
 using Questionable.External;
 using Questionable.Functions;
@@ -136,7 +137,7 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
             return;
 
         var director = UIState.Instance()->DirectorTodo.Director;
-        if (director != null && director->Info.EventId.ContentId == EventHandlerType.GatheringLeveDirector)
+        if (director != null && director->Info.EventId.ContentId == EventHandlerContent.GatheringLeveDirector)
         {
             if (director->Sequence == 254)
                 return;
@@ -166,7 +167,7 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
             if (pointOnFloor != null)
                 pointOnFloor = pointOnFloor.Value with { Y = pointOnFloor.Value.Y + (fly ? 3f : 0f) };
 
-            _taskQueue.Enqueue(new MoveTo.MoveTask(territoryId, pointOnFloor ?? averagePosition,
+            _taskQueue.Enqueue(new MoveTask(territoryId, pointOnFloor ?? averagePosition,
                 null, 50f, Fly: fly, IgnoreDistanceToObject: true, InteractionType: EInteractionType.WalkTo));
         }
 

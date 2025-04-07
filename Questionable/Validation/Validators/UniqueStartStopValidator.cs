@@ -13,7 +13,7 @@ internal sealed class UniqueStartStopValidator : IQuestValidator
             yield break;
 
         var questAccepts =
-            FindQuestStepsWithInteractionType(quest, [EInteractionType.AcceptQuest, EInteractionType.AcceptLeve])
+            FindQuestStepsWithInteractionType(quest, [EInteractionType.AcceptQuest])
                 .Where(x => x.Step.PickUpQuestId == null)
                 .ToList();
         foreach (var accept in questAccepts)
@@ -46,7 +46,7 @@ internal sealed class UniqueStartStopValidator : IQuestValidator
         }
 
         var questCompletes =
-            FindQuestStepsWithInteractionType(quest, [EInteractionType.CompleteQuest, EInteractionType.CompleteLeve])
+            FindQuestStepsWithInteractionType(quest, [EInteractionType.CompleteQuest])
                 .Where(x => x.Step.TurnInQuestId == null)
                 .ToList();
         foreach (var complete in questCompletes)

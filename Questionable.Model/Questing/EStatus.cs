@@ -9,4 +9,5 @@ public enum EStatus : uint
     GatheringRateUp = 218,
     Hidden = 614,
     Eukrasia = 2606,
+    Jog = 4209,
 }
