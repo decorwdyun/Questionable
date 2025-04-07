@@ -88,7 +88,10 @@
               "Z": 343.00745
           },
           "TerritoryId": 612,
-          "InteractionType": "WaitForManualProgress",
+          "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": false
+          },
           "Comment": "Solo Duty"
         }
       ]
