@@ -26,6 +26,7 @@ namespace Questionable.Controller;
 internal sealed class CombatController : IDisposable
 {
     private const float MaxTargetRange = 55f;
+    private const float MaxNameplateRange = 50f;
 
     private readonly List<ICombatModule> _combatModules;
     private readonly MovementController _movementController;
@@ -303,11 +304,21 @@ internal sealed class CombatController : IDisposable
                 return (null, "Untargetable");
 
             var complexCombatData = _currentFight.Data.ComplexCombatDatas;
+            var gameObjectStruct = (GameObject*)gameObject.Address;
+
+            bool expectQuestMarker =
+                Vector3.Distance(_clientState.LocalPlayer?.Position ?? Vector3.Zero, battleNpc.Position) <
+                MaxNameplateRange;
             if (complexCombatData.Count > 0)
             {
                 for (int i = 0; i < complexCombatData.Count; ++i)
                 {
                     if (_currentFight.Data.CompletedComplexDatas.Contains(i))
+                        continue;
+
+                    if (expectQuestMarker &&
+                        !complexCombatData[i].IgnoreQuestMarker &&
+                        gameObjectStruct->NamePlateIconId == 0)
                         continue;
 
                     if (complexCombatData[i].DataId == battleNpc.DataId &&
@@ -317,15 +328,14 @@ internal sealed class CombatController : IDisposable
             }
             else
             {
-                if (_currentFight.Data.KillEnemyDataIds.Contains(battleNpc.DataId))
+                if ((!expectQuestMarker || gameObjectStruct->NamePlateIconId != 0) &&
+                    _currentFight.Data.KillEnemyDataIds.Contains(battleNpc.DataId))
                     return (90, "KED");
             }
 
             // enemies that we have aggro on
             if (battleNpc.BattleNpcKind is BattleNpcSubKind.BattleNpcPart or BattleNpcSubKind.Enemy)
             {
-                var gameObjectStruct = (GameObject*)gameObject.Address;
-
                 // npc that starts a fate or does turn-ins; not sure why they're marked as hostile
                 if (gameObjectStruct->NamePlateIconId is 60093 or 60732)
                     return (null, "FATE NPC");
