@@ -36,18 +36,28 @@
               "DataId": 55,
               "MinimumKillCount": 3,
               "RewardItemId": 2003022,
-              "RewardItemCount": 3,
-              "$": "QW goes 6x0 → 0 0 16 0 0 0 → 0 0 32 0 0 0 → 16 0 48 0 0 0"
+              "RewardItemCount": 3
+            },
+            {
+              "DataId": 61,
+              "MinimumKillCount": 3,
+              "RewardItemId": 2003022,
+              "RewardItemCount": 3
             },
             {
               "DataId": 62,
               "MinimumKillCount": 0,
               "RewardItemId": 2003021,
-              "RewardItemCount": 3,
-              "$": "QW goes [..] → 16 1 48 0 0 0 → 16 2 48 0 0 0 → 0 51 0 0 0 0"
+              "RewardItemCount": 3
             },
             {
               "DataId": 63,
+              "MinimumKillCount": 0,
+              "RewardItemId": 2003021,
+              "RewardItemCount": 3
+            },
+            {
+              "DataId": 64,
               "MinimumKillCount": 0,
               "RewardItemId": 2003021,
               "RewardItemCount": 3

@@ -44,7 +44,7 @@
           "EnemySpawnType": "OverworldEnemies",
           "ComplexCombatData": [
             {
-              "DataId": 135,
+              "DataId": 5,
               "MinimumKillCount": 3,
               "CompletionQuestVariablesFlags": [
                 {
