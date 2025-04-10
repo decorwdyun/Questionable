@@ -51,6 +51,7 @@ public static class RoslynShortcuts
                 QuestId questId => questId.ToExpressionSyntax(),
                 SatisfactionSupplyNpcId satisfactionSupplyNpcId => satisfactionSupplyNpcId.ToExpressionSyntax(),
                 AlliedSocietyDailyId alliedSocietyDailyId => alliedSocietyDailyId.ToExpressionSyntax(),
+                UnlockLinkId unlockLinkId => unlockLinkId.ToExpressionSyntax(),
                 Vector3 vector => vector.ToExpressionSyntax(),
                 AethernetShortcut aethernetShortcut => aethernetShortcut.ToExpressionSyntax(),
                 ChatMessage chatMessage => chatMessage.ToExpressionSyntax(),
