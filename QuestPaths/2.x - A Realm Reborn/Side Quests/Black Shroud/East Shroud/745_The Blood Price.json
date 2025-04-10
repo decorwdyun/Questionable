@@ -49,8 +49,7 @@
                     "Z": -40.177063
                 },
                 "TerritoryId": 152,
-                "InteractionType": "Instruction",
-                "Comment": "TODO Needs item use; manual for now (also unsure on health percent)",
+                "InteractionType": "Combat",
                 "EnemySpawnType": "OverworldEnemies",
                 "ComplexCombatData": [
                     {
@@ -61,7 +60,12 @@
                     "RewardItemId": 2000598,
                     "RewardItemCount": 3
                     }
-                ]
+                ],
+                "CombatItemUse": {
+                    "ItemId": 2000597,
+                    "Condition": "Health%",
+                    "Value": 30
+                }
             }
         ]
       },
