@@ -22,6 +22,7 @@ internal sealed class EventInfoComponent
     [SuppressMessage("ReSharper", "CollectionNeverUpdated.Local")]
     private readonly List<EventQuest> _eventQuests =
     [
+        new EventQuest("Hatching-tide", [new QuestId(5242), new QuestId(5243)], AtDailyReset(new(2025, 4, 24))),
         new EventQuest("Limited Time Items", [new UnlockLinkId(506)], DateTime.MaxValue),
     ];
 
