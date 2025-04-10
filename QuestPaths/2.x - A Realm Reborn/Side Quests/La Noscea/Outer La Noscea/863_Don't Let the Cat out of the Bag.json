@@ -29,19 +29,17 @@
                 "Z": -322.04163
             },
             "TerritoryId": 180,
-            "InteractionType": "WalkTo",            
+            "InteractionType": "Combat",
+            "KillEnemyDataIds": [
+              2269
+            ],
+            "EnemySpawnType": "OverworldEnemies",
+            "CombatItemUse": {
+              "ItemId": 2000670,
+              "Condition": "Health%",
+              "Value": 30
+            },            
             "Fly": true
-          },
-          {
-            "DataId": 1006331,
-            "Position": {
-                "X": -268.5741,
-                "Y": 64.49246,
-                "Z": -322.04163
-            },
-            "TerritoryId": 180,
-            "InteractionType": "WaitForManualProgress",
-            "Comment": "Weaken the Coerl and use quest item on it (BLU: 'Missile' works great here, if overleveled)"
           }
         ]
       },
