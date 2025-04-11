@@ -1,6 +1,7 @@
 {
     "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
     "Author": "skiaz",
+    "Disabled": true, 
     "QuestSequence": [
       {
         "Sequence": 0,
@@ -74,6 +75,24 @@
                 "MinimumKillCount": 1
               }                
             ]
+          },
+          {
+            "DataId": 2003087,
+            "Position": {
+                "X": 545.2506,
+                "Y": 7.5531616,
+                "Z": -155.77942
+            },
+            "TerritoryId": 146,
+            "InteractionType": "Combat",
+            "EnemySpawnType": "AfterInteraction",
+            "ComplexCombatData":[
+              {
+                "DataId": 739,
+                "NameId": 2304,
+                "MinimumKillCount": 1
+              }                
+            ]
           }
         ]
       },
@@ -86,6 +105,18 @@
                 "X": 125.53589,
                 "Y": 15.335266,
                 "Z": 132.52454
+            },
+            "TerritoryId": 146,
+            "InteractionType": "UseItem",
+            "ItemId": 2001170,
+            "Fly": true
+          },
+          {
+            "DataId": 2003084,
+            "Position": {
+                "X": 115.587036,
+                "Y": 15.396301,
+                "Z": 132.92126
             },
             "TerritoryId": 146,
             "InteractionType": "UseItem",
