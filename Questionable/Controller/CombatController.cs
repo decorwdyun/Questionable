@@ -305,6 +305,8 @@ internal sealed class CombatController : IDisposable
 
             var complexCombatData = _currentFight.Data.ComplexCombatDatas;
             var gameObjectStruct = (GameObject*)gameObject.Address;
+            if (gameObjectStruct->FateId != 0)
+                return (null, "FATE mob");
 
             bool expectQuestMarker =
                 Vector3.Distance(_clientState.LocalPlayer?.Position ?? Vector3.Zero, battleNpc.Position) <
