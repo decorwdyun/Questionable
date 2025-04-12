@@ -319,7 +319,7 @@
           "EnemySpawnType": "OverworldEnemies",
           "ComplexCombatData": [
             {
-              "DataId": 5,
+              "DataId": 12,
               "MinimumKillCount": 8,
               "$": "Slay northern vultures.",
               "CompletionQuestVariablesFlags": [
