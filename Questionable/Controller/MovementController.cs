@@ -235,11 +235,8 @@ internal sealed class MovementController : IDisposable
                 Vector3? start = _clientState.LocalPlayer?.Position;
                 if (start != null)
                 {
-                    if (Destination.ShouldRecalculateNavmesh())
-                    {
-                        RecalculateNavmesh(navPoints, start.Value);
+                    if (Destination.ShouldRecalculateNavmesh() && RecalculateNavmesh(navPoints, start.Value))
                         return;
-                    }
 
                     if (!Destination.IsFlying && !_condition[ConditionFlag.Mounted] &&
                         !_gameFunctions.HasStatusPreventingSprint() && Destination.CanSprint)
@@ -356,60 +353,65 @@ internal sealed class MovementController : IDisposable
         _pathfindTask = null;
     }
 
-    private void RecalculateNavmesh(List<Vector3> navPoints, Vector3 start)
+    private bool RecalculateNavmesh(List<Vector3> navPoints, Vector3 start)
     {
         if (Destination == null)
             throw new InvalidOperationException("Destination is null");
 
         if (DateTime.Now - MovementStartedAt <= TimeSpan.FromSeconds(5))
-            return;
+            return false;
 
         var nextWaypoint = navPoints.FirstOrDefault();
-        if (nextWaypoint != default)
-        {
-            var distance = Vector2.Distance(new Vector2(start.X, start.Z),
-                new Vector2(nextWaypoint.X, nextWaypoint.Z));
-            if (Destination.LastWaypoint == null ||
-                (Destination.LastWaypoint.Position - nextWaypoint).Length() > 0.1f)
-            {
-                Destination.LastWaypoint = new LastWaypointData(nextWaypoint)
-                {
-                    Distance2DAtLastUpdate = distance,
-                    UpdatedAt = Environment.TickCount64,
-                };
-            }
-            else if (Environment.TickCount64 - Destination.LastWaypoint.UpdatedAt > 500)
-            {
-                // check whether we've made any progress of any kind
-                if (Math.Abs(distance - Destination.LastWaypoint.Distance2DAtLastUpdate) < 0.5f)
-                {
-                    int calculations = Destination.NavmeshCalculations;
-                    if (calculations % 6 == 1)
-                    {
-                        _logger.LogWarning("Jumping to try and resolve navmesh problem (n = {Calculations})",
-                            calculations);
-                        unsafe
-                        {
-                            ActionManager.Instance()->UseAction(ActionType.GeneralAction, 2);
-                            Destination.NavmeshCalculations++;
-                            Destination.LastWaypoint.UpdatedAt = Environment.TickCount64;
-                        }
-                    }
-                    else
-                    {
-                        _logger.LogWarning("Recalculating navmesh (n = {Calculations})", calculations);
-                        Restart(Destination);
-                    }
+        if (nextWaypoint == default)
+            return false;
 
-                    Destination.NavmeshCalculations = calculations + 1;
+        var distance = Vector2.Distance(new Vector2(start.X, start.Z), 
+            new Vector2(nextWaypoint.X, nextWaypoint.Z));
+        if (Destination.LastWaypoint == null ||
+            (Destination.LastWaypoint.Position - nextWaypoint).Length() > 0.1f)
+        {
+            Destination.LastWaypoint = new LastWaypointData(nextWaypoint)
+            {
+                Distance2DAtLastUpdate = distance,
+                UpdatedAt = Environment.TickCount64,
+            };
+            return false;
+        }
+        else if (Environment.TickCount64 - Destination.LastWaypoint.UpdatedAt > 500)
+        {
+            // check whether we've made any progress of any kind
+            if (Math.Abs(distance - Destination.LastWaypoint.Distance2DAtLastUpdate) < 0.5f)
+            {
+                int calculations = Destination.NavmeshCalculations;
+                if (calculations % 6 == 1)
+                {
+                    _logger.LogWarning("Jumping to try and resolve navmesh problem (n = {Calculations})",
+                        calculations);
+                    unsafe
+                    {
+                        ActionManager.Instance()->UseAction(ActionType.GeneralAction, 2);
+                        Destination.NavmeshCalculations++;
+                        Destination.LastWaypoint.UpdatedAt = Environment.TickCount64;
+                    }
                 }
                 else
                 {
-                    Destination.LastWaypoint.Distance2DAtLastUpdate = distance;
-                    Destination.LastWaypoint.UpdatedAt = Environment.TickCount64;
+                    _logger.LogWarning("Recalculating navmesh (n = {Calculations})", calculations);
+                    Restart(Destination);
                 }
+
+                Destination.NavmeshCalculations = calculations + 1;
+                return true;
+            }
+            else
+            {
+                Destination.LastWaypoint.Distance2DAtLastUpdate = distance;
+                Destination.LastWaypoint.UpdatedAt = Environment.TickCount64;
+                return false;
             }
         }
+        else
+            return false;
     }
 
     private void TriggerSprintIfNeeded(IEnumerable<Vector3> navPoints, Vector3 start)
