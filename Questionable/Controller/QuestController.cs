@@ -319,11 +319,11 @@ internal sealed class QuestController : MiniTaskController<QuestController>
             }
             else
             {
-                (ElementId? currentQuestId, currentSequence) =
+                (ElementId? currentQuestId, currentSequence, bool msqInformationAvailable) =
                     ManualPriorityQuests
                         .Where(x => _questFunctions.IsReadyToAcceptQuest(x.Id) || _questFunctions.IsQuestAccepted(x.Id))
                         .Select(x =>
-                            ((ElementId?, byte)?)(x.Id, _questFunctions.GetQuestProgressInfo(x.Id)?.Sequence ?? 0))
+                            ((ElementId?, byte, bool)?)(x.Id, _questFunctions.GetQuestProgressInfo(x.Id)?.Sequence ?? 0, true))
                         .FirstOrDefault() ??
                     _questFunctions.GetCurrentQuest(allowNewMsq: AutomationType != EAutomationType.SingleQuestB);
 
@@ -331,6 +331,12 @@ internal sealed class QuestController : MiniTaskController<QuestController>
                 {
                     if (_startedQuest != null)
                     {
+                        if (!msqInformationAvailable)
+                        {
+                            _logger.LogDebug("MSQ information not available...");
+                            return;
+                        }
+
                         _logger.LogInformation("No current quest, resetting data");
                         _startedQuest = null;
                         Stop("Resetting current quest");

@@ -56,33 +56,33 @@ internal sealed unsafe class QuestFunctions
         _gameGui = gameGui;
     }
 
-    public (ElementId? CurrentQuest, byte Sequence) GetCurrentQuest(bool allowNewMsq = true)
+    public (ElementId? CurrentQuest, byte Sequence, bool MsqInformationAvailable) GetCurrentQuest(bool allowNewMsq = true)
     {
-        var (currentQuest, sequence) = GetCurrentQuestInternal(allowNewMsq);
+        var (currentQuest, sequence, msqInformationAvailable) = GetCurrentQuestInternal(allowNewMsq);
         PlayerState* playerState = PlayerState.Instance();
 
         if (currentQuest == null || currentQuest.Value == 0)
         {
             if (_clientState.TerritoryType == 181) // Starting in Limsa
-                return (new QuestId(107), 0);
+                return (new QuestId(107), 0, msqInformationAvailable);
             if (_clientState.TerritoryType == 182) // Starting in Ul'dah
-                return (new QuestId(594), 0);
+                return (new QuestId(594), 0, msqInformationAvailable);
             if (_clientState.TerritoryType == 183) // Starting in Gridania
-                return (new QuestId(39), 0);
+                return (new QuestId(39), 0, msqInformationAvailable);
             return default;
         }
         else if (currentQuest.Value == 681)
         {
             // if we have already picked up the GC quest, just return the progress for it
             if (IsQuestAccepted(currentQuest) || IsQuestComplete(currentQuest))
-                return (currentQuest, sequence);
+                return (currentQuest, sequence, msqInformationAvailable);
 
             // The company you keep...
             return _configuration.General.GrandCompany switch
             {
-                GrandCompany.TwinAdder => (new QuestId(680), 0),
-                GrandCompany.Maelstrom => (new QuestId(681), 0),
-                GrandCompany.ImmortalFlames => (new QuestId(682), 0),
+                GrandCompany.TwinAdder => (new QuestId(680), 0, msqInformationAvailable),
+                GrandCompany.Maelstrom => (new QuestId(681), 0, msqInformationAvailable),
+                GrandCompany.ImmortalFlames => (new QuestId(682), 0, msqInformationAvailable),
                 _ => default
             };
         }
@@ -97,107 +97,108 @@ internal sealed unsafe class QuestFunctions
             };
 
             if (chocoboQuest != 0 && !QuestManager.IsQuestComplete(chocoboQuest))
-                return (new QuestId(chocoboQuest), QuestManager.GetQuestSequence(chocoboQuest));
+                return (new QuestId(chocoboQuest), QuestManager.GetQuestSequence(chocoboQuest), msqInformationAvailable);
         }
         else if (currentQuest.Value == 801)
         {
             // skeletons in her closet, finish 'broadening horizons' to unlock the white wolf gate
             QuestId broadeningHorizons = new QuestId(802);
             if (IsQuestAccepted(broadeningHorizons))
-                return (broadeningHorizons, QuestManager.GetQuestSequence(broadeningHorizons.Value));
+                return (broadeningHorizons, QuestManager.GetQuestSequence(broadeningHorizons.Value), msqInformationAvailable);
         }
 
-        return (currentQuest, sequence);
+        return (currentQuest, sequence, msqInformationAvailable);
     }
 
-    public (ElementId? CurrentQuest, byte Sequence) GetCurrentQuestInternal(bool allowNewMsq)
+    public (ElementId? CurrentQuest, byte Sequence, bool MsqInformationAvailable) GetCurrentQuestInternal(bool allowNewMsq)
     {
         var questManager = QuestManager.Instance();
-        if (questManager != null)
+        if (questManager == null)
+            return default;
+
+        // always prioritize accepting MSQ quests, to make sure we don't turn in one MSQ quest and then go off to do
+        // side quests until the end of time.
+        var msqQuest = GetMainScenarioQuest();
+        if (msqQuest.CurrentQuest != null && !_questRegistry.IsKnownQuest(msqQuest.CurrentQuest))
+            msqQuest = default;
+
+        if (msqQuest.CurrentQuest != null && !IsQuestAccepted(msqQuest.CurrentQuest))
         {
-            // always prioritize accepting MSQ quests, to make sure we don't turn in one MSQ quest and then go off to do
-            // side quests until the end of time.
-            var msqQuest = GetMainScenarioQuest();
-            if (msqQuest.CurrentQuest != null && !_questRegistry.IsKnownQuest(msqQuest.CurrentQuest))
+            if (allowNewMsq)
+                return msqQuest;
+            else
                 msqQuest = default;
+        }
 
-            if (msqQuest.CurrentQuest != null && !IsQuestAccepted(msqQuest.CurrentQuest))
+        // Use the quests in the same order as they're shown in the to-do list, e.g. if the MSQ is the first item,
+        // do the MSQ; if a side quest is the first item do that side quest.
+        //
+        // If no quests are marked as 'priority', accepting a new quest adds it to the top of the list.
+        List<(ElementId Quest, byte Sequence)> trackedQuests = [];
+        for (int i = questManager->TrackedQuests.Length - 1; i >= 0; --i)
+        {
+            ElementId currentQuest;
+            var trackedQuest = questManager->TrackedQuests[i];
+            switch (trackedQuest.QuestType)
             {
-                if (allowNewMsq)
-                    return msqQuest;
-                else
-                    msqQuest = default;
+                case 1: // normal quest
+                    currentQuest = new QuestId(questManager->NormalQuests[trackedQuest.Index].QuestId);
+                    if (_questRegistry.IsKnownQuest(currentQuest))
+                        trackedQuests.Add((currentQuest, QuestManager.GetQuestSequence(currentQuest.Value)));
+                    break;
+
+                case 2: // leve
+                    break;
             }
+        }
 
-            // Use the quests in the same order as they're shown in the to-do list, e.g. if the MSQ is the first item,
-            // do the MSQ; if a side quest is the first item do that side quest.
-            //
-            // If no quests are marked as 'priority', accepting a new quest adds it to the top of the list.
-            List<(ElementId Quest, byte Sequence)> trackedQuests = [];
-            for (int i = questManager->TrackedQuests.Length - 1; i >= 0; --i)
+        if (trackedQuests.Count > 0)
+        {
+            // if we have multiple quests to turn in for an allied society, try and complete all of them
+            var (firstTrackedQuest, firstTrackedSequence) = trackedQuests.First();
+            EAlliedSociety firstTrackedAlliedSociety =
+                _alliedSocietyData.GetCommonAlliedSocietyTurnIn(firstTrackedQuest);
+            if (firstTrackedAlliedSociety != EAlliedSociety.None)
             {
-                ElementId currentQuest;
-                var trackedQuest = questManager->TrackedQuests[i];
-                switch (trackedQuest.QuestType)
+                var alliedQuestsForSameSociety = trackedQuests.Skip(1)
+                    .Where(quest =>
+                        _alliedSocietyData.GetCommonAlliedSocietyTurnIn(quest.Quest) == firstTrackedAlliedSociety)
+                    .ToList();
+                if (alliedQuestsForSameSociety.Count > 0)
                 {
-                    case 1: // normal quest
-                        currentQuest = new QuestId(questManager->NormalQuests[trackedQuest.Index].QuestId);
-                        if (_questRegistry.IsKnownQuest(currentQuest))
-                            trackedQuests.Add((currentQuest, QuestManager.GetQuestSequence(currentQuest.Value)));
-                        break;
-
-                    case 2: // leve
-                        break;
-                }
-            }
-
-            if (trackedQuests.Count > 0)
-            {
-                // if we have multiple quests to turn in for an allied society, try and complete all of them
-                var (firstTrackedQuest, firstTrackedSequence) = trackedQuests.First();
-                EAlliedSociety firstTrackedAlliedSociety =
-                    _alliedSocietyData.GetCommonAlliedSocietyTurnIn(firstTrackedQuest);
-                if (firstTrackedAlliedSociety != EAlliedSociety.None)
-                {
-                    var alliedQuestsForSameSociety = trackedQuests.Skip(1)
-                        .Where(quest =>
-                            _alliedSocietyData.GetCommonAlliedSocietyTurnIn(quest.Quest) == firstTrackedAlliedSociety)
-                        .ToList();
-                    if (alliedQuestsForSameSociety.Count > 0)
+                    if (firstTrackedSequence == 255)
                     {
-                        if (firstTrackedSequence == 255)
+                        foreach (var (quest, sequence) in alliedQuestsForSameSociety)
                         {
-                            foreach (var (quest, sequence) in alliedQuestsForSameSociety)
-                            {
-                                // only if the other quest isn't ready to be turned in
-                                if (sequence != 255)
-                                    return (quest, sequence);
-                            }
+                            // only if the other quest isn't ready to be turned in
+                            if (sequence != 255)
+                                return (quest, sequence, msqQuest.MsqInformationAvailable);
                         }
-                        else if (!IsOnAlliedSocietyMount())
+                    }
+                    else if (!IsOnAlliedSocietyMount())
+                    {
+                        // a few of the vanu quests require you to talk to one of the npcs near the issuer, so we
+                        // give priority to those
+
+                        // also include the first quest in the list for those
+                        alliedQuestsForSameSociety.Insert(0, (firstTrackedQuest, firstTrackedSequence));
+
+                        _alliedSocietyData.GetCommonAlliedSocietyNpcs(firstTrackedAlliedSociety,
+                            out uint[]? normalNpcs,
+                            out _);
+
+                        if (normalNpcs.Length > 0)
                         {
-                            // a few of the vanu quests require you to talk to one of the npcs near the issuer, so we
-                            // give priority to those
+                            var talkToNormalNpcs = alliedQuestsForSameSociety
+                                .Where(x => x.Sequence < 255)
+                                .Where(x => IsInteractSequence(x.Quest, x.Sequence, normalNpcs))
+                                .Cast<(ElementId, byte)?>()
+                                .FirstOrDefault();
+                            if (talkToNormalNpcs != null)
+                                return (talkToNormalNpcs.Value.Item1, talkToNormalNpcs.Value.Item2, msqQuest.MsqInformationAvailable);
+                        }
 
-                            // also include the first quest in the list for those
-                            alliedQuestsForSameSociety.Insert(0, (firstTrackedQuest, firstTrackedSequence));
-
-                            _alliedSocietyData.GetCommonAlliedSocietyNpcs(firstTrackedAlliedSociety,
-                                out uint[]? normalNpcs,
-                                out _);
-
-                            if (normalNpcs.Length > 0)
-                            {
-                                var talkToNormalNpcs = alliedQuestsForSameSociety
-                                    .Where(x => x.Sequence < 255)
-                                    .Where(x => IsInteractSequence(x.Quest, x.Sequence, normalNpcs))
-                                    .Cast<(ElementId, byte)?>()
-                                    .FirstOrDefault();
-                                if (talkToNormalNpcs != null)
-                                    return talkToNormalNpcs.Value;
-                            }
-
-                            /*
+                        /*
                              * TODO: If you have e.g. a mount quest in the middle of 3, it should temporarily make you
                              *       do that quest first, even if it isn't the first in the list. Otherwise, the logic
                              *       here won't make much sense.
@@ -214,31 +215,30 @@ internal sealed unsafe class QuestFunctions
                                     return talkToMountNpc.Value;
                             }
                             */
-                        }
                     }
                 }
-
-                return (firstTrackedQuest, firstTrackedSequence);
             }
 
-            ElementId? priorityQuest = GetNextPriorityQuestsThatCanBeAccepted().FirstOrDefault();
-            if (priorityQuest != null)
-            {
-                // if we have an accepted msq quest, and know of no quest of those currently in the to-do list...
-                // (1) try and find a priority quest to do
-                return (priorityQuest, QuestManager.GetQuestSequence(priorityQuest.Value));
-            }
-            else if (msqQuest.CurrentQuest != null)
-            {
-                // (2) just do a normal msq quest
-                return msqQuest;
-            }
+            return (firstTrackedQuest, firstTrackedSequence, msqQuest.MsqInformationAvailable);
         }
 
-        return default;
+        ElementId? priorityQuest = GetNextPriorityQuestsThatCanBeAccepted().FirstOrDefault();
+        if (priorityQuest != null)
+        {
+            // if we have an accepted msq quest, and know of no quest of those currently in the to-do list...
+            // (1) try and find a priority quest to do
+            return (priorityQuest, QuestManager.GetQuestSequence(priorityQuest.Value), msqQuest.MsqInformationAvailable);
+        }
+        else if (msqQuest.CurrentQuest != null)
+        {
+            // (2) just do a normal msq quest
+            return msqQuest;
+        }
+
+        return (null, 0, msqQuest.MsqInformationAvailable);
     }
 
-    private (QuestId? CurrentQuest, byte Sequence) GetMainScenarioQuest()
+    private (QuestId? CurrentQuest, byte Sequence, bool MsqInformationAvailable) GetMainScenarioQuest()
     {
         if (QuestManager.IsQuestComplete(3759)) // Memories Rekindled
         {
@@ -258,7 +258,7 @@ internal sealed unsafe class QuestFunctions
                     // redoHud+44 is chapter
                     // redoHud+46 is quest
                     ushort questId = MemoryHelper.Read<ushort>((nint)questRedoHud + 46);
-                    return (new QuestId(questId), QuestManager.GetQuestSequence(questId));
+                    return (new QuestId(questId), QuestManager.GetQuestSequence(questId), true);
                 }
             }
         }
@@ -273,8 +273,8 @@ internal sealed unsafe class QuestFunctions
         QuestId currentQuest = new QuestId(scenarioTree->Data->CurrentScenarioQuest);
         if (currentQuest.Value == 0)
         {
-            if (IsQuestComplete(_questData.LastMainScenarioQuestId))
-                return default;
+            if (IsMainScenarioQuestComplete())
+                return (null, 0, true);
 
             // fallback lookup; find a quest which isn't completed but where all prequisites are met
             // excluding branching quests
@@ -318,7 +318,7 @@ internal sealed unsafe class QuestFunctions
         // is one you've just completed. We return 255 as sequence here, since that is the end of said quest;
         // but this is just really hoping that this breaks nothing.
         if (IsQuestComplete(currentQuest))
-            return (currentQuest, 255);
+            return (currentQuest, 255, true);
         else if (!IsReadyToAcceptQuest(currentQuest))
             return default;
 
@@ -333,7 +333,7 @@ internal sealed unsafe class QuestFunctions
             && quest.Info.Level > currentLevel)
             return default;
 
-        return (currentQuest, QuestManager.GetQuestSequence(currentQuest.Value));
+        return (currentQuest, QuestManager.GetQuestSequence(currentQuest.Value), true);
     }
 
     private bool IsOnAlliedSocietyMount()
@@ -826,5 +826,10 @@ internal sealed unsafe class QuestFunctions
     public GrandCompany GetGrandCompany()
     {
         return (GrandCompany)PlayerState.Instance()->GrandCompany;
+    }
+
+    public bool IsMainScenarioQuestComplete()
+    {
+        return IsQuestComplete(_questData.LastMainScenarioQuestId);
     }
 }
