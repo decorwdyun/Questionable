@@ -92,24 +92,6 @@
           "Fly": true
         },
         {
-          "Position": {
-            "X": -418.48892,
-            "Y": 221.5,
-            "Z": -288.05304
-          },
-          "TerritoryId": 155,
-          "InteractionType": "WalkTo"
-        },
-        {
-          "Position": {
-            "X": -417.80032,
-            "Y": 223.3749,
-            "Z": -291.7167
-          },
-          "TerritoryId": 155,
-          "InteractionType": "WalkTo"
-        },
-        {
           "DataId": 1009081,
           "Position": {
             "X": -413.93152,
@@ -126,22 +108,13 @@
       "Steps": [
         {
           "Position": {
-            "X": -419.1515,
-            "Y": 221.49998,
-            "Z": -288.4794
-          },
-          "TerritoryId": 155,
-          "InteractionType": "WalkTo",
-          "Mount": true
-        },
-        {
-          "Position": {
             "X": -429.70523,
             "Y": 217.9995,
             "Z": -297.22086
           },
           "TerritoryId": 155,
-          "InteractionType": "WalkTo"
+          "InteractionType": "WalkTo",
+          "Mount": true
         },
         {
           "Position": {

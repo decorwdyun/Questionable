@@ -77,52 +77,6 @@ Horizon side of the gate:
         }
 ```
 
-```json
-      {
-          "Position": {
-            "X": -421.5105,
-            "Y": 218.1,
-            "Z": -297.2496
-          },
-          "TerritoryId": 155,
-          "InteractionType": "WalkTo",
-          "Comment": "North Whitebrim, Stairs (bottom)"
-        },
-        {
-          "Position": {
-            "X": -421.45218,
-            "Y": 221.5,
-            "Z": -287.28427
-          },
-          "TerritoryId": 155,
-          "InteractionType": "WalkTo",
-          "Comment": "North Whitebrim, Stairs (middle/bottom)",
-          "DisableNavmesh": true
-        },
-        {
-          "Position": {
-            "X": -417.70758,
-            "Y": 221.5,
-            "Z": -287.7873
-          },
-          "TerritoryId": 155,
-          "InteractionType": "WalkTo",
-          "Comment": "North Whitebrim, Stairs (middle/top)",
-          "DisableNavmesh": true
-        },
-        {
-          "Position": {
-            "X": -417.37885,
-            "Y": 224.99997,
-            "Z": -295.45523
-          },
-          "TerritoryId": 155,
-          "InteractionType": "WalkTo",
-          "Comment": "North Whitebrim, Stairs (top)",
-          "DisableNavmesh": true
-        }
-```
-
 ## Coerthas Western Highlands
 
 ```json
