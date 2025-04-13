@@ -20,7 +20,7 @@ namespace Questionable.Controller.Steps.Shared;
 
 internal static class SkipCondition
 {
-    internal sealed class Factory : SimpleTaskFactory
+    internal sealed class Factory(Configuration configuration) : SimpleTaskFactory
     {
         public override ITask? CreateTask(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -34,7 +34,8 @@ internal static class SkipCondition
                 step.PickUpQuestId == null &&
                 step.NextQuestId == null &&
                 step.RequiredCurrentJob.Count == 0 &&
-                step.RequiredQuestAcceptedJob.Count == 0)
+                step.RequiredQuestAcceptedJob.Count == 0 &&
+                !(step.InteractionType == EInteractionType.AttuneAetherCurrent && configuration.Advanced.SkipAetherCurrents))
                 return null;
 
             return new SkipTask(step, skipConditions ?? new(), quest.Id);
