@@ -7,6 +7,7 @@ using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin;
+using Dalamud.Plugin.Services;
 using Dalamud.Utility;
 using ImGuiNET;
 using LLib.ImGui;
@@ -79,9 +80,16 @@ internal sealed class OneTimeSetupWindow : LWindow
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly UiUtils _uiUtils;
     private readonly ILogger<OneTimeSetupWindow> _logger;
+    private readonly ICommandManager _commandManager;
 
-    public OneTimeSetupWindow(Configuration configuration, IDalamudPluginInterface pluginInterface, UiUtils uiUtils,
-        ILogger<OneTimeSetupWindow> logger, AutomatonIpc automatonIpc)
+    public OneTimeSetupWindow(
+        Configuration configuration,
+        IDalamudPluginInterface pluginInterface,
+        UiUtils uiUtils,
+        ILogger<OneTimeSetupWindow> logger,
+        AutomatonIpc automatonIpc,
+        PandorasBoxIpc pandorasBoxIpc,
+        ICommandManager commandManager)
         : base("Questionable Setup###QuestionableOneTimeSetup",
             ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoSavedSettings, true)
     {
@@ -89,6 +97,7 @@ internal sealed class OneTimeSetupWindow : LWindow
         _pluginInterface = pluginInterface;
         _uiUtils = uiUtils;
         _logger = logger;
+        _commandManager = commandManager;
         _recommendedPlugins =
         [
             new PluginInfo("CBT (formerly known as Automaton)",
@@ -99,7 +108,20 @@ internal sealed class OneTimeSetupWindow : LWindow
                 """,
                 new Uri("https://github.com/Jaksuhn/Automaton"),
                 new Uri("https://puni.sh/api/repository/croizat"),
+                "/cbt",
                 [new PluginDetailInfo("'Sniper no sniping' enabled", () => automatonIpc.IsAutoSnipeEnabled)]),
+            new PluginInfo("Pandora's Box",
+                "PandorasBox",
+                """
+                Pandora's Box is a collection of tweaks.
+                The 'Auto Active Time Maneuver' tweak can complete any
+                active time maneuvers in single player instances, trials and raids.
+                """,
+                new Uri("https://github.com/PunishXIV/PandorasBox"),
+                new Uri("https://puni.sh/api/plugins"),
+                "/pandora",
+                [new PluginDetailInfo("'Auto Active Time Maneuver' enabled",
+                    () => pandorasBoxIpc.IsAutoActiveTimeManeuverEnabled)]),
             new("NotificationMaster",
                 "NotificationMaster",
                 """
@@ -249,27 +271,44 @@ internal sealed class OneTimeSetupWindow : LWindow
             if (!string.IsNullOrEmpty(plugin.Details))
                 ImGui.TextUnformatted(plugin.Details);
 
+            bool allDetailsOk = true;
             if (plugin.DetailsToCheck != null)
             {
                 foreach (var detail in plugin.DetailsToCheck)
-                    _uiUtils.ChecklistItem(detail.DisplayName, isInstalled && detail.Predicate());
+                {
+                    bool detailOk = detail.Predicate();
+                    allDetailsOk &= detailOk;
+
+                    _uiUtils.ChecklistItem(detail.DisplayName, isInstalled && detailOk);
+                }
             }
 
             ImGui.Spacing();
 
-            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Globe, "Open Website"))
-                Util.OpenLink(plugin.WebsiteUri.ToString());
-
-            ImGui.SameLine();
-            if (plugin.DalamudRepositoryUri != null)
+            if (isInstalled)
             {
-                if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Code, "Open Repository"))
-                    Util.OpenLink(plugin.DalamudRepositoryUri.ToString());
+                if (!allDetailsOk && plugin.ConfigCommand != null && plugin.ConfigCommand.StartsWith('/'))
+                {
+                    if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Cog, "Open configuration"))
+                        _commandManager.ProcessCommand(plugin.ConfigCommand);
+                }
             }
             else
             {
-                ImGui.AlignTextToFramePadding();
-                ImGuiComponents.HelpMarker("Available on official Dalamud Repository");
+                if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Globe, "Open Website"))
+                    Util.OpenLink(plugin.WebsiteUri.ToString());
+
+                ImGui.SameLine();
+                if (plugin.DalamudRepositoryUri != null)
+                {
+                    if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Code, "Open Repository"))
+                        Util.OpenLink(plugin.DalamudRepositoryUri.ToString());
+                }
+                else
+                {
+                    ImGui.AlignTextToFramePadding();
+                    ImGuiComponents.HelpMarker("Available on official Dalamud Repository");
+                }
             }
         }
     }
@@ -285,6 +324,7 @@ internal sealed class OneTimeSetupWindow : LWindow
         string Details,
         Uri WebsiteUri,
         Uri? DalamudRepositoryUri,
+        string? ConfigCommand = null,
         List<PluginDetailInfo>? DetailsToCheck = null);
 
     private sealed record PluginDetailInfo(string DisplayName, Func<bool> Predicate);

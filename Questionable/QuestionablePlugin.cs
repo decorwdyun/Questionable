@@ -133,6 +133,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<AutomatonIpc>();
         serviceCollection.AddSingleton<AutoDutyIpc>();
         serviceCollection.AddSingleton<BossModIpc>();
+        serviceCollection.AddSingleton<PandorasBoxIpc>();
 
         serviceCollection.AddSingleton<GearStatsCalculator>();
     }
@@ -337,7 +338,6 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceProvider.GetRequiredService<QuestionableIpc>();
         serviceProvider.GetRequiredService<DalamudInitializer>();
         serviceProvider.GetRequiredService<TextAdvanceIpc>();
-        serviceProvider.GetRequiredService<AutomatonIpc>();
     }
 
     public void Dispose()

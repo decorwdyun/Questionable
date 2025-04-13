@@ -11,7 +11,7 @@ namespace Questionable;
 
 internal sealed class Configuration : IPluginConfiguration
 {
-    public const int PluginSetupVersion = 4;
+    public const int PluginSetupVersion = 5;
 
     public int Version { get; set; } = 1;
     public int PluginSetupCompleteVersion { get; set; }
