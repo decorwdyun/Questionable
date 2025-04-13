@@ -301,6 +301,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<PriorityWindow>();
 
         serviceCollection.AddSingleton<GeneralConfigComponent>();
+        serviceCollection.AddSingleton<PluginConfigComponent>();
         serviceCollection.AddSingleton<DutyConfigComponent>();
         serviceCollection.AddSingleton<SinglePlayerDutyConfigComponent>();
         serviceCollection.AddSingleton<NotificationConfigComponent>();

@@ -19,8 +19,6 @@ internal sealed class GeneralConfigComponent : ConfigComponent
     private static readonly List<(uint Id, string Name)> DefaultMounts = [(0, "Mount Roulette")];
     private static readonly List<(EClassJob ClassJob, string Name)> DefaultClassJobs = [(EClassJob.Adventurer, "Auto (highest level/item level)")];
 
-    private readonly CombatController _combatController;
-
     private readonly uint[] _mountIds;
     private readonly string[] _mountNames;
     private readonly string[] _combatModuleNames = ["None", "Boss Mod (VBM)", "Wrath Combo", "Rotation Solver Reborn"];
@@ -34,13 +32,10 @@ internal sealed class GeneralConfigComponent : ConfigComponent
     public GeneralConfigComponent(
         IDalamudPluginInterface pluginInterface,
         Configuration configuration,
-        CombatController combatController,
         IDataManager dataManager,
         ClassJobUtils classJobUtils)
         : base(pluginInterface, configuration)
     {
-        _combatController = combatController;
-
         var mounts = dataManager.GetExcelSheet<Mount>()
             .Where(x => x is { RowId: > 0, Icon: > 0 })
             .Select(x => (MountId: x.RowId, Name: x.Singular.ToString()))
@@ -67,7 +62,7 @@ internal sealed class GeneralConfigComponent : ConfigComponent
         if (!tab)
             return;
 
-        using (ImRaii.Disabled(_combatController.IsRunning))
+
         {
             int selectedCombatModule = (int)Configuration.General.CombatModule;
             if (ImGui.Combo("Preferred Combat Module", ref selectedCombatModule, _combatModuleNames,

@@ -11,6 +11,7 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
 {
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly GeneralConfigComponent _generalConfigComponent;
+    private readonly PluginConfigComponent _pluginConfigComponent;
     private readonly DutyConfigComponent _dutyConfigComponent;
     private readonly SinglePlayerDutyConfigComponent _singlePlayerDutyConfigComponent;
     private readonly NotificationConfigComponent _notificationConfigComponent;
@@ -20,6 +21,7 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
     public ConfigWindow(
         IDalamudPluginInterface pluginInterface,
         GeneralConfigComponent generalConfigComponent,
+        PluginConfigComponent pluginConfigComponent,
         DutyConfigComponent dutyConfigComponent,
         SinglePlayerDutyConfigComponent singlePlayerDutyConfigComponent,
         NotificationConfigComponent notificationConfigComponent,
@@ -29,6 +31,7 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
     {
         _pluginInterface = pluginInterface;
         _generalConfigComponent = generalConfigComponent;
+        _pluginConfigComponent = pluginConfigComponent;
         _dutyConfigComponent = dutyConfigComponent;
         _singlePlayerDutyConfigComponent = singlePlayerDutyConfigComponent;
         _notificationConfigComponent = notificationConfigComponent;
@@ -45,6 +48,7 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
             return;
 
         _generalConfigComponent.DrawTab();
+        _pluginConfigComponent.DrawTab();
         _dutyConfigComponent.DrawTab();
         _singlePlayerDutyConfigComponent.DrawTab();
         _notificationConfigComponent.DrawTab();
