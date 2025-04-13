@@ -308,9 +308,16 @@ internal sealed class CombatController : IDisposable
             if (gameObjectStruct->FateId != 0)
                 return (null, "FATE mob");
 
-            bool expectQuestMarker =
-                Vector3.Distance(_clientState.LocalPlayer?.Position ?? Vector3.Zero, battleNpc.Position) <
-                MaxNameplateRange;
+            var ownPosition = _clientState.LocalPlayer?.Position ?? Vector3.Zero;
+            bool expectQuestMarker;
+            if (_currentFight.Data.SpawnType == EEnemySpawnType.FinishCombatIfAny)
+                expectQuestMarker = false;
+            else if (_currentFight.Data.SpawnType == EEnemySpawnType.OverworldEnemies &&
+                     Vector3.Distance(ownPosition, battleNpc.Position) >= MaxNameplateRange)
+                expectQuestMarker = false;
+            else
+                expectQuestMarker = true;
+
             if (complexCombatData.Count > 0)
             {
                 for (int i = 0; i < complexCombatData.Count; ++i)
