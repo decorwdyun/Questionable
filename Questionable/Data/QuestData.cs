@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Dalamud.Plugin.Services;
@@ -16,22 +17,71 @@ namespace Questionable.Data;
 
 internal sealed class QuestData
 {
+    public static readonly IReadOnlyList<QuestId> HardModePrimals = [new(1048), new(1157), new(1158)];
+
     public static readonly IReadOnlyList<QuestId> CrystalTowerQuests =
         [new(1709), new(1200), new(1201), new(1202), new(1203), new(1474), new(494), new(495)];
 
-    public static readonly IReadOnlyList<uint> TankRoleQuests = [136, 154, 178];
-    public static readonly IReadOnlyList<uint> HealerRoleQuests = [137, 155, 179];
-    public static readonly IReadOnlyList<uint> MeleeRoleQuests = [138, 156, 180];
-    public static readonly IReadOnlyList<uint> PhysicalRangedRoleQuests = [138, 157, 181];
-    public static readonly IReadOnlyList<uint> CasterRoleQuests = [139, 158, 182];
+    public static readonly ImmutableDictionary<uint, ImmutableList<QuestId>> AetherCurrentQuestsByTerritory =
+        new Dictionary<uint, List<ushort>>
+            {
+                // Heavensward
+                { 397, [1744, 1759, 1760, 2111] },
+                { 398, [1771, 1790, 1797, 1802] },
+                { 399, [1936, 1945, 1963, 1966] },
+                { 400, [1819, 1823, 1828, 1835] },
+                { 401, [1748, 1874, 1909, 1910] },
+
+                // Stormblood
+                { 612, [2639, 2661, 2816, 2821] },
+                { 613, [2632, 2673, 2687, 2693] },
+                { 614, [2724, 2728, 2730, 2733] },
+                { 620, [2655, 2842, 2851, 2860] },
+                { 621, [2877, 2880, 2881, 2883] },
+                { 622, [2760, 2771, 2782, 2791] },
+
+                // Shadowbringers
+                { 813, [3380, 3384, 3385, 3386] },
+                { 814, [3360, 3371, 3537, 3556] },
+                { 815, [3375, 3503, 3511, 3525] },
+                { 816, [3395, 3398, 3404, 3427] },
+                { 817, [3444, 3467, 3478, 3656] },
+                { 818, [3588, 3592, 3593, 3594] },
+
+                // Endwalker
+                { 956, [4320, 4329, 4480, 4484] },
+                { 957, [4203, 4257, 4259, 4489] },
+                { 958, [4216, 4232, 4498, 4502] },
+                { 959, [4240, 4241, 4253, 4516] },
+                { 960, [4342, 4346, 4354, 4355] },
+                { 961, [4288, 4313, 4507, 4511] },
+
+                // Dawntrail
+                {1187, [5039, 5047, 5051, 5055]},
+                {1188, [5064, 5074, 5081, 5085]},
+                {1189, [5094, 5103, 5110, 5114]},
+                {1190, [5130, 5138, 5140, 5144]},
+                {1191, [5153, 5156, 5159, 5160]},
+                {1192, [5174, 5176, 5178, 5179]},
+            }
+            .ToImmutableDictionary(x => x.Key, x => x.Value.Select(y => new QuestId(y)).ToImmutableList());
+
+    public static ImmutableHashSet<QuestId> AetherCurrentQuests { get; } =
+        AetherCurrentQuestsByTerritory.Values.SelectMany(x => x).ToImmutableHashSet();
+
+    private static readonly IReadOnlyList<uint> TankRoleQuestChapters = [136, 154, 178];
+    private static readonly IReadOnlyList<uint> HealerRoleQuestChapters = [137, 155, 179];
+    private static readonly IReadOnlyList<uint> MeleeRoleQuestChapters = [138, 156, 180];
+    private static readonly IReadOnlyList<uint> PhysicalRangedRoleQuestChapters = [138, 157, 181];
+    private static readonly IReadOnlyList<uint> CasterRoleQuestChapters = [139, 158, 182];
 
     public static readonly IReadOnlyList<IReadOnlyList<uint>> AllRoleQuestChapters =
     [
-        TankRoleQuests,
-        HealerRoleQuests,
-        MeleeRoleQuests,
-        PhysicalRangedRoleQuests,
-        CasterRoleQuests
+        TankRoleQuestChapters,
+        HealerRoleQuestChapters,
+        MeleeRoleQuestChapters,
+        PhysicalRangedRoleQuestChapters,
+        CasterRoleQuestChapters
     ];
 
     public static readonly IReadOnlyList<QuestId> FinalShadowbringersRoleQuests =
@@ -383,11 +433,11 @@ internal sealed class QuestData
     {
         return classJob switch
         {
-            _ when classJob.IsTank() => TankRoleQuests,
-            _ when classJob.IsHealer() => HealerRoleQuests,
-            _ when classJob.IsMelee() => MeleeRoleQuests,
-            _ when classJob.IsPhysicalRanged() => PhysicalRangedRoleQuests,
-            _ when classJob.IsCaster() && classJob != EClassJob.BlueMage => CasterRoleQuests,
+            _ when classJob.IsTank() => TankRoleQuestChapters,
+            _ when classJob.IsHealer() => HealerRoleQuestChapters,
+            _ when classJob.IsMelee() => MeleeRoleQuestChapters,
+            _ when classJob.IsPhysicalRanged() => PhysicalRangedRoleQuestChapters,
+            _ when classJob.IsCaster() && classJob != EClassJob.BlueMage => CasterRoleQuestChapters,
             _ => []
         };
     }

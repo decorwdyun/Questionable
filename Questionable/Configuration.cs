@@ -72,6 +72,10 @@ internal sealed class Configuration : IPluginConfiguration
         public bool NeverFly { get; set; }
         public bool AdditionalStatusInformation { get; set; }
         public bool DisableAutoDutyBareMode { get; set; }
+        public bool SkipAetherCurrents { get; set; }
+        public bool SkipClassJobQuests { get; set; }
+        public bool SkipARealmRebornHardModePrimals { get; set; }
+        public bool SkipCrystalTowerRaids { get; set; }
     }
 
     internal enum ECombatModule

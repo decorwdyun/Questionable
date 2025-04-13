@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using Dalamud.Interface;
+using Dalamud.Interface.Colors;
+using Dalamud.Interface.Style;
 using Dalamud.Interface.Utility.Raii;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Common.Math;
@@ -20,14 +22,16 @@ internal sealed class ARealmRebornComponent
     private readonly QuestData _questData;
     private readonly TerritoryData _territoryData;
     private readonly UiUtils _uiUtils;
+    private readonly Configuration _configuration;
 
     public ARealmRebornComponent(QuestFunctions questFunctions, QuestData questData, TerritoryData territoryData,
-        UiUtils uiUtils)
+        UiUtils uiUtils, Configuration configuration)
     {
         _questFunctions = questFunctions;
         _questData = questData;
         _territoryData = territoryData;
         _uiUtils = uiUtils;
+        _configuration = configuration;
     }
 
     public bool ShouldDraw => !_questFunctions.IsQuestAcceptedOrComplete(ATimeForEveryPurpose) &&
@@ -44,7 +48,8 @@ internal sealed class ARealmRebornComponent
     private void DrawPrimals()
     {
         bool complete = UIState.IsInstanceContentCompleted(RequiredPrimalInstances.Last());
-        bool hover = _uiUtils.ChecklistItem("Hard Mode Primals", complete);
+        bool hover = _uiUtils.ChecklistItem("Hard Mode Primals", complete,
+            _configuration.Advanced.SkipARealmRebornHardModePrimals ? ImGuiColors.DalamudGrey : null);
         if (complete || !hover)
             return;
 
@@ -62,7 +67,8 @@ internal sealed class ARealmRebornComponent
     private void DrawAllianceRaids()
     {
         bool complete = _questFunctions.IsQuestComplete(QuestData.CrystalTowerQuests[^1]);
-        bool hover = _uiUtils.ChecklistItem("Crystal Tower Raids", complete);
+        bool hover = _uiUtils.ChecklistItem("Crystal Tower Raids", complete,
+            _configuration.Advanced.SkipCrystalTowerRaids ? ImGuiColors.DalamudGrey : null);
         if (complete || !hover)
             return;
 

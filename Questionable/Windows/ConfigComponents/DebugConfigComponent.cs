@@ -77,6 +77,49 @@ internal sealed class DebugConfigComponent : ConfigComponent
                 "Typically, the loop settings for AutoDuty are disabled when running dungeons with Questionable, since they can cause issues (or even shut down your PC).");
         }
 
-        ImGui.EndTabItem();
+        ImGui.Separator();
+        ImGui.Text("Quest/Interaction Skips");
+        using (_ = ImRaii.PushIndent())
+        {
+            bool skipAetherCurrents = Configuration.Advanced.SkipAetherCurrents;
+            if (ImGui.Checkbox("Don't pick up aether currents/aether current quests", ref skipAetherCurrents))
+            {
+                Configuration.Advanced.SkipAetherCurrents = skipAetherCurrents;
+                Save();
+            }
+
+            ImGui.SameLine();
+            ImGuiComponents.HelpMarker("If not done during the MSQ by Questionable, you have to manually pick up any missed aether currents/quests. There is no way to automatically pick up all missing aether currents.");
+
+            bool skipClassJobQuests = Configuration.Advanced.SkipClassJobQuests;
+            if (ImGui.Checkbox("Don't pick up class/job/role quests", ref skipClassJobQuests))
+            {
+                Configuration.Advanced.SkipClassJobQuests = skipClassJobQuests;
+                Save();
+            }
+
+            ImGui.SameLine();
+            ImGuiComponents.HelpMarker("Class and job skills for A Realm Reborn, Heavensward and (for the Lv70 skills) Stormblood are locked behind quests. Not recommended if you plan on queueing for instances with duty finder/party finder.");
+
+            bool skipARealmRebornHardModePrimals = Configuration.Advanced.SkipARealmRebornHardModePrimals;
+            if (ImGui.Checkbox("Don't pick up ARR hard mode primal quests", ref skipARealmRebornHardModePrimals))
+            {
+                Configuration.Advanced.SkipARealmRebornHardModePrimals = skipARealmRebornHardModePrimals;
+                Save();
+            }
+
+            ImGui.SameLine();
+            ImGuiComponents.HelpMarker("Hard mode Ifrit/Garuda/Titan are required for the Patch 2.5 quest 'Good Intentions' and to start Heavensward.");
+
+            bool skipCrystalTowerRaids = Configuration.Advanced.SkipCrystalTowerRaids;
+            if (ImGui.Checkbox("Don't pick up Crystal Tower quests", ref skipCrystalTowerRaids))
+            {
+                Configuration.Advanced.SkipCrystalTowerRaids = skipCrystalTowerRaids;
+                Save();
+            }
+
+            ImGui.SameLine();
+            ImGuiComponents.HelpMarker("Crystal Tower raids are required for the Patch 2.55 quest 'A Time to Every Purpose' and to start Heavensward.");
+        }
     }
 }

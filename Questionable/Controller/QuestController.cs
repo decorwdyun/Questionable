@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps;
 using Questionable.Controller.Steps.Interactions;
 using Questionable.Controller.Steps.Shared;
+using Questionable.Data;
 using Questionable.External;
 using Questionable.Functions;
 using Questionable.Model;
@@ -812,7 +813,8 @@ internal sealed class QuestController : MiniTaskController<QuestController>
             return false;
 
         // "ifrit bleeds, we can kill it" isn't listed as priority quest, as we accept it during the MSQ 'Moving On'
-        if (currentQuest.Quest.Id is QuestId { Value: 1048 })
+        // the rest are priority quests, but that's fine here
+        if (QuestData.HardModePrimals.Contains(currentQuest.Quest.Id))
             return false;
 
         if (currentQuest.Quest.Info.AlliedSociety != EAlliedSociety.None)

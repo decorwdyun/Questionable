@@ -70,10 +70,10 @@ internal sealed class UiUtils
         return hover;
     }
 
-    public bool ChecklistItem(string text, bool complete)
+    public bool ChecklistItem(string text, bool complete, Vector4? colorOverride = null)
     {
         return ChecklistItem(text,
-            complete ? ImGuiColors.ParsedGreen : ImGuiColors.DalamudRed,
+            colorOverride ?? (complete ? ImGuiColors.ParsedGreen : ImGuiColors.DalamudRed),
             complete ? FontAwesomeIcon.Check : FontAwesomeIcon.Times);
     }
 }

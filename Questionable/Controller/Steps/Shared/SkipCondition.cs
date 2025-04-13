@@ -51,6 +51,7 @@ internal static class SkipCondition
 
     internal sealed class CheckSkip(
         ILogger<CheckSkip> logger,
+        Configuration configuration,
         AetheryteFunctions aetheryteFunctions,
         GameFunctions gameFunctions,
         QuestFunctions questFunctions,
@@ -94,7 +95,7 @@ internal static class SkipCondition
             if (CheckAetheryteCondition(step, skipConditions))
                 return true;
 
-            if (CheckAethernetCondition(step))
+            if (CheckAetherCurrentCondition(step))
                 return true;
 
             if (CheckQuestWorkConditions(elementId, step))
@@ -297,12 +298,19 @@ internal static class SkipCondition
             return false;
         }
 
-        private bool CheckAethernetCondition(QuestStep step)
+        private bool CheckAetherCurrentCondition(QuestStep step)
         {
             if (step is { DataId: not null, InteractionType: EInteractionType.AttuneAetherCurrent } &&
                 gameFunctions.IsAetherCurrentUnlocked(step.DataId.Value))
             {
                 logger.LogInformation("Skipping step, as current is unlocked");
+                return true;
+            }
+
+            if (step is { InteractionType: EInteractionType.AttuneAetherCurrent } &&
+                configuration.Advanced.SkipAetherCurrents)
+            {
+                logger.LogInformation("Skipping step, as aether currents should be skipped");
                 return true;
             }
 
@@ -414,6 +422,22 @@ internal static class SkipCondition
             if (step.TurnInQuestId != null && questFunctions.IsQuestComplete(step.TurnInQuestId))
             {
                 logger.LogInformation("Skipping step, as we have already completed the relevant quest");
+                return true;
+            }
+
+            if (step.PickUpQuestId != null &&
+                configuration.Advanced.SkipAetherCurrents &&
+                QuestData.AetherCurrentQuests.Contains(step.PickUpQuestId))
+            {
+                logger.LogInformation("Skipping step, as aether current quests should be skipped");
+                return true;
+            }
+
+            if (step.PickUpQuestId != null &&
+                configuration.Advanced.SkipARealmRebornHardModePrimals &&
+                QuestData.HardModePrimals.Contains(step.PickUpQuestId))
+            {
+                logger.LogInformation("Skipping step, as hard mode primal quests should be skipped");
                 return true;
             }
 
