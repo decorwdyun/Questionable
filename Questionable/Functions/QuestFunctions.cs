@@ -56,34 +56,35 @@ internal sealed unsafe class QuestFunctions
         _gameGui = gameGui;
     }
 
-    public (ElementId? CurrentQuest, byte Sequence, bool MsqInformationAvailable) GetCurrentQuest(bool allowNewMsq = true)
+    public QuestReference GetCurrentQuest(bool allowNewMsq = true)
     {
-        var (currentQuest, sequence, msqInformationAvailable) = GetCurrentQuestInternal(allowNewMsq);
+        var internalQuest = GetCurrentQuestInternal(allowNewMsq);
+        var (currentQuest, sequence, msqInformationAvailable) = internalQuest;
         PlayerState* playerState = PlayerState.Instance();
 
         if (currentQuest == null || currentQuest.Value == 0)
         {
             if (_clientState.TerritoryType == 181) // Starting in Limsa
-                return (new QuestId(107), 0, msqInformationAvailable);
+                return new(new QuestId(107), 0, true);
             if (_clientState.TerritoryType == 182) // Starting in Ul'dah
-                return (new QuestId(594), 0, msqInformationAvailable);
+                return new(new QuestId(594), 0, true);
             if (_clientState.TerritoryType == 183) // Starting in Gridania
-                return (new QuestId(39), 0, msqInformationAvailable);
-            return default;
+                return new(new QuestId(39), 0, true);
+            return QuestReference.NoQuest(msqInformationAvailable);
         }
         else if (currentQuest.Value == 681)
         {
             // if we have already picked up the GC quest, just return the progress for it
             if (IsQuestAccepted(currentQuest) || IsQuestComplete(currentQuest))
-                return (currentQuest, sequence, msqInformationAvailable);
+                return new(currentQuest, sequence, msqInformationAvailable);
 
             // The company you keep...
             return _configuration.General.GrandCompany switch
             {
-                GrandCompany.TwinAdder => (new QuestId(680), 0, msqInformationAvailable),
-                GrandCompany.Maelstrom => (new QuestId(681), 0, msqInformationAvailable),
-                GrandCompany.ImmortalFlames => (new QuestId(682), 0, msqInformationAvailable),
-                _ => default
+                GrandCompany.TwinAdder => new(new QuestId(680), 0, true),
+                GrandCompany.Maelstrom => new(new QuestId(681), 0, true),
+                GrandCompany.ImmortalFlames => new(new QuestId(682), 0, true),
+                _ => QuestReference.NoQuest(),
             };
         }
         else if (currentQuest.Value == 3856 && !playerState->IsMountUnlocked(1)) // we come in peace
@@ -97,37 +98,37 @@ internal sealed unsafe class QuestFunctions
             };
 
             if (chocoboQuest != 0 && !QuestManager.IsQuestComplete(chocoboQuest))
-                return (new QuestId(chocoboQuest), QuestManager.GetQuestSequence(chocoboQuest), msqInformationAvailable);
+                return new(new QuestId(chocoboQuest), QuestManager.GetQuestSequence(chocoboQuest), true);
         }
         else if (currentQuest.Value == 801)
         {
             // skeletons in her closet, finish 'broadening horizons' to unlock the white wolf gate
             QuestId broadeningHorizons = new QuestId(802);
             if (IsQuestAccepted(broadeningHorizons))
-                return (broadeningHorizons, QuestManager.GetQuestSequence(broadeningHorizons.Value), msqInformationAvailable);
+                return new(broadeningHorizons, QuestManager.GetQuestSequence(broadeningHorizons.Value), true);
         }
 
-        return (currentQuest, sequence, msqInformationAvailable);
+        return internalQuest;
     }
 
-    public (ElementId? CurrentQuest, byte Sequence, bool MsqInformationAvailable) GetCurrentQuestInternal(bool allowNewMsq)
+    public QuestReference GetCurrentQuestInternal(bool allowNewMsq)
     {
         var questManager = QuestManager.Instance();
         if (questManager == null)
-            return default;
+            return QuestReference.NoQuest(false);
 
         // always prioritize accepting MSQ quests, to make sure we don't turn in one MSQ quest and then go off to do
         // side quests until the end of time.
-        var msqQuest = GetMainScenarioQuest();
+        QuestReference msqQuest = GetMainScenarioQuest();
         if (msqQuest.CurrentQuest != null && !_questRegistry.IsKnownQuest(msqQuest.CurrentQuest))
-            msqQuest = default;
+            msqQuest = QuestReference.NoQuest(msqQuest.MsqInformationAvailable);
 
         if (msqQuest.CurrentQuest != null && !IsQuestAccepted(msqQuest.CurrentQuest))
         {
             if (allowNewMsq)
                 return msqQuest;
             else
-                msqQuest = default;
+                msqQuest = QuestReference.NoQuest(msqQuest.MsqInformationAvailable);
         }
 
         // Use the quests in the same order as they're shown in the to-do list, e.g. if the MSQ is the first item,
@@ -172,7 +173,7 @@ internal sealed unsafe class QuestFunctions
                         {
                             // only if the other quest isn't ready to be turned in
                             if (sequence != 255)
-                                return (quest, sequence, msqQuest.MsqInformationAvailable);
+                                return new(quest, sequence, msqQuest.MsqInformationAvailable);
                         }
                     }
                     else if (!IsOnAlliedSocietyMount())
@@ -195,7 +196,7 @@ internal sealed unsafe class QuestFunctions
                                 .Cast<(ElementId, byte)?>()
                                 .FirstOrDefault();
                             if (talkToNormalNpcs != null)
-                                return (talkToNormalNpcs.Value.Item1, talkToNormalNpcs.Value.Item2, msqQuest.MsqInformationAvailable);
+                                return new(talkToNormalNpcs.Value.Item1, talkToNormalNpcs.Value.Item2, msqQuest.MsqInformationAvailable);
                         }
 
                         /*
@@ -219,7 +220,7 @@ internal sealed unsafe class QuestFunctions
                 }
             }
 
-            return (firstTrackedQuest, firstTrackedSequence, msqQuest.MsqInformationAvailable);
+            return new(firstTrackedQuest, firstTrackedSequence, msqQuest.MsqInformationAvailable);
         }
 
         ElementId? priorityQuest = GetNextPriorityQuestsThatCanBeAccepted().FirstOrDefault();
@@ -227,7 +228,7 @@ internal sealed unsafe class QuestFunctions
         {
             // if we have an accepted msq quest, and know of no quest of those currently in the to-do list...
             // (1) try and find a priority quest to do
-            return (priorityQuest, QuestManager.GetQuestSequence(priorityQuest.Value), msqQuest.MsqInformationAvailable);
+            return new(priorityQuest, QuestManager.GetQuestSequence(priorityQuest.Value), msqQuest.MsqInformationAvailable);
         }
         else if (msqQuest.CurrentQuest != null)
         {
@@ -235,10 +236,10 @@ internal sealed unsafe class QuestFunctions
             return msqQuest;
         }
 
-        return (null, 0, msqQuest.MsqInformationAvailable);
+        return QuestReference.NoQuest(msqQuest.MsqInformationAvailable);
     }
 
-    private (QuestId? CurrentQuest, byte Sequence, bool MsqInformationAvailable) GetMainScenarioQuest()
+    private QuestReference GetMainScenarioQuest()
     {
         if (QuestManager.IsQuestComplete(3759)) // Memories Rekindled
         {
@@ -258,23 +259,23 @@ internal sealed unsafe class QuestFunctions
                     // redoHud+44 is chapter
                     // redoHud+46 is quest
                     ushort questId = MemoryHelper.Read<ushort>((nint)questRedoHud + 46);
-                    return (new QuestId(questId), QuestManager.GetQuestSequence(questId), true);
+                    return new(new QuestId(questId), QuestManager.GetQuestSequence(questId), true);
                 }
             }
         }
 
         var scenarioTree = AgentScenarioTree.Instance();
         if (scenarioTree == null)
-            return default;
+            return QuestReference.NoQuest(false);
 
         if (scenarioTree->Data == null)
-            return default;
+            return QuestReference.NoQuest(false);
 
         QuestId currentQuest = new QuestId(scenarioTree->Data->CurrentScenarioQuest);
         if (currentQuest.Value == 0)
         {
             if (IsMainScenarioQuestComplete())
-                return (null, 0, true);
+                return QuestReference.NoQuest();
 
             // fallback lookup; find a quest which isn't completed but where all prequisites are met
             // excluding branching quests
@@ -285,13 +286,15 @@ internal sealed unsafe class QuestFunctions
                 .Where(q => IsReadyToAcceptQuest(q.QuestId, true))
                 .ToList();
             if (potentialQuests.Count == 0)
-                return default;
+                return QuestReference.NoQuest(false);
             else if (potentialQuests.Count > 1)
             {
                 // for all of these (except the GC quests), questionable normally auto-picks the next quest based on the
                 // agent data. This should (hopefully) pick the exact same quest when the agent does not know for a bit.
                 if (potentialQuests.All(x => x.QuestId.Value is 680 or 681 or 682))
-                    currentQuest = new QuestId(681); // The Company You Keep; actual quest will be resolved later in GetCurrentQuest
+                    currentQuest =
+                        new QuestId(
+                            681); // The Company You Keep; actual quest will be resolved later in GetCurrentQuest
                 else if (potentialQuests.Any(x => x.QuestId.Value == 1583))
                     currentQuest = new QuestId(1583); // HW: Over the Wall vs. Onwards and Upwards
                 else if (potentialQuests.Any(x => x.QuestId.Value == 2451))
@@ -303,7 +306,7 @@ internal sealed unsafe class QuestFunctions
                 else if (potentialQuests.Any(x => x.QuestId.Value == 4865))
                     currentQuest = new QuestId(4865); // DT: To Kozama'uk vs. To Urqopacha
                 if (potentialQuests.Count != 1)
-                    return default;
+                    return QuestReference.NoQuest(false);
             }
             else
                 currentQuest = (QuestId)potentialQuests.Single().QuestId;
@@ -312,28 +315,28 @@ internal sealed unsafe class QuestFunctions
         // if the MSQ is hidden, we generally ignore it
         QuestManager* questManager = QuestManager.Instance();
         if (IsQuestAccepted(currentQuest) && questManager->GetQuestById(currentQuest.Value)->IsHidden)
-            return default;
+            return QuestReference.NoQuest();
 
         // it can sometimes happen (although this isn't reliably reproducible) that the quest returned here
         // is one you've just completed. We return 255 as sequence here, since that is the end of said quest;
         // but this is just really hoping that this breaks nothing.
         if (IsQuestComplete(currentQuest))
-            return (currentQuest, 255, true);
+            return new(currentQuest, 255, true);
         else if (!IsReadyToAcceptQuest(currentQuest))
-            return default;
+            return QuestReference.NoQuest();
 
         var currentLevel = _clientState.LocalPlayer?.Level;
 
         // are we in a loading screen?
         if (currentLevel == null)
-            return default;
+            return QuestReference.NoQuest();
 
         // if we're not at a high enough level to continue, we also ignore it
         if (_questRegistry.TryGetQuest(currentQuest, out Quest? quest)
             && quest.Info.Level > currentLevel)
-            return default;
+            return QuestReference.NoQuest();
 
-        return (currentQuest, QuestManager.GetQuestSequence(currentQuest.Value), true);
+        return new(currentQuest, QuestManager.GetQuestSequence(currentQuest.Value), true);
     }
 
     private bool IsOnAlliedSocietyMount()
@@ -832,4 +835,9 @@ internal sealed unsafe class QuestFunctions
     {
         return IsQuestComplete(_questData.LastMainScenarioQuestId);
     }
+}
+
+public sealed record QuestReference(ElementId? CurrentQuest, byte Sequence, bool MsqInformationAvailable)
+{
+    public static QuestReference NoQuest(bool msqInformationAvailable = true) => new(null, 0, msqInformationAvailable);
 }

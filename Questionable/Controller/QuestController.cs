@@ -320,8 +320,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
                 (ElementId? currentQuestId, currentSequence, bool msqInformationAvailable) =
                     ManualPriorityQuests
                         .Where(x => _questFunctions.IsReadyToAcceptQuest(x.Id) || _questFunctions.IsQuestAccepted(x.Id))
-                        .Select(x =>
-                            ((ElementId?, byte, bool)?)(x.Id, _questFunctions.GetQuestProgressInfo(x.Id)?.Sequence ?? 0, true))
+                        .Select(x => new QuestReference(x.Id, _questFunctions.GetQuestProgressInfo(x.Id)?.Sequence ?? 0, true))
                         .FirstOrDefault() ??
                     _questFunctions.GetCurrentQuest(allowNewMsq: AutomationType != EAutomationType.SingleQuestB);
 
@@ -331,7 +330,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
                     {
                         if (!msqInformationAvailable)
                         {
-                            _logger.LogDebug("MSQ information not available...");
+                            _logger.LogTrace("MSQ information not available, doing nothing (complete: {Complete})", _questFunctions.IsMainScenarioQuestComplete());
                             return;
                         }
 
