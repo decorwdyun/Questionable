@@ -22,6 +22,10 @@
     "Disabled": {
       "type": "boolean"
     },
+    "Interruptible": {
+      "type": "boolean",
+      "description": "If set to false, no priority quest (e.g. class quests) will be done while this is the currently active quest"
+    },
     "Comment": {
       "type": "string"
     },

@@ -152,6 +152,7 @@ public class QuestSourceGenerator : ISourceGenerator
     {
         try
         {
+            QuestRoot emptyQuest = new();
             return ObjectCreationExpression(
                     IdentifierName(nameof(QuestRoot)))
                 .WithInitializer(
@@ -161,8 +162,9 @@ public class QuestSourceGenerator : ISourceGenerator
                             SyntaxNodeList(
                                 AssignmentList(nameof(QuestRoot.Author), quest.Author)
                                     .AsSyntaxNodeOrToken(),
-                                Assignment(nameof(QuestRoot.Disabled), quest.Disabled, false).AsSyntaxNodeOrToken(),
-                                Assignment(nameof(QuestRoot.Comment), quest.Comment, null)
+                                Assignment(nameof(QuestRoot.Disabled), quest.Disabled, emptyQuest.Disabled).AsSyntaxNodeOrToken(),
+                                Assignment(nameof(QuestRoot.Interruptible), quest.Interruptible, emptyQuest.Interruptible).AsSyntaxNodeOrToken(),
+                                Assignment(nameof(QuestRoot.Comment), quest.Comment, emptyQuest.Comment)
                                     .AsSyntaxNodeOrToken(),
                                 AssignmentExpression(
                                     SyntaxKind.SimpleAssignmentExpression,

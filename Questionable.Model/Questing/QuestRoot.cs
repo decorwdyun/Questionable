@@ -15,6 +15,7 @@ public sealed class QuestRoot
     /// </summary>
     public bool Disabled { get; set; }
 
+    public bool Interruptible { get; set; } = true;
     public string? Comment { get; set; }
     public List<QuestSequence> QuestSequence { get; set; } = new();
 }

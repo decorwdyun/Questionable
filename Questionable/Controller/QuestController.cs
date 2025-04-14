@@ -9,13 +9,11 @@ using Dalamud.Game.Gui.Toast;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
-using Lumina.Excel.Sheets;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps;
 using Questionable.Controller.Steps.Interactions;
 using Questionable.Controller.Steps.Shared;
 using Questionable.Data;
-using Questionable.External;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
@@ -812,7 +810,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
             return false;
 
         var (currentQuest, type) = details.Value;
-        if (type != ECurrentQuestType.Normal || currentQuest.Sequence == 0)
+        if (type != ECurrentQuestType.Normal || !currentQuest.Quest.Root.Interruptible || currentQuest.Sequence == 0)
             return false;
 
         if (ManualPriorityQuests.Contains(currentQuest.Quest))
