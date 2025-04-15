@@ -34,7 +34,9 @@
             "Z": -556.90857
           },
           "TerritoryId": 957,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Thavnair - Palaka's Stand",
+          "Fly": true
         }
       ]
     },
