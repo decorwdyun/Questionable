@@ -89,7 +89,8 @@
           },
           "TerritoryId": 957,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "Thavnair - Great Work"
+          "AetheryteShortcut": "Thavnair - Great Work",
+          "Fly": true
         }
       ]
     },
