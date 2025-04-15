@@ -8,13 +8,13 @@ namespace Questionable.External;
 internal sealed class PandorasBoxIpc
 {
     private readonly ILogger<PandorasBoxIpc> _logger;
-    private readonly ICallGateSubscriber<string,bool> _getFeatureEnabled;
+    private readonly ICallGateSubscriber<string,bool?> _getFeatureEnabled;
     private bool _loggedIpcError;
 
     public PandorasBoxIpc(IDalamudPluginInterface pluginInterface, ILogger<PandorasBoxIpc> logger)
     {
         _logger = logger;
-        _getFeatureEnabled = pluginInterface.GetIpcSubscriber<string, bool>("PandorasBox.GetFeatureEnabled");
+        _getFeatureEnabled = pluginInterface.GetIpcSubscriber<string, bool?>("PandorasBox.GetFeatureEnabled");
         logger.LogInformation("Pandora's Box auto active time maneuver enabled: {IsAtmEnabled}", IsAutoActiveTimeManeuverEnabled);
     }
 
@@ -24,7 +24,7 @@ internal sealed class PandorasBoxIpc
         {
             try
             {
-                return _getFeatureEnabled.InvokeFunc("Auto Active Time Maneuver");
+                return _getFeatureEnabled.InvokeFunc("Auto Active Time Maneuver") == true;
             }
             catch (IpcError e)
             {
