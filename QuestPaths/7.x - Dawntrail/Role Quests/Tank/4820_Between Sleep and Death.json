@@ -57,7 +57,8 @@
             "Z": -493.33948
           },
           "TerritoryId": 397,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
