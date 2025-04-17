@@ -8,9 +8,9 @@
         {
           "DataId": 1006288,
           "Position": {
-              "X": -361.40997,
-              "Y": 8.46532,
-              "Z": 426.13855
+            "X": -361.40997,
+            "Y": 8.46532,
+            "Z": 426.13855
           },
           "TerritoryId": 146,
           "InteractionType": "AcceptQuest",
@@ -24,9 +24,9 @@
         {
           "DataId": 1006287,
           "Position": {
-              "X": -354.66547,
-              "Y": 8.469922,
-              "Z": 416.80017
+            "X": -354.66547,
+            "Y": 8.469922,
+            "Z": 416.80017
           },
           "TerritoryId": 146,
           "InteractionType": "Interact"
@@ -39,9 +39,9 @@
         {
           "DataId": 1006737,
           "Position": {
-              "X": -332.72296,
-              "Y": 4.1964035,
-              "Z": 278.21765
+            "X": -332.72296,
+            "Y": 4.1964035,
+            "Z": 278.21765
           },
           "TerritoryId": 146,
           "InteractionType": "Interact"
@@ -54,13 +54,16 @@
         {
           "DataId": 2268,
           "Position": {
-              "X": -192.82831,
-              "Y": 9.630248,
-              "Z": 454.79517
+            "X": -192.82831,
+            "Y": 9.630248,
+            "Z": 454.79517
           },
           "TerritoryId": 146,
           "InteractionType": "Combat",
           "EnemySpawnType": "OverworldEnemies",
+          "KillEnemyDataIds": [
+            2268
+          ],
           "CombatItemUse": {
             "DataId": 2268,
             "Condition": "Health%",
@@ -78,9 +81,9 @@
         {
           "DataId": 1006737,
           "Position": {
-              "X": -332.72296,
-              "Y": 4.1964035,
-              "Z": 278.21765
+            "X": -332.72296,
+            "Y": 4.1964035,
+            "Z": 278.21765
           },
           "TerritoryId": 146,
           "InteractionType": "Interact",
@@ -94,9 +97,9 @@
         {
           "DataId": 1006287,
           "Position": {
-              "X": -354.66547,
-              "Y": 8.469922,
-              "Z": 416.80017
+            "X": -354.66547,
+            "Y": 8.469922,
+            "Z": 416.80017
           },
           "TerritoryId": 146,
           "InteractionType": "CompleteQuest"
