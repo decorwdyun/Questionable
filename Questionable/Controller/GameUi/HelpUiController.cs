@@ -46,6 +46,12 @@ internal sealed class HelpUiController : IDisposable
             GuidePostSetup(addonGuide);
         }
 
+        if (_gameGui.TryGetAddonByName("ContentsTutorial", out AtkUnitBase* addonContentsTutorial))
+        {
+            _logger.LogInformation("ContentsTutorial window is open");
+            ContentsTutorialPostSetup(addonContentsTutorial);
+        }
+
         if (_gameGui.TryGetAddonByName("JobHudNotice", out AtkUnitBase* addonJobHudNotice))
         {
             _logger.LogInformation("JobHudNotice window is open");
@@ -65,12 +71,14 @@ internal sealed class HelpUiController : IDisposable
 
     private unsafe void ContentsTutorialPostSetup(AddonEvent type, AddonArgs args)
     {
-        if (_questController.StartedQuest?.Quest.Id.Value is 245 or 3872)
-        {
-            _logger.LogInformation("Closing ContentsTutorial");
-            AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
-            addon->FireCallbackInt(13);
-        }
+        if (_questController.StartedQuest?.Quest.Id.Value is 245 or 3872 or 5253)
+            ContentsTutorialPostSetup((AtkUnitBase*)args.Addon);
+    }
+
+    private unsafe void ContentsTutorialPostSetup(AtkUnitBase* addon)
+    {
+        _logger.LogInformation("Closing ContentsTutorial");
+        addon->FireCallbackInt(13);
     }
 
     /// <summary>
