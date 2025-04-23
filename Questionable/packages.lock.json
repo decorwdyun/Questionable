@@ -132,13 +132,14 @@
       "gatheringpaths": {
         "type": "Project",
         "dependencies": {
-          "Questionable.Model": "[4.26.0, )"
+          "Questionable.Model": "[5.10.0, )"
         }
       },
       "llib": {
         "type": "Project",
         "dependencies": {
-          "DalamudPackager": "[12.0.0, )"
+          "DalamudPackager": "[12.0.0, )",
+          "JetBrains.Annotations": "[2024.3.0, )"
         }
       },
       "notificationmasterapi": {
@@ -153,7 +154,7 @@
       "questpaths": {
         "type": "Project",
         "dependencies": {
-          "Questionable.Model": "[4.26.0, )"
+          "Questionable.Model": "[5.10.0, )"
         }
       }
     }
