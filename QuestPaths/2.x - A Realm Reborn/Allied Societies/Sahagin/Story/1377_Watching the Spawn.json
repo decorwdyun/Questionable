@@ -1,6 +1,6 @@
 {
     "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-    "Author": "Redacted",
+    "Author": "Censored",
     "QuestSequence": [
         {
             "Sequence": 0,
@@ -148,7 +148,7 @@
                         null,
                         128
                     ]
-                },  
+                },
                 {
                     "DataId": 1008903,
                     "Position": {
