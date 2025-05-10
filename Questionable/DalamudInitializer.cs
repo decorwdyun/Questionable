@@ -106,7 +106,7 @@ internal sealed class DalamudInitializer : IDisposable
     private void ToggleQuestWindow()
     {
         if (_configuration.IsPluginSetupComplete())
-            _questWindow.Toggle();
+            _questWindow.ToggleOrUncollapse();
         else
             _oneTimeSetupWindow.IsOpen = true;
     }

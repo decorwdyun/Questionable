@@ -127,7 +127,7 @@ internal sealed partial class ActiveQuestComponent
 
             ImGui.SameLine();
             if (ImGuiComponents.IconButton(FontAwesomeIcon.SortAmountDown))
-                _priorityWindow.Toggle();
+                _priorityWindow.ToggleOrUncollapse();
         }
     }
 
@@ -333,7 +333,7 @@ internal sealed partial class ActiveQuestComponent
 
             ImGui.SameLine();
             if (ImGuiComponents.IconButton(FontAwesomeIcon.SortAmountDown))
-                _priorityWindow.Toggle();
+                _priorityWindow.ToggleOrUncollapse();
 
             if (_commandManager.Commands.TryGetValue("/questinfo", out var commandInfo))
             {

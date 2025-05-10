@@ -94,7 +94,7 @@ internal sealed class CommandHandler : IDisposable
         {
             case "c":
             case "config":
-                _configWindow.Toggle();
+                _configWindow.ToggleOrUncollapse();
                 break;
 
             case "start":
@@ -141,7 +141,7 @@ internal sealed class CommandHandler : IDisposable
                 break;
 
             case "":
-                _questWindow.Toggle();
+                _questWindow.ToggleOrUncollapse();
                 break;
 
             default:
