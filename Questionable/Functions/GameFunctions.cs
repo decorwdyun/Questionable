@@ -447,7 +447,7 @@ internal sealed unsafe class GameFunctions
                _condition[ConditionFlag.OccupiedInQuestEvent] || _condition[ConditionFlag.OccupiedInCutSceneEvent] ||
                _condition[ConditionFlag.Casting] || _condition[ConditionFlag.MountOrOrnamentTransition] ||
                _condition[ConditionFlag.BetweenAreas] || _condition[ConditionFlag.BetweenAreas51] ||
-               _condition[ConditionFlag.Jumping61] || _condition[ConditionFlag.Gathering42] ||
+               _condition[ConditionFlag.Jumping61] || _condition[ConditionFlag.ExecutingGatheringAction] ||
                _condition[ConditionFlag.Jumping];
     }
 
