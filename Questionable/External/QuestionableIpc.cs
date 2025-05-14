@@ -121,8 +121,8 @@ internal sealed class QuestionableIpc : IDisposable
         if (progress == null)
             return null;
 
-        string? questId = progress.Quest.Id.ToString();
-        if (questId == null)
+        string questId = progress.Quest.Id.ToString();
+        if (string.IsNullOrEmpty(questId))
             return null;
 
         QuestStep? step = progress.Quest.FindSequence(progress.Sequence)?.FindStep(progress.Step);
