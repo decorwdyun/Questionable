@@ -40,11 +40,10 @@ internal sealed class QuestJournalUtils
             _questController.Start(label);
         }
 
-        bool openInQuestMap = _commandManager.Commands.TryGetValue("/questinfo", out var commandInfo);
+        bool openInQuestMap = _commandManager.Commands.ContainsKey("/questinfo");
         if (ImGui.MenuItem("View in Quest Map", questInfo.QuestId is QuestId && openInQuestMap))
         {
-            _commandManager.DispatchCommand("/questinfo", questInfo.QuestId.ToString() ?? string.Empty,
-                commandInfo!);
+            _commandManager.ProcessCommand($"/questinfo {questInfo.QuestId}");
         }
     }
 

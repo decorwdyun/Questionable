@@ -10,18 +10,11 @@ namespace Questionable.Controller.Steps.Shared;
 
 internal sealed class ExtraConditionUtils
 {
-    private readonly Configuration _configuration;
     private readonly IClientState _clientState;
-    private readonly ILogger<ExtraConditionUtils> _logger;
 
-    public ExtraConditionUtils(
-        Configuration configuration,
-        IClientState clientState,
-        ILogger<ExtraConditionUtils> logger)
+    public ExtraConditionUtils(IClientState clientState)
     {
-        _configuration = configuration;
         _clientState = clientState;
-        _logger = logger;
     }
 
     public bool MatchesExtraCondition(EExtraSkipCondition skipCondition)

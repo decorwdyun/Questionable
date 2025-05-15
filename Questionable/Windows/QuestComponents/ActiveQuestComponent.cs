@@ -335,12 +335,11 @@ internal sealed partial class ActiveQuestComponent
             if (ImGuiComponents.IconButton(FontAwesomeIcon.SortAmountDown))
                 _priorityWindow.ToggleOrUncollapse();
 
-            if (_commandManager.Commands.TryGetValue("/questinfo", out var commandInfo))
+            if (_commandManager.Commands.ContainsKey("/questinfo"))
             {
                 ImGui.SameLine();
                 if (ImGuiComponents.IconButton(FontAwesomeIcon.Atlas))
-                    _commandManager.DispatchCommand("/questinfo",
-                        currentQuest.Quest.Id.ToString() ?? string.Empty, commandInfo);
+                    _commandManager.ProcessCommand($"/questinfo {currentQuest.Quest.Id}");
             }
         }
     }

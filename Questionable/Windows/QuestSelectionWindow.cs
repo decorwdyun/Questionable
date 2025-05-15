@@ -170,7 +170,7 @@ internal sealed class QuestSelectionWindow : LWindow
         {
             ImGui.TableNextRow();
 
-            string questId = quest.QuestId.ToString() ?? string.Empty;
+            string questId = quest.QuestId.ToString();
             bool isKnownQuest = _questRegistry.TryGetQuest(quest.QuestId, out var knownQuest);
 
             if (ImGui.TableNextColumn())
