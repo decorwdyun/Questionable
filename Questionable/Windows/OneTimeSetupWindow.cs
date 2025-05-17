@@ -38,7 +38,7 @@ internal sealed class OneTimeSetupWindow : LWindow
         _logger.LogInformation("One-time setup needed: {IsOpen}", IsOpen);
     }
 
-    public override void Draw()
+    public override void DrawContent()
     {
         _pluginConfigComponent.Draw(out bool allRequiredInstalled);
 

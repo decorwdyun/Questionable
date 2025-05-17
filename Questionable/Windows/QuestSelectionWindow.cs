@@ -134,7 +134,7 @@ internal sealed class QuestSelectionWindow : LWindow
         _offeredQuests = [];
     }
 
-    public override void Draw()
+    public override void DrawContent()
     {
         if (_offeredQuests.Count != 0)
             ImGui.Checkbox("Only show quests currently offered", ref _onlyAvailableQuests);

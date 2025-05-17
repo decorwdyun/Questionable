@@ -57,7 +57,7 @@ internal sealed class PriorityWindow : LWindow
         };
     }
 
-    public override void Draw()
+    public override void DrawContent()
     {
         ImGui.Text("Quests to do first:");
         DrawQuestFilter();

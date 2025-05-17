@@ -59,7 +59,7 @@ internal sealed class JournalProgressWindow : LWindow, IDisposable
         _gatheringJournalComponent.RefreshCounts();
     }
 
-    public override void Draw()
+    public override void DrawContent()
     {
         using var tabBar = ImRaii.TabBar("Journal");
         if (!tabBar)

@@ -141,7 +141,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         return true;
     }
 
-    public override void Draw()
+    public override void DrawContent()
     {
         try
         {

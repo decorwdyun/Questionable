@@ -35,7 +35,7 @@ internal sealed class QuestValidationWindow : LWindow
         };
     }
 
-    public override void Draw()
+    public override void DrawContent()
     {
         using var table = ImRaii.Table("QuestSelection", 5, ImGuiTableFlags.Borders | ImGuiTableFlags.ScrollY);
         if (!table)

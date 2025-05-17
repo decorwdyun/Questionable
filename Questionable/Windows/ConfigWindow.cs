@@ -41,7 +41,7 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
 
     public WindowConfig WindowConfig => _configuration.ConfigWindowConfig;
 
-    public override void Draw()
+    public override void DrawContent()
     {
         using var tabBar = ImRaii.TabBar("QuestionableConfigTabs");
         if (!tabBar)
