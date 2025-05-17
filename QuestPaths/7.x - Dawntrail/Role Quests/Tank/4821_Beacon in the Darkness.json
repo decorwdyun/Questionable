@@ -36,6 +36,7 @@
           "TerritoryId": 400,
           "InteractionType": "Interact",
           "AetheryteShortcut": "The Churning Mists - Zenith",
+          "Fly": true,
           "CompletionQuestVariablesFlags": [
             null,
             null,
@@ -85,7 +86,8 @@
           "AethernetShortcut": [
             "[Idyllshire] Aetheryte Plaza",
             "[Idyllshire] Prologue Gate (Western Hinterlands)"
-          ]
+          ],
+          "Fly": true
         }
       ]
     },

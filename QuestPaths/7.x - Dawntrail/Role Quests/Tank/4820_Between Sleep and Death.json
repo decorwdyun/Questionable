@@ -57,13 +57,23 @@
             "Z": -493.33948
           },
           "TerritoryId": 397,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "Fly": true
         }
       ]
     },
     {
       "Sequence": 3,
       "Steps": [
+        {
+          "Position": {
+            "X": 454.6491,
+            "Y": 164.30826,
+            "Z": -541.31744
+          },
+          "TerritoryId": 397,
+          "InteractionType": "WalkTo"
+        },
         {
           "Position": {
             "X": 455.58475,

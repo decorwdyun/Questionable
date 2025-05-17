@@ -89,7 +89,8 @@
           },
           "TerritoryId": 957,
           "InteractionType": "Interact",
-          "AetheryteShortcut": "Thavnair - Great Work"
+          "AetheryteShortcut": "Thavnair - Great Work",
+          "Fly": true
         }
       ]
     },
@@ -108,7 +109,8 @@
           "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
             17625
-          ]
+          ],
+          "Fly": true
         }
       ]
     },
@@ -140,6 +142,7 @@
           },
           "TerritoryId": 957,
           "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Thavnair - Yedlihmad",
           "NextQuestId": 4844
         }
       ]
