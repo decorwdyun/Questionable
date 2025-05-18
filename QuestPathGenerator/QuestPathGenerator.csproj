@@ -17,7 +17,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Json.More.Net" Version="2.1.1" GeneratePathProperty="true" />
+        <PackageReference Include="Json.More.Net" Version="2.1.2" GeneratePathProperty="true" />
         <PackageReference Include="JsonPointer.Net" Version="5.3.1" GeneratePathProperty="true" />
         <PackageReference Include="JsonSchema.Net" Version="7.3.4" GeneratePathProperty="true" />
         <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
