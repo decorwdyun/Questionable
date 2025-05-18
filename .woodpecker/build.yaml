@@ -13,6 +13,11 @@ steps:
     commands:
       - dotnet restore /p:Configuration=Release --packages $CI_WORKSPACE/.nuget
 
+  - name: dotnet test
+    image: mcr.microsoft.com/dotnet/sdk:9.0-noble
+    commands:
+      - dotnet test QuestPaths.JsonValidator/QuestPaths.JsonValidator.csproj --no-restore
+
   - name: dotnet build
     image: mcr.microsoft.com/dotnet/sdk:9.0-noble
     commands:
