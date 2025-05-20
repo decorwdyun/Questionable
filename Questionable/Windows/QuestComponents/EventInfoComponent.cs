@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using Dalamud.Interface;
 using Dalamud.Interface.Components;
+using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin;
 using Humanizer;
 using Humanizer.Localisation;
@@ -23,6 +24,7 @@ internal sealed class EventInfoComponent
     private readonly List<EventQuest> _eventQuests =
     [
         new EventQuest("Limited Time Items", [new UnlockLinkId(506)], DateTime.MaxValue),
+        new EventQuest("Make It Rain", [new QuestId(5322)], AtDailyReset(new(2025, 6, 11)))
     ];
 
     private readonly QuestData _questData;
@@ -100,35 +102,37 @@ internal sealed class EventInfoComponent
             if (_questFunctions.IsQuestComplete(questId))
                 continue;
 
-            string questName = _questData.GetQuestInfo(questId).Name;
-            if (startableQuests.Contains(questId) &&
-                _questRegistry.TryGetQuest(questId, out Quest? quest))
+            using (ImRaii.PushId($"##EventQuestSelection{questId}"))
             {
-                ImGuiComponents.IconButton(FontAwesomeIcon.Play);
-                if (ImGui.IsItemClicked())
+                string questName = _questData.GetQuestInfo(questId).Name;
+                if (startableQuests.Contains(questId) &&
+                    _questRegistry.TryGetQuest(questId, out Quest? quest))
                 {
-                    _questController.SetNextQuest(quest);
-                    _questController.Start("SeasonalEventSelection");
+                    if (ImGuiComponents.IconButton(FontAwesomeIcon.Play))
+                    {
+                        _questController.SetNextQuest(quest);
+                        _questController.Start("SeasonalEventSelection");
+                    }
+
+                    bool hovered = ImGui.IsItemHovered();
+
+                    ImGui.SameLine();
+                    ImGui.AlignTextToFramePadding();
+                    ImGui.Text(questName);
+                    hovered |= ImGui.IsItemHovered();
+
+                    if (hovered)
+                        _questTooltipComponent.Draw(quest.Info);
                 }
+                else
+                {
+                    if (width > 0)
+                        ImGui.SetCursorPosX(ImGui.GetCursorPosX() + width);
 
-                bool hovered = ImGui.IsItemHovered();
-
-                ImGui.SameLine();
-                ImGui.AlignTextToFramePadding();
-                ImGui.Text(questName);
-                hovered |= ImGui.IsItemHovered();
-
-                if (hovered)
-                    _questTooltipComponent.Draw(quest.Info);
-            }
-            else
-            {
-                if (width > 0)
-                    ImGui.SetCursorPosX(ImGui.GetCursorPosX() + width);
-
-                var style = _uiUtils.GetQuestStyle(questId);
-                if (_uiUtils.ChecklistItem(questName, style.Color, style.Icon, ImGui.GetStyle().FramePadding.X))
-                    _questTooltipComponent.Draw(_questData.GetQuestInfo(questId));
+                    var style = _uiUtils.GetQuestStyle(questId);
+                    if (_uiUtils.ChecklistItem(questName, style.Color, style.Icon, ImGui.GetStyle().FramePadding.X))
+                        _questTooltipComponent.Draw(_questData.GetQuestInfo(questId));
+                }
             }
         }
     }
