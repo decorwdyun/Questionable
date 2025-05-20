@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
   "QuestSequence": [
@@ -117,7 +117,8 @@
           },
           "StopDistance": 7,
           "TerritoryId": 919,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "NextQuestId": 4762
         }
       ]
     }
