@@ -15,6 +15,7 @@
                     "TerritoryId": 154,
                     "InteractionType": "AcceptQuest",
                     "AetheryteShortcut": "North Shroud - Fallgourd Float",
+                    "Fly": true,
                     "SkipConditions": {
                         "AetheryteShortcutIf": {
                             "NearPosition": {
@@ -80,10 +81,7 @@
                                 "NotInInventory": false
                             }
                         }
-                    },
-                    "RequiredCurrentJob": [
-                        "DoH"
-                    ]
+                    }
                 },
                 {
                     "DataId": 1009211,

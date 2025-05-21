@@ -36,15 +36,41 @@
             "Sequence": 1,
             "Steps": [
                 {
-                    "DataId": 2004464,
+                    "TerritoryId": 154,
+                    "InteractionType": "SwitchClass",
+                    "TargetClass": "ConfiguredCombatJob"
+                },
+                {
                     "Position": {
-                        "X": 25.741943,
-                        "Y": -43.442444,
-                        "Z": 441.12292
+                        "X": 83.55191,
+                        "Y": -42.160282,
+                        "Z": 359.22104
                     },
                     "TerritoryId": 154,
-                    "InteractionType": "Interact",
-                    "AetheryteShortcut": "North Shroud - Fallgourd Float"
+                    "InteractionType": "Combat",
+                    "EnemySpawnType": "AutoOnEnterArea",
+                    "KillEnemyDataIds": [
+                        747
+                    ],
+                    "Fly": true,
+                    "CompletionQuestVariablesFlags": [
+                        1,
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                    ]
+                },
+                {
+                    "DataId": 2004461,
+                    "Position": {
+                        "X": 82.993774,
+                        "Y": -41.519836,
+                        "Z": 362.2339
+                    },
+                    "TerritoryId": 154,
+                    "InteractionType": "Interact"
                 }
             ]
         },
@@ -71,8 +97,8 @@
                 {
                     "TerritoryId": 154,
                     "InteractionType": "Craft",
-                    "ItemId": 8096,
-                    "ItemCount": 2,
+                    "ItemId": 8095,
+                    "ItemCount": 3,
                     "SkipConditions": {
                         "StepIf": {
                             "Item": {
