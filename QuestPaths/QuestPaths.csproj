@@ -48,6 +48,6 @@
 
     <ItemGroup>
       <Folder Include="3.x - Heavensward\Side Stories\Scholasticate Quests\" />
-      <Folder Include="6.x - Endwalker\Side Stories\Tales From the Calamity\" />
+      <Folder Include="6.x - Endwalker\Side Stories\Tales from the Calamity\" />
     </ItemGroup>
 </Project>
