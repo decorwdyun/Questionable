@@ -53,6 +53,21 @@
           "InteractionType": "Interact"
         }
       ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
+        {
+          "DataId": 1053908,
+          "Position": {
+            "X": 28.854736,
+            "Y": 0,
+            "Z": 13.351624
+          },
+          "TerritoryId": 1278,
+          "InteractionType": "CompleteQuest"
+        }
+      ]
     }
   ]
 }
