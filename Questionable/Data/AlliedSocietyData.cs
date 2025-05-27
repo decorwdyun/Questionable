@@ -19,6 +19,7 @@ internal sealed class AlliedSocietyData
             { 89, new([1017322], EAetheryteLocation.ChurningMistsZenith) },
             { 147, new([1024777,1024912], EAetheryteLocation.FringesPeeringStones) },
             { 369, new([1051798], EAetheryteLocation.KozamaukaDockPoga) },
+            //{ ??, new([], EAetheryteLocation.YakTelMamook) },
         }.AsReadOnly();
 
     public EAlliedSociety GetCommonAlliedSocietyTurnIn(ElementId elementId)
@@ -31,6 +32,7 @@ internal sealed class AlliedSocietyData
                 >= 2261 and <= 2280 => EAlliedSociety.Vath,
                 >= 2290 and <= 2319 => EAlliedSociety.Moogles,
                 >= 5199 and <= 5226 => EAlliedSociety.Pelupelu,
+                >= 5261 and <= 5288 => EAlliedSociety.MamoolJa,
                 _ => EAlliedSociety.None,
             };
         }

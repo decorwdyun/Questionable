@@ -30,11 +30,12 @@ internal sealed class AlliedSocietyDailyInfo : IQuestInfo
             EAlliedSociety.Ixal or
                 EAlliedSociety.Moogles or
                 EAlliedSociety.Dwarves or
-                EAlliedSociety.Loporrits or
-                EAlliedSociety.MamoolJa =>
+                EAlliedSociety.Loporrits =>
                 classJobUtils.AsIndividualJobs(EExtendedClassJob.DoH, null).ToList(),
 
-            EAlliedSociety.Qitari or EAlliedSociety.Omicrons =>
+            EAlliedSociety.Qitari or
+                EAlliedSociety.Omicrons or
+                EAlliedSociety.MamoolJa =>
                 classJobUtils.AsIndividualJobs(EExtendedClassJob.DoL, null).ToList(),
 
             EAlliedSociety.Namazu =>
