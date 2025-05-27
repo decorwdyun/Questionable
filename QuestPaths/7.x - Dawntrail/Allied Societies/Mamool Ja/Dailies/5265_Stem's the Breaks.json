@@ -18,34 +18,50 @@
       ]
     },
     {
-      "Sequence": 255,
+      "Sequence": 1,
       "Steps": [
         {
+          "Position": {
+            "X": 213.46579,
+            "Y": -160.31227,
+            "Z": 431.11423
+          },
+          "StopDistance": 1,
           "TerritoryId": 1189,
-          "InteractionType": "Gather",
-          "RequiredQuestAcceptedJob": [
-            "Miner"
-          ],
-          "ItemsToGather": [
-            {
-              "ItemId": 48027,
-              "ItemCount": 3
-            }
-          ]
+          "InteractionType": "WalkTo",
+          "Fly": true
         },
         {
+          "DataId": 1048991,
+          "Position": {
+            "X": 211.10852,
+            "Y": -160.27475,
+            "Z": 432.4253
+          },
+          "StopDistance": 7,
           "TerritoryId": 1189,
-          "InteractionType": "Gather",
-          "RequiredQuestAcceptedJob": [
-            "Botanist"
-          ],
-          "ItemsToGather": [
-            {
-              "ItemId": 48028,
-              "ItemCount": 3
-            }
-          ]
-        },
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 2,
+      "Steps": [
+        {
+          "DataId": 2014727,
+          "Position": {
+            "X": 215.5946,
+            "Y": -159.96033,
+            "Z": 430.13647
+          },
+          "TerritoryId": 1189,
+          "InteractionType": "Interact"
+        }
+      ]
+    },
+    {
+      "Sequence": 255,
+      "Steps": [
         {
           "DataId": 1052560,
           "Position": {

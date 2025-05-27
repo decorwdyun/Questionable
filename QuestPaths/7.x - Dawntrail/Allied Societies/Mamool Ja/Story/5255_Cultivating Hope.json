@@ -213,7 +213,7 @@
             "Z": 749.20264
           },
           "TerritoryId": 1189,
-          "InteractionType": "Interact",
+          "InteractionType": "CompleteQuest",
           "AetheryteShortcut": "Yak T'el - Mamook",
           "Fly": true
         }

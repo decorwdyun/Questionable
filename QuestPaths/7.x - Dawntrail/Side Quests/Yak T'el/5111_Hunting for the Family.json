@@ -13,7 +13,21 @@
             "Z": -478.8739
           },
           "TerritoryId": 1189,
-          "InteractionType": "AcceptQuest"
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Yak T'el - Iq Br'aax",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "NearPosition": {
+                "Position": {
+                  "X": -455.10034,
+                  "Y": 17.027555,
+                  "Z": -478.8739
+                },
+                "TerritoryId": 1189,
+                "MaximumDistance": 250
+              }
+            }
+          }
         }
       ]
     },
