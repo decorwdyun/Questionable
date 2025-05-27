@@ -84,31 +84,39 @@ internal sealed partial class ActiveQuestComponent
                 ImGui.TextUnformatted(_questController.DebugState ?? string.Empty);
             }
 
-            QuestSequence? currentSequence = currentQuest.Quest.FindSequence(currentQuest.Sequence);
-            QuestStep? currentStep = currentSequence?.FindStep(currentQuest.Step);
-            if (!isMinimized)
+            try
             {
-                using (var color = new ImRaii.Color())
+                QuestSequence? currentSequence = currentQuest.Quest.FindSequence(currentQuest.Sequence);
+                QuestStep? currentStep = currentSequence?.FindStep(currentQuest.Step);
+                if (!isMinimized)
                 {
-                    bool colored = currentStep is
+                    using (var color = new ImRaii.Color())
                     {
-                        InteractionType: EInteractionType.Instruction or EInteractionType.WaitForManualProgress
-                        or EInteractionType.Snipe
-                    };
-                    if (colored)
-                        color.Push(ImGuiCol.Text, ImGuiColors.DalamudOrange);
+                        bool colored = currentStep is
+                        {
+                            InteractionType: EInteractionType.Instruction or EInteractionType.WaitForManualProgress
+                            or EInteractionType.Snipe
+                        };
+                        if (colored)
+                            color.Push(ImGuiCol.Text, ImGuiColors.DalamudOrange);
 
-                    ImGui.TextUnformatted(currentStep?.Comment ??
-                                          currentSequence?.Comment ?? currentQuest.Quest.Root.Comment ?? string.Empty);
+                        ImGui.TextUnformatted(currentStep?.Comment ??
+                                              currentSequence?.Comment ??
+                                              currentQuest.Quest.Root.Comment ?? string.Empty);
+                    }
+
+                    //var nextStep = _questController.GetNextStep();
+                    //ImGui.BeginDisabled(nextStep.Step == null);
+                    ImGui.Text(_questController.ToStatString());
+                    //ImGui.EndDisabled();
                 }
 
-                //var nextStep = _questController.GetNextStep();
-                //ImGui.BeginDisabled(nextStep.Step == null);
-                ImGui.Text(_questController.ToStatString());
-                //ImGui.EndDisabled();
+                DrawQuestButtons(currentQuest, currentStep, questWork, isMinimized);
             }
-
-            DrawQuestButtons(currentQuest, currentStep, questWork, isMinimized);
+            catch (Exception e)
+            {
+                ImGui.TextColored(ImGuiColors.DalamudRed, e.ToString());
+            }
 
             DrawSimulationControls();
         }
