@@ -13,7 +13,8 @@
             "Z": -355.00116
           },
           "TerritoryId": 140,
-          "InteractionType": "AcceptQuest"
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Western Thanalan - Horizon"
         }
       ]
     },
