@@ -1,6 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "liza",
+  "Author": "liza, Friendly",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -13,7 +13,8 @@
             "Z": -5.081299
           },
           "TerritoryId": 132,
-          "InteractionType": "AcceptQuest"
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Gridania"
         }
       ]
     },
