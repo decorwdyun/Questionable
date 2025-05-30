@@ -55,6 +55,7 @@ public enum EAction
     Adloquium = 185,
     WaterCannon = 11385,
     Wasshoi = 11499,
+    ShroudedLuminescence = 39505,
 
     CollectMiner = 240,
     LuckOfTheMountaineer = 4081,
@@ -98,6 +99,7 @@ public static class EActionExtensions
             or EAction.ElectrixFlux
             or EAction.HopStep
             or EAction.BosomBrook
-            or EAction.Wasshoi;
+            or EAction.Wasshoi
+            or EAction.ShroudedLuminescence;
     }
 }

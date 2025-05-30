@@ -37,7 +37,11 @@
               "MaximumAngle": -30
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "Nodes": [
         {
           "DataId": 35259,
           "Locations": [
@@ -51,7 +55,11 @@
               "MaximumAngle": -45
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "Nodes": [
         {
           "DataId": 35258,
           "Locations": [
