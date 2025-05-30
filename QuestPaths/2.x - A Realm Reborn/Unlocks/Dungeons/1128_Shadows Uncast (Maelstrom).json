@@ -1,6 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "liza",
+  "Author": "liza, Friendly",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -13,7 +13,12 @@
             "Z": 81.1322
           },
           "TerritoryId": 128,
-          "InteractionType": "AcceptQuest"
+          "InteractionType": "AcceptQuest",
+					"AetheryteShortcut": "Limsa Lominsa",
+					"AethernetShortcut": [
+					"[Limsa Lominsa] Aetheryte Plaza",
+					"[Limsa Lominsa] The Aftcastle"
+          ]
         }
       ]
     },
