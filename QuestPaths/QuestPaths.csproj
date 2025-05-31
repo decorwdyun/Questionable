@@ -45,9 +45,4 @@
         <AdditionalFiles Include="6.x - Endwalker\**\*.json" />
         <AdditionalFiles Include="7.x - Dawntrail\**\*.json" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="3.x - Heavensward\Side Stories\Scholasticate Quests\" />
-      <Folder Include="6.x - Endwalker\Side Stories\Tales from the Calamity\" />
-    </ItemGroup>
 </Project>
