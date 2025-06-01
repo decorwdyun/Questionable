@@ -84,25 +84,25 @@
             "Sequence": 255,
             "Steps": [
                 {
+                    "DataId": 2004013,
                     "Position": {
-                        "X": -245.65279,
-                        "Y": -41.732937,
-                        "Z": 52.040615
+                        "X": -883.36005,
+                        "Y": -29.251587,
+                        "Z": 929.2285
                     },
                     "TerritoryId": 138,
-                    "InteractionType": "WalkTo",
-                    "AetheryteShortcut": "Western La Noscea - Aleport",
-                    "Fly": true,
+                    "TargetTerritoryId": 138,
+                    "InteractionType": "Interact",
                     "SkipConditions": {
                         "StepIf": {
-                            "NearPosition": {
+                            "NotNearPosition": {
                                 "Position": {
-                                    "X": -245.65279,
-                                    "Y": -41.732937,
-                                    "Z": 52.040615
+                                    "X": -883.36005,
+                                    "Y": -29.251587,
+                                    "Z": 929.2285
                                 },
                                 "TerritoryId": 138,
-                                "MaximumDistance": 5
+                                "MaximumDistance": 50
                             }
                         }
                     }
