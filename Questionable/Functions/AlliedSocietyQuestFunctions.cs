@@ -14,7 +14,7 @@ internal sealed class AlliedSocietyQuestFunctions
 {
     private readonly ILogger<AlliedSocietyQuestFunctions> _logger;
     private readonly Dictionary<EAlliedSociety, List<NpcData>> _questsByAlliedSociety = [];
-    private readonly Dictionary<(uint NpcDataId, byte Seed, bool OutranksAll), List<QuestId>> _dailyQuests = [];
+    private readonly Dictionary<(uint NpcDataId, byte Seed, bool OutranksAll, bool RankedUp), List<QuestId>> _dailyQuests = [];
 
     public AlliedSocietyQuestFunctions(QuestData questData, ILogger<AlliedSocietyQuestFunctions> logger)
     {
@@ -51,7 +51,7 @@ internal sealed class AlliedSocietyQuestFunctions
         foreach (NpcData npcData in _questsByAlliedSociety[alliedSociety])
         {
             bool outranksAll = npcData.AllQuests.All(x => currentRank > x.AlliedSocietyRank);
-            var key = (NpcDataId: npcData.IssuerDataId, seed, outranksAll);
+            var key = (NpcDataId: npcData.IssuerDataId, seed, outranksAll, rankedUp);
             if (_dailyQuests.TryGetValue(key, out List<QuestId>? questIds))
                 result.AddRange(questIds);
             else
