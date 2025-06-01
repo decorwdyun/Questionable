@@ -108,7 +108,7 @@ internal sealed class DalamudInitializer : IDisposable
         if (_configuration.IsPluginSetupComplete())
             _questWindow.ToggleOrUncollapse();
         else
-            _oneTimeSetupWindow.IsOpen = true;
+            _oneTimeSetupWindow.IsOpenAndUncollapsed = true;
     }
 
     public void Dispose()

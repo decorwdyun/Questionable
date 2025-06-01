@@ -64,7 +64,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         _interactionUiController = interactionUiController;
 
 #if DEBUG
-        IsOpen = true;
+        IsOpenAndUncollapsed = true;
 #endif
         SizeConstraints = new WindowSizeConstraints
         {
@@ -92,7 +92,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         {
             Icon = FontAwesomeIcon.Cog,
             IconOffset = new Vector2(1.5f, 1),
-            Click = _ => configWindow.IsOpen = true,
+            Click = _ => configWindow.IsOpenAndUncollapsed = true,
             Priority = int.MinValue,
             ShowTooltip = () =>
             {

@@ -103,7 +103,7 @@ internal sealed class QuestSelectionWindow : LWindow
             _offeredQuests = [];
         }
 
-        IsOpen = _quests.Count > 0;
+        IsOpenAndUncollapsed = _quests.Count > 0;
     }
 
     public unsafe void OpenForCurrentZone()
@@ -125,7 +125,7 @@ internal sealed class QuestSelectionWindow : LWindow
         }
 
         _offeredQuests = [];
-        IsOpen = true;
+        IsOpenAndUncollapsed = true;
     }
 
     public override void OnClose()
