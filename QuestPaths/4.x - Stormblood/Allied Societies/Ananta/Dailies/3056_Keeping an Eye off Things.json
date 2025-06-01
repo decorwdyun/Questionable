@@ -22,17 +22,27 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 8590,
           "Position": {
             "X": -50.436653,
             "Y": 41.158955,
             "Z": -264.4358
           },
           "TerritoryId": 612,
-          "InteractionType": "Instruction",
-          "Comment": "Use item on enemy, then kill it",
-          "EnemySpawnType": "AutoOnEnterArea",
-          "KillEnemyDataIds": [
-            7030
+          "Fly": true,
+          "Land": true,
+          "InteractionType": "Combat",
+          "ItemId": 2002438,
+          "EnemySpawnType": "AfterItemUse",
+          "CombatItemUse": {
+            "ItemId": 2002438,
+            "Condition": "MissingStatus",
+            "Value": 22
+          },
+          "ComplexCombatData": [
+            {
+              "DataId": 7030
+            }
           ]
         }
       ]
