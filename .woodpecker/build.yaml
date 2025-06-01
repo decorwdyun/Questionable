@@ -16,7 +16,7 @@ steps:
   - name: dotnet test
     image: mcr.microsoft.com/dotnet/sdk:9.0-noble
     commands:
-      - dotnet test QuestPaths.JsonValidator/QuestPaths.JsonValidator.csproj -c Release -f net9.0-windows --no-restore
+      - dotnet test QuestPaths.JsonValidator/QuestPaths.JsonValidator.csproj -c Release --no-restore
 
   - name: dotnet build
     image: mcr.microsoft.com/dotnet/sdk:9.0-noble
