@@ -44,7 +44,8 @@
                     "TerritoryId": 138,
                     "InteractionType": "Combat",
                     "EnemySpawnType": "OverworldEnemies",
-                    "KillEnemyDataIds": [ 2837 ]
+                    "KillEnemyDataIds": [ 2837 ],
+                    "Fly": true
                 }
             ]
         },
