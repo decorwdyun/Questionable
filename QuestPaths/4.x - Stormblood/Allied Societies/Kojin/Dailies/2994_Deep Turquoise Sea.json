@@ -44,6 +44,18 @@
           "Fly": true
         },
         {
+          "DataId": 2009120,
+          "Position": {
+            "X": -233.9361,
+            "Y": -411.3985,
+            "Z": 372.8236
+          },
+          "TerritoryId": 613,
+          "InteractionType": "Interact",
+          "RequiredQuestVariables": [null, [2], null, null, null, null],
+          "Fly": true
+        },
+        {
           "DataId": 2009121,
           "Position": {
             "X": -279.62158,
@@ -52,7 +64,19 @@
           },
           "TerritoryId": 613,
           "InteractionType": "Interact",
-          "RequiredQuestVariables": [null, [19], null, null, null, null],
+          "RequiredQuestVariables": [null, [18, 19], null, null, null, null],
+          "Fly": true
+        },
+        {
+          "DataId": 2009122,
+          "Position": {
+            "X": -286.09143,
+            "Y": -367.422,
+            "Z": 390.2494
+          },
+          "TerritoryId": 613,
+          "InteractionType": "Interact",
+          "RequiredQuestVariables": [null, [34], null, null, null, null],
           "Fly": true
         },
         {
