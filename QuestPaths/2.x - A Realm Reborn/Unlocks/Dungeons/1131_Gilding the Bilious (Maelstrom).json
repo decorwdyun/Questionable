@@ -25,24 +25,42 @@
     {
       "Sequence": 1,
       "Steps": [
-        {
+          {
           "Position": {
-            "X": 126.33908,
-            "Y": 31.31262,
-            "Z": -772.82794
+            "X": 123.6,
+            "Y": 31.6,
+            "Z": -768.8
           },
           "TerritoryId": 156,
           "InteractionType": "WalkTo",
-          "TargetTerritoryId": 155,
           "AetheryteShortcut": "Mor Dhona",
           "Fly": true,
           "SkipConditions": {
             "AetheryteShortcutIf": {
               "AetheryteLocked": "Mor Dhona",
+              "InSameTerritory": true,
               "InTerritory": [
                 155
               ]
             },
+            "StepIf": {
+              "AetheryteLocked": "Mor Dhona",
+              "InTerritory": [
+                155
+              ]
+            }
+          }
+        },
+        {
+          "Position": {
+            "X": 129.3,
+            "Y": 31.71,
+            "Z": -774.87
+          },
+          "TerritoryId": 156,
+          "InteractionType": "WalkTo",
+          "TargetTerritoryId": 155,
+          "SkipConditions": {
             "StepIf": {
               "AetheryteLocked": "Mor Dhona",
               "InTerritory": [
