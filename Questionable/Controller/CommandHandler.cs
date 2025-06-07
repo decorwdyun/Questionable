@@ -98,7 +98,7 @@ internal sealed class CommandHandler : IDisposable
                 break;
 
             case "start":
-                _questWindow.IsOpen = true;
+                _questWindow.IsOpenAndUncollapsed = true;
                 _questController.Start("Start command");
                 break;
 
@@ -177,7 +177,7 @@ internal sealed class CommandHandler : IDisposable
         if (!_configuration.IsPluginSetupComplete())
         {
             if (string.IsNullOrEmpty(arguments))
-                _oneTimeSetupWindow.IsOpen = true;
+                _oneTimeSetupWindow.IsOpenAndUncollapsed = true;
             else
                 _chatGui.PrintError("Please complete the one-time setup first.", MessageTag, TagColor);
             return true;

@@ -1,51 +1,45 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Ipc;
-using Dalamud.Plugin.Services;
-using Lumina.Excel.Sheets;
 using Microsoft.Extensions.Logging;
-using Questionable.Data;
 using Questionable.Model.Common;
 
 namespace Questionable.External;
 
 internal sealed class LifestreamIpc
 {
-    private readonly AetheryteData _aetheryteData;
-    private readonly IDataManager _dataManager;
     private readonly ILogger<LifestreamIpc> _logger;
-    private readonly ICallGateSubscriber<string, bool> _aethernetTeleport;
+    private readonly ICallGateSubscriber<uint, bool> _aethernetTeleportByPlaceNameId;
+    private readonly ICallGateSubscriber<uint, bool> _aethernetTeleportById;
+    private readonly ICallGateSubscriber<bool> _aethernetTeleportToFirmament;
 
-    public LifestreamIpc(IDalamudPluginInterface pluginInterface, AetheryteData aetheryteData, IDataManager dataManager, ILogger<LifestreamIpc> logger)
+    public LifestreamIpc(IDalamudPluginInterface pluginInterface, ILogger<LifestreamIpc> logger)
     {
-        _aetheryteData = aetheryteData;
-        _dataManager = dataManager;
         _logger = logger;
-        _aethernetTeleport = pluginInterface.GetIpcSubscriber<string, bool>("Lifestream.AethernetTeleport");
+        _aethernetTeleportByPlaceNameId =
+            pluginInterface.GetIpcSubscriber<uint, bool>("Lifestream.AethernetTeleportByPlaceNameId");
+        _aethernetTeleportById =
+            pluginInterface.GetIpcSubscriber<uint, bool>("Lifestream.AethernetTeleportById");
+        _aethernetTeleportToFirmament =
+            pluginInterface.GetIpcSubscriber<bool>("Lifestream.AethernetTeleportToFirmament");
     }
 
     public bool Teleport(EAetheryteLocation aetheryteLocation)
     {
-        string? name = aetheryteLocation switch
+        _logger.LogInformation("Teleporting to '{Name}'", aetheryteLocation);
+        return aetheryteLocation switch
         {
-            EAetheryteLocation.IshgardFirmament => "Firmament",
-            EAetheryteLocation.FirmamentMendicantsCourt => GetPlaceName(3436),
-            EAetheryteLocation.FirmamentMattock => GetPlaceName(3473),
-            EAetheryteLocation.FirmamentNewNest => GetPlaceName(3475),
-            EAetheryteLocation.FirmanentSaintRoellesDais => GetPlaceName(3474),
-            EAetheryteLocation.FirmamentFeatherfall => GetPlaceName(3525),
-            EAetheryteLocation.FirmamentHoarfrostHall => GetPlaceName(3528),
-            EAetheryteLocation.FirmamentWesternRisensongQuarter => GetPlaceName(3646),
-            EAetheryteLocation.FIrmamentEasternRisensongQuarter => GetPlaceName(3645),
-            _ => _aetheryteData.AethernetNames.GetValueOrDefault(aetheryteLocation),
+            EAetheryteLocation.IshgardFirmament => _aethernetTeleportToFirmament.InvokeFunc(),
+            EAetheryteLocation.FirmamentMendicantsCourt => _aethernetTeleportByPlaceNameId.InvokeFunc(3436),
+            EAetheryteLocation.FirmamentMattock => _aethernetTeleportByPlaceNameId.InvokeFunc(3473),
+            EAetheryteLocation.FirmamentNewNest => _aethernetTeleportByPlaceNameId.InvokeFunc(3475),
+            EAetheryteLocation.FirmanentSaintRoellesDais => _aethernetTeleportByPlaceNameId.InvokeFunc(3474),
+            EAetheryteLocation.FirmamentFeatherfall => _aethernetTeleportByPlaceNameId.InvokeFunc(3525),
+            EAetheryteLocation.FirmamentHoarfrostHall => _aethernetTeleportByPlaceNameId.InvokeFunc(3528),
+            EAetheryteLocation.FirmamentWesternRisensongQuarter => _aethernetTeleportByPlaceNameId.InvokeFunc(3646),
+            EAetheryteLocation.FIrmamentEasternRisensongQuarter => _aethernetTeleportByPlaceNameId.InvokeFunc(3645),
+            EAetheryteLocation.None => throw new ArgumentOutOfRangeException(nameof(aetheryteLocation)),
+            _ => _aethernetTeleportById.InvokeFunc((uint)aetheryteLocation),
         };
-
-        if (name == null)
-            return false;
-
-        _logger.LogInformation("Teleporting to '{Name}'", name);
-        return _aethernetTeleport.InvokeFunc(name);
     }
-
-    private string GetPlaceName(uint rowId) => _dataManager.GetExcelSheet<PlaceName>().GetRow(rowId).Name.ToString();
 }

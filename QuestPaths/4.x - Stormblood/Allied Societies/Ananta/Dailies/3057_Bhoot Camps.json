@@ -29,14 +29,39 @@
             "Z": -180.89569
           },
           "TerritoryId": 612,
-          "InteractionType": "WaitForManualProgress",
+          "InteractionType": "Combat",
           "Comment": "Kill enemy, then use item",
-          "ItemId": 2002439,
-          "EnemySpawnType": "AfterItemUse",
+          "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
             8591
           ],
           "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [
+              {
+                "Low": 2
+              },
+              {
+                "Low": 3
+              }
+            ],
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "DataId": 8591,
+          "Position": {
+            "X": 101.304565,
+            "Y": 41.031494,
+            "Z": -180.89569
+          },
+          "TerritoryId": 612,
+          "InteractionType": "UseItem",
+          "ItemId": 2002439,
           "RequiredQuestVariables": [
             null,
             null,
@@ -69,14 +94,39 @@
             "Z": -397.69592
           },
           "TerritoryId": 612,
-          "InteractionType": "WaitForManualProgress",
+          "InteractionType": "Combat",
           "Comment": "Kill enemy, then use item",
-          "ItemId": 2002439,
-          "EnemySpawnType": "AfterItemUse",
+          "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
             8591
           ],
           "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [
+              {
+                "Low": 1
+              },
+              {
+                "Low": 3
+              }
+            ],
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "DataId": 8591,
+          "Position": {
+            "X": 136.40039,
+            "Y": 50.369995,
+            "Z": -397.69592
+          },
+          "TerritoryId": 612,
+          "InteractionType": "UseItem",
+          "ItemId": 2002439,
           "RequiredQuestVariables": [
             null,
             null,
@@ -109,14 +159,39 @@
             "Z": -294.02612
           },
           "TerritoryId": 612,
-          "InteractionType": "WaitForManualProgress",
+          "InteractionType": "Combat",
           "Comment": "Kill enemy, then use item",
-          "ItemId": 2002439,
-          "EnemySpawnType": "AfterItemUse",
+          "EnemySpawnType": "AfterInteraction",
           "KillEnemyDataIds": [
             8591
           ],
           "Fly": true,
+          "RequiredQuestVariables": [
+            null,
+            null,
+            [
+              {
+                "Low": 1
+              },
+              {
+                "Low": 2
+              }
+            ],
+            null,
+            null,
+            null
+          ]
+        },
+        {
+          "DataId": 8591,
+          "Position": {
+            "X": 12.588623,
+            "Y": 41.672363,
+            "Z": -294.02612
+          },
+          "TerritoryId": 612,
+          "InteractionType": "UseItem",
+          "ItemId": 2002439,
           "RequiredQuestVariables": [
             null,
             null,

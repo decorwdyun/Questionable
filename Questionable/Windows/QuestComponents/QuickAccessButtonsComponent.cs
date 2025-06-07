@@ -92,7 +92,7 @@ internal sealed class QuickAccessButtonsComponent
 
         ImGui.SameLine();
         if (ImGuiComponents.IconButton(FontAwesomeIcon.BookBookmark))
-            _journalProgressWindow.IsOpen = true;
+            _journalProgressWindow.IsOpenAndUncollapsed = true;
         if (ImGui.IsItemHovered())
             ImGui.SetTooltip("Journal Progress");
 
@@ -101,7 +101,7 @@ internal sealed class QuickAccessButtonsComponent
         {
             ImGui.SameLine();
             if (DrawValidationIssuesButton())
-                _questValidationWindow.IsOpen = true;
+                _questValidationWindow.IsOpenAndUncollapsed = true;
         }
     }
 
