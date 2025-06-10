@@ -61,6 +61,7 @@
                     },
                     "TerritoryId": 180,
                     "InteractionType": "Interact",
+                    "Fly": true,
                     "DialogueChoices": [
                         {
                             "Type": "YesNo",
