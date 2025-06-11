@@ -65,9 +65,24 @@
           "TerritoryId": 180,
           "InteractionType": "Combat",
           "EnemySpawnType": "FinishCombatIfAny",
-          "KillEnemyDataIds": [
-            755
-          ]
+          "ComplexCombatData": [
+            {
+              "DataId": 755,
+              "NameId": 2711
+            }
+          ],
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                32
+              ]
+            }
+          }
         },
         {
           "DataId": 2003910,
@@ -97,9 +112,24 @@
           "TerritoryId": 180,
           "InteractionType": "Combat",
           "EnemySpawnType": "FinishCombatIfAny",
-          "KillEnemyDataIds": [
-            755
-          ]
+          "ComplexCombatData": [
+            {
+              "DataId": 755,
+              "NameId": 2711
+            }
+          ],
+          "SkipConditions": {
+            "StepIf": {
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                64
+              ]
+            }
+          }
         },
         {
           "DataId": 2003909,
@@ -134,8 +164,11 @@
           "TerritoryId": 180,
           "InteractionType": "Combat",
           "EnemySpawnType": "FinishCombatIfAny",
-          "KillEnemyDataIds": [
-            755
+          "ComplexCombatData": [
+            {
+              "DataId": 755,
+              "NameId": 2711
+            }
           ]
         },
         {
