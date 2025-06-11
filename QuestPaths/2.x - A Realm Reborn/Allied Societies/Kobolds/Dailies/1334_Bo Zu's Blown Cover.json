@@ -81,6 +81,18 @@
                     },
                     "TerritoryId": 180,
                     "InteractionType": "Combat",
+                    "EnemySpawnType": "FinishCombatIfAny",
+                    "KillEnemyDataIds": [ 2871 ]
+                },
+                {
+                    "DataId": 2003954,
+                    "Position": {
+                        "X": 48.081177,
+                        "Y": 48.599854,
+                        "Z": -346.21198
+                    },
+                    "TerritoryId": 180,
+                    "InteractionType": "Combat",
                     "EnemySpawnType": "AfterInteraction",
                     "KillEnemyDataIds": [
                         17
