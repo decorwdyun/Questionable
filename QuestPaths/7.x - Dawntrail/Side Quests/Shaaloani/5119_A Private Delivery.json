@@ -57,11 +57,11 @@
       "Sequence": 3,
       "Steps": [
         {
-          "DataId": 2014065,
+          "DataId": 2014073,
           "Position": {
-            "X": 250.04956,
-            "Y": 16.281311,
-            "Z": 744.3502
+            "X": 379.65967,
+            "Y": 0.19836426,
+            "Z": 419.6383
           },
           "TerritoryId": 1190,
           "InteractionType": "Interact"
