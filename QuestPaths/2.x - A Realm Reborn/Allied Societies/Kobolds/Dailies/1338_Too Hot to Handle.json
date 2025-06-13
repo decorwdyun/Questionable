@@ -31,7 +31,7 @@
           "EnemySpawnType": "OverworldEnemies",
           "ComplexCombatData": [
             {
-              "DataId": 1833,
+              "DataId": 2833,
               "MinimumKillCount": 2
             }
           ],

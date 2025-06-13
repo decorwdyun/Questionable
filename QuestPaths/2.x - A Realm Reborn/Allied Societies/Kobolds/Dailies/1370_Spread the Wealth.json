@@ -65,8 +65,11 @@
           "TerritoryId": 180,
           "InteractionType": "Combat",
           "EnemySpawnType": "FinishCombatIfAny",
-          "KillEnemyDataIds": [
-            755
+          "ComplexCombatData": [
+            {
+              "DataId": 755,
+              "NameId": 2711
+            }
           ]
         },
         {
@@ -97,8 +100,11 @@
           "TerritoryId": 180,
           "InteractionType": "Combat",
           "EnemySpawnType": "FinishCombatIfAny",
-          "KillEnemyDataIds": [
-            755
+          "ComplexCombatData": [
+            {
+              "DataId": 755,
+              "NameId": 2711
+            }
           ]
         },
         {
@@ -134,8 +140,11 @@
           "TerritoryId": 180,
           "InteractionType": "Combat",
           "EnemySpawnType": "FinishCombatIfAny",
-          "KillEnemyDataIds": [
-            755
+          "ComplexCombatData": [
+            {
+              "DataId": 755,
+              "NameId": 2711
+            }
           ]
         },
         {
