@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using Microsoft.Extensions.Logging;
-using Questionable.Data;
+﻿using Microsoft.Extensions.Logging;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;

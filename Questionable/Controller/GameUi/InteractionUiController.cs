@@ -17,7 +17,6 @@ using LLib.GameData;
 using LLib.GameUI;
 using Lumina.Excel.Sheets;
 using Microsoft.Extensions.Logging;
-using Questionable.Controller.Steps.Interactions;
 using Questionable.Data;
 using Questionable.External;
 using Questionable.Functions;

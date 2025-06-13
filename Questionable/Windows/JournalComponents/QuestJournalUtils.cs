@@ -6,8 +6,6 @@ using Questionable.Controller;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
-using System;
-using Dalamud.Interface.Colors;
 
 namespace Questionable.Windows.JournalComponents;
 

@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
-using Dalamud.Game.ClientState.Objects;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Ipc;
 using JetBrains.Annotations;
 using Questionable.Controller;
 using Questionable.Functions;
-using Questionable.Model;
 using Questionable.Model.Questing;
 using Questionable.Windows;
 using Questionable.Windows.QuestComponents;

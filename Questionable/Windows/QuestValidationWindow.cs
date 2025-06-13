@@ -1,14 +1,12 @@
 ﻿using System.Globalization;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
-using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin;
 using FFXIVClientStructs.FFXIV.Common.Math;
 using ImGuiNET;
 using LLib.ImGui;
 using Questionable.Data;
-using Questionable.Model;
 using Questionable.Validation;
 
 namespace Questionable.Windows;

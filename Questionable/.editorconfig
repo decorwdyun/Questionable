@@ -1019,3 +1019,4 @@ csharp_style_unused_value_expression_statement_preference = discard_variable:sil
 resharper_arrange_trailing_comma_in_multiline_lists_highlighting = none
 resharper_redundant_if_else_block_highlighting = none
 resharper_convert_to_primary_constructor_highlighting = hint
+resharper_redundant_using_directive_highlighting = warning

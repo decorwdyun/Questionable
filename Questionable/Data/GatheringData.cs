@@ -2,7 +2,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Dalamud.Plugin.Services;
-using LLib.GameData;
 using Lumina.Excel.Sheets;
 using Questionable.Model.Gathering;
 
