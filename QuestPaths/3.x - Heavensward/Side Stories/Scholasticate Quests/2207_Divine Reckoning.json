@@ -41,7 +41,8 @@
                         "Z": -129.25922
                     },
                     "TerritoryId": 419,
-                    "InteractionType": "Interact"
+                    "InteractionType": "Interact",
+                    "TargetTerritoryId": 427
                 },
                 {
                     "DataId": 1018161,
@@ -139,6 +140,7 @@
                     },
                     "TerritoryId": 419,
                     "InteractionType": "Interact",
+                    "TargetTerritoryId": 427,
                     "AetheryteShortcut": "Ishgard",
                     "AethernetShortcut": [
                         "[Ishgard] Aetheryte Plaza",
