@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Game.ClientState.Conditions;
-using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Common;
@@ -74,9 +73,6 @@ internal static class AethernetShortcut
         private bool _teleported;
         private bool _triedMounting;
         private DateTime _continueAt = DateTime.MinValue;
-
-        public EAetheryteLocation From => Task.From;
-        public EAetheryteLocation To => Task.To;
 
         protected override bool Start()
         {
@@ -198,9 +194,12 @@ internal static class AethernetShortcut
                 _ when AetheryteConverter.IsLargeAetheryte(Task.From) => 10.9f,
                 _ => 6.9f,
             };
+
+            bool goldSaucerAethernetShard = aetheryteData.IsGoldSaucerAetheryte(Task.From) &&
+                                          !AetheryteConverter.IsLargeAetheryte(Task.From);
             movementController.NavigateTo(EMovementType.Quest, (uint)Task.From, aetheryteData.Locations[Task.From],
-                false, true,
-                distance);
+                false, true, distance,
+                verticalStopDistance: goldSaucerAethernetShard ? 5f : null);
         }
 
         private void DoTeleport()
@@ -245,16 +244,18 @@ internal static class AethernetShortcut
                 return ETaskResult.StillRunning;
             }
 
+            Vector3? position = clientState.LocalPlayer?.Position;
+            if (position == null)
+                return ETaskResult.StillRunning;
+
             if (aetheryteData.IsAirshipLanding(Task.To))
             {
-                if (aetheryteData.CalculateAirshipLandingDistance(clientState.LocalPlayer?.Position ?? Vector3.Zero,
-                        clientState.TerritoryType, Task.To) > 5)
+                if (aetheryteData.CalculateAirshipLandingDistance(position.Value, clientState.TerritoryType, Task.To) > 5)
                     return ETaskResult.StillRunning;
             }
-            else if (aetheryteData.IsCityAetheryte(Task.To))
+            else if (aetheryteData.IsCityAetheryte(Task.To) || aetheryteData.IsGoldSaucerAetheryte(Task.To))
             {
-                if (aetheryteData.CalculateDistance(clientState.LocalPlayer?.Position ?? Vector3.Zero,
-                        clientState.TerritoryType, Task.To) > 20)
+                if (aetheryteData.CalculateDistance(position.Value, clientState.TerritoryType, Task.To) > 20)
                     return ETaskResult.StillRunning;
             }
             else

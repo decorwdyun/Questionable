@@ -20,6 +20,7 @@ using Questionable.Controller.Utils;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
+using Questionable.Model.Questing.Converter;
 
 namespace Questionable.Controller;
 
@@ -423,14 +424,14 @@ internal sealed class CombatController : IDisposable
                 _logger.LogInformation("Moving to {TargetName} ({DataId}) to attack", gameObject.Name,
                     gameObject.DataId);
                 _movementController.NavigateTo(EMovementType.Combat, null, [gameObject.Position], false, false,
-                    maxDistance + hitboxOffset - 0.25f, true);
+                    maxDistance + hitboxOffset - 0.25f, verticalStopDistance: float.MaxValue);
             }
             else
             {
                 _logger.LogInformation("Moving to {TargetName} ({DataId}) to attack (with navmesh)", gameObject.Name,
                     gameObject.DataId);
                 _movementController.NavigateTo(EMovementType.Combat, null, gameObject.Position, false, false,
-                    maxDistance + hitboxOffset - 0.25f, true);
+                    maxDistance + hitboxOffset - 0.25f, verticalStopDistance: float.MaxValue);
             }
         }
     }
