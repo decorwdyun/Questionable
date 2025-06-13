@@ -1,6 +1,5 @@
 ﻿using System;
 using Dalamud.Plugin.Services;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Data;
 using Questionable.Functions;

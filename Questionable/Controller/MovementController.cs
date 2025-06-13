@@ -23,7 +23,6 @@ using Questionable.Model;
 using Questionable.Model.Common;
 using Questionable.Model.Common.Converter;
 using Questionable.Model.Questing;
-using Questionable.Model.Questing.Converter;
 
 namespace Questionable.Controller;
 
@@ -184,7 +183,7 @@ internal sealed class MovementController : IDisposable
             }
             else if ((localPlayerPosition - Destination.Position).Length() < Destination.StopDistance)
             {
-                if (Destination.IgnoreDistanceToObject)
+                if (localPlayerPosition.Y - Destination.Position.Y <= Destination.VerticalStopDistance)
                 {
                     Stop();
                 }
@@ -255,12 +254,12 @@ internal sealed class MovementController : IDisposable
         if (destination.UseNavmesh)
         {
             NavigateTo(EMovementType.None, destination.DataId, destination.Position, false, false,
-                destination.StopDistance, destination.IgnoreDistanceToObject);
+                destination.StopDistance, destination.VerticalStopDistance);
         }
         else
         {
             NavigateTo(EMovementType.None, destination.DataId, [destination.Position], false, false,
-                destination.StopDistance, destination.IgnoreDistanceToObject);
+                destination.StopDistance, destination.VerticalStopDistance);
         }
     }
 
@@ -272,7 +271,7 @@ internal sealed class MovementController : IDisposable
 
     [MemberNotNull(nameof(Destination))]
     private void PrepareNavigation(EMovementType type, uint? dataId, Vector3 to, bool fly, bool sprint,
-        float? stopDistance, bool ignoreDistanceToObject, bool land, bool useNavmesh)
+        float? stopDistance, float verticalStopDistance, bool land, bool useNavmesh)
     {
         ResetPathfinding();
 
@@ -283,18 +282,18 @@ internal sealed class MovementController : IDisposable
         }
 
         Destination = new DestinationData(type, dataId, to, stopDistance ?? (QuestStep.DefaultStopDistance - 0.2f), fly,
-            sprint, ignoreDistanceToObject, land, useNavmesh);
+            sprint, verticalStopDistance, land, useNavmesh);
         MovementStartedAt = DateTime.MaxValue;
     }
 
     public void NavigateTo(EMovementType type, uint? dataId, Vector3 to, bool fly, bool sprint,
-        float? stopDistance = null, bool ignoreDistanceToObject = false, bool land = false)
+        float? stopDistance = null, float? verticalStopDistance = null, bool land = false)
     {
         fly |= _condition[ConditionFlag.Diving];
         if (fly && land)
             to = to with { Y = to.Y + 2.6f };
 
-        PrepareNavigation(type, dataId, to, fly, sprint, stopDistance, ignoreDistanceToObject, land, true);
+        PrepareNavigation(type, dataId, to, fly, sprint, stopDistance, verticalStopDistance ?? DefaultVerticalInteractionDistance, land, true);
         _logger.LogInformation("Pathfinding to {Destination}", Destination);
 
         Destination.NavmeshCalculations++;
@@ -322,13 +321,13 @@ internal sealed class MovementController : IDisposable
     }
 
     public void NavigateTo(EMovementType type, uint? dataId, List<Vector3> to, bool fly, bool sprint,
-        float? stopDistance, bool ignoreDistanceToObject = false, bool land = false)
+        float? stopDistance, float? verticalStopDistance = null, bool land = false)
     {
         fly |= _condition[ConditionFlag.Diving];
         if (fly && land && to.Count > 0)
             to[^1] = to[^1] with { Y = to[^1].Y + 2.6f };
 
-        PrepareNavigation(type, dataId, to.Last(), fly, sprint, stopDistance, ignoreDistanceToObject, land, false);
+        PrepareNavigation(type, dataId, to.Last(), fly, sprint, stopDistance, verticalStopDistance ?? DefaultVerticalInteractionDistance, land, false);
 
         _logger.LogInformation("Moving to {Destination}", Destination);
         _navmeshIpc.MoveTo(to, fly);
@@ -468,7 +467,7 @@ internal sealed class MovementController : IDisposable
         float StopDistance,
         bool IsFlying,
         bool CanSprint,
-        bool IgnoreDistanceToObject,
+        float VerticalStopDistance,
         bool Land,
         bool UseNavmesh)
     {

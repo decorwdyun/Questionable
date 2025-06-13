@@ -68,7 +68,7 @@ internal sealed class MoveExecutor : TaskExecutor<MoveTask>, IToastAware
                     fly: Task.Fly,
                     sprint: Task.Sprint ?? _mountDuringMovement == null,
                     stopDistance: Task.StopDistance,
-                    ignoreDistanceToObject: Task.IgnoreDistanceToObject,
+                    verticalStopDistance: Task.IgnoreDistanceToObject ? float.MaxValue : null,
                     land: Task.Land);
         }
         else
@@ -78,7 +78,7 @@ internal sealed class MoveExecutor : TaskExecutor<MoveTask>, IToastAware
                     fly: Task.Fly,
                     sprint: Task.Sprint ?? _mountDuringMovement == null,
                     stopDistance: Task.StopDistance,
-                    ignoreDistanceToObject: Task.IgnoreDistanceToObject,
+                    verticalStopDistance: Task.IgnoreDistanceToObject ? float.MaxValue : null,
                     land: Task.Land);
         }
     }
