@@ -7,6 +7,7 @@ using Dalamud.Plugin.Ipc.Exceptions;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller;
+using Questionable.Data;
 
 namespace Questionable.External;
 
@@ -31,6 +32,8 @@ internal sealed class PandorasBoxIpc : IDisposable
 
     private readonly IFramework _framework;
     private readonly QuestController _questController;
+    private readonly TerritoryData _territoryData;
+    private readonly IClientState _clientState;
     private readonly ILogger<PandorasBoxIpc> _logger;
 
     private readonly ICallGateSubscriber<string, bool?> _getFeatureEnabled;
@@ -39,11 +42,17 @@ internal sealed class PandorasBoxIpc : IDisposable
     private bool _loggedIpcError;
     private HashSet<string>? _pausedFeatures;
 
-    public PandorasBoxIpc(IDalamudPluginInterface pluginInterface, IFramework framework,
-        QuestController questController, ILogger<PandorasBoxIpc> logger)
+    public PandorasBoxIpc(IDalamudPluginInterface pluginInterface,
+        IFramework framework,
+        QuestController questController,
+        TerritoryData territoryData,
+        IClientState clientState,
+        ILogger<PandorasBoxIpc> logger)
     {
         _framework = framework;
         _questController = questController;
+        _territoryData = territoryData;
+        _clientState = clientState;
         _logger = logger;
         _getFeatureEnabled = pluginInterface.GetIpcSubscriber<string, bool?>("PandorasBox.GetFeatureEnabled");
         _setFeatureEnabled = pluginInterface.GetIpcSubscriber<string, bool, object?>("PandorasBox.SetFeatureEnabled");
@@ -78,7 +87,7 @@ internal sealed class PandorasBoxIpc : IDisposable
     {
         bool hasActiveQuest = _questController.IsRunning ||
                               _questController.AutomationType != QuestController.EAutomationType.Manual;
-        if (hasActiveQuest)
+        if (hasActiveQuest && !_territoryData.IsDutyInstance(_clientState.TerritoryType))
         {
             DisableConflictingFeatures();
         }
