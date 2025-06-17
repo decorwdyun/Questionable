@@ -56,6 +56,7 @@ public enum EAction
     WaterCannon = 11385,
     Wasshoi = 11499,
     ShroudedLuminescence = 39505,
+    BigSneeze = 1765,
 
     CollectMiner = 240,
     LuckOfTheMountaineer = 4081,
@@ -100,6 +101,7 @@ public static class EActionExtensions
             or EAction.HopStep
             or EAction.BosomBrook
             or EAction.Wasshoi
-            or EAction.ShroudedLuminescence;
+            or EAction.ShroudedLuminescence
+            or EAction.BigSneeze;
     }
 }
