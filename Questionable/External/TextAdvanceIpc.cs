@@ -1,10 +1,7 @@
 ﻿using Dalamud.Plugin;
 using Dalamud.Plugin.Ipc;
 using Dalamud.Plugin.Services;
-using FFXIVClientStructs.FFXIV.Client.Game;
 using Questionable.Controller;
-using Questionable.Data;
-using Questionable.Model.Common;
 using System;
 using System.Diagnostics.CodeAnalysis;
 

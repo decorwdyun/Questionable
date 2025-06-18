@@ -21,6 +21,17 @@
       "Sequence": 1,
       "Steps": [
         {
+          "DataId": 2009129,
+          "Position": {
+            "X": 320.39355,
+            "Y": -0.07635498,
+            "Z": 2.7313232
+          },
+          "TerritoryId": 613,
+          "InteractionType": "Interact",
+          "RequiredQuestVariables": [null, [2], null, null, null, null]
+        },
+        {
           "DataId": 2009130,
           "Position": {
             "X": 14.572327,
@@ -31,7 +42,7 @@
           "InteractionType": "Interact",
           "Fly": true,
           "AetheryteShortcut": "Ruby Sea - Onokoro",
-          "RequiredQuestVariables": [null, [6, 7], null, null, null, null]
+          "RequiredQuestVariables": [null, [6, 7, 8], null, null, null, null]
         },
         {
           "DataId": 2009131,
@@ -43,7 +54,7 @@
           "TerritoryId": 613,
           "InteractionType": "Interact",
           "Fly": true,
-          "RequiredQuestVariables": [null, [22], null, null, null, null]
+          "RequiredQuestVariables": [null, [18, 22], null, null, null, null]
         },
         {
           "DataId": 2009132,
@@ -55,7 +66,7 @@
           "TerritoryId": 613,
           "InteractionType": "Interact",
           "Fly": true,
-          "RequiredQuestVariables": [null, [23], null, null, null, null]
+          "RequiredQuestVariables": [null, [23, 24], null, null, null, null]
         },
         {
           "DataId": 2009133,
@@ -79,7 +90,7 @@
           "TerritoryId": 613,
           "InteractionType": "Interact",
           "Fly": true,
-          "RequiredQuestVariables": [null, [38], null, null, null, null]
+          "RequiredQuestVariables": [null, [34, 38, 40], null, null, null, null]
         }
       ]
     },

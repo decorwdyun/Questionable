@@ -20,6 +20,7 @@ internal sealed class AlliedSocietyData
             { 147, new([1024777,1024912], EAetheryteLocation.FringesPeeringStones) },
             { 369, new([1051798], EAetheryteLocation.KozamaukaDockPoga) },
             { 391, new([1052562], EAetheryteLocation.YakTelMamook) },
+            { 24, new([1052562], EAetheryteLocation.EastShroudHawthorneHut) }
         }.AsReadOnly();
 
     public EAlliedSociety GetCommonAlliedSocietyTurnIn(ElementId elementId)

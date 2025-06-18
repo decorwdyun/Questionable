@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Plugin.Services;
-using Dalamud.Utility;
 using Lumina.Excel.Sheets;
 using Questionable.Model.Common;
 
@@ -13,33 +12,24 @@ internal sealed class AetheryteData
 {
     public AetheryteData(IDataManager dataManager)
     {
-        Dictionary<EAetheryteLocation, string> aethernetNames = new();
         Dictionary<EAetheryteLocation, ushort> territoryIds = new();
         Dictionary<EAetheryteLocation, ushort> aethernetGroups = new();
 
 
-        void ConfigureAetheryte(EAetheryteLocation aetheryteLocation, string name, ushort territoryId,
+        void ConfigureAetheryte(EAetheryteLocation aetheryteLocation, ushort territoryId,
             ushort aethernetGroup)
         {
-            aethernetNames[aetheryteLocation] = name;
             territoryIds[aetheryteLocation] = territoryId;
             aethernetGroups[aetheryteLocation] = aethernetGroup;
         }
 
-        void ConfigureAetheryteWithPlaceName(EAetheryteLocation aetheryteLocation, uint placeNameId, ushort territoryId)
+        void ConfigureAetheryteWithAutoGroup(EAetheryteLocation aetheryteLocation, ushort territoryId)
         {
-            ConfigureAetheryte(aetheryteLocation,
-                dataManager.GetExcelSheet<PlaceName>().GetRow(placeNameId).Name.ToDalamudString().TextValue,
-                territoryId,
-                (ushort)((int)aetheryteLocation / 100));
+            ConfigureAetheryte(aetheryteLocation, territoryId, (ushort)((int)aetheryteLocation / 100));
         }
 
         foreach (var aetheryte in dataManager.GetExcelSheet<Aetheryte>().Where(x => x.RowId > 0))
         {
-            string? aethernetName = aetheryte.AethernetName.ValueNullable?.Name.ToString();
-            if (!string.IsNullOrEmpty(aethernetName))
-                aethernetNames[(EAetheryteLocation)aetheryte.RowId] = aethernetName;
-
             if (aetheryte.Territory.RowId > 0)
                 territoryIds[(EAetheryteLocation)aetheryte.RowId] = (ushort)aetheryte.Territory.RowId;
 
@@ -47,18 +37,16 @@ internal sealed class AetheryteData
                 aethernetGroups[(EAetheryteLocation)aetheryte.RowId] = aetheryte.AethernetGroup;
         }
 
-        ConfigureAetheryte(EAetheryteLocation.IshgardFirmament, "Firmament", 886,
-            aethernetGroups[EAetheryteLocation.Ishgard]);
-        ConfigureAetheryteWithPlaceName(EAetheryteLocation.FirmamentMendicantsCourt, 3436, 886);
-        ConfigureAetheryteWithPlaceName(EAetheryteLocation.FirmamentMattock, 3473, 886);
-        ConfigureAetheryteWithPlaceName(EAetheryteLocation.FirmamentNewNest, 3475, 886);
-        ConfigureAetheryteWithPlaceName(EAetheryteLocation.FirmanentSaintRoellesDais, 3474, 886);
-        ConfigureAetheryteWithPlaceName(EAetheryteLocation.FirmamentFeatherfall, 3525, 886);
-        ConfigureAetheryteWithPlaceName(EAetheryteLocation.FirmamentHoarfrostHall, 3528, 886);
-        ConfigureAetheryteWithPlaceName(EAetheryteLocation.FirmamentWesternRisensongQuarter, 3646, 886);
-        ConfigureAetheryteWithPlaceName(EAetheryteLocation.FIrmamentEasternRisensongQuarter, 3645, 886);
+        ConfigureAetheryte(EAetheryteLocation.IshgardFirmament, 886, aethernetGroups[EAetheryteLocation.Ishgard]);
+        ConfigureAetheryteWithAutoGroup(EAetheryteLocation.FirmamentMendicantsCourt, 886);
+        ConfigureAetheryteWithAutoGroup(EAetheryteLocation.FirmamentMattock, 886);
+        ConfigureAetheryteWithAutoGroup(EAetheryteLocation.FirmamentNewNest, 886);
+        ConfigureAetheryteWithAutoGroup(EAetheryteLocation.FirmanentSaintRoellesDais, 886);
+        ConfigureAetheryteWithAutoGroup(EAetheryteLocation.FirmamentFeatherfall, 886);
+        ConfigureAetheryteWithAutoGroup(EAetheryteLocation.FirmamentHoarfrostHall, 886);
+        ConfigureAetheryteWithAutoGroup(EAetheryteLocation.FirmamentWesternRisensongQuarter, 886);
+        ConfigureAetheryteWithAutoGroup(EAetheryteLocation.FIrmamentEasternRisensongQuarter, 886);
 
-        AethernetNames = aethernetNames.AsReadOnly();
         TerritoryIds = territoryIds.AsReadOnly();
         AethernetGroups = aethernetGroups.AsReadOnly();
 
@@ -309,7 +297,7 @@ internal sealed class AetheryteData
     /// <summary>
     /// Airship landings are special as they're one-way only (except for Radz-at-Han, which is a normal aetheryte).
     /// </summary>
-    public ReadOnlyDictionary<EAetheryteLocation, Vector3> AirshipLandingLocations { get; } =
+    private ReadOnlyDictionary<EAetheryteLocation, Vector3> AirshipLandingLocations { get; } =
         new Dictionary<EAetheryteLocation, Vector3>
         {
             { EAetheryteLocation.LimsaAirship, new(-19.44352f, 91.99999f, -9.892939f) },
@@ -319,10 +307,9 @@ internal sealed class AetheryteData
             { EAetheryteLocation.IshgardFirmament, new(9.92315f, -15.2f, 173.5059f) },
         }.AsReadOnly();
 
-    public ReadOnlyDictionary<EAetheryteLocation, string> AethernetNames { get; }
     public ReadOnlyDictionary<EAetheryteLocation, ushort> TerritoryIds { get; }
     public ReadOnlyDictionary<EAetheryteLocation, ushort> AethernetGroups { get; }
-    public IReadOnlyList<ushort> TownTerritoryIds { get; set; }
+    private IReadOnlyList<ushort> TownTerritoryIds { get; set; }
 
     public float CalculateDistance(Vector3 fromPosition, ushort fromTerritoryType, EAetheryteLocation to)
     {
@@ -356,4 +343,6 @@ internal sealed class AetheryteData
     }
 
     public bool IsAirshipLanding(EAetheryteLocation aetheryte) => AirshipLandingLocations.ContainsKey(aetheryte);
+
+    public bool IsGoldSaucerAetheryte(EAetheryteLocation aetheryte) => TerritoryIds[aetheryte] is 144 or 388;
 }

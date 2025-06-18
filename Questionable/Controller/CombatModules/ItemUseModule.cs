@@ -9,7 +9,6 @@ using FFXIVClientStructs.FFXIV.Client.Game.Character;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Questionable.Functions;
 using Questionable.Model.Questing;
 
 namespace Questionable.Controller.CombatModules;
