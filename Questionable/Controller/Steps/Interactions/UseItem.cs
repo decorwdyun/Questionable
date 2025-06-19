@@ -234,11 +234,9 @@ internal static class UseItem
         ElementId? QuestId,
         Vector3 Position,
         uint ItemId,
-        IList<QuestWorkValue?> CompletionQuestVariablesFlags)
-        : IUseItemBase
+        IList<QuestWorkValue?> CompletionQuestVariablesFlags,
+        bool StartingCombat = false) : IUseItemBase
     {
-        public bool StartingCombat => false;
-
         public override string ToString() =>
             $"UseItem({ItemId} on ground at {Position.ToString("G", CultureInfo.InvariantCulture)})";
     }
@@ -276,9 +274,9 @@ internal static class UseItem
     internal sealed record UseOnSelf(
         ElementId? QuestId,
         uint ItemId,
-        IList<QuestWorkValue?> CompletionQuestVariablesFlags) : IUseItemBase
+        IList<QuestWorkValue?> CompletionQuestVariablesFlags,
+        bool StartingCombat = false) : IUseItemBase
     {
-        public bool StartingCombat => false;
         public override string ToString() => $"UseItem({ItemId})";
     }
 

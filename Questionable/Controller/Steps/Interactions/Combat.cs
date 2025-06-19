@@ -42,15 +42,31 @@ internal static class Combat
                     break;
 
                 case EEnemySpawnType.AfterItemUse:
-                    ArgumentNullException.ThrowIfNull(step.DataId);
                     ArgumentNullException.ThrowIfNull(step.ItemId);
 
                     if (step.GroundTarget == true)
-                        yield return new UseItem.UseOnGround(quest.Id, step.DataId.Value, step.ItemId.Value,
-                            step.CompletionQuestVariablesFlags, true);
-                    else
+                    {
+                        if (step.DataId != null)
+                            yield return new UseItem.UseOnGround(quest.Id, step.DataId.Value, step.ItemId.Value,
+                                step.CompletionQuestVariablesFlags, true);
+                        else
+                        {
+                            ArgumentNullException.ThrowIfNull(step.Position);
+                            yield return new UseItem.UseOnPosition(quest.Id, step.Position.Value, step.ItemId.Value,
+                                step.CompletionQuestVariablesFlags, true);
+                        }
+                    }
+                    else if (step.DataId != null)
+                    {
                         yield return new UseItem.UseOnObject(quest.Id, step.DataId.Value, step.ItemId.Value,
                             step.CompletionQuestVariablesFlags, true);
+                    }
+                    else
+                    {
+                        yield return new UseItem.UseOnSelf(quest.Id, step.ItemId.Value,
+                            step.CompletionQuestVariablesFlags, true);
+                    }
+
                     yield return new WaitAtEnd.WaitDelay(TimeSpan.FromSeconds(1));
                     yield return CreateTask(quest, sequence, step);
                     break;
