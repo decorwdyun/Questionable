@@ -35,7 +35,7 @@
           "InteractionType": "PurchaseItem",
           "PurchaseMenu": {
             "ExcelSheet": "GilShop",
-            "Key": 262186
+            "Key": 262227
           },
           "ItemId": 2653,
           "ItemCount": 1,
@@ -61,7 +61,7 @@
           "InteractionType": "PurchaseItem",
           "PurchaseMenu": {
             "ExcelSheet": "GilShop",
-            "Key": 262186
+            "Key": 262227
           },
           "ItemId": 2655,
           "ItemCount": 1,
