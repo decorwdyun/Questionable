@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using LLib.GameUI;
@@ -9,7 +8,6 @@ using Questionable.Controller.Steps.Shared;
 using Questionable.Data;
 using Questionable.Functions;
 using Questionable.Model;
-using Questionable.Model.Common;
 using Questionable.Model.Questing;
 
 namespace Questionable.Controller.Steps;

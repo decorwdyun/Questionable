@@ -1,8 +1,5 @@
-﻿using System;
-using System.Numerics;
-using Dalamud.Game.ClientState.Objects.Types;
+﻿using Dalamud.Game.ClientState.Objects.Types;
 using Questionable.Functions;
-using Questionable.Model;
 using Questionable.Model.Questing;
 
 namespace Questionable.Controller.CombatModules;

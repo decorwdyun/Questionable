@@ -1,9 +1,6 @@
 using System;
 using System.Numerics;
 using Dalamud.Plugin.Services;
-using FFXIVClientStructs.FFXIV.Client.Game;
-using FFXIVClientStructs.FFXIV.Client.Game.UI;
-using Microsoft.Extensions.Logging;
 using Questionable.Model.Questing;
 
 namespace Questionable.Controller.Steps.Shared;

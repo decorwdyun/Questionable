@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "liza",
   "QuestSequence": [
@@ -133,7 +133,8 @@
           },
           "TerritoryId": 962,
           "InteractionType": "CompleteQuest",
-          "AetheryteShortcut": "Old Sharlayan"
+          "AetheryteShortcut": "Old Sharlayan",
+          "NextQuestId": 4812
         }
       ]
     }

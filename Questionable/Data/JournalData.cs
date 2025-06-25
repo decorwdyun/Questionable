@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Dalamud.Plugin.Services;
-using FFXIVClientStructs.FFXIV.Client.Game.Fate;
 using Lumina.Excel.Sheets;
 using Questionable.Model;
 using Questionable.Model.Questing;

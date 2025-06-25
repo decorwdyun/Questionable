@@ -2,7 +2,6 @@
 using Dalamud.Plugin;
 using ImGuiNET;
 using LLib.ImGui;
-using Questionable.Controller.Steps.Interactions;
 using Questionable.Windows.ConfigComponents;
 
 namespace Questionable.Windows;

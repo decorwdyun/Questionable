@@ -26,6 +26,7 @@ internal sealed class CommandHandler : IDisposable
     private readonly OneTimeSetupWindow _oneTimeSetupWindow;
     private readonly QuestWindow _questWindow;
     private readonly QuestSelectionWindow _questSelectionWindow;
+    private readonly JournalProgressWindow _journalProgressWindow;
     private readonly ITargetManager _targetManager;
     private readonly QuestFunctions _questFunctions;
     private readonly GameFunctions _gameFunctions;
@@ -43,6 +44,7 @@ internal sealed class CommandHandler : IDisposable
         OneTimeSetupWindow oneTimeSetupWindow,
         QuestWindow questWindow,
         QuestSelectionWindow questSelectionWindow,
+        JournalProgressWindow journalProgressWindow,
         ITargetManager targetManager,
         QuestFunctions questFunctions,
         GameFunctions gameFunctions,
@@ -59,6 +61,7 @@ internal sealed class CommandHandler : IDisposable
         _oneTimeSetupWindow = oneTimeSetupWindow;
         _questWindow = questWindow;
         _questSelectionWindow = questSelectionWindow;
+        _journalProgressWindow = journalProgressWindow;
         _targetManager = targetManager;
         _questFunctions = questFunctions;
         _gameFunctions = gameFunctions;
@@ -130,6 +133,11 @@ internal sealed class CommandHandler : IDisposable
             case "z":
             case "zone":
                 _questSelectionWindow.OpenForCurrentZone();
+                break;
+
+            case "j":
+            case "journal":
+                _journalProgressWindow.ToggleOrUncollapse();
                 break;
 
             case "mountid":

@@ -14,6 +14,7 @@
                     },
                     "TerritoryId": 419,
                     "InteractionType": "Interact",
+                    "TargetTerritoryId": 427,
                     "AetheryteShortcut": "Ishgard",
                     "AethernetShortcut": [
                         "[Ishgard] Aetheryte Plaza",
@@ -51,7 +52,8 @@
                         "Z": 11.86189
                     },
                     "TerritoryId": 427,
-                    "InteractionType": "Interact"
+                    "InteractionType": "Interact",
+                    "TargetTerritoryId": 419
                 },
                 {
                     "DataId": 1015977,
@@ -91,7 +93,8 @@
                         "Z": -129.25922
                     },
                     "TerritoryId": 419,
-                    "InteractionType": "Interact"
+                    "InteractionType": "Interact",
+                    "TargetTerritoryId": 427
                 },
                 {
                     "DataId": 1015944,
@@ -116,7 +119,8 @@
                         "Z": 11.856201
                     },
                     "TerritoryId": 427,
-                    "InteractionType": "Interact"
+                    "InteractionType": "Interact",
+                    "TargetTerritoryId": 419
                 },
                 {
                     "DataId": 1015949,
@@ -152,6 +156,7 @@
                     },
                     "TerritoryId": 419,
                     "InteractionType": "Interact",
+                    "TargetTerritoryId": 427,
                     "AethernetShortcut": [
                         "[Ishgard] The Jeweled Crozier",
                         "[Ishgard] Saint Reymanaud's Cathedral"

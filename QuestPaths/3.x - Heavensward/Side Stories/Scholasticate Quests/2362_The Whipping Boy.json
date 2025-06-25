@@ -14,6 +14,7 @@
                     },
                     "TerritoryId": 419,
                     "InteractionType": "Interact",
+                    "TargetTerritoryId": 427,
                     "AetheryteShortcut": "Ishgard",
                     "AethernetShortcut": [
                         "[Ishgard] Aetheryte Plaza",
@@ -51,7 +52,8 @@
                         "Z": 11.856201
                     },
                     "TerritoryId": 427,
-                    "InteractionType": "Interact"
+                    "InteractionType": "Interact",
+                    "TargetTerritoryId": 419
                 },
                 {
                     "DataId": 1017909,
@@ -92,7 +94,8 @@
                     },
                     "TerritoryId": 419,
                     "InteractionType": "CompleteQuest",
-                    "Emote": "soothe"
+                    "Emote": "soothe",
+                    "NextQuestId": 2363
                 }
             ]
         }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Dalamud.Game.Text;
+﻿using Dalamud.Game.Text;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
 using Questionable.Data;

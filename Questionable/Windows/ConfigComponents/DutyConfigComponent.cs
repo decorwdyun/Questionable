@@ -4,7 +4,6 @@ using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using System.Text;
-using Dalamud.Game.Text;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
