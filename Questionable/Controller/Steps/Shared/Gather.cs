@@ -13,6 +13,7 @@ using Questionable.Data;
 using Questionable.Model;
 using Questionable.Model.Gathering;
 using Questionable.Model.Questing;
+using Action = Questionable.Controller.Steps.Interactions.Action;
 
 namespace Questionable.Controller.Steps.Shared;
 
@@ -60,6 +61,11 @@ internal static class Gather
 
             if (HasRequiredItems(Task.GatheredItem))
                 yield break;
+
+            if (currentClassJob == EClassJob.Miner)
+                yield return new Action.TriggerStatusIfMissing(EStatus.Triangulate, EAction.Prospect);
+            else if (currentClassJob == EClassJob.Botanist)
+                yield return new Action.TriggerStatusIfMissing(EStatus.Triangulate, EAction.Triangulate);
 
             using (var _ = logger.BeginScope("Gathering(inner)"))
             {

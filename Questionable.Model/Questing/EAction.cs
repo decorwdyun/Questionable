@@ -58,12 +58,14 @@ public enum EAction
     ShroudedLuminescence = 39505,
     BigSneeze = 1765,
 
+    Prospect = 227,
     CollectMiner = 240,
     LuckOfTheMountaineer = 4081,
     ScourMiner = 22182,
     MeticulousMiner = 22184,
     ScrutinyMiner = 22185,
 
+    Triangulate = 210,
     CollectBotanist = 815,
     LuckOfThePioneer = 4095,
     ScourBotanist = 22186,
