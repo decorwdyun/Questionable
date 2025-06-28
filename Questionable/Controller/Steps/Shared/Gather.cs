@@ -63,7 +63,7 @@ internal static class Gather
                 yield break;
 
             if (currentClassJob == EClassJob.Miner)
-                yield return new Action.TriggerStatusIfMissing(EStatus.Triangulate, EAction.Prospect);
+                yield return new Action.TriggerStatusIfMissing(EStatus.Prospect, EAction.Prospect);
             else if (currentClassJob == EClassJob.Botanist)
                 yield return new Action.TriggerStatusIfMissing(EStatus.Triangulate, EAction.Triangulate);
 
