@@ -192,4 +192,29 @@ internal static class Action
 
         public override bool ShouldInterruptOnDamage() => false;
     }
+
+    internal sealed record TriggerStatusIfMissing(EStatus Status, EAction Action) : ITask
+    {
+        public override string ToString() => $"TriggerStatus({Status})";
+    }
+
+    internal sealed class TriggerStatusIfMissingExecutor(GameFunctions gameFunctions)
+        : TaskExecutor<TriggerStatusIfMissing>
+    {
+        protected override bool Start()
+        {
+            if (gameFunctions.HasStatus(Task.Status))
+                return false;
+
+            gameFunctions.UseAction(Task.Action);
+            return true;
+        }
+
+        public override ETaskResult Update()
+        {
+            return gameFunctions.HasStatus(Task.Status) ? ETaskResult.TaskComplete : ETaskResult.StillRunning;
+        }
+
+        public override bool ShouldInterruptOnDamage() => false;
+    }
 }

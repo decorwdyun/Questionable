@@ -214,10 +214,14 @@ internal sealed unsafe class GameFunctions
 
     public bool UseAction(EAction action)
     {
-        uint actionId = ActionManager.Instance()->GetAdjustedActionId((uint)action);
-        if (ActionManager.Instance()->GetActionStatus(ActionType.Action, actionId) == 0)
+        uint actionId = (uint)action & 0xFFFF;
+        ActionType actionType = ((uint)action & 0x10000) == 0x10000 ? ActionType.GeneralAction : ActionType.Action;
+        if (actionType == ActionType.Action)
+            actionId = ActionManager.Instance()->GetAdjustedActionId(actionId);
+
+        if (ActionManager.Instance()->GetActionStatus(actionType, actionId) == 0)
         {
-            bool result = ActionManager.Instance()->UseAction(ActionType.Action, actionId);
+            bool result = ActionManager.Instance()->UseAction(actionType, actionId);
             _logger.LogInformation("UseAction {Action} (adjusted: {AdjustedActionId}) result: {Result}", action,
                 actionId, result);
 
@@ -229,8 +233,15 @@ internal sealed unsafe class GameFunctions
 
     public bool UseAction(IGameObject gameObject, EAction action, bool checkCanUse = true)
     {
-        uint actionId = ActionManager.Instance()->GetAdjustedActionId((uint)action);
-        var actionRow = _dataManager.GetExcelSheet<Action>().GetRow(actionId);
+        uint actionId = (uint)action & 0xFFFF;
+        ActionType actionType = ((uint)action & 0x10000) == 0x10000 ? ActionType.GeneralAction : ActionType.Action;
+        if (actionType == ActionType.GeneralAction)
+        {
+            _logger.LogWarning("Can not use general action {Action} on target {Target}", action, gameObject);
+            return false;
+        }
+
+        actionId = ActionManager.Instance()->GetAdjustedActionId(actionId);
         if (checkCanUse && !ActionManager.CanUseActionOnTarget(actionId, (GameObject*)gameObject.Address))
         {
             _logger.LogWarning("Can not use action {Action} (adjusted: {AdjustedActionId}) on target {Target}", action,
@@ -238,14 +249,15 @@ internal sealed unsafe class GameFunctions
             return false;
         }
 
+        Action actionRow = _dataManager.GetExcelSheet<Action>().GetRow(actionId);
         _targetManager.Target = gameObject;
-        if (ActionManager.Instance()->GetActionStatus(ActionType.Action, actionId, gameObject.GameObjectId) == 0)
+        if (ActionManager.Instance()->GetActionStatus(actionType, actionId, gameObject.GameObjectId) == 0)
         {
             bool result;
             if (actionRow.TargetArea)
             {
                 Vector3 position = gameObject.Position;
-                result = ActionManager.Instance()->UseActionLocation(ActionType.Action, actionId,
+                result = ActionManager.Instance()->UseActionLocation(actionType, actionId,
                     location: &position);
                 _logger.LogInformation(
                     "UseAction {Action} (adjusted: {AdjustedActionId}) on target area {Target} result: {Result}",
@@ -253,7 +265,7 @@ internal sealed unsafe class GameFunctions
             }
             else
             {
-                result = ActionManager.Instance()->UseAction(ActionType.Action, actionId, gameObject.GameObjectId);
+                result = ActionManager.Instance()->UseAction(actionType, actionId, gameObject.GameObjectId);
                 _logger.LogInformation(
                     "UseAction {Action} (adjusted: {AdjustedActionId}) on target {Target} result: {Result}", action,
                     actionId, gameObject, result);
