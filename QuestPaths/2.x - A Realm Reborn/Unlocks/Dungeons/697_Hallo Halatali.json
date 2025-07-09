@@ -6,6 +6,18 @@
       "Sequence": 0,
       "Steps": [
         {
+          "TerritoryId": 128,
+          "InteractionType": "UseItem",
+          "ItemId": 30362,
+          "SkipConditions": {
+            "StepIf": {
+              "InTerritory": [
+                140
+              ]
+            }
+          }
+        },
+        {
           "DataId": 1005021,
           "Position": {
             "X": -472.49567,
@@ -13,8 +25,7 @@
             "Z": -355.00116
           },
           "TerritoryId": 140,
-          "InteractionType": "AcceptQuest",
-          "AetheryteShortcut": "Western Thanalan - Horizon"
+          "InteractionType": "AcceptQuest"
         }
       ]
     },
