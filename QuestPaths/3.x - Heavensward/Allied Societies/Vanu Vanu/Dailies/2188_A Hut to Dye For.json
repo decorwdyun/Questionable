@@ -92,7 +92,20 @@
           },
           "TerritoryId": 401,
           "InteractionType": "WalkTo",
-          "$": "Run away from the enemy to TP"
+          "$": "Run away from the enemy to TP",
+          "SkipConditions": {
+            "StepIf": {
+              "NotNearPosition": {
+                "Position": {
+                  "X": 317.41415,
+                  "Y": 110.85538,
+                  "Z": -34.527588
+                },
+                "TerritoryId": 401,
+                "MaximumDistance": 50
+              }
+            }
+          }
         },
         {
           "DataId": 1016092,

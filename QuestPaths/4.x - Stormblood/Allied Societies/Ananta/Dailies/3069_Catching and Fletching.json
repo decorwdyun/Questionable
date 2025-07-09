@@ -72,6 +72,7 @@
           "TerritoryId": 612,
           "InteractionType": "Combat",
           "EnemySpawnType": "AfterInteraction",
+          "Fly": true,
           "ComplexCombatData": [
             {
               "DataId": 8595,

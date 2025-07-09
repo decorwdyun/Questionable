@@ -30,7 +30,8 @@
           "TerritoryId": 146,
           "InteractionType": "Interact",
           "RequiredQuestVariables": [null, [1, 2], null, null, null, null],
-          "Fly": true
+          "Fly": true,
+          "Land": true
         },
         {
           "DataId": 2002981,
@@ -42,7 +43,8 @@
           "TerritoryId": 146,
           "InteractionType": "Interact",
           "RequiredQuestVariables": [null, [4, 17], null, null, null, null],
-          "Fly": true
+          "Fly": true,
+          "Land": true
         },
         {
           "DataId": 2002982,
@@ -54,7 +56,8 @@
           "TerritoryId": 146,
           "InteractionType": "Interact",
           "RequiredQuestVariables": [null, [18, 20], null, null, null, null],
-          "Fly": true
+          "Fly": true,
+          "Land": true
         },
         {
           "DataId": 2002985,
@@ -73,7 +76,8 @@
             null,
             null
           ],
-          "Fly": true
+          "Fly": true,
+          "Land": true
         },
         {
           "DataId": 2002986,
@@ -92,7 +96,8 @@
             null,
             null
           ],
-          "Fly": true
+          "Fly": true,
+          "Land": true
         }
       ]
     },
