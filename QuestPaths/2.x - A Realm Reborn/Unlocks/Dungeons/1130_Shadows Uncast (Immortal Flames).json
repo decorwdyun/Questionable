@@ -1,6 +1,6 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
-  "Author": "liza",
+  "Author": ["liza", "Friendly"],
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -13,7 +13,13 @@
             "Z": -114.67157
           },
           "TerritoryId": 130,
-          "InteractionType": "AcceptQuest"
+          "InteractionType": "AcceptQuest",
+          "AetheryteShortcut": "Ul'dah",
+          "SkipConditions": {
+            "AethernetShortcutIf": {
+              "InSameTerritory": true
+            }
+          }
         }
       ]
     },
