@@ -124,7 +124,8 @@ internal sealed class EditorWindow : Window
 
     public override bool DrawConditions()
     {
-        return _target != null || _targetLocation != null;
+        return !(_clientState.TerritoryType is 0 or 939) &&
+            (_target != null || _targetLocation != null);
     }
 
     public override void Draw()
