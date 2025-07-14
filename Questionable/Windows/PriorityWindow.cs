@@ -104,9 +104,17 @@ internal sealed class PriorityWindow : LWindow
             IEnumerable<Quest> foundQuests;
             if (!string.IsNullOrEmpty(_searchString))
             {
+                bool DefaultPredicate(Quest x) => x.Info.Name.Contains(_searchString, StringComparison.CurrentCultureIgnoreCase);
+
+                Func<Quest, bool> searchPredicate;
+                if (ElementId.TryFromString(_searchString, out ElementId? elementId))
+                    searchPredicate = x => DefaultPredicate(x) || x.Id == elementId;
+                else
+                    searchPredicate = DefaultPredicate;
+
                 foundQuests = _questRegistry.AllQuests
                     .Where(x => x.Id is not SatisfactionSupplyNpcId and not AlliedSocietyDailyId)
-                    .Where(x => x.Info.Name.Contains(_searchString, StringComparison.CurrentCultureIgnoreCase))
+                    .Where(searchPredicate)
                     .Where(x => !_questFunctions.IsQuestUnobtainable(x.Id));
             }
             else
