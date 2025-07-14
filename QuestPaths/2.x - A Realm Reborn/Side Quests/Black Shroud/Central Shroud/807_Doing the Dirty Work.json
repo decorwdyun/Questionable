@@ -53,8 +53,8 @@
           ],
           "CombatItemUse": {
             "ItemId": 2000958,
-            "Condition": "Health%",
-            "Value": 100
+            "Condition": "MissingStatus",
+            "Value": 22
           }
         }
       ]
