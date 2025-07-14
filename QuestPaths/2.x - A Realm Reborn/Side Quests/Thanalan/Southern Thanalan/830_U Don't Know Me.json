@@ -61,15 +61,16 @@
           "TerritoryId": 146,
           "InteractionType": "Combat",
           "EnemySpawnType": "OverworldEnemies",
-          "KillEnemyDataIds": [
-            2268
+          "ComplexCombatData": [
+            {
+              "DataId": 2268,
+              "MinimumKillCount": 3
+            }
           ],
           "CombatItemUse": {
-            "DataId": 2268,
             "Condition": "Health%",
             "Value": 50,
-            "ItemId": 2000647,
-            "MinimumKillCount": 3
+            "ItemId": 2000647
           },
           "Fly": true
         }

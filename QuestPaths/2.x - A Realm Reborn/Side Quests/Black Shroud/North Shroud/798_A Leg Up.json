@@ -29,7 +29,15 @@
           },
           "TerritoryId": 154,
           "InteractionType": "UseItem",
-          "ItemId": 2000629
+          "ItemId": 2000629,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            128
+          ]
         },
         {
           "DataId": 2001997,
@@ -40,7 +48,15 @@
           },
           "TerritoryId": 154,
           "InteractionType": "UseItem",
-          "ItemId": 2000629
+          "ItemId": 2000629,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            64
+          ]
         },
         {
           "DataId": 2001998,
@@ -51,7 +67,15 @@
           },
           "TerritoryId": 154,
           "InteractionType": "UseItem",
-          "ItemId": 2000629
+          "ItemId": 2000629,
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            32
+          ]
         }
       ]
     },

@@ -13,7 +13,7 @@
                 "Z": 221.75928
             },
             "TerritoryId": 152,
-            "InteractionType": "AcceptQuest",       
+            "InteractionType": "AcceptQuest",
             "Fly": true
           }
         ]
@@ -55,8 +55,6 @@
                     {
                     "DataId": 2264,
                     "MinimumKillCount": 3,
-                    "ItemId": 2000597,
-                    "ItemUseHealthMaxPercent": 49,
                     "RewardItemId": 2000598,
                     "RewardItemCount": 3
                     }
@@ -87,4 +85,3 @@
       }
     ]
   }
-  

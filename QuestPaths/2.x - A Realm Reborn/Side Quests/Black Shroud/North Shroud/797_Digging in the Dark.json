@@ -33,11 +33,14 @@
             {
               "DataId": 2266,
               "MinimumKillCount": 2,
-              "ItemId": 2000627,
-              "ItemUseHealthMaxPercent": 50,
               "RewardItemId": 2000628
             }
-          ]
+          ],
+          "CombatItemUse": {
+            "ItemId": 2000627,
+            "Condition": "Health%",
+            "Value": 50
+          }
         }
       ]
     },

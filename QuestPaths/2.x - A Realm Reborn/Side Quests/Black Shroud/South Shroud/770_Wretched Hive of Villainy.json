@@ -32,15 +32,45 @@
           "ComplexCombatData": [
             {
               "DataId": 87,
-              "MinimumKillCount": 1
+              "MinimumKillCount": 1,
+              "CompletionQuestVariablesFlags": [
+                null,
+                {
+                  "High": 1
+                },
+                null,
+                null,
+                null,
+                null
+              ]
             },
             {
               "DataId": 86,
-              "MinimumKillCount": 1
+              "MinimumKillCount": 1,
+              "CompletionQuestVariablesFlags": [
+                null,
+                {
+                  "Low": 1
+                },
+                null,
+                null,
+                null,
+                null
+              ]
             },
             {
               "DataId": 84,
-              "MinimumKillCount": 1
+              "MinimumKillCount": 1,
+              "CompletionQuestVariablesFlags": [
+                {
+                  "Low": 1
+                },
+                null,
+                null,
+                null,
+                null,
+                null
+              ]
             }
           ]
         }

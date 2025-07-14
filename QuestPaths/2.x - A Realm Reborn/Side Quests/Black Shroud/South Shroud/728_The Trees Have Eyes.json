@@ -36,6 +36,14 @@
               "RewardItemId": 2000582,
               "RewardItemCount": 4
             }
+          ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            4,
+            null,
+            null,
+            null,
+            null
           ]
         },
         {
@@ -54,6 +62,14 @@
               "RewardItemId": 2000583,
               "RewardItemCount": 2
             }
+          ],
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            32,
+            null,
+            null,
+            null
           ]
         }
       ]

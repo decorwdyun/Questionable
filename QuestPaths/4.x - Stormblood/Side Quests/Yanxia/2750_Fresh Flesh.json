@@ -33,7 +33,7 @@
           "ComplexCombatData": [
             {
               "DataId": 6682,
-              "KillCount": 3
+              "MinimumKillCount": 3
             }
           ]
         }

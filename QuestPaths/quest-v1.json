@@ -697,11 +697,15 @@
                     },
                     "IgnoreQuestMarker": {
                       "type": "boolean"
+                    },
+                    "$": {
+                      "type": "string"
                     }
                   },
                   "required": [
                     "DataId"
-                  ]
+                  ],
+                  "additionalProperties": false
                 }
               },
               "CombatItemUse": {
@@ -727,7 +731,8 @@
                 "required": [
                   "ItemId",
                   "Condition"
-                ]
+                ],
+                "additionalProperties": false
               },
               "CombatDelaySecondsAtStart": {
                 "type": "number"

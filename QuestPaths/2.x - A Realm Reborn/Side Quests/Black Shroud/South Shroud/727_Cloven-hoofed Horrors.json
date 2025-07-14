@@ -34,11 +34,14 @@
           "ComplexCombatData": [
             {
               "DataId": 2187,
-              "MinimumKillCount": 1,
-              "ItemId": 2000828,
-              "ItemUseHealthMaxPercent": 100
+              "MinimumKillCount": 1
             }
-          ]
+          ],
+          "CombatItemUse": {
+            "ItemId": 2000828,
+            "Condition": "MissingStatus",
+            "Value": 22
+          }
         }
       ]
     },
