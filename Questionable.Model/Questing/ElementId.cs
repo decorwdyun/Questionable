@@ -83,8 +83,7 @@ public abstract class ElementId : IComparable<ElementId>, IEquatable<ElementId>
         catch (Exception)
         {
             elementId = null;
-            //return false;
-            throw;
+            return false;
         }
     }
 
