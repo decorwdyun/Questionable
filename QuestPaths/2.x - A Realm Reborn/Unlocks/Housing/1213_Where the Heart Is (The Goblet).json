@@ -103,7 +103,14 @@
               "Prompt": 6347,
               "Answer": 6403
             }
-          ]
+          ],
+          "SkipConditions": {
+            "StepIf": {
+              "NotInTerritory": [
+                341
+              ]
+            }
+          }
         },
         {
           "DataId": 1002001,
@@ -115,7 +122,20 @@
           "TerritoryId": 140,
           "InteractionType": "CompleteQuest",
           "Fly": true,
-          "DelaySecondsAtStart": 3
+          "DelaySecondsAtStart": 3,
+          "AetheryteShortcut": "Ul'dah",
+          "AethernetShortcut": [
+            "[Ul'dah] Aetheryte Plaza",
+            "[Ul'dah] Gate of the Sultana (Western Thanalan)"
+          ],
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true,
+              "InTerritory": [
+                140
+              ]
+            }
+          }
         }
       ]
     }

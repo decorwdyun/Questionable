@@ -95,7 +95,14 @@
           },
           "TerritoryId": 339,
           "InteractionType": "WalkTo",
-          "DisableNavmesh": true
+          "DisableNavmesh": true,
+          "SkipConditions": {
+            "StepIf": {
+              "NotInTerritory": [
+                339
+              ]
+            }
+          }
         },
         {
           "Position": {
@@ -114,7 +121,14 @@
               "Prompt": 6347,
               "Answer": 6403
             }
-          ]
+          ],
+          "SkipConditions": {
+            "StepIf": {
+              "NotInTerritory": [
+                339
+              ]
+            }
+          }
         },
         {
           "DataId": 1002579,
@@ -125,7 +139,20 @@
           },
           "TerritoryId": 135,
           "InteractionType": "CompleteQuest",
-          "Fly": true
+          "Fly": true,
+          "AetheryteShortcut": "Limsa Lominsa",
+          "AethernetShortcut": [
+            "[Limsa Lominsa] Aetheryte Plaza",
+            "[Limsa Lominsa] Tempest Gate (Lower La Noscea)"
+          ],
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true,
+              "InTerritory": [
+                135
+              ]
+            }
+          }
         }
       ]
     }
