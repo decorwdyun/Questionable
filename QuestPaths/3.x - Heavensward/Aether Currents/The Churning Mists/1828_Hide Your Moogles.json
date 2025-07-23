@@ -183,7 +183,7 @@
           "StopDistance": 0.5,
           "TerritoryId": 400,
           "InteractionType": "WalkTo",
-          "DisableNavmesh": true
+          "DisableNavmesh": true,
           "SkipConditions": {
             "StepIf": {
               "CompletionQuestVariablesFlags": [
