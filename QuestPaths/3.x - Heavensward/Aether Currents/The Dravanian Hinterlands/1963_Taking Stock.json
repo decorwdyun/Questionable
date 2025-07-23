@@ -72,14 +72,14 @@
       "Steps": [
         {
           "Position": {
-            "X": -346.407,
-            "Y": 152.32855,
-            "Z": 86.98739
+            "X": -403.42465,
+            "Y": 154.8542,
+            "Z": 82.59637
           },
           "TerritoryId": 399,
-          "InteractionType": "WalkTo",
-          "Mount": false,
-          "Sprint": false
+          "InteractionType": "Combat",
+          "EnemySpawnType": "FinishCombatIfAny",
+          "KillEnemyDataIds": []
         },
         {
           "DataId": 2005885,
@@ -90,7 +90,7 @@
           },
           "TerritoryId": 399,
           "InteractionType": "Interact",
-          "DelaySecondsAtStart": 5
+          "DelaySecondsAtStart": 2
         }
       ]
     },
