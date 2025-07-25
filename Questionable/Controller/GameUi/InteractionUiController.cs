@@ -678,6 +678,9 @@ internal sealed class InteractionUiController : IDisposable
 
     private unsafe void DifficultySelectYesNoPostSetup(AtkUnitBase* addonDifficultySelectYesNo, bool checkAllSteps)
     {
+        if (!_questController.IsRunning)
+            return;
+
         var currentQuest = _questController.StartedQuest;
         if (currentQuest == null)
             return;
