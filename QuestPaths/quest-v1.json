@@ -1324,6 +1324,10 @@
                     "type": "string",
                     "pattern": "^0\\.\\d+\\.\\d+\\.\\d+$"
                   },
+                  "LowPriority": {
+                    "type": "boolean",
+                    "description": "Indicates that this dungeon is included in the 'Skip certain optional dungeons and raids' option"
+                  },
                   "$": {
                     "type": "string"
                   }

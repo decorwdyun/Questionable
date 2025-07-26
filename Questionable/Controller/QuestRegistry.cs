@@ -33,6 +33,7 @@ internal sealed class QuestRegistry
     private readonly ICallGateProvider<object> _reloadDataIpc;
     private readonly Dictionary<ElementId, Quest> _quests = [];
     private readonly Dictionary<uint, (ElementId QuestId, QuestStep Step)> _contentFinderConditionIds = [];
+    private readonly List<(uint ContentFinderConditionId, ElementId QuestId, int Sequence)> _lowPriorityContentFinderConditionQuests = [];
 
     public QuestRegistry(
         IDalamudPluginInterface pluginInterface,
@@ -58,6 +59,9 @@ internal sealed class QuestRegistry
     public int ValidationIssueCount => _questValidator.IssueCount;
     public int ValidationErrorCount => _questValidator.ErrorCount;
 
+    public IReadOnlyList<(uint ContentFinderConditionId, ElementId QuestId, int Sequence)>
+        LowPriorityContentFinderConditionQuests => _lowPriorityContentFinderConditionQuests;
+
     public event EventHandler? Reloaded;
 
     public void Reload()
@@ -65,6 +69,7 @@ internal sealed class QuestRegistry
         _questValidator.Reset();
         _quests.Clear();
         _contentFinderConditionIds.Clear();
+        _lowPriorityContentFinderConditionQuests.Clear();
 
         LoadQuestsFromAssembly();
         LoadQuestsFromProjectDirectory();
@@ -157,16 +162,25 @@ internal sealed class QuestRegistry
     {
         foreach (var quest in _quests.Values)
         {
-            foreach (var dutyStep in quest.AllSteps().Where(x =>
-                         x.Step.InteractionType is EInteractionType.Duty or EInteractionType.SinglePlayerDuty))
+            foreach (var dutySequence in quest.AllSequences())
             {
-                if (dutyStep.Step is { InteractionType: EInteractionType.Duty, DutyOptions: { } dutyOptions })
-                    _contentFinderConditionIds[dutyOptions.ContentFinderConditionId] =
-                        (quest.Id, dutyStep.Step);
-                else if (dutyStep.Step.InteractionType == EInteractionType.SinglePlayerDuty &&
-                         _territoryData.TryGetContentFinderConditionForSoloInstance(quest.Id,
-                             dutyStep.Step.SinglePlayerDutyIndex, out var cfcData))
-                    _contentFinderConditionIds[cfcData.ContentFinderConditionId] = (quest.Id, dutyStep.Step);
+                foreach (var dutyStep in dutySequence.Steps.Where(x =>
+                             x.InteractionType is EInteractionType.Duty or EInteractionType.SinglePlayerDuty))
+                {
+                    if (dutyStep is { InteractionType: EInteractionType.Duty, DutyOptions: { } dutyOptions })
+                    {
+                        _contentFinderConditionIds[dutyOptions.ContentFinderConditionId] = (quest.Id, dutyStep);
+                        if (dutyOptions.LowPriority)
+                        {
+                            _lowPriorityContentFinderConditionQuests.Add((dutyOptions.ContentFinderConditionId,
+                                quest.Id, dutySequence.Sequence));
+                        }
+                    }
+                    else if (dutyStep.InteractionType == EInteractionType.SinglePlayerDuty &&
+                             _territoryData.TryGetContentFinderConditionForSoloInstance(quest.Id,
+                                 dutyStep.SinglePlayerDutyIndex, out var cfcData))
+                        _contentFinderConditionIds[cfcData.ContentFinderConditionId] = (quest.Id, dutyStep);
+                }
             }
         }
     }

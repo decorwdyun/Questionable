@@ -60,8 +60,8 @@ internal sealed class DebugConfigComponent : ConfigComponent
 
         ImGui.Separator();
 
-        ImGui.Text("AutoDuty options");
-        using (var _ = ImRaii.PushIndent())
+        ImGui.Text("AutoDuty Settings");
+        using (ImRaii.PushIndent())
         {
             ImGui.AlignTextToFramePadding();
             bool disableAutoDutyBareMode = Configuration.Advanced.DisableAutoDutyBareMode;
@@ -78,7 +78,7 @@ internal sealed class DebugConfigComponent : ConfigComponent
 
         ImGui.Separator();
         ImGui.Text("Quest/Interaction Skips");
-        using (_ = ImRaii.PushIndent())
+        using (ImRaii.PushIndent())
         {
             bool skipAetherCurrents = Configuration.Advanced.SkipAetherCurrents;
             if (ImGui.Checkbox("Don't pick up aether currents/aether current quests", ref skipAetherCurrents))

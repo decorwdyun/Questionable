@@ -155,6 +155,12 @@ internal sealed unsafe class QuestFunctions
 
         if (trackedQuests.Count > 0)
         {
+            if (_configuration.General.SkipLowPriorityDuties)
+            {
+                var lowPriorityQuests = _questRegistry.LowPriorityContentFinderConditionQuests;
+                trackedQuests.RemoveAll(x => lowPriorityQuests.Any(y => x.Quest == y.QuestId && x.Sequence == y.Sequence));
+            }
+
             // if we have multiple quests to turn in for an allied society, try and complete all of them
             var (firstTrackedQuest, firstTrackedSequence) = trackedQuests.First();
             EAlliedSociety firstTrackedAlliedSociety =

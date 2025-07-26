@@ -33,7 +33,8 @@ internal static class Duty
             }
             else
             {
-                yield return new OpenDutyFinderTask(step.DutyOptions.ContentFinderConditionId);
+                if (!step.DutyOptions.LowPriority)
+                    yield return new OpenDutyFinderTask(step.DutyOptions.ContentFinderConditionId);
             }
         }
     }

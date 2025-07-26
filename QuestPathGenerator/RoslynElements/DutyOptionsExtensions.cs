@@ -24,6 +24,9 @@ internal static class DutyOptionsExtensions
                             Assignment(nameof(DutyOptions.ContentFinderConditionId),
                                     dutyOptions.ContentFinderConditionId, emptyOptions.ContentFinderConditionId)
                                 .AsSyntaxNodeOrToken(),
+                            Assignment(nameof(DutyOptions.LowPriority),
+                                    dutyOptions.LowPriority, emptyOptions.LowPriority)
+                                .AsSyntaxNodeOrToken(),
                             AssignmentList(nameof(DutyOptions.Notes), dutyOptions.Notes)
                                 .AsSyntaxNodeOrToken()))));
     }

@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Dalamud.Interface;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using ImGuiNET;
 using LLib.GameData;
 using Lumina.Excel.Sheets;
+using Questionable.Controller;
 using Questionable.Data;
 using GrandCompany = FFXIVClientStructs.FFXIV.Client.UI.Agent.GrandCompany;
 
@@ -16,6 +18,9 @@ internal sealed class GeneralConfigComponent : ConfigComponent
 {
     private static readonly List<(uint Id, string Name)> DefaultMounts = [(0, "Mount Roulette")];
     private static readonly List<(EClassJob ClassJob, string Name)> DefaultClassJobs = [(EClassJob.Adventurer, "Auto (highest level/item level)")];
+
+    private readonly QuestRegistry _questRegistry;
+    private readonly TerritoryData _territoryData;
 
     private readonly uint[] _mountIds;
     private readonly string[] _mountNames;
@@ -31,9 +36,14 @@ internal sealed class GeneralConfigComponent : ConfigComponent
         IDalamudPluginInterface pluginInterface,
         Configuration configuration,
         IDataManager dataManager,
-        ClassJobUtils classJobUtils)
+        ClassJobUtils classJobUtils,
+        QuestRegistry questRegistry,
+        TerritoryData territoryData)
         : base(pluginInterface, configuration)
     {
+        _questRegistry = questRegistry;
+        _territoryData = territoryData;
+
         var mounts = dataManager.GetExcelSheet<Mount>()
             .Where(x => x is { RowId: > 0, Icon: > 0 })
             .Select(x => (MountId: x.RowId, Name: x.Singular.ToString()))
@@ -108,33 +118,75 @@ internal sealed class GeneralConfigComponent : ConfigComponent
             Save();
         }
 
-        bool hideInAllInstances = Configuration.General.HideInAllInstances;
-        if (ImGui.Checkbox("Hide quest window in all instanced duties", ref hideInAllInstances))
+        ImGui.Separator();
+        ImGui.Text("UI");
+        using (ImRaii.PushIndent())
         {
-            Configuration.General.HideInAllInstances = hideInAllInstances;
-            Save();
+            bool hideInAllInstances = Configuration.General.HideInAllInstances;
+            if (ImGui.Checkbox("Hide quest window in all instanced duties", ref hideInAllInstances))
+            {
+                Configuration.General.HideInAllInstances = hideInAllInstances;
+                Save();
+            }
+
+            bool useEscToCancelQuesting = Configuration.General.UseEscToCancelQuesting;
+            if (ImGui.Checkbox("Use ESC to cancel questing/movement", ref useEscToCancelQuesting))
+            {
+                Configuration.General.UseEscToCancelQuesting = useEscToCancelQuesting;
+                Save();
+            }
+
+            bool showIncompleteSeasonalEvents = Configuration.General.ShowIncompleteSeasonalEvents;
+            if (ImGui.Checkbox("Show details for incomplete seasonal events", ref showIncompleteSeasonalEvents))
+            {
+                Configuration.General.ShowIncompleteSeasonalEvents = showIncompleteSeasonalEvents;
+                Save();
+            }
         }
 
-        bool useEscToCancelQuesting = Configuration.General.UseEscToCancelQuesting;
-        if (ImGui.Checkbox("Use ESC to cancel questing/movement", ref useEscToCancelQuesting))
+        ImGui.Separator();
+        ImGui.Text("Questing");
+        using (ImRaii.PushIndent())
         {
-            Configuration.General.UseEscToCancelQuesting = useEscToCancelQuesting;
-            Save();
-        }
+            bool configureTextAdvance = Configuration.General.ConfigureTextAdvance;
+            if (ImGui.Checkbox("Automatically configure TextAdvance with the recommended settings",
+                    ref configureTextAdvance))
+            {
+                Configuration.General.ConfigureTextAdvance = configureTextAdvance;
+                Save();
+            }
 
-        bool showIncompleteSeasonalEvents = Configuration.General.ShowIncompleteSeasonalEvents;
-        if (ImGui.Checkbox("Show details for incomplete seasonal events", ref showIncompleteSeasonalEvents))
-        {
-            Configuration.General.ShowIncompleteSeasonalEvents = showIncompleteSeasonalEvents;
-            Save();
-        }
+            bool skipLowPriorityInstances = Configuration.General.SkipLowPriorityDuties;
+            if (ImGui.Checkbox("Unlock certain optional dungeons and raids (instead of waiting for completion)", ref skipLowPriorityInstances))
+            {
+                Configuration.General.SkipLowPriorityDuties = skipLowPriorityInstances;
+                Save();
+            }
 
-        bool configureTextAdvance = Configuration.General.ConfigureTextAdvance;
-        if (ImGui.Checkbox("Automatically configure TextAdvance with the recommended settings",
-                ref configureTextAdvance))
-        {
-            Configuration.General.ConfigureTextAdvance = configureTextAdvance;
-            Save();
+            ImGui.SameLine();
+            using (ImRaii.PushFont(UiBuilder.IconFont))
+            {
+                ImGui.TextDisabled(FontAwesomeIcon.InfoCircle.ToIconString());
+            }
+
+            if (ImGui.IsItemHovered())
+            {
+                using (ImRaii.Tooltip())
+                {
+                    ImGui.Text("Questionable automatically picks up some optional quests (e.g. for aether currents, or the ARR alliance raids).");
+                    ImGui.Text("If this setting is enabled, Questionable will continue with other quests, instead of waiting for manual completion of the duty.");
+
+                    ImGui.Separator();
+                    ImGui.Text("This affects the following dungeons and raids:");
+                    foreach (var lowPriorityCfc in _questRegistry.LowPriorityContentFinderConditionQuests)
+                    {
+                        if (_territoryData.TryGetContentFinderCondition(lowPriorityCfc.ContentFinderConditionId, out var cfcData))
+                        {
+                            ImGui.BulletText($"{cfcData.Name}");
+                        }
+                    }
+                }
+            }
         }
     }
 }

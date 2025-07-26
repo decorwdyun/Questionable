@@ -35,6 +35,7 @@ internal sealed class Configuration : IPluginConfiguration
         public bool HideInAllInstances { get; set; } = true;
         public bool UseEscToCancelQuesting { get; set; } = true;
         public bool ShowIncompleteSeasonalEvents { get; set; } = true;
+        public bool SkipLowPriorityDuties { get; set; }
         public bool ConfigureTextAdvance { get; set; } = true;
     }
 
