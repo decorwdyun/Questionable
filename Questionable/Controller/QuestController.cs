@@ -316,24 +316,34 @@ internal sealed class QuestController : MiniTaskController<QuestController>
             }
             else
             {
-                (ElementId? currentQuestId, currentSequence, bool msqInformationAvailable) =
+                (ElementId? currentQuestId, currentSequence, MainScenarioQuestState msqState) = _questFunctions.GetCurrentQuest(allowNewMsq: AutomationType != EAutomationType.SingleQuestB);
+                (ElementId, byte)? priorityQuestOption =
                     ManualPriorityQuests
                         .Where(x => _questFunctions.IsReadyToAcceptQuest(x.Id) || _questFunctions.IsQuestAccepted(x.Id))
-                        .Select(x => new QuestReference(x.Id, _questFunctions.GetQuestProgressInfo(x.Id)?.Sequence ?? 0, true))
-                        .FirstOrDefault() ??
-                    _questFunctions.GetCurrentQuest(allowNewMsq: AutomationType != EAutomationType.SingleQuestB);
+                        .Select(x => (x.Id, _questFunctions.GetQuestProgressInfo(x.Id)?.Sequence ?? 0))
+                        .FirstOrDefault();
+                if (priorityQuestOption is { Item1: not null } priorityQuest)
+                {
+                    currentQuestId = priorityQuest.Item1;
+                    currentSequence = priorityQuest.Item2;
+                }
 
                 if (currentQuestId == null || currentQuestId.Value == 0)
                 {
                     if (_startedQuest != null)
                     {
-                        if (!msqInformationAvailable)
+                        if (msqState == MainScenarioQuestState.Unavailable)
                         {
-                            _logger.LogTrace("MSQ information not available, doing nothing (complete: {Complete})", _questFunctions.IsMainScenarioQuestComplete());
+                            _logger.LogWarning("MSQ information not available, doing nothing");
+                            return;
+                        }
+                        else if (msqState == MainScenarioQuestState.LoadingScreen)
+                        {
+                            _logger.LogWarning("On loading screen, no MSQ - doing nothing");
                             return;
                         }
 
-                        _logger.LogInformation("No current quest, resetting data");
+                        _logger.LogInformation("No current quest, resetting data [CQI: {CurrrentQuestData}], [CQ: {QuestData}], [MSQ: {MsqData}]", _questFunctions.GetCurrentQuestInternal(true), _questFunctions.GetCurrentQuest(), _questFunctions.GetMainScenarioQuest());
                         _startedQuest = null;
                         Stop("Resetting current quest");
                     }
