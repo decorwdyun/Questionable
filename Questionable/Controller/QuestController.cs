@@ -162,18 +162,23 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         {
             _logger.LogInformation("Reload, resetting curent quest progress");
 
-            _startedQuest = null;
-            _nextQuest = null;
-            _gatheringQuest = null;
-            _pendingQuest = null;
-            _simulatedQuest = null;
-            _safeAnimationEnd = DateTime.MinValue;
-
-            DebugState = null;
+            ResetInternalState();
 
             _questRegistry.Reload();
             _singlePlayerDutyConfigComponent.Reload();
         }
+    }
+
+    private void ResetInternalState()
+    {
+        _startedQuest = null;
+        _nextQuest = null;
+        _gatheringQuest = null;
+        _pendingQuest = null;
+        _simulatedQuest = null;
+        _safeAnimationEnd = DateTime.MinValue;
+
+        DebugState = null;
     }
 
     public void Update()
@@ -249,6 +254,13 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         lock (_progressLock)
         {
             DebugState = null;
+
+            if (!_clientState.IsLoggedIn)
+            {
+                ResetInternalState();
+                DebugState = "Not logged in";
+                return;
+            }
 
             if (_pendingQuest != null)
             {
