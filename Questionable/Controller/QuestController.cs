@@ -153,7 +153,8 @@ internal sealed class QuestController : MiniTaskController<QuestController>
 
     public string? DebugState { get; private set; }
 
-    public Func<bool> IsQuestWindowOpen { private get; set; } = () => true;
+    public bool IsQuestWindowOpen => IsQuestWindowOpenFunction?.Invoke() ?? true;
+    public Func<bool>? IsQuestWindowOpenFunction { private get; set; } = () => true;
 
     public void Reload()
     {
@@ -191,7 +192,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
             }
         }
 
-        if (AutomationType == EAutomationType.Manual && !IsRunning && !IsQuestWindowOpen())
+        if (AutomationType == EAutomationType.Manual && !IsRunning && !IsQuestWindowOpen)
             return;
 
         UpdateCurrentQuest();

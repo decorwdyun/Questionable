@@ -68,6 +68,9 @@ internal sealed class DebugOverlay : Window
         if (_clientState is not { IsLoggedIn: true, LocalPlayer: not null, IsPvPExcludingDen: false })
             return;
 
+        if (!_questController.IsQuestWindowOpen)
+            return;
+
         DrawCurrentQuest();
         DrawHighlightedQuest();
 
