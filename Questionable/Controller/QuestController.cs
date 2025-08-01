@@ -153,8 +153,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
 
     public string? DebugState { get; private set; }
 
-    public bool IsQuestWindowOpen => IsQuestWindowOpenFunction?.Invoke() ?? true;
-    public Func<bool>? IsQuestWindowOpenFunction { private get; set; } = () => true;
+    public Func<bool> IsQuestWindowOpen { private get; set; } = () => true;
 
     public void Reload()
     {
@@ -162,23 +161,18 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         {
             _logger.LogInformation("Reload, resetting curent quest progress");
 
-            ResetInternalState();
+            _startedQuest = null;
+            _nextQuest = null;
+            _gatheringQuest = null;
+            _pendingQuest = null;
+            _simulatedQuest = null;
+            _safeAnimationEnd = DateTime.MinValue;
+
+            DebugState = null;
 
             _questRegistry.Reload();
             _singlePlayerDutyConfigComponent.Reload();
         }
-    }
-
-    private void ResetInternalState()
-    {
-        _startedQuest = null;
-        _nextQuest = null;
-        _gatheringQuest = null;
-        _pendingQuest = null;
-        _simulatedQuest = null;
-        _safeAnimationEnd = DateTime.MinValue;
-
-        DebugState = null;
     }
 
     public void Update()
@@ -197,7 +191,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
             }
         }
 
-        if (AutomationType == EAutomationType.Manual && !IsRunning && !IsQuestWindowOpen)
+        if (AutomationType == EAutomationType.Manual && !IsRunning && !IsQuestWindowOpen())
             return;
 
         UpdateCurrentQuest();
@@ -254,13 +248,6 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         lock (_progressLock)
         {
             DebugState = null;
-
-            if (!_clientState.IsLoggedIn)
-            {
-                ResetInternalState();
-                DebugState = "Not logged in";
-                return;
-            }
 
             if (_pendingQuest != null)
             {
@@ -404,8 +391,8 @@ internal sealed class QuestController : MiniTaskController<QuestController>
 
             if (questToRun == null)
             {
-                DebugState = "No quest active";
-                Stop("No quest active");
+                DebugState = "当前没有可执行的任务";
+                Stop("当前没有可执行的任务");
                 return;
             }
 
@@ -417,19 +404,19 @@ internal sealed class QuestController : MiniTaskController<QuestController>
 
             if (_movementController.IsPathfinding)
             {
-                DebugState = "Pathfinding is running";
+                DebugState = "正在计算路线";
                 return;
             }
 
             if (_movementController.IsPathRunning)
             {
-                DebugState = "Path is running";
+                DebugState = "正在导航前往目标点";
                 return;
             }
 
             if (DateTime.Now < _safeAnimationEnd)
             {
-                DebugState = "Waiting for Animation";
+                DebugState = "等待动画结束";
                 return;
             }
 

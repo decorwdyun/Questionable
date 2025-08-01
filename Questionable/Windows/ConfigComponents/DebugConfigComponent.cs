@@ -3,6 +3,8 @@ using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin;
 using ImGuiNET;
+using Questionable.External;
+using Questionable.Model.Common;
 
 namespace Questionable.Windows.ConfigComponents;
 
@@ -15,17 +17,17 @@ internal sealed class DebugConfigComponent : ConfigComponent
 
     public override void DrawTab()
     {
-        using var tab = ImRaii.TabItem("Advanced###Debug");
+        using var tab = ImRaii.TabItem("高级###Debug");
         if (!tab)
             return;
 
         ImGui.TextColored(ImGuiColors.DalamudRed,
-            "Enabling any option here may cause unexpected behavior. Use at your own risk.");
+            "启用此处的任何选项都可能会产生非预期行为。请谨慎使用。");
 
         ImGui.Separator();
 
         bool debugOverlay = Configuration.Advanced.DebugOverlay;
-        if (ImGui.Checkbox("Enable debug overlay", ref debugOverlay))
+        if (ImGui.Checkbox("启用 Debug 覆盖层", ref debugOverlay))
         {
             Configuration.Advanced.DebugOverlay = debugOverlay;
             Save();
@@ -45,27 +47,27 @@ internal sealed class DebugConfigComponent : ConfigComponent
         }
 
         bool neverFly = Configuration.Advanced.NeverFly;
-        if (ImGui.Checkbox("Disable flying (even if unlocked for the zone)", ref neverFly))
+        if (ImGui.Checkbox("禁用飞行（即使该区域已解锁飞行）", ref neverFly))
         {
             Configuration.Advanced.NeverFly = neverFly;
             Save();
         }
 
         bool additionalStatusInformation = Configuration.Advanced.AdditionalStatusInformation;
-        if (ImGui.Checkbox("Draw additional status information", ref additionalStatusInformation))
+        if (ImGui.Checkbox("显示额外的状态信息", ref additionalStatusInformation))
         {
             Configuration.Advanced.AdditionalStatusInformation = additionalStatusInformation;
             Save();
         }
 
         ImGui.Separator();
-
-        ImGui.Text("AutoDuty Settings");
+        
+        ImGui.Text("AutoDuty 选项");
         using (ImRaii.PushIndent())
         {
             ImGui.AlignTextToFramePadding();
             bool disableAutoDutyBareMode = Configuration.Advanced.DisableAutoDutyBareMode;
-            if (ImGui.Checkbox("Use Pre-Loop/Loop/Post-Loop settings", ref disableAutoDutyBareMode))
+            if (ImGui.Checkbox("使用 Pre-Loop/Loop/Post-Loop 设置", ref disableAutoDutyBareMode))
             {
                 Configuration.Advanced.DisableAutoDutyBareMode = disableAutoDutyBareMode;
                 Save();
@@ -73,52 +75,52 @@ internal sealed class DebugConfigComponent : ConfigComponent
 
             ImGui.SameLine();
             ImGuiComponents.HelpMarker(
-                "Typically, the loop settings for AutoDuty are disabled when running dungeons with Questionable, since they can cause issues (or even shut down your PC).");
+                "通常情况下，在使用 Questionable 运行副本时，AutoDuty 的循环设置会被禁用，因为它们可能会导致问题（甚至把的电脑关机）。");
         }
 
         ImGui.Separator();
-        ImGui.Text("Quest/Interaction Skips");
+        ImGui.Text("任务/交互跳过");
         using (ImRaii.PushIndent())
         {
             bool skipAetherCurrents = Configuration.Advanced.SkipAetherCurrents;
-            if (ImGui.Checkbox("Don't pick up aether currents/aether current quests", ref skipAetherCurrents))
+            if (ImGui.Checkbox("不共鸣风脉泉/接取风脉任务", ref skipAetherCurrents))
             {
                 Configuration.Advanced.SkipAetherCurrents = skipAetherCurrents;
                 Save();
             }
 
             ImGui.SameLine();
-            ImGuiComponents.HelpMarker("If not done during the MSQ by Questionable, you have to manually pick up any missed aether currents/quests. There is no way to automatically pick up all missing aether currents.");
+            ImGuiComponents.HelpMarker("如果未通过 Questionable 功能在主线任务时完成，你将需要手动完成遗漏的风脉泉/任务。Questionable 没有任何办法可以自动查缺补漏。");
 
             bool skipClassJobQuests = Configuration.Advanced.SkipClassJobQuests;
-            if (ImGui.Checkbox("Don't pick up class/job/role quests", ref skipClassJobQuests))
+            if (ImGui.Checkbox("不接取职业/特职/职能任务", ref skipClassJobQuests))
             {
                 Configuration.Advanced.SkipClassJobQuests = skipClassJobQuests;
                 Save();
             }
 
             ImGui.SameLine();
-            ImGuiComponents.HelpMarker("Class and job skills for A Realm Reborn, Heavensward and (for the Lv70 skills) Stormblood are locked behind quests. Not recommended if you plan on queueing for instances with duty finder/party finder.");
+            ImGuiComponents.HelpMarker("部分职业技能必须通过职业任务获得。若计划和其他玩家攻略副本，不建议勾选。");
 
             bool skipARealmRebornHardModePrimals = Configuration.Advanced.SkipARealmRebornHardModePrimals;
-            if (ImGui.Checkbox("Don't pick up ARR hard mode primal quests", ref skipARealmRebornHardModePrimals))
+            if (ImGui.Checkbox("不接取 2.0 极神任务", ref skipARealmRebornHardModePrimals))
             {
                 Configuration.Advanced.SkipARealmRebornHardModePrimals = skipARealmRebornHardModePrimals;
                 Save();
             }
 
             ImGui.SameLine();
-            ImGuiComponents.HelpMarker("Hard mode Ifrit/Garuda/Titan are required for the Patch 2.5 quest 'Good Intentions' and to start Heavensward.");
+            ImGuiComponents.HelpMarker("极伊弗利特/迦楼罗/泰坦为进入3.0的必要条件（氪了直升包可勾选）。");
 
             bool skipCrystalTowerRaids = Configuration.Advanced.SkipCrystalTowerRaids;
-            if (ImGui.Checkbox("Don't pick up Crystal Tower quests", ref skipCrystalTowerRaids))
+            if (ImGui.Checkbox("不接取水晶塔系列任务", ref skipCrystalTowerRaids))
             {
                 Configuration.Advanced.SkipCrystalTowerRaids = skipCrystalTowerRaids;
                 Save();
             }
 
             ImGui.SameLine();
-            ImGuiComponents.HelpMarker("Crystal Tower raids are required for the Patch 2.55 quest 'A Time to Every Purpose' and to start Heavensward.");
+            ImGuiComponents.HelpMarker("水晶塔系列任务为进入3.0的必要条件（氪了直升包可勾选）。");
         }
     }
 }

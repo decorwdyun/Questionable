@@ -71,13 +71,13 @@ internal sealed class CommandHandler : IDisposable
         _commandManager.AddHandler("/qst", new CommandInfo(ProcessCommand)
         {
             HelpMessage = string.Join($"{Environment.NewLine}\t",
-                "Opens the Questing window",
-                "/qst config - opens the configuration window",
-                "/qst start - starts doing quests",
-                "/qst stop - stops doing quests",
-                "/qst reload - reload all quest data",
-                "/qst which - shows all quests starting with your selected target",
-                "/qst zone - shows all quests starting in the current zone (only includes quests with a known quest path, and currently visible unaccepted quests)")
+                "打开任务窗口",
+                "/qst config - 打开配置窗口",
+                "/qst start - 开始执行任务",
+                "/qst stop - 停止执行任务",
+                "/qst reload - 重新加载所有任务数据",
+                "/qst which - 显示所有以当前选定目标开始的任务",
+                "/qst zone - 显示当前地图内的所有任务（仅包括已知任务路径且当前可见的未接受任务）")
         });
 #if DEBUG
         _commandManager.AddHandler("/qst@", new CommandInfo(ProcessDebugCommand)

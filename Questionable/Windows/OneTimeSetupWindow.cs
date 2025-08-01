@@ -16,7 +16,8 @@ internal sealed class OneTimeSetupWindow : LWindow
     private readonly Configuration _configuration;
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly ILogger<OneTimeSetupWindow> _logger;
-
+    private readonly string _authToken = "倒卖免费插件的小店死个妈 买的也是傻逼";
+    private string _authTokenInput = "";
     public OneTimeSetupWindow(
         PluginConfigComponent pluginConfigComponent,
         Configuration configuration,
@@ -48,9 +49,19 @@ internal sealed class OneTimeSetupWindow : LWindow
 
         if (allRequiredInstalled)
         {
+            ImGui.Text("请在下方输入口令：");
+            ImGui.SameLine();
+            ImGui.TextColored(ImGuiColors.DalamudRed, _authToken);
+            ImGui.SameLine();
+            ImGui.Text("来完成设置（中间的空格也要输入）：");
+            ImGui.InputText("", ref _authTokenInput, 200);
+        }
+
+        if (allRequiredInstalled && _authToken == _authTokenInput)
+        {
             using (ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.ParsedGreen))
             {
-                if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Check, "Finish Setup"))
+                if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Check, "完成配置"))
                 {
                     _logger.LogInformation("Marking setup as complete");
                     _configuration.MarkPluginSetupComplete();
@@ -64,13 +75,18 @@ internal sealed class OneTimeSetupWindow : LWindow
             using (ImRaii.Disabled())
             {
                 using (ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudRed))
-                    ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Check, "Missing required plugins");
+                {
+                    var warningText = "缺少必需的插件";
+                    if (allRequiredInstalled)
+                        warningText = "请输入正确的验证码";
+                    ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Check, warningText);
+                }
             }
         }
 
         ImGui.SameLine();
 
-        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Times, "Close window & don't enable Questionable"))
+        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Times, "关闭此窗口并且不启用 Questionable"))
         {
             _logger.LogWarning("Closing window without all required plugins installed");
             IsOpen = false;

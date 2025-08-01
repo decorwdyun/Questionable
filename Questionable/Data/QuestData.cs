@@ -143,7 +143,7 @@ internal sealed class QuestData
                     }
                 }));
 
-        quests.Add(new UnlockLinkQuestInfo(new UnlockLinkId(506), "Patch 7.2 Fantasia", 1052475));
+        quests.Add(new UnlockLinkQuestInfo(new UnlockLinkId(506), "7.2 版本限时幻想药", 1052475));
 
         _quests = quests.ToDictionary(x => x.QuestId, x => x);
 

@@ -66,7 +66,7 @@ internal sealed class QuickAccessButtonsComponent
                                             map->FlagMapMarker.TerritoryId != _clientState.TerritoryType ||
                                             !_navmeshIpc.IsReady))
         {
-            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Flag, "To Flag"))
+            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Flag, "移动到地图标点"))
             {
                 _movementController.Destination = null;
                 _chatFunctions.ExecuteCommand(
@@ -79,22 +79,22 @@ internal sealed class QuickAccessButtonsComponent
             ImGui.SameLine();
             using (var unused = ImRaii.Disabled(!ImGui.IsKeyDown(ImGuiKey.ModCtrl)))
             {
-                if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.GlobeEurope, "Rebuild Navmesh"))
+                if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.GlobeEurope, "重建导航"))
                     _commandManager.ProcessCommand("/vnav rebuild");
             }
 
             if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
-                ImGui.SetTooltip("Hold CTRL to enable this button.\nRebuilding the navmesh will take some time.");
+                ImGui.SetTooltip("按住 CTRL 以启用此按钮。\n重建导航将需要一些时间。");
         }
 
-        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.RedoAlt, "Reload Data"))
+        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.RedoAlt, "重新加载任务"))
             Reload?.Invoke(this, EventArgs.Empty);
 
         ImGui.SameLine();
         if (ImGuiComponents.IconButton(FontAwesomeIcon.BookBookmark))
             _journalProgressWindow.IsOpenAndUncollapsed = true;
         if (ImGui.IsItemHovered())
-            ImGui.SetTooltip("Journal Progress");
+            ImGui.SetTooltip("任务进度");
 
 
         if (_questRegistry.ValidationIssueCount > 0)

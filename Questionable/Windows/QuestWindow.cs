@@ -97,14 +97,14 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
             ShowTooltip = () =>
             {
                 ImGui.BeginTooltip();
-                ImGui.Text("Open Configuration");
+                ImGui.Text("打开插件设置");
                 ImGui.EndTooltip();
             }
         });
 
         _activeQuestComponent.Reload += OnReload;
         _quickAccessButtonsComponent.Reload += OnReload;
-        _questController.IsQuestWindowOpenFunction = () => IsOpen;
+        _questController.IsQuestWindowOpen = () => IsOpen;
     }
 
     public WindowConfig WindowConfig => _configuration.DebugWindowConfig;

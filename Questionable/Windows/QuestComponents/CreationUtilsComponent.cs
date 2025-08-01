@@ -200,12 +200,12 @@ internal sealed class CreationUtilsComponent
 
         ImGui.Separator();
         ImGui.Text(string.Create(CultureInfo.InvariantCulture,
-            $"Target: {target.Name}  ({target.ObjectKind}; {target.DataId}{nameId})"));
+            $"目标: {target.Name}  ({target.ObjectKind}; {target.DataId}{nameId})"));
 
         if (_clientState.LocalPlayer != null)
         {
             ImGui.Text(string.Create(CultureInfo.InvariantCulture,
-                $"Distance: {(target.Position - _clientState.LocalPlayer.Position).Length():F2}"));
+                $"距离: {(target.Position - _clientState.LocalPlayer.Position).Length():F2}"));
             ImGui.SameLine();
 
             float verticalDistance = target.Position.Y - _clientState.LocalPlayer.Position.Y;
@@ -227,7 +227,7 @@ internal sealed class CreationUtilsComponent
         ImGui.BeginDisabled(!_movementController.IsNavmeshReady || _gameFunctions.IsOccupied());
         if (!_movementController.IsPathfinding)
         {
-            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Bullseye, "To Target"))
+            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Bullseye, "前往目标位置"))
             {
                 _movementController.NavigateTo(EMovementType.DebugWindow, target.DataId,
                     target.Position,
@@ -237,7 +237,7 @@ internal sealed class CreationUtilsComponent
         }
         else
         {
-            if (ImGui.Button("Cancel pathfinding"))
+            if (ImGui.Button("取消寻路"))
                 _movementController.ResetPathfinding();
         }
 
@@ -247,7 +247,7 @@ internal sealed class CreationUtilsComponent
         ImGui.BeginDisabled(!_questData.IsIssuerOfAnyQuest(target.DataId));
         bool showQuests = ImGuiComponents.IconButton(FontAwesomeIcon.MapMarkerAlt);
         if (ImGui.IsItemHovered())
-            ImGui.SetTooltip("Show all Quests starting with your current target.");
+            ImGui.SetTooltip("显示当前目标可接取的全部任务.");
         if (showQuests)
             _questSelectionWindow.OpenForTarget(_targetManager.Target);
 
@@ -257,7 +257,7 @@ internal sealed class CreationUtilsComponent
         ImGui.SameLine();
         bool interact = ImGuiComponents.IconButton(FontAwesomeIcon.MousePointer);
         if (ImGui.IsItemHovered())
-            ImGui.SetTooltip("Interact with your current target.");
+            ImGui.SetTooltip("和当前目标进行交互.");
         if (interact)
         {
             ulong result = TargetSystem.Instance()->InteractWithObject(
@@ -274,7 +274,7 @@ internal sealed class CreationUtilsComponent
         bool copy = ImGuiComponents.IconButton(FontAwesomeIcon.Copy);
         if (ImGui.IsItemHovered())
             ImGui.SetTooltip(
-                "Left click: Copy target position as JSON.\nRight click: Copy target position as C# code.");
+                "左键点击：将目标位置复制为 JSON。\n右键点击：将目标位置复制为 C# 代码。");
         if (copy)
         {
             if (target.ObjectKind == ObjectKind.GatheringPoint)
@@ -331,7 +331,7 @@ internal sealed class CreationUtilsComponent
         bool copy = ImGuiComponents.IconButton(FontAwesomeIcon.Copy);
         if (ImGui.IsItemHovered())
             ImGui.SetTooltip(
-                "Left click: Copy your position as JSON.\nRight click: Copy your position as C# code.");
+                "左键点击：将当前位置复制为 JSON。\n右键点击：将当前位置复制为 C# 代码。");
         if (copy)
         {
             ImGui.SetClipboardText($$"""

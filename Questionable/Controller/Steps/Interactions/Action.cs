@@ -45,7 +45,7 @@ internal static class Action
         uint? DataId,
         EAction Action) : ITask
     {
-        public override string ToString() => $"Action({Action})";
+        public override string ToString() => $"技能({Action})";
     }
 
     internal sealed class UseOnObjectExecutor(

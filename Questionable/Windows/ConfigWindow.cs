@@ -15,6 +15,7 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
     private readonly SinglePlayerDutyConfigComponent _singlePlayerDutyConfigComponent;
     private readonly NotificationConfigComponent _notificationConfigComponent;
     private readonly DebugConfigComponent _debugConfigComponent;
+    private readonly AboutConfigComponent _aboutConfigComponent;
     private readonly Configuration _configuration;
 
     public ConfigWindow(
@@ -25,6 +26,7 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
         SinglePlayerDutyConfigComponent singlePlayerDutyConfigComponent,
         NotificationConfigComponent notificationConfigComponent,
         DebugConfigComponent debugConfigComponent,
+        AboutConfigComponent aboutConfigComponent,
         Configuration configuration)
         : base("Config - Questionable###QuestionableConfig", ImGuiWindowFlags.AlwaysAutoResize)
     {
@@ -35,6 +37,7 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
         _singlePlayerDutyConfigComponent = singlePlayerDutyConfigComponent;
         _notificationConfigComponent = notificationConfigComponent;
         _debugConfigComponent = debugConfigComponent;
+        _aboutConfigComponent = aboutConfigComponent;
         _configuration = configuration;
     }
 
@@ -52,6 +55,7 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
         _singlePlayerDutyConfigComponent.DrawTab();
         _notificationConfigComponent.DrawTab();
         _debugConfigComponent.DrawTab();
+        _aboutConfigComponent.DrawTab();
     }
 
     public void SaveWindowConfig() => _pluginInterface.SavePluginConfig(_configuration);

@@ -94,7 +94,7 @@ internal static class SinglePlayerDuty
 
     internal sealed record StartSinglePlayerDuty(uint ContentFinderConditionId) : ITask
     {
-        public override string ToString() => $"Wait(BossMod, entered instance {ContentFinderConditionId})";
+        public override string ToString() => $"等待(BossMod, 进入单人副本 {ContentFinderConditionId})";
     }
 
     internal sealed class StartSinglePlayerDutyExecutor : TaskExecutor<StartSinglePlayerDuty>

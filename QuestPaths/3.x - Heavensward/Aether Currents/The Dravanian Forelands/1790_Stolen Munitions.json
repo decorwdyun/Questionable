@@ -61,6 +61,7 @@
           },
           "TerritoryId": 398,
           "InteractionType": "WalkTo",
+          "Mount": true,
           "$": "Loth ast Vath navmesh workaround"
         },
         {

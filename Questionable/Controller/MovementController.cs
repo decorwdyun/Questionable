@@ -247,7 +247,7 @@ internal sealed class MovementController : IDisposable
         }
     }
 
-    private void Restart(DestinationData destination)
+    private void Restart(DestinationData destination, bool fly = false)
     {
         Stop();
 

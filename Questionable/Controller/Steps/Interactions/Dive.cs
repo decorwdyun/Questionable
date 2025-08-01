@@ -30,7 +30,7 @@ internal static class Dive
     internal sealed class Task : ITask
     {
 
-        public override string ToString() => "Dive";
+        public override string ToString() => "潜水";
     }
 
     internal sealed class DoDive(ICondition condition, ILogger<DoDive> logger)

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Dalamud.Interface;
+using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
@@ -10,24 +11,26 @@ using LLib.GameData;
 using Lumina.Excel.Sheets;
 using Questionable.Controller;
 using Questionable.Data;
+using Questionable.External;
 using GrandCompany = FFXIVClientStructs.FFXIV.Client.UI.Agent.GrandCompany;
 
 namespace Questionable.Windows.ConfigComponents;
 
 internal sealed class GeneralConfigComponent : ConfigComponent
 {
-    private static readonly List<(uint Id, string Name)> DefaultMounts = [(0, "Mount Roulette")];
-    private static readonly List<(EClassJob ClassJob, string Name)> DefaultClassJobs = [(EClassJob.Adventurer, "Auto (highest level/item level)")];
-
+    private static readonly List<(uint Id, string Name)> DefaultMounts = [(0, "随机坐骑")];
+    private static readonly List<(EClassJob ClassJob, string Name)> DefaultClassJobs = [(EClassJob.Adventurer, "自动（等级/装等最高的）")];
     private readonly QuestRegistry _questRegistry;
     private readonly TerritoryData _territoryData;
 
+    private readonly IDalamudPluginInterface _pluginInterface;
+    private readonly DailyRoutinesIpc _dailyRoutinesIpc;
+
     private readonly uint[] _mountIds;
     private readonly string[] _mountNames;
-    private readonly string[] _combatModuleNames = ["None", "Boss Mod (VBM)", "Wrath Combo", "Rotation Solver Reborn"];
+    private readonly string[] _combatModuleNames = ["未选择", "Boss Mod (VBM)", "Wrath Combo", "Rotation Solver Reborn", "AEAssist"];
 
-    private readonly string[] _grandCompanyNames =
-        ["None (manually pick quest)", "Maelstrom", "Twin Adder", "Immortal Flames"];
+    private readonly string[] _grandCompanyNames = ["未选择（需要时再手动）", "黑涡团", "双蛇党", "恒辉队"];
 
     private readonly EClassJob[] _classJobIds;
     private readonly string[] _classJobNames;
@@ -38,11 +41,14 @@ internal sealed class GeneralConfigComponent : ConfigComponent
         IDataManager dataManager,
         ClassJobUtils classJobUtils,
         QuestRegistry questRegistry,
-        TerritoryData territoryData)
+        TerritoryData territoryData,
+        DailyRoutinesIpc dailyRoutinesIpc)
         : base(pluginInterface, configuration)
     {
         _questRegistry = questRegistry;
         _territoryData = territoryData;
+        _pluginInterface = pluginInterface;
+        _dailyRoutinesIpc = dailyRoutinesIpc;
 
         var mounts = dataManager.GetExcelSheet<Mount>()
             .Where(x => x is { RowId: > 0, Icon: > 0 })
@@ -66,14 +72,14 @@ internal sealed class GeneralConfigComponent : ConfigComponent
 
     public override void DrawTab()
     {
-        using var tab = ImRaii.TabItem("General###General");
+        using var tab = ImRaii.TabItem("通用###General");
         if (!tab)
             return;
 
 
         {
             int selectedCombatModule = (int)Configuration.General.CombatModule;
-            if (ImGui.Combo("Preferred Combat Module", ref selectedCombatModule, _combatModuleNames,
+            if (ImGui.Combo("首选战斗模块", ref selectedCombatModule, _combatModuleNames,
                     _combatModuleNames.Length))
             {
                 Configuration.General.CombatModule = (Configuration.ECombatModule)selectedCombatModule;
@@ -89,14 +95,14 @@ internal sealed class GeneralConfigComponent : ConfigComponent
             Save();
         }
 
-        if (ImGui.Combo("Preferred Mount", ref selectedMount, _mountNames, _mountNames.Length))
+        if (ImGui.Combo("首选坐骑", ref selectedMount, _mountNames, _mountNames.Length))
         {
             Configuration.General.MountId = _mountIds[selectedMount];
             Save();
         }
 
         int grandCompany = (int)Configuration.General.GrandCompany;
-        if (ImGui.Combo("Preferred Grand Company", ref grandCompany, _grandCompanyNames,
+        if (ImGui.Combo("首选部队阵营", ref grandCompany, _grandCompanyNames,
                 _grandCompanyNames.Length))
         {
             Configuration.General.GrandCompany = (GrandCompany)grandCompany;
@@ -112,32 +118,32 @@ internal sealed class GeneralConfigComponent : ConfigComponent
             combatJob = 0;
         }
 
-        if (ImGui.Combo("Preferred Combat Job", ref combatJob, _classJobNames, _classJobNames.Length))
+        if (ImGui.Combo("首选战斗职业", ref combatJob, _classJobNames, _classJobNames.Length))
         {
             Configuration.General.CombatJob = _classJobIds[combatJob];
             Save();
         }
 
         ImGui.Separator();
-        ImGui.Text("UI");
+        ImGui.Text("界面设置");
         using (ImRaii.PushIndent())
         {
             bool hideInAllInstances = Configuration.General.HideInAllInstances;
-            if (ImGui.Checkbox("Hide quest window in all instanced duties", ref hideInAllInstances))
+            if (ImGui.Checkbox("在副本任务中隐藏任务窗口", ref hideInAllInstances))
             {
                 Configuration.General.HideInAllInstances = hideInAllInstances;
                 Save();
             }
 
             bool useEscToCancelQuesting = Configuration.General.UseEscToCancelQuesting;
-            if (ImGui.Checkbox("Use ESC to cancel questing/movement", ref useEscToCancelQuesting))
+            if (ImGui.Checkbox("使用 ESC 取消移动/任务", ref useEscToCancelQuesting))
             {
                 Configuration.General.UseEscToCancelQuesting = useEscToCancelQuesting;
                 Save();
             }
 
             bool showIncompleteSeasonalEvents = Configuration.General.ShowIncompleteSeasonalEvents;
-            if (ImGui.Checkbox("Show details for incomplete seasonal events", ref showIncompleteSeasonalEvents))
+            if (ImGui.Checkbox("显示未完成的季节活动信息", ref showIncompleteSeasonalEvents))
             {
                 Configuration.General.ShowIncompleteSeasonalEvents = showIncompleteSeasonalEvents;
                 Save();
@@ -145,11 +151,11 @@ internal sealed class GeneralConfigComponent : ConfigComponent
         }
 
         ImGui.Separator();
-        ImGui.Text("Questing");
+        ImGui.Text("任务设置");
         using (ImRaii.PushIndent())
         {
             bool configureTextAdvance = Configuration.General.ConfigureTextAdvance;
-            if (ImGui.Checkbox("Automatically configure TextAdvance with the recommended settings",
+            if (ImGui.Checkbox("自动配置 TextAdvance",
                     ref configureTextAdvance))
             {
                 Configuration.General.ConfigureTextAdvance = configureTextAdvance;
@@ -157,7 +163,7 @@ internal sealed class GeneralConfigComponent : ConfigComponent
             }
 
             bool skipLowPriorityInstances = Configuration.General.SkipLowPriorityDuties;
-            if (ImGui.Checkbox("Unlock certain optional dungeons and raids (instead of waiting for completion)", ref skipLowPriorityInstances))
+            if (ImGui.Checkbox("解锁某些可选的副本和大型任务（无需等待完成）", ref skipLowPriorityInstances))
             {
                 Configuration.General.SkipLowPriorityDuties = skipLowPriorityInstances;
                 Save();
@@ -173,11 +179,11 @@ internal sealed class GeneralConfigComponent : ConfigComponent
             {
                 using (ImRaii.Tooltip())
                 {
-                    ImGui.Text("Questionable automatically picks up some optional quests (e.g. for aether currents, or the ARR alliance raids).");
-                    ImGui.Text("If this setting is enabled, Questionable will continue with other quests, instead of waiting for manual completion of the duty.");
+                    ImGui.Text("Questionable 会自动接取一些可选任务（例如风脉泉任务或 2.0 团本）。");
+                    ImGui.Text("如果启用此设置，Questionable 将继续推进其他任务，而无需等待手动完成对应副本。");
 
                     ImGui.Separator();
-                    ImGui.Text("This affects the following dungeons and raids:");
+                    ImGui.Text("此设置将影响以下副本和大型任务：");
                     foreach (var lowPriorityCfc in _questRegistry.LowPriorityContentFinderConditionQuests)
                     {
                         if (_territoryData.TryGetContentFinderCondition(lowPriorityCfc.ContentFinderConditionId, out var cfcData))
@@ -186,6 +192,35 @@ internal sealed class GeneralConfigComponent : ConfigComponent
                         }
                     }
                 }
+            }
+        }
+        if (_pluginInterface.InstalledPlugins.Any(x => x is { InternalName: "DailyRoutines", IsLoaded: true }))
+        {
+            ImGui.Separator();
+            ImGui.Text("DailyRoutines 兼容性");
+            using (ImRaii.PushIndent())
+            {
+                    var configureDailyRoutines = Configuration.General.ConfigureDailyRoutines;
+                    if (ImGui.Checkbox("插件工作时临时禁用 Daily Routines 中的冲突模块",
+                            ref configureDailyRoutines))
+                    {
+                        Configuration.General.ConfigureDailyRoutines = configureDailyRoutines;
+                        Save();
+                    }
+
+                    ImGuiComponents.HelpMarker($"{string.Join("\n", _dailyRoutinesIpc.ConflictingModules)} \n如果你发现还有其他冲突模块未列入，请联系汉化作者。");
+
+                    var useDailyRoutinesTeleport = Configuration.General.UsingDailyRoutinesTeleport;
+                    if (ImGui.Checkbox("使用 Daily Routines 进行小水晶传送（请仔细阅读右侧说明）",
+                            ref useDailyRoutinesTeleport))
+                    {
+                        Configuration.General.UsingDailyRoutinesTeleport = useDailyRoutinesTeleport;
+                        Save();
+                    }
+
+                    ImGuiComponents.HelpMarker("使用了【更好的传送界面】模块，如果未启用将帮你自动启用\n" +
+                                               "勾选后，主城内将不会再寻路前往小水晶传送，而是直接【瞬移】，使用请自负风险\n" +
+                                               "如果遇到任何问题，请安装 Lifestream 并禁用此选项。");
             }
         }
     }

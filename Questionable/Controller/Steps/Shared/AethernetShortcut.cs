@@ -28,7 +28,7 @@ internal static class AethernetShortcut
         {
             if (step.AethernetShortcut == null)
                 yield break;
-
+            
             yield return new WaitNavmesh.Task();
             yield return new Task(step.AethernetShortcut.From, step.AethernetShortcut.To,
                 step.SkipConditions?.AethernetShortcutIf ?? new());
@@ -37,7 +37,7 @@ internal static class AethernetShortcut
             {
                 yield return new WaitCondition.Task(
                     () => clientState.TerritoryType == aetheryteData.TerritoryIds[step.AethernetShortcut.To],
-                    $"Wait(territory: {territoryData.GetNameAndId(aetheryteData.TerritoryIds[step.AethernetShortcut.To])})");
+                    $"等待(区域: {territoryData.GetNameAndId(aetheryteData.TerritoryIds[step.AethernetShortcut.To])})");
                 yield return new AetheryteShortcut.MoveAwayFromAetheryte(step.AethernetShortcut.To);
             }
         }
@@ -54,7 +54,7 @@ internal static class AethernetShortcut
         {
         }
 
-        public override string ToString() => $"UseAethernet({From} -> {To})";
+        public override string ToString() => $"使用城内以太水晶({From.ToFriendlyString()} -> {To.ToFriendlyString()})";
     }
 
     internal sealed class UseAethernetShortcut(
@@ -67,7 +67,9 @@ internal static class AethernetShortcut
         TerritoryData territoryData,
         LifestreamIpc lifestreamIpc,
         MovementController movementController,
-        ICondition condition) : TaskExecutor<Task>
+        ICondition condition,
+        Configuration configuration,
+        DailyRoutinesIpc dailyRoutinesIpc) : TaskExecutor<Task>
     {
         private bool _moving;
         private bool _teleported;
@@ -131,6 +133,14 @@ internal static class AethernetShortcut
                 if (aetheryteData.CalculateDistance(playerPosition, territoryType, Task.From) <
                     aetheryteData.CalculateDistance(playerPosition, territoryType, Task.To))
                 {
+                    if (configuration.General.UsingDailyRoutinesTeleport && 
+                        dailyRoutinesIpc.IsDailyRoutinesEnabled
+                        && (aetheryteData.IsCityAetheryte(Task.To) || aetheryteData.IsAirshipLanding(Task.To))
+                       )
+                    {
+                        DoTeleport();
+                        return true;
+                    }
                     if (aetheryteData.CalculateDistance(playerPosition, territoryType, Task.From) <
                         (Task.From.IsFirmamentAetheryte() ? 11f : 4f))
                     {
@@ -205,7 +215,14 @@ internal static class AethernetShortcut
         private void DoTeleport()
         {
             logger.LogInformation("Using lifestream to teleport to {Destination}", Task.To);
-            lifestreamIpc.Teleport(Task.To);
+            if (configuration.General.UsingDailyRoutinesTeleport && dailyRoutinesIpc.IsDailyRoutinesEnabled)
+            {
+                dailyRoutinesIpc.Teleport(Task.To);
+            }
+            else
+            {
+                lifestreamIpc.Teleport(Task.To);
+            }
             _teleported = true;
         }
 

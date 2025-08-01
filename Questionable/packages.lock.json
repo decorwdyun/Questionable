@@ -132,7 +132,7 @@
       "gatheringpaths": {
         "type": "Project",
         "dependencies": {
-          "Questionable.Model": "[5.11.0, )"
+          "Questionable.Model": "[5.16.0, )"
         }
       },
       "llib": {
@@ -154,7 +154,7 @@
       "questpaths": {
         "type": "Project",
         "dependencies": {
-          "Questionable.Model": "[5.11.0, )"
+          "Questionable.Model": "[5.16.0, )"
         }
       }
     }

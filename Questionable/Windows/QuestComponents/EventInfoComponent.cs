@@ -21,10 +21,9 @@ namespace Questionable.Windows.QuestComponents;
 internal sealed class EventInfoComponent
 {
     [SuppressMessage("ReSharper", "CollectionNeverUpdated.Local")]
-    private readonly List<EventQuest> _eventQuests =
-    [
-        new EventQuest("Limited Time Items", [new UnlockLinkId(506)], DateTime.MaxValue),
-        new EventQuest("Make It Rain", [new QuestId(5322)], AtDailyReset(new(2025, 6, 11)))
+    private readonly List<EventQuest> _eventQuests = [
+        new EventQuest("7.2 版本限时幻想药", [new UnlockLinkId(506)], DateTime.MaxValue),
+        new("彩蛋狩猎 2025", [new QuestId(5242),new QuestId(5243)], AtDailyReset(new DateOnly(2025, 8, 8)))
     ];
 
     private readonly QuestData _questData;
@@ -76,7 +75,7 @@ internal sealed class EventInfoComponent
                 culture: CultureInfo.InvariantCulture,
                 minUnit: TimeUnit.Minute,
                 maxUnit: TimeUnit.Day);
-            ImGui.Text($"{eventQuest.Name} ({time})");
+            ImGui.Text($"{eventQuest.Name} ({time} 后结束)");
         }
         else
             ImGui.Text(eventQuest.Name);

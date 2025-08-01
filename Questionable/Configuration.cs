@@ -37,6 +37,8 @@ internal sealed class Configuration : IPluginConfiguration
         public bool ShowIncompleteSeasonalEvents { get; set; } = true;
         public bool SkipLowPriorityDuties { get; set; }
         public bool ConfigureTextAdvance { get; set; } = true;
+        public bool ConfigureDailyRoutines { get; set; } = true;
+        public bool UsingDailyRoutinesTeleport { get; set; }
     }
 
     internal sealed class DutyConfiguration
@@ -84,5 +86,6 @@ internal sealed class Configuration : IPluginConfiguration
         BossMod,
         WrathCombo,
         RotationSolverReborn,
+        AEAssist,
     }
 }

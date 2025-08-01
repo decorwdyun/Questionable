@@ -58,24 +58,26 @@ internal sealed class PriorityWindow : LWindow
 
     public override void DrawContent()
     {
-        ImGui.Text("Quests to do first:");
+        ImGui.Text("优先做的任务：");
         DrawQuestFilter();
         DrawQuestList();
 
         List<ElementId> clipboardItems = ParseClipboardItems();
         ImGui.BeginDisabled(clipboardItems.Count == 0);
-        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Download, "Import from Clipboard"))
+        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Download, "从剪贴板导入"))
             ImportFromClipboard(clipboardItems);
         ImGui.EndDisabled();
         ImGui.SameLine();
         ImGui.BeginDisabled(_questController.ManualPriorityQuests.Count == 0);
-        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Upload, "Export to Clibpoard"))
+        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Upload, "导出到剪贴板"))
             ExportToClipboard();
-        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Check, "Remove finished Quests"))
+        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Check, "移除已完成的任务"))
             _questController.ManualPriorityQuests.RemoveAll(q => _questFunctions.IsQuestComplete(q.Id));
         ImGui.SameLine();
-        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Trash, "Clear"))
+
+        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Trash, "清除"))
             _questController.ClearQuestPriority();
+
         ImGui.EndDisabled();
 
         ImGui.Spacing();
@@ -83,22 +85,22 @@ internal sealed class PriorityWindow : LWindow
         ImGui.Separator();
         ImGui.Spacing();
         ImGui.TextWrapped(
-            "If you have an active MSQ quest, Questionable will generally try to do:");
-        ImGui.BulletText("'Priority' quests: class quests, ARR primals, ARR raids");
+            "如果你有一个正在进行的主线任务，Questionable 将优先做以下任务：");
+        ImGui.BulletText("'优先' 任务：职业任务， ARR primals, ARR raids");
         ImGui.BulletText(
-            "Supported quests in your 'To-Do list'\n(quests from your Journal that are always on-screen)");
-        ImGui.BulletText("MSQ quest (if available, unless it is marked as 'ignored'\nin your Journal)");
+            "你已经接取得任务中的受支持任务\n（任务日志）");
+        ImGui.BulletText("主线任务（除非在 qst 中手动设置为'忽略'）");
         ImGui.TextWrapped(
-            "If you don't have any active MSQ quest, it will always try to pick up the next quest in the MSQ first.");
+            "如果你没有任何进行中的主线任务，它将始终尝试首先接取下一个主线任务。");
     }
 
     private void DrawQuestFilter()
     {
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
-        if (ImGui.BeginCombo($"##QuestSelection", "Add Quest...", ImGuiComboFlags.HeightLarge))
+        if (ImGui.BeginCombo($"##QuestSelection", "添加任务...", ImGuiComboFlags.HeightLarge))
         {
             ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
-            bool addFirst = ImGui.InputTextWithHint("", "Filter...", ref _searchString, 256,
+            bool addFirst = ImGui.InputTextWithHint("", "筛选...", ref _searchString, 256,
                 ImGuiInputTextFlags.AutoSelectAll | ImGuiInputTextFlags.EnterReturnsTrue);
 
             IEnumerable<Quest> foundQuests;
