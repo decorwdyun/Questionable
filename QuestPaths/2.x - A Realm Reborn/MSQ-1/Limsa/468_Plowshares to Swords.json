@@ -33,7 +33,6 @@
             348,
             349
           ],
-          "Comment": "Kill Pirates/Raiders manually",
           "$": "These flags don't exist, just want this step to not-finish",
           "CompletionQuestVariablesFlags": [
             null,

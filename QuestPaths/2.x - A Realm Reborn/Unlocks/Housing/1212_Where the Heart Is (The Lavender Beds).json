@@ -6,8 +6,9 @@
       "Sequence": 0,
       "Steps": [
         {
-          "InteractionType": "None",
+          "InteractionType": "AttuneAetheryte",
           "TerritoryId": 148,
+          "Aetheryte": "Central Shroud - Bentbranch Meadows",
           "AetheryteShortcut": "Gridania",
           "AethernetShortcut": [
             "[Gridania] Aetheryte Plaza",
@@ -15,6 +16,9 @@
           ],
           "SkipConditions": {
             "AetheryteShortcutIf": {
+              "AetheryteUnlocked": "Central Shroud - Bentbranch Meadows"
+            },
+            "StepIf": {
               "AetheryteUnlocked": "Central Shroud - Bentbranch Meadows"
             }
           }

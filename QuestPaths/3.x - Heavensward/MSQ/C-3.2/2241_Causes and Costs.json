@@ -36,7 +36,6 @@
           },
           "TerritoryId": 155,
           "InteractionType": "Interact",
-          "Fly": true,
           "AetheryteShortcut": "Coerthas Central Highlands - Camp Dragonhead",
           "TargetTerritoryId": 395
         },
