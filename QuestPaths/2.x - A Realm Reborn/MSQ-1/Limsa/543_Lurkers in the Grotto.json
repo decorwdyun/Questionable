@@ -30,11 +30,8 @@
           "TerritoryId": 134,
           "InteractionType": "SinglePlayerDuty",
           "SinglePlayerDutyOptions": {
-            "Enabled": false,
-            "TestedBossModVersion": "0.0.0.292",
-            "Notes": [
-              "AI doesn't automatically target newly spawning adds until after the boss died (requires healing luck on ACN)"
-            ]
+            "Enabled": true,
+            "TestedBossModVersion": "0.3.1.3"
           }
         }
       ]
