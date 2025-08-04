@@ -100,6 +100,9 @@ internal static class QuestStepExtensions
                             Assignment(nameof(QuestStep.TargetClass), step.TargetClass,
                                     emptyStep.TargetClass)
                                 .AsSyntaxNodeOrToken(),
+                            Assignment(nameof(QuestStep.TaxiStandId), step.TaxiStandId,
+                                    emptyStep.TaxiStandId)
+                                .AsSyntaxNodeOrToken(),
                             Assignment(nameof(QuestStep.EnemySpawnType), step.EnemySpawnType,
                                     emptyStep.EnemySpawnType)
                                 .AsSyntaxNodeOrToken(),

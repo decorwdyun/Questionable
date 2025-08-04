@@ -137,6 +137,7 @@
             "Gather",
             "Snipe",
             "SwitchClass",
+            "UnlockTaxiStand",
             "Instruction",
             "AcceptQuest",
             "CompleteQuest",
@@ -1408,6 +1409,25 @@
                 "exclusiveMinimum": 0
               }
             }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "InteractionType": {
+                "const": "UnlockTaxiStand"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "TaxiStandId": {
+                "type": "number"
+              }
+            },
+            "required": [
+              "TaxiStandId"
+            ]
           }
         },
         {

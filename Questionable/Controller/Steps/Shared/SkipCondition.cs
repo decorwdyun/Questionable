@@ -31,6 +31,7 @@ internal static class SkipCondition
             if ((skipConditions == null || !skipConditions.HasSkipConditions()) &&
                 !QuestWorkUtils.HasCompletionFlags(step.CompletionQuestVariablesFlags) &&
                 step.RequiredQuestVariables.Count == 0 &&
+                step.TaxiStandId == null &&
                 step.PickUpQuestId == null &&
                 step.NextQuestId == null &&
                 step.RequiredCurrentJob.Count == 0 &&
@@ -116,6 +117,9 @@ internal static class SkipCondition
             }
 
             if (CheckPickUpTurnInQuestIds(step))
+                return true;
+
+            if (CheckTaxiStandUnlocked(step))
                 return true;
 
             return false;
@@ -439,6 +443,19 @@ internal static class SkipCondition
                 QuestData.HardModePrimals.Contains(step.PickUpQuestId))
             {
                 logger.LogInformation("Skipping step, as hard mode primal quests should be skipped");
+                return true;
+            }
+
+            return false;
+        }
+
+        private unsafe bool CheckTaxiStandUnlocked(QuestStep step)
+        {
+            UIState* uiState = UIState.Instance();
+            if (step.TaxiStandId is { } taxiStandId &&
+                uiState->IsChocoboTaxiStandUnlocked(taxiStandId))
+            {
+                logger.LogInformation("Skipping step, as taxi stand {TaxiStandId} is unlocked", taxiStandId);
                 return true;
             }
 

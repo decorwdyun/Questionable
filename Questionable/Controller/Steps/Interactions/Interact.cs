@@ -5,6 +5,7 @@ using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Shared;
 using Questionable.Controller.Utils;
@@ -46,6 +47,11 @@ internal static class Interact
                 if (!automatonIpc.IsAutoSnipeEnabled)
                     yield break;
             }
+            else if (step.InteractionType == EInteractionType.UnlockTaxiStand)
+            {
+                if (step.TaxiStandId == null)
+                    yield break;
+            }
             else if (step.InteractionType != EInteractionType.Interact)
                 yield break;
 
@@ -55,10 +61,16 @@ internal static class Interact
             if (sequence.Sequence == 0 && sequence.Steps.IndexOf(step) == 0)
                 yield return new WaitAtEnd.WaitDelay();
 
-            yield return new Task(step.DataId.Value, quest, step.InteractionType,
-                step.TargetTerritoryId != null || quest.Id is SatisfactionSupplyNpcId ||
-                step.SkipConditions is { StepIf.Never: true } || step.InteractionType == EInteractionType.PurchaseItem || step.DataId == 1052475,
-                step.PickUpItemId, step.SkipConditions?.StepIf, step.CompletionQuestVariablesFlags);
+            yield return new Task(
+                DataId: step.DataId.Value,
+                Quest: quest,
+                InteractionType: step.InteractionType,
+                SkipMarkerCheck: step.TargetTerritoryId != null || quest.Id is SatisfactionSupplyNpcId ||
+                    step.SkipConditions is { StepIf.Never: true } || step.InteractionType == EInteractionType.PurchaseItem || step.DataId == 1052475,
+                PickUpItemId: step.PickUpItemId,
+                TaxiStandId: step.TaxiStandId,
+                SkipConditions: step.SkipConditions?.StepIf,
+                CompletionQuestVariablesFlags: step.CompletionQuestVariablesFlags);
         }
     }
 
@@ -68,6 +80,7 @@ internal static class Interact
         EInteractionType InteractionType,
         bool SkipMarkerCheck = false,
         uint? PickUpItemId = null,
+        byte? TaxiStandId = null,
         SkipStepConditions? SkipConditions = null,
         List<QuestWorkValue?>? CompletionQuestVariablesFlags = null) : ITask
     {
@@ -159,12 +172,21 @@ internal static class Interact
                     _needsUnmount = false;
             }
 
-            if (Task.PickUpItemId != null)
+            if (Task.PickUpItemId is { } pickUpItemId)
             {
                 unsafe
                 {
                     InventoryManager* inventoryManager = InventoryManager.Instance();
-                    if (inventoryManager->GetInventoryItemCount(Task.PickUpItemId.Value) > 0)
+                    if (inventoryManager->GetInventoryItemCount(pickUpItemId) > 0)
+                        return ETaskResult.TaskComplete;
+                }
+            }
+            else if (Task.TaxiStandId is { } taxiStandId)
+            {
+                unsafe
+                {
+                    UIState* uiState = UIState.Instance();
+                    if (uiState->IsChocoboTaxiStandUnlocked(taxiStandId))
                         return ETaskResult.TaskComplete;
                 }
             }

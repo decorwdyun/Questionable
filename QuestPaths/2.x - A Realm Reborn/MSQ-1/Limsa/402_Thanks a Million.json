@@ -48,6 +48,17 @@
           "TargetTerritoryId": 138
         },
         {
+          "DataId": 1002722,
+          "Position": {
+            "X": 667.68884,
+            "Y": 9.882242,
+            "Z": 487.32727
+          },
+          "TerritoryId": 138,
+          "InteractionType": "UnlockTaxiStand",
+          "TaxiStandId": 23
+        },
+        {
           "TerritoryId": 138,
           "InteractionType": "AttuneAetheryte",
           "Aetheryte": "Western La Noscea - Swiftperch"

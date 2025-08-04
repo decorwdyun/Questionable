@@ -31,6 +31,17 @@
           "TargetTerritoryId": 135
         },
         {
+          "DataId": 1002720,
+          "Position": {
+            "X": 49.271362,
+            "Y": 29.315498,
+            "Z": 605.27954
+          },
+          "TerritoryId": 135,
+          "InteractionType": "UnlockTaxiStand",
+          "TaxiStandId": 27
+        },
+        {
           "TerritoryId": 135,
           "InteractionType": "AttuneAetheryte",
           "Aetheryte": "Lower La Noscea - Moraby Drydocks"

@@ -80,6 +80,17 @@
           "Aetheryte": "Western La Noscea - Aleport"
         },
         {
+          "DataId": 1002723,
+          "Position": {
+            "X": 298.63428,
+            "Y": -25.004364,
+            "Z": 233.14258
+          },
+          "TerritoryId": 138,
+          "InteractionType": "UnlockTaxiStand",
+          "TaxiStandId": 24
+        },
+        {
           "DataId": 1017075,
           "Position": {
             "X": 356.5575,
@@ -102,7 +113,13 @@
             "Z": 17.135864
           },
           "TerritoryId": 138,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "AetheryteShortcut": "Western La Noscea - Aleport",
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
+          }
         }
       ]
     },

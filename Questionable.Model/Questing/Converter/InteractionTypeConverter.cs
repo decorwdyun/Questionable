@@ -32,6 +32,7 @@ public sealed class InteractionTypeConverter() : EnumConverter<EInteractionType>
         { EInteractionType.Gather, "Gather" },
         { EInteractionType.Snipe, "Snipe" },
         { EInteractionType.SwitchClass, "SwitchClass" },
+        { EInteractionType.UnlockTaxiStand, "UnlockTaxiStand" },
         { EInteractionType.Instruction, "Instruction" },
         { EInteractionType.AcceptQuest, "AcceptQuest" },
         { EInteractionType.CompleteQuest, "CompleteQuest" },

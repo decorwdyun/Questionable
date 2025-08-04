@@ -307,12 +307,15 @@ internal sealed class InteractionUiController : IDisposable
         if (currentQuest != null)
         {
             var quest = currentQuest.Quest;
+            bool isTaxiStandUnlock = false;
             if (checkAllSteps)
             {
                 var sequence = quest.FindSequence(currentQuest.Sequence);
                 var choices = sequence?.Steps.SelectMany(x => x.DialogueChoices);
                 if (choices != null)
                     dialogueChoices.AddRange(choices.Select(x => new DialogueChoiceInfo(quest, x)));
+
+                isTaxiStandUnlock = sequence?.Steps.Any(x => x.InteractionType == EInteractionType.UnlockTaxiStand) ?? false;
             }
             else
             {
@@ -339,7 +342,21 @@ internal sealed class InteractionUiController : IDisposable
                             Prompt = null,
                             Answer = step.PurchaseMenu.Key,
                         }));
+
+                    isTaxiStandUnlock = step.InteractionType == EInteractionType.UnlockTaxiStand;
                 }
+            }
+
+            if (isTaxiStandUnlock)
+            {
+                _logger.LogInformation("Adding chocobo taxi stand unlock dialogue choices");
+                dialogueChoices.Add(new DialogueChoiceInfo(quest, new DialogueChoice
+                {
+                    Type = EDialogChoiceType.List,
+                    ExcelSheet = "transport/ChocoboTaxiStand",
+                    Prompt = ExcelRef.FromKey("TEXT_CHOCOBOTAXISTAND_00000_Q1_000_1"),
+                    Answer = ExcelRef.FromKey("TEXT_CHOCOBOTAXISTAND_00000_A1_000_3")
+                }));
             }
 
             // add all travel dialogue choices
@@ -634,6 +651,12 @@ internal sealed class InteractionUiController : IDisposable
             // DifficultySelectYesNo → [0, 2] for very easy
             _logger.LogInformation("SinglePlayerDutyYesNo: probably Single Player Duty");
             return true;
+        }
+            else
+            {
+                _logger.LogInformation("SinglePlayerDuty: not enabled");
+                return false;
+            }
         }
 
         return false;

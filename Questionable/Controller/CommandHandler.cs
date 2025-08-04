@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.Command;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using Lumina.Excel.Sheets;
 using Questionable.Functions;
 using Questionable.Model.Questing;
@@ -176,6 +178,24 @@ internal sealed class CommandHandler : IDisposable
                     _chatGui.Print($"Saved {foundUnlockLinks} unlock links to log.", MessageTag, TagColor);
                 else
                     _chatGui.PrintError("Could not query unlock links.", MessageTag, TagColor);
+                break;
+
+            case "taxi":
+                unsafe
+                {
+                    List<string> taxiStands = [];
+                    var taxiStandNames = _dataManager.GetExcelSheet<ChocoboTaxiStand>();
+                    var uiState = UIState.Instance();
+                    for (byte i = 0; i < uiState->ChocoboTaxiStandsBitmask.Length * 8; ++ i)
+                    {
+                        if (uiState->IsChocoboTaxiStandUnlocked(i))
+                            taxiStands.Add($"{taxiStandNames.GetRow(i + 0x120000u).PlaceName} ({i})");
+                    }
+
+                    _chatGui.Print("Unlocked taxi stands:", MessageTag, TagColor);
+                    foreach (var taxiStand in taxiStands)
+                        _chatGui.Print($"- {taxiStand}", MessageTag, TagColor);
+                }
                 break;
         }
     }

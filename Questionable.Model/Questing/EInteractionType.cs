@@ -31,6 +31,7 @@ public enum EInteractionType
     Gather,
     Snipe,
     SwitchClass,
+    UnlockTaxiStand,
 
     /// <summary>
     /// Needs to be manually continued.
