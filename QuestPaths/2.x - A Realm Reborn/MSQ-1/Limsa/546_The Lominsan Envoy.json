@@ -191,6 +191,15 @@
           "AethernetShard": "[Gridania] Leatherworkers' Guild & Shaded Bower"
         },
         {
+          "Position": {
+            "X": 121.70568,
+            "Y": 12.25941,
+            "Z": -100.795494
+          },
+          "TerritoryId": 133,
+          "InteractionType": "WalkTo"
+        },
+        {
           "TerritoryId": 133,
           "InteractionType": "AttuneAethernetShard",
           "AethernetShard": "[Gridania] Lancers' Guild"
