@@ -16,6 +16,7 @@ using Lumina.Excel.Sheets;
 using Questionable.Controller;
 using Questionable.Data;
 using Questionable.Model;
+using Questionable.Model.Common;
 using Questionable.Model.Questing;
 using GrandCompany = FFXIVClientStructs.FFXIV.Client.UI.Agent.GrandCompany;
 using Quest = Questionable.Model.Quest;
@@ -33,6 +34,7 @@ internal sealed unsafe class QuestFunctions
     private readonly IDataManager _dataManager;
     private readonly IClientState _clientState;
     private readonly IGameGui _gameGui;
+    private readonly IAetheryteList _aetheryteList;
 
     public QuestFunctions(
         QuestRegistry questRegistry,
@@ -43,7 +45,8 @@ internal sealed unsafe class QuestFunctions
         Configuration configuration,
         IDataManager dataManager,
         IClientState clientState,
-        IGameGui gameGui)
+        IGameGui gameGui,
+        IAetheryteList aetheryteList)
     {
         _questRegistry = questRegistry;
         _questData = questData;
@@ -54,6 +57,7 @@ internal sealed unsafe class QuestFunctions
         _dataManager = dataManager;
         _clientState = clientState;
         _gameGui = gameGui;
+        _aetheryteList = aetheryteList;
     }
 
     public QuestReference GetCurrentQuest(bool allowNewMsq = true)
@@ -439,12 +443,20 @@ internal sealed unsafe class QuestFunctions
             .ToList();
     }
 
-    private static int EstimateTeleportCosts(Quest quest)
+    private int EstimateTeleportCosts(Quest quest)
     {
-        if (quest.Info.Expansion == EExpansionVersion.ARealmReborn)
-            return 300 * quest.AllSteps().Count(x => x.Step.AetheryteShortcut != null);
-        else
-            return 1000 * quest.AllSteps().Count(x => x.Step.AetheryteShortcut != null);
+        Dictionary<EAetheryteLocation, float> cheapTeleports = _aetheryteList.Where(x => x.IsFavourite || x.GilCost == 0)
+            .ToDictionary(x => (EAetheryteLocation)x.AetheryteId, x =>
+            {
+                if (x.GilCost == 0)
+                    return 0;
+                else
+                    return 0.5f;
+            });
+
+        int baseCost = quest.Info.Expansion == EExpansionVersion.ARealmReborn ? 300 : 1000;
+        return quest.AllSteps().Where(x => x.Step.AetheryteShortcut != null)
+            .Sum(x => (int)(baseCost * cheapTeleports.GetValueOrDefault(x.Step.AethernetShortcut!.From, 1f)));
     }
 
     public List<ElementId> GetPriorityQuests(bool onlyClassAndRoleQuests = false)
