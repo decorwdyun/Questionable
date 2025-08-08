@@ -4,6 +4,3 @@
 [submodule "vendor/NotificationMasterAPI"]
 	path = vendor/NotificationMasterAPI
 	url = https://github.com/NightmareXIV/NotificationMasterAPI.git
-[submodule "vendor/pictomancy"]
-	path = vendor/pictomancy
-	url = https://github.com/sourpuh/ffxiv_pictomancy.git

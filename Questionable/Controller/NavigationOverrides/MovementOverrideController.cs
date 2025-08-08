@@ -87,6 +87,11 @@ internal sealed class MovementOverrideController
         // heritage found: yyupye's halo (farm, npc: Mahuwsa)
         new BlacklistedPoint(1191, new(-108f, 29.25f, -350.75f), new(-107.56289f, 29.008266f, -348.80087f)),
         new BlacklistedPoint(1191, new(-105.75f, 29.75f, -351f), new(-105.335304f, 29.017048f, -348.85077f)),
+
+        // solution nine: walks behind the bar in front of the backrooms thing
+        new BlacklistedPoint(1186, new(284.25f, 50.75f, 171.25f), new(284.25f, 50.75f, 166.25f)),
+        new BlacklistedPoint(1186, new(283.75f, 50.75f, 167.25f), new(284.25f, 50.75f, 166.25f)),
+        new BlacklistedPoint(1186, new(287.75f, 51.25f, 172f), new(288.875f, 50.75f, 166.25f)),
     ];
 
     private readonly IClientState _clientState;

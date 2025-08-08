@@ -29,7 +29,7 @@ internal sealed class CreditsController : IDisposable
     private unsafe void CreditScrollPostSetup(AddonEvent type, AddonArgs args)
     {
         _logger.LogInformation("Closing Credits sequence");
-        AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
+        AtkUnitBase* addon = (AtkUnitBase*)args.Addon.Address;
         addon->FireCallbackInt(-2);
     }
 
@@ -39,14 +39,14 @@ internal sealed class CreditsController : IDisposable
     private unsafe void CreditPostSetup(AddonEvent type, AddonArgs args)
     {
         _logger.LogInformation("Closing Credits sequence");
-        AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
+        AtkUnitBase* addon = (AtkUnitBase*)args.Addon.Address;
         addon->FireCallbackInt(-2);
     }
 
     private unsafe void CreditPlayerPostSetup(AddonEvent type, AddonArgs args)
     {
         _logger.LogInformation("Closing CreditPlayer");
-        AtkUnitBase* addon = (AtkUnitBase*)args.Addon;
+        AtkUnitBase* addon = (AtkUnitBase*)args.Addon.Address;
         addon->Close(true);
     }
 

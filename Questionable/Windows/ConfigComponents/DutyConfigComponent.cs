@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
@@ -11,7 +12,6 @@ using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using Dalamud.Utility;
-using ImGuiNET;
 using Lumina.Excel.Sheets;
 using Questionable.Controller;
 using Questionable.Data;
@@ -206,13 +206,13 @@ internal sealed class DutyConfigComponent : ConfigComponent
 
         ImGui.SameLine();
 
-        string? clipboardText = GetClipboardText();
-        using (ImRaii.Disabled(clipboardText == null ||
+        string clipboardText = ImGui.GetClipboardText();
+        using (ImRaii.Disabled(string.IsNullOrEmpty(clipboardText) ||
                                !clipboardText.StartsWith(DutyClipboardPrefix, StringComparison.InvariantCulture)))
         {
             if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Paste, "Import from Clipboard"))
             {
-                clipboardText = clipboardText!.Substring(DutyClipboardPrefix.Length);
+                clipboardText = clipboardText.Substring(DutyClipboardPrefix.Length);
                 string text = Encoding.UTF8.GetString(Convert.FromBase64String(clipboardText));
 
                 Configuration.Duties.WhitelistedDutyCfcIds.Clear();

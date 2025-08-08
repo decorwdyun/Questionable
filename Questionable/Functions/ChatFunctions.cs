@@ -28,7 +28,6 @@ internal sealed unsafe class ChatFunctions
     private readonly ITargetManager _targetManager;
     private readonly ILogger<ChatFunctions> _logger;
     private readonly ProcessChatBoxDelegate _processChatBox;
-    private readonly delegate* unmanaged<Utf8String*, int, IntPtr, void> _sanitiseString;
 
     public ChatFunctions(ISigScanner sigScanner, IDataManager dataManager, GameFunctions gameFunctions,
         ITargetManager targetManager, ILogger<ChatFunctions> logger)
@@ -38,8 +37,6 @@ internal sealed unsafe class ChatFunctions
         _logger = logger;
         _processChatBox =
             Marshal.GetDelegateForFunctionPointer<ProcessChatBoxDelegate>(sigScanner.ScanText(Signatures.SendChat));
-        _sanitiseString =
-            (delegate* unmanaged<Utf8String*, int, IntPtr, void>)sigScanner.ScanText(Signatures.SanitiseString);
 
         _emoteCommands = dataManager.GetExcelSheet<Emote>()
             .Where(x => x.RowId > 0)
@@ -122,7 +119,7 @@ internal sealed unsafe class ChatFunctions
     {
         var uText = Utf8String.FromString(text);
 
-        _sanitiseString(uText, 0x27F, IntPtr.Zero);
+        uText->SanitizeString((AllowedEntities)0x27F);
         var sanitised = uText->ToString();
 
         uText->Dtor();
@@ -157,7 +154,6 @@ internal sealed unsafe class ChatFunctions
     private static class Signatures
     {
         internal const string SendChat = "48 89 5C 24 ?? 48 89 74 24 ?? 57 48 83 EC 20 48 8B F2 48 8B F9 45 84 C9";
-        internal const string SanitiseString = "E8 ?? ?? ?? ?? EB 0A 48 8D 4C 24 ?? E8 ?? ?? ?? ?? 48 8D AE";
     }
 
     [StructLayout(LayoutKind.Explicit)]

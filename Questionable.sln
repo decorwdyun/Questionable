@@ -21,15 +21,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GatheringPathRenderer", "Ga
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BBFFC6EA-15B1-48FC-B4D3-D9491278C27F}"
 	ProjectSection(SolutionItems) = preProject
-		Directory.Build.targets = Directory.Build.targets
 		.woodpecker\build.yaml = .woodpecker\build.yaml
+		Directory.Build.targets = Directory.Build.targets
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "vendor", "vendor", "{8F5EC9D5-4CE7-433B-BB3A-782500E84DDB}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationMasterAPI", "vendor\NotificationMasterAPI\NotificationMasterAPI\NotificationMasterAPI.csproj", "{9BD494ED-22F2-487B-BCE1-435399A8720E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pictomancy", "vendor\pictomancy\Pictomancy\Pictomancy.csproj", "{D1AE2F8C-BDE7-457F-A369-973101044A25}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Questionable.IpcTest", "Questionable.IpcTest\Questionable.IpcTest.csproj", "{8572A8B2-2F31-4D17-B207-6A7A2E0579EF}"
 EndProject
@@ -77,10 +75,6 @@ Global
 		{9BD494ED-22F2-487B-BCE1-435399A8720E}.Debug|x64.Build.0 = Debug|x64
 		{9BD494ED-22F2-487B-BCE1-435399A8720E}.Release|x64.ActiveCfg = Release|x64
 		{9BD494ED-22F2-487B-BCE1-435399A8720E}.Release|x64.Build.0 = Release|x64
-		{D1AE2F8C-BDE7-457F-A369-973101044A25}.Debug|x64.ActiveCfg = Debug|x64
-		{D1AE2F8C-BDE7-457F-A369-973101044A25}.Debug|x64.Build.0 = Debug|x64
-		{D1AE2F8C-BDE7-457F-A369-973101044A25}.Release|x64.ActiveCfg = Release|x64
-		{D1AE2F8C-BDE7-457F-A369-973101044A25}.Release|x64.Build.0 = Release|x64
 		{8572A8B2-2F31-4D17-B207-6A7A2E0579EF}.Debug|x64.ActiveCfg = Debug|x64
 		{8572A8B2-2F31-4D17-B207-6A7A2E0579EF}.Debug|x64.Build.0 = Debug|x64
 		{8572A8B2-2F31-4D17-B207-6A7A2E0579EF}.Release|x64.ActiveCfg = Release|x64
@@ -95,6 +89,8 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{9BD494ED-22F2-487B-BCE1-435399A8720E} = {8F5EC9D5-4CE7-433B-BB3A-782500E84DDB}
-		{D1AE2F8C-BDE7-457F-A369-973101044A25} = {8F5EC9D5-4CE7-433B-BB3A-782500E84DDB}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E6C60C7E-BEEA-422F-85B3-639BAD5A4B75}
 	EndGlobalSection
 EndGlobal

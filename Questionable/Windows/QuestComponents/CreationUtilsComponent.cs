@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Numerics;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Game.ClientState.Conditions;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.ClientState.Objects.Types;
@@ -12,7 +13,6 @@ using Dalamud.Interface.Components;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
 using FFXIVClientStructs.FFXIV.Client.Game.Object;
-using ImGuiNET;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller;
 using Questionable.Data;

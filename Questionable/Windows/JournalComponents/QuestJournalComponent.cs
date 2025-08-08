@@ -2,7 +2,6 @@
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin;
-using ImGuiNET;
 using Questionable.Controller;
 using Questionable.Data;
 using Questionable.Functions;
@@ -13,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Dalamud.Bindings.ImGui;
 
 namespace Questionable.Windows.JournalComponents;
 

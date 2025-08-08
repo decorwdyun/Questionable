@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
-using ImGuiNET;
 using LLib.ImGui;
 using Questionable.Controller;
 using Questionable.Functions;
@@ -255,18 +255,18 @@ internal sealed class PriorityWindow : LWindow
         }
     }
 
-    private List<ElementId> ParseClipboardItems()
+    private static List<ElementId> ParseClipboardItems()
     {
-        string? clipboardText = GetClipboardText();
+        string clipboardText = ImGui.GetClipboardText();
         return DecodeQuestPriority(clipboardText);
     }
 
-    public static List<ElementId> DecodeQuestPriority(string? clipboardText)
+    public static List<ElementId> DecodeQuestPriority(string clipboardText)
     {
         List<ElementId> clipboardItems = new List<ElementId>();
         try
         {
-            if (clipboardText != null && clipboardText.StartsWith(ClipboardPrefix, StringComparison.InvariantCulture))
+            if (string.IsNullOrEmpty(clipboardText) && clipboardText.StartsWith(ClipboardPrefix, StringComparison.InvariantCulture))
             {
                 clipboardText = clipboardText.Substring(ClipboardPrefix.Length);
                 string text = Encoding.UTF8.GetString(Convert.FromBase64String(clipboardText));
@@ -301,20 +301,5 @@ internal sealed class PriorityWindow : LWindow
     private void ImportFromClipboard(List<ElementId> questElements)
     {
         _questController.ImportQuestPriority(questElements);
-    }
-
-    /// <summary>
-    /// The default implementation for <see cref="ImGui.GetClipboardText"/> throws an NullReferenceException if the clipboard is empty, maybe also if it doesn't contain text.
-    /// </summary>
-    private unsafe string? GetClipboardText()
-    {
-        byte* ptr = ImGuiNative.igGetClipboardText();
-        if (ptr == null)
-            return null;
-
-        int byteCount = 0;
-        while (ptr[byteCount] != 0)
-            ++byteCount;
-        return Encoding.UTF8.GetString(ptr, byteCount);
     }
 }

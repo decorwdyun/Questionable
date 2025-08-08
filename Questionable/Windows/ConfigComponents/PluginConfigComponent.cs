@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
@@ -9,7 +10,6 @@ using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using Dalamud.Utility;
-using ImGuiNET;
 using Questionable.Controller;
 using Questionable.External;
 

@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using ImGuiNET;
+using Dalamud.Bindings.ImGui;
 using Questionable.Controller;
 
 namespace Questionable.Windows.QuestComponents;

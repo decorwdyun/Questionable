@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
@@ -10,7 +11,6 @@ using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.UI;
-using ImGuiNET;
 using LLib.GameUI;
 using LLib.ImGui;
 using Questionable.Controller;

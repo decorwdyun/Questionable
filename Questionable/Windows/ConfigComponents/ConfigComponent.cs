@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using System.Text;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Game.Text;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin;
-using ImGuiNET;
 
 namespace Questionable.Windows.ConfigComponents;
 
@@ -49,21 +48,6 @@ internal abstract class ConfigComponent
             return string.Empty;
 
         return $"{(includePrefix ? SeIconChar.LevelEn.ToIconString() : string.Empty)}{FormatLevel(level / 10, false)}{(SeIconChar.Number0 + level % 10).ToIconChar()}";
-    }
-
-    /// <summary>
-    /// The default implementation for <see cref="ImGui.GetClipboardText"/> throws an NullReferenceException if the clipboard is empty, maybe also if it doesn't contain text.
-    /// </summary>
-    protected unsafe string? GetClipboardText()
-    {
-        byte* ptr = ImGuiNative.igGetClipboardText();
-        if (ptr == null)
-            return null;
-
-        int byteCount = 0;
-        while (ptr[byteCount] != 0)
-            ++byteCount;
-        return Encoding.UTF8.GetString(ptr, byteCount);
     }
 
     protected static void DrawNotes(bool enabledByDefault, IEnumerable<string> notes)

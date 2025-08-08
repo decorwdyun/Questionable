@@ -1,4 +1,4 @@
-<Project Sdk="Dalamud.NET.Sdk/12.0.2">
+<Project Sdk="Dalamud.NET.Sdk/13.0.0">
     <PropertyGroup>
         <Version>0.3</Version>
         <OutputPath>dist</OutputPath>
@@ -9,7 +9,10 @@
     <ItemGroup>
       <ProjectReference Include="..\LLib\LLib.csproj" />
       <ProjectReference Include="..\Questionable.Model\Questionable.Model.csproj" />
-      <ProjectReference Include="..\vendor\pictomancy\Pictomancy\Pictomancy.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Pictomancy" Version="0.0.1" />
     </ItemGroup>
 
     <Import Project="..\LLib\LLib.targets"/>

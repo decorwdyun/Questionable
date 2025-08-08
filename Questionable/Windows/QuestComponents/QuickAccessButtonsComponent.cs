@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Numerics;
-using Dalamud.Game.ClientState.Conditions;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
@@ -9,74 +9,38 @@ using Dalamud.Interface.Utility;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
-using FFXIVClientStructs.FFXIV.Client.UI.Agent;
-using ImGuiNET;
 using Questionable.Controller;
-using Questionable.External;
-using Questionable.Functions;
 
 namespace Questionable.Windows.QuestComponents;
 
 internal sealed class QuickAccessButtonsComponent
 {
-    private readonly MovementController _movementController;
-    private readonly GameFunctions _gameFunctions;
-    private readonly ChatFunctions _chatFunctions;
     private readonly QuestRegistry _questRegistry;
-    private readonly NavmeshIpc _navmeshIpc;
     private readonly QuestValidationWindow _questValidationWindow;
     private readonly JournalProgressWindow _journalProgressWindow;
-    private readonly IClientState _clientState;
-    private readonly ICondition _condition;
     private readonly ICommandManager _commandManager;
     private readonly IDalamudPluginInterface _pluginInterface;
 
     public QuickAccessButtonsComponent(
-        MovementController movementController,
-        GameFunctions gameFunctions,
-        ChatFunctions chatFunctions,
         QuestRegistry questRegistry,
-        NavmeshIpc navmeshIpc,
         QuestValidationWindow questValidationWindow,
         JournalProgressWindow journalProgressWindow,
-        IClientState clientState,
-        ICondition condition,
         ICommandManager commandManager,
         IDalamudPluginInterface pluginInterface)
     {
-        _movementController = movementController;
-        _gameFunctions = gameFunctions;
-        _chatFunctions = chatFunctions;
         _questRegistry = questRegistry;
-        _navmeshIpc = navmeshIpc;
         _questValidationWindow = questValidationWindow;
         _journalProgressWindow = journalProgressWindow;
-        _clientState = clientState;
-        _condition = condition;
         _commandManager = commandManager;
         _pluginInterface = pluginInterface;
     }
 
     public event EventHandler? Reload;
 
-    public unsafe void Draw()
+    public void Draw()
     {
-        var map = AgentMap.Instance();
-        using (var unused = ImRaii.Disabled(map == null || !map->IsFlagMarkerSet ||
-                                            map->FlagMapMarker.TerritoryId != _clientState.TerritoryType ||
-                                            !_navmeshIpc.IsReady))
-        {
-            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Flag, "To Flag"))
-            {
-                _movementController.Destination = null;
-                _chatFunctions.ExecuteCommand(
-                    $"/vnav {(_condition[ConditionFlag.Mounted] && _gameFunctions.IsFlyingUnlockedInCurrentZone() ? "flyflag" : "moveflag")}");
-            }
-        }
-
         if (_commandManager.Commands.ContainsKey("/vnav"))
         {
-            ImGui.SameLine();
             using (var unused = ImRaii.Disabled(!ImGui.IsKeyDown(ImGuiKey.ModCtrl)))
             {
                 if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.GlobeEurope, "Rebuild Navmesh"))

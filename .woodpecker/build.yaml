@@ -29,7 +29,7 @@ steps:
     commands:
       - mkdir release
       - mv Questionable/dist/Questionable/latest.zip release/Questionable-${CI_COMMIT_TAG##v}.zip
-      - mv Questionable/dist/Questionable/Questionable.json release/Questionable-${CI_COMMIT_TAG##v}.json.d12
+      - mv Questionable/dist/Questionable/Questionable.json release/Questionable-${CI_COMMIT_TAG##v}.json.d13
     when:
       - event: tag
         ref: refs/tags/v*
