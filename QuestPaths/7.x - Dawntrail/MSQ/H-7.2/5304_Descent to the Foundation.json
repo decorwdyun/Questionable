@@ -62,8 +62,10 @@
           "TerritoryId": 1186,
           "InteractionType": "Duty",
           "DutyOptions": {
-            "Enabled": false,
-            "ContentFinderConditionId": 1027
+            "Enabled": true,
+            "ContentFinderConditionId": 1027,
+            "TestedBossModVersion": "0.3.2.4",
+            "TestedAutoDutyVersion": "0.0.0.230"
           }
         }
       ]
