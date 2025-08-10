@@ -1,4 +1,5 @@
 ﻿using System;
+using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.Logging;
 using Questionable.Data;
@@ -51,7 +52,8 @@ internal static class AetherCurrent
                 logger.LogInformation("Attuning to aether current {AetherCurrentId} / {DataId}", Task.AetherCurrentId,
                     Task.DataId);
                 ProgressContext =
-                    InteractionProgressContext.FromActionUseOrDefault(() => gameFunctions.InteractWith(Task.DataId));
+                    InteractionProgressContext.FromActionUseOrDefault(() =>
+                        gameFunctions.InteractWith(Task.DataId, ObjectKind.EventObj));
                 return true;
             }
 

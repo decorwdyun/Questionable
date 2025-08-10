@@ -1,4 +1,5 @@
 ﻿using System;
+using Dalamud.Game.ClientState.Objects.Enums;
 using Microsoft.Extensions.Logging;
 using Questionable.Functions;
 using Questionable.Model;
@@ -40,7 +41,7 @@ internal static class Aetheryte
                 logger.LogInformation("Attuning to aetheryte {Aetheryte}", Task.AetheryteLocation);
                 ProgressContext =
                     InteractionProgressContext.FromActionUseOrDefault(() =>
-                        gameFunctions.InteractWith((uint)Task.AetheryteLocation));
+                        gameFunctions.InteractWith((uint)Task.AetheryteLocation, ObjectKind.Aetheryte));
                 return true;
             }
 
