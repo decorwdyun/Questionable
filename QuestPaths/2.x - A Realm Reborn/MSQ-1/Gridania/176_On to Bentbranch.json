@@ -30,6 +30,17 @@
           ]
         },
         {
+          "DataId": 1002980,
+          "Position": {
+            "X": 22.934265,
+            "Y": -8,
+            "Z": 84.97742
+          },
+          "TerritoryId": 148,
+          "InteractionType": "UnlockTaxiStand",
+          "TaxiStandId": 9
+        },
+        {
           "DataId": 1000470,
           "Position": {
             "X": -59.006653,

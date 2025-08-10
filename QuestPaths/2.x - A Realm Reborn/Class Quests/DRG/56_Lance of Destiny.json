@@ -42,7 +42,12 @@
           },
           "StopDistance": 4,
           "TerritoryId": 133,
-          "InteractionType": "SinglePlayerDuty"
+          "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Index": 0,
+            "Enabled": true,
+            "TestedBossModVersion": "0.3.2.4"
+          }
         }
       ]
     },
@@ -73,6 +78,22 @@
       "Sequence": 3,
       "Steps": [
         {
+          "DataId": 1001263,
+          "Position": {
+            "X": 181.41443,
+            "Y": -2.3519497,
+            "Z": -240.40594
+          },
+          "TerritoryId": 133,
+          "InteractionType": "Interact",
+          "TargetTerritoryId": 152,
+          "SkipConditions": {
+            "StepIf": {
+              "AetheryteUnlocked": "East Shroud - Hawthorne Hut"
+            }
+          }
+        },
+        {
           "Position": {
             "X": -131.39551,
             "Y": -1.8032382,
@@ -88,7 +109,12 @@
               "MinimumKillCount": 10
             }
           ],
-          "Fly": true
+          "Fly": true,
+          "SkipConditions": {
+            "AetheryteShortcutIf": {
+              "InSameTerritory": true
+            }
+          }
         }
       ]
     },
@@ -121,7 +147,9 @@
           "TerritoryId": 152,
           "InteractionType": "SinglePlayerDuty",
           "SinglePlayerDutyOptions": {
-            "Index": 1
+            "Index": 1,
+            "Enabled": true,
+            "TestedBossModVersion": "0.3.2.4"
           }
         }
       ]

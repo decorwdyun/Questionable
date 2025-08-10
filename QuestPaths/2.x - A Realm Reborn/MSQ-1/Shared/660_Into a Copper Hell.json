@@ -36,13 +36,24 @@
       "Sequence": 2,
       "Steps": [
         {
+          "DataId": 1003732,
+          "Position": {
+            "X": 63.645386,
+            "Y": 45.14341,
+            "Z": -193.59125
+          },
           "TerritoryId": 140,
-          "InteractionType": "AttuneAetheryte",
-          "Aetheryte": "Western Thanalan - Horizon",
+          "InteractionType": "UnlockTaxiStand",
+          "TaxiStandId": 11,
           "AethernetShortcut": [
             "[Ul'dah] Adventurers' Guild",
             "[Ul'dah] Gate of the Sultana (Western Thanalan)"
           ]
+        },
+        {
+          "TerritoryId": 140,
+          "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Western Thanalan - Horizon"
         },
         {
           "DataId": 1002285,

@@ -1,6 +1,7 @@
 ﻿{
   "$schema": "https://git.carvel.li/liza/Questionable/raw/branch/master/QuestPaths/quest-v1.json",
   "Author": "pot0to",
+  "Comment": "TODO Fix pathing if flying is locked",
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -134,7 +135,14 @@
           },
           "TerritoryId": 140,
           "Fly": true,
-          "InteractionType": "SinglePlayerDuty"
+          "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": false,
+            "TestedBossModVersion": "0.3.2.4",
+            "Notes": [
+              "Duty somewhat expects you to put the boss to sleep, vbm doesn't and lets the friendly NPC die"
+            ]
+          }
         }
       ]
     },

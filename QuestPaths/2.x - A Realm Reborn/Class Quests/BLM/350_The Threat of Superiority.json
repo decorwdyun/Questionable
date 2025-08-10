@@ -107,6 +107,14 @@
           },
           "TerritoryId": 145,
           "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {
+            "Enabled": false,
+            "TestedBossModVersion": "0.3.2.4",
+            "Notes": [
+              "vbm doesn't move to the enemies automatically",
+              "vbm doesn't interact with the urn"
+            ]
+          },
           "Fly": true,
           "AetheryteShortcut": "Eastern Thanalan - Camp Drybone",
           "SkipConditions": {
