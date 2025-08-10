@@ -31,20 +31,20 @@
       },
       "JsonSchema.Net": {
         "type": "Direct",
-        "requested": "[7.3.4, )",
-        "resolved": "7.3.4",
-        "contentHash": "7GggWrdzKrtGWETRn3dcMnmuLSyWaDkBK94TK80LEHQEVz4bmsQc7FYO7qL40RDdZU2YPz5d98aT9lW5OYExuA==",
+        "requested": "[7.4.0, )",
+        "resolved": "7.4.0",
+        "contentHash": "5T3DWENwuCzLwFWz0qjXXVWA8+5+gC95OLkhqUBWpVpWBMr9gwfhWNeX8rWyr+fLQ7pIQ+lWuHIrmXRudxOOSw==",
         "dependencies": {
           "JsonPointer.Net": "5.3.1"
         }
       },
       "Microsoft.Extensions.DependencyInjection": {
         "type": "Direct",
-        "requested": "[9.0.5, )",
-        "resolved": "9.0.5",
-        "contentHash": "N1Mn0T/tUBPoLL+Fzsp+VCEtneUhhxc1//Dx3BeuQ8AX+XrMlYCfnp2zgpEXnTCB7053CLdiqVWPZ7mEX6MPjg==",
+        "requested": "[9.0.8, )",
+        "resolved": "9.0.8",
+        "contentHash": "JJjI2Fa+QtZcUyuNjbKn04OjIUX5IgFGFu/Xc+qvzh1rXdZHLcnqqVXhR4093bGirTwacRlHiVg1XYI9xum6QQ==",
         "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.5"
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.8"
         }
       },
       "Microsoft.SourceLink.Gitea": {
@@ -89,8 +89,8 @@
       },
       "Microsoft.Extensions.DependencyInjection.Abstractions": {
         "type": "Transitive",
-        "resolved": "9.0.5",
-        "contentHash": "cjnRtsEAzU73aN6W7vkWy8Phj5t3Xm78HSqgrbh/O4Q9SK/yN73wZVa21QQY6amSLQRQ/M8N+koGnY6PuvKQsw=="
+        "resolved": "9.0.8",
+        "contentHash": "xY3lTjj4+ZYmiKIkyWitddrp1uL5uYiweQjqo4BKBw01ZC4HhcfgLghDpPZcUlppgWAFqFy9SgkiYWOMx365pw=="
       },
       "Microsoft.Extensions.Logging": {
         "type": "Transitive",
