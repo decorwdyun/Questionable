@@ -10,6 +10,7 @@ using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin.Services;
+using Microsoft.Extensions.Logging;
 using Questionable.Controller;
 using Questionable.Controller.Steps.Shared;
 using Questionable.Functions;
@@ -33,6 +34,7 @@ internal sealed partial class ActiveQuestComponent
     private readonly QuestRegistry _questRegistry;
     private readonly PriorityWindow _priorityWindow;
     private readonly IChatGui _chatGui;
+    private readonly ILogger<ActiveQuestComponent> _logger;
 
     public ActiveQuestComponent(
         QuestController questController,
@@ -44,7 +46,8 @@ internal sealed partial class ActiveQuestComponent
         Configuration configuration,
         QuestRegistry questRegistry,
         PriorityWindow priorityWindow,
-        IChatGui chatGui)
+        IChatGui chatGui,
+        ILogger<ActiveQuestComponent> logger)
     {
         _questController = questController;
         _movementController = movementController;
@@ -56,6 +59,7 @@ internal sealed partial class ActiveQuestComponent
         _questRegistry = questRegistry;
         _priorityWindow = priorityWindow;
         _chatGui = chatGui;
+        _logger = logger;
     }
 
     public event EventHandler? Reload;
@@ -115,6 +119,7 @@ internal sealed partial class ActiveQuestComponent
             catch (Exception e)
             {
                 ImGui.TextColored(ImGuiColors.DalamudRed, e.ToString());
+                _logger.LogError(e, "Could not handle active quest buttons");
             }
 
             DrawSimulationControls();
