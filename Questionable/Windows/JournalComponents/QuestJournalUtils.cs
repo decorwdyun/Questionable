@@ -32,16 +32,22 @@ internal sealed class QuestJournalUtils
         if (!popup)
             return;
 
-        if (ImGui.MenuItem("Start as next quest", _questFunctions.IsReadyToAcceptQuest(questInfo.QuestId)))
+        using (ImRaii.Disabled(!_questFunctions.IsReadyToAcceptQuest(questInfo.QuestId)))
         {
-            _questController.SetNextQuest(quest);
-            _questController.Start(label);
+            if (ImGui.MenuItem("Start as next quest"))
+            {
+                _questController.SetNextQuest(quest);
+                _questController.Start(label);
+            }
         }
 
         bool openInQuestMap = _commandManager.Commands.ContainsKey("/questinfo");
-        if (ImGui.MenuItem("View in Quest Map", questInfo.QuestId is QuestId && openInQuestMap))
+        using (ImRaii.Disabled(!(questInfo.QuestId is QuestId) || !openInQuestMap))
         {
-            _commandManager.ProcessCommand($"/questinfo {questInfo.QuestId}");
+            if (ImGui.MenuItem("View in Quest Map"))
+            {
+                _commandManager.ProcessCommand($"/questinfo {questInfo.QuestId}");
+            }
         }
     }
 
