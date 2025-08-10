@@ -456,7 +456,7 @@ internal sealed unsafe class QuestFunctions
 
         int baseCost = quest.Info.Expansion == EExpansionVersion.ARealmReborn ? 300 : 1000;
         return quest.AllSteps().Where(x => x.Step.AetheryteShortcut != null)
-            .Sum(x => (int)(baseCost * cheapTeleports.GetValueOrDefault(x.Step.AethernetShortcut!.From, 1f)));
+            .Sum(x => (int)(baseCost * cheapTeleports.GetValueOrDefault(x.Step.AetheryteShortcut!.Value, 1f)));
     }
 
     public List<ElementId> GetPriorityQuests(bool onlyClassAndRoleQuests = false)
