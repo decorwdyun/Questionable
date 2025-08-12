@@ -754,6 +754,8 @@ internal sealed unsafe class QuestFunctions
     {
         if (unlockLinkId.Value == 506)
             return !IsFestivalActive(160, 2);
+        else if (unlockLinkId.Value == 568)
+            return !IsFestivalActive(160, 3);
         else
             return true;
     }

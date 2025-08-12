@@ -23,8 +23,7 @@ internal sealed class EventInfoComponent
     [SuppressMessage("ReSharper", "CollectionNeverUpdated.Local")]
     private readonly List<EventQuest> _eventQuests =
     [
-        new EventQuest("Limited Time Items", [new UnlockLinkId(506)], DateTime.MaxValue),
-        new EventQuest("Make It Rain", [new QuestId(5322)], AtDailyReset(new(2025, 6, 11)))
+        new EventQuest("Limited Time Items", [new UnlockLinkId(568)], DateTime.MaxValue),
     ];
 
     private readonly QuestData _questData;
