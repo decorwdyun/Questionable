@@ -138,7 +138,7 @@ internal static class DoGather
             for (int i = 0; i < 8; ++i)
             {
                 // +8 = new item?
-                uint itemId = atkValues[i * 11 + 7].UInt;
+                uint itemId = addonGathering->ItemIds[i];
                 if (itemId == 0)
                     continue;
 
@@ -161,6 +161,7 @@ internal static class DoGather
                 slots.Add(slot);
             }
 
+            logger.LogTrace("Slots: {Slots}", string.Join(", ", slots));
             return slots;
         }
 
