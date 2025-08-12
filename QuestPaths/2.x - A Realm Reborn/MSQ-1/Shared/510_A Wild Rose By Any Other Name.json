@@ -72,6 +72,17 @@
           "Aetheryte": "Central Thanalan - Black Brush Station"
         },
         {
+          "DataId": 1001607,
+          "Position": {
+            "X": -2.7314453,
+            "Y": -2.055717,
+            "Z": -158.52606
+          },
+          "TerritoryId": 141,
+          "InteractionType": "UnlockTaxiStand",
+          "TaxiStandId": 14
+        },
+        {
           "Position": {
             "X": 454.0109,
             "Y": -17.999832,
@@ -90,6 +101,17 @@
           "TerritoryId": 145,
           "InteractionType": "WalkTo",
           "$": "Camp Drybone Lantern"
+        },
+        {
+          "DataId": 1003935,
+          "Position": {
+            "X": -423.2395,
+            "Y": -39.060455,
+            "Z": 112.2301
+          },
+          "TerritoryId": 145,
+          "InteractionType": "UnlockTaxiStand",
+          "TaxiStandId": 15
         },
         {
           "TerritoryId": 145,

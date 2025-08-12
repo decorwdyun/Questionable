@@ -21,6 +21,15 @@
       "Sequence": 1,
       "Steps": [
         {
+          "Position": {
+            "X": -21.400705,
+            "Y": 46.621056,
+            "Z": -70.3491
+          },
+          "TerritoryId": 134,
+          "InteractionType": "WalkTo"
+        },
+        {
           "DataId": 2001582,
           "Position": {
             "X": -58.640503,
@@ -31,7 +40,7 @@
           "InteractionType": "SinglePlayerDuty",
           "SinglePlayerDutyOptions": {
             "Enabled": true,
-            "TestedBossModVersion": "0.3.1.3"
+            "TestedBossModVersion": "0.3.2.5"
           }
         }
       ]
