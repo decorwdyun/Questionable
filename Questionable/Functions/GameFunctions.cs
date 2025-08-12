@@ -528,13 +528,13 @@ internal sealed unsafe class GameFunctions
     /// </summary>
     public void AbandonDuty() => _abandonDuty(false);
 
-    public int DumpUnlockLinks()
+    public IReadOnlyList<uint> GetUnlockLinks()
     {
         UIState* uiState = UIState.Instance();
         if (uiState == null)
         {
             _logger.LogError("Could not query unlock links");
-            return -1;
+            return [];
         }
 
         List<uint> unlockedUnlockLinks = [];
@@ -545,7 +545,7 @@ internal sealed unsafe class GameFunctions
         }
 
         _logger.LogInformation("Unlocked unlock links: {UnlockedUnlockLinks}", string.Join(", ", unlockedUnlockLinks));
-        return unlockedUnlockLinks.Count;
+        return unlockedUnlockLinks;
     }
 
 #if false

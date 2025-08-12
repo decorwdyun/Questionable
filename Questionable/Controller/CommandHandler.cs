@@ -34,7 +34,10 @@ internal sealed class CommandHandler : IDisposable
     private readonly QuestFunctions _questFunctions;
     private readonly GameFunctions _gameFunctions;
     private readonly IDataManager _dataManager;
+    private readonly IClientState _clientState;
     private readonly Configuration _configuration;
+
+    private IReadOnlyList<uint> _previouslyUnlockedUnlockLinks = [];
 
     public CommandHandler(
         ICommandManager commandManager,
@@ -52,6 +55,7 @@ internal sealed class CommandHandler : IDisposable
         QuestFunctions questFunctions,
         GameFunctions gameFunctions,
         IDataManager dataManager,
+        IClientState clientState,
         Configuration configuration)
     {
         _commandManager = commandManager;
@@ -69,8 +73,10 @@ internal sealed class CommandHandler : IDisposable
         _questFunctions = questFunctions;
         _gameFunctions = gameFunctions;
         _dataManager = dataManager;
+        _clientState = clientState;
         _configuration = configuration;
 
+        _clientState.Logout += OnLogout;
         _commandManager.AddHandler("/qst", new CommandInfo(ProcessCommand)
         {
             HelpMessage = string.Join($"{Environment.NewLine}\t",
@@ -174,11 +180,19 @@ internal sealed class CommandHandler : IDisposable
                 break;
 
             case "unlock-links":
-                int foundUnlockLinks = _gameFunctions.DumpUnlockLinks();
-                if (foundUnlockLinks >= 0)
-                    _chatGui.Print($"Saved {foundUnlockLinks} unlock links to log.", MessageTag, TagColor);
+                IReadOnlyList<uint> unlockedUnlockLinks = _gameFunctions.GetUnlockLinks();
+                if (unlockedUnlockLinks.Count >= 0)
+                {
+                    _chatGui.Print($"Saved {unlockedUnlockLinks.Count} unlock links to log.", MessageTag, TagColor);
+
+                    var newUnlockLinks = unlockedUnlockLinks.Except(_previouslyUnlockedUnlockLinks).ToList();
+                    if (_previouslyUnlockedUnlockLinks.Count > 0 && newUnlockLinks.Count > 0)
+                        _chatGui.Print($"New unlock links: {string.Join(", ", newUnlockLinks)}", MessageTag, TagColor);
+                }
                 else
                     _chatGui.PrintError("Could not query unlock links.", MessageTag, TagColor);
+
+                _previouslyUnlockedUnlockLinks = unlockedUnlockLinks;
                 break;
 
             case "taxi":
@@ -330,11 +344,17 @@ internal sealed class CommandHandler : IDisposable
             _chatGui.Print("You are not mounted.", MessageTag, TagColor);
     }
 
+    private void OnLogout(int type, int code)
+    {
+        _previouslyUnlockedUnlockLinks = [];
+    }
+
     public void Dispose()
     {
 #if DEBUG
         _commandManager.RemoveHandler("/qst@");
 #endif
         _commandManager.RemoveHandler("/qst");
+        _clientState.Logout -= OnLogout;
     }
 }
