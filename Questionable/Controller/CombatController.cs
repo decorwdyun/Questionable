@@ -305,7 +305,7 @@ internal sealed class CombatController : IDisposable
 
             var complexCombatData = _currentFight.Data.ComplexCombatDatas;
             var gameObjectStruct = (GameObject*)gameObject.Address;
-            if (gameObjectStruct->FateId != 0)
+            if (gameObjectStruct->FateId != 0 && gameObject.TargetObjectId != _clientState.LocalPlayer?.GameObjectId)
                 return (null, "FATE mob");
 
             var ownPosition = _clientState.LocalPlayer?.Position ?? Vector3.Zero;
