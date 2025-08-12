@@ -4,6 +4,7 @@ using System.Linq;
 using Dalamud.Game.ClientState.Objects;
 using Dalamud.Game.Command;
 using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using Lumina.Excel.Sheets;
 using Questionable.Functions;
@@ -195,6 +196,23 @@ internal sealed class CommandHandler : IDisposable
                     _chatGui.Print("Unlocked taxi stands:", MessageTag, TagColor);
                     foreach (var taxiStand in taxiStands)
                         _chatGui.Print($"- {taxiStand}", MessageTag, TagColor);
+                }
+                break;
+
+            case "festivals":
+                unsafe
+                {
+                    List<string> activeFestivals = [];
+                    for (byte i = 0; i < 4; ++i)
+                    {
+                        var festival = GameMain.Instance()->ActiveFestivals[i];
+                        if (festival.Id == 0)
+                            continue;
+
+                        activeFestivals.Add($"{festival.Id}({festival.Phase})");
+                    }
+
+                    _chatGui.Print($"Active festivals: {string.Join(", ", activeFestivals)}", MessageTag, TagColor);
                 }
                 break;
         }
