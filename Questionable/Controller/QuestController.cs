@@ -457,7 +457,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
                 return;
             }
 
-            if (questToRun.Step >= sequence.Steps.Count)
+            if (sequence.Steps.Count > 0 && questToRun.Step >= sequence.Steps.Count)
             {
                 DebugState = "Step not found";
                 Stop("Unknown step");
@@ -468,27 +468,30 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         }
     }
 
-    public (QuestSequence? Sequence, QuestStep? Step) GetNextStep()
+    public (QuestSequence? Sequence, QuestStep? Step, bool createTasks) GetNextStep()
     {
         if (CurrentQuest == null)
-            return (null, null);
+            return (null, null, false);
 
         var q = CurrentQuest.Quest;
         var seq = q.FindSequence(CurrentQuest.Sequence);
         if (seq == null)
-            return (null, null);
+            return (null, null, true);
+
+        if (seq.Steps.Count == 0)
+            return (seq, null, true);
 
         if (CurrentQuest.Step >= seq.Steps.Count)
-            return (null, null);
+            return (null, null, false);
 
-        return (seq, seq.Steps[CurrentQuest.Step]);
+        return (seq, seq.Steps[CurrentQuest.Step], true);
     }
 
     public void IncreaseStepCount(ElementId? questId, int? sequence, bool shouldContinue = false)
     {
         lock (_progressLock)
         {
-            (QuestSequence? seq, QuestStep? step) = GetNextStep();
+            (QuestSequence? seq, QuestStep? step, _) = GetNextStep();
             if (CurrentQuest == null || seq == null || step == null)
             {
                 _logger.LogWarning("Unable to retrieve next quest step, not increasing step count");
@@ -662,8 +665,8 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         if (TryPickPriorityQuest())
             _logger.LogInformation("Using priority quest over current quest");
 
-        (QuestSequence? seq, QuestStep? step) = GetNextStep();
-        if (CurrentQuest == null || seq == null || step == null)
+        (QuestSequence? seq, QuestStep? step, bool createTasks) = GetNextStep();
+        if (CurrentQuest == null || seq == null)
         {
             if (CurrentQuestDetails?.Progress.Quest.Id is SatisfactionSupplyNpcId &&
                 CurrentQuestDetails?.Progress.Sequence == 1 &&
@@ -681,7 +684,8 @@ internal sealed class QuestController : MiniTaskController<QuestController>
                     CurrentQuest?.Quest.Id, CurrentQuest?.Sequence, CurrentQuest?.Step);
             }
 
-            return;
+            if (CurrentQuest == null || !createTasks)
+                return;
         }
 
         _movementController.Stop();
@@ -690,7 +694,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
 
         try
         {
-            foreach (var task in _taskCreator.CreateTasks(CurrentQuest.Quest, seq, step))
+            foreach (var task in _taskCreator.CreateTasks(CurrentQuest.Quest, CurrentQuest.Sequence, seq, step))
                 _taskQueue.Enqueue(task);
         }
         catch (Exception e)

@@ -32,19 +32,7 @@
       ]
     },
     {
-      "Sequence": 2,
-      "Steps": [
-        {
-          "Position": {
-            "X": 0,
-            "Y": 0,
-            "Z": 0
-          },
-          "TerritoryId": 1,
-          "InteractionType": "WalkTo",
-          "Comment": "Filler"
-        }
-      ]
+      "Sequence": 2
     },
     {
       "Sequence": 3,
@@ -69,19 +57,7 @@
       ]
     },
     {
-      "Sequence": 4,
-      "Steps": [
-        {
-          "Position": {
-            "X": 0,
-            "Y": 0,
-            "Z": 0
-          },
-          "TerritoryId": 1,
-          "InteractionType": "WalkTo",
-          "Comment": "Filler"
-        }
-      ]
+      "Sequence": 4
     },
     {
       "Sequence": 5,
@@ -97,19 +73,7 @@
       ]
     },
     {
-      "Sequence": 6,
-      "Steps": [
-        {
-          "Position": {
-            "X": 0,
-            "Y": 0,
-            "Z": 0
-          },
-          "TerritoryId": 1,
-          "InteractionType": "WalkTo",
-          "Comment": "Filler"
-        }
-      ]
+      "Sequence": 6
     },
     {
       "Sequence": 255,

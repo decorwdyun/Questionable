@@ -5,7 +5,7 @@ namespace Questionable.Model.Questing;
 
 public sealed class QuestSequence
 {
-    public int Sequence { get; set; }
+    public byte Sequence { get; set; }
     public string? Comment { get; set; }
     public List<QuestStep> Steps { get; set; } = new();
 

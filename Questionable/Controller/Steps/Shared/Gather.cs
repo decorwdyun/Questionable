@@ -28,12 +28,12 @@ internal static class Gather
 
             foreach (var itemToGather in step.ItemsToGather)
             {
-                yield return new DelayedGatheringTask(itemToGather, quest);
+                yield return new DelayedGatheringTask(itemToGather, quest, (byte)sequence.Sequence);
             }
         }
     }
 
-    internal sealed record DelayedGatheringTask(GatheredItem GatheredItem, Quest Quest) : ITask
+    internal sealed record DelayedGatheringTask(GatheredItem GatheredItem, Quest Quest, byte Sequence) : ITask
     {
         public override string ToString() => $"Gathering(pending for {GatheredItem.ItemId})";
     }
@@ -77,7 +77,7 @@ internal static class Gather
                 foreach (var gatheringStep in gatheringSequence.Steps)
                 {
                     foreach (var task in serviceProvider.GetRequiredService<TaskCreator>()
-                                 .CreateTasks(Task.Quest, gatheringSequence, gatheringStep))
+                                 .CreateTasks(Task.Quest, Task.Sequence, gatheringSequence, gatheringStep))
                         if (task is WaitAtEnd.NextStep)
                             yield return new SkipMarker();
                         else

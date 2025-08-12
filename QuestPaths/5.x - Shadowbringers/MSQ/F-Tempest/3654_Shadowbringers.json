@@ -128,19 +128,7 @@
       ]
     },
     {
-      "Sequence": 8,
-      "Steps": [
-        {
-          "Position": {
-            "X": 0,
-            "Y": 0,
-            "Z": 0
-          },
-          "TerritoryId": 1,
-          "InteractionType": "WalkTo",
-          "Comment": "Filler"
-        }
-      ]
+      "Sequence": 8
     },
     {
       "Sequence": 9,
@@ -156,19 +144,7 @@
       ]
     },
     {
-      "Sequence": 10,
-      "Steps": [
-        {
-          "Position": {
-            "X": 0,
-            "Y": 0,
-            "Z": 0
-          },
-          "TerritoryId": 1,
-          "InteractionType": "WalkTo",
-          "Comment": "Filler"
-        }
-      ]
+      "Sequence": 10
     },
     {
       "Sequence": 11,

@@ -46,19 +46,7 @@
       ]
     },
     {
-      "Sequence": 2,
-      "Steps": [
-        {
-          "Position": {
-            "X": 0,
-            "Y": 0,
-            "Z": 0
-          },
-          "TerritoryId": 1,
-          "InteractionType": "WalkTo",
-          "Comment": "Filler"
-        }
-      ]
+      "Sequence": 2
     },
     {
       "Sequence": 3,

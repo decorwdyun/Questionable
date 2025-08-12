@@ -47,7 +47,9 @@
             "type": "array",
             "items": {
               "$ref": "#/$defs/Step"
-            }
+            },
+            "minItems": 1,
+            "description": "All steps necessary to complete the quest sequence. If a sequence has no steps (e.g. if it is cutscene-only), this element should not be used."
           },
           "Comment": {
             "type": "string"

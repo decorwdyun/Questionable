@@ -25,19 +25,7 @@
       ]
     },
     {
-      "Sequence": 1,
-      "Steps": [
-        {
-          "Position": {
-            "X": 0,
-            "Y": 0,
-            "Z": 0
-          },
-          "TerritoryId": 1,
-          "InteractionType": "WalkTo",
-          "Comment": "Filler"
-        }
-      ]
+      "Sequence": 1
     },
     {
       "Sequence": 2,
