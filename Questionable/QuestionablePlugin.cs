@@ -30,6 +30,7 @@ using Questionable.Windows;
 using Questionable.Windows.ConfigComponents;
 using Questionable.Windows.JournalComponents;
 using Questionable.Windows.QuestComponents;
+using Questionable.Windows.Utils;
 using Action = Questionable.Controller.Steps.Interactions.Action;
 
 namespace Questionable;
@@ -279,6 +280,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
     private static void AddWindows(ServiceCollection serviceCollection)
     {
         serviceCollection.AddSingleton<UiUtils>();
+        serviceCollection.AddTransient<QuestSelector>();
 
         serviceCollection.AddSingleton<ActiveQuestComponent>();
         serviceCollection.AddSingleton<ARealmRebornComponent>();
@@ -307,6 +309,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<PluginConfigComponent>();
         serviceCollection.AddSingleton<DutyConfigComponent>();
         serviceCollection.AddSingleton<SinglePlayerDutyConfigComponent>();
+        serviceCollection.AddSingleton<StopConditionComponent>();
         serviceCollection.AddSingleton<NotificationConfigComponent>();
         serviceCollection.AddSingleton<DebugConfigComponent>();
     }

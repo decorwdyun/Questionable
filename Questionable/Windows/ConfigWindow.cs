@@ -13,6 +13,7 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
     private readonly PluginConfigComponent _pluginConfigComponent;
     private readonly DutyConfigComponent _dutyConfigComponent;
     private readonly SinglePlayerDutyConfigComponent _singlePlayerDutyConfigComponent;
+    private readonly StopConditionComponent _stopConditionComponent;
     private readonly NotificationConfigComponent _notificationConfigComponent;
     private readonly DebugConfigComponent _debugConfigComponent;
     private readonly Configuration _configuration;
@@ -23,6 +24,7 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
         PluginConfigComponent pluginConfigComponent,
         DutyConfigComponent dutyConfigComponent,
         SinglePlayerDutyConfigComponent singlePlayerDutyConfigComponent,
+        StopConditionComponent stopConditionComponent,
         NotificationConfigComponent notificationConfigComponent,
         DebugConfigComponent debugConfigComponent,
         Configuration configuration)
@@ -33,6 +35,7 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
         _pluginConfigComponent = pluginConfigComponent;
         _dutyConfigComponent = dutyConfigComponent;
         _singlePlayerDutyConfigComponent = singlePlayerDutyConfigComponent;
+        _stopConditionComponent = stopConditionComponent;
         _notificationConfigComponent = notificationConfigComponent;
         _debugConfigComponent = debugConfigComponent;
         _configuration = configuration;
@@ -50,6 +53,7 @@ internal sealed class ConfigWindow : LWindow, IPersistableWindowConfig
         _pluginConfigComponent.DrawTab();
         _dutyConfigComponent.DrawTab();
         _singlePlayerDutyConfigComponent.DrawTab();
+        _stopConditionComponent.DrawTab();
         _notificationConfigComponent.DrawTab();
         _debugConfigComponent.DrawTab();
     }

@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Dalamud.Configuration;
 using Dalamud.Game.Text;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using LLib.GameData;
 using LLib.ImGui;
+using Newtonsoft.Json;
+using Questionable.Model.Questing;
 
 namespace Questionable;
 
@@ -15,6 +18,7 @@ internal sealed class Configuration : IPluginConfiguration
     public int Version { get; set; } = 1;
     public int PluginSetupCompleteVersion { get; set; }
     public GeneralConfiguration General { get; } = new();
+    public StopConfiguration Stop { get; } = new();
     public DutyConfiguration Duties { get; } = new();
     public SinglePlayerDutyConfiguration SinglePlayerDuties { get; } = new();
     public NotificationConfiguration Notifications { get; } = new();
@@ -37,6 +41,14 @@ internal sealed class Configuration : IPluginConfiguration
         public bool ShowIncompleteSeasonalEvents { get; set; } = true;
         public bool SkipLowPriorityDuties { get; set; }
         public bool ConfigureTextAdvance { get; set; } = true;
+    }
+
+    internal sealed class StopConfiguration
+    {
+        public bool Enabled { get; set; }
+
+        [JsonProperty(ItemConverterType = typeof(ElementIdNConverter))]
+        public List<ElementId> QuestsToStopAfter { get; set; } = [];
     }
 
     internal sealed class DutyConfiguration
@@ -84,5 +96,20 @@ internal sealed class Configuration : IPluginConfiguration
         BossMod,
         WrathCombo,
         RotationSolverReborn,
+    }
+
+    public sealed class ElementIdNConverter : JsonConverter<ElementId>
+    {
+        public override void WriteJson(JsonWriter writer, ElementId? value, JsonSerializer serializer)
+        {
+            writer.WriteValue(value?.ToString());
+        }
+
+        public override ElementId? ReadJson(JsonReader reader, Type objectType, ElementId? existingValue,
+            bool hasExistingValue, JsonSerializer serializer)
+        {
+            string? value = reader.Value?.ToString();
+            return value != null ? ElementId.FromString(value) : null;
+        }
     }
 }

@@ -33,6 +33,7 @@ internal sealed partial class ActiveQuestComponent
     private readonly Configuration _configuration;
     private readonly QuestRegistry _questRegistry;
     private readonly PriorityWindow _priorityWindow;
+    private readonly UiUtils _uiUtils;
     private readonly IChatGui _chatGui;
     private readonly ILogger<ActiveQuestComponent> _logger;
 
@@ -46,6 +47,7 @@ internal sealed partial class ActiveQuestComponent
         Configuration configuration,
         QuestRegistry questRegistry,
         PriorityWindow priorityWindow,
+        UiUtils uiUtils,
         IChatGui chatGui,
         ILogger<ActiveQuestComponent> logger)
     {
@@ -58,6 +60,7 @@ internal sealed partial class ActiveQuestComponent
         _configuration = configuration;
         _questRegistry = questRegistry;
         _priorityWindow = priorityWindow;
+        _uiUtils = uiUtils;
         _chatGui = chatGui;
         _logger = logger;
     }
@@ -182,6 +185,29 @@ internal sealed partial class ActiveQuestComponent
                 {
                     ImGui.SameLine();
                     ImGui.TextColored(ImGuiColors.DalamudRed, "Disabled");
+                }
+
+                if (_configuration.Stop.Enabled &&
+                    _configuration.Stop.QuestsToStopAfter.Any(x => !_questFunctions.IsQuestComplete(x) && !_questFunctions.IsQuestUnobtainable(x)))
+                {
+                    ImGui.SameLine();
+                    ImGui.TextColored(ImGuiColors.ParsedPurple, SeIconChar.Clock.ToIconString());
+                    if (ImGui.IsItemHovered())
+                    {
+                        using var tooltip = ImRaii.Tooltip();
+                        if (tooltip)
+                        {
+                            ImGui.Text("Questionable will stop after completing any of the following quests:");
+                            foreach (var questId in _configuration.Stop.QuestsToStopAfter)
+                            {
+                                if (_questRegistry.TryGetQuest(questId, out var quest))
+                                {
+                                    (Vector4 color, FontAwesomeIcon icon, _) = _uiUtils.GetQuestStyle(questId);
+                                    _uiUtils.ChecklistItem($"{quest.Info.Name} ({questId})", color, icon);
+                                }
+                            }
+                        }
+                    }
                 }
 
                 if (_configuration.Advanced.AdditionalStatusInformation && _questController.IsInterruptible())

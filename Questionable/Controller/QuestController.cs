@@ -365,7 +365,18 @@ internal sealed class QuestController : MiniTaskController<QuestController>
                 }
                 else if (_startedQuest == null || _startedQuest.Quest.Id != currentQuestId)
                 {
-                    if (_questRegistry.TryGetQuest(currentQuestId, out var quest))
+                    if (_configuration.Stop.Enabled &&
+                        _startedQuest != null &&
+                        _configuration.Stop.QuestsToStopAfter.Contains(_startedQuest.Quest.Id) &&
+                        _questFunctions.IsQuestComplete(_startedQuest.Quest.Id))
+                    {
+                        var questId = _startedQuest.Quest.Id;
+                        _logger.LogInformation("Reached stopping point (quest: {QuestId})", questId);
+                        _chatGui.Print($"Completed quest '{_startedQuest.Quest.Info.Name}', which is configured as a stopping point.", CommandHandler.MessageTag, CommandHandler.TagColor);
+                        _startedQuest = null;
+                        Stop($"Stopping point [{questId}] reached");
+                    }
+                    else if (_questRegistry.TryGetQuest(currentQuestId, out var quest))
                     {
                         _logger.LogInformation("New quest: {QuestName}", quest.Info.Name);
                         _startedQuest = new QuestProgress(quest, currentSequence);

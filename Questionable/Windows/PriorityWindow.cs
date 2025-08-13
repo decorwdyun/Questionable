@@ -7,6 +7,7 @@ using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Components;
+using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using LLib.ImGui;
@@ -15,6 +16,7 @@ using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
 using Questionable.Windows.QuestComponents;
+using Questionable.Windows.Utils;
 
 namespace Questionable.Windows;
 
@@ -24,28 +26,34 @@ internal sealed class PriorityWindow : LWindow
     private const char ClipboardSeparator = ';';
 
     private readonly QuestController _questController;
-    private readonly QuestRegistry _questRegistry;
     private readonly QuestFunctions _questFunctions;
+    private readonly QuestSelector _questSelector;
     private readonly QuestTooltipComponent _questTooltipComponent;
     private readonly UiUtils _uiUtils;
     private readonly IChatGui _chatGui;
     private readonly IDalamudPluginInterface _pluginInterface;
 
-    private string _searchString = string.Empty;
     private ElementId? _draggedItem;
 
-    public PriorityWindow(QuestController questController, QuestRegistry questRegistry, QuestFunctions questFunctions,
+    public PriorityWindow(QuestController questController, QuestFunctions questFunctions, QuestSelector questSelector,
         QuestTooltipComponent questTooltipComponent, UiUtils uiUtils, IChatGui chatGui,
         IDalamudPluginInterface pluginInterface)
         : base("Quest Priority###QuestionableQuestPriority")
     {
         _questController = questController;
-        _questRegistry = questRegistry;
         _questFunctions = questFunctions;
+        _questSelector = questSelector;
         _questTooltipComponent = questTooltipComponent;
         _uiUtils = uiUtils;
         _chatGui = chatGui;
         _pluginInterface = pluginInterface;
+
+        _questSelector.SuggestionPredicate = quest =>
+            !quest.Info.IsMainScenarioQuest &&
+            !questFunctions.IsQuestUnobtainable(quest.Id) &&
+            questController.ManualPriorityQuests.All(x => x.Id != quest.Id);
+        _questSelector.DefaultPredicate = quest => questFunctions.IsQuestAccepted(quest.Id);
+        _questSelector.QuestSelected = quest => _questController.ManualPriorityQuests.Add(quest);
 
         Size = new Vector2(400, 400);
         SizeCondition = ImGuiCond.Once;
@@ -59,7 +67,7 @@ internal sealed class PriorityWindow : LWindow
     public override void DrawContent()
     {
         ImGui.Text("Quests to do first:");
-        DrawQuestFilter();
+        _questSelector.DrawSelection();
         DrawQuestList();
 
         List<ElementId> clipboardItems = ParseClipboardItems();
@@ -92,60 +100,6 @@ internal sealed class PriorityWindow : LWindow
             "If you don't have any active MSQ quest, it will always try to pick up the next quest in the MSQ first.");
     }
 
-    private void DrawQuestFilter()
-    {
-        ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
-        if (ImGui.BeginCombo($"##QuestSelection", "Add Quest...", ImGuiComboFlags.HeightLarge))
-        {
-            ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
-            bool addFirst = ImGui.InputTextWithHint("", "Filter...", ref _searchString, 256,
-                ImGuiInputTextFlags.AutoSelectAll | ImGuiInputTextFlags.EnterReturnsTrue);
-
-            IEnumerable<Quest> foundQuests;
-            if (!string.IsNullOrEmpty(_searchString))
-            {
-                bool DefaultPredicate(Quest x) => x.Info.Name.Contains(_searchString, StringComparison.CurrentCultureIgnoreCase);
-
-                Func<Quest, bool> searchPredicate;
-                if (ElementId.TryFromString(_searchString, out ElementId? elementId))
-                    searchPredicate = x => DefaultPredicate(x) || x.Id == elementId;
-                else
-                    searchPredicate = DefaultPredicate;
-
-                foundQuests = _questRegistry.AllQuests
-                    .Where(x => x.Id is not SatisfactionSupplyNpcId and not AlliedSocietyDailyId)
-                    .Where(searchPredicate)
-                    .Where(x => !_questFunctions.IsQuestUnobtainable(x.Id));
-            }
-            else
-            {
-                foundQuests = _questRegistry.AllQuests.Where(x => _questFunctions.IsQuestAccepted(x.Id));
-            }
-
-            foreach (var quest in foundQuests)
-            {
-                if (quest.Info.IsMainScenarioQuest || _questController.ManualPriorityQuests.Any(x => x.Id == quest.Id))
-                    continue;
-
-                bool addThis = ImGui.Selectable(quest.Info.Name);
-                if (addThis || addFirst)
-                {
-                    _questController.ManualPriorityQuests.Add(quest);
-
-                    if (addFirst)
-                    {
-                        ImGui.CloseCurrentPopup();
-                        addFirst = false;
-                    }
-                }
-            }
-
-            ImGui.EndCombo();
-        }
-
-        ImGui.Spacing();
-    }
-
     private void DrawQuestList()
     {
         List<Quest> priorityQuests = _questController.ManualPriorityQuests;
@@ -161,63 +115,64 @@ internal sealed class PriorityWindow : LWindow
             Vector2 topLeft = ImGui.GetCursorScreenPos() +
                               new Vector2(0, -ImGui.GetStyle().ItemSpacing.Y / 2);
             var quest = priorityQuests[i];
-            ImGui.PushID($"Quest{quest.Id}");
-
-            var style = _uiUtils.GetQuestStyle(quest.Id);
-            bool hovered;
-            using (var _ = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
+            using (ImRaii.PushId($"Quest{quest.Id}"))
             {
-                ImGui.AlignTextToFramePadding();
-                ImGui.TextColored(style.Color, style.Icon.ToIconString());
-                hovered = ImGui.IsItemHovered();
-            }
-
-            ImGui.SameLine();
-            ImGui.AlignTextToFramePadding();
-            ImGui.Text(quest.Info.Name);
-            hovered |= ImGui.IsItemHovered();
-
-            if (hovered)
-                _questTooltipComponent.Draw(quest.Info);
-
-            if (priorityQuests.Count > 1)
-            {
-                ImGui.PushFont(UiBuilder.IconFont);
-                ImGui.SameLine(ImGui.GetContentRegionAvail().X +
-                               ImGui.GetStyle().WindowPadding.X -
-                               ImGui.CalcTextSize(FontAwesomeIcon.ArrowsUpDown.ToIconString()).X -
-                               ImGui.CalcTextSize(FontAwesomeIcon.Times.ToIconString()).X -
-                               ImGui.GetStyle().FramePadding.X * 4 -
-                               ImGui.GetStyle().ItemSpacing.X);
-                ImGui.PopFont();
-
-                if (_draggedItem == quest.Id)
+                var style = _uiUtils.GetQuestStyle(quest.Id);
+                bool hovered;
+                using (var _ = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
                 {
-                    ImGuiComponents.IconButton("##Move", FontAwesomeIcon.ArrowsUpDown,
-                        ImGui.ColorConvertU32ToFloat4(ImGui.GetColorU32(ImGuiCol.ButtonActive)));
+                    ImGui.AlignTextToFramePadding();
+                    ImGui.TextColored(style.Color, style.Icon.ToIconString());
+                    hovered = ImGui.IsItemHovered();
                 }
-                else
-                    ImGuiComponents.IconButton("##Move", FontAwesomeIcon.ArrowsUpDown);
-
-                if (_draggedItem == null && ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
-                    _draggedItem = quest.Id;
 
                 ImGui.SameLine();
-            }
-            else
-            {
-                ImGui.PushFont(UiBuilder.IconFont);
-                ImGui.SameLine(ImGui.GetContentRegionAvail().X +
-                               ImGui.GetStyle().WindowPadding.X -
-                               ImGui.CalcTextSize(FontAwesomeIcon.Times.ToIconString()).X -
-                               ImGui.GetStyle().FramePadding.X * 2);
-                ImGui.PopFont();
-            }
+                ImGui.AlignTextToFramePadding();
+                ImGui.Text(quest.Info.Name);
+                hovered |= ImGui.IsItemHovered();
 
-            if (ImGuiComponents.IconButton($"##Remove{i}", FontAwesomeIcon.Times))
-                itemToRemove = quest;
+                if (hovered)
+                    _questTooltipComponent.Draw(quest.Info);
 
-            ImGui.PopID();
+                if (priorityQuests.Count > 1)
+                {
+                    using (ImRaii.PushFont(UiBuilder.IconFont))
+                    {
+                        ImGui.SameLine(ImGui.GetContentRegionAvail().X +
+                                       ImGui.GetStyle().WindowPadding.X -
+                                       ImGui.CalcTextSize(FontAwesomeIcon.ArrowsUpDown.ToIconString()).X -
+                                       ImGui.CalcTextSize(FontAwesomeIcon.Times.ToIconString()).X -
+                                       ImGui.GetStyle().FramePadding.X * 4 -
+                                       ImGui.GetStyle().ItemSpacing.X);
+                    }
+
+                    if (_draggedItem == quest.Id)
+                    {
+                        ImGuiComponents.IconButton("##Move", FontAwesomeIcon.ArrowsUpDown,
+                            ImGui.ColorConvertU32ToFloat4(ImGui.GetColorU32(ImGuiCol.ButtonActive)));
+                    }
+                    else
+                        ImGuiComponents.IconButton("##Move", FontAwesomeIcon.ArrowsUpDown);
+
+                    if (_draggedItem == null && ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
+                        _draggedItem = quest.Id;
+
+                    ImGui.SameLine();
+                }
+                else
+                {
+                    using (ImRaii.PushFont(UiBuilder.IconFont))
+                    {
+                        ImGui.SameLine(ImGui.GetContentRegionAvail().X +
+                                       ImGui.GetStyle().WindowPadding.X -
+                                       ImGui.CalcTextSize(FontAwesomeIcon.Times.ToIconString()).X -
+                                       ImGui.GetStyle().FramePadding.X * 2);
+                    }
+                }
+
+                if (ImGuiComponents.IconButton($"##Remove{i}", FontAwesomeIcon.Times))
+                    itemToRemove = quest;
+            }
 
             Vector2 bottomRight = new Vector2(topLeft.X + width,
                 ImGui.GetCursorScreenPos().Y - ImGui.GetStyle().ItemSpacing.Y + 2);
