@@ -299,7 +299,8 @@ internal sealed unsafe class GameFunctions
 
         var battleChara = (BattleChara*)localPlayer.Address;
         StatusManager* statusManager = battleChara->GetStatusManager();
-        if (statusManager->HasStatus(1151))
+        if (statusManager->HasStatus(1151) ||
+            statusManager->HasStatus(1945)) // hoofing it
             return true;
 
         return HasCharacterStatusPreventingMountOrSprint();
