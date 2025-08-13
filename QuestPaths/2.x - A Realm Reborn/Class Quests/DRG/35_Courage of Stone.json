@@ -34,6 +34,22 @@
       "Sequence": 1,
       "Steps": [
         {
+          "Position": {
+            "X": 502.843,
+            "Y": 43.200996,
+            "Z": -32.464188
+          },
+          "StopDistance": 0.5,
+          "TerritoryId": 148,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "FinishCombatIfAny",
+          "KillEnemyDataIds": [],
+          "AethernetShortcut": [
+            "[Gridania] Lancers' Guild",
+            "[Gridania] Blue Badger Gate (Central Shroud)"
+          ]
+        },
+        {
           "DataId": 142,
           "Position": {
             "X": 514.06104,
@@ -43,10 +59,6 @@
           "StopDistance": 0.5,
           "TerritoryId": 148,
           "InteractionType": "Combat",
-          "AethernetShortcut": [
-            "[Gridania] Lancers' Guild",
-            "[Gridania] Blue Badger Gate (Central Shroud)"
-          ],
           "EnemySpawnType": "AutoOnEnterArea",
           "KillEnemyDataIds": [
             142
