@@ -241,7 +241,8 @@
           },
           "StopDistance": 7,
           "TerritoryId": 137,
-          "InteractionType": "Interact"
+          "InteractionType": "Interact",
+          "DelaySecondsAtStart": 5
         }
       ]
     },
@@ -283,7 +284,8 @@
           },
           "StopDistance": 7,
           "TerritoryId": 137,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "DelaySecondsAtStart": 5
         }
       ]
     }
