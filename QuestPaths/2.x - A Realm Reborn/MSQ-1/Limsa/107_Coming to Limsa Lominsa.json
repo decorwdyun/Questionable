@@ -13,7 +13,15 @@
             "Z": -4.9592285
           },
           "TerritoryId": 181,
-          "InteractionType": "AcceptQuest"
+          "InteractionType": "AcceptQuest",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "ExcelSheet": "opening/OpeningLimsaLominsa",
+              "Prompt": "TEXT_OPENINGLIMSALOMINSA_FST_SYSTEM_Q_01",
+              "Answer": "TEXT_OPENINGLIMSALOMINSA_FST_SYSTEM_A_01"
+            }
+          ]
         }
       ]
     },

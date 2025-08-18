@@ -13,7 +13,15 @@
             "Z": 143.63306
           },
           "TerritoryId": 183,
-          "InteractionType": "AcceptQuest"
+          "InteractionType": "AcceptQuest",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "ExcelSheet": "opening/OpeningGridania",
+              "Prompt": "TEXT_OPENINGGRIDANIA_FST_SYSTEM_Q_01",
+              "Answer": "TEXT_OPENINGGRIDANIA_FST_SYSTEM_A_01"
+            }
+          ]
         }
       ]
     },

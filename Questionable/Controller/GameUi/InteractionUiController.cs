@@ -93,6 +93,7 @@ internal sealed class InteractionUiController : IDisposable
         _returnRegex = _dataManager.GetExcelSheet<Addon>().GetRow(196).GetRegex(addon => addon.Text, pluginLog)!;
         _purchaseItemRegex = _dataManager.GetRegex<Addon>(3406, addon => addon.Text, pluginLog)!;
 
+        _questController.AutomationTypeChanged += HandleCurrentDialogueChoices;
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "SelectString", SelectStringPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "CutSceneSelectString", CutsceneSelectStringPostSetup);
         _addonLifecycle.RegisterListener(AddonEvent.PostSetup, "SelectIconString", SelectIconStringPostSetup);
@@ -113,6 +114,12 @@ internal sealed class InteractionUiController : IDisposable
     private bool ShouldHandleUiInteractions => _isInitialCheck ||
                                                _questController.IsRunning ||
                                                _territoryData.IsQuestBattleInstance(_clientState.TerritoryType);
+
+    private void HandleCurrentDialogueChoices(object sender, QuestController.EAutomationType automationType)
+    {
+        if (automationType != QuestController.EAutomationType.Manual)
+            HandleCurrentDialogueChoices();
+    }
 
     internal unsafe void HandleCurrentDialogueChoices()
     {
@@ -970,6 +977,7 @@ internal sealed class InteractionUiController : IDisposable
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "SelectIconString", SelectIconStringPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "CutSceneSelectString", CutsceneSelectStringPostSetup);
         _addonLifecycle.UnregisterListener(AddonEvent.PostSetup, "SelectString", SelectStringPostSetup);
+        _questController.AutomationTypeChanged -= HandleCurrentDialogueChoices;
     }
 
     private sealed record DialogueChoiceInfo(Quest? Quest, DialogueChoice DialogueChoice);

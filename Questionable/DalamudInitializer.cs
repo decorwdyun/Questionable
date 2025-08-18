@@ -73,7 +73,6 @@ internal sealed class DalamudInitializer : IDisposable
         _pluginInterface.UiBuilder.OpenMainUi += ToggleQuestWindow;
         _pluginInterface.UiBuilder.OpenConfigUi += _configWindow.Toggle;
         _framework.Update += FrameworkUpdate;
-        _framework.RunOnTick(interactionUiController.HandleCurrentDialogueChoices, TimeSpan.FromMilliseconds(200));
         _toastGui.Toast += OnToast;
         _toastGui.ErrorToast += OnErrorToast;
         _toastGui.QuestToast += OnQuestToast;

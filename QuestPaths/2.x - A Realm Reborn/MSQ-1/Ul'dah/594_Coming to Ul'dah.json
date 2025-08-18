@@ -13,7 +13,15 @@
             "Z": -151.99518
           },
           "TerritoryId": 182,
-          "InteractionType": "AcceptQuest"
+          "InteractionType": "AcceptQuest",
+          "DialogueChoices": [
+            {
+              "Type": "List",
+              "ExcelSheet": "opening/OpeningUldah",
+              "Prompt": "TEXT_OPENINGULDAH_FST_SYSTEM_Q_01",
+              "Answer": "TEXT_OPENINGULDAH_FST_SYSTEM_A_01"
+            }
+          ]
         }
       ]
     },
