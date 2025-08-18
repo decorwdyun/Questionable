@@ -38,6 +38,9 @@ internal static class WaitAtEnd
             switch (step.InteractionType)
             {
                 case EInteractionType.Combat:
+                    if (step.EnemySpawnType == EEnemySpawnType.FinishCombatIfAny)
+                        return [Next(quest, sequence)];
+
                     var notInCombat =
                         new WaitCondition.Task(() => !condition[ConditionFlag.InCombat], "Wait(not in combat)");
                     return
