@@ -20,6 +20,7 @@ using Questionable.Data;
 using Questionable.External;
 using Questionable.Functions;
 using Questionable.Model;
+using Questionable.Model.Common;
 using Questionable.Model.Gathering;
 using Questionable.Model.Questing;
 using Quest = Questionable.Model.Quest;
@@ -307,6 +308,7 @@ internal sealed class InteractionUiController : IDisposable
         {
             var quest = currentQuest.Quest;
             bool isTaxiStandUnlock = false;
+            List<EAetheryteLocation> freeOrFavoredAetheryteRegistrations = [];
             if (checkAllSteps)
             {
                 var sequence = quest.FindSequence(currentQuest.Sequence);
@@ -314,7 +316,17 @@ internal sealed class InteractionUiController : IDisposable
                 if (choices != null)
                     dialogueChoices.AddRange(choices.Select(x => new DialogueChoiceInfo(quest, x)));
 
-                isTaxiStandUnlock = sequence?.Steps.Any(x => x.InteractionType == EInteractionType.UnlockTaxiStand) ?? false;
+                isTaxiStandUnlock = sequence?.Steps.Any(x => x.InteractionType == EInteractionType.UnlockTaxiStand) ??
+                                    false;
+                freeOrFavoredAetheryteRegistrations = sequence?.Steps
+                                                          .Where(x => x is
+                                                          {
+                                                              InteractionType: EInteractionType
+                                                                  .RegisterFreeOrFavoredAetheryte,
+                                                              Aetheryte: not null
+                                                          })
+                                                          .Select(x => x.Aetheryte!.Value).ToList()
+                                                      ?? [];
             }
             else
             {
@@ -342,6 +354,9 @@ internal sealed class InteractionUiController : IDisposable
                             Answer = step.PurchaseMenu.Key,
                         }));
 
+                    if (step is { InteractionType: EInteractionType.RegisterFreeOrFavoredAetheryte, Aetheryte: {} aetheryte })
+                        freeOrFavoredAetheryteRegistrations = [aetheryte];
+
                     isTaxiStandUnlock = step.InteractionType == EInteractionType.UnlockTaxiStand;
                 }
             }
@@ -355,6 +370,36 @@ internal sealed class InteractionUiController : IDisposable
                     ExcelSheet = "transport/ChocoboTaxiStand",
                     Prompt = ExcelRef.FromKey("TEXT_CHOCOBOTAXISTAND_00000_Q1_000_1"),
                     Answer = ExcelRef.FromKey("TEXT_CHOCOBOTAXISTAND_00000_A1_000_3")
+                }));
+            }
+
+            if (freeOrFavoredAetheryteRegistrations.Any(x =>
+                    _aetheryteFunctions.CanRegisterFreeOrFavoriteAetheryte(x) ==
+                    AetheryteRegistrationResult.SecurityTokenFreeDestinationAvailable))
+            {
+                _logger.LogInformation("Adding security token aetheryte unlock dialogue choice");
+                dialogueChoices.Add(new DialogueChoiceInfo(quest, new DialogueChoice
+                {
+                    Type = EDialogChoiceType.List,
+                    ExcelSheet = "transport/Aetheryte",
+                    Prompt = ExcelRef.FromKey("TEXT_AETHERYTE_MAINMENU_TITLE"),
+                    PromptIsRegularExpression = true,
+                    Answer = ExcelRef.FromKey("TEXT_AETHERYTE_REGISTER_TOKEN_FAVORITE"),
+                    AnswerIsRegularExpression = true,
+                }));
+            } else if (freeOrFavoredAetheryteRegistrations.Any(x =>
+                    _aetheryteFunctions.CanRegisterFreeOrFavoriteAetheryte(x) ==
+                    AetheryteRegistrationResult.FavoredDestinationAvailable))
+            {
+                _logger.LogInformation("Adding favored aetheryte unlock dialogue choice");
+                dialogueChoices.Add(new DialogueChoiceInfo(quest, new DialogueChoice
+                {
+                    Type = EDialogChoiceType.List,
+                    ExcelSheet = "transport/Aetheryte",
+                    Prompt = ExcelRef.FromKey("TEXT_AETHERYTE_MAINMENU_TITLE"),
+                    PromptIsRegularExpression = true,
+                    Answer = ExcelRef.FromKey("TEXT_AETHERYTE_REGISTER_FAVORITE"),
+                    AnswerIsRegularExpression = true,
                 }));
             }
 
@@ -589,6 +634,39 @@ internal sealed class InteractionUiController : IDisposable
     private unsafe bool HandleDefaultYesNo(AddonSelectYesno* addonSelectYesno, Quest quest,
         QuestStep? step, List<DialogueChoice> dialogueChoices, string actualPrompt)
     {
+        if (step is { InteractionType: EInteractionType.RegisterFreeOrFavoredAetheryte, Aetheryte: {} aetheryteLocation })
+        {
+            var registrationResult = _aetheryteFunctions.CanRegisterFreeOrFavoriteAetheryte(aetheryteLocation);
+            if (registrationResult == AetheryteRegistrationResult.SecurityTokenFreeDestinationAvailable)
+            {
+                dialogueChoices =
+                [
+                    ..dialogueChoices,
+                    new DialogueChoice
+                    {
+                        Type = EDialogChoiceType.YesNo,
+                        ExcelSheet = "Addon",
+                        Prompt = ExcelRef.FromRowId(102334),
+                        Yes = true
+                    }
+                ];
+            }
+            else if (registrationResult == AetheryteRegistrationResult.FavoredDestinationAvailable)
+            {
+                dialogueChoices =
+                [
+                    ..dialogueChoices,
+                    new DialogueChoice
+                    {
+                        Type = EDialogChoiceType.YesNo,
+                        ExcelSheet = "Addon",
+                        Prompt = ExcelRef.FromRowId(102306),
+                        Yes = true
+                    }
+                ];
+            }
+        }
+
         _logger.LogTrace("DefaultYesNo: Choice count: {Count}", dialogueChoices.Count);
         foreach (var dialogueChoice in dialogueChoices)
         {

@@ -30,6 +30,11 @@
           ]
         },
         {
+          "TerritoryId": 148,
+          "InteractionType": "RegisterFreeOrFavoredAetheryte",
+          "Aetheryte": "Central Shroud - Bentbranch Meadows"
+        },
+        {
           "DataId": 1002980,
           "Position": {
             "X": 22.934265,

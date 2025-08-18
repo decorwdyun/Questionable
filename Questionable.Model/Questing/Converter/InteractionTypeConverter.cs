@@ -12,6 +12,7 @@ public sealed class InteractionTypeConverter() : EnumConverter<EInteractionType>
         { EInteractionType.WalkTo, "WalkTo" },
         { EInteractionType.AttuneAethernetShard, "AttuneAethernetShard" },
         { EInteractionType.AttuneAetheryte, "AttuneAetheryte" },
+        { EInteractionType.RegisterFreeOrFavoredAetheryte, "RegisterFreeOrFavoredAetheryte" },
         { EInteractionType.AttuneAetherCurrent, "AttuneAetherCurrent" },
         { EInteractionType.Combat, "Combat" },
         { EInteractionType.UseItem, "UseItem" },

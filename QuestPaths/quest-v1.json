@@ -119,6 +119,7 @@
             "WalkTo",
             "AttuneAethernetShard",
             "AttuneAetheryte",
+            "RegisterFreeOrFavoredAetheryte",
             "AttuneAetherCurrent",
             "Combat",
             "UseItem",
@@ -557,7 +558,14 @@
           "if": {
             "properties": {
               "InteractionType": {
-                "const": "AttuneAetheryte"
+                "anyOf": [
+                  {
+                    "const": "AttuneAetheryte"
+                  },
+                  {
+                    "const": "RegisterFreeOrFavoredAetheryte"
+                  }
+                ]
               }
             }
           },

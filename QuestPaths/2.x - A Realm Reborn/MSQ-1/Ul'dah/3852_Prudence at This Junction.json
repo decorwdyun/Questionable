@@ -26,6 +26,11 @@
           "Aetheryte": "Central Thanalan - Black Brush Station"
         },
         {
+          "TerritoryId": 141,
+          "InteractionType": "RegisterFreeOrFavoredAetheryte",
+          "Aetheryte": "Central Thanalan - Black Brush Station"
+        },
+        {
           "DataId": 1001447,
           "Position": {
             "X": -32.6391,

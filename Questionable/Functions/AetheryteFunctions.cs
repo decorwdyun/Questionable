@@ -18,13 +18,15 @@ internal sealed unsafe class AetheryteFunctions
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<AetheryteFunctions> _logger;
     private readonly IDataManager _dataManager;
+    private readonly IClientState _clientState;
 
     public AetheryteFunctions(IServiceProvider serviceProvider, ILogger<AetheryteFunctions> logger,
-        IDataManager dataManager)
+        IDataManager dataManager, IClientState clientState)
     {
         _serviceProvider = serviceProvider;
         _logger = logger;
         _dataManager = dataManager;
+        _clientState = clientState;
     }
 
     public DateTime ReturnRequestedAt { get; set; } = DateTime.MinValue;
@@ -91,4 +93,52 @@ internal sealed unsafe class AetheryteFunctions
 
     public bool TeleportAetheryte(EAetheryteLocation aetheryteLocation)
         => TeleportAetheryte((uint)aetheryteLocation);
+
+    public AetheryteRegistrationResult CanRegisterFreeOrFavoriteAetheryte(EAetheryteLocation aetheryteLocation)
+    {
+        if (_clientState.LocalPlayer == null)
+            return AetheryteRegistrationResult.NotPossible;
+
+        var playerState = PlayerState.Instance();
+        if (playerState == null)
+            return AetheryteRegistrationResult.NotPossible;
+
+        // if we have a free or favored aetheryte assigned to this location, we don't override it (and don't upgrade
+        // favored to free, either).
+        if (playerState->FreeAetheryteId == (uint)aetheryteLocation ||
+            playerState->FreeAetherytePlayStationPlus == (uint)aetheryteLocation)
+            return AetheryteRegistrationResult.NotPossible;
+
+        bool freeFavoredSlotsAvailable = false;
+        for (int i = 0; i < playerState->FavouriteAetheryteCount; i++)
+        {
+            if (playerState->FavouriteAetherytes[i] == (ushort)aetheryteLocation)
+                return AetheryteRegistrationResult.NotPossible;
+            else if (playerState->FavouriteAetherytes[i] == 0)
+            {
+                freeFavoredSlotsAvailable = true;
+                break;
+            }
+        }
+
+        // probably can't register a ps plus aetheryte on pc, so we don't check for that
+        if (playerState->IsPlayerStateFlagSet(PlayerStateFlag.IsLoginSecurityToken) &&
+            playerState->FreeAetheryteId == 0)
+            return AetheryteRegistrationResult.SecurityTokenFreeDestinationAvailable;
+
+        return freeFavoredSlotsAvailable
+            ? AetheryteRegistrationResult.FavoredDestinationAvailable
+            : AetheryteRegistrationResult.NotPossible;
+    }
+}
+
+/// <remarks>
+/// The whole free/favored aetheryte situation is primarily relevant for early ARR anyhow, since teleporting to
+/// each class quest the moment it becomes available might end up with the character running out of gil.
+/// </remarks>
+public enum AetheryteRegistrationResult
+{
+    NotPossible,
+    SecurityTokenFreeDestinationAvailable,
+    FavoredDestinationAvailable,
 }

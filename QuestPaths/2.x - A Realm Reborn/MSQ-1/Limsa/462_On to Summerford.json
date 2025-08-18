@@ -35,6 +35,11 @@
           ]
         },
         {
+          "TerritoryId": 134,
+          "InteractionType": "RegisterFreeOrFavoredAetheryte",
+          "Aetheryte": "Middle La Noscea - Summerford Farms"
+        },
+        {
           "DataId": 1002626,
           "Position": {
             "X": 207.2633,

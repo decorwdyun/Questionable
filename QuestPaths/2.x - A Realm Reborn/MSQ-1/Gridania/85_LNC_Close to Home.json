@@ -35,6 +35,11 @@
         },
         {
           "TerritoryId": 132,
+          "InteractionType": "RegisterFreeOrFavoredAetheryte",
+          "Aetheryte": "Gridania"
+        },
+        {
+          "TerritoryId": 132,
           "InteractionType": "AttuneAethernetShard",
           "AethernetShard": "[Gridania] Archers' Guild"
         },

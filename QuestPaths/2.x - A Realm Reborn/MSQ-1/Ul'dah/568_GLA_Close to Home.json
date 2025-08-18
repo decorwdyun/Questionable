@@ -141,6 +141,11 @@
       "Sequence": 255,
       "Steps": [
         {
+          "TerritoryId": 130,
+          "InteractionType": "RegisterFreeOrFavoredAetheryte",
+          "Aetheryte": "Ul'dah"
+        },
+        {
           "DataId": 1001353,
           "Position": {
             "X": 21.072632,

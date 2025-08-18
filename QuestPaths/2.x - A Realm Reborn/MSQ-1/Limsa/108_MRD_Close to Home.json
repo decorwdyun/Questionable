@@ -45,6 +45,11 @@
           ]
         },
         {
+          "TerritoryId": 129,
+          "InteractionType": "RegisterFreeOrFavoredAetheryte",
+          "Aetheryte": "Limsa Lominsa"
+        },
+        {
           "DataId": 1001217,
           "Position": {
             "X": -140.85602,

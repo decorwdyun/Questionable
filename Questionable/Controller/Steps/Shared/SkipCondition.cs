@@ -13,7 +13,6 @@ using Questionable.Controller.Utils;
 using Questionable.Data;
 using Questionable.Functions;
 using Questionable.Model;
-using Questionable.Model.Common;
 using Questionable.Model.Questing;
 
 namespace Questionable.Controller.Steps.Shared;
@@ -286,6 +285,16 @@ internal static class SkipCondition
                 aetheryteFunctions.IsAetheryteUnlocked(aethernetShard))
             {
                 logger.LogInformation("Skipping step, as aethernet shard is unlocked");
+                return true;
+            }
+
+            if (step is
+                {
+                    Aetheryte: { } favoredAetheryte, InteractionType: EInteractionType.RegisterFreeOrFavoredAetheryte
+                } &&
+                aetheryteFunctions.CanRegisterFreeOrFavoriteAetheryte(favoredAetheryte) is AetheryteRegistrationResult.NotPossible)
+            {
+                logger.LogInformation("Skipping step, already registered all possible free or favored aetherytes");
                 return true;
             }
 

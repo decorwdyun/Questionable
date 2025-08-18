@@ -156,6 +156,11 @@
         },
         {
           "TerritoryId": 129,
+          "InteractionType": "RegisterFreeOrFavoredAetheryte",
+          "Aetheryte": "Limsa Lominsa"
+        },
+        {
+          "TerritoryId": 129,
           "InteractionType": "AttuneAethernetShard",
           "AethernetShard": "[Limsa Lominsa] Hawkers' Alley"
         },
@@ -287,6 +292,11 @@
         {
           "TerritoryId": 132,
           "InteractionType": "AttuneAetheryte",
+          "Aetheryte": "Gridania"
+        },
+        {
+          "TerritoryId": 132,
+          "InteractionType": "RegisterFreeOrFavoredAetheryte",
           "Aetheryte": "Gridania"
         },
         {

@@ -94,6 +94,11 @@
         },
         {
           "TerritoryId": 130,
+          "InteractionType": "RegisterFreeOrFavoredAetheryte",
+          "Aetheryte": "Ul'dah"
+        },
+        {
+          "TerritoryId": 130,
           "InteractionType": "AttuneAethernetShard",
           "AethernetShard": "[Ul'dah] Thaumaturges' Guild"
         },

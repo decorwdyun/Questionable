@@ -161,14 +161,14 @@ internal sealed class DebugOverlay : Window
             position = step.Position;
             return true;
         }
-        else if (step.InteractionType == EInteractionType.AttuneAetheryte && step.Aetheryte != null)
+        else if (step is { InteractionType: EInteractionType.AttuneAetheryte or EInteractionType.RegisterFreeOrFavoredAetheryte, Aetheryte: {} aetheryteLocation })
         {
-            position = _aetheryteData.Locations[step.Aetheryte.Value];
+            position = _aetheryteData.Locations[aetheryteLocation];
             return true;
         }
-        else if (step.InteractionType == EInteractionType.AttuneAethernetShard && step.AethernetShard != null)
+        else if (step is { InteractionType: EInteractionType.AttuneAethernetShard, AethernetShard: {} aethernetShard })
         {
-            position = _aetheryteData.Locations[step.AethernetShard.Value];
+            position = _aetheryteData.Locations[aethernetShard];
             return true;
         }
         else

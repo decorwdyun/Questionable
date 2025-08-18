@@ -11,6 +11,7 @@ public enum EInteractionType
     WalkTo,
     AttuneAethernetShard,
     AttuneAetheryte,
+    RegisterFreeOrFavoredAetheryte,
     AttuneAetherCurrent,
     Combat,
     UseItem,

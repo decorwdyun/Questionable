@@ -119,7 +119,7 @@ public sealed class QuestStep
         return InteractionType switch
         {
             EInteractionType.WalkTo => 0.25f,
-            EInteractionType.AttuneAetheryte => 10f,
+            EInteractionType.AttuneAetheryte or EInteractionType.RegisterFreeOrFavoredAetheryte => 10f,
             _ => DefaultStopDistance
         };
     }
