@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Dalamud.Bindings.ImGui;
 using Questionable.Controller;
-using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
 
 namespace Questionable.Windows.Utils;
 
-internal sealed class QuestSelector(QuestRegistry questRegistry, QuestFunctions questFunctions)
+internal sealed class QuestSelector(QuestRegistry questRegistry)
 {
     private string _searchString = string.Empty;
 
