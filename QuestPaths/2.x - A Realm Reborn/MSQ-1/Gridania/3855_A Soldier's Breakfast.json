@@ -22,10 +22,47 @@
       "Steps": [
         {
           "Position": {
+            "X": 459.86548,
+            "Y": 17.983778,
+            "Z": -76.51779
+          },
+          "StopDistance": 1,
+          "TerritoryId": 148,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "FinishCombatIfAny",
+          "KillEnemyDataIds": []
+        },
+        {
+          "Position": {
             "X": 486.40424,
             "Y": 24.968294,
             "Z": -88.684456
           },
+          "StopDistance": 1,
+          "TerritoryId": 148,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "FinishCombatIfAny",
+          "KillEnemyDataIds": []
+        },
+        {
+          "Position": {
+            "X": 485.05884,
+            "Y": 30.642492,
+            "Z": -59.45244
+          },
+          "StopDistance": 1,
+          "TerritoryId": 148,
+          "InteractionType": "Combat",
+          "EnemySpawnType": "FinishCombatIfAny",
+          "KillEnemyDataIds": []
+        },
+        {
+          "Position": {
+            "X": 480.88794,
+            "Y": 30.746826,
+            "Z": -49.729187
+          },
+          "StopDistance": 1,
           "TerritoryId": 148,
           "InteractionType": "Combat",
           "EnemySpawnType": "FinishCombatIfAny",
@@ -61,7 +98,6 @@
           "KillEnemyDataIds": [
             142
           ],
-          "Comment": "Depending on how many enemies you fought on the way to the egg, this step could be optional",
           "CompletionQuestVariablesFlags": [
             null,
             {
