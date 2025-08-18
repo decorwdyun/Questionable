@@ -24,10 +24,6 @@ internal sealed class MovementOverrideController
         // lotus stand
         new BlacklistedPoint(205, new(26.75f, 0.5f, 20.75f), new(27.179117f, 0.26728272f, 19.714373f)),
 
-        // New Gridania Navmesh workaround - planter box outside the Carline Canopy
-        new BlacklistedPoint(132, new(45.5f, -8f, 101f), new(50.53978f, -8.046954f, 101.06045f), 1),
-        new BlacklistedPoint(132, new(48.5f, -8f, 98.25f), new(50.53978f, -8.046954f, 101.06045f), 3f),
-
         // ul'dah lamp near adventurers' guild
         new BlacklistedPoint(130, new(59.5f, 4.25f, -118f), new(60.551353f, 4f, -119.76446f)),
 

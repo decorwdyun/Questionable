@@ -52,16 +52,6 @@
       "Sequence": 2,
       "Steps": [
         {
-          "Position": {
-            "X": 49.65071,
-            "Y": -8.046952,
-            "Z": 102.32186
-          },
-          "TerritoryId": 132,
-          "InteractionType": "WalkTo",
-          "$": "New Gridania Navmesh workaround"
-        },
-        {
           "DataId": 1000153,
           "Position": {
             "X": -44.87683,
@@ -76,16 +66,6 @@
     {
       "Sequence": 255,
       "Steps": [
-        {
-          "Position": {
-            "X": 49.65071,
-            "Y": -8.046952,
-            "Z": 102.32186
-          },
-          "TerritoryId": 132,
-          "InteractionType": "WalkTo",
-          "$": "New Gridania Navmesh workaround"
-        },
         {
           "DataId": 1000100,
           "Position": {

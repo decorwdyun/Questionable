@@ -21,16 +21,6 @@
       "Sequence": 1,
       "Steps": [
         {
-          "Position": {
-            "X": 49.65071,
-            "Y": -8.046952,
-            "Z": 102.32186
-          },
-          "TerritoryId": 132,
-          "InteractionType": "WalkTo",
-          "$": "New Gridania Navmesh workaround"
-        },
-        {
           "DataId": 1000423,
           "Position": {
             "X": 232.04382,
