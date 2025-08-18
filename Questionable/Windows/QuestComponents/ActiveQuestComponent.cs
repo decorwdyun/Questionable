@@ -401,7 +401,7 @@ internal sealed partial class ActiveQuestComponent
 
             byte oldSequence = simulatedQuest.Sequence;
             byte newSequence = simulatedQuest.Quest.Root.QuestSequence
-                .Select(x => (byte)x.Sequence)
+                .Select(x => x.Sequence)
                 .LastOrDefault(x => x < oldSequence, byte.MinValue);
 
             _questController.SimulatedQuest.SetSequence(newSequence);
@@ -418,7 +418,7 @@ internal sealed partial class ActiveQuestComponent
 
             byte oldSequence = simulatedQuest.Sequence;
             byte newSequence = simulatedQuest.Quest.Root.QuestSequence
-                .Select(x => (byte)x.Sequence)
+                .Select(x => x.Sequence)
                 .FirstOrDefault(x => x > oldSequence, byte.MaxValue);
 
             simulatedQuest.SetSequence(newSequence);

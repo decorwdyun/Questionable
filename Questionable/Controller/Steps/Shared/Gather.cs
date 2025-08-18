@@ -28,7 +28,7 @@ internal static class Gather
 
             foreach (var itemToGather in step.ItemsToGather)
             {
-                yield return new DelayedGatheringTask(itemToGather, quest, (byte)sequence.Sequence);
+                yield return new DelayedGatheringTask(itemToGather, quest, sequence.Sequence);
             }
         }
     }

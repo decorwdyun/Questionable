@@ -20,7 +20,7 @@ internal sealed class UniqueSinglePlayerInstanceValidator : IQuestValidator
                 yield return new ValidationIssue
                 {
                     ElementId = quest.Id,
-                    Sequence = (byte)singlePlayerInstance.Sequence.Sequence,
+                    Sequence = singlePlayerInstance.Sequence.Sequence,
                     Step = singlePlayerInstance.StepId,
                     Type = EIssueType.DuplicateSinglePlayerInstance,
                     Severity = EIssueSeverity.Error,

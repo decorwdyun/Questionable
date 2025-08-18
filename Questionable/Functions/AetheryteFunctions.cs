@@ -94,6 +94,14 @@ internal sealed unsafe class AetheryteFunctions
     public bool TeleportAetheryte(EAetheryteLocation aetheryteLocation)
         => TeleportAetheryte((uint)aetheryteLocation);
 
+    public bool IsFreeAetheryte(EAetheryteLocation aetheryteLocation)
+    {
+        var playerState = PlayerState.Instance();
+        return playerState != null &&
+               (playerState->FreeAetheryteId == (uint)aetheryteLocation ||
+                playerState->FreeAetherytePlayStationPlus == (uint)aetheryteLocation);
+    }
+
     public AetheryteRegistrationResult CanRegisterFreeOrFavoriteAetheryte(EAetheryteLocation aetheryteLocation)
     {
         if (_clientState.LocalPlayer == null)
@@ -105,8 +113,7 @@ internal sealed unsafe class AetheryteFunctions
 
         // if we have a free or favored aetheryte assigned to this location, we don't override it (and don't upgrade
         // favored to free, either).
-        if (playerState->FreeAetheryteId == (uint)aetheryteLocation ||
-            playerState->FreeAetherytePlayStationPlus == (uint)aetheryteLocation)
+        if (IsFreeAetheryte(aetheryteLocation))
             return AetheryteRegistrationResult.NotPossible;
 
         bool freeFavoredSlotsAvailable = false;

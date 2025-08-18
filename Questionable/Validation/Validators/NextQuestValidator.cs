@@ -13,7 +13,7 @@ internal sealed class NextQuestValidator : IQuestValidator
             yield return new ValidationIssue
             {
                 ElementId = quest.Id,
-                Sequence = (byte)invalidNextQuest.Sequence.Sequence,
+                Sequence = invalidNextQuest.Sequence.Sequence,
                 Step = invalidNextQuest.StepId,
                 Type = EIssueType.InvalidNextQuestId,
                 Severity = EIssueSeverity.Error,

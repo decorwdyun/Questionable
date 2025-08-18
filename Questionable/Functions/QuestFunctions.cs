@@ -445,10 +445,11 @@ internal sealed unsafe class QuestFunctions
 
     private int EstimateTeleportCosts(Quest quest)
     {
-        Dictionary<EAetheryteLocation, float> cheapTeleports = _aetheryteList.Where(x => x.IsFavourite || x.GilCost == 0)
+        // TODO (probably in 7.4): clientstructs' aetheryte list has an 'IsFreeAetheryte' field, dalamud doesn't
+        Dictionary<EAetheryteLocation, float> cheapTeleports = _aetheryteList.Where(x => x.IsFavourite || _aetheryteFunctions.IsFreeAetheryte((EAetheryteLocation)x.AetheryteId))
             .ToDictionary(x => (EAetheryteLocation)x.AetheryteId, x =>
             {
-                if (x.GilCost == 0)
+                if (_aetheryteFunctions.IsFreeAetheryte((EAetheryteLocation)x.AetheryteId))
                     return 0;
                 else
                     return 0.5f;

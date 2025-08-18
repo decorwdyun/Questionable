@@ -307,7 +307,7 @@ internal sealed class CommandHandler : IDisposable
                     QuestSequence? sequence = quest.FindSequence(parsedSequence);
                     if (sequence != null)
                     {
-                        sequenceId = (byte)sequence.Sequence;
+                        sequenceId = sequence.Sequence;
                         if (arguments.Length >= 3 && int.TryParse(arguments[2], out int parsedStep))
                         {
                             QuestStep? step = sequence.FindStep(parsedStep);

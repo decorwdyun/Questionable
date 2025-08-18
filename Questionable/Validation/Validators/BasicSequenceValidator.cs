@@ -38,7 +38,7 @@ internal sealed class BasicSequenceValidator : IQuestValidator
                 yield return new ValidationIssue
                 {
                     ElementId = quest.Id,
-                    Sequence = (byte)sequence.Sequence,
+                    Sequence = sequence.Sequence,
                     Step = null,
                     Type = EIssueType.InstantQuestWithMultipleSteps,
                     Severity = EIssueSeverity.Error,

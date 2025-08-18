@@ -34,7 +34,7 @@ internal sealed class SayValidator : IQuestValidator
                 yield return new ValidationIssue
                 {
                     ElementId = quest.Id,
-                    Sequence = (byte)data.Sequence.Sequence,
+                    Sequence = data.Sequence.Sequence,
                     Step = data.StepId,
                     Type = EIssueType.InvalidChatMessage,
                     Severity = EIssueSeverity.Error,

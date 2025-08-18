@@ -54,7 +54,7 @@ internal sealed class DialogueChoiceValidator : IQuestValidator
                 return new ValidationIssue
                 {
                     ElementId = quest.Id,
-                    Sequence = (byte)sequence.Sequence,
+                    Sequence = sequence.Sequence,
                     Step = stepId,
                     Type = EIssueType.InvalidExcelRef,
                     Severity = EIssueSeverity.Error,
@@ -69,7 +69,7 @@ internal sealed class DialogueChoiceValidator : IQuestValidator
                 return new ValidationIssue
                 {
                     ElementId = quest.Id,
-                    Sequence = (byte)sequence.Sequence,
+                    Sequence = sequence.Sequence,
                     Step = stepId,
                     Type = EIssueType.InvalidExcelRef,
                     Severity = EIssueSeverity.Error,

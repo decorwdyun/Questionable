@@ -23,7 +23,7 @@ internal sealed class UniqueStartStopValidator : IQuestValidator
                 yield return new ValidationIssue
                 {
                     ElementId = quest.Id,
-                    Sequence = (byte)accept.Sequence.Sequence,
+                    Sequence = accept.Sequence.Sequence,
                     Step = accept.StepId,
                     Type = EIssueType.UnexpectedAcceptQuestStep,
                     Severity = EIssueSeverity.Error,
@@ -56,7 +56,7 @@ internal sealed class UniqueStartStopValidator : IQuestValidator
                 yield return new ValidationIssue
                 {
                     ElementId = quest.Id,
-                    Sequence = (byte)complete.Sequence.Sequence,
+                    Sequence = complete.Sequence.Sequence,
                     Step = complete.StepId,
                     Type = EIssueType.UnexpectedCompleteQuestStep,
                     Severity = EIssueSeverity.Error,
