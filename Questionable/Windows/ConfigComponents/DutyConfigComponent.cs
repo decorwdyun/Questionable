@@ -206,7 +206,7 @@ internal sealed class DutyConfigComponent : ConfigComponent
 
         ImGui.SameLine();
 
-        string clipboardText = ImGui.GetClipboardText();
+        string clipboardText = ImGui.GetClipboardText().Trim();
         using (ImRaii.Disabled(string.IsNullOrEmpty(clipboardText) ||
                                !clipboardText.StartsWith(DutyClipboardPrefix, StringComparison.InvariantCulture)))
         {

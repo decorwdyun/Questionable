@@ -212,7 +212,7 @@ internal sealed class PriorityWindow : LWindow
 
     private static List<ElementId> ParseClipboardItems()
     {
-        string clipboardText = ImGui.GetClipboardText();
+        string clipboardText = ImGui.GetClipboardText().Trim();
         return DecodeQuestPriority(clipboardText);
     }
 
@@ -221,7 +221,7 @@ internal sealed class PriorityWindow : LWindow
         List<ElementId> clipboardItems = new List<ElementId>();
         try
         {
-            if (string.IsNullOrEmpty(clipboardText) && clipboardText.StartsWith(ClipboardPrefix, StringComparison.InvariantCulture))
+            if (!string.IsNullOrEmpty(clipboardText) && clipboardText.StartsWith(ClipboardPrefix, StringComparison.InvariantCulture))
             {
                 clipboardText = clipboardText.Substring(ClipboardPrefix.Length);
                 string text = Encoding.UTF8.GetString(Convert.FromBase64String(clipboardText));
