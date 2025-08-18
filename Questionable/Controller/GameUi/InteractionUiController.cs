@@ -9,7 +9,6 @@ using Dalamud.Game.ClientState.Objects;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game.Event;
 using FFXIVClientStructs.FFXIV.Client.Game.InstanceContent;
-using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.UI;
 using FFXIVClientStructs.FFXIV.Component.GUI;
 using LLib;
@@ -545,17 +544,6 @@ internal sealed class InteractionUiController : IDisposable
         {
             addonSelectYesno->AtkUnitBase.FireCallbackInt(0);
             _shopController.IsAwaitingYesNo = false;
-            return;
-        }
-
-        var director = UIState.Instance()->DirectorTodo.Director;
-        if (director != null &&
-            director->Info.EventId.ContentId == EventHandlerContent.GatheringLeveDirector &&
-            director->Sequence == 254)
-        {
-            // just close the dialogue for 'do you want to return to next settlement', should prolly be different for
-            // ARR territories
-            addonSelectYesno->AtkUnitBase.FireCallbackInt(1);
             return;
         }
 

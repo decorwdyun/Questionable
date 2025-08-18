@@ -9,8 +9,6 @@ using Dalamud.Game.ClientState.Objects.Enums;
 using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game;
-using FFXIVClientStructs.FFXIV.Client.Game.Event;
-using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using LLib;
 using Lumina.Excel.Sheets;
 using Microsoft.Extensions.Logging;
@@ -18,7 +16,6 @@ using Questionable.Controller.Steps;
 using Questionable.Controller.Steps.Gathering;
 using Questionable.Controller.Steps.Interactions;
 using Questionable.Controller.Steps.Movement;
-using Questionable.Controller.Steps.Shared;
 using Questionable.External;
 using Questionable.Functions;
 using Questionable.Model.Gathering;
@@ -135,15 +132,6 @@ internal sealed unsafe class GatheringController : MiniTaskController<GatheringC
 
         if (!_taskQueue.AllTasksComplete)
             return;
-
-        var director = UIState.Instance()->DirectorTodo.Director;
-        if (director != null && director->Info.EventId.ContentId == EventHandlerContent.GatheringLeveDirector)
-        {
-            if (director->Sequence == 254)
-                return;
-
-            _taskQueue.Enqueue(new WaitAtEnd.WaitDelay());
-        }
 
         GatheringNode? currentNode = FindNextTargetableNodeAndUpdateIndex(_currentRequest);
         if (currentNode == null)
