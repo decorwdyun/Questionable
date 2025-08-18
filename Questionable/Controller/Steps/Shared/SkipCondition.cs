@@ -275,14 +275,17 @@ internal static class SkipCondition
 
         private bool CheckAetheryteCondition(QuestStep step, SkipStepConditions skipConditions)
         {
-            if (step is
-                {
-                    DataId: not null,
-                    InteractionType: EInteractionType.AttuneAetheryte or EInteractionType.AttuneAethernetShard
-                } &&
-                aetheryteFunctions.IsAetheryteUnlocked((EAetheryteLocation)step.DataId.Value))
+            if (step is { Aetheryte: {} aetheryteLocation, InteractionType: EInteractionType.AttuneAetheryte } &&
+                aetheryteFunctions.IsAetheryteUnlocked(aetheryteLocation))
             {
-                logger.LogInformation("Skipping step, as aetheryte/aethernet shard is unlocked");
+                logger.LogInformation("Skipping step, as aetheryte is unlocked");
+                return true;
+            }
+
+            if (step is { Aetheryte: {} aethernetShard, InteractionType: EInteractionType.AttuneAethernetShard } &&
+                aetheryteFunctions.IsAetheryteUnlocked(aethernetShard))
+            {
+                logger.LogInformation("Skipping step, as aethernet shard is unlocked");
                 return true;
             }
 
