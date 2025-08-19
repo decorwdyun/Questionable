@@ -392,11 +392,6 @@ internal sealed unsafe class QuestFunctions
 
     public List<PriorityQuestInfo> GetNextPriorityQuestsThatCanBeAccepted()
     {
-        // all priority quests assume we're able to teleport to the beginning (and for e.g. class quests, the end)
-        // ideally without having to wait 15m for Return.
-        if (!_aetheryteFunctions.IsTeleportUnlocked())
-            return [];
-
         // ideally, we'd also be able to afford *some* teleports
         // this implicitly makes sure we're not starting one of the lv1 class quests if we can't afford to teleport back
         //
@@ -414,6 +409,13 @@ internal sealed unsafe class QuestFunctions
                 var firstStep = quest.FindSequence(0)?.FindStep(0);
                 if (firstStep == null)
                     return new PriorityQuestInfo(x, "No sequence 0 with steps");
+
+                // all priority quests assume we're able to teleport to the beginning (and for e.g. class quests, the end)
+                // ideally without having to wait 15m for Return.
+                // TODO This should be tweaked for level 1-5 class quests so that all of them can be done without teleport unlocked; the latest we unlock teleport is level 10 for Gridania characters
+                //      That probably means that (a) level 1-5 class quests should be doable without any teleports at all, and (b) the return point after being interrupted should be in the main city
+                if (!_aetheryteFunctions.IsTeleportUnlocked())
+                    return new PriorityQuestInfo(x, "Teleport not unlocked");
 
                 if (!firstStep.IsTeleportableForPriorityQuests())
                     return new PriorityQuestInfo(x, "Can't teleport to start");
