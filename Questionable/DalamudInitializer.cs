@@ -6,7 +6,6 @@ using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller;
-using Questionable.Controller.GameUi;
 using Questionable.Controller.Utils;
 using Questionable.Windows;
 
@@ -32,7 +31,6 @@ internal sealed class DalamudInitializer : IDisposable
         IFramework framework,
         QuestController questController,
         MovementController movementController,
-        InteractionUiController interactionUiController,
         WindowSystem windowSystem,
         OneTimeSetupWindow oneTimeSetupWindow,
         QuestWindow questWindow,
