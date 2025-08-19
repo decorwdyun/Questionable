@@ -331,27 +331,28 @@ internal sealed partial class ActiveQuestComponent
     private void DrawQuestButtons(QuestController.QuestProgress currentQuest, QuestStep? currentStep,
         QuestProgressInfo? questProgressInfo, bool isMinimized)
     {
-        ImGui.BeginDisabled(_questController.IsRunning);
-        if (ImGuiComponents.IconButton(FontAwesomeIcon.Play))
+        using (ImRaii.Disabled(_questController.IsRunning))
         {
-            // if we haven't accepted this quest, mark it as next quest so that we can optionally use aetherytes to travel
-            if (questProgressInfo == null)
-                _questController.SetNextQuest(currentQuest.Quest);
-
-            _questController.Start("UI start");
-        }
-
-        if (!isMinimized)
-        {
-            ImGui.SameLine();
-
-            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.StepForward, "Step"))
+            if (ImGuiComponents.IconButton(FontAwesomeIcon.Play))
             {
-                _questController.StartSingleStep("UI step");
+                // if we haven't accepted this quest, mark it as next quest so that we can optionally use aetherytes to travel
+                if (questProgressInfo == null)
+                    _questController.SetNextQuest(currentQuest.Quest);
+
+                _questController.Start("UI start");
+            }
+
+            if (!isMinimized)
+            {
+                ImGui.SameLine();
+
+                if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.StepForward, "Step"))
+                {
+                    _questController.StartSingleStep("UI step");
+                }
             }
         }
 
-        ImGui.EndDisabled();
         ImGui.SameLine();
 
         if (ImGuiComponents.IconButton(FontAwesomeIcon.Stop))
@@ -376,28 +377,29 @@ internal sealed partial class ActiveQuestComponent
                            && currentStep.InteractionType == EInteractionType.Instruction
                            && _questController.HasCurrentTaskMatching<WaitAtEnd.WaitNextStepOrSequence>(out _);
 
-            ImGui.BeginDisabled(lastStep);
-            if (colored)
-                ImGui.PushStyleColor(ImGuiCol.Text, ImGuiColors.ParsedGreen);
-            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.ArrowCircleRight, "Skip"))
+            using (ImRaii.Disabled(lastStep))
             {
-                _movementController.Stop();
-                _questController.Skip(currentQuest.Quest.Id, currentQuest.Sequence);
+                using (ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.ParsedGreen, colored))
+                {
+                    if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.ArrowCircleRight, "Skip"))
+                    {
+                        _movementController.Stop();
+                        _questController.Skip(currentQuest.Quest.Id, currentQuest.Sequence);
+                    }
+
+                    if (ImGui.IsItemHovered())
+                        ImGui.SetTooltip("Skip the current step of the quest path.");
+                }
             }
-
-            if (colored)
-                ImGui.PopStyleColor();
-            ImGui.EndDisabled();
-
-            ImGui.SameLine();
-            if (ImGuiComponents.IconButton(FontAwesomeIcon.SortAmountDown))
-                _priorityWindow.ToggleOrUncollapse();
 
             if (_commandManager.Commands.ContainsKey("/questinfo"))
             {
                 ImGui.SameLine();
                 if (ImGuiComponents.IconButton(FontAwesomeIcon.Atlas))
                     _commandManager.ProcessCommand($"/questinfo {currentQuest.Quest.Id}");
+
+                if (ImGui.IsItemHovered())
+                    ImGui.SetTooltip($"Show information about '{currentQuest.Quest.Info.Name}' in Quest Map plugin.");
             }
         }
     }

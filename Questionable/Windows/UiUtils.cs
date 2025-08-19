@@ -55,10 +55,11 @@ internal sealed class UiUtils
 
     public bool ChecklistItem(string text, Vector4 color, FontAwesomeIcon icon, float extraPadding = 0)
     {
+        if (extraPadding > 0)
+            ImGui.SetCursorPosX(ImGui.GetCursorPosX() + extraPadding);
+
         using (_pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
-        {
             ImGui.TextColored(color, icon.ToIconString());
-        }
 
         bool hover = ImGui.IsItemHovered();
 

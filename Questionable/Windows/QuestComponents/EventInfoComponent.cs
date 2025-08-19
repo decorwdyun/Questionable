@@ -7,7 +7,6 @@ using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
 using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
-using Dalamud.Plugin;
 using Humanizer;
 using Humanizer.Localisation;
 using Questionable.Controller;
@@ -34,11 +33,14 @@ internal sealed class EventInfoComponent
     private readonly QuestController _questController;
     private readonly QuestTooltipComponent _questTooltipComponent;
     private readonly Configuration _configuration;
-    private readonly IDalamudPluginInterface _pluginInterface;
 
-    public EventInfoComponent(QuestData questData, QuestRegistry questRegistry, QuestFunctions questFunctions,
-        UiUtils uiUtils, QuestController questController, QuestTooltipComponent questTooltipComponent,
-        Configuration configuration, IDalamudPluginInterface pluginInterface)
+    public EventInfoComponent(QuestData questData,
+        QuestRegistry questRegistry,
+        QuestFunctions questFunctions,
+        UiUtils uiUtils,
+        QuestController questController,
+        QuestTooltipComponent questTooltipComponent,
+        Configuration configuration)
     {
         _questData = questData;
         _questRegistry = questRegistry;
@@ -47,7 +49,6 @@ internal sealed class EventInfoComponent
         _questController = questController;
         _questTooltipComponent = questTooltipComponent;
         _configuration = configuration;
-        _pluginInterface = pluginInterface;
     }
 
     [SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -81,22 +82,12 @@ internal sealed class EventInfoComponent
         else
             ImGui.Text(eventQuest.Name);
 
-        float width;
-        using (var _ = _pluginInterface.UiBuilder.IconFontHandle.Push())
-            width = ImGui.CalcTextSize(FontAwesomeIcon.Play.ToIconString()).X + ImGui.GetStyle().FramePadding.X;
-
-        using (var _ = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
-            width -= ImGui.CalcTextSize(FontAwesomeIcon.Check.ToIconString()).X;
-
         List<ElementId> startableQuests = eventQuest.QuestIds.Where(x =>
                 _questRegistry.IsKnownQuest(x) &&
                 _questFunctions.IsReadyToAcceptQuest(x) &&
                 x != _questController.StartedQuest?.Quest.Id &&
                 x != _questController.NextQuest?.Quest.Id)
             .ToList();
-        if (startableQuests.Count == 0)
-            width = 0;
-
         foreach (var questId in eventQuest.QuestIds)
         {
             if (_questFunctions.IsQuestComplete(questId))
@@ -126,8 +117,7 @@ internal sealed class EventInfoComponent
                 }
                 else
                 {
-                    if (width > 0)
-                        ImGui.SetCursorPosX(ImGui.GetCursorPosX() + width);
+                    ImGui.SetCursorPosX(ImGui.GetCursorPosX());
 
                     var style = _uiUtils.GetQuestStyle(questId);
                     if (_uiUtils.ChecklistItem(questName, style.Color, style.Icon, ImGui.GetStyle().FramePadding.X))

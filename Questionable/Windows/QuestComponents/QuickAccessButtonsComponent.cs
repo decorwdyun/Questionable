@@ -18,6 +18,7 @@ internal sealed class QuickAccessButtonsComponent
     private readonly QuestRegistry _questRegistry;
     private readonly QuestValidationWindow _questValidationWindow;
     private readonly JournalProgressWindow _journalProgressWindow;
+    private readonly PriorityWindow _priorityWindow;
     private readonly ICommandManager _commandManager;
     private readonly IDalamudPluginInterface _pluginInterface;
 
@@ -25,12 +26,14 @@ internal sealed class QuickAccessButtonsComponent
         QuestRegistry questRegistry,
         QuestValidationWindow questValidationWindow,
         JournalProgressWindow journalProgressWindow,
+        PriorityWindow priorityWindow,
         ICommandManager commandManager,
         IDalamudPluginInterface pluginInterface)
     {
         _questRegistry = questRegistry;
         _questValidationWindow = questValidationWindow;
         _journalProgressWindow = journalProgressWindow;
+        _priorityWindow = priorityWindow;
         _commandManager = commandManager;
         _pluginInterface = pluginInterface;
     }
@@ -39,42 +42,69 @@ internal sealed class QuickAccessButtonsComponent
 
     public void Draw()
     {
-        if (_commandManager.Commands.ContainsKey("/vnav"))
-        {
-            using (var unused = ImRaii.Disabled(!ImGui.IsKeyDown(ImGuiKey.ModCtrl)))
-            {
-                if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.GlobeEurope, "Rebuild Navmesh"))
-                    _commandManager.ProcessCommand("/vnav rebuild");
-            }
-
-            if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
-                ImGui.SetTooltip("Hold CTRL to enable this button.\nRebuilding the navmesh will take some time.");
-        }
-
-        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.RedoAlt, "Reload Data"))
-            Reload?.Invoke(this, EventArgs.Empty);
-
+        DrawQuestPriorityButton();
         ImGui.SameLine();
-        if (ImGuiComponents.IconButton(FontAwesomeIcon.BookBookmark))
-            _journalProgressWindow.IsOpenAndUncollapsed = true;
-        if (ImGui.IsItemHovered())
-            ImGui.SetTooltip("Journal Progress");
+        DrawRebuildNavmeshButton();
 
+        DrawReloadDataButton();
+        ImGui.SameLine();
+        DrawJournalProgressButton();
 
         if (_questRegistry.ValidationIssueCount > 0)
         {
             ImGui.SameLine();
-            if (DrawValidationIssuesButton())
-                _questValidationWindow.IsOpenAndUncollapsed = true;
+            DrawValidationIssuesButton();
         }
     }
 
-    private bool DrawValidationIssuesButton()
+    private void DrawQuestPriorityButton()
+    {
+        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Exclamation, "Priority Quests"))
+            _priorityWindow.ToggleOrUncollapse();
+
+        if (ImGui.IsItemHovered())
+            ImGui.SetTooltip("Configure priority quests which will be done as soon as possible.");
+    }
+
+    private void DrawRebuildNavmeshButton()
+    {
+        bool isNavmeshAvailable = _commandManager.Commands.ContainsKey("/vnav");
+        using (ImRaii.Disabled(!isNavmeshAvailable || !ImGui.IsKeyDown(ImGuiKey.ModCtrl)))
+        {
+            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.GlobeEurope, "Rebuild Navmesh"))
+                _commandManager.ProcessCommand("/vnav rebuild");
+        }
+
+        if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
+        {
+            if (!isNavmeshAvailable)
+                ImGui.SetTooltip("vnavmesh is not available.\nPlease install it first.");
+            else
+                ImGui.SetTooltip("Hold CTRL to enable this button.\nRebuilding the navmesh will take some time.");
+        }
+    }
+
+    private void DrawReloadDataButton()
+    {
+        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.RedoAlt, "Reload Data"))
+            Reload?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void DrawJournalProgressButton()
+    {
+        if (ImGuiComponents.IconButton(FontAwesomeIcon.BookBookmark))
+            _journalProgressWindow.IsOpenAndUncollapsed = true;
+
+        if (ImGui.IsItemHovered())
+            ImGui.SetTooltip("Journal Progress");
+    }
+
+    private void DrawValidationIssuesButton()
     {
         int errorCount = _questRegistry.ValidationErrorCount;
         int infoCount = _questRegistry.ValidationIssueCount - _questRegistry.ValidationErrorCount;
         if (errorCount == 0 && infoCount == 0)
-            return false;
+            return;
 
         int partsToRender = errorCount == 0 || infoCount == 0 ? 1 : 2;
         using var id = ImRaii.PushId("validationissues");
@@ -133,6 +163,7 @@ internal sealed class QuickAccessButtonsComponent
             dl.AddText(position, ImGui.GetColorU32(ImGuiCol.Text), text2);
         }
 
-        return button;
+        if (button)
+            _questValidationWindow.IsOpenAndUncollapsed = true;
     }
 }

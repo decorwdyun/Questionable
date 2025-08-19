@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Utility.Raii;
@@ -59,7 +60,7 @@ internal sealed class ARealmRebornComponent
         foreach (var instanceId in RequiredPrimalInstances)
         {
             (Vector4 color, FontAwesomeIcon icon) = UiUtils.GetInstanceStyle(instanceId);
-            _uiUtils.ChecklistItem(_territoryData.GetInstanceName(instanceId) ?? "?", color, icon);
+            _uiUtils.ChecklistItem(_territoryData.GetInstanceName(instanceId) ?? "?", color, icon, ImGui.GetStyle().FramePadding.X);
         }
     }
 
@@ -78,7 +79,7 @@ internal sealed class ARealmRebornComponent
         foreach (var questId in QuestData.CrystalTowerQuests)
         {
             (Vector4 color, FontAwesomeIcon icon, _) = _uiUtils.GetQuestStyle(questId);
-            _uiUtils.ChecklistItem(_questData.GetQuestInfo(questId).Name, color, icon);
+            _uiUtils.ChecklistItem(_questData.GetQuestInfo(questId).Name, color, icon, ImGui.GetStyle().FramePadding.X);
         }
     }
 }
