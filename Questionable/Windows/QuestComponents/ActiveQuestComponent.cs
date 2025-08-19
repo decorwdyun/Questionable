@@ -225,10 +225,14 @@ internal sealed partial class ActiveQuestComponent
                             ImGui.Separator();
                             ImGui.Text("Available priority quests:");
 
-                            List<ElementId> priorityQuests = _questFunctions.GetNextPriorityQuestsThatCanBeAccepted();
-                            if (priorityQuests.Count > 0)
+                            List<PriorityQuestInfo> priorityQuests = _questFunctions.GetNextPriorityQuestsThatCanBeAccepted();
+                            var availablePriorityQuests = priorityQuests
+                                .Where(x => x.IsAvailable)
+                                .Select(x => x.QuestId)
+                                .ToList();
+                            if (availablePriorityQuests.Count > 0)
                             {
-                                foreach (var questId in priorityQuests)
+                                foreach (var questId in availablePriorityQuests)
                                 {
                                     if (_questRegistry.TryGetQuest(questId, out var quest))
                                         ImGui.BulletText($"{quest.Info.Name} ({questId})");
@@ -236,6 +240,22 @@ internal sealed partial class ActiveQuestComponent
                             }
                             else
                                 ImGui.BulletText("(none)");
+
+                            if (_configuration.Advanced.AdditionalStatusInformation)
+                            {
+                                var unavailablePriorityQuests = priorityQuests
+                                    .Where(x => !x.IsAvailable)
+                                    .ToList();
+                                if (unavailablePriorityQuests.Count > 0)
+                                {
+                                    ImGui.Text("Unavailable priority quests:");
+                                    foreach (var (questId, reason) in unavailablePriorityQuests)
+                                    {
+                                        if (_questRegistry.TryGetQuest(questId, out var quest))
+                                            ImGui.BulletText($"{quest.Info.Name} ({questId}) - {reason}");
+                                    }
+                                }
+                            }
                         }
                     }
                 }

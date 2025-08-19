@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
+using Dalamud.Game.Text;
 using Dalamud.Memory;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
@@ -233,7 +235,10 @@ internal sealed unsafe class QuestFunctions
             return new(firstTrackedQuest, firstTrackedSequence, msqQuest.State);
         }
 
-        ElementId? priorityQuest = GetNextPriorityQuestsThatCanBeAccepted().FirstOrDefault();
+        ElementId? priorityQuest = GetNextPriorityQuestsThatCanBeAccepted()
+            .Where(x => x.IsAvailable)
+            .Select(x => x.QuestId)
+            .FirstOrDefault();
         if (priorityQuest != null)
         {
             // if we have an accepted msq quest, and know of no quest of those currently in the to-do list...
@@ -385,7 +390,7 @@ internal sealed unsafe class QuestFunctions
             return null;
     }
 
-    public List<ElementId> GetNextPriorityQuestsThatCanBeAccepted()
+    public List<PriorityQuestInfo> GetNextPriorityQuestsThatCanBeAccepted()
     {
         // all priority quests assume we're able to teleport to the beginning (and for e.g. class quests, the end)
         // ideally without having to wait 15m for Return.
@@ -401,44 +406,55 @@ internal sealed unsafe class QuestFunctions
 
         return GetPriorityQuests()
             .Where(x => IsReadyToAcceptQuest(x))
-            .Where(x =>
+            .Select(x =>
             {
                 if (!_questRegistry.TryGetQuest(x, out Quest? quest))
-                    return false;
+                    return new PriorityQuestInfo(x, "Unknown quest");
 
                 var firstStep = quest.FindSequence(0)?.FindStep(0);
                 if (firstStep == null)
-                    return false;
+                    return new PriorityQuestInfo(x, "No sequence 0 with steps");
 
-                return firstStep.IsTeleportableForPriorityQuests();
-            })
-            .Where(x =>
-            {
-                if (!_questRegistry.TryGetQuest(x, out Quest? quest))
-                    return false;
+                if (!firstStep.IsTeleportableForPriorityQuests())
+                    return new PriorityQuestInfo(x, "Can't teleport to start");
 
                 if (gil < EstimateTeleportCosts(quest))
-                    return false;
-
-                return quest.AllSteps().All(y =>
                 {
-                    if (y.Step.AetheryteShortcut is { } aetheryteShortcut &&
-                        !_aetheryteFunctions.IsAetheryteUnlocked(aetheryteShortcut))
+                    return new PriorityQuestInfo(x,
+                        string.Create(CultureInfo.InvariantCulture,
+                            $"Not enough gil, estimated cost: {EstimateTeleportCosts(quest):N0}{SeIconChar.Gil.ToIconString()}"));
+                }
+
+                EAetheryteLocation? firstLockedAetheryte = quest.AllSteps()
+                    .Select(y =>
                     {
-                        if (y.Step.SkipConditions?.AetheryteShortcutIf?.AetheryteLocked == aetheryteShortcut)
+                        if (y.Step.AetheryteShortcut is { } aetheryteShortcut &&
+                            !_aetheryteFunctions.IsAetheryteUnlocked(aetheryteShortcut))
                         {
-                            // _logger.LogTrace("Checking priority quest {QuestId}: aetheryte locked, but is listed as skippable", quest.Id);
+                            if (y.Step.SkipConditions?.AetheryteShortcutIf?.AetheryteLocked == aetheryteShortcut)
+                            {
+                                // _logger.LogTrace("Checking priority quest {QuestId}: aetheryte locked, but is listed as skippable", quest.Id);
+                            }
+                            else
+                                return aetheryteShortcut;
                         }
-                        else return false;
-                    }
 
-                    if (y.Step.AethernetShortcut is { } aethernetShortcut &&
-                        (!_aetheryteFunctions.IsAetheryteUnlocked(aethernetShortcut.From) ||
-                         !_aetheryteFunctions.IsAetheryteUnlocked(aethernetShortcut.To)))
-                        return false;
+                        if (y.Step.AethernetShortcut is { } aethernetShortcut)
+                        {
+                            if (!_aetheryteFunctions.IsAetheryteUnlocked(aethernetShortcut.From))
+                                return aethernetShortcut.From;
 
-                    return true;
-                });
+                            if (!_aetheryteFunctions.IsAetheryteUnlocked(aethernetShortcut.To))
+                                return aethernetShortcut.To;
+                        }
+
+                        return (EAetheryteLocation?)null;
+                    })
+                    .FirstOrDefault(y => y != null);
+                if (firstLockedAetheryte != null)
+                    return new PriorityQuestInfo(x, $"Aetheryte locked: {firstLockedAetheryte}");
+
+                return new PriorityQuestInfo(x);
             })
             .ToList();
     }
@@ -871,4 +887,9 @@ public enum MainScenarioQuestState
     Available,
     Complete,
     LoadingScreen,
+}
+
+internal sealed record PriorityQuestInfo(ElementId QuestId, string? UnavailableReason = null)
+{
+    public bool IsAvailable => UnavailableReason == null;
 }
