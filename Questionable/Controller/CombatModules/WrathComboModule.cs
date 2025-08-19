@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Ipc;
@@ -18,8 +19,9 @@ internal sealed class WrathComboModule : ICombatModule, IDisposable
     private readonly ICallGateSubscriber<object> _test;
     private readonly ICallGateSubscriber<string, string, string, Guid?> _registerForLeaseWithCallback;
     private readonly ICallGateSubscriber<Guid, object> _releaseControl;
-    private readonly ICallGateSubscriber<Guid,bool,ESetResult> _setAutoRotationState;
-    private readonly ICallGateSubscriber<Guid,ESetResult> _setCurrentJobAutoRotationReady;
+    private readonly ICallGateSubscriber<Guid, bool, ESetResult> _setAutoRotationState;
+    private readonly ICallGateSubscriber<Guid, object, object, ESetResult> _setAutoRotationConfigState;
+    private readonly ICallGateSubscriber<Guid, ESetResult> _setCurrentJobAutoRotationReady;
     private readonly ICallGateProvider<int, string, object> _callback;
 
     private Guid? _lease;
@@ -34,6 +36,7 @@ internal sealed class WrathComboModule : ICombatModule, IDisposable
             pluginInterface.GetIpcSubscriber<string, string, string, Guid?>("WrathCombo.RegisterForLeaseWithCallback");
         _releaseControl = pluginInterface.GetIpcSubscriber<Guid, object>("WrathCombo.ReleaseControl");
         _setAutoRotationState = pluginInterface.GetIpcSubscriber<Guid, bool, ESetResult>("WrathCombo.SetAutoRotationState");
+        _setAutoRotationConfigState = pluginInterface.GetIpcSubscriber<Guid, object, object, ESetResult>("WrathCombo.SetAutoRotationConfigState");
         _setCurrentJobAutoRotationReady =
             pluginInterface.GetIpcSubscriber<Guid, ESetResult>("WrathCombo.SetCurrentJobAutoRotationReady");
 
@@ -77,9 +80,17 @@ internal sealed class WrathComboModule : ICombatModule, IDisposable
                 ESetResult currentJobSetForAutoRotation = _setCurrentJobAutoRotationReady.InvokeFunc(_lease.Value);
                 if (!currentJobSetForAutoRotation.IsSuccess())
                 {
-                    _logger.LogError("Unable to setr current job for autorotation");
+                    _logger.LogError("Unable to set current job for autorotation");
                     Stop();
                     return false;
+                }
+
+                ESetResult healerRotationModeSet = _setAutoRotationConfigState.InvokeFunc(_lease.Value,
+                    AutoRotationConfigOption.HealerRotationMode, HealerRotationMode.Lowest_Current);
+                if (!healerRotationModeSet.IsSuccess())
+                {
+                    _logger.LogError("Unable to configure healing priority for autorotation: {Result}",
+                        healerRotationModeSet);
                 }
 
                 return true;
@@ -137,6 +148,7 @@ internal sealed class WrathComboModule : ICombatModule, IDisposable
     }
 
     [PublicAPI]
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public enum ESetResult
     {
         Okay = 0,
@@ -149,6 +161,39 @@ internal sealed class WrathComboModule : ICombatModule, IDisposable
         PlayerNotAvailable = 14,
         InvalidConfiguration = 15,
         InvalidValue = 16,
+    }
+
+    [PublicAPI]
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
+    public enum AutoRotationConfigOption
+    {
+        InCombatOnly = 0,
+        DPSRotationMode = 1,
+        HealerRotationMode = 2,
+        FATEPriority = 3,
+        QuestPriority = 4,
+        SingleTargetHPP = 5,
+        AoETargetHPP = 6,
+        SingleTargetRegenHPP = 7,
+        ManageKardia = 8,
+        AutoRez = 9,
+        AutoRezDPSJobs = 10,
+        AutoCleanse = 11,
+        IncludeNPCs = 12,
+        OnlyAttackInCombat = 13,
+        OrbwalkerIntegration = 14,
+        AutoRezOutOfParty = 15,
+        DPSAoETargets = 16,
+        SingleTargetExcogHPP = 17,
+    }
+
+    [PublicAPI]
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
+    public enum HealerRotationMode
+    {
+        Manual = 0,
+        Highest_Current = 1,
+        Lowest_Current = 2,
     }
 }
 
