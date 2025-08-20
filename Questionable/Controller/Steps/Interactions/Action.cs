@@ -45,6 +45,7 @@ internal static class Action
         uint? DataId,
         EAction Action) : ITask
     {
+        public bool ShouldRedoOnInterrupt() => true;
         public override string ToString() => $"Action({Action})";
     }
 
@@ -125,7 +126,7 @@ internal static class Action
             return ETaskResult.TaskComplete;
         }
 
-        public override bool ShouldInterruptOnDamage() => false;
+        public override bool ShouldInterruptOnDamage() => true;
     }
 
     internal sealed record UseMudraOnObject(uint DataId, EAction Action) : ITask
