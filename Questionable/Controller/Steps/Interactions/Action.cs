@@ -5,6 +5,7 @@ using Dalamud.Game.ClientState.Objects.Types;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Common;
+using Questionable.Controller.Utils;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
@@ -22,14 +23,14 @@ internal static class Action
 
             ArgumentNullException.ThrowIfNull(step.Action);
 
-            var task = OnObject(step.DataId, step.Action.Value);
+            var task = OnObject(step.DataId, quest, step.Action.Value, step.CompletionQuestVariablesFlags);
             if (step.Action.Value.RequiresMount())
                 return [task];
             else
                 return [new Mount.UnmountTask(), task];
         }
 
-        public static ITask OnObject(uint? dataId, EAction action)
+        public static ITask OnObject(uint? dataId, Quest quest, EAction action, List<QuestWorkValue?>? completionQuestVariablesFlags)
         {
             if (action is EAction.FumaShuriken or EAction.Katon or EAction.Raiton)
             {
@@ -37,13 +38,15 @@ internal static class Action
                 return new UseMudraOnObject(dataId.Value, action);
             }
             else
-                return new UseOnObject(dataId, action);
+                return new UseOnObject(dataId, quest, action, completionQuestVariablesFlags);
         }
     }
 
     internal sealed record UseOnObject(
         uint? DataId,
-        EAction Action) : ITask
+        Quest? Quest,
+        EAction Action,
+        List<QuestWorkValue?>? CompletionQuestVariablesFlags) : ITask
     {
         public bool ShouldRedoOnInterrupt() => true;
         public override string ToString() => $"Action({Action})";
@@ -51,6 +54,7 @@ internal static class Action
 
     internal sealed class UseOnObjectExecutor(
         GameFunctions gameFunctions,
+        QuestFunctions questFunctions,
         ILogger<UseOnObject> logger) : TaskExecutor<UseOnObject>
     {
         private bool _usedAction;
@@ -123,13 +127,27 @@ internal static class Action
                 return ETaskResult.StillRunning;
             }
 
+            if (Task.Quest != null &&
+                Task.CompletionQuestVariablesFlags != null &&
+                QuestWorkUtils.HasCompletionFlags(Task.CompletionQuestVariablesFlags))
+            {
+                var questWork = questFunctions.GetQuestProgressInfo(Task.Quest.Id);
+                return questWork != null &&
+                       QuestWorkUtils.MatchesQuestWork(Task.CompletionQuestVariablesFlags, questWork)
+                    ? ETaskResult.TaskComplete
+                    : ETaskResult.StillRunning;
+            }
+
             return ETaskResult.TaskComplete;
         }
 
         public override bool ShouldInterruptOnDamage() => true;
     }
 
-    internal sealed record UseMudraOnObject(uint DataId, EAction Action) : ITask
+    internal sealed record UseMudraOnObject(
+        uint DataId,
+        EAction Action)
+        : ITask
     {
         public override string ToString() => $"Mudra({Action})";
     }

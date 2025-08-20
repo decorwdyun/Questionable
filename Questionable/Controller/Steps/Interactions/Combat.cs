@@ -77,7 +77,7 @@ internal static class Combat
 
                     if (!step.Action.Value.RequiresMount())
                         yield return new Mount.UnmountTask();
-                    yield return new Action.UseOnObject(step.DataId.Value, step.Action.Value);
+                    yield return new Action.UseOnObject(step.DataId.Value, null, step.Action.Value, null);
                     yield return new WaitAtEnd.WaitDelay(TimeSpan.FromSeconds(1));
                     yield return CreateTask(quest, sequence, step);
                     break;
