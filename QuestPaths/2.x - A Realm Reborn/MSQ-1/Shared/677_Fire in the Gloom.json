@@ -76,7 +76,8 @@
             "Z": 115.92273
           },
           "TerritoryId": 132,
-          "InteractionType": "CompleteQuest"
+          "InteractionType": "CompleteQuest",
+          "AetheryteShortcut": "Gridania"
         }
       ]
     }
