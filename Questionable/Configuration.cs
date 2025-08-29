@@ -8,6 +8,8 @@ using LLib.GameData;
 using LLib.ImGui;
 using Newtonsoft.Json;
 using Questionable.Model.Questing;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace Questionable;
 
@@ -17,6 +19,7 @@ internal sealed class Configuration : IPluginConfiguration
 
     public int Version { get; set; } = 1;
     public int PluginSetupCompleteVersion { get; set; }
+    public string? SetupToken { get; set; }
     public GeneralConfiguration General { get; } = new();
     public StopConfiguration Stop { get; } = new();
     public DutyConfiguration Duties { get; } = new();
@@ -26,10 +29,52 @@ internal sealed class Configuration : IPluginConfiguration
     public WindowConfig DebugWindowConfig { get; } = new();
     public WindowConfig ConfigWindowConfig { get; } = new();
 
-    internal bool IsPluginSetupComplete() => PluginSetupCompleteVersion == PluginSetupVersion;
+    [NonSerialized]
+    private bool? _isPluginSetupComplete;
 
-    internal void MarkPluginSetupComplete() => PluginSetupCompleteVersion = PluginSetupVersion;
+    private const string SecretToken = "Questionable.IsSetupComplete";
+    internal bool IsPluginSetupComplete()
+    {
+        if (_isPluginSetupComplete.HasValue)
+            return _isPluginSetupComplete.Value;
 
+        if (PluginSetupCompleteVersion != PluginSetupVersion)
+        {
+            _isPluginSetupComplete = false;
+            return false;
+        }
+
+        if (string.IsNullOrEmpty(SetupToken))
+        {
+            _isPluginSetupComplete = false;
+            return false;
+        }
+
+        try
+        {
+            var encryptedData = Convert.FromBase64String(SetupToken);
+            var decryptedData = ProtectedData.Unprotect(encryptedData, null, DataProtectionScope.CurrentUser);
+            var token = Encoding.UTF8.GetString(decryptedData);
+            _isPluginSetupComplete = token == SecretToken;
+            return _isPluginSetupComplete.Value;
+        }
+        catch
+        {
+            _isPluginSetupComplete = false;
+            return false;
+        }
+    }
+
+    internal void MarkPluginSetupComplete()
+    {
+        PluginSetupCompleteVersion = PluginSetupVersion;
+
+        var data = Encoding.UTF8.GetBytes(SecretToken);
+        var encryptedData = ProtectedData.Protect(data, null, DataProtectionScope.CurrentUser);
+        SetupToken = Convert.ToBase64String(encryptedData);
+
+        _isPluginSetupComplete = true;
+    }
     internal sealed class GeneralConfiguration
     {
         public ECombatModule CombatModule { get; set; } = ECombatModule.None;
@@ -43,6 +88,8 @@ internal sealed class Configuration : IPluginConfiguration
         public bool ConfigureTextAdvance { get; set; } = true;
         public bool AutoStepRefreshEnabled { get; set; } = true;
         public int AutoStepRefreshDelaySeconds { get; set; } = 10;
+        public bool ConfigureDailyRoutines { get; set; } = true;
+        public bool UsingDailyRoutinesTeleport { get; set; }
     }
 
     internal sealed class StopConfiguration
@@ -105,6 +152,7 @@ internal sealed class Configuration : IPluginConfiguration
         BossMod,
         WrathCombo,
         RotationSolverReborn,
+        AEAssist,
     }
 
     public sealed class ElementIdNConverter : JsonConverter<ElementId>

@@ -15,7 +15,7 @@ namespace Questionable.Windows.JournalComponents;
 internal sealed class AlliedSocietyJournalComponent
 {
     private static readonly string[] RankNames =
-        ["Neutral", "Recognized", "Friendly", "Trusted", "Respected", "Honored", "Sworn", "Allied"];
+        ["中立", "承认", "友好", "信赖", "尊敬", "名誉", "誓约", "血誓"];
 
 #if DEBUG
     private readonly QuestFunctions _questFunctions;
@@ -51,7 +51,7 @@ internal sealed class AlliedSocietyJournalComponent
 
     public void DrawAlliedSocietyQuests()
     {
-        using var tab = ImRaii.TabItem("Allied Societies");
+        using var tab = ImRaii.TabItem("友好部族");
         if (!tab)
             return;
 
@@ -63,7 +63,7 @@ internal sealed class AlliedSocietyJournalComponent
             if (quests.Count == 0)
                 continue;
 
-            string label = $"{alliedSociety}###AlliedSociety{(int)alliedSociety}";
+            string label = $"{alliedSociety.ToFriendlyString()}###AlliedSociety{(int)alliedSociety}";
 #if DEBUG
             bool isOpen;
             if (quests.Any(x => !_questRegistry.TryGetQuest(x.QuestId, out var quest) || quest.Root.Disabled))

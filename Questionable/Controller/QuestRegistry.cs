@@ -202,7 +202,11 @@ internal sealed class QuestRegistry
         _jsonSchemaValidator.Enqueue(questId, questNode);
 
         var questRoot = questNode.Deserialize<QuestRoot>()!;
-        var questInfo = _questData.GetQuestInfo(questId);
+        if (!_questData.TryGetQuestInfo(questId, out var questInfo))
+        {
+            _logger.LogWarning("Not loading unknown quest {QuestId} from '{Filename}'", questId, fileName);
+            return;
+        }
         Quest quest = new Quest
         {
             Id = questId,

@@ -36,5 +36,5 @@ internal sealed record MoveTask(
 
     public bool ShouldRedoOnInterrupt() => true;
 
-    public override string ToString() => $"MoveTo({Destination.ToString("G", CultureInfo.InvariantCulture)})";
+    public override string ToString() => $"移动到({Destination.ToString("G", CultureInfo.InvariantCulture)})";
 }
