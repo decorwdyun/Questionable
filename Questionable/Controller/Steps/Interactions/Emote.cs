@@ -40,7 +40,7 @@ internal static class Emote
 
     internal sealed record UseOnObject(EEmote Emote, uint DataId) : ITask
     {
-        public override string ToString() => $"Emote({Emote} on {DataId})";
+        public override string ToString() => $"情感动作({Emote} on {DataId})";
     }
 
     internal sealed class UseOnObjectExecutor(ChatFunctions chatFunctions)

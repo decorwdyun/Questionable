@@ -49,7 +49,7 @@ internal static class Action
         List<QuestWorkValue?>? CompletionQuestVariablesFlags) : ITask
     {
         public bool ShouldRedoOnInterrupt() => true;
-        public override string ToString() => $"Action({Action})";
+        public override string ToString() => $"技能({Action})";
     }
 
     internal sealed class UseOnObjectExecutor(
