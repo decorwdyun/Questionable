@@ -38,7 +38,7 @@ internal static class Jump
         JumpDestination JumpDestination,
         string? Comment) : IJumpTask
     {
-        public override string ToString() => $"Jump({Comment})";
+        public override string ToString() => $"跳跃({Comment})";
     }
 
     internal abstract class JumpBase<T>(

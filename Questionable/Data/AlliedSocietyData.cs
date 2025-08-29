@@ -58,6 +58,16 @@ internal sealed class AlliedSocietyData
             normalNpcs = [];
             mountNpcs = [1017322, 1017470, 1017471];
         }
+        else if (alliedSociety == EAlliedSociety.Qitari)
+        {
+            normalNpcs = [];
+            mountNpcs = [1032663];
+        }
+        else if (alliedSociety == EAlliedSociety.Pelupelu)
+        {
+            normalNpcs = [];
+            mountNpcs = [1051798];
+        }
         else
         {
             normalNpcs = [];
