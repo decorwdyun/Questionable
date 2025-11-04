@@ -63,6 +63,12 @@
           "Microsoft.SourceLink.Common": "8.0.0"
         }
       },
+      "System.Security.Cryptography.ProtectedData": {
+        "type": "Direct",
+        "requested": "[9.0.8, )",
+        "resolved": "9.0.8",
+        "contentHash": "w7+KCnqmtDboV8dxTLxlUltasP7AgzNFdTLq1D/ey50ykgXW+CJBIQkzYZjgPzmjKB+/PGGUKYrH7TSbwrDtRw=="
+      },
       "System.Text.Json": {
         "type": "Direct",
         "requested": "[9.0.3, )",
@@ -138,7 +144,7 @@
       "gatheringpaths": {
         "type": "Project",
         "dependencies": {
-          "Questionable.Model": "[6.17.1, )"
+          "Questionable.Model": "[6.17.2, )"
         }
       },
       "llib": {
@@ -160,7 +166,7 @@
       "questpaths": {
         "type": "Project",
         "dependencies": {
-          "Questionable.Model": "[6.17.1, )"
+          "Questionable.Model": "[6.17.2, )"
         }
       }
     }
