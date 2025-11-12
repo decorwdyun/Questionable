@@ -23,24 +23,24 @@ internal sealed class UiUtils
     public (Vector4 Color, FontAwesomeIcon Icon, string Status) GetQuestStyle(ElementId elementId)
     {
         if (_questFunctions.IsQuestAccepted(elementId))
-            return (ImGuiColors.DalamudYellow, FontAwesomeIcon.PersonWalkingArrowRight, "Active");
+            return (ImGuiColors.DalamudYellow, FontAwesomeIcon.PersonWalkingArrowRight, "已接取");
         else if (elementId is QuestId questId && _questFunctions.IsDailyAlliedSocietyQuestAndAvailableToday(questId))
         {
             if (!_questFunctions.IsReadyToAcceptQuest(questId))
-                return (ImGuiColors.ParsedGreen, FontAwesomeIcon.Check, "Complete");
+                return (ImGuiColors.ParsedGreen, FontAwesomeIcon.Check, "已完成");
             else if (_questFunctions.IsQuestComplete(questId))
-                return (ImGuiColors.ParsedBlue, FontAwesomeIcon.Running, "Available (Complete)");
+                return (ImGuiColors.ParsedBlue, FontAwesomeIcon.Running, "可接取（已完成）");
             else
-                return (ImGuiColors.DalamudYellow, FontAwesomeIcon.Running, "Available");
+                return (ImGuiColors.DalamudYellow, FontAwesomeIcon.Running, "可接取");
         }
         else if (_questFunctions.IsQuestAcceptedOrComplete(elementId))
-            return (ImGuiColors.ParsedGreen, FontAwesomeIcon.Check, "Complete");
+            return (ImGuiColors.ParsedGreen, FontAwesomeIcon.Check, "已完成");
         else if (_questFunctions.IsQuestUnobtainable(elementId))
-            return (ImGuiColors.DalamudGrey, FontAwesomeIcon.Minus, "Unobtainable");
+            return (ImGuiColors.DalamudGrey, FontAwesomeIcon.Minus, "无法接取");
         else if (_questFunctions.IsQuestLocked(elementId))
-            return (ImGuiColors.DalamudRed, FontAwesomeIcon.Times, "Locked");
+            return (ImGuiColors.DalamudRed, FontAwesomeIcon.Times, "锁定");
         else
-            return (ImGuiColors.DalamudYellow, FontAwesomeIcon.Running, "Available");
+            return (ImGuiColors.DalamudYellow, FontAwesomeIcon.Running, "可接取");
     }
 
     public static (Vector4 color, FontAwesomeIcon icon) GetInstanceStyle(ushort instanceId)

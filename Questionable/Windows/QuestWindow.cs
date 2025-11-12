@@ -94,7 +94,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
             ShowTooltip = () =>
             {
                 ImGui.BeginTooltip();
-                ImGui.Text("Open Configuration");
+                ImGui.Text("打开插件设置");
                 ImGui.EndTooltip();
             }
         });

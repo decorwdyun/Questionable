@@ -158,13 +158,13 @@ internal static class Combat
         public override string ToString()
         {
             if (CombatData.SpawnType == EEnemySpawnType.FinishCombatIfAny)
-                return "HandleCombat(wait: not in combat, optional)";
+                return "处理战斗(等待脱战，可选)";
             if (QuestWorkUtils.HasCompletionFlags(CompletionQuestVariableFlags))
-                return "HandleCombat(wait: QW flags)";
+                return "处理战斗(wait: QW flags)";
             else if (IsLastStep)
-                return "HandleCombat(wait: next sequence)";
+                return "处理战斗(等待下一步)";
             else
-                return "HandleCombat(wait: not in combat)";
+                return "处理战斗(等待脱战)";
         }
     }
 
