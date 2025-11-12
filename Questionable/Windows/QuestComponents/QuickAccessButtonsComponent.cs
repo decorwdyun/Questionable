@@ -57,11 +57,11 @@ internal sealed class QuickAccessButtonsComponent(
 
     private void DrawQuestPriorityButton()
     {
-        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Exclamation, "Priority Quests"))
+        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Exclamation, "高优先任务"))
             _priorityWindow.ToggleOrUncollapse();
 
         if (ImGui.IsItemHovered())
-            ImGui.SetTooltip("Configure priority quests which will be done as soon as possible.");
+            ImGui.SetTooltip("配置高优先任务，这些任务将会被优先处理。");
     }
 
     private void DrawRebuildNavmeshButton()
@@ -69,22 +69,22 @@ internal sealed class QuickAccessButtonsComponent(
         bool isNavmeshAvailable = _commandManager.Commands.ContainsKey("/vnav");
         using (ImRaii.Disabled(!isNavmeshAvailable || !ImGui.IsKeyDown(ImGuiKey.ModCtrl)))
         {
-            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.GlobeEurope, "Rebuild Navmesh"))
+            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.GlobeEurope, "重新构建导航"))
                 _commandManager.ProcessCommand("/vnav rebuild");
         }
 
         if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
         {
             if (!isNavmeshAvailable)
-                ImGui.SetTooltip("vnavmesh is not available.\nPlease install it first.");
+                ImGui.SetTooltip("vnavmesh 还没有安装.\n请先安装它。");
             else
-                ImGui.SetTooltip("Hold CTRL to enable this button.\nRebuilding the navmesh will take some time.");
+                ImGui.SetTooltip("按住 CTRL 解锁此按钮。\n注意重建导航网格可能需要一些时间。");
         }
     }
 
     private void DrawReloadDataButton()
     {
-        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.RedoAlt, "Reload Data"))
+        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.RedoAlt, "重载数据"))
             Reload?.Invoke(this, EventArgs.Empty);
     }
 
@@ -94,7 +94,7 @@ internal sealed class QuickAccessButtonsComponent(
             _journalProgressWindow.IsOpenAndUncollapsed = true;
 
         if (ImGui.IsItemHovered())
-            ImGui.SetTooltip("Journal Progress");
+            ImGui.SetTooltip("任务进度");
     }
 
     private static void DrawSponsorButton()

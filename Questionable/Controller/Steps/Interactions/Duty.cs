@@ -80,8 +80,8 @@ internal static class Duty
                 var currentItemLevel = gearStatsCalculator.CalculateAverageItemLevel(equippedItems);
                 if (cfcData.RequiredItemLevel > currentItemLevel)
                 {
-                    string errorText =
-                        $"Could not use AutoDuty to queue for {cfcData.Name}, required item level: {cfcData.RequiredItemLevel}, current item level: {currentItemLevel}.";
+                    string errorText =  
+                        $"无法使用 AutoDuty 进入 {cfcData.Name}，所需装等：{cfcData.RequiredItemLevel}，当前装等：{currentItemLevel}。";
                     if (!sendNotificationExecutor.Start(new SendNotification.Task(EInteractionType.Duty, errorText)))
                         chatGui.PrintError(errorText, CommandHandler.MessageTag, CommandHandler.TagColor);
 

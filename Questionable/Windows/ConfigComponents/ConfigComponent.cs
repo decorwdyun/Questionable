@@ -16,16 +16,16 @@ internal abstract class ConfigComponent(IDalamudPluginInterface pluginInterface,
 
     protected readonly string[] SupportedCfcOptions =
     [
-        $"{SeIconChar.Circle.ToIconChar()} Enabled (Default)",
-        $"{SeIconChar.Circle.ToIconChar()} Enabled",
-        $"{SeIconChar.Cross.ToIconChar()} Disabled"
+        $"{SeIconChar.Circle.ToIconChar()} 启用 (默认)",
+        $"{SeIconChar.Circle.ToIconChar()} 启用",
+        $"{SeIconChar.Cross.ToIconChar()} 禁用"
     ];
 
     protected readonly string[] UnsupportedCfcOptions =
     [
-        $"{SeIconChar.Cross.ToIconChar()} Disabled (Default)",
-        $"{SeIconChar.Circle.ToIconChar()} Enabled",
-        $"{SeIconChar.Cross.ToIconChar()} Disabled"
+        $"{SeIconChar.Cross.ToIconChar()} 禁用 (默认)",
+        $"{SeIconChar.Circle.ToIconChar()} 启用",
+        $"{SeIconChar.Cross.ToIconChar()} 禁用"
     ];
 
     private readonly IDalamudPluginInterface _pluginInterface = pluginInterface;
@@ -64,7 +64,7 @@ internal abstract class ConfigComponent(IDalamudPluginInterface pluginInterface,
         using var _ = ImRaii.Tooltip();
 
         ImGui.TextColored(ImGuiColors.DalamudYellow,
-            "While testing, the following issues have been found:");
+            "在我们测试时发现了以下问题:");
         foreach (string note in notes)
             ImGui.BulletText(note);
     }

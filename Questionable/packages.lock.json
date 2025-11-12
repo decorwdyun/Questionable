@@ -13,9 +13,9 @@
       },
       "DalamudPackager": {
         "type": "Direct",
-        "requested": "[13.1.0, )",
-        "resolved": "13.1.0",
-        "contentHash": "XdoNhJGyFby5M/sdcRhnc5xTop9PHy+H50PTWpzLhJugjB19EDBiHD/AsiDF66RETM+0qKUdJBZrNuebn7qswQ=="
+        "requested": "[14.0.1, )",
+        "resolved": "14.0.1",
+        "contentHash": "y0WWyUE6dhpGdolK3iKgwys05/nZaVf4ZPtIjpLhJBZvHxkkiE23zYRo7K7uqAgoK/QvK5cqF6l3VG5AbgC6KA=="
       },
       "DotNet.ReproducibleBuilds": {
         "type": "Direct",
@@ -52,6 +52,12 @@
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.8"
         }
+      },
+      "System.Security.Cryptography.ProtectedData": {
+        "type": "Direct",
+        "requested": "[10.0.1, )",
+        "resolved": "10.0.1",
+        "contentHash": "9SqHNq+lAjZeyPcm69FTQEjr+wsRYvkS3aW8yxoEndVYwDRkCrsP/44QPqpWHwzevoX26rkOoQ6kr7GZWngw2A=="
       },
       "System.Text.Json": {
         "type": "Direct",
@@ -118,7 +124,7 @@
       "gatheringpaths": {
         "type": "Project",
         "dependencies": {
-          "Questionable.Model": "[14.200.1.1, )"
+          "Questionable.Model": "[14.200.4, )"
         }
       },
       "llib": {
@@ -133,15 +139,12 @@
         "type": "Project"
       },
       "questionable.model": {
-        "type": "Project",
-        "dependencies": {
-          "System.Text.Json": "[9.0.3, )"
-        }
+        "type": "Project"
       },
       "questpaths": {
         "type": "Project",
         "dependencies": {
-          "Questionable.Model": "[14.200.1.1, )"
+          "Questionable.Model": "[14.200.4, )"
         }
       }
     }

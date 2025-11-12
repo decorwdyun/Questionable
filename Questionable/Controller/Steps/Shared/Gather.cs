@@ -36,7 +36,7 @@ internal static class Gather
 
     internal sealed record DelayedGatheringTask(GatheredItem GatheredItem, Quest Quest, byte Sequence, QuestStep Step) : ITask
     {
-        public override string ToString() => $"Gathering(pending for {GatheredItem.ItemId})";
+        public override string ToString() => $"采集(等待 {GatheredItem.ItemId})";
     }
 
     internal sealed class DelayedGatheringExecutor(
@@ -92,7 +92,7 @@ internal static class Gather
 
             ushort territoryId = gatheringRoot.Steps.Last().TerritoryId;
             yield return new WaitCondition.Task(() => clientState.TerritoryType == territoryId,
-                $"Wait(territory: {territoryData.GetNameAndId(territoryId)})");
+                $"等待(区域: {territoryData.GetNameAndId(territoryId)})");
 
             yield return new WaitNavmesh.Task();
 
@@ -119,10 +119,10 @@ internal static class Gather
         public override string ToString()
         {
             if (GatheredItem.Collectability == 0)
-                return $"Gather({GatheredItem.ItemCount}x {GatheredItem.ItemId})";
+                return $"采集({GatheredItem.ItemCount}x {GatheredItem.ItemId})";
             else
                 return
-                    $"Gather({GatheredItem.ItemCount}x {GatheredItem.ItemId} {SeIconChar.Collectible.ToIconString()} {GatheredItem.Collectability})";
+                    $"采集({GatheredItem.ItemCount}x {GatheredItem.ItemId} {SeIconChar.Collectible.ToIconString()} {GatheredItem.Collectability})";
         }
     }
 

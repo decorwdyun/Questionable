@@ -159,7 +159,7 @@ internal sealed class QuestRegistry
                 {
                     _quests.Clear();
 
-                    _chatGui.PrintError($"Unable to load quests - {e.GetType().Name}: {e.Message}", CommandHandler.MessageTag, CommandHandler.TagColor);
+                    _chatGui.PrintError($"加载任务预设失败 - {e.GetType().Name}: {e.Message}", CommandHandler.MessageTag, CommandHandler.TagColor);
                     _logger.LogError(e, "Failed to load quests from project directory");
                 }
             }

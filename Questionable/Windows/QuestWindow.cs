@@ -68,7 +68,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
 
         SizeConstraints = new WindowSizeConstraints
         {
-            MinimumSize = new Vector2(240, 30),
+            MinimumSize = new Vector2(300, 30),
             MaximumSize = default
         };
         RespectCloseHotkey = false;
@@ -97,7 +97,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
             ShowTooltip = () =>
             {
                 ImGui.BeginTooltip();
-                ImGui.Text("Open Configuration");
+                ImGui.Text("打开插件设置");
                 ImGui.EndTooltip();
             }
         });
@@ -154,7 +154,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
                 {
                     ImGui.TextColoredWrapped(
                         ImGuiColors.DalamudRed,
-                        "Questionable was not able to load all components. Some functionality may be disabled."
+                        "Questionable 尚未完全适配7.4，遇到任何 bug 都是正常的."
                     );
                 }
 

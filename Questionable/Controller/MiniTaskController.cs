@@ -73,7 +73,7 @@ internal abstract class MiniTaskController<T> : IDisposable
                 {
                     _logger.LogError(e, "Failed to start task {TaskName}", upcomingTask.ToString());
                     _chatGui.PrintError(
-                        $"Failed to start task '{upcomingTask}', please check /xllog for details.", CommandHandler.MessageTag, CommandHandler.TagColor);
+                        $"无法启动任务 '{upcomingTask}', 请使用 /xllog 来获取报错信息", CommandHandler.MessageTag, CommandHandler.TagColor);
                     Stop("Task failed to start");
                     return;
                 }
@@ -98,7 +98,7 @@ internal abstract class MiniTaskController<T> : IDisposable
             _logger.LogError(e, "Failed to update task {TaskName}",
                 _taskQueue.CurrentTaskExecutor.CurrentTask.ToString());
             _chatGui.PrintError(
-                $"Failed to update task '{_taskQueue.CurrentTaskExecutor.CurrentTask}', please check /xllog for details.", CommandHandler.MessageTag, CommandHandler.TagColor);
+                $"无法更新任务 '{_taskQueue.CurrentTaskExecutor.CurrentTask}', 请使用 /xllog 来获取报错信息.", CommandHandler.MessageTag, CommandHandler.TagColor);
             Stop("Task failed to update");
             return;
         }

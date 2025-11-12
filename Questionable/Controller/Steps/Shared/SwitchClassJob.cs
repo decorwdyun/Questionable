@@ -25,7 +25,7 @@ internal static class SwitchClassJob
     }
     internal sealed record Task(EClassJob ClassJob) : ITask
     {
-        public override string ToString() => $"SwitchJob({ClassJob})";
+        public override string ToString() => $"切换职业({ClassJob})";
     }
 
     internal sealed class SwitchClassJobExecutor() : AbstractDelayedTaskExecutor<Task>
