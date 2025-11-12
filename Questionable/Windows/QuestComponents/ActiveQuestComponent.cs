@@ -11,6 +11,7 @@ using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin.Services;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
+using LLib.GameData;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller;
 using Questionable.Controller.Steps.Shared;
@@ -67,7 +68,7 @@ internal sealed partial class ActiveQuestComponent(
             var questWork = DrawQuestWork(currentQuest, isMinimized);
 
             if (_combatController.IsRunning)
-                ImGui.TextColored(ImGuiColors.DalamudOrange, "In Combat");
+                ImGui.TextColored(ImGuiColors.DalamudOrange, "战斗模块工作中");
             else if (_questController.CurrentTaskState is { } currentTaskState)
             {
                 using var _ = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudOrange);
@@ -118,9 +119,9 @@ internal sealed partial class ActiveQuestComponent(
         }
         else
         {
-            ImGui.Text("No active quest");
+            ImGui.Text("空闲中");
             if (!isMinimized)
-                ImGui.TextColored(ImGuiColors.DalamudGrey, $"{_questRegistry.Count} quests loaded");
+                ImGui.TextColored(ImGuiColors.DalamudGrey, $"已支持 {_questRegistry.Count} 个任务");
 
             if (ImGuiComponents.IconButton(FontAwesomeIcon.Stop))
             {
@@ -168,7 +169,7 @@ internal sealed partial class ActiveQuestComponent(
                 }
 
                 ImGui.TextUnformatted(
-                    $"Quest: {Shorten(startedQuest.Quest.Info.Name)} ({startedQuest.Quest.Id}) / {startedQuest.Sequence} / {startedQuest.Step}");
+                    $"任务： {Shorten(startedQuest.Quest.Info.Name)} ({startedQuest.Quest.Id}) / {startedQuest.Sequence} / {startedQuest.Step}");
 
                 if (startedQuest.Quest.Root.Disabled)
                 {
@@ -209,7 +210,7 @@ internal sealed partial class ActiveQuestComponent(
                         using var tooltip = ImRaii.Tooltip();
                         if (tooltip)
                         {
-                            ImGui.Text("Stop Conditions:");
+                            ImGui.Text("自动停止条件:");
                             ImGui.Separator();
 
                             // Level stop condition
@@ -218,17 +219,17 @@ internal sealed partial class ActiveQuestComponent(
                                 unsafe
                                 {
                                     int currentLevel = PlayerState.Instance()->CurrentLevel;
-                                    ImGui.BulletText($"Stop at level {_configuration.Stop.TargetLevel}");
+                                    ImGui.BulletText($"当角色等级到达 {_configuration.Stop.TargetLevel}");
                                     if (currentLevel > 0)
                                     {
                                         ImGui.SameLine();
                                         if (currentLevel >= _configuration.Stop.TargetLevel)
                                         {
-                                            ImGui.TextColored(ImGuiColors.ParsedGreen, $"(Current: {currentLevel} - Reached!)");
+                                            ImGui.TextColored(ImGuiColors.ParsedGreen, $"(当前: {currentLevel} - 已完成!)");
                                         }
                                         else
                                         {
-                                            ImGui.TextColored(ImGuiColors.ParsedBlue, $"(Current: {currentLevel})");
+                                            ImGui.TextColored(ImGuiColors.ParsedBlue, $"(当前: {currentLevel})");
                                         }
                                     }
                                 }
@@ -240,7 +241,7 @@ internal sealed partial class ActiveQuestComponent(
                                 if (hasLevelCondition)
                                     ImGui.Spacing();
 
-                                ImGui.BulletText("Stop after completing any of these quests:");
+                                ImGui.BulletText("完成以下任意一个任务时停止:");
                                 ImGui.Indent();
                                 foreach (var questId in _configuration.Stop.QuestsToStopAfter)
                                 {
@@ -308,7 +309,7 @@ internal sealed partial class ActiveQuestComponent(
             {
                 using var _ = ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudYellow);
                 ImGui.TextUnformatted(
-                    $"Next Quest: {Shorten(nextQuest.Quest.Info.Name)} ({nextQuest.Quest.Id}) / {nextQuest.Sequence} / {nextQuest.Step}");
+                    $"下一个任务: {Shorten(nextQuest.Quest.Info.Name)} ({nextQuest.Quest.Id}) / {nextQuest.Sequence} / {nextQuest.Step}");
             }
         }
     }
@@ -340,7 +341,7 @@ internal sealed partial class ActiveQuestComponent(
             {
                 string progressText = MultipleWhitespaceRegex().Replace(questWork.ToString(), " ");
                 ImGui.SetClipboardText(progressText);
-                _chatGui.Print($"Copied '{progressText}' to clipboard");
+                _chatGui.Print($"'{progressText}' 已经复制到剪切板");
             }
 
             if (ImGui.IsItemHovered())
@@ -355,7 +356,7 @@ internal sealed partial class ActiveQuestComponent(
             if (currentQuest.Quest.Info.AlliedSociety != EAlliedSociety.None)
             {
                 ImGui.SameLine();
-                ImGui.Text($"/ {questWork.ClassJob}");
+                ImGui.Text($"/ {questWork.ClassJob.ToFriendlyString()}");
             }
         }
         else if (currentQuest.Quest.Id is QuestId)
@@ -363,9 +364,10 @@ internal sealed partial class ActiveQuestComponent(
             using var disabled = ImRaii.Disabled();
 
             if (currentQuest.Quest.Id == _questController.NextQuest?.Quest.Id)
-                ImGui.TextUnformatted("(Next quest in story line not accepted)");
+                ImGui.TextUnformatted("(故事线中的下一个任务尚未接取)");
             else
-                ImGui.TextUnformatted("(Not accepted)");
+                ImGui.TextUnformatted("(未接取)");
+
         }
 
         return questWork;
@@ -376,7 +378,7 @@ internal sealed partial class ActiveQuestComponent(
     {
         using (ImRaii.Disabled(_questController.IsRunning))
         {
-            if (ImGuiComponents.IconButton(FontAwesomeIcon.Play))
+            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Play, "启动"))
             {
                 // if we haven't accepted this quest, mark it as next quest so that we can optionally use aetherytes to travel
                 if (questProgressInfo == null)
@@ -389,7 +391,7 @@ internal sealed partial class ActiveQuestComponent(
             {
                 ImGui.SameLine();
 
-                if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.StepForward, "Step"))
+                if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.StepForward, "下一步"))
                 {
                     _questController.StartSingleStep("UI step");
                 }
@@ -398,7 +400,7 @@ internal sealed partial class ActiveQuestComponent(
 
         ImGui.SameLine();
 
-        if (ImGuiComponents.IconButton(FontAwesomeIcon.Stop))
+        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Stop,"停止"))
         {
             _movementController.Stop();
             _questController.Stop("UI stop");
@@ -424,14 +426,14 @@ internal sealed partial class ActiveQuestComponent(
             {
                 using (ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.ParsedGreen, colored))
                 {
-                    if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.ArrowCircleRight, "Skip"))
+                    if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.ArrowCircleRight, "跳过步骤"))
                     {
                         _movementController.Stop();
                         _questController.Skip(currentQuest.Quest.Id, currentQuest.Sequence);
                     }
 
                     if (ImGui.IsItemHovered())
-                        ImGui.SetTooltip("Skip the current step of the quest path.");
+                        ImGui.SetTooltip("跳过当前步骤.");
                 }
             }
 

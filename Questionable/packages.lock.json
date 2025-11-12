@@ -53,6 +53,12 @@
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.8"
         }
       },
+      "System.Security.Cryptography.ProtectedData": {
+        "type": "Direct",
+        "requested": "[10.0.1, )",
+        "resolved": "10.0.1",
+        "contentHash": "9SqHNq+lAjZeyPcm69FTQEjr+wsRYvkS3aW8yxoEndVYwDRkCrsP/44QPqpWHwzevoX26rkOoQ6kr7GZWngw2A=="
+      },
       "System.Text.Json": {
         "type": "Direct",
         "requested": "[9.0.3, )",
@@ -118,7 +124,7 @@
       "gatheringpaths": {
         "type": "Project",
         "dependencies": {
-          "Questionable.Model": "[14.197.0, )"
+          "Questionable.Model": "[14.198.0, )"
         }
       },
       "llib": {
@@ -133,15 +139,12 @@
         "type": "Project"
       },
       "questionable.model": {
-        "type": "Project",
-        "dependencies": {
-          "System.Text.Json": "[9.0.3, )"
-        }
+        "type": "Project"
       },
       "questpaths": {
         "type": "Project",
         "dependencies": {
-          "Questionable.Model": "[14.197.0, )"
+          "Questionable.Model": "[14.198.0, )"
         }
       }
     }

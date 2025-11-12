@@ -46,7 +46,7 @@ internal sealed class TaskCreator(
             if (!quest.Root.Disabled)
             {
                 _chatGui.PrintError(
-                    $"Path for quest '{quest.Info.Name}' ({quest.Id}) does not contain sequence {sequenceNumber}, please report this: https://github.com/PunishXIV/Questionable/discussions/20",
+                    $"任务 '{quest.Info.Name}' ({quest.Id}) 的路径中没有找到序列 {sequenceNumber}，请在此报告问题：https://github.com/PunishXIV/Questionable/discussions/20",
                     CommandHandler.MessageTag, CommandHandler.TagColor);
             }
             newTasks = [new WaitAtEnd.WaitNextStepOrSequence()];

@@ -26,7 +26,7 @@ internal static class AetherCurrent
             if (!aetherCurrentData.IsValidAetherCurrent(step.TerritoryId, step.AetherCurrentId.Value))
             {
                 chatGui.PrintError(
-                    $"Aether current with id {step.AetherCurrentId} is referencing an invalid aether current, will skip attunement",
+                    $"ID 为 {step.AetherCurrentId} 的以太水晶位置无效，已跳过共鸣步骤",  
                     CommandHandler.MessageTag, CommandHandler.TagColor);
                 return null;
             }
@@ -38,7 +38,7 @@ internal static class AetherCurrent
     internal sealed record Attune(uint DataId, uint AetherCurrentId) : ITask
     {
         public bool ShouldRedoOnInterrupt() => true;
-        public override string ToString() => $"AttuneAetherCurrent({AetherCurrentId})";
+        public override string ToString() => $"共鸣({AetherCurrentId})";
     }
 
     internal sealed class DoAttune(

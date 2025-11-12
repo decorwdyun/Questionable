@@ -74,7 +74,7 @@ internal static class MoveTo
             //    }
             //}
             yield return new WaitCondition.Task(() => clientState.TerritoryType == step.TerritoryId,
-                $"Wait(territory: {territoryData.GetNameAndId(step.TerritoryId)})");
+                $"等待(区域: {territoryData.GetNameAndId(step.TerritoryId)})");
 
             if (!step.DisableNavmesh)
                 yield return new WaitNavmesh.Task();
