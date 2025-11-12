@@ -23,7 +23,7 @@ namespace Questionable.Controller.Steps.Interactions;
 
 internal static class Interact
 {
-    internal sealed class Factory(AutomatonIpc automatonIpc, Configuration configuration) : ITaskFactory
+    internal sealed class Factory(Configuration configuration) : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
@@ -55,8 +55,7 @@ internal static class Interact
             }
             else if (step.InteractionType == EInteractionType.Snipe)
             {
-                if (!automatonIpc.IsAutoSnipeEnabled)
-                    yield break;
+       
             }
             else if (step.InteractionType == EInteractionType.UnlockTaxiStand)
             {
@@ -105,7 +104,7 @@ internal static class Interact
         public bool ShouldRedoOnInterrupt() => true;
 
         public override string ToString() =>
-            $"Interact{(HasCompletionQuestVariablesFlags ? "*" : "")}({DataId})";
+            $"交互{(HasCompletionQuestVariablesFlags ? "*" : "")}({DataId})";
     }
 
     internal sealed class DoInteract(

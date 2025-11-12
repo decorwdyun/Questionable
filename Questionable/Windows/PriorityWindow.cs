@@ -67,46 +67,45 @@ internal sealed class PriorityWindow : LWindow
 
     public override void DrawContent()
     {
-
-        if (ImGui.CollapsingHeader("Explanation"))
+        if (ImGui.CollapsingHeader("说明"))
         {
             ImGui.TextWrapped(
-                "Questionable will generally try to do:");
-            ImGui.BulletText("Priority quests added below, in order");
-            ImGui.BulletText("'Priority' quests: class quests, ARR primals, ARR raids");
+                "Questionable 一般会优先执行以下任务：");
+            ImGui.BulletText("下方添加的优先任务，按顺序执行");
+            ImGui.BulletText("“插件内置的优先任务”包括：职业任务、2.0 原版蛮神任务、副本任务");
             ImGui.BulletText(
-                "Supported quests in your 'To-Do list'\n(quests from your Quest Journal that are always on-screen)");
-            ImGui.BulletText("MSQ quest (if available, unless it is marked as 'ignored'\nin your Journal)");
+                "你的“待办列表”中的已支持任务\n（也就是游戏的任务日志中设置为始终显示在屏幕上的任务）");
+            ImGui.BulletText("主线任务（除非你在任务日志中将其标记为“忽略”）");
             ImGui.TextWrapped(
-                "If you don't have any active MSQ quest and there is no Priority Quest added here, it will always try to pick up the next quest in the MSQ first.");
+                "如果当前没有进行中的主线任务，并且这里也没有添加任何优先任务，插件将默认优先去接取下一条主线任务。");
         }
         ImGui.Separator();
         ImGui.Spacing();
-        ImGui.Text("Quests to do first:");
+        ImGui.Text("要优先做的任务：");
         _questSelector.DrawSelection();
         DrawQuestList();
 
         List<ElementId> clipboardItems = ParseClipboardItems();
         ImGui.BeginDisabled(clipboardItems.Count == 0);
-        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Download, "Import from Clipboard"))
+        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Download, "从剪贴板导入"))
             ImportFromClipboard(clipboardItems);
         ImGui.EndDisabled();
         ImGui.SameLine();
         ImGui.BeginDisabled(_questController.ManualPriorityQuests.Count == 0);
-        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Upload, "Export to Clipboard"))
+        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Upload, "导出到剪贴板"))
             ExportToClipboard();
-        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Check, "Remove finished Quests"))
+        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Check, "移除已完成的任务"))
             _questController.ManualPriorityQuests.RemoveAll(q => _questFunctions.IsQuestComplete(q.Id));
         ImGui.SameLine();
 
         using (ImRaii.Disabled(!ImGui.IsKeyDown(ImGuiKey.ModCtrl)))
         {
-            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Trash, "Clear All"))
+            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Trash, "清除"))
                 _questController.ClearQuestPriority();
         }
 
         if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
-            ImGui.SetTooltip("Hold CTRL to enable this button.");
+            ImGui.SetTooltip("按住 CTRL 来启用此按钮.");
 
         ImGui.EndDisabled();
     }

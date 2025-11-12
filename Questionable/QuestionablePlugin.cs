@@ -6,6 +6,7 @@ using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using ECommons;
+using ECommons.DalamudServices;
 using LLib;
 using LLib.Gear;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +25,7 @@ using Questionable.Controller.Utils;
 using Questionable.Data;
 using Questionable.External;
 using Questionable.Functions;
+using Questionable.Tweak;
 using Questionable.Validation;
 using Questionable.Validation.Validators;
 using Questionable.Windows;
@@ -38,7 +40,8 @@ namespace Questionable;
 public sealed class QuestionablePlugin : IDalamudPlugin
 {
     private readonly ServiceProvider? _serviceProvider;
-
+    private readonly IDalamudPluginInterface _pi;
+    
     public QuestionablePlugin(IDalamudPluginInterface pluginInterface,
         IClientState clientState,
         ITargetManager targetManager,
@@ -57,12 +60,51 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         IContextMenu contextMenu,
         IToastGui toastGui,
         IGameInteropProvider gameInteropProvider,
-        IAetheryteList aetheryteList)
+        IAetheryteList aetheryteList,
+        INotificationManager notificationManager)
     {
         ArgumentNullException.ThrowIfNull(pluginInterface);
         ArgumentNullException.ThrowIfNull(chatGui);
         ECommonsMain.Init(pluginInterface, this, Module.DalamudReflector);
-
+        
+        ArgumentNullException.ThrowIfNull(notificationManager);
+        _pi = pluginInterface;
+#if !DEBUG
+        bool RepoCheck()
+        {
+            var sourceRepository = _pi.SourceRepository;
+            return sourceRepository == "https://gp.xuolu.com/love.json" || sourceRepository.Contains("decorwdyun/DalamudPlugins", StringComparison.OrdinalIgnoreCase);
+        }
+        if ((_pi.IsDev || !RepoCheck()))
+        {
+            toastGui.ShowError("请看右下角提示，插件禁止本地加载，\n" +
+                               "请看右下角提示，插件禁止本地加载，\n" +
+                               "请看右下角提示，插件禁止本地加载，\n" +
+                               "请看右下角提示，插件禁止本地加载，\n" +
+                               "请看右下角提示，插件禁止本地加载，\n" +
+                               "请看右下角提示，插件禁止本地加载，\n" +
+                               "请看右下角提示，插件禁止本地加载，\n" +
+                               "请看右下角提示，插件禁止本地加载，\n" +
+                               "请看右下角提示，插件禁止本地加载，\n" +
+                               "请看右下角提示，插件禁止本地加载，\n" +
+                               "请看右下角提示，插件禁止本地加载，\n" +
+                               "请看右下角提示，插件禁止本地加载，\n" +
+                               "请看右下角提示，插件禁止本地加载，\n" +
+                               "请看右下角提示，插件禁止本地加载，\n" +
+                               "请看右下角提示，插件禁止本地加载，\n" +
+                               "请看右下角提示，插件禁止本地加载，\n" +
+                               "请看右下角提示，插件禁止本地加载，\n" +
+                               "请看右下角提示，插件禁止本地加载，\n" +
+                               "请看右下角提示，插件禁止本地加载，\n");
+            notificationManager.AddNotification(new Dalamud.Interface.ImGuiNotification.Notification()
+            {
+                Type = Dalamud.Interface.ImGuiNotification.NotificationType.Error,
+                Title = "加载验证",
+                Content = "由于本地加载或安装来源仓库非 decorwdyun 个人仓库，插件禁止加载。",
+            });
+            return;
+        }
+#endif
         try
         {
             ServiceCollection serviceCollection = [];
@@ -106,7 +148,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         }
         catch (Exception)
         {
-            chatGui.PrintError("Unable to load plugin, check /xllog for details", "Questionable");
+            chatGui.PrintError("插件加载失败, 请输入 /xllog 查看日志", "Questionable");
             throw;
         }
     }
@@ -136,7 +178,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<QuestionableIpc>();
         serviceCollection.AddSingleton<TextAdvanceIpc>();
         serviceCollection.AddSingleton<NotificationMasterIpc>();
-        serviceCollection.AddSingleton<AutomatonIpc>();
+        // serviceCollection.AddSingleton<AutomatonIpc>();
         serviceCollection.AddSingleton<AutoDutyIpc>();
         serviceCollection.AddSingleton<BossModIpc>();
         serviceCollection.AddSingleton<PandorasBoxIpc>();
@@ -144,6 +186,9 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<StylistIpc>();
 
         serviceCollection.AddSingleton<GearStatsCalculator>();
+
+        serviceCollection.AddSingleton<DailyRoutinesIpc>();
+        serviceCollection.AddSingleton<AutoSnipeHandler>();
     }
 
     private static void AddTaskFactories(ServiceCollection serviceCollection)
@@ -288,6 +333,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<ICombatModule, BossModModule>();
         serviceCollection.AddSingleton<ICombatModule, WrathComboModule>();
         serviceCollection.AddSingleton<ICombatModule, RotationSolverRebornModule>();
+        serviceCollection.AddSingleton<ICombatModule, AeAssistModule>();
     }
 
     private static void AddWindows(ServiceCollection serviceCollection)
@@ -325,6 +371,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<StopConditionComponent>();
         serviceCollection.AddSingleton<NotificationConfigComponent>();
         serviceCollection.AddSingleton<DebugConfigComponent>();
+        serviceCollection.AddSingleton<AboutConfigComponent>();
     }
 
     private static void AddQuestValidators(ServiceCollection serviceCollection)
@@ -360,10 +407,24 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceProvider.GetRequiredService<DalamudInitializer>();
         serviceProvider.GetRequiredService<TextAdvanceIpc>();
         serviceProvider.GetRequiredService<YesAlreadyIpc>();
+        // serviceProvider.GetRequiredService<AutomatonIpc>();
+        serviceProvider.GetRequiredService<DailyRoutinesIpc>();
+        serviceProvider.GetRequiredService<AutoSnipeHandler>().Enable();
     }
 
     public void Dispose()
     {
+#if !DEBUG
+        bool RepoCheck()
+        {
+            var sourceRepository = _pi.SourceRepository;
+            return sourceRepository == "https://gp.xuolu.com/love.json" || sourceRepository.Contains("decorwdyun/DalamudPlugins", StringComparison.OrdinalIgnoreCase);
+        }
+        if (_pi.IsDev || !RepoCheck())
+        {
+            return;
+        }
+#endif
         _serviceProvider?.Dispose();
         ECommonsMain.Dispose();
     }

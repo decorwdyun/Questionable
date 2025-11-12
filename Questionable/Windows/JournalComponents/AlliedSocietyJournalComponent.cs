@@ -28,7 +28,7 @@ internal sealed class AlliedSocietyJournalComponent(
     UiUtils uiUtils)
 {
     private static readonly string[] RankNames =
-        ["Neutral", "Recognized", "Friendly", "Trusted", "Respected", "Honored", "Sworn", "Allied"];
+        ["中立", "承认", "友好", "信赖", "尊敬", "名誉", "誓约", "血誓"];
 
     private readonly QuestFunctions _questFunctions = questFunctions;
     private readonly QuestController _questController = questController;
@@ -41,19 +41,19 @@ internal sealed class AlliedSocietyJournalComponent(
 
     public void DrawAlliedSocietyQuests()
     {
-        using var tab = ImRaii.TabItem("Allied Societies");
+        using var tab = ImRaii.TabItem("友好部族");
         if (!tab)
             return;
         bool addPending = false;
         #if DEBUG
-        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Plus, "Add"))
+        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Plus, "添加"))
             addPending = true;
         ImGui.SameLine();
         #endif
 
         unsafe {
             uint allowances = QuestManager.Instance()->GetBeastTribeAllowance();
-            ImGui.Text($"Remaining: {allowances}/12");
+            ImGui.Text($"剩余限额: {allowances}/12");
         }
 
         foreach (EAlliedSociety alliedSociety in Enum.GetValues<EAlliedSociety>().Where(x => x != EAlliedSociety.None))
@@ -63,8 +63,8 @@ internal sealed class AlliedSocietyJournalComponent(
                 .ToList();
             //if (quests.Count == 0)
             //    continue;
-
-            string label = $"{alliedSociety}###AlliedSociety{(int)alliedSociety}";
+            
+            string label = $"{alliedSociety.ToFriendlyString()}###AlliedSociety{(int)alliedSociety}";
             bool isOpen;
 
             using (ImRaii.Disabled(quests.Count == 0))

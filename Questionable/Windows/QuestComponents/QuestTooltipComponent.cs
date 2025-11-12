@@ -44,13 +44,13 @@ internal sealed class QuestTooltipComponent(
         if (questInfo is QuestInfo { IsSeasonalEvent: true })
         {
             ImGui.SameLine();
-            ImGui.TextUnformatted("Event");
+            ImGui.TextUnformatted("季节活动");
         }
 
         if (questInfo.IsRepeatable)
         {
             ImGui.SameLine();
-            ImGui.TextUnformatted("Repeatable");
+            ImGui.TextUnformatted("可重复接取");
         }
 
         if (questInfo is QuestInfo { CompletesInstantly: true })
@@ -64,27 +64,27 @@ internal sealed class QuestTooltipComponent(
             if (quest.Root.Disabled)
             {
                 ImGui.SameLine();
-                ImGui.TextColored(ImGuiColors.DalamudRed, "Disabled");
+                ImGui.TextColored(ImGuiColors.DalamudRed, "已禁用");
             }
 
             if (quest.Root.Author.Count == 1)
-                ImGui.Text($"Author: {quest.Root.Author[0]}");
+                ImGui.Text($"作者: {quest.Root.Author[0]}");
             else
-                ImGui.Text($"Authors: {string.Join(", ", quest.Root.Author)}");
+                ImGui.Text($"作者们: {string.Join(", ", quest.Root.Author)}");
 
             if (quest.Root.Comment != null)
-                ImGui.Text($"Comment: {quest.Root.Comment.Split('\n', 2)[0]}");
+                ImGui.Text($"备注: {quest.Root.Comment.Split('\n', 2)[0]}");
 
             if (quest.Root.LastChecked.Date != null)
-                ImGui.Text($"Last checked: {quest.Root.LastChecked.Date} by {quest.Root.LastChecked.Username}");
+                ImGui.Text($"上次测试：{quest.Root.LastChecked.Username} 在 {quest.Root.LastChecked.Date}");
 
             if (questInfo.AlliedSociety != EAlliedSociety.None)
-                ImGui.Text($"Society: {questInfo.AlliedSociety}");
+                ImGui.Text($"友好部族: {questInfo.AlliedSociety.ToFriendlyString()}");
         }
         else
         {
             ImGui.SameLine();
-            ImGui.TextColored(ImGuiColors.DalamudRed, "NoQuestPath");
+            ImGui.TextColored(ImGuiColors.DalamudRed, "暂无任务预设");
         }
 
         DrawQuestUnlocks(questInfo, 0, showItemRewards);
@@ -109,9 +109,9 @@ internal sealed class QuestTooltipComponent(
             if (questInfo.PreviousQuests.Count > 1)
             {
                 if (questInfo.PreviousQuestJoin == EQuestJoin.All)
-                    ImGui.Text("Requires all:");
+                    ImGui.Text("前置任务（所有）:");
                 else if (questInfo.PreviousQuestJoin == EQuestJoin.AtLeastOne)
-                    ImGui.Text("Requires one:");
+                    ImGui.Text("前置任务（其一）:");
             }
 
             foreach (var q in questInfo.PreviousQuests)
@@ -174,12 +174,12 @@ internal sealed class QuestTooltipComponent(
                 if (actualQuestInfo.PreviousInstanceContent.Count > 1)
                 {
                     if (questInfo.PreviousQuestJoin == EQuestJoin.All)
-                        ImGui.Text("Requires all:");
+                        ImGui.Text("前置任务（所有）:");
                     else if (questInfo.PreviousQuestJoin == EQuestJoin.AtLeastOne)
-                        ImGui.Text("Requires one:");
+                        ImGui.Text("前置任务（其一）:");
                 }
                 else
-                    ImGui.Text("Requires:");
+                    ImGui.Text("前置任务:");
 
                 foreach (var instanceId in actualQuestInfo.PreviousInstanceContent)
                 {
@@ -194,20 +194,20 @@ internal sealed class QuestTooltipComponent(
                 ImGui.Separator();
                 string gcName = actualQuestInfo.GrandCompany switch
                 {
-                    GrandCompany.Maelstrom => "Maelstrom",
-                    GrandCompany.TwinAdder => "Twin Adder",
-                    GrandCompany.ImmortalFlames => "Immortal Flames",
-                    _ => "None",
+                    GrandCompany.Maelstrom => "黑涡团",
+                    GrandCompany.TwinAdder => "双蛇党",
+                    GrandCompany.ImmortalFlames => "恒辉队",
+                    _ => "无",
                 };
 
                 GrandCompany currentGrandCompany = _questFunctions.GetGrandCompany();
-                _uiUtils.ChecklistItem($"Grand Company: {gcName}", actualQuestInfo.GrandCompany == currentGrandCompany);
+                _uiUtils.ChecklistItem($"部队阵营: {gcName}", actualQuestInfo.GrandCompany == currentGrandCompany);
             }
 
             if (showItemRewards && actualQuestInfo.ItemRewards.Count > 0)
             {
                 ImGui.Separator();
-                ImGui.Text("Item Rewards:");
+                ImGui.Text("物品奖励:");
                 foreach (var reward in actualQuestInfo.ItemRewards)
                 {
                     ImGui.BulletText(reward.Name);

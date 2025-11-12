@@ -74,11 +74,11 @@ internal sealed class PandorasBoxIpc : IDisposable
             }
             catch (IpcError e)
             {
-                if (!_loggedIpcError)
-                {
-                    _loggedIpcError = true;
-                    _logger.LogWarning(e, "Could not query pandora's box for feature status, probably not installed");
-                }
+                // if (!_loggedIpcError)
+                // {
+                //     _loggedIpcError = true;
+                //     _logger.LogWarning(e, "Could not query pandora's box for feature status, probably not installed");
+                // }
 
                 return false;
             }
@@ -126,7 +126,7 @@ internal sealed class PandorasBoxIpc : IDisposable
             }
             catch (IpcError e)
             {
-                _logger.LogWarning(e, "Failed to pause Pandora's Box feature: {Feature}", feature);
+                // _logger.LogWarning(e, "Failed to pause Pandora's Box feature: {Feature}", feature);
             }
         }
     }
@@ -145,7 +145,7 @@ internal sealed class PandorasBoxIpc : IDisposable
             }
             catch (IpcError e)
             {
-                _logger.LogWarning(e, "Failed to restore Pandora's Box feature: {Feature}", feature);
+                // _logger.LogWarning(e, "Failed to restore Pandora's Box feature: {Feature}", feature);
             }
         }
 

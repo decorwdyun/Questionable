@@ -7,12 +7,12 @@ namespace Questionable.External;
 
 internal sealed class StylistIpc
 {
-    private readonly ILogger<AutomatonIpc> _logger;
+    private readonly ILogger<StylistIpc> _logger;
     private readonly ICallGateSubscriber<bool?, bool?, object?> _updateGearset; //bool? moveItemsFromInventory, bool? shouldEquip
     private          bool _loggedIpcError;
     private readonly ICallGateSubscriber<bool> _isBusy;
 
-    public StylistIpc(IDalamudPluginInterface pluginInterface, ILogger<AutomatonIpc> logger)
+    public StylistIpc(IDalamudPluginInterface pluginInterface, ILogger<StylistIpc> logger)
     {
         _logger = logger;
         _updateGearset = pluginInterface.GetIpcSubscriber<bool?, bool?, object?>("Stylist.UpdateCurrentGearsetEx");

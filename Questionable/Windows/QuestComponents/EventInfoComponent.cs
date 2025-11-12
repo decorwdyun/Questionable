@@ -3,10 +3,15 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Dalamud.Bindings.ImGui;
+using Dalamud.Game.Text.SeStringHandling;
 using Dalamud.Interface;
 using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
+using Dalamud.Plugin;
+using Dalamud.Plugin.Services;
+using FFXIVClientStructs.FFXIV.Client.UI;
 using Humanizer;
 using Humanizer.Localisation;
 using Questionable.Controller;
@@ -17,28 +22,71 @@ using Questionable.Model.Questing;
 
 namespace Questionable.Windows.QuestComponents;
 
-internal sealed class EventInfoComponent(QuestData questData,
-    QuestRegistry questRegistry,
-    QuestFunctions questFunctions,
-    UiUtils uiUtils,
-    QuestController questController,
-    QuestTooltipComponent questTooltipComponent,
-    Configuration configuration)
-{
+internal sealed class EventInfoComponent{
     [SuppressMessage("ReSharper", "CollectionNeverUpdated.Local")]
     private readonly List<EventQuest> _eventQuests =
     [
-        new EventQuest("Limited Time Items", [new UnlockLinkId(568)], DateTime.MaxValue),
-        new EventQuest("Starlight Celebration 2025", [new QuestId(5231)], AtDailyReset(new DateOnly(2026,1,1)))
+        new EventQuest("星芒节 2025 Vol.2", [new QuestId(5231)], AtDailyReset(new DateOnly(2025, 12, 31)))
     ];
 
-    private readonly QuestData _questData = questData;
-    private readonly QuestRegistry _questRegistry = questRegistry;
-    private readonly QuestFunctions _questFunctions = questFunctions;
-    private readonly UiUtils _uiUtils = uiUtils;
-    private readonly QuestController _questController = questController;
-    private readonly QuestTooltipComponent _questTooltipComponent = questTooltipComponent;
-    private readonly Configuration _configuration = configuration;
+    private readonly QuestData _questData;
+    private readonly QuestRegistry _questRegistry;
+    private readonly QuestFunctions _questFunctions;
+    private readonly UiUtils _uiUtils;
+    private readonly QuestController _questController;
+    private readonly QuestTooltipComponent _questTooltipComponent;
+    private readonly Configuration _configuration;
+    private readonly IDalamudPluginInterface _pluginInterface;
+    private readonly IChatGui _chatGui;
+    private readonly IClientState _clientState;
+
+    public EventInfoComponent(QuestData questData,
+        QuestRegistry questRegistry,
+        QuestFunctions questFunctions,
+        UiUtils uiUtils,
+        QuestController questController,
+        QuestTooltipComponent questTooltipComponent,
+        Configuration configuration,
+        IDalamudPluginInterface pluginInterface,
+        IClientState clientState,
+        IChatGui chatGui)
+    {
+        _questData = questData;
+        _questRegistry = questRegistry;
+        _questFunctions = questFunctions;
+        _uiUtils = uiUtils;
+        _questController = questController;
+        _questTooltipComponent = questTooltipComponent;
+        _configuration = configuration;
+        _pluginInterface = pluginInterface;
+        _clientState = clientState;
+        _chatGui = chatGui;
+        _clientState.Login += OnLogin;
+    }
+
+    private void OnLogin()
+    {
+        if (!_configuration.General.ShowIncompleteSeasonalEvents) return;
+        Task.Run(async () =>
+        {
+            await Task.Delay(TimeSpan.FromSeconds(10)).ConfigureAwait(true);
+            var now = DateTime.UtcNow;
+            var incomplete = _eventQuests
+                .Where(e => e.EndsAtUtc != DateTime.MaxValue && e.EndsAtUtc > now && IsIncomplete(e))
+                .ToList();
+
+            foreach (var message in incomplete.Select(eventQuest => new SeStringBuilder()
+                         .AddUiForeground("[Questionable] ",25)
+                         .AddText($"尚未完成的活动任务：")
+                         .AddUiForeground(eventQuest.Name, 45)
+                         .AddText("，剩余时间：")
+                         .AddUiForeground(FormatRemaining(eventQuest.EndsAtUtc), 65)))
+            {
+                _chatGui.Print(message.Build());
+                UIGlobals.PlayChatSoundEffect(3);
+            }
+        });
+    }
 
     [SuppressMessage("ReSharper", "UnusedMember.Local")]
     private static DateTime AtDailyReset(DateOnly date)
@@ -61,12 +109,7 @@ internal sealed class EventInfoComponent(QuestData questData,
     {
         if (eventQuest.EndsAtUtc != DateTime.MaxValue)
         {
-            string time = (eventQuest.EndsAtUtc - DateTime.UtcNow).Humanize(
-                precision: 1,
-                culture: CultureInfo.InvariantCulture,
-                minUnit: TimeUnit.Minute,
-                maxUnit: TimeUnit.Day);
-            ImGui.Text($"{eventQuest.Name} ({time})");
+            ImGui.Text($"限时活动：{eventQuest.Name} ({FormatRemaining(eventQuest.EndsAtUtc)}后结束)");
         }
         else
             ImGui.Text(eventQuest.Name);
@@ -115,7 +158,7 @@ internal sealed class EventInfoComponent(QuestData questData,
             }
         }
     }
-
+    
     private bool IsIncomplete(EventQuest eventQuest)
     {
         if (eventQuest.EndsAtUtc <= DateTime.UtcNow)
@@ -136,4 +179,26 @@ internal sealed class EventInfoComponent(QuestData questData,
                                                          !_questFunctions.IsQuestUnobtainable(elementId);
 
     private sealed record EventQuest(string Name, List<ElementId> QuestIds, DateTime EndsAtUtc);
+
+    public void Dispose()
+    {
+        _clientState.Login -= OnLogin;
+    }
+    
+    private static string FormatRemaining(DateTime targetUtc)
+    {
+        var now = DateTime.UtcNow;
+        var span = targetUtc - now;
+
+        if (span <= TimeSpan.Zero)
+            return "已结束";
+        if (span.TotalDays >= 1)
+            return $"{(int)span.TotalDays}天";
+        if (span.TotalHours >= 1)
+            return $"{(int)span.TotalHours}小时";
+        if (span.TotalMinutes >= 1)
+            return $"{(int)span.TotalMinutes}分钟";
+        
+        return $"{(int)span.TotalSeconds}秒";
+    }
 }

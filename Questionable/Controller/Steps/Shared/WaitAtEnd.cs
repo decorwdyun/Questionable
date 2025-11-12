@@ -43,7 +43,7 @@ internal static class WaitAtEnd
                         return [Next(quest, sequence)];
 
                     var notInCombat =
-                        new WaitCondition.Task(() => !condition[ConditionFlag.InCombat], "Wait(not in combat)");
+                        new WaitCondition.Task(() => !condition[ConditionFlag.InCombat], "等待(脱战)");
                     return
                     [
                         new WaitDelay(),
@@ -85,7 +85,7 @@ internal static class WaitAtEnd
                         // interaction moves to a different territory
                         waitInteraction = new WaitCondition.Task(
                             () => clientState.TerritoryType == step.TargetTerritoryId,
-                            $"Wait(tp to territory: {territoryData.GetNameAndId(step.TargetTerritoryId.Value)})");
+                            $"等待(tp to territory: {territoryData.GetNameAndId(step.TargetTerritoryId.Value)})");
                     }
                     else
                     {
@@ -101,7 +101,7 @@ internal static class WaitAtEnd
                                 //   - waking sands' solar
                                 //   - rising stones' solar + dawn's respite
                                 return (lastPosition - currentPosition.Value).Length() > 2;
-                            }, $"Wait(tp away from {lastPosition.ToString("G", CultureInfo.InvariantCulture)})");
+                            }, $"等待(tp away from {lastPosition.ToString("G", CultureInfo.InvariantCulture)})");
                     }
 
                     return
@@ -152,7 +152,7 @@ internal static class WaitAtEnd
 
         public bool ShouldRedoOnInterrupt() => true;
 
-        public override string ToString() => $"Wait(seconds: {Delay.TotalSeconds})";
+        public override string ToString() => $"等待({Delay.TotalSeconds}秒)";
     }
 
     internal sealed class WaitDelayExecutor : AbstractDelayedTaskExecutor<WaitDelay>
@@ -168,7 +168,7 @@ internal static class WaitAtEnd
 
     internal sealed class WaitNextStepOrSequence : ITask
     {
-        public override string ToString() => "Wait(next step or sequence)";
+        public override string ToString() => "等待(下一步或序列)";
     }
 
     internal sealed class WaitNextStepOrSequenceExecutor : TaskExecutor<WaitNextStepOrSequence>
@@ -226,7 +226,7 @@ internal static class WaitAtEnd
 
     internal sealed record WaitQuestAccepted(ElementId ElementId) : ITask
     {
-        public override string ToString() => $"WaitQuestAccepted({ElementId})";
+        public override string ToString() => $"等待接取任务({ElementId})";
     }
 
     internal sealed class WaitQuestAcceptedExecutor(QuestFunctions questFunctions) : TaskExecutor<WaitQuestAccepted>
@@ -245,7 +245,7 @@ internal static class WaitAtEnd
 
     internal sealed record WaitQuestCompleted(ElementId ElementId) : ITask
     {
-        public override string ToString() => $"WaitQuestComplete({ElementId})";
+        public override string ToString() => $"等待任务完成({ElementId})";
     }
 
     internal sealed class WaitQuestCompletedExecutor(QuestFunctions questFunctions) : TaskExecutor<WaitQuestCompleted>
@@ -262,7 +262,7 @@ internal static class WaitAtEnd
 
     internal sealed record NextStep(ElementId ElementId, int Sequence) : ILastTask
     {
-        public override string ToString() => "NextStep";
+        public override string ToString() => "下一步";
     }
 
     internal sealed class NextStepExecutor : TaskExecutor<NextStep>
