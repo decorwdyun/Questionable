@@ -4,7 +4,7 @@
     "Kiarra",
     "alydev"
   ],
-  "Comment": "vnavmesh v0.5.5.0",
+  "Comment": "你可能需要 vnavmesh v0.5.5.0 以上",
   "QuestSequence": [
     {
       "Sequence": 0,

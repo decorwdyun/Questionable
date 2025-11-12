@@ -36,7 +36,7 @@ internal sealed class QuestJournalUtils
 
         using (ImRaii.Disabled(quest == null))
         {
-            if (ImGui.MenuItem("Add to Priority Quests") && quest != null)
+            if (ImGui.MenuItem("添加到优先列表") && quest != null)
             {
                 _questController.AddQuestPriority(quest.Id);
             }
@@ -44,17 +44,17 @@ internal sealed class QuestJournalUtils
 
         using (ImRaii.Disabled(!_questFunctions.IsReadyToAcceptQuest(questInfo.QuestId)))
         {
-            if (ImGui.MenuItem("Start as next quest"))
+            if (ImGui.MenuItem("启动任务"))
             {
                 _questController.SetNextQuest(quest);
                 _questController.Start(label);
             }
         }
-
+        
         bool openInQuestMap = _commandManager.Commands.ContainsKey("/questinfo");
         using (ImRaii.Disabled(!(questInfo.QuestId is QuestId) || !openInQuestMap))
         {
-            if (ImGui.MenuItem("View in Quest Map"))
+            if (ImGui.MenuItem("在 Quest Map 中打开"))
             {
                 _commandManager.ProcessCommand($"/questinfo {questInfo.QuestId}");
             }
@@ -63,15 +63,15 @@ internal sealed class QuestJournalUtils
 
     internal static void ShowFilterContextMenu(QuestJournalComponent journalUi)
     {
-        if (ImGuiComponents.IconButtonWithText(Dalamud.Interface.FontAwesomeIcon.Filter, "Filter"))
+        if (ImGuiComponents.IconButtonWithText(Dalamud.Interface.FontAwesomeIcon.Filter, "筛选"))
             ImGui.OpenPopup("##QuestFilters");
 
         using var popup = ImRaii.Popup("##QuestFilters");
         if (!popup)
             return;
 
-        if (ImGui.Checkbox("Show only Available Quests", ref journalUi.Filter.AvailableOnly) ||
-            ImGui.Checkbox("Hide Quests Without Path", ref journalUi.Filter.HideNoPaths))
+        if (ImGui.Checkbox("只显示可接取的任务", ref journalUi.Filter.AvailableOnly) ||
+            ImGui.Checkbox("隐藏尚未支持的任务", ref journalUi.Filter.HideNoPaths))
             journalUi.UpdateFilter();
     }
 
@@ -84,7 +84,7 @@ internal sealed class QuestJournalUtils
         if (!popup)
             return;
 
-        if (ImGui.MenuItem("Add all to Priority Quests"))
+        if (ImGui.MenuItem("全部添加到优先列表"))
         {
             foreach(var quest in quests)
             {
@@ -92,7 +92,7 @@ internal sealed class QuestJournalUtils
             }
         }
 
-        if (ImGui.MenuItem("Remove all from Priority Quests"))
+        if (ImGui.MenuItem("从优先列表清除"))
         {
             foreach(var quest in quests)
             {
