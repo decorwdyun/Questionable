@@ -395,7 +395,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
             if (!_clientState.IsLoggedIn)
             {
                 ResetInternalState();
-                DebugState = "Not logged in";
+                DebugState = "未登录";
                 return;
             }
 
@@ -562,32 +562,32 @@ internal sealed class QuestController : MiniTaskController<QuestController>
 
             if (questToRun == null)
             {
-                DebugState = "No quest active";
-                Stop("No quest active");
+                DebugState = "当前没有可执行的任务";
+                Stop("当前没有可执行的任务");
                 return;
             }
 
             if (_gameFunctions.IsOccupied() && !_gameFunctions.IsOccupiedWithCustomDeliveryNpc(questToRun.Quest))
             {
-                DebugState = "Occupied";
+                DebugState = "玩家繁忙中";
                 return;
             }
 
             if (_movementController.IsPathfinding)
             {
-                DebugState = "Pathfinding is running";
+                DebugState = "正在计算路线";
                 return;
             }
 
             if (_movementController.IsPathRunning)
             {
-                DebugState = "Path is running";
+                DebugState = "正在导航前往目标点";
                 return;
             }
 
             if (DateTime.Now < _safeAnimationEnd)
             {
-                DebugState = "Waiting for Animation";
+                DebugState = "等待动画结束";
                 return;
             }
 
@@ -935,7 +935,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         catch (Exception e)
         {
             _logger.LogError(e, "Failed to create tasks");
-            _chatGui.PrintError("Failed to start next task sequence, please check /xllog for details.", CommandHandler.MessageTag, CommandHandler.TagColor);
+            _chatGui.PrintError("无法启动下一个任务序列, 请使用 /xllog 来获取报错信息.", CommandHandler.MessageTag, CommandHandler.TagColor);
             Stop("Tasks failed to create");
         }
     }
@@ -1167,7 +1167,7 @@ internal sealed class QuestController : MiniTaskController<QuestController>
         catch (Exception e)
         {
             _logger.LogError(e, "Failed to insert quest in priority list");
-            _chatGui.PrintError("Failed to insert quest in priority list, please check /xllog for details.", CommandHandler.MessageTag, CommandHandler.TagColor);
+            _chatGui.PrintError("添加优先任务失败, 请使用 /xllog 来获取报错信息.", CommandHandler.MessageTag, CommandHandler.TagColor);
             return false;
         }
     }
