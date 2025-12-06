@@ -12,7 +12,6 @@ using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
 using Dalamud.Utility;
 using ImGuiNET;
-using Lumina.Excel.Sheets;
 using Questionable.Controller;
 using Questionable.Data;
 using Questionable.External;
@@ -41,27 +40,27 @@ internal sealed class DutyConfigComponent : ConfigComponent
         _questRegistry = questRegistry;
         _autoDutyIpc = autoDutyIpc;
 
-        _contentFinderConditionNames = dataManager.GetExcelSheet<DawnContent>()
-            .Where(x => x is { RowId: > 0, Unknown16: false })
-            .OrderBy(x => x.Unknown15) // SortKey for the support UI
-            .Select(x => x.Content.ValueNullable)
-            .Where(x => x != null)
-            .Select(x => x!.Value)
-            .Select(x => new
-            {
-                Expansion = (EExpansionVersion)x.TerritoryType.Value.ExVersion.RowId,
-                CfcId = x.RowId,
-                Name = territoryData.GetContentFinderCondition(x.RowId)?.Name ?? "?",
-                TerritoryId = x.TerritoryType.RowId,
-                ContentType = x.ContentType.RowId,
-                Level = x.ClassJobLevelRequired,
-                x.SortKey
-            })
-            .GroupBy(x => x.Expansion)
-            .ToDictionary(x => x.Key,
-                x => x
-                    .Select(y => new DutyInfo(y.CfcId, y.TerritoryId, $"{FormatLevel(y.Level)} {y.Name}"))
-                    .ToList());
+        // _contentFinderConditionNames = dataManager.GetExcelSheet<DawnContent>()
+        //     .Where(x => x is { RowId: > 0, Unknown16: false })
+        //     .OrderBy(x => x.Unknown15) // SortKey for the support UI
+        //     .Select(x => x.Content.ValueNullable)
+        //     .Where(x => x.HasValue)
+        //     .Select(x => x!.Value)
+        //     .Select(x => new
+        //     {
+        //         Expansion = (EExpansionVersion)x.TerritoryType.Value.ExVersion.RowId,
+        //         CfcId = x.RowId,
+        //         Name = territoryData.GetContentFinderCondition(x.RowId)?.Name ?? "?",
+        //         TerritoryId = x.TerritoryType.RowId,
+        //         ContentType = x.ContentType.RowId,
+        //         Level = x.ClassJobLevelRequired,
+        //         x.SortKey
+        //     })
+        //     .GroupBy(x => x.Expansion)
+        //     .ToDictionary(x => x.Key,
+        //         x => x
+        //             .Select(y => new DutyInfo(y.CfcId, y.TerritoryId, $"{FormatLevel(y.Level)} {y.Name}"))
+        //             .ToList());
     }
 
     public override void DrawTab()
@@ -97,7 +96,7 @@ internal sealed class DutyConfigComponent : ConfigComponent
             ImGui.Separator();
             ImGui.Text("You can override the settings for each individual dungeon/trial:");
 
-            DrawConfigTable(runInstancedContentWithAutoDuty);
+            // DrawConfigTable(runInstancedContentWithAutoDuty);
 
             DrawClipboardButtons();
             ImGui.SameLine();
