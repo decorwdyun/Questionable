@@ -15,5 +15,5 @@ The cn branch contains the localized version for the Chinese client. If you are 
 
 目前能在繁中服务器工作的版本已在 [5.23.4 (release) ](https://github.com/decorwdyun/Questionable/releases/tag/5.23.4) 提供
 
-也可以使用仓库链接：https://raw.githubusercontent.com/decorwdyun/DalamudPlugins/main/pluginmaster.json
+也可以使用仓库链接：https://raw.githubusercontent.com/decorwdyun/DalamudPlugins/main/pluginmaster-tw.json
 
