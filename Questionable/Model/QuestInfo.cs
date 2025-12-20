@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using ECommons.DalamudServices;
 using LLib.GameData;
+using Lumina.Excel;
 using Lumina.Excel.Sheets;
 using Questionable.Model.Questing;
 using ExcelQuest = Lumina.Excel.Sheets.Quest;
@@ -73,7 +75,11 @@ internal sealed class QuestInfo : IQuestInfo
         AlliedSociety = (EAlliedSociety)quest.BeastTribe.RowId;
         AlliedSocietyQuestGroup = quest.DailyQuestPool;
         AlliedSocietyRank = (int)quest.BeastReputationRank.RowId;
-        ClassJobs = QuestInfoUtils.AsList(quest.ClassJobCategory0.ValueNullable!);
+        // TODO: Restore
+        var classJobCategory0 = new RowRef<ClassJobCategory>(quest.ExcelPage.Module,
+            quest.ExcelPage.ReadUInt8(quest.RowOffset + 0xACB),
+            quest.ExcelPage.Language);
+        ClassJobs = QuestInfoUtils.AsList(classJobCategory0.ValueNullable!);
         IsSeasonalEvent = quest.Festival.RowId != 0;
         NewGamePlusChapter = newGamePlusChapter;
         StartingCity = startingCity;
@@ -87,7 +93,9 @@ internal sealed class QuestInfo : IQuestInfo
             .Where(x => x != null)
             .Cast<ItemReward>()
             .ToList();
-        Expansion = (EExpansionVersion)quest.Expansion.RowId;
+        // TODO: Restore
+        Expansion = (EExpansionVersion)new RowRef<ExVersion>(quest.ExcelPage.Module, quest.ExcelPage.ReadUInt8(quest.RowOffset + 0xACA),
+            quest.ExcelPage.Language).RowId;
     }
 
     private static QuestId ReplaceOldQuestIds(QuestId questId)
