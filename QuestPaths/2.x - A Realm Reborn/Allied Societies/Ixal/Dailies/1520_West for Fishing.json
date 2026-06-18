@@ -1,11 +1,9 @@
 {
   "$schema": "https://qstxiv.github.io/schema/quest-v1.json",
   "Author": "alydev",
-  "Comment": "Buy 99 Moth Pupa from vendor at\nNorth Shroud 28.1, 28.1",
-  "LastChecked": {
-    "Username": "alydev",
-    "Date": "2025-11-06"
-  },
+  "Disabled": true,
+  "Comment": "Quest requires manual intervention due to\nno support for automatic fishing (yet?)\nBuy 99 Moth Pupa from vendor at\nNorth Shroud 28.1, 28.1",
+  "LastChecked":{"Username": "alydev", "Date": "2026-05-28"},
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -52,7 +50,7 @@
         {
           "TerritoryId": 155,
           "InteractionType": "WaitForManualProgress",
-          "Comment": "Catch 3x Snow Smelt using Moth Pupa"
+          "Comment": "Catch 3x Snow Smelt (!!) using Moth Pupa"
         }
       ]
     },

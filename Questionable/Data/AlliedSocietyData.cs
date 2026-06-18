@@ -12,13 +12,15 @@ internal sealed class AlliedSocietyData
     public ReadOnlyDictionary<ushort, AlliedSocietyMountConfiguration> Mounts { get; } =
         new Dictionary<ushort, AlliedSocietyMountConfiguration>
         {
+            { 23, new([1008327, 1005848, 1005860, 1005581], EAetheryteLocation.SouthernThanalanLittleAlaMhigo) }, // amaljaa
+            { 24, new([1052562, 1008332], EAetheryteLocation.EastShroudHawthorneHut) }, // sylphs
             { 66, new([1016093, 1016087], EAetheryteLocation.SeaOfCloudsOkZundu) }, //vanu
             { 79, new([1017031, 1016837, 1016838], EAetheryteLocation.DravanianForelandsAnyxTrine) }, //vath
             { 88, new([1017470, 1017432], EAetheryteLocation.ChurningMistsZenith) }, //moogle
             { 89, new([1017322], EAetheryteLocation.ChurningMistsZenith) }, //moogle
+            { 137, new([1024218], EAetheryteLocation.RubySeaTamamizu) }, //Kojin  
             { 147, new([1024777, 1024912], EAetheryteLocation.FringesPeeringStones) }, //ananta
             { 165, new([1025610], EAetheryteLocation.AzimSteppeDhoroIloh) }, //namazu
-            { 137, new([1024218], EAetheryteLocation.RubySeaTamamizu) }, //Kojin  
             { 210, new([1031811], EAetheryteLocation.IlMhegLydhaLran) }, //Pixie
             { 221, new([1032663], EAetheryteLocation.RaktikaFanow) }, //Qitari Done
             { 227, new([1033715], EAetheryteLocation.LakelandOstallImperative) }, //Dwarf
@@ -27,9 +29,14 @@ internal sealed class AlliedSocietyData
             { 309, new([1044408, 1044403], EAetheryteLocation.MareLamentorumBestwaysBurrow) }, // rabbits
             { 369, new([1051798], EAetheryteLocation.KozamaukaDockPoga) }, //pelu
             { 391, new([1052562], EAetheryteLocation.YakTelMamook) }, //mamook
-            { 24, new([1052562, 1008332], EAetheryteLocation.EastShroudHawthorneHut) }
         }.AsReadOnly();
 
+    public bool IsAlliedSocietyMount(ushort? mountId)
+    {
+        if (mountId is { } && Mounts.TryGetValue(mountId.Value, out AlliedSocietyMountConfiguration? mountConfig) && mountConfig is { })
+            return true;
+        return false;
+    }
     public EAlliedSociety GetCommonAlliedSocietyTurnIn(ElementId elementId)
     {
         if (elementId is QuestId questId)
@@ -38,7 +45,7 @@ internal sealed class AlliedSocietyData
             {
                 >= 1222 and <= 1251 => EAlliedSociety.Amaljaa, //ARR
                 //>= 1494 and <= 1523 => EAlliedSociety.Ixal, // Ixal also has 1566,1567,1568
-                //>= 1566 and <= 1568 => EAlliedSociety.Ixal,  Ixal quests seem designed to be done sequentially and dont craft til 255
+                //>= 1566 and <= 1568 => EAlliedSociety.Ixal, // Ixal quests seem designed to be done sequentially and dont craft til 255
                 >= 1325 and <= 1344 => EAlliedSociety.Kobolds, // Kobolds 1364-1373
                 >= 1364 and <= 1373 => EAlliedSociety.Kobolds,
                 >= 1257 and <= 1286 => EAlliedSociety.Sylphs,
@@ -66,7 +73,12 @@ internal sealed class AlliedSocietyData
 
     public void GetCommonAlliedSocietyNpcs(EAlliedSociety alliedSociety, out uint[] normalNpcs, out uint[] mountNpcs)
     {
-        if (alliedSociety == EAlliedSociety.VanuVanu)
+        if (alliedSociety == EAlliedSociety.Ixal)
+        {
+            normalNpcs = [1008945, 1009218, 1009217, 1009219, 1009220, 1009221];
+            mountNpcs = [];
+        }
+        else if (alliedSociety == EAlliedSociety.VanuVanu)
         {
             normalNpcs = [1016088, 1016091, 1016092];
             mountNpcs = [1016093];

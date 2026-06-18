@@ -4,6 +4,7 @@ using Lumina.Text.ReadOnly;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
+using static Questionable.Utils.LocalizeShortcut;
 namespace Questionable.Validation.Validators;
 
 internal sealed class SayValidator(ExcelFunctions excelFunctions) : IQuestValidator
@@ -12,9 +13,9 @@ internal sealed class SayValidator(ExcelFunctions excelFunctions) : IQuestValida
 
     public IEnumerable<ValidationIssue> Validate(Quest quest)
     {
-        foreach ((QuestSequence Sequence, int StepId, QuestStep Step) data in quest.AllSteps().Where(x => x.Step.InteractionType == EInteractionType.Say))
+        foreach ((QuestSequence Sequence, int StepId, QuestStep Step) in quest.AllSteps().Where(x => x.Step.InteractionType == EInteractionType.Say))
         {
-            ChatMessage? chatMessage = data.Step.ChatMessage;
+            ChatMessage? chatMessage = Step.ChatMessage;
             if (chatMessage == null)
                 continue;
 
@@ -28,11 +29,11 @@ internal sealed class SayValidator(ExcelFunctions excelFunctions) : IQuestValida
                 yield return new()
                 {
                     ElementId = quest.Id,
-                    Sequence = data.Sequence.Sequence,
-                    Step = data.StepId,
+                    Sequence = Sequence.Sequence,
+                    Step = StepId,
                     Type = EIssueType.InvalidChatMessage,
                     Severity = EIssueSeverity.Error,
-                    Description = $"Invalid chat message: {excelString.Value}"
+                    Description = _LF("Invalid chat message: {0}",excelString.Value)
                 };
             }
         }

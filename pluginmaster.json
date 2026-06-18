@@ -1,0 +1,17 @@
+[
+  {
+    "Author": "youdianfengbao (基于 PunishXIV/Questionable)",
+    "Name": "Questionable (国服汉化)",
+    "InternalName": "Questionable",
+    "Punchline": "一个小小的自动任务插件",
+    "Description": "国服汉化版自动任务插件，基于 PunishXIV/Questionable。可在尽可能的情况下自动完成游戏任务。\n所需插件：vnavmesh, TextAdvance, Lifestream",
+    "RepoUrl": "https://github.com/youdianfengbao/Questionable",
+    "AssemblyVersion": "15.301.0.19",
+    "ApplicableVersion": "any",
+    "DalamudApiLevel": "15",
+    "IconUrl": "https://qstxiv.github.io/icons/Questionable.png",
+    "DownloadLinkInstall": "https://github.com/youdianfengbao/Questionable/releases/download/15.301.0.19-cn/latest.zip",
+    "DownloadLinkUpdate": "https://github.com/youdianfengbao/Questionable/releases/download/15.301.0.19-cn/latest.zip"
+  }
+]
+

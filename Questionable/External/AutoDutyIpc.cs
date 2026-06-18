@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps;
 using Questionable.Data;
 using Questionable.Model.Questing;
+using static Questionable.Utils.LocalizeShortcut;
 namespace Questionable.External;
 
 internal sealed class AutoDutyIpc
@@ -21,28 +22,25 @@ internal sealed class AutoDutyIpc
         UnsyncRegular = 2
     }
 
-    private readonly Configuration _configuration = configuration;
     private readonly ICallGateSubscriber<uint, bool> _contentHasPath = pluginInterface.GetIpcSubscriber<uint, bool>("AutoDuty.ContentHasPath");
     private readonly ICallGateSubscriber<bool> _isStopped = pluginInterface.GetIpcSubscriber<bool>("AutoDuty.IsStopped");
-    private readonly ILogger<AutoDutyIpc> _logger = logger;
     private readonly ICallGateSubscriber<uint, int, bool, object> _run = pluginInterface.GetIpcSubscriber<uint, int, bool, object>("AutoDuty.Run");
     private readonly ICallGateSubscriber<string, string, object> _setConfig = pluginInterface.GetIpcSubscriber<string, string, object>("AutoDuty.SetConfig");
     private readonly ICallGateSubscriber<object> _stop = pluginInterface.GetIpcSubscriber<object>("AutoDuty.Stop");
-    private readonly TerritoryData _territoryData = territoryData;
 
     public bool IsConfiguredToRunContent(DutyOptions? dutyOptions)
     {
         if (dutyOptions == null || dutyOptions.ContentFinderConditionId == 0)
             return false;
 
-        if (!_configuration.Duties.RunInstancedContentWithAutoDuty)
+        if (!configuration.Duties.RunInstancedContentWithAutoDuty)
             return false;
 
-        if (_configuration.Duties.BlacklistedDutyCfcIds.Contains(dutyOptions.ContentFinderConditionId))
+        if (configuration.Duties.BlacklistedDutyCfcIds.Contains(dutyOptions.ContentFinderConditionId))
             return false;
 
-        if (_configuration.Duties.WhitelistedDutyCfcIds.Contains(dutyOptions.ContentFinderConditionId) &&
-            _territoryData.TryGetContentFinderCondition(dutyOptions.ContentFinderConditionId, out TerritoryData.ContentFinderConditionData? _))
+        if (configuration.Duties.WhitelistedDutyCfcIds.Contains(dutyOptions.ContentFinderConditionId) &&
+            territoryData.TryGetContentFinderCondition(dutyOptions.ContentFinderConditionId, out TerritoryData.ContentFinderConditionData? _))
         {
             return true;
         }
@@ -52,25 +50,17 @@ internal sealed class AutoDutyIpc
 
     public bool HasPath(uint cfcId)
     {
-        if (!_territoryData.TryGetContentFinderCondition(cfcId, out TerritoryData.ContentFinderConditionData? cfcData))
+        if (!territoryData.TryGetContentFinderCondition(cfcId, out TerritoryData.ContentFinderConditionData? cfcData))
             return false;
 
-        try
-        {
-            return _contentHasPath.InvokeFunc(cfcData.TerritoryId);
-        }
-        catch (IpcError e)
-        {
-            _logger.LogWarning("Unable to query AutoDuty for path in territory {TerritoryType}: {Message}",
-                cfcData.TerritoryId, e.Message);
-            return false;
-        }
+        return IpcInvoke.SafeFunc(() => _contentHasPath.InvokeFunc(cfcData.TerritoryId), false,
+            logger, "Unable to query AutoDuty for path in territory {TerritoryType}", cfcData.TerritoryId);
     }
 
     public void StartInstance(uint cfcId, DutyMode dutyMode)
     {
-        if (!_territoryData.TryGetContentFinderCondition(cfcId, out TerritoryData.ContentFinderConditionData? cfcData))
-            throw new TaskException($"Unknown ContentFinderConditionId {cfcId}");
+        if (!territoryData.TryGetContentFinderCondition(cfcId, out TerritoryData.ContentFinderConditionData? cfcData))
+            throw new TaskException(_LF("Unknown ContentFinderConditionId {0}",cfcId));
 
         try
         {
@@ -82,36 +72,26 @@ internal sealed class AutoDutyIpc
                 var _ => throw new ArgumentOutOfRangeException(nameof(dutyMode), dutyMode, null)
             });
 
-            _run.InvokeAction(cfcData.TerritoryId, 1, !_configuration.Advanced.DisableAutoDutyBareMode);
+            _run.InvokeAction(cfcData.TerritoryId, 1, !configuration.Advanced.DisableAutoDutyBareMode);
         }
         catch (IpcError e)
         {
-            throw new TaskException($"Unable to run content with AutoDuty: {e.Message}", e);
+            throw new TaskException(_LF("Unable to run content with AutoDuty: {0}",e.Message), e);
         }
     }
 
-    public bool IsStopped()
-    {
-        try
-        {
-            return _isStopped.InvokeFunc();
-        }
-        catch (IpcError)
-        {
-            return true;
-        }
-    }
+    public bool IsStopped() => IpcInvoke.SafeFunc(() => _isStopped.InvokeFunc(), true);
 
     public void Stop()
     {
         try
         {
-            _logger.LogInformation("Calling AutoDuty.Stop");
+            logger.LogInformation("Calling AutoDuty.Stop");
             _stop.InvokeAction();
         }
         catch (IpcError e)
         {
-            throw new TaskException($"Unable to stop AutoDuty: {e.Message}", e);
+            throw new TaskException(_LF("Unable to stop AutoDuty: {0}",e.Message), e);
         }
     }
 }

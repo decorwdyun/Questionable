@@ -4,7 +4,6 @@ using System.Linq;
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
-using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
@@ -13,8 +12,10 @@ using Questionable.Controller;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
+using Questionable.Utils;
 using Questionable.Windows.QuestComponents;
 using Questionable.Windows.Utils;
+using static Questionable.Utils.LocalizeShortcut;
 namespace Questionable.Windows.ConfigComponents;
 
 internal sealed class StopConditionComponent : ConfigComponent
@@ -22,10 +23,10 @@ internal sealed class StopConditionComponent : ConfigComponent
     private readonly IClientState _clientState;
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly QuestRegistry _questRegistry;
-    private readonly QuestSelector _questSelector;
+    private readonly QuestSelector _acceptQuestSelector;
+    private readonly QuestSelector _completeQuestSelector;
     private readonly QuestTooltipComponent _questTooltipComponent;
     private readonly UiUtils _uiUtils;
-    //private readonly IPlayerState _playerState;
 
     public StopConditionComponent(
         IDalamudPluginInterface pluginInterface,
@@ -35,35 +36,46 @@ internal sealed class StopConditionComponent : ConfigComponent
         QuestTooltipComponent questTooltipComponent,
         UiUtils uiUtils,
         IClientState clientState,
-        //IPlayerState playerState,
         Configuration configuration)
         : base(pluginInterface, configuration)
     {
         _pluginInterface = pluginInterface;
-        _questSelector = questSelector;
         _questRegistry = questRegistry;
         _questTooltipComponent = questTooltipComponent;
         _uiUtils = uiUtils;
         _clientState = clientState;
-        //_playerState = playerState;
 
-        _questSelector.SuggestionPredicate = quest => configuration.Stop.QuestsToStopAfter.All(x => x != quest.Id);
-        _questSelector.DefaultPredicate = quest => quest.Info.IsMainScenarioQuest && questFunctions.IsQuestAccepted(quest.Id);
-        _questSelector.QuestSelected = quest =>
+        _completeQuestSelector = questSelector;
+        _completeQuestSelector.SuggestionPredicate = quest => configuration.Stop.QuestsToStopAfter.All(x => x != quest.Id);
+        _completeQuestSelector.DefaultPredicate = quest =>
+            quest.Info.IsMainScenarioQuest && questFunctions.IsQuestAccepted(quest.Id);
+        _completeQuestSelector.QuestSelected = quest =>
         {
             configuration.Stop.QuestsToStopAfter.Add(quest.Id);
             Save();
+        };
+
+        _acceptQuestSelector = new QuestSelector(questRegistry)
+        {
+            SuggestionPredicate = quest => configuration.Stop.QuestsToStopWhenAccepted.All(x => x != quest.Id),
+            DefaultPredicate = quest =>
+                    quest.Info.IsMainScenarioQuest && !questFunctions.IsQuestAcceptedOrComplete(quest.Id),
+            QuestSelected = quest =>
+                {
+                    configuration.Stop.QuestsToStopWhenAccepted.Add(quest.Id);
+                    Save();
+                }
         };
     }
 
     public override void DrawTab()
     {
-        using ImRaii.TabItemDisposable tab = ImRaii.TabItem("停止###StopConditionns");
+        using ImRaii.TabItemDisposable tab = ImRaii.TabItem(_L("停止") + "###StopConditionns");
         if (!tab)
             return;
 
         bool enabled = Configuration.Stop.Enabled;
-        if (ImGui.Checkbox("满足以下任一条件时停止 Questionable", ref enabled))
+        if (ImGui.Checkbox(_L("满足以下任一条件时停止 Questionable"), ref enabled))
         {
             Configuration.Stop.Enabled = enabled;
             Save();
@@ -74,10 +86,10 @@ internal sealed class StopConditionComponent : ConfigComponent
         using (ImRaii.Disabled(!enabled))
         {
             // Level stop condition section
-            ImGui.Text("角色等级达到指定等级时停止：");
+            ImGui.Text(_L("角色等级达到指定等级时停止:"));
 
             bool levelToStopAfter = Configuration.Stop.LevelToStopAfter;
-            if (ImGui.Checkbox("启用等级停止条件", ref levelToStopAfter))
+            if (ImGui.Checkbox(_L("启用等级停止条件"), ref levelToStopAfter))
             {
                 Configuration.Stop.LevelToStopAfter = levelToStopAfter;
                 Save();
@@ -87,7 +99,7 @@ internal sealed class StopConditionComponent : ConfigComponent
             {
                 int targetLevel = Configuration.Stop.TargetLevel;
                 ImGui.SetNextItemWidth(100);
-                if (ImGui.InputInt("停止等级", ref targetLevel, 1, 5))
+                if (ImGui.InputInt(_L("停止等级"), ref targetLevel, 1, 5))
                 {
                     Configuration.Stop.TargetLevel = Math.Max(1, Math.Min(100, targetLevel));
                     Save();
@@ -101,54 +113,73 @@ internal sealed class StopConditionComponent : ConfigComponent
                     if (currentLevel > 0)
                     {
                         ImGui.SameLine();
-                        ImGui.TextDisabled($"(当前：{currentLevel})");
+                        ImGui.TextDisabled(_LF("(当前: {0})", currentLevel));
                     }
                 }
             }
 
             ImGui.Separator();
 
-            // Quest completion stop condition section
-            ImGui.Text("完成以下任一任务时停止：");
+            DrawQuestStopSection(
+                _L("完成以下任一任务时停止:"),
+                "完成",
+                _completeQuestSelector,
+                Configuration.Stop.QuestsToStopAfter,
+                () => Configuration.Stop.QuestsToStopAfter.Clear());
 
-            _questSelector.DrawSelection();
 
-            List<ElementId> questsToStopAfter = Configuration.Stop.QuestsToStopAfter;
+            ImGui.Separator();
 
-            // 'Clear All' button if there are quests to clear for fast removal
-            if (questsToStopAfter.Count > 0)
+            DrawQuestStopSection(
+                _L("接受以下任一选定任务时停止:"),
+                "接受",
+                _acceptQuestSelector,
+                Configuration.Stop.QuestsToStopWhenAccepted,
+                () => Configuration.Stop.QuestsToStopWhenAccepted.Clear());
+        }
+    }
+
+    private void DrawQuestStopSection(string label, string sectionId, QuestSelector selector, List<ElementId> quests,
+        Action clearAll)
+    {
+        using (ImRaii.PushId(sectionId))
+        {
+            ImGui.Text(label);
+            selector.DrawSelection();
+
+            if (quests.Count > 0)
             {
                 using (ImRaii.Disabled(!ImGui.IsKeyDown(ImGuiKey.ModCtrl)))
                 {
-                    if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Trash, "清空全部"))
+                    if (ImGuiComponentsLocal.IconButtonWithText(FontAwesomeIcon.Trash, _L("清空全部")))
                     {
-                        Configuration.Stop.QuestsToStopAfter.Clear();
+                        clearAll();
                         Save();
                     }
                 }
 
                 if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
-                    ImGui.SetTooltip("按住 CTRL 启用此按钮。");
+                    ImGui.SetTooltip(_L("按住 CTRL 启用此按钮。"));
 
                 ImGui.Separator();
             }
 
             Quest? itemToRemove = null;
-            for (int i = 0; i < questsToStopAfter.Count; i++)
+            for (int i = 0; i < quests.Count; i++)
             {
-                ElementId questId = questsToStopAfter[i];
+                ElementId questId = quests[i];
 
                 if (!_questRegistry.TryGetQuest(questId, out Quest? quest))
                     continue;
 
                 using (ImRaii.PushId($"Quest{questId}"))
                 {
-                    (Vector4 Color, FontAwesomeIcon Icon, string Status) style = _uiUtils.GetQuestStyle(questId);
+                    (Vector4 Color, FontAwesomeIcon Icon, string Status) = _uiUtils.GetQuestStyle(questId);
                     bool hovered;
                     using (IDisposable _ = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
                     {
                         ImGui.AlignTextToFramePadding();
-                        ImGui.TextColored(style.Color, style.Icon.ToIconString());
+                        ImGui.TextColored(Color, Icon.ToIconString());
                         hovered = ImGui.IsItemHovered();
                     }
 
@@ -168,14 +199,14 @@ internal sealed class StopConditionComponent : ConfigComponent
                                        ImGui.GetStyle().FramePadding.X * 2);
                     }
 
-                    if (ImGuiComponents.IconButton($"##Remove{i}", FontAwesomeIcon.Times))
+                    if (ImGuiComponentsLocal.IconButton($"##Remove{i}", FontAwesomeIcon.Times))
                         itemToRemove = quest;
                 }
             }
 
             if (itemToRemove != null)
             {
-                Configuration.Stop.QuestsToStopAfter.Remove(itemToRemove.Id);
+                quests.Remove(itemToRemove.Id);
                 Save();
             }
         }

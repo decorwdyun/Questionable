@@ -74,7 +74,7 @@ public sealed class AethernetShardConverter() : EnumConverter<EAetheryteLocation
         { EAetheryteLocation.FirmamentFeatherfall, "[Firmament] Featherfall" },
         { EAetheryteLocation.FirmamentHoarfrostHall, "[Firmament] Hoarfrost Hall" },
         { EAetheryteLocation.FirmamentWesternRisensongQuarter, "[Firmament] Western Risensong Quarter" },
-        { EAetheryteLocation.FIrmamentEasternRisensongQuarter, "[Firmament] Eastern Risensong Quarter" },
+        { EAetheryteLocation.FirmamentEasternRisensongQuarter, "[Firmament] Eastern Risensong Quarter" },
 
         { EAetheryteLocation.Idyllshire, "[Idyllshire] Aetheryte Plaza" },
         { EAetheryteLocation.IdyllshireWest, "[Idyllshire] West Idyllshire" },
@@ -156,6 +156,7 @@ public sealed class AethernetShardConverter() : EnumConverter<EAetheryteLocation
         { EAetheryteLocation.TuliyollalIhuykatumu, "[Tuliyollal] Ihuykatumu (Kozama'uka)" },
         { EAetheryteLocation.TuliyollalDirigibleLandingYakTel, "[Tuliyollal] Dirigible Landing (Yak T'el)" },
         { EAetheryteLocation.TuliyollalXakTuralSkygate, "[Tuliyollal] Xak Tural Skygate (Shaaloani)" },
+        { EAetheryteLocation.TuliyollalPhantomVillage, "[Tuliyollal] Phantom Village" },
 
         { EAetheryteLocation.SolutionNine, "[Solution Nine] Aetheryte Plaza" },
         { EAetheryteLocation.SolutionNineInformationCenter, "[Solution Nine] Information Center" },

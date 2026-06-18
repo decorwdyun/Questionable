@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
@@ -10,6 +11,7 @@ using Questionable.Controller.GameUi;
 using Questionable.Data;
 using Questionable.Windows.Common;
 using Questionable.Windows.QuestComponents;
+using static Questionable.Utils.LocalizeShortcut;
 namespace Questionable.Windows;
 
 internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
@@ -49,7 +51,7 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
         IFramework framework,
         InteractionUiController interactionUiController,
         ConfigWindow configWindow)
-        : base($"Questionable v{PluginVersion.ToString(4)}###Questionable",
+        : base((configuration.Advanced.Debug ? "(DEBUG) " : "") + $"QST v{PluginVersion.ToString(4)}###Questionable",
             ImGuiWindowFlags.AlwaysAutoResize)
     {
         _pluginInterface = pluginInterface;
@@ -99,10 +101,25 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
             ShowTooltip = () =>
             {
                 ImGui.BeginTooltip();
-                ImGui.Text("打开设置");
+                ImGui.Text(_L("打开设置"));
                 ImGui.EndTooltip();
             }
         });
+
+        if (!_configuration.General.HideSponsorButton)
+            TitleBarButtons.Add(new()
+            {
+                Icon = FontAwesomeIcon.Heart,
+                IconOffset = new(1.5f, 1),
+                Click = _ => Process.Start(new ProcessStartInfo { FileName = "https://github.com/sponsors/alydevs", UseShellExecute = true }),
+                Priority = int.MinValue,
+                ShowTooltip = () =>
+                {
+                    ImGui.BeginTooltip();
+                    ImGui.Text(_L("Sponsor QST development"));
+                    ImGui.EndTooltip();
+                }
+            });
 
         _activeQuestComponent.Reload += OnReload;
         _quickAccessButtonsComponent.Reload += OnReload;
@@ -157,8 +174,8 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
             string notice = "";
             if (notice.Length != 0)
             {
-                ImGui.TextColored(ImGuiColors.DPSRed, "Notice");
-                ImGui.TextWrapped(notice);
+                ImGui.TextColored(ImGuiColors.DPSRed, _L("Notice"));
+                ImGui.TextWrapped(_L(notice));
                 ImGui.Separator();
             }
 
@@ -184,10 +201,9 @@ internal sealed class QuestWindow : LWindow, IPersistableWindowConfig
                     ImGui.Separator();
                 }
 
-                _creationUtilsComponent.Draw();
-                ImGui.Separator();
-
                 _quickAccessButtonsComponent.Draw();
+                ImGui.Separator();
+                _creationUtilsComponent.Draw();
                 _remainingTasksComponent.Draw();
             }
         }

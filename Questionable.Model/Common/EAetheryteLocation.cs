@@ -102,7 +102,7 @@ public enum EAetheryteLocation
     FirmamentFeatherfall = 2011386,
     FirmamentHoarfrostHall = 2011387,
     FirmamentWesternRisensongQuarter = 2011388,
-    FIrmamentEasternRisensongQuarter = 2011389,
+    FirmamentEasternRisensongQuarter = 2011389,
 
     Idyllshire = 75,
     IdyllshireWest = 90,
@@ -241,6 +241,7 @@ public enum EAetheryteLocation
     TuliyollalIhuykatumu = 227,
     TuliyollalDirigibleLandingYakTel = 228,
     TuliyollalXakTuralSkygate = 229,
+    TuliyollalPhantomVillage = 239,
 
     SolutionNine = 217,
     SolutionNineInformationCenter = 230,
@@ -336,7 +337,7 @@ public static class EAetheryteLocationExtensions
         EAetheryteLocation.FirmamentFeatherfall,
         EAetheryteLocation.FirmamentHoarfrostHall,
         EAetheryteLocation.FirmamentWesternRisensongQuarter,
-        EAetheryteLocation.FIrmamentEasternRisensongQuarter,
+        EAetheryteLocation.FirmamentEasternRisensongQuarter,
 
         EAetheryteLocation.IdyllshireWest,
         EAetheryteLocation.IdyllshirePrologueGate,
@@ -409,6 +410,7 @@ public static class EAetheryteLocationExtensions
         EAetheryteLocation.TuliyollalIhuykatumu,
         EAetheryteLocation.TuliyollalDirigibleLandingYakTel,
         EAetheryteLocation.TuliyollalXakTuralSkygate,
+        EAetheryteLocation.TuliyollalPhantomVillage,
 
         EAetheryteLocation.SolutionNineInformationCenter,
         EAetheryteLocation.SolutionNineTrueVue,
@@ -430,7 +432,7 @@ public static class EAetheryteLocationExtensions
             or EAetheryteLocation.FirmamentFeatherfall
             or EAetheryteLocation.FirmamentHoarfrostHall
             or EAetheryteLocation.FirmamentWesternRisensongQuarter
-            or EAetheryteLocation.FIrmamentEasternRisensongQuarter;
+            or EAetheryteLocation.FirmamentEasternRisensongQuarter;
 
     public static string ToFriendlyString(this EAetheryteLocation eAetheryteLocation)
     {
@@ -673,7 +675,7 @@ public static class EAetheryteLocationExtensions
             EAetheryteLocation.FirmamentFeatherfall => "落羽商业区",
             EAetheryteLocation.FirmamentHoarfrostHall => "白霜官舍",
             EAetheryteLocation.FirmamentWesternRisensongQuarter => "西升歌文化区",
-            EAetheryteLocation.FIrmamentEasternRisensongQuarter => "东升歌文化区",
+            EAetheryteLocation.FirmamentEasternRisensongQuarter => "东升歌文化区",
             
             _ => eAetheryteLocation.ToString(),
         };

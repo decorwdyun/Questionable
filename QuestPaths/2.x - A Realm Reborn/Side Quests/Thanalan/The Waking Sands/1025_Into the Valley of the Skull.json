@@ -12,13 +12,17 @@
           "TargetTerritoryId": 140,
           "SkipConditions": {
             "StepIf": {
-              "InTerritory": [
-                140,
-                212
-              ],
-              "Item": {
-                "NotInInventory": true
-              }
+              "NearPosition": {
+                "Position": {
+                  "X": -516.35004,
+                  "Y": 14.956879,
+                  "Z": -370.47382
+                },
+                "TerritoryId": 140,
+                "MaximumDistance": 300
+              },
+              "InTerritory": [212],
+              "Item": { "NotInInventory": true }
             }
           }
         },
@@ -30,21 +34,9 @@
           },
           "TerritoryId": 140,
           "InteractionType": "WalkTo",
-          "AetheryteShortcut": "Western Thanalan - Horizon",
           "Fly": true,
           "$": "Avoid walking around Waking Sands table",
-          "SkipConditions": {
-            "AetheryteShortcutIf": {
-              "InTerritory": [
-                212
-              ]
-            },
-            "StepIf": {
-              "InTerritory": [
-                212
-              ]
-            }
-          }
+          "SkipConditions": { "StepIf": { "InTerritory": [212] } }
         },
         {
           "DataId": 2001711,
@@ -56,13 +48,7 @@
           "TerritoryId": 140,
           "InteractionType": "Interact",
           "TargetTerritoryId": 212,
-          "SkipConditions": {
-            "StepIf": {
-              "InTerritory": [
-                212
-              ]
-            }
-          }
+          "SkipConditions": { "StepIf": { "InTerritory": [212] } }
         },
         {
           "DataId": 1007488,
@@ -72,6 +58,7 @@
             "Z": -28.000305
           },
           "TerritoryId": 212,
+          "TargetTerritoryId": 212,
           "InteractionType": "AcceptQuest"
         }
       ]

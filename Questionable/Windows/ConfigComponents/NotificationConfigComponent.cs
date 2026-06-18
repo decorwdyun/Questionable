@@ -6,22 +6,25 @@ using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin;
 using Dalamud.Utility;
+using Questionable.External;
+using static Questionable.Utils.LocalizeShortcut;
 namespace Questionable.Windows.ConfigComponents;
 
 internal sealed class NotificationConfigComponent
 (
     IDalamudPluginInterface pluginInterface,
-    Configuration configuration) : ConfigComponent(pluginInterface, configuration)
+    Configuration configuration,
+    NotificationMasterIpc notificationMasterIpc) : ConfigComponent(pluginInterface, configuration)
 {
 
     public override void DrawTab()
     {
-        using ImRaii.TabItemDisposable tab = ImRaii.TabItem("通知###Notifications");
+        using ImRaii.TabItemDisposable tab = ImRaii.TabItem(_L("通知") + "###Notifications");
         if (!tab)
             return;
 
         bool enabled = Configuration.Notifications.Enabled;
-        if (ImGui.Checkbox("需要手动操作时启用通知", ref enabled))
+        if (ImGui.Checkbox(_L("需要手动操作时启用通知"), ref enabled))
         {
             Configuration.Notifications.Enabled = enabled;
             Save();
@@ -34,31 +37,29 @@ internal sealed class NotificationConfigComponent
                 XivChatType[] xivChatTypes = Enum.GetValues<XivChatType>()
                     .Where(x => x != XivChatType.StandardEmote)
                     .ToArray();
-                int selectedChatType = Array.IndexOf(xivChatTypes, Configuration.Notifications.ChatType);
                 string[] chatTypeNames = xivChatTypes
                     .Select(t => t.GetAttribute<XivChatTypeInfoAttribute>()?.FancyName ?? t.ToString())
                     .ToArray();
-                if (ImGui.Combo("聊天频道", ref selectedChatType, chatTypeNames,
-                    chatTypeNames.Length))
-                {
-                    Configuration.Notifications.ChatType = xivChatTypes[selectedChatType];
-                    Save();
-                }
+                DrawComboOption(_L("聊天频道"), xivChatTypes, chatTypeNames,
+                    () => Configuration.Notifications.ChatType,
+                    v => Configuration.Notifications.ChatType = v);
+
 
                 ImGui.Separator();
-                ImGui.Text("桌面通知");
-                ImGuiComponents.HelpMarker("桌面托盘和任务栏通知目前不可用。");
-                using (ImRaii.Disabled())
+                ImGui.Text(_L("桌面通知"));
+                ImGui.SameLine();
+                ImGuiComponents.HelpMarker(_L("需要安装 NotificationMaster 插件。"));
+                using (ImRaii.Disabled(!notificationMasterIpc.Enabled))
                 {
                     bool showTrayMessage = Configuration.Notifications.ShowTrayMessage;
-                    if (ImGui.Checkbox("显示托盘通知", ref showTrayMessage))
+                    if (ImGui.Checkbox(_L("显示托盘通知"), ref showTrayMessage))
                     {
                         Configuration.Notifications.ShowTrayMessage = showTrayMessage;
                         Save();
                     }
 
                     bool flashTaskbar = Configuration.Notifications.FlashTaskbar;
-                    if (ImGui.Checkbox("闪烁任务栏图标", ref flashTaskbar))
+                    if (ImGui.Checkbox(_L("闪烁任务栏图标"), ref flashTaskbar))
                     {
                         Configuration.Notifications.FlashTaskbar = flashTaskbar;
                         Save();

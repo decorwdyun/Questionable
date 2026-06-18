@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
@@ -14,7 +14,6 @@ internal sealed class NavmeshIpc(IDalamudPluginInterface pluginInterface, ILogge
 {
     private readonly ICallGateSubscriber<float> _buildProgress = pluginInterface.GetIpcSubscriber<float>("vnavmesh.Nav.BuildProgress");
     private readonly ICallGateSubscriber<bool> _isNavReady = pluginInterface.GetIpcSubscriber<bool>("vnavmesh.Nav.IsReady");
-    private readonly ILogger<NavmeshIpc> _logger = logger;
     private readonly ICallGateSubscriber<Vector3, Vector3, bool, CancellationToken, Task<List<Vector3>>> _navPathfind =
         pluginInterface.GetIpcSubscriber<Vector3, Vector3, bool, CancellationToken, Task<List<Vector3>>>(
             "vnavmesh.Nav.PathfindCancelable");
@@ -32,83 +31,38 @@ internal sealed class NavmeshIpc(IDalamudPluginInterface pluginInterface, ILogge
     private readonly ICallGateSubscriber<bool> _simpleMovePathfindInProgress =
         pluginInterface.GetIpcSubscriber<bool>("vnavmesh.SimpleMove.PathfindInProgress");
 
-    public bool IsReady
+    public Version? Version
     {
         get
         {
-            try
-            {
-                return _isNavReady.InvokeFunc();
-            }
-            catch (IpcError)
-            {
-                return false;
-            }
+            IExposedPlugin? plugin = pluginInterface.InstalledPlugins.FirstOrDefault(x =>
+                x.InternalName == "vnavmesh" && x.IsLoaded);
+            return plugin?.Version ?? null;
         }
     }
 
-    public bool IsPathRunning
-    {
-        get
-        {
-            try
-            {
-                return _pathIsRunning.InvokeFunc();
-            }
-            catch (IpcError)
-            {
-                return false;
-            }
-        }
-    }
+    public bool IsReady => IpcInvoke.SafeFunc(() => _isNavReady.InvokeFunc(), false);
 
-    public bool IsSimpleMovePathfindInProgress
-    {
-        get
-        {
-            try
-            {
-                return _simpleMovePathfindInProgress.InvokeFunc();
-            }
-            catch (IpcError)
-            {
-                return false;
-            }
-        }
-    }
+    public bool IsPathRunning => IpcInvoke.SafeFunc(() => _pathIsRunning.InvokeFunc(), false);
 
-    public void Stop()
-    {
-        try
-        {
-            _pathStop.InvokeAction();
-        }
-        catch (IpcError e)
-        {
-            _logger.LogWarning(e, "Could not stop navigating via navmesh");
-        }
-    }
+    public bool IsSimpleMovePathfindInProgress =>
+        IpcInvoke.SafeFunc(() => _simpleMovePathfindInProgress.InvokeFunc(), false);
+
+    public void Stop() =>
+        IpcInvoke.SafeAction(() => _pathStop.InvokeAction(), logger,
+            "Could not stop navigating via navmesh {Version}", Version);
 
     public Task<List<Vector3>> Pathfind(Vector3 localPlayerPosition, Vector3 targetPosition, bool fly,
         CancellationToken cancellationToken)
     {
         try
         {
-            // IExposedPlugin? plugin = pluginInterface.InstalledPlugins.FirstOrDefault(x =>
-                // x.InternalName == "vnavmesh" && x.IsLoaded);
-            // if (plugin != null && plugin.Version < new Version(1, 2, 3, 2))
-            //     throw new IpcValueNullError("vnavmesh", typeof(Version), 0);
             _pathSetTolerance.InvokeAction(0.25f);
             return _navPathfind.InvokeFunc(localPlayerPosition, targetPosition, fly, cancellationToken);
         }
         catch (IpcNotReadyError e)
         {
-            _logger.LogWarning(e, "Could not pathfind via navmesh");
-            return Task.FromException<List<Vector3>>(e);
-        }
-        catch (IpcValueNullError e)
-        {
-            _logger.LogWarning(e, "Unsupported version of vnavmesh");
+            logger.LogWarning(e, "Could not pathfind via navmesh {Version}", Version);
             return Task.FromException<List<Vector3>>(e);
         }
     }
@@ -116,88 +70,40 @@ internal sealed class NavmeshIpc(IDalamudPluginInterface pluginInterface, ILogge
     public void MoveTo(List<Vector3> position, bool fly)
     {
         Stop();
-
-        try
-        {
-            _pathMoveTo.InvokeAction(position, fly);
-        }
-        catch (IpcError e)
-        {
-            _logger.LogWarning(e, "Could not move via navmesh");
-        }
+        IpcInvoke.SafeAction(() => _pathMoveTo.InvokeAction(position, fly), logger,
+            "Could not move via navmesh {Version}", Version);
     }
 
-    public Vector3? GetPointOnFloor(Vector3 position, bool unlandable)
-    {
-        try
-        {
-            return _queryPointOnFloor.InvokeFunc(position, unlandable, 0.2f);
-        }
-        catch (IpcError)
-        {
-            return null;
-        }
-    }
+    public Vector3? GetPointOnFloor(Vector3 position, bool unlandable) =>
+        IpcInvoke.SafeFunc(() => _queryPointOnFloor.InvokeFunc(position, unlandable, 0.2f), null);
 
     public bool SimplePathfindAndMoveTo(Vector3 destination, bool fly)
     {
         if (!IsReady)
             return false;
-        try
-        {
-            return _simpleMovePathfindAndMoveTo.InvokeFunc(destination, fly);
-        }
-        catch (IpcError exception)
-        {
-            _logger.LogWarning(exception, "Could not SimplePathfindAndMoveTo");
-            return false;
-        }
+        return IpcInvoke.SafeFunc(() => _simpleMovePathfindAndMoveTo.InvokeFunc(destination, fly), false,
+            logger, "Could not SimplePathfindAndMoveTo {Version}", Version);
     }
 
     public bool SimplePathfindAndMoveCloseTo(Vector3 destination, bool fly, float range)
     {
         if (!IsReady)
             return false;
-        try
-        {
-            return _simpleMovePathfindAndMoveCloseTo.InvokeFunc(destination, fly, range);
-        }
-        catch (IpcError exception)
-        {
-            _logger.LogWarning(exception, "Could not SimplePathfindAndMoveCloseTo");
-            return false;
-        }
+        return IpcInvoke.SafeFunc(() => _simpleMovePathfindAndMoveCloseTo.InvokeFunc(destination, fly, range), false,
+            logger, "Could not SimplePathfindAndMoveCloseTo {Version}", Version);
     }
 
     public List<Vector3> GetWaypoints()
     {
-        if (IsPathRunning)
-        {
-            try
-            {
-                return _pathListWaypoints.InvokeFunc();
-            }
-            catch (IpcError)
-            {
-                return [];
-            }
-        }
-        else
+        if (!IsPathRunning)
             return [];
+        return IpcInvoke.SafeFunc<List<Vector3>>(() => _pathListWaypoints.InvokeFunc(), []);
     }
 
-    public int GetBuildProgress()
-    {
-        try
+    public int GetBuildProgress() =>
+        IpcInvoke.SafeFunc(() =>
         {
             float progress = _buildProgress.InvokeFunc();
-            if (progress < 0)
-                return 100;
-            return (int)(progress * 100);
-        }
-        catch (IpcError)
-        {
-            return 0;
-        }
-    }
+            return progress < 0 ? 100 : (int)(progress * 100);
+        }, 0);
 }

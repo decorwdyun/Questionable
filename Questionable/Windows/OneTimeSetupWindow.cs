@@ -1,12 +1,13 @@
 ﻿using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
-using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin;
 using Microsoft.Extensions.Logging;
+using Questionable.Utils;
 using Questionable.Windows.Common;
 using Questionable.Windows.ConfigComponents;
+using static Questionable.Utils.LocalizeShortcut;
 namespace Questionable.Windows;
 
 internal sealed class OneTimeSetupWindow : LWindow
@@ -21,7 +22,7 @@ internal sealed class OneTimeSetupWindow : LWindow
         Configuration configuration,
         IDalamudPluginInterface pluginInterface,
         ILogger<OneTimeSetupWindow> logger)
-        : base("Questionable Setup###QuestionableOneTimeSetup",
+        : base(_L("Questionable Setup") + "###QuestionableOneTimeSetup",
             ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.AlwaysAutoResize | ImGuiWindowFlags.NoSavedSettings, true)
     {
         _pluginConfigComponent = pluginConfigComponent;
@@ -49,7 +50,7 @@ internal sealed class OneTimeSetupWindow : LWindow
         {
             using (ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.ParsedGreen))
             {
-                if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Check, "Finish Setup"))
+                if (ImGuiComponentsLocal.IconButtonWithText(FontAwesomeIcon.Check, _L("Finish Setup")))
                 {
                     _logger.LogInformation("Marking setup as complete");
                     _configuration.MarkPluginSetupComplete();
@@ -64,14 +65,14 @@ internal sealed class OneTimeSetupWindow : LWindow
             {
                 using (ImRaii.PushColor(ImGuiCol.Text, ImGuiColors.DalamudRed))
                 {
-                    ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Check, "Missing required plugins");
+                    ImGuiComponentsLocal.IconButtonWithText(FontAwesomeIcon.Check, _L("Missing required plugins"));
                 }
             }
         }
 
         ImGui.SameLine();
 
-        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Times, "Close window & don't enable Questionable"))
+        if (ImGuiComponentsLocal.IconButtonWithText(FontAwesomeIcon.Times, _L("Close window & don't enable Questionable")))
         {
             _logger.LogWarning("Closing window without all required plugins installed");
             IsOpen = false;

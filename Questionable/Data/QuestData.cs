@@ -10,6 +10,7 @@ using Lumina.Excel.Sheets;
 using Questionable.Model;
 using Questionable.Model.Questing;
 using Quest = Lumina.Excel.Sheets.Quest;
+using static Questionable.Utils.LocalizeShortcut;
 
 namespace Questionable.Data;
 
@@ -140,13 +141,16 @@ internal sealed class QuestData
                         return [new(x, 0, classJobUtils)];
                 }));
 
-        quests.Add(new UnlockLinkQuestInfo(new(506), "Patch 7.2 Fantasia", 1052475));
-        quests.Add(new UnlockLinkQuestInfo(new(568), "Patch 7.3 Fantasia", 1052475));
+        quests.Add(new UnlockLinkQuestInfo(new(506), _L("Patch 7.2 Fantasia"), 1052475));
+        quests.Add(new UnlockLinkQuestInfo(new(568), _L("Patch 7.3 Fantasia"), 1052475));
 
         _quests = quests.ToDictionary(x => x.QuestId, x => x);
 
         // workaround because the game doesn't require completion of the CT questline through normal means
         AddPreviousQuest(new(425), new(495));
+
+        // white wolf gate
+        AddPreviousQuest(new(803), new(802));
 
         // "In order to undertake this quest" [...]
         const int mountaintopDiplomacy = 1619;
@@ -217,6 +221,7 @@ internal sealed class QuestData
         AddPreviousQuest(new(4966), new(inscrutableTastes));
         AddPreviousQuest(new(5000), new(4908));
         AddPreviousQuest(new(5001), new(4912));
+        AddPreviousQuest(new(5443), new(434));
 
         // "In order to proceed with this quest" [...]
         /* my little chocobo
@@ -284,7 +289,7 @@ internal sealed class QuestData
             .FirstOrDefault() ?? new QuestId(0);
         RedeemableItems = quests.Where(x => x is QuestInfo)
             .Cast<QuestInfo>()
-            .SelectMany(x => x.ItemRewards)
+            .SelectMany(x => x.ItemRewards.Union(x.TripleTriadCardRewards))
             .ToImmutableHashSet();
     }
 
@@ -312,7 +317,7 @@ internal sealed class QuestData
     }
 
     public IQuestInfo GetQuestInfo(ElementId elementId) => _quests[elementId] ?? throw new ArgumentOutOfRangeException(nameof(elementId));
-
+    
     public bool TryGetQuestInfo(ElementId elementId, [NotNullWhen(true)] out IQuestInfo? questInfo) => _quests.TryGetValue(elementId, out questInfo);
 
     public List<IQuestInfo> GetAllByIssuerDataId(uint targetId)

@@ -10,10 +10,14 @@ using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using Lumina.Excel;
 using Lumina.Excel.Sheets;
+using Questionable.Controller.Steps.Shared;
 using Questionable.Functions;
 using Questionable.Model.Questing;
 using Questionable.Windows;
 using Quest = Questionable.Model.Quest;
+using static Questionable.Utils.LocalizeShortcut;
+using Questionable.Data;
+using Questionable.Model;
 
 namespace Questionable.Controller;
 
@@ -40,6 +44,8 @@ internal sealed class CommandHandler : IDisposable
     private readonly QuestSelectionWindow _questSelectionWindow;
     private readonly QuestValidationWindow _questValidationWindow;
     private readonly QuestWindow _questWindow;
+    private readonly QuestData _questData;
+    private readonly TerritoryData _territoryData;
     private readonly ITargetManager _targetManager;
 
     private IReadOnlyList<uint> _previouslyUnlockedUnlockLinks = [];
@@ -63,7 +69,9 @@ internal sealed class CommandHandler : IDisposable
         GameFunctions gameFunctions,
         IDataManager dataManager,
         IClientState clientState,
-        Configuration configuration)
+        Configuration configuration,
+        QuestData questData,
+        TerritoryData territoryData)
     {
         _commandManager = commandManager;
         _chatGui = chatGui;
@@ -84,31 +92,29 @@ internal sealed class CommandHandler : IDisposable
         _dataManager = dataManager;
         _clientState = clientState;
         _configuration = configuration;
+        _questData = questData;
+        _territoryData = territoryData;
 
         _clientState.Logout += OnLogout;
         _commandManager.AddHandler("/qst", new(ProcessCommand)
         {
             HelpMessage = string.Join($"{Environment.NewLine}\t",
-                "打开任务窗口",
-                "/qst help - 显示简化命令",
-                "/qst help-all - 显示所有可用命令",
-                "/qst config - 打开设置窗口",
-                "/qst start - 开始做任务",
-                "/qst stop - 停止做任务")
+                _L("打开任务窗口"),
+                _L("/qst help - 显示简化命令"),
+                _L("/qst help-all - 显示所有可用命令"),
+                _L("/qst config - 打开设置窗口"),
+                _L("/qst start - 开始做任务"),
+                _L("/qst stop - 停止做任务"))
         });
-#if DEBUG
         _commandManager.AddHandler("/qst@", new(ProcessDebugCommand)
         {
             ShowInHelp = false
         });
-#endif
     }
 
     public void Dispose()
     {
-#if DEBUG
         _commandManager.RemoveHandler("/qst@");
-#endif
         _commandManager.RemoveHandler("/qst");
         _clientState.Logout -= OnLogout;
     }
@@ -123,36 +129,37 @@ internal sealed class CommandHandler : IDisposable
         {
             case "h":
             case "help":
-                _chatGui.Print("可用命令：", MessageTag, TagColor);
-                _chatGui.Print("/qst - 切换任务窗口", MessageTag, TagColor);
-                _chatGui.Print("/qst help - 显示简化命令", MessageTag, TagColor);
-                _chatGui.Print("/qst help-all - 显示所有可用命令", MessageTag, TagColor);
-                _chatGui.Print("/qst config - 打开设置窗口", MessageTag, TagColor);
-                _chatGui.Print("/qst start - 开始做任务", MessageTag, TagColor);
-                _chatGui.Print("/qst stop - 停止做任务", MessageTag, TagColor);
-                _chatGui.Print("/qst reload - 重新加载全部任务数据", MessageTag, TagColor);
+                _chatGui.Print(_L("可用命令："), MessageTag, TagColor);
+                _chatGui.Print(_L("/qst - 切换任务窗口"), MessageTag, TagColor);
+                _chatGui.Print(_L("/qst help - 显示简化命令"), MessageTag, TagColor);
+                _chatGui.Print(_L("/qst help-all - 显示所有可用命令"), MessageTag, TagColor);
+                _chatGui.Print(_L("/qst config - 打开设置窗口"), MessageTag, TagColor);
+                _chatGui.Print(_L("/qst start - 开始做任务"), MessageTag, TagColor);
+                _chatGui.Print(_L("/qst stop - 停止做任务"), MessageTag, TagColor);
+                _chatGui.Print(_L("/qst reload - 重新加载全部任务数据"), MessageTag, TagColor);
                 break;
 
             case "ha":
             case "help-all":
-                _chatGui.Print("可用命令：", MessageTag, TagColor);
-                _chatGui.Print("/qst - 切换任务窗口", MessageTag, TagColor);
-                _chatGui.Print("/qst help - 显示可用命令", MessageTag, TagColor);
-                _chatGui.Print("/qst help-all - 显示所有可用命令", MessageTag, TagColor);
-                _chatGui.Print("/qst config - 打开设置窗口", MessageTag, TagColor);
-                _chatGui.Print("/qst start - 开始做任务", MessageTag, TagColor);
-                _chatGui.Print("/qst stop - 停止做任务", MessageTag, TagColor);
-                _chatGui.Print("/qst reload - 重新加载全部任务数据", MessageTag, TagColor);
-                _chatGui.Print("/qst do <questId> - 在调试叠加层中高亮指定任务（需要启用调试叠加层）", MessageTag, TagColor);
-                _chatGui.Print("/qst do - 清除调试叠加层中的高亮任务（需要启用调试叠加层）", MessageTag, TagColor);
-                _chatGui.Print("/qst next <questId> - 设置下一个要做的任务（未指定 questId 时清除）", MessageTag, TagColor);
-                _chatGui.Print("/qst sim <questId> [sequence] [step] - 模拟指定任务（未指定 questId 时清除）", MessageTag, TagColor);
-                _chatGui.Print("/qst which - 显示当前目标可接取的所有任务", MessageTag, TagColor);
-                _chatGui.Print("/qst zone - 显示当前区域可接取的所有任务（仅包含有路径且当前可见的未接任务）", MessageTag, TagColor);
-                _chatGui.Print("/qst journal - 切换日志进度窗口", MessageTag, TagColor);
-                _chatGui.Print("/qst priority - 切换优先级窗口", MessageTag, TagColor);
-                _chatGui.Print("/qst mountid - 输出当前坐骑信息", MessageTag, TagColor);
-                _chatGui.Print("/qst handle-interrupt - 立即处理已排队的中断（手动进入战斗时有用）", MessageTag, TagColor);
+                _chatGui.Print(_L("可用命令："), MessageTag, TagColor);
+                _chatGui.Print(_L("/qst - 开关任务窗口"), MessageTag, TagColor);
+                _chatGui.Print(_L("/qst help - 显示可用命令"), MessageTag, TagColor);
+                _chatGui.Print(_L("/qst help-all - 显示所有可用命令"), MessageTag, TagColor);
+                _chatGui.Print(_L("/qst config - 打开设置窗口"), MessageTag, TagColor);
+                _chatGui.Print(_L("/qst start - 开始做任务"), MessageTag, TagColor);
+                _chatGui.Print(_L("/qst stop - 停止做任务"), MessageTag, TagColor);
+                _chatGui.Print(_L("/qst reload - 重新加载全部任务数据"), MessageTag, TagColor);
+                _chatGui.Print(_L("/qst do <questId> - 在调试叠加层中高亮指定任务（需要启用调试叠加层）"), MessageTag, TagColor);
+                _chatGui.Print(_L("/qst do - 清除调试叠加层中的高亮任务（需要启用调试叠加层）"), MessageTag, TagColor);
+                _chatGui.Print(_L("/qst next <questId> - 设置下一个要做的任务（未指定任务Id时清除）"), MessageTag, TagColor);
+                _chatGui.Print(_L("/qst sim <questId> [sequence] [step] - 模拟指定任务（未指定任务Id时清除）"), MessageTag, TagColor);
+                _chatGui.Print(_L("/qst which - 显示当前目标可接取的所有任务"), MessageTag, TagColor);
+                _chatGui.Print(_L("/qst zone - 显示当前区域可接取的所有任务（仅包含有路径且当前可见的未接任务）"), MessageTag, TagColor);
+                _chatGui.Print(_L("/qst journal - 切换日志进度窗口"), MessageTag, TagColor);
+                _chatGui.Print(_L("/qst priority - 切换优先级窗口"), MessageTag, TagColor);
+                _chatGui.Print(_L("/qst mountid - 输出当前坐骑信息"), MessageTag, TagColor);
+                _chatGui.Print(_L("/qst handle-interrupt - 立即处理已排队的中断（手动进入战斗时有用）"), MessageTag, TagColor);
+                _chatGui.Print(_L("/qst clearlog - 清空任务完成记录json"), MessageTag, TagColor);
                 break;
 
             case "c":
@@ -162,12 +169,12 @@ internal sealed class CommandHandler : IDisposable
 
             case "start":
                 _questWindow.IsOpenAndUncollapsed = true;
-                _questController.Start("开始命令");
+                _questController.Start(_L("开始命令"));
                 break;
 
             case "stop":
                 _movementController.Stop();
-                _questController.Stop("停止命令");
+                _questController.Stop(_L("停止命令"));
                 break;
 
             case "reload":
@@ -187,12 +194,15 @@ internal sealed class CommandHandler : IDisposable
                 break;
 
             case "which":
-                _questSelectionWindow.OpenForTarget(_targetManager.Target);
+                _questSelectionWindow.OpenForTarget(_targetManager.Target, GameFunctions.GetBaseID(_targetManager.Target));
                 break;
 
             case "z":
             case "zone":
-                _questSelectionWindow.OpenForCurrentZone();
+                if (parts.Length < 2)
+                    _questSelectionWindow.OpenForCurrentZone();
+                else
+                    _questSelectionWindow.OpenForZone(uint.Parse(parts.Skip(1).First(), CultureInfo.InvariantCulture));
                 break;
 
             case "j":
@@ -233,6 +243,39 @@ internal sealed class CommandHandler : IDisposable
                 _chatGui.Print(lowOutp);
                 break;
 
+            case "gen":
+                _questRegistry.OpenEditor();
+                break;
+
+            case "clearlog":
+                LogQuestCompletion.ClearQuestCompletions();
+                _chatGui.PrintError(_L("Completions log has been cleared"));
+                break;
+
+            case "@debugmode":
+                _configuration.Advanced.Debug = !_configuration.Advanced.Debug;
+                break;
+
+            case "rewards":
+                ushort rewardsId = 2772;
+                if (parts.Length > 1)
+                    rewardsId = ushort.Parse(parts[1], CultureInfo.InvariantCulture);
+                if (_questData.TryGetQuestInfo(new QuestId(rewardsId), out var qInfo) &&
+                    qInfo is QuestInfo questInfo &&
+                    questInfo.ItemRewards.Concat(questInfo.TripleTriadCardRewards).Select(x => x.ToString()) is var rewards &&
+                    rewards.ToArray().Length != 0)
+                    _chatGui.Print($"{string.Join(',', rewards)}", MessageTag, TagColor);
+                else
+                    _chatGui.Print("no results", MessageTag, TagColor);
+                break;
+
+            case "tname":
+                if (parts.Length == 1)
+                    break;
+                var tnameId = uint.Parse(parts[1], CultureInfo.InvariantCulture);
+                _chatGui.Print($"{_territoryData.GetNameAndId(tnameId)}");
+                break;
+
             //case "abandon-quest":
             //    if (parts.Length > 1)
             //        _questController.AbandonQuest(parts[1]);
@@ -245,7 +288,7 @@ internal sealed class CommandHandler : IDisposable
                 break;
 
             default:
-                _chatGui.PrintError($"Unknown subcommand {parts[0]}", MessageTag, TagColor);
+                _chatGui.PrintError(_LF("Unknown subcommand {0}", parts[0]), MessageTag, TagColor);
                 break;
         }
     }
@@ -279,19 +322,20 @@ internal sealed class CommandHandler : IDisposable
                 break;
 
             case "unlock-links":
-                IReadOnlyList<uint> unlockedUnlockLinks = _gameFunctions.GetUnlockLinks();
-                if (unlockedUnlockLinks.Count >= 0)
+                IReadOnlyList<uint>? unlockedUnlockLinks = _gameFunctions.GetUnlockLinks();
+                if (unlockedUnlockLinks != null)
                 {
-                    _chatGui.Print($"Saved {unlockedUnlockLinks.Count} unlock links to log.", MessageTag, TagColor);
+                    _chatGui.Print(_LF("Saved {0} unlock links to log.", unlockedUnlockLinks.Count), MessageTag, TagColor);
 
                     List<uint> newUnlockLinks = unlockedUnlockLinks.Except(_previouslyUnlockedUnlockLinks).ToList();
                     if (_previouslyUnlockedUnlockLinks.Count > 0 && newUnlockLinks.Count > 0)
-                        _chatGui.Print($"New unlock links: {string.Join(", ", newUnlockLinks)}", MessageTag, TagColor);
+                        _chatGui.Print(_LF("New unlock links: {0}", string.Join(", ", newUnlockLinks)), MessageTag, TagColor);
+
+                    _previouslyUnlockedUnlockLinks = unlockedUnlockLinks;
                 }
                 else
-                    _chatGui.PrintError("Could not query unlock links.", MessageTag, TagColor);
+                    _chatGui.PrintError(_L("Could not query unlock links."), MessageTag, TagColor);
 
-                _previouslyUnlockedUnlockLinks = unlockedUnlockLinks;
                 break;
 
             case "taxi":
@@ -311,7 +355,7 @@ internal sealed class CommandHandler : IDisposable
                         }
                     }
 
-                    _chatGui.Print("Locked taxi stands:", MessageTag, TagColor);
+                    _chatGui.Print(_L("Locked taxi stands:"), MessageTag, TagColor);
                     foreach (string taxiStand in taxiStands)
                         _chatGui.Print($"- {taxiStand}", MessageTag, TagColor);
                 }
@@ -331,7 +375,7 @@ internal sealed class CommandHandler : IDisposable
                         activeFestivals.Add($"{festival.Id}({festival.Phase})");
                     }
 
-                    _chatGui.Print($"Active festivals: {string.Join(", ", activeFestivals)}", MessageTag, TagColor);
+                    _chatGui.Print(_LF("Active festivals: {0}", string.Join(", ", activeFestivals)), MessageTag, TagColor);
                 }
 
                 break;
@@ -345,7 +389,7 @@ internal sealed class CommandHandler : IDisposable
             if (string.IsNullOrEmpty(arguments))
                 _oneTimeSetupWindow.IsOpenAndUncollapsed = true;
             else
-                _chatGui.PrintError("Please complete the one-time setup first.", MessageTag, TagColor);
+                _chatGui.PrintError(_L("Please complete the one-time setup first."), MessageTag, TagColor);
             return true;
         }
 
@@ -356,7 +400,7 @@ internal sealed class CommandHandler : IDisposable
     {
         if (!_debugOverlay.DrawConditions())
         {
-            _chatGui.PrintError("You don't have the debug overlay enabled.", MessageTag, TagColor);
+            _chatGui.PrintError(_L("You don't have the debug overlay enabled."), MessageTag, TagColor);
             return;
         }
 
@@ -365,15 +409,15 @@ internal sealed class CommandHandler : IDisposable
             if (_questRegistry.TryGetQuest(questId, out Quest? quest))
             {
                 _debugOverlay.HighlightedQuest = quest.Id;
-                _chatGui.Print($"Set highlighted quest to {questId} ({quest.Info.Name}).", MessageTag, TagColor);
+                _chatGui.Print(_LF("Set highlighted quest to {0} ({1}).", questId, quest.Info.Name), MessageTag, TagColor);
             }
             else
-                _chatGui.PrintError($"Unknown quest {questId}.", MessageTag, TagColor);
+                _chatGui.PrintError(_LF("Unknown quest {0}.", questId), MessageTag, TagColor);
         }
         else
         {
             _debugOverlay.HighlightedQuest = null;
-            _chatGui.Print("Cleared highlighted quest.", MessageTag, TagColor);
+            _chatGui.Print(_L("Cleared highlighted quest."), MessageTag, TagColor);
         }
     }
 
@@ -381,20 +425,24 @@ internal sealed class CommandHandler : IDisposable
     {
         if (arguments.Length >= 1 && ElementId.TryFromString(arguments[0], out ElementId? questId) && questId != null)
         {
-            if (_questFunctions.IsQuestLocked(questId))
-                _chatGui.PrintError($"Quest {questId} is locked.", MessageTag, TagColor);
+            (var isLocked, string[]? reasons) = _questFunctions.IsQuestLocked(questId);
+            if (isLocked)
+                _chatGui.PrintError(_LF("Quest {0} is locked.", questId) + (reasons != null ? string.Join(',',reasons) : ""),
+                    MessageTag, TagColor);
             else if (_questRegistry.TryGetQuest(questId, out Quest? quest))
             {
                 _questController.SetNextQuest(quest);
-                _chatGui.Print($"Set next quest to {questId} ({quest.Info.Name}).", MessageTag, TagColor);
+                _chatGui.Print(_LF("Set next quest to {0} ({1}).", questId, quest.Info.Name) + (reasons != null ? string.Join(',',reasons) : ""),
+                    MessageTag, TagColor);
             }
             else
-                _chatGui.PrintError($"Unknown quest {questId}.", MessageTag, TagColor);
+                _chatGui.PrintError(_LF("Unknown quest {0}.", questId) + (reasons != null ? string.Join(',',reasons) : ""),
+                    MessageTag, TagColor);
         }
         else
         {
             _questController.SetNextQuest(null);
-            _chatGui.Print("Cleared next quest.", MessageTag, TagColor);
+            _chatGui.Print(_L("Cleared next quest."), MessageTag, TagColor);
         }
     }
 
@@ -422,30 +470,30 @@ internal sealed class CommandHandler : IDisposable
                 }
 
                 _questController.SimulateQuest(quest, sequenceId, stepId);
-                _chatGui.Print($"Simulating quest {questId} ({quest.Info.Name}).", MessageTag, TagColor);
+                _chatGui.Print(_LF("Simulating quest {0} ({1}).", questId, quest.Info.Name), MessageTag, TagColor);
             }
             else
-                _chatGui.PrintError($"Unknown quest {questId}.", MessageTag, TagColor);
+                _chatGui.PrintError(_LF("Unknown quest {0}.", questId), MessageTag, TagColor);
         }
         else
         {
             _questController.StopSimulate();
-            _chatGui.Print("Cleared simulated quest.", MessageTag, TagColor);
+            _chatGui.Print(_L("Cleared simulated quest."), MessageTag, TagColor);
         }
     }
 
     private void PrintMountId()
     {
-        ushort? mountId = _gameFunctions.GetMountId();
+        ushort? mountId = GameFunctions.GetMountId();
         if (mountId != null)
         {
             Mount? row = _dataManager.GetExcelSheet<Mount>().GetRowOrDefault(mountId.Value);
             _chatGui.Print(
-                $"Mount ID: {mountId}, Name: {row?.Singular}, Obtainable: {(row?.Order == -1 ? "No" : "Yes")}",
+                _LF("Mount ID: {0}, Name: {1}, Obtainable: {2}", mountId, row?.Singular.ToString() ?? "", (row?.Order == -1 ? "No" : "Yes")),
                 MessageTag, TagColor);
         }
         else
-            _chatGui.Print("You are not mounted.", MessageTag, TagColor);
+            _chatGui.Print(_L("You are not mounted."), MessageTag, TagColor);
     }
 
     private void OnLogout(int type, int code) => _previouslyUnlockedUnlockLinks = [];

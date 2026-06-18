@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://qstxiv.github.io/schema/quest-v1.json",
   "Author": "pot0to",
   "QuestSequence": [
@@ -40,9 +40,18 @@
           "TargetTerritoryId": 140,
           "SkipConditions": {
             "StepIf": {
-              "InTerritory": [
-                140
-              ]
+              "NearPosition": {
+                "Position": {
+                  "X": -516.35004,
+                  "Y": 14.956879,
+                  "Z": -370.47382
+                },
+                "TerritoryId": 140,
+                "MaximumDistance": 300
+              },
+              "Item": {
+                "NotInInventory": true
+              }
             }
           }
         },
@@ -147,7 +156,10 @@
               "Prompt": "TEXT_CLSTHM300_00353_Q_000_1",
               "Answer": "TEXT_CLSTHM300_00353_A_000_2"
             }
-          ]
+          ],
+          "SinglePlayerDutyOptions": {
+            "Enabled": true
+          }
         }
       ]
     },

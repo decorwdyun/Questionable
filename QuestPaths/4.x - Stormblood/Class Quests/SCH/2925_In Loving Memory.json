@@ -1,6 +1,7 @@
-{
+﻿{
   "$schema": "https://qstxiv.github.io/schema/quest-v1.json",
   "Author": "liza",
+  "LastChecked": {"Username": "Iskierka", "Date": "2026-06-10"},
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -35,7 +36,10 @@
           },
           "TerritoryId": 153,
           "InteractionType": "SinglePlayerDuty",
-          "Fly": true
+          "Fly": true,
+          "SinglePlayerDutyOptions": {
+            "Enabled": true
+          }
         }
       ]
     },

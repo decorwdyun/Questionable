@@ -4,18 +4,18 @@ using System.Collections.ObjectModel;
 using System.IO;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Ipc;
-using Dalamud.Plugin.Ipc.Exceptions;
 using Dalamud.Plugin.Services;
 using Questionable.Data;
 using Questionable.Model.Questing;
+using static Questionable.Utils.LocalizeShortcut;
 namespace Questionable.External;
 
 internal sealed class BossModIpc
 (
     IDalamudPluginInterface pluginInterface,
     Configuration configuration,
-    ICommandManager commandManager,
-    TerritoryData territoryData)
+    TerritoryData territoryData,
+    ICommandManager commandManager)
 {
     public enum EPreset
     {
@@ -33,51 +33,105 @@ internal sealed class BossModIpc
         { EPreset.NormalMovement, new("Questionable - Normal Movement", "NormalMovement") }
     }.AsReadOnly();
     private readonly ICallGateSubscriber<bool> _clearPreset = pluginInterface.GetIpcSubscriber<bool>($"{PluginName}.Presets.ClearActive");
-    private readonly ICommandManager _commandManager = commandManager;
 
-    private readonly Configuration _configuration = configuration;
     private readonly ICallGateSubscriber<string, bool, bool> _createPreset = pluginInterface.GetIpcSubscriber<string, bool, bool>($"{PluginName}.Presets.Create");
+    private readonly ICallGateSubscriber<string?> _getActivePreset = pluginInterface.GetIpcSubscriber<string?>($"{PluginName}.Presets.GetActive");
     private readonly ICallGateSubscriber<string, string?> _getPreset = pluginInterface.GetIpcSubscriber<string, string?>($"{PluginName}.Presets.Get");
     private readonly ICallGateSubscriber<string, bool> _setPreset = pluginInterface.GetIpcSubscriber<string, bool>($"{PluginName}.Presets.SetActive");
-    private readonly TerritoryData _territoryData = territoryData;
+    private readonly ICallGateSubscriber<string, bool> _deletePreset = pluginInterface.GetIpcSubscriber<string, bool>($"{PluginName}.Presets.Delete");
 
-    public bool IsSupported()
+    private bool _soloDutyZoneConfigured;
+
+    public bool IsSupported() => IpcInvoke.SafeFunc(() => _getPreset.HasFunction, false);
+
+    public PresetDefinition AddPreset(EPreset preset) => AddPreset(PresetDefinitions[preset]);
+    public PresetDefinition AddPreset(PresetDefinition definition)
     {
-        try
+        if (_getPreset.InvokeFunc(definition.Name) == null)
+            _createPreset.InvokeFunc(definition.Content, true);
+        return definition;
+    }
+
+    public void AddAllPresets(bool delete = false)
+    {
+        foreach (PresetDefinition definition in PresetDefinitions.Values)
         {
-            return _getPreset.HasFunction;
-        }
-        catch (IpcError)
-        {
-            return false;
+            if (delete)
+                DeletePreset(definition);
+            AddPreset(definition);
         }
     }
 
-    public void SetPreset(EPreset preset)
-    {
-        PresetDefinition definition = PresetDefinitions[preset];
-        if (_getPreset.InvokeFunc(definition.Name) == null)
-            _createPreset.InvokeFunc(definition.Content, true);
+    public bool DeletePreset(EPreset preset) => DeletePreset(PresetDefinitions[preset]);
 
+    public bool DeletePreset(PresetDefinition definition) => _deletePreset.InvokeFunc(definition.Name);
+
+    public void SetActivePreset(EPreset preset)
+    {
+        PresetDefinition definition = AddPreset(preset);
+        commandManager.ProcessCommand("/vbmai off");
         _setPreset.InvokeFunc(definition.Name);
     }
 
-    public void ClearPreset() => _clearPreset.InvokeFunc();
-
-    // TODO this should use your actual rotation plugin, not always vbm
-    public void EnableAi(bool passive)
+    public void SetPresetForSoloDuty(EPreset preset)
     {
-        //_commandManager.ProcessCommand("/vbmai on");
-        _commandManager.ProcessCommand("/vbm cfg ZoneModuleConfig EnableQuestBattles true");
-        _commandManager.ProcessCommand("/vbm cfg Autorotation ClearPresetOnCombatEnd false");
-        SetPreset(passive ? EPreset.Overworld : EPreset.QuestBattle);
+        ConfigureZoneForQuestBattle(true);
+        SetActivePreset(preset);
     }
 
-    public void DisableAi()
+    public void LoadPresets()
     {
-        _commandManager.ProcessCommand("/vbmai off");
-        _commandManager.ProcessCommand("/vbm cfg ZoneModuleConfig EnableQuestBattles false");
-        ClearPreset();
+        ClearActivePresets();
+    }
+
+    public void ClearActivePresets()
+    {
+        string? activePreset = _getActivePreset.InvokeFunc();
+        if (activePreset == null)
+            return;
+
+        foreach (PresetDefinition definition in PresetDefinitions.Values)
+        {
+            if (definition.Name.Equals(activePreset, StringComparison.Ordinal))
+            {
+                _clearPreset.InvokeFunc();
+                return;
+            }
+        }
+    }
+
+    public void DisableSoloDutyPreset()
+    {
+        ReleaseSoloDutyZone();
+        ClearActivePresets();
+    }
+
+    public void Cleanup()
+    {
+        commandManager.ProcessCommand("/vbmai off");
+        ReleaseSoloDutyZone();
+        ClearActivePresets();
+    }
+
+    private void ConfigureZoneForQuestBattle(bool enable)
+    {
+        commandManager.ProcessCommand(enable
+            ? "/vbm cfg ZoneModuleConfig EnableQuestBattles true"
+            : "/vbm cfg ZoneModuleConfig EnableQuestBattles false");
+        if (enable)
+        {
+            commandManager.ProcessCommand("/vbm cfg Autorotation ClearPresetOnCombatEnd false");
+            _soloDutyZoneConfigured = true;
+        }
+    }
+
+    private void ReleaseSoloDutyZone()
+    {
+        if (!_soloDutyZoneConfigured)
+            return;
+
+        commandManager.ProcessCommand("/vbm cfg ZoneModuleConfig EnableQuestBattles false");
+        _soloDutyZoneConfigured = false;
     }
 
     public bool IsConfiguredToRunSoloInstance(ElementId questId, SinglePlayerDutyOptions? dutyOptions)
@@ -85,33 +139,33 @@ internal sealed class BossModIpc
         if (!IsSupported())
             return false;
 
-        if (!_configuration.SinglePlayerDuties.RunSoloInstancesWithBossMod)
+        if (!configuration.SinglePlayerDuties.RunSoloInstancesWithBossMod)
             return false;
 
         dutyOptions ??= new();
-        if (!_territoryData.TryGetContentFinderConditionForSoloInstance(questId, dutyOptions.Index, out TerritoryData.ContentFinderConditionData? cfcData))
+        if (!territoryData.TryGetContentFinderConditionForSoloInstance(questId, dutyOptions.Index, out TerritoryData.ContentFinderConditionData? cfcData))
             return false;
 
-        if (_configuration.SinglePlayerDuties.BlacklistedSinglePlayerDutyCfcIds.Contains(cfcData.ContentFinderConditionId))
+        if (configuration.SinglePlayerDuties.BlacklistedSinglePlayerDutyCfcIds.Contains(cfcData.ContentFinderConditionId))
             return false;
 
-        if (_configuration.SinglePlayerDuties.WhitelistedSinglePlayerDutyCfcIds.Contains(cfcData.ContentFinderConditionId))
+        if (configuration.SinglePlayerDuties.WhitelistedSinglePlayerDutyCfcIds.Contains(cfcData.ContentFinderConditionId))
             return true;
 
         return dutyOptions.Enabled;
     }
 
-    private sealed class PresetDefinition(string name, string fileName)
+    public sealed class PresetDefinition(string name, string fileName)
     {
         public string Name { get; } = name;
         public string Content { get; } = LoadPreset(fileName);
 
-        private static string LoadPreset(string name)
+        public static string LoadPreset(string name)
         {
             Stream stream =
                 typeof(BossModIpc).Assembly.GetManifestResourceStream(
                     $"Questionable.Controller.CombatModules.BossModPreset.{name}") ??
-                throw new InvalidOperationException($"Preset {name} was not found");
+                throw new InvalidOperationException(_LF("Preset {0} was not found",name));
             using StreamReader reader = new(stream);
             return reader.ReadToEnd();
         }

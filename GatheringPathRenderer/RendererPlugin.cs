@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -9,6 +10,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
+using System.Xml.Linq;
 using Dalamud.Interface.Colors;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
@@ -33,7 +35,6 @@ public sealed class RendererPlugin : IDalamudPlugin
     private readonly IObjectTable _objectTable;
 
     private readonly IDalamudPluginInterface _pluginInterface;
-    //private readonly IPlayerState _playerState;
     private readonly IPluginLog _pluginLog;
     private readonly WindowSystem _windowSystem = new(nameof(RendererPlugin));
     private Job _currentClassJob = Job.ADV;
@@ -45,7 +46,6 @@ public sealed class RendererPlugin : IDalamudPlugin
         _pluginInterface = pluginInterface;
         _clientState = clientState;
         _objectTable = objectTable;
-        //_playerState = playerState;
         _pluginLog = pluginLog;
         GBRLocationData = LoadGBRPosData(_pluginInterface.AssemblyLocation.DirectoryName!);
         pluginLog.Info($"Loaded {GBRLocationData.Count} entries from GBR data");
@@ -63,7 +63,7 @@ public sealed class RendererPlugin : IDalamudPlugin
         ConfigWindow configWindow = new(pluginInterface, configuration);
         _editorWindow = new(this, _editorCommands, dataManager, commandManager, targetManager, clientState, objectTable,
                 configWindow)
-            { IsOpen = true };
+        { IsOpen = true };
         _windowSystem.AddWindow(configWindow);
         _windowSystem.AddWindow(_editorWindow);
 
@@ -81,11 +81,9 @@ public sealed class RendererPlugin : IDalamudPlugin
         PctService.Initialize(pluginInterface);
         LoadGatheringLocationsFromDirectory();
 
-        _pluginInterface.UiBuilder.Draw += _windowSystem.Draw;
         _pluginInterface.UiBuilder.Draw += Draw;
+        _pluginInterface.UiBuilder.Draw += _windowSystem.Draw;
         _clientState.ClassJobChanged += ClassJobChanged;
-
-        //commandManager.AddHandler("/qipc", new CommandInfo(CallIPC));
     }
 
     internal List<GatheringLocationContext> GatheringLocations { get; } =
@@ -94,87 +92,6 @@ public sealed class RendererPlugin : IDalamudPlugin
     internal Dictionary<uint, List<Vector3>> GBRLocationData { get; }
 
     internal bool DistantRange { get; set; }
-
-    //private void CallIPC(string command, string argument)
-    //{
-    //    string[] parts = argument.Split(' ');
-    //    string function = parts[0];
-    //    List<Type> types = [];
-    //    List<object> arguments = [];
-    //    char delim = ':';
-    //    foreach (string part in parts.Skip(1).ToArray())
-    //    {
-    //        char t;
-    //        string v;
-    //        if (!part.Contains(':'))
-    //        {
-    //            t = 's';
-    //            v = part;
-    //        }
-    //        else
-    //        {
-    //            var _ = part.Split(':', 2);
-    //            t = char.Parse(_[0]);
-    //            v = _[1];
-    //        }
-    //        switch (t)
-    //        {
-    //            case 'i':
-    //                types.Add(typeof(int));
-    //                if (v.Length != 0)
-    //                    arguments.Add(int.Parse(v));
-    //                break;
-    //            case 'b':
-    //                types.Add(typeof(bool));
-    //                if (v.Length != 0)
-    //                    arguments.Add(bool.Parse(v));
-    //                break;
-    //            case 'u':
-    //                types.Add(typeof(uint));
-    //                if (v.Length != 0)
-    //                    arguments.Add(uint.Parse(v));
-    //                break;
-    //            case 'h':
-    //                types.Add(typeof(ushort));
-    //                if (v.Length != 0)
-    //                    arguments.Add(ushort.Parse(v));
-    //                break;
-    //            case 'y':
-    //                types.Add(typeof(byte));
-    //                if (v.Length != 0)
-    //                    arguments.Add(byte.Parse(v));
-    //                break;
-    //            default:
-    //                types.Add(typeof(string));
-    //                if (v.Length != 0)
-    //                    arguments.Add((string)v);
-    //                break;
-    //        }
-    //    }
-    //    var _types = types.ToArray();
-    //    var _arguments = arguments.ToArray();
-    //    _pluginLog.Debug(_types.Print(","));
-    //    _pluginLog.Debug(_arguments.Print(","));
-    //    _pluginLog.Debug($"{_types.Length},{_arguments.Length}");
-    //    _pluginLog.Debug($"Attempting to call {function}({_arguments.Print()})");
-    //    EzIPCDisposalToken[] _disposalTokens = EzIPC.Init(_pluginInterface, function.Split('.')[0], SafeWrapper.IPCException);
-
-    //    MethodInfo? method1 = typeof(IDalamudPluginInterface).GetMethod("GetIpcSubscriber", _types.Length, _types);
-    //    MethodInfo? func1 = method1?.MakeGenericMethod(_types);
-    //    object? callGateSubscriber = func1?.Invoke(_pluginInterface, [function]);
-    //    MethodInfo? method2 = typeof(ICallGateSubscriber).GetMethod("InvokeFunc", _types.Length, _types);
-    //    MethodInfo? func2 = method2?.MakeGenericMethod(_types);
-    //    func2?.Invoke(callGateSubscriber, _arguments);
-    //    //ICallGateSubscriber<string,bool> callGateSubscriber = _pluginInterface.GetIpcSubscriber<string,bool>(function);
-    //    //_chatGui.Print(callGateSubscriber.InvokeFunc(args[0]).ToString(), "qipc");
-    //    foreach (var token in _disposalTokens) token.Dispose();
-    //    //else if (parts.Length == 2)
-    //    //{
-    //    //    MethodInfo method0 = typeof(arguments[0].GetType());
-    //    //    ICallGateProvider<type,bool> callGateSubscriber = _pluginInterface.GetIpcSubscriber<T,bool>(function);
-    //    //}
-
-    //}
 
     internal DirectoryInfo PathsDirectory
     {
@@ -206,6 +123,7 @@ public sealed class RendererPlugin : IDalamudPlugin
         _clientState.ClassJobChanged -= ClassJobChanged;
         _pluginInterface.UiBuilder.Draw -= Draw;
         _pluginInterface.UiBuilder.Draw -= _windowSystem.Draw;
+        _windowSystem.RemoveAllWindows();
 
         PctService.Dispose();
 
@@ -232,7 +150,7 @@ public sealed class RendererPlugin : IDalamudPlugin
 #else
             LoadFromDirectory(PathsDirectory);
             _pluginLog.Information(
-                $"Loaded {_gatheringLocations.Count} gathering root locations from {PathsDirectory.FullName} directory");
+                $"Loaded {GatheringLocations.Count} gathering root locations from {PathsDirectory.FullName} directory");
 #endif
         }
         catch (Exception e)
@@ -268,14 +186,16 @@ public sealed class RendererPlugin : IDalamudPlugin
     {
         JsonNode locationNode = JsonNode.Parse(stream)!;
         GatheringRoot root = locationNode.Deserialize<GatheringRoot>()!;
-        GatheringLocations.Add(new(fileInfo, ushort.Parse(fileInfo.Name.Split('_')[0]),
+        GatheringLocations.Add(new(fileInfo, ushort.Parse(fileInfo.Name.Split('_')[0], CultureInfo.InvariantCulture),
             root));
     }
 
     public static Dictionary<uint, List<Vector3>> LoadGBRPosData(string directoryName)
     {
-        string path = Path.Combine(directoryName, "world_locations.json");
-        using FileStream stream = new(path, FileMode.Open, FileAccess.Read);
+        Stream stream =
+                typeof(RendererPlugin).Assembly.GetManifestResourceStream(
+                    "GatheringPathRenderer.GBRWorldLocations") ??
+                throw new InvalidOperationException($"world_locations.json was not found");
         JsonNode? root = JsonNode.Parse(stream);
         Dictionary<uint, List<Vector3>> result = new();
 

@@ -1,6 +1,9 @@
 using System;
 using System.Linq;
-namespace ECommons.ExcelServices;
+using ECommons.ExcelServices;
+using static Questionable.Utils.LocalizeShortcut;
+
+namespace Questionable.Data;
 
 internal static class JobExtensions
 {

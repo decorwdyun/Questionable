@@ -35,6 +35,7 @@
           },
           "TerritoryId": 399,
           "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {"Enabled": true},
           "AetheryteShortcut": "Idyllshire",
           "AethernetShortcut": [
             "[Idyllshire] Aetheryte Plaza",

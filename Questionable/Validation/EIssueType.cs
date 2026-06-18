@@ -1,4 +1,7 @@
-﻿namespace Questionable.Validation;
+﻿using Questionable.Model;
+using Questionable.Model.Common.Converter;
+
+namespace Questionable.Validation;
 
 public enum EIssueType
 {
@@ -20,5 +23,7 @@ public enum EIssueType
     ClassQuestWithoutAetheryteShortcut,
     DuplicateSinglePlayerInstance,
     UnusedSinglePlayerInstance,
-    InvalidChatMessage
+    InvalidChatMessage,
+    InvalidAcceptQuestTerritory
 }
+public sealed class IssueTypeConverter() : EnumConverter<EIssueType>();

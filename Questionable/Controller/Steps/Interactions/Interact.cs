@@ -13,26 +13,40 @@ using FFXIVClientStructs.FFXIV.Client.UI.Misc;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Shared;
 using Questionable.Controller.Utils;
+using Questionable.Data;
 using Questionable.External;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
+using Questionable.Windows.Utils;
 using ObjectKind = Dalamud.Game.ClientState.Objects.Enums.ObjectKind;
 
 namespace Questionable.Controller.Steps.Interactions;
 
 internal static class Interact
 {
-    internal sealed class Factory(AutomatonIpc automatonIpc, Configuration configuration) : ITaskFactory
+    internal sealed class Factory(AutomatonIpc automatonIpc, Configuration configuration, RedoUtil redoUtil) : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
         {
             if (step.InteractionType is EInteractionType.AcceptQuest or EInteractionType.CompleteQuest
                 or EInteractionType.SinglePlayerDuty)
             {
-                // 'PreventQuestCompletion' config check
-                if (step.InteractionType is EInteractionType.CompleteQuest && configuration.Advanced.PreventQuestCompletion)
+                if (step.InteractionType is EInteractionType.AcceptQuest && sequence.Sequence > 0 && redoUtil.IsRedoActive())
+                {
+                    // Can't accept other quests during NG+
                     yield break;
+                }
+                if (step.InteractionType is EInteractionType.CompleteQuest)
+                {
+                    yield return new LogQuestCompletion.Task(quest);
+                    if (configuration.Advanced.PreventQuestCompletion)
+                    {
+                        if (configuration.Advanced.AbandonQuestBeforeCompletion)
+                            yield return new AbandonQuest.Task(quest);
+                        yield break;
+                    }
+                }
 
                 if (step.Emote != null)
                     yield break;
@@ -63,8 +77,8 @@ internal static class Interact
             }
             else if (step.InteractionType != EInteractionType.Interact)
                 yield break;
-
-            ArgumentNullException.ThrowIfNull(step.DataId);
+            if (!step.DataId.HasValue)
+                throw new ArgumentNullException(nameof(step.DataId));
 
             // if we're fast enough, it is possible to get the smalltalk prompt
             if (sequence.Sequence == 0 && sequence.Steps.IndexOf(step) == 0)
@@ -109,11 +123,9 @@ internal static class Interact
     internal sealed class DoInteract
     (
         GameFunctions gameFunctions,
-        QuestFunctions questFunctions,
         CameraFunctions cameraFunctions,
         Configuration configuration,
         ICondition condition,
-        IChatGui chatGui,
         IObjectTable objectTable,
         ILogger<DoInteract> logger)
         : TaskExecutor<Task>, IConditionChangeAware
@@ -135,7 +147,6 @@ internal static class Interact
 
         public override ETaskResult Update()
         {
-            //logger.LogDebug($"Entered Update, _continueAt: {_continueAt}");
             if (DateTime.Now <= _continueAt)
                 return ETaskResult.StillRunning;
 
@@ -143,7 +154,6 @@ internal static class Interact
             {
                 if (condition[ConditionFlag.Mounted])
                 {
-                    //logger.LogDebug("Attempting unmount");
                     gameFunctions.Unmount();
                     _continueAt = DateTime.Now.AddSeconds(1);
                     return ETaskResult.StillRunning;
@@ -151,12 +161,9 @@ internal static class Interact
                 else
                     _needsUnmount = false;
             }
-            else
-                //logger.LogDebug("Does not need unmount");
-
-            if (Task.PickUpItemId is { } pickUpItemId)
+            else if (Task.PickUpItemId is { } pickUpItemId)
             {
-                logger.LogDebug($"PickUpItemId {pickUpItemId}");
+                logger.LogDebug("PickUpItemId {PickUpItemId}", pickUpItemId);
                 unsafe
                 {
                     InventoryManager* inventoryManager = InventoryManager.Instance();
@@ -166,7 +173,7 @@ internal static class Interact
             }
             else if (Task.TaxiStandId is { } taxiStandId)
             {
-                logger.LogDebug($"TaxiStandId {taxiStandId}");
+                logger.LogDebug("TaxiStandId {TaxiStandId}", taxiStandId);
                 unsafe
                 {
                     UIState* uiState = UIState.Instance();
@@ -178,15 +185,13 @@ internal static class Interact
                 return ETaskResult.TaskComplete;
             else if (Quest != null && Task.HasCompletionQuestVariablesFlags)
             {
-                logger.LogDebug("Checking QW");
-                QuestProgressInfo? questWork = questFunctions.GetQuestProgressInfo(Quest.Id);
+                QuestProgressInfo? questWork = QuestFunctions.GetQuestProgressInfo(Quest.Id);
 
                 if (questWork != null && QuestWorkUtils.MatchesQuestWork(Task.CompletionQuestVariablesFlags, questWork))
                     return ETaskResult.TaskComplete;
             }
             else if (ProgressContext != null)
             {
-                logger.LogDebug("Entered ProgressContext");
                 if (ProgressContext.WasInterrupted())
                     return ETaskResult.StillRunning;
                 else if (ProgressContext.WasSuccessful() ||
@@ -200,8 +205,6 @@ internal static class Interact
                     return ETaskResult.StillRunning;
                 }
             }
-            else
-                logger.LogDebug("Conditions block passed");
 
             IGameObject? gameObject = gameFunctions.FindObjectByDataId(Task.DataId);
             //if (gameObject == null || !gameObject.IsTargetable || !HasAnyMarker(gameObject))
@@ -217,7 +220,6 @@ internal static class Interact
             }
 
             _reportedGameObjNull = false;
-            //logger.LogDebug("gameObject != null");
 
             if (_needsFacing)
             {
@@ -227,8 +229,6 @@ internal static class Interact
                 _needsFacing = false;
                 return ETaskResult.StillRunning;
             }
-            else
-                logger.LogDebug("Does not need facing");
 
             if (objectTable[0] is IPlayerCharacter player && Task.Quest != null && InteractionType == EInteractionType.AcceptQuest)
             {
@@ -243,14 +243,16 @@ internal static class Interact
                         if (acceptableJobs.Contains(configuration.General.CraftingJob))
                             acceptableJobs = [.. acceptableJobs.Prepend(configuration.General.CraftingJob)];
                         else
-                            logger.LogInformation($"Crafting quest, but configured job {configuration.General.CraftingJob} is not valid for {Task.Quest.Id}, changing to {acceptableJobs[0]}");
+                            logger.LogInformation("Crafting quest, but configured job {CraftingJob} is not valid for {QuestId}, changing to {AcceptableJob}",
+                                configuration.General.CraftingJob, Task.Quest.Id, acceptableJobs[0]);
                     }
                     else if (acceptableJobs[0].IsGatherer())
                     {
                         if (acceptableJobs.Contains(configuration.General.GatheringJob))
                             acceptableJobs = [.. acceptableJobs.Prepend(configuration.General.GatheringJob)];
                         else
-                            logger.LogInformation($"Gathering quest, but configured job {configuration.General.GatheringJob} is not valid for {Task.Quest.Id}, changing to {acceptableJobs[0]}");
+                            logger.LogInformation("Gathering quest, but configured job {GatheringJob} is not valid for {QuestId}, changing to {AcceptableJob}",
+                                configuration.General.GatheringJob, Task.Quest.Id, acceptableJobs[0]);
                     }
                     if (Task.Quest.Info.AlliedSociety.Equals(EAlliedSociety.Namazu))
                     {
@@ -260,7 +262,7 @@ internal static class Interact
                             acceptableJobs = [.. acceptableJobs.Prepend(configuration.General.GatheringJob)];
                     }
 
-                    logger.LogInformation($"Current ClassJob {playerJob} not valid for {Task.Quest.Id}, attempting to switch");
+                    logger.LogInformation("Current ClassJob {PlayerJob} not valid for {QuestId}, attempting to switch", playerJob, Task.Quest.Id);
                     unsafe
                     {
                         bool changed = false;
@@ -270,6 +272,8 @@ internal static class Interact
                             for (int i = 0; i < 100; ++i)
                             {
                                 RaptureGearsetModule.GearsetEntry* gearset = gearsetModule->GetGearset(i);
+                                if (gearset == null)
+                                    continue;
                                 if (acceptableJobs[0].Equals((Job)gearset->ClassJob))
                                 {
                                     gearsetModule->EquipGearset(gearset->Id);
@@ -280,7 +284,7 @@ internal static class Interact
 
                         if (!changed)
                         {
-                            chatGui.PrintError($"Quest {Task.Quest.Info.Name} requires a job like {acceptableJobs[0]}, " +
+                            throw new Exception($"Quest {Task.Quest.Info.Name} requires a job like {acceptableJobs[0]}, " +
                                                "but you do not have a valid job configured in QST Settings.");
                         }
                     }
@@ -289,8 +293,6 @@ internal static class Interact
                     return ETaskResult.StillRunning;
                 }
             }
-            //else
-            //    logger.LogDebug("is not AcceptQuest");
 
             if (!gameObject.IsTargetable || !HasAnyMarker(gameObject))
                 return ETaskResult.StillRunning;

@@ -172,6 +172,7 @@
           },
           "TerritoryId": 398,
           "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {"Enabled": true},
           "AetheryteShortcut": "The Dravanian Forelands - Anyx Trine",
           "Fly": true
         }

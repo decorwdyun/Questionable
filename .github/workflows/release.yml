@@ -3,6 +3,23 @@ on:
   push:
     tags:
       - '*-cn'
+    paths-ignore:
+      - 'QuestPaths/**'
+      - 'GatheringPaths/**'
+  workflow_dispatch:
+    inputs:
+      force_release:
+        description: 'Force create release even if tag exists'
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  contents: write
+
 jobs:
   Build:
     permissions:

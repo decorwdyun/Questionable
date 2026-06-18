@@ -1,49 +1,151 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Dalamud.Memory;
 using ECommons;
+using ECommons.MathHelpers;
+using FFXIVClientStructs.FFXIV.Client.Game;
+using FFXIVClientStructs.FFXIV.Client.UI.Agent;
+using FFXIVClientStructs.FFXIV.Component.GUI;
 using Lumina.Excel.Sheets;
 using Lumina.Text.ReadOnly;
+using Questionable.Data;
+using Questionable.Utils;
+using Sheets = Lumina.Excel.Sheets;
 namespace Questionable.Windows.Utils;
 
-internal sealed class RedoUtil
+internal unsafe sealed class RedoUtil
 {
-    public Dictionary<uint, List<uint>> Dict;
+    internal readonly Dictionary<Sheets.QuestRedoChapterUI, RedoCache> RedoData = [];
+    internal readonly AgentInterface* QuestRedoHud;
+    private readonly IGameGuiAdapter _gameGui;
 
-    public RedoUtil()
+    public RedoUtil(IGameGuiAdapter gameGui)
     {
-        Dict = [];
-        Last = Generate();
-    }
-    public Stopwatch Last { get; private set; }
-
-    public Tuple<ReadOnlySeString, int> GetChapter(uint questId)
-    {
-        KeyValuePair<uint, List<uint>> result = Dict.FirstOrDefault(entry => entry.Value.Contains(questId));
-        if (result.Value == null)
-            return new((ReadOnlySeString)"", -1);
-        int index = result.Value.IndexOf(questId);
-        return new(GenericHelpers.GetSheet<QuestRedoChapterUI>().GetRow(result.Key).ChapterName, index);
+        _gameGui = gameGui;
+        QuestRedoHud = AgentModule.Instance()->GetAgentByInternalId(AgentId.QuestRedoHud);
+        RedoData = [];
+        Generate();
     }
 
-    public Stopwatch Generate()
+    private Stopwatch Generate()
     {
         Stopwatch watch = Stopwatch.StartNew();
-        foreach (QuestRedo chapter in GenericHelpers.GetSheet<QuestRedo>())
+        var chapterUi = GenericHelpers.GetSheet<Sheets.QuestRedoChapterUI>();
+        foreach (Sheets.QuestRedo redo in GenericHelpers.GetSheet<Sheets.QuestRedo>())
         {
-            if (chapter.Chapter.RowId == 0)
+            if (redo.Chapter.RowId == 0)
                 continue;
-            if (!Dict.ContainsKey(chapter.Chapter.RowId))
-                Dict[chapter.Chapter.RowId] = [];
-            foreach (QuestRedo.QuestRedoParamStruct quest in chapter.QuestRedoParam)
+            var chapter = chapterUi.GetRow(redo.Chapter.RowId);
+            if (!RedoData.TryGetValue(chapter, out RedoCache? cache))
+                cache = new(chapter, new());
+            foreach (Sheets.QuestRedo.QuestRedoParamStruct quest in redo.QuestRedoParam)
             {
                 if (quest.Quest.RowId != 0)
-                    Dict[chapter.Chapter.RowId].Add(quest.Quest.RowId);
+                    cache.Quests.Add(quest.Quest.Value);
             }
+            RedoData[chapter] = cache;
         }
 
         watch.Stop();
         return watch;
+    }
+
+    public RedoIndex GetChapter(ushort questId)
+    {
+        ReadOnlySeString name = (ReadOnlySeString)"";
+        int index = -1;
+        (QuestRedoChapterUI key, RedoCache value) = RedoData.FirstOrDefault(entry => entry.Value.Quests.Any(q => (ushort)q.RowId == questId));
+        if (value != null)
+        {
+            name = value.ChapterUi.ChapterName;
+            index = value.Quests.FindIndex(q => (ushort)q.RowId == questId);
+            if (name.ByteLength == 0 || index == -1)
+                return new(value.ChapterUi, -1);
+        }
+        return new(key, index);
+    }
+
+
+    /// <summary>
+    /// if NG+ is already active, this silently overwrites the chapter index to 0 so NG+ is turned off.
+    /// users of this function then need to run it again to send the right value.
+    /// this is intended behaviour. do not change this. -alydev
+    /// </summary>
+    /// <param name="chapterIndex"></param>
+    /// <param name="redoChapter"></param>
+    /// <param name="questRedoChapter"></param>
+    internal void SendRedoCommand(int? chapterIndex = null, RedoChapter? redoChapter = null, QuestRedoChapterUI? questRedoChapter = null)
+    {
+        if (chapterIndex == null)
+        {
+            if (redoChapter != null)
+                chapterIndex = (int)redoChapter;
+            else if (questRedoChapter != null)
+                chapterIndex = (int)questRedoChapter.Value.RowId;
+        }
+        if (IsRedoActive())
+            chapterIndex = 0;
+        GameMain.ExecuteCommand((int)GameCommand.QuestRedo, chapterIndex ?? 0);
+    }
+
+    internal bool IsRedoActive() => QuestRedoHud != null && QuestRedoHud->IsAgentActive() && TryGetActiveRedoChapter(out var _) == true;
+
+    internal bool TryGetActiveRedoChapter(out QuestRedoChapterUI? questRedoChapter)
+    {
+        if (_gameGui.TryGetAddonByName<AtkUnitBase>("QuestRedoHud", out AtkUnitBase* addon) &&
+                    addon->AtkValuesCount == 4 &&
+                    // 0 seems to be active,
+                    // 1 seems to be paused,
+                    // 2 is unknown, but it happens e.g. before the quest 'Alzadaal's Legacy'
+                    // 3 seems to be having /ng+ open while active,
+                    // 4 seems to be when (a) suspending the chapter, or (b) having turned in a quest
+                    addon->AtkValues[0].UInt is 0 or 2 or 3 or 4)
+        {
+            // redoHud+44 is chapter
+            // redoHud+46 is quest
+            ushort chapter = MemoryHelper.Read<ushort>((nint)QuestRedoHud + 44);
+            questRedoChapter = RedoData.Where(kvp => kvp.Key.RowId == chapter).Select(kvp => kvp.Value.ChapterUi).FirstOrDefault();
+            return true;
+        }
+        questRedoChapter = null;
+        return false;
+    }
+}
+
+internal sealed record RedoCache(Sheets.QuestRedoChapterUI ChapterUi, List<Sheets.Quest> Quests)
+{
+    public Sheets.QuestRedoChapterUI ChapterUi = ChapterUi;
+    public List<Sheets.Quest> Quests = Quests;
+}
+
+internal sealed record RedoIndex(QuestRedoChapterUI Chapter, int Index)
+{
+    public QuestRedoChapterUI Chapter = Chapter;
+    public int Index = Index;
+    public int SimplifiedIndex
+    {
+        get
+        {
+            int index = Index + 1;
+            if (Chapter.RowId.Equals(1)) // ARR part 1
+            {
+                // handling for citystate starts numbering
+                if (index.InRange(22, 43)) // gridania
+                    index -= 21;
+                if (index.InRange(43, 65)) // uldah
+                    index -= 42;
+                if (index == 65) // call of the sea limsa/gridania
+                    index = 22;
+                if (index == 66) // call of the sea uldah
+                    index = 23;
+            }
+            return index;
+        }
+    }
+
+    public override string ToString()
+    {
+        return $"{Chapter.ChapterName} (#{SimplifiedIndex})";
     }
 }

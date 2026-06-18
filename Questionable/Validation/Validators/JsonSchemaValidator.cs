@@ -5,6 +5,7 @@ using Json.Schema;
 using Questionable.Model;
 using Questionable.Model.Questing;
 using Questionable.QuestPaths;
+using static Questionable.Utils.LocalizeShortcut;
 namespace Questionable.Validation.Validators;
 
 internal sealed class JsonSchemaValidator : IQuestValidator
@@ -16,24 +17,24 @@ internal sealed class JsonSchemaValidator : IQuestValidator
     {
         SchemaRegistry.Global.Register(
             new("https://qstxiv.github.io/schema/common-aethernetshard.json"),
-            JsonSchema.FromStream(AssemblyModelLoader.CommonAethernetShard).AsTask().Result);
+            JsonSchema.FromStream(AssemblyModelLoader.CommonAethernetShardStream).AsTask().Result);
         SchemaRegistry.Global.Register(
             new("https://qstxiv.github.io/schema/common-aetheryte.json"),
-            JsonSchema.FromStream(AssemblyModelLoader.CommonAetheryte).AsTask().Result);
+            JsonSchema.FromStream(AssemblyModelLoader.CommonAetheryteStream).AsTask().Result);
         SchemaRegistry.Global.Register(
             new("https://qstxiv.github.io/schema/common-classjob.json"),
-            JsonSchema.FromStream(AssemblyModelLoader.CommonClassJob).AsTask().Result);
+            JsonSchema.FromStream(AssemblyModelLoader.CommonClassJobStream).AsTask().Result);
         SchemaRegistry.Global.Register(
             new("https://qstxiv.github.io/schema/common-completionflags.json"),
-            JsonSchema.FromStream(AssemblyModelLoader.CommonCompletionFlags).AsTask().Result);
+            JsonSchema.FromStream(AssemblyModelLoader.CommonCompletionFlagsStream).AsTask().Result);
         SchemaRegistry.Global.Register(
             new("https://qstxiv.github.io/schema/common-vector3.json"),
-            JsonSchema.FromStream(AssemblyModelLoader.CommonVector3).AsTask().Result);
+            JsonSchema.FromStream(AssemblyModelLoader.CommonVector3Stream).AsTask().Result);
     }
 
     public IEnumerable<ValidationIssue> Validate(Quest quest)
     {
-        _questSchema ??= JsonSchema.FromStream(AssemblyQuestLoader.QuestSchema).AsTask().Result;
+        _questSchema ??= JsonSchema.FromStream(AssemblyQuestLoader.QuestSchemaStream).AsTask().Result;
 
         if (_questNodes.TryGetValue(quest.Id, out JsonNode? questNode))
         {
@@ -51,7 +52,7 @@ internal sealed class JsonSchemaValidator : IQuestValidator
                     Step = null,
                     Type = EIssueType.InvalidJsonSchema,
                     Severity = EIssueSeverity.Error,
-                    Description = "JSON Validation failed"
+                    Description = _L("JSON Validation failed")
                 };
             }
         }

@@ -100,6 +100,7 @@ internal abstract class MiniTaskController<T> : IDisposable
                 _taskQueue.CurrentTaskExecutor.CurrentTask.ToString());
             _chatGui.PrintError(
                 $"无法更新任务 '{_taskQueue.CurrentTaskExecutor.CurrentTask}', 请使用 /xllog 来获取报错信息.", CommandHandler.MessageTag, CommandHandler.TagColor);
+
             Stop("Task failed to update");
             return;
         }
@@ -152,6 +153,15 @@ internal abstract class MiniTaskController<T> : IDisposable
                 OnNextStep(lastTask);
                 return;
 
+            case ETaskResult.RetryStep:
+                _logger.LogInformation("{Task} → {Result}, clearing queue and retrying current step",
+                    _taskQueue.CurrentTaskExecutor.CurrentTask, result);
+
+                _taskQueue.CurrentTaskExecutor = null;
+                _taskQueue.Reset();
+                OnRetryStep();
+                return;
+
             case ETaskResult.End:
                 _logger.LogInformation("{Task} → {Result}", _taskQueue.CurrentTaskExecutor.CurrentTask, result);
                 _taskQueue.CurrentTaskExecutor = null;
@@ -166,6 +176,11 @@ internal abstract class MiniTaskController<T> : IDisposable
 
     protected virtual void OnNextStep(ILastTask task)
     {
+    }
+
+    protected virtual void OnRetryStep()
+    {
+        Stop("RetryStep not supported");
     }
 
     public abstract void Stop(string label);

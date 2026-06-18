@@ -5,6 +5,7 @@ using Dalamud.Plugin.Services;
 using Questionable.Controller;
 using Questionable.Windows.Common;
 using Questionable.Windows.JournalComponents;
+using static Questionable.Utils.LocalizeShortcut;
 namespace Questionable.Windows;
 
 internal sealed class JournalProgressWindow : LWindow, IDisposable
@@ -15,20 +16,23 @@ internal sealed class JournalProgressWindow : LWindow, IDisposable
     private readonly QuestJournalComponent _questJournalComponent;
     private readonly QuestRegistry _questRegistry;
     private readonly QuestRewardComponent _questRewardComponent;
+    private readonly RedoComponent _redoComponent;
 
     public JournalProgressWindow(
         QuestJournalComponent questJournalComponent,
         QuestRewardComponent questRewardComponent,
         AlliedSocietyJournalComponent alliedSocietyJournalComponent,
         GatheringJournalComponent gatheringJournalComponent,
+        RedoComponent redoComponent,
         QuestRegistry questRegistry,
         IClientState clientState)
-        : base("任务进度###QuestionableJournalProgress")
+        : base(_L("任务进度") + "###QuestionableJournalProgress")
     {
         _questJournalComponent = questJournalComponent;
         _alliedSocietyJournalComponent = alliedSocietyJournalComponent;
         _questRewardComponent = questRewardComponent;
         _gatheringJournalComponent = gatheringJournalComponent;
+        _redoComponent = redoComponent;
         _questRegistry = questRegistry;
         _clientState = clientState;
 
@@ -77,5 +81,6 @@ internal sealed class JournalProgressWindow : LWindow, IDisposable
         _alliedSocietyJournalComponent.DrawAlliedSocietyQuests();
         _questRewardComponent.DrawItemRewards();
         _gatheringJournalComponent.DrawGatheringItems();
+        _redoComponent.DrawRedoChapters();
     }
 }

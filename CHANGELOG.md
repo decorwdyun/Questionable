@@ -1,2 +1,8 @@
-- Better handling of aetheryte shortcuts -alydev
-- Stop After Quest button -Kage
+- Bug fix: Locked quests are not super reliable at the moment because of the prerequisite tree check. This might help with that
+- Feature: Automatic recovery for quests that lead to the below aetheryte-less territories, in cases where they don't already have recovery steps written:
+  - Waking Sands
+  - Rising Stones
+  - Old Gridania
+  - Limsa Upper
+  - Uldah Thal
+  - Pillars

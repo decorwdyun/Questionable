@@ -58,7 +58,8 @@ internal sealed class HighlightObject : IDisposable
             _condition[ConditionFlag.Occupied39] || _condition[ConditionFlag.OccupiedInEvent] ||
             _condition[ConditionFlag.OccupiedInQuestEvent] || _condition[ConditionFlag.OccupiedInCutSceneEvent] ||
             _condition[ConditionFlag.Casting] || _condition[ConditionFlag.MountOrOrnamentTransition] ||
-            _condition[ConditionFlag.BetweenAreas] || _condition[ConditionFlag.BetweenAreas51])
+            _condition[ConditionFlag.BetweenAreas] || _condition[ConditionFlag.BetweenAreas51] ||
+            _condition[ConditionFlag.Mounting71])
             ToggleHighlight(false);
         else
             ToggleHighlight(true);
@@ -70,7 +71,7 @@ internal sealed class HighlightObject : IDisposable
         {
             if (!_targetNpcDataId.Contains(Id))
             {
-                _logger.LogDebug($"Adding {Id} to highlight");
+                _logger.LogDebug("Adding {Id} to highlight", Id);
                 _targetNpcDataId = _targetNpcDataId.Append(Id).ToArray();
             }
         });
@@ -80,7 +81,7 @@ internal sealed class HighlightObject : IDisposable
     {
         _ = _framework.Run(() =>
         {
-            _logger.LogDebug($"Removing {Id} from highlight");
+            _logger.LogDebug("Removing {Id} from highlight", Id);
             _targetNpcDataId = _targetNpcDataId.Where(n => n != Id).ToArray();
         });
     }
@@ -94,7 +95,7 @@ internal sealed class HighlightObject : IDisposable
             ToggleHighlight(false);
             if (_targetNpcDataId.Length == 0 && Ids.Length == 0)
                 return;
-            _logger.LogDebug($"Setting highlight to {string.Join(',', Ids)}");
+            _logger.LogDebug("Setting highlight to {Ids}", string.Join(',', Ids));
             _targetNpcDataId = Ids;
             ToggleHighlight(true);
         });

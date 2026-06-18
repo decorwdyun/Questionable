@@ -155,7 +155,7 @@ internal sealed class DailyRoutinesIpc: IDisposable
             EAetheryteLocation.FirmamentFeatherfall => GetPlaceName(3525),
             EAetheryteLocation.FirmamentHoarfrostHall => GetPlaceName(3528),
             EAetheryteLocation.FirmamentWesternRisensongQuarter => GetPlaceName(3646),
-            EAetheryteLocation.FIrmamentEasternRisensongQuarter => GetPlaceName(3645),
+            EAetheryteLocation.FirmamentEasternRisensongQuarter => GetPlaceName(3645),
             _ => aetheryteLocation.ToFriendlyString(),
         };
         

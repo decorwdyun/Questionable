@@ -61,7 +61,6 @@ internal static class SkipCondition
         QuestFunctions questFunctions,
         IClientState clientState,
         IObjectTable objectTable,
-        //IPlayerState playerState,
         ICondition condition,
         ExtraConditionUtils extraConditionUtils,
         ClassJobUtils classJobUtils) : TaskExecutor<SkipTask>
@@ -116,7 +115,7 @@ internal static class SkipCondition
             if (skipConditions.ExtraCondition != null && skipConditions.ExtraCondition != EExtraSkipCondition.None &&
                 extraConditionUtils.MatchesExtraCondition(skipConditions.ExtraCondition.Value))
             {
-                logger.LogInformation("Skipping step, extra condition {} matches", skipConditions.ExtraCondition);
+                logger.LogInformation("Skipping step, extra condition {ExtraCondition} matches", skipConditions.ExtraCondition);
                 return true;
             }
 
@@ -132,14 +131,14 @@ internal static class SkipCondition
         private bool CheckFlyingCondition(QuestStep step, SkipStepConditions skipConditions)
         {
             if (skipConditions.Flying == ELockedSkipCondition.Unlocked &&
-                gameFunctions.IsFlyingUnlocked(step.TerritoryId))
+                GameFunctions.IsFlyingUnlocked(step.TerritoryId))
             {
                 logger.LogInformation("Skipping step, as flying is unlocked");
                 return true;
             }
 
             if (skipConditions.Flying == ELockedSkipCondition.Locked &&
-                !gameFunctions.IsFlyingUnlocked(step.TerritoryId))
+                !GameFunctions.IsFlyingUnlocked(step.TerritoryId))
             {
                 logger.LogInformation("Skipping step, as flying is locked");
                 return true;
@@ -350,7 +349,7 @@ internal static class SkipCondition
 
         private bool CheckQuestWorkConditions(ElementId elementId, QuestStep step)
         {
-            QuestProgressInfo? questWork = questFunctions.GetQuestProgressInfo(elementId);
+            QuestProgressInfo? questWork = QuestFunctions.GetQuestProgressInfo(elementId);
             if (questWork != null)
             {
                 if (QuestWorkUtils.HasCompletionFlags(step.CompletionQuestVariablesFlags) &&
@@ -444,32 +443,36 @@ internal static class SkipCondition
 
         private bool CheckPickUpTurnInQuestIds(QuestStep step)
         {
-            if (step.PickUpQuestId != null && questFunctions.IsQuestAcceptedOrComplete(step.PickUpQuestId))
+            if (step.PickUpQuestId != null)
             {
-                logger.LogInformation("Skipping step, as we have already picked up the relevant quest");
-                return true;
-            }
+                if (questFunctions.IsQuestAcceptedOrComplete(step.PickUpQuestId))
+                {
+                    logger.LogInformation("Skipping step, as we have already picked up the relevant quest");
+                    return true;
+                }
 
-            if (step.TurnInQuestId != null && questFunctions.IsQuestComplete(step.TurnInQuestId))
-            {
-                logger.LogInformation("Skipping step, as we have already completed the relevant quest");
-                return true;
-            }
+                if ((configuration.Advanced.SkipAetherCurrents &&
+                    QuestData.AetherCurrentQuests.Contains(step.PickUpQuestId)) ||
+                    GameFunctions.IsFlyingUnlocked(step.TerritoryId)) // story skip apparently makes 1748 impossible to complete -alydev
+                {
+                    logger.LogInformation("Skipping step, as aether current quests should be skipped");
+                    return true;
+                }
 
-            if (step.PickUpQuestId != null &&
-                configuration.Advanced.SkipAetherCurrents &&
-                QuestData.AetherCurrentQuests.Contains(step.PickUpQuestId))
-            {
-                logger.LogInformation("Skipping step, as aether current quests should be skipped");
-                return true;
+                if (configuration.Advanced.SkipARealmRebornHardModePrimals &&
+                    QuestData.HardModePrimals.Contains(step.PickUpQuestId))
+                {
+                    logger.LogInformation("Skipping step, as hard mode primal quests should be skipped");
+                    return true;
+                }
             }
-
-            if (step.PickUpQuestId != null &&
-                configuration.Advanced.SkipARealmRebornHardModePrimals &&
-                QuestData.HardModePrimals.Contains(step.PickUpQuestId))
+            if (step.TurnInQuestId != null)
             {
-                logger.LogInformation("Skipping step, as hard mode primal quests should be skipped");
-                return true;
+                if (questFunctions.IsQuestComplete(step.TurnInQuestId))
+                {
+                    logger.LogInformation("Skipping step, as we have already completed the relevant quest");
+                    return true;
+                }
             }
 
             return false;

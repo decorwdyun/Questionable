@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Dalamud.Plugin.Services;
-using ECommons.MathHelpers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.Steps.Interactions;
@@ -18,6 +17,7 @@ internal sealed class TaskCreator
     TerritoryData territoryData,
     IClientState clientState,
     IChatGui chatGui,
+    Configuration configuration,
     ILogger<TaskCreator> logger)
 {
     private readonly IChatGui _chatGui = chatGui;
@@ -29,21 +29,23 @@ internal sealed class TaskCreator
     public IReadOnlyList<ITask> CreateTasks(Quest quest, byte sequenceNumber, QuestSequence? sequence, QuestStep? step)
     {
         List<ITask> newTasks;
-# if !DEBUG
-        if (quest.Root.Disabled && sequenceNumber.InRange(1, 2))
+
+        if (!configuration.Advanced.Debug && quest.Root.Disabled && sequenceNumber.Equals(1))
         {
             var reason = (quest.Root.Comment ?? "<no reason specified>").Split('\n', 2)[0];
-            _chatGui.PrintError($"The quest '{quest.Info.Name}' has been marked as Disabled for the following reason: {reason}",
+            _chatGui.PrintError($"任务'{quest.Info.Name}'已因以下原因被标记为已禁用：{reason}",
                 CommandHandler.MessageTag, CommandHandler.TagColor);
-            _chatGui.PrintError("We recommend you complete this quest manually, as the provided path may not run successfully.",
+            _chatGui.PrintError("我们建议您手动完成此任务，因为提供的路径可能无法成功运行。",
                 CommandHandler.MessageTag, CommandHandler.TagColor);
-            _chatGui.PrintError("Thank you for your patience as we expand QST's support to include this quest in a future update.",
+            _chatGui.PrintError("感谢您的耐心等待，我们将在未来的更新中扩展QST的支持范围以纳入此任务。",
                 CommandHandler.MessageTag, CommandHandler.TagColor);
         }
-# endif
+
         if (sequence == null)
         {
-            if (!quest.Root.Disabled)
+            if (!quest.Root.Disabled &&
+                quest.FindSequence((byte)(sequenceNumber - 1)) is { } prevSequence &&
+                !prevSequence.Steps.Any(_step => _step is { InteractionType: EInteractionType.Duty or EInteractionType.SinglePlayerDuty }))
             {
                 _chatGui.PrintError(
                     $"任务 '{quest.Info.Name}' ({quest.Id}) 的路径中没有找到序列 {sequenceNumber}，请在此报告问题：https://github.com/PunishXIV/Questionable/discussions/20",

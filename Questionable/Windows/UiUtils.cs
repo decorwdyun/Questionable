@@ -1,39 +1,45 @@
-﻿using System.Numerics;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
 using Dalamud.Plugin;
 using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using Questionable.Functions;
+using Questionable.Model;
 using Questionable.Model.Questing;
+using static Questionable.Utils.LocalizeShortcut;
 namespace Questionable.Windows;
 
 internal sealed class UiUtils(QuestFunctions questFunctions, IDalamudPluginInterface pluginInterface)
 {
-    private readonly IDalamudPluginInterface _pluginInterface = pluginInterface;
-    private readonly QuestFunctions _questFunctions = questFunctions;
-
     public (Vector4 Color, FontAwesomeIcon Icon, string Status) GetQuestStyle(ElementId elementId)
     {
-        if (_questFunctions.IsQuestAccepted(elementId))
-            return (ImGuiColors.DalamudYellow, FontAwesomeIcon.PersonWalkingArrowRight, "已接取");
-        else if (elementId is QuestId questId && _questFunctions.IsDailyAlliedSocietyQuestAndAvailableToday(questId))
+        HashSet<IQuestInfo>? prereqValue = null;
+        if (questFunctions.IsQuestAccepted(elementId))
+            return (ImGuiColors.DalamudYellow, FontAwesomeIcon.PersonWalkingArrowRight, _L("已接取"));
+        else if (elementId is QuestId questId && questFunctions.IsDailyAlliedSocietyQuestAndAvailableToday(questId))
         {
-            if (!_questFunctions.IsReadyToAcceptQuest(questId))
-                return (ImGuiColors.ParsedGreen, FontAwesomeIcon.Check, "已完成");
-            else if (_questFunctions.IsQuestComplete(questId))
-                return (ImGuiColors.ParsedBlue, FontAwesomeIcon.Running, "可接取（已完成）");
+            if (!questFunctions.IsReadyToAcceptQuest(questId))
+                return (ImGuiColors.ParsedGreen, FontAwesomeIcon.Check, _L("已完成"));
+            else if (questFunctions.IsQuestComplete(questId))
+                return (ImGuiColors.ParsedBlue, FontAwesomeIcon.Running, _L("可接取（已完成）"));
             else
-                return (ImGuiColors.DalamudYellow, FontAwesomeIcon.Running, "可接取");
+                return (ImGuiColors.DalamudYellow, FontAwesomeIcon.Running, _L("可接取"));
         }
-        else if (_questFunctions.IsQuestAcceptedOrComplete(elementId))
-            return (ImGuiColors.ParsedGreen, FontAwesomeIcon.Check, "已完成");
-        else if (_questFunctions.IsQuestUnobtainable(elementId))
-            return (ImGuiColors.DalamudGrey, FontAwesomeIcon.Minus, "无法接取");
-        else if (_questFunctions.IsQuestLocked(elementId))
-            return (ImGuiColors.DalamudRed, FontAwesomeIcon.Times, "锁定");
+        else if (questFunctions.IsQuestAcceptedOrComplete(elementId))
+            return (ImGuiColors.ParsedGreen, FontAwesomeIcon.Check, _L("Complete"));
+        else if (questFunctions.IsQuestUnobtainable(elementId))
+            return (ImGuiColors.DalamudGrey, FontAwesomeIcon.Minus, _L("Unobtainable"));
+        else if (questFunctions.IsQuestLocked(elementId) is (bool isLocked, var _) && isLocked &&
+                questFunctions.prereqCache.TryGetValue(elementId.Value, out prereqValue) &&
+                prereqValue.Any(q => questFunctions.IsQuestLocked(q.QuestId) is (bool qIsLocked, string[] reasons) && qIsLocked && !reasons.Contains("Unobtainable")))
+            return (ImGuiColors.DalamudRed, FontAwesomeIcon.Times, _L("Locked"));
+        else if (prereqValue == null)
+            return (ImGuiColors.TankBlue, FontAwesomeIcon.QuestionCircle, _L("Available(?)"));
         else
-            return (ImGuiColors.DalamudYellow, FontAwesomeIcon.Running, "可接取");
+            return (ImGuiColors.DalamudYellow, FontAwesomeIcon.Running, _L("可接取"));
     }
 
     public static (Vector4 color, FontAwesomeIcon icon) GetInstanceStyle(ushort instanceId)
@@ -51,7 +57,7 @@ internal sealed class UiUtils(QuestFunctions questFunctions, IDalamudPluginInter
         if (extraPadding > 0)
             ImGui.SetCursorPosX(ImGui.GetCursorPosX() + extraPadding);
 
-        using (_pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
+        using (pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
         {
             ImGui.TextColored(color, icon.ToIconString());
         }

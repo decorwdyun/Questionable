@@ -11,28 +11,31 @@ internal sealed class BossModModule
     BossModIpc bossModIpc,
     Configuration configuration) : ICombatModule, IDisposable
 {
-    private readonly BossModIpc _bossModIpc = bossModIpc;
-    private readonly Configuration _configuration = configuration;
-    private readonly ILogger<BossModModule> _logger = logger;
+    private bool _justLoaded = true;
 
     public bool CanHandleFight(CombatController.CombatData combatData)
     {
-        if (_configuration.General.CombatModule != Configuration.ECombatModule.BossMod)
+        if (configuration.General.CombatModule != Configuration.ECombatModule.BossMod)
             return false;
 
-        return _bossModIpc.IsSupported();
+        return bossModIpc.IsSupported();
     }
 
     public bool Start(CombatController.CombatData combatData)
     {
         try
         {
-            _bossModIpc.SetPreset(BossModIpc.EPreset.Overworld);
+            if (_justLoaded)
+            {
+                bossModIpc.AddAllPresets(delete: true);
+                _justLoaded = false;
+            }
+            bossModIpc.SetActivePreset(BossModIpc.EPreset.Overworld);
             return true;
         }
         catch (IpcError e)
         {
-            _logger.LogWarning(e, "Could not start combat");
+            logger.LogWarning(e, "Could not start combat");
             return false;
         }
     }
@@ -41,12 +44,12 @@ internal sealed class BossModModule
     {
         try
         {
-            _bossModIpc.ClearPreset();
+            bossModIpc.Cleanup();
             return true;
         }
         catch (IpcError e)
         {
-            _logger.LogWarning(e, "Could not turn off combat");
+            logger.LogWarning(e, "Could not turn off combat");
             return false;
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -39,7 +40,8 @@ public class GatheringSourceGenerator : ISourceGenerator
         if (gatheringSchema != null)
             GenerateGatheringSource(context, gatheringSchema);
     }
-
+    
+    [Conditional("ASSEMBLY")]
     private void GenerateGatheringSource(GeneratorExecutionContext context, AdditionalText jsonSchemaFile)
     {
         JsonSchema gatheringSchema = JsonSchema.FromText(jsonSchemaFile.GetText()!.ToString());
@@ -125,7 +127,7 @@ public class GatheringSourceGenerator : ISourceGenerator
     {
         List<StatementSyntax> statements = [];
 
-        foreach ((ushort QuestId, GatheringRoot Root) quest in quests)
+        foreach ((ushort QuestId, GatheringRoot Root) in quests)
         {
             statements.Add(
                 ExpressionStatement(
@@ -138,9 +140,9 @@ public class GatheringSourceGenerator : ISourceGenerator
                                     {
                                         Argument(
                                             LiteralExpression(SyntaxKind.NumericLiteralExpression,
-                                                Literal(quest.QuestId))),
+                                                Literal(QuestId))),
                                         Token(SyntaxKind.CommaToken),
-                                        Argument(CreateGatheringRootExpression(quest.QuestId, quest.Root))
+                                        Argument(CreateGatheringRootExpression(QuestId, Root))
                                     })))));
         }
 

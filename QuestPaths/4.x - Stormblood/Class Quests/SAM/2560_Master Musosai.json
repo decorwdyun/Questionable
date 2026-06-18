@@ -1,6 +1,7 @@
 ﻿{
   "$schema": "https://qstxiv.github.io/schema/quest-v1.json",
   "Author": "liza",
+  "LastChecked": {"Username": "alydev", "Date": "2026-06-05"},
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -36,6 +37,7 @@
           },
           "TerritoryId": 131,
           "InteractionType": "UseItem",
+          "DelaySecondsAtStart": 2,
           "ItemId": 20620,
           "SkipConditions": {
             "StepIf": {
@@ -65,6 +67,14 @@
       "Sequence": 1,
       "Steps": [
         {
+          "TerritoryId": 131,
+          "AethernetShortcut": [
+            "[Ul'dah] Aetheryte Plaza",
+            "[Ul'dah] Gladiators' Guild"
+          ],
+          "InteractionType": "EquipRecommended"
+        },
+        {
           "DataId": 1023637,
           "Position": {
             "X": -89.28058,
@@ -72,7 +82,8 @@
             "Z": 59.739014
           },
           "TerritoryId": 131,
-          "InteractionType": "SinglePlayerDuty"
+          "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {"Enabled": true}
         }
       ]
     },

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using Dalamud.Bindings.ImGui;
@@ -16,13 +17,14 @@ using Microsoft.Extensions.Logging;
 using Questionable.Controller;
 using Questionable.Model;
 using Questionable.Model.Gathering;
+using static Questionable.Utils.LocalizeShortcut;
 namespace Questionable.Windows.JournalComponents;
 
 internal sealed class GatheringJournalComponent
 {
     private readonly List<ushort> _gatheredItems = [];
     private readonly GatheringController _gatheringController;
-    private readonly Dictionary<int, string> _gatheringItems;
+    private readonly Dictionary<uint, string> _gatheringItems;
     private readonly GatheringPointRegistry _gatheringPointRegistry;
     private readonly List<ExpansionPoints> _gatheringPointsByExpansion;
     private readonly ILogger<GatheringJournalComponent> _logger;
@@ -73,7 +75,7 @@ internal sealed class GatheringJournalComponent
             .Where(x => x.RowId != 0 && x.GatheringItemLevel.RowId != 0)
             .Select(x => new
             {
-                GatheringItemId = (int)x.RowId,
+                GatheringItemId = x.RowId,
                 Name = itemSheet.GetRowOrDefault(x.Item.RowId)?.Name.ToString()
             })
             .Where(x => !string.IsNullOrEmpty(x.Name))
@@ -146,12 +148,12 @@ internal sealed class GatheringJournalComponent
 
     public void DrawGatheringItems()
     {
-        using ImRaii.TabItemDisposable tab = ImRaii.TabItem("Gathering Points");
+        using ImRaii.TabItemDisposable tab = ImRaii.TabItem(_L("采集点"));
         if (!tab)
             return;
 
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
-        if (ImGui.InputTextWithHint(string.Empty, "Search areas, gathering points and items", ref _searchText, 256))
+        if (ImGui.InputTextWithHint(string.Empty, _L("搜索地图，采集点或物品名"), ref _searchText, 256))
             UpdateFilter();
 
         if (_filteredExpansions.Count > 0)
@@ -160,16 +162,16 @@ internal sealed class GatheringJournalComponent
             if (!table)
                 return;
 
-            ImGui.TableSetupColumn("Name", ImGuiTableColumnFlags.NoHide);
-            ImGui.TableSetupColumn("Supported", ImGuiTableColumnFlags.WidthFixed, 100 * ImGui.GetIO().FontGlobalScale);
-            ImGui.TableSetupColumn("Collected", ImGuiTableColumnFlags.WidthFixed, 100 * ImGui.GetIO().FontGlobalScale);
+            ImGui.TableSetupColumn(_L("Name"), ImGuiTableColumnFlags.NoHide);
+            ImGui.TableSetupColumn(_L("Supported"), ImGuiTableColumnFlags.WidthFixed, 100 * ImGui.GetIO().FontGlobalScale);
+            ImGui.TableSetupColumn(_L("Collected"), ImGuiTableColumnFlags.WidthFixed, 100 * ImGui.GetIO().FontGlobalScale);
             ImGui.TableHeadersRow();
 
             foreach (FilteredExpansion expansion in _filteredExpansions)
                 DrawExpansion(expansion);
         }
         else
-            ImGui.Text("No area, gathering point or item matches your search text.");
+            ImGui.Text(_L("No area, gathering point or item matches your search text."));
     }
 
     private void DrawExpansion(FilteredExpansion expansion)
@@ -255,7 +257,7 @@ internal sealed class GatheringJournalComponent
         if (ImGui.IsItemClicked())
         {
             GatheringController.GatheringRequest request = new(pointId, item, 0, 1);
-            _logger.LogDebug($"clicked, doing {request}");
+            _logger.LogDebug("clicked, doing {Request}", request);
             _gatheringController.Start(request);
         }
 
@@ -361,10 +363,10 @@ internal sealed class GatheringJournalComponent
     internal void RefreshCounts()
     {
         _gatheredItems.Clear();
-        foreach (ushort key in _gatheringItems.Keys)
+        foreach (uint key in _gatheringItems.Keys)
         {
             if (IsGatheringItemGathered(key))
-                _gatheredItems.Add(key);
+                _gatheredItems.Add((ushort)key);
         }
 
         foreach (ExpansionPoints expansion in _gatheringPointsByExpansion)
@@ -390,6 +392,7 @@ internal sealed class GatheringJournalComponent
         }
     }
 
+    [SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "Required by LogoutDelegate signature")]
     public void ClearCounts(int type, int code)
     {
         foreach (ExpansionPoints expansion in _gatheringPointsByExpansion)

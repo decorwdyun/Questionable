@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Dalamud.Extensions.MicrosoftLogging;
 using Dalamud.Interface.ImGuiNotification;
 using Dalamud.Interface.Windowing;
@@ -22,7 +23,7 @@ using Questionable.Data;
 using Questionable.External;
 using Questionable.Functions;
 using Questionable.Gear;
-using Questionable.Tweak;
+using Questionable.PathData;
 using Questionable.Utils;
 using Questionable.Validation;
 using Questionable.Validation.Validators;
@@ -32,6 +33,8 @@ using Questionable.Windows.JournalComponents;
 using Questionable.Windows.QuestComponents;
 using Questionable.Windows.Utils;
 using WrathCombo.API;
+using PunishLib;
+using static Questionable.Utils.LocalizeShortcut;
 using Action = Questionable.Controller.Steps.Interactions.Action;
 using WrathError = WrathCombo.API.WrathIPCWrapper.ErrorType;
 
@@ -50,7 +53,6 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         IDataManager dataManager,
         ISigScanner sigScanner,
         IObjectTable objectTable,
-        IPlayerState playerState,
         IPluginLog pluginLog,
         ICondition condition,
         IChatGui chatGui,
@@ -60,8 +62,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         IContextMenu contextMenu,
         IToastGui toastGui,
         IGameInteropProvider gameInteropProvider,
-        IAetheryteList aetheryteList,
         INotificationManager notificationManager)
+
     {
         ArgumentNullException.ThrowIfNull(pluginInterface);
         ArgumentNullException.ThrowIfNull(chatGui);
@@ -69,28 +71,11 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         _pluginInterface = pluginInterface;
         ECommonsMain.Init(pluginInterface, this, Module.DalamudReflector);
 
-#if !DEBUG
-        bool RepoCheck()
-        {
-            string sourceRepository = _pluginInterface.SourceRepository;
-            return sourceRepository == "https://gp.xuolu.com/love.json" ||
-                   sourceRepository.Contains("decorwdyun/DalamudPlugins", StringComparison.OrdinalIgnoreCase);
-        }
-
-        if (_pluginInterface.IsDev || !RepoCheck())
-        {
-            toastGui.ShowError("请看右下角提示，插件禁止本地加载。");
-            notificationManager.AddNotification(new Notification
-            {
-                Type = NotificationType.Error,
-                Title = "加载验证",
-                Content = "由于本地加载或安装来源仓库非 decorwdyun 个人仓库，插件禁止加载。",
-            });
-            return;
-        }
-#endif
-
         WrathIPCWrapper.Init(pluginInterface, WrathError.IPCNotReady | WrathError.Unexpected);
+        PunishLibMain.Init(pluginInterface, "Questionable", new AboutPlugin() {
+            Developer = "alydev",
+            Sponsor = "https://github.com/sponsors/alydevs"
+        });
 
         try
         {
@@ -107,7 +92,6 @@ public sealed class QuestionablePlugin : IDalamudPlugin
             serviceCollection.AddSingleton(dataManager);
             serviceCollection.AddSingleton(sigScanner);
             serviceCollection.AddSingleton(objectTable);
-            serviceCollection.AddSingleton(playerState);
             serviceCollection.AddSingleton(pluginLog);
             serviceCollection.AddSingleton(condition);
             serviceCollection.AddSingleton(chatGui);
@@ -117,9 +101,18 @@ public sealed class QuestionablePlugin : IDalamudPlugin
             serviceCollection.AddSingleton(contextMenu);
             serviceCollection.AddSingleton(toastGui);
             serviceCollection.AddSingleton(gameInteropProvider);
-            serviceCollection.AddSingleton(aetheryteList);
             serviceCollection.AddSingleton(new WindowSystem(nameof(Questionable)));
-            serviceCollection.AddSingleton((Configuration?)pluginInterface.GetPluginConfig() ?? new Configuration());
+
+            var savedConfig = (Configuration?)pluginInterface.GetPluginConfig();
+            if (savedConfig != null && savedConfig?.Version != Configuration.PluginConfigVersion)
+            {
+                // Backup config when version changes
+                pluginInterface.ConfigFile.CopyTo(Path.ChangeExtension(pluginInterface.ConfigFile.FullName, ".json.bak"), true);
+                savedConfig?.Version = Configuration.PluginConfigVersion;
+            }
+            var configuration = savedConfig ?? new Configuration();
+            serviceCollection.AddSingleton(configuration);
+            Questionable.Utils.LocalizeShortcut.Initialize(configuration);
 
             AddBasicFunctionsAndData(serviceCollection);
             AddTaskFactories(serviceCollection);
@@ -135,7 +128,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         }
         catch (Exception)
         {
-            chatGui.PrintError("插件加载失败, 请输入 /xllog 查看日志", "Questionable");
+            chatGui.PrintError(_L("插件加载失败, 请输入 /xllog 查看日志"), _L("Questionable"));
             throw;
         }
     }
@@ -170,6 +163,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<ArtisanIpc>();
         serviceCollection.AddSingleton<QuestionableIpc>();
         serviceCollection.AddSingleton<TextAdvanceIpc>();
+        serviceCollection.AddSingleton<NotificationMasterIpc>();
         serviceCollection.AddSingleton<AutomatonIpc>();
         serviceCollection.AddSingleton<AutoDutyIpc>();
         serviceCollection.AddSingleton<BossModIpc>();
@@ -179,7 +173,6 @@ public sealed class QuestionablePlugin : IDalamudPlugin
 
         serviceCollection.AddSingleton<GearStatsCalculator>();
         serviceCollection.AddSingleton<DailyRoutinesIpc>();
-        serviceCollection.AddSingleton<AutoSnipeHandler>();
     }
 
     private static void AddTaskFactories(ServiceCollection serviceCollection)
@@ -201,6 +194,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
             UpdateGearset.UpdateGearsetExecutor>();
         serviceCollection.AddTaskExecutor<Mount.MountTask, Mount.MountExecutor>();
         serviceCollection.AddTaskExecutor<Mount.UnmountTask, Mount.UnmountExecutor>();
+        serviceCollection.AddTaskExecutor<AbandonQuest.Task, AbandonQuest.AbandonQuestExecutor>();
+        serviceCollection.AddTaskExecutor<LogQuestCompletion.Task, LogQuestCompletion.LogQuestCompletionExecutor>();
 
         // task factories
         serviceCollection
@@ -263,6 +258,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTaskExecutor<UseItem.UseOnObject, UseItem.UseOnObjectExecutor>();
         serviceCollection.AddTaskExecutor<UseItem.UseOnSelf, UseItem.UseOnSelfExecutor>();
         serviceCollection.AddTaskFactoryAndExecutor<EquipItem.Task, EquipItem.Factory, EquipItem.DoEquip>();
+        serviceCollection.AddTaskFactoryAndExecutor<UnequipItem.Task, UnequipItem.Factory, UnequipItem.DoUnequip>();
         serviceCollection
             .AddTaskFactoryAndExecutor<EquipRecommended.EquipTask, EquipRecommended.Factory,
                 EquipRecommended.DoEquipRecommended>();
@@ -279,6 +275,9 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddTaskExecutor<SinglePlayerDuty.Commence, SinglePlayerDuty.CommenceExecutor>();
         serviceCollection
             .AddTaskExecutor<SinglePlayerDuty.WaitSinglePlayerDuty, SinglePlayerDuty.WaitSinglePlayerDutyExecutor>();
+        serviceCollection
+            .AddTaskExecutor<SinglePlayerDuty.WaitForSinglePlayerDutyOutcome,
+                SinglePlayerDuty.WaitForSinglePlayerDutyOutcomeExecutor>();
         serviceCollection.AddTaskExecutor<SinglePlayerDuty.DisableAi, SinglePlayerDuty.DisableAiExecutor>();
         serviceCollection.AddTaskExecutor<SinglePlayerDuty.SetTarget, SinglePlayerDuty.SetTargetExecutor>();
 
@@ -305,11 +304,16 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<MovementOverrideController>();
         serviceCollection.AddSingleton<GatheringPointRegistry>();
         serviceCollection.AddSingleton<QuestRegistry>();
+        serviceCollection.AddSingleton<PathDataUpdater>();
+        serviceCollection.AddSingleton<QuestPriorityManager>();
+        serviceCollection.AddSingleton<QuestProgressTracker>();
         serviceCollection.AddSingleton<QuestController>();
         serviceCollection.AddSingleton<CombatController>();
         serviceCollection.AddSingleton<GatheringController>();
         serviceCollection.AddSingleton<ContextMenuController>();
         serviceCollection.AddSingleton<ShopController>();
+        serviceCollection.AddSingleton<GrandCompanyExchangeController>();
+        serviceCollection.AddSingleton<ChocoboNamingController>();
         serviceCollection.AddSingleton<InterruptHandler>();
 
         serviceCollection.AddSingleton<HighlightObject>();
@@ -318,6 +322,12 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<CraftworksSupplyController>();
         serviceCollection.AddSingleton<CreditsController>();
         serviceCollection.AddSingleton<HelpUiController>();
+        serviceCollection.AddSingleton<DialogueReferenceResolver>();
+        serviceCollection.AddSingleton<TravelDestinationResolver>();
+        serviceCollection.AddSingleton<PointMenuHandler>();
+        serviceCollection.AddSingleton<HousingSelectBlockHandler>();
+        serviceCollection.AddSingleton<YesNoChoiceHandler>();
+        serviceCollection.AddSingleton<DialogueChoiceHandler>();
         serviceCollection.AddSingleton<InteractionUiController>();
 
         serviceCollection.AddSingleton<ICombatModule, Mount128Module>();
@@ -333,6 +343,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
     {
         serviceCollection.AddSingleton<UiUtils>();
         serviceCollection.AddTransient<QuestSelector>();
+        serviceCollection.AddTransient<RedoUtil>();
 
         serviceCollection.AddSingleton<ActiveQuestComponent>();
         serviceCollection.AddSingleton<ARealmRebornComponent>();
@@ -348,6 +359,7 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<QuestRewardComponent>();
         serviceCollection.AddSingleton<GatheringJournalComponent>();
         serviceCollection.AddSingleton<AlliedSocietyJournalComponent>();
+        serviceCollection.AddSingleton<RedoComponent>();
 
         serviceCollection.AddSingleton<OneTimeSetupWindow>();
         serviceCollection.AddSingleton<QuestWindow>();
@@ -376,6 +388,8 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceCollection.AddSingleton<IQuestValidator, NextQuestValidator>();
         serviceCollection.AddSingleton<IQuestValidator, CompletionFlagsValidator>();
         serviceCollection.AddSingleton<IQuestValidator, AethernetShortcutValidator>();
+        serviceCollection.AddSingleton<IAetheryteTerritoryProvider>(sp => sp.GetRequiredService<AetheryteData>());
+        serviceCollection.AddSingleton<IQuestValidator, AcceptQuestTerritoryValidator>();
         serviceCollection.AddSingleton<IQuestValidator, DialogueChoiceValidator>();
         serviceCollection.AddSingleton<IQuestValidator, ClassQuestShouldHaveShortcutValidator>();
         serviceCollection.AddSingleton<IQuestValidator, SinglePlayerInstanceValidator>();
@@ -387,6 +401,9 @@ public sealed class QuestionablePlugin : IDalamudPlugin
 
     private static void Initialize(IServiceProvider serviceProvider)
     {
+        // Resolve before the registry loads — its constructor discards a bundle left by an older
+        // plugin version, so the registry doesn't pick up a stale one.
+        PathDataUpdater pathDataUpdater = serviceProvider.GetRequiredService<PathDataUpdater>();
         serviceProvider.GetRequiredService<QuestRegistry>().Reload();
         serviceProvider.GetRequiredService<GatheringPointRegistry>().Reload();
         serviceProvider.GetRequiredService<SinglePlayerDutyConfigComponent>().Reload();
@@ -395,12 +412,20 @@ public sealed class QuestionablePlugin : IDalamudPlugin
         serviceProvider.GetRequiredService<CraftworksSupplyController>();
         serviceProvider.GetRequiredService<CreditsController>();
         serviceProvider.GetRequiredService<HelpUiController>();
+        serviceProvider.GetRequiredService<PointMenuHandler>();
+        serviceProvider.GetRequiredService<HousingSelectBlockHandler>();
+        serviceProvider.GetRequiredService<YesNoChoiceHandler>();
+        serviceProvider.GetRequiredService<DialogueChoiceHandler>();
         serviceProvider.GetRequiredService<ShopController>();
+        serviceProvider.GetRequiredService<GrandCompanyExchangeController>();
+        serviceProvider.GetRequiredService<ChocoboNamingController>();
         serviceProvider.GetRequiredService<QuestionableIpc>();
         serviceProvider.GetRequiredService<DalamudInitializer>();
         serviceProvider.GetRequiredService<TextAdvanceIpc>();
         serviceProvider.GetRequiredService<YesAlreadyIpc>();
         serviceProvider.GetRequiredService<DailyRoutinesIpc>();
-        serviceProvider.GetRequiredService<AutoSnipeHandler>().Enable();
+
+        pathDataUpdater.CheckForUpdates();
+
     }
 }

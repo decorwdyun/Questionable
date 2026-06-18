@@ -1,6 +1,10 @@
 {
   "$schema": "https://qstxiv.github.io/schema/quest-v1.json",
   "Author": "pot0to",
+  "LastChecked": {
+    "Username": "alydev",
+    "Date": "2026-05-19"
+  },
   "QuestSequence": [
     {
       "Sequence": 0,
@@ -88,7 +92,16 @@
           "Fly": true,
           "SkipConditions": {
             "StepIf": {
-              "CompletionQuestVariablesFlags": [null,null,null,null,null,16]
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                {
+                  "High": 1
+                }
+              ]
             }
           }
         },
@@ -103,7 +116,16 @@
           "StopDistance": 20,
           "InteractionType": "Action",
           "Action": "Heavy Shot",
-          "CompletionQuestVariablesFlags": [null,null,null,null,null,16]
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "High": 1
+            }
+          ]
         },
         {
           "Position": {
@@ -115,7 +137,16 @@
           "InteractionType": "WalkTo",
           "SkipConditions": {
             "StepIf": {
-              "CompletionQuestVariablesFlags": [null,null,null,null,null,32]
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                {
+                  "High": 2
+                }
+              ]
             }
           }
         },
@@ -130,7 +161,16 @@
           "StopDistance": 20,
           "InteractionType": "Action",
           "Action": "Heavy Shot",
-          "CompletionQuestVariablesFlags": [null,null,null,null,null,32]
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "High": 2
+            }
+          ]
         },
         {
           "Position": {
@@ -142,7 +182,16 @@
           "InteractionType": "WalkTo",
           "SkipConditions": {
             "StepIf": {
-              "CompletionQuestVariablesFlags": [null,null,null,null,null,8]
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                {
+                  "Low": 8
+                }
+              ]
             }
           }
         },
@@ -157,7 +206,16 @@
           "StopDistance": 20,
           "InteractionType": "Action",
           "Action": "Heavy Shot",
-          "CompletionQuestVariablesFlags": [null,null,null,null,null,8]
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "Low": 8
+            }
+          ]
         },
         {
           "Position": {
@@ -169,7 +227,16 @@
           "InteractionType": "WalkTo",
           "SkipConditions": {
             "StepIf": {
-              "CompletionQuestVariablesFlags": [null,null,null,null,null,64]
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                {
+                  "High": 4
+                }
+              ]
             }
           }
         },
@@ -184,7 +251,16 @@
           "StopDistance": 20,
           "InteractionType": "Action",
           "Action": "Heavy Shot",
-          "CompletionQuestVariablesFlags": [null,null,null,null,null,64]
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "High": 4
+            }
+          ]
         },
         {
           "Position": {
@@ -196,7 +272,16 @@
           "InteractionType": "WalkTo",
           "SkipConditions": {
             "StepIf": {
-              "CompletionQuestVariablesFlags": [null,null,null,null,null,2]
+              "CompletionQuestVariablesFlags": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                {
+                  "Low": 2
+                }
+              ]
             }
           }
         },
@@ -211,7 +296,16 @@
           "StopDistance": 20,
           "InteractionType": "Action",
           "Action": "Heavy Shot",
-          "CompletionQuestVariablesFlags": [null,null,null,null,null,2]
+          "CompletionQuestVariablesFlags": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "Low": 2
+            }
+          ]
         },
         {
           "Position": {
@@ -272,7 +366,10 @@
             "[Gridania] Archers' Guild",
             "[Gridania] Yellow Serpent Gate (North Shroud)"
           ],
-          "Fly": true
+          "Fly": true,
+          "SinglePlayerDutyOptions": {
+            "Enabled": true
+          }
         }
       ]
     },

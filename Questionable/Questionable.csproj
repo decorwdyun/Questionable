@@ -1,4 +1,4 @@
-﻿<Project Sdk="Dalamud.NET.Sdk/15.0.0">
+<Project Sdk="Dalamud.NET.Sdk/15.0.0">
     <PropertyGroup>
         <OutputPath>dist</OutputPath>
         <PathMap Condition="$(SolutionDir) != ''">$(SolutionDir)=X:\</PathMap>
@@ -6,32 +6,40 @@
         <NoWarn>NU1510</NoWarn>
     </PropertyGroup>
 
+    <Target Name="PopulateI18N">
+        <Exec Command="dotnet tool install --global I18N.DotNet.Tool --version 1.2.1" IgnoreExitCode="true" />
+        <Exec Command="dotnet-i18n-tool parse -S . -o .\Resources\I18N.xml -r -E _L _LF" />
+    </Target>
+
 
     <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
         <DefineConstants>DEBUG;TRACE</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Dalamud.Extensions.MicrosoftLogging" Version="4.0.1"/>
-        <PackageReference Include="ECommons" Version="3.2.0.16"/>
-        <PackageReference Include="JetBrains.Annotations" Version="2025.2.4" ExcludeAssets="runtime"/>
-        <PackageReference Include="JsonSchema.Net" Version="7.4.0"/>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8"/>
-        <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.1"/>
-        <PackageReference Include="System.Text.Json" Version="9.0.3"/>
-        <PackageReference Include="WrathCombo.API" Version="0.5.4"/>
+        <PackageReference Include="Dalamud.Extensions.MicrosoftLogging" Version="4.0.1" />
+        <PackageReference Include="ECommons" Version="3.2.0.16" />
+        <PackageReference Include="I18N.DotNet" Version="1.3.1" />
+        <PackageReference Include="JetBrains.Annotations" Version="2025.2.4" ExcludeAssets="runtime" />
+        <PackageReference Include="JsonSchema.Net" Version="7.4.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.8" />
+        <PackageReference Include="NotificationMasterAPI" Version="1.0.0.1" />
+        <PackageReference Include="PunishLib" Version="2.0.0.1" />
+        <PackageReference Include="System.Text.Json" Version="9.0.3" />
+        <PackageReference Include="WrathCombo.API" Version="0.5.5" />
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <ProjectReference Include="..\GatheringPaths\GatheringPaths.csproj" />
+        <ProjectReference Include="..\Questionable.Model\Questionable.Model.csproj" />
+        <ProjectReference Include="..\QuestPaths\QuestPaths.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\GatheringPaths\GatheringPaths.csproj"/>
-        <ProjectReference Include="..\Questionable.Model\Questionable.Model.csproj"/>
-        <ProjectReference Include="..\QuestPaths\QuestPaths.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Remove="Controller\CombatModules\BossModPreset_Overworld.json"/>
-        <None Remove="Controller\CombatModules\BossModPreset_QuestBattle.json"/>
-        <None Remove="Controller\CombatModules\BossModPreset_NormalMovement.json"/>
+        <None Remove="Controller\CombatModules\BossModPreset_Overworld.json" />
+        <None Remove="Controller\CombatModules\BossModPreset_QuestBattle.json" />
+        <None Remove="Controller\CombatModules\BossModPreset_NormalMovement.json" />
         <EmbeddedResource Include="Controller\CombatModules\BossModPreset_Overworld.json">
             <LogicalName>Questionable.Controller.CombatModules.BossModPreset.Overworld</LogicalName>
         </EmbeddedResource>
@@ -41,5 +49,18 @@
         <EmbeddedResource Include="Controller\CombatModules\BossModPreset_QuestBattle.json">
             <LogicalName>Questionable.Controller.CombatModules.BossModPreset.QuestBattle</LogicalName>
         </EmbeddedResource>
+        <EmbeddedResource Include="Resources\I18N.xml">
+            <LogicalName>Resources.I18N.xml</LogicalName>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>Questionable.Tests</_Parameter1>
+        </AssemblyAttribute>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>DynamicProxyGenAssembly2</_Parameter1>
+        </AssemblyAttribute>
     </ItemGroup>
 </Project>

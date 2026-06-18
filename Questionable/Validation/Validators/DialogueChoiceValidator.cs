@@ -2,6 +2,7 @@
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
+using static Questionable.Utils.LocalizeShortcut;
 namespace Questionable.Validation.Validators;
 
 internal sealed class DialogueChoiceValidator(ExcelFunctions excelFunctions) : IQuestValidator
@@ -10,17 +11,17 @@ internal sealed class DialogueChoiceValidator(ExcelFunctions excelFunctions) : I
 
     public IEnumerable<ValidationIssue> Validate(Quest quest)
     {
-        foreach ((QuestSequence Sequence, int StepId, QuestStep Step) x in quest.AllSteps())
+        foreach ((QuestSequence Sequence, int StepId, QuestStep Step) in quest.AllSteps())
         {
-            if (x.Step.DialogueChoices.Count == 0)
+            if (Step.DialogueChoices.Count == 0)
                 continue;
 
-            foreach (DialogueChoice dialogueChoice in x.Step.DialogueChoices)
+            foreach (DialogueChoice dialogueChoice in Step.DialogueChoices)
             {
                 ExcelRef? prompt = dialogueChoice.Prompt;
                 if (prompt != null)
                 {
-                    ValidationIssue? promptIssue = Validate(quest, x.Sequence, x.StepId, dialogueChoice.ExcelSheet,
+                    ValidationIssue? promptIssue = Validate(quest, Sequence, StepId, dialogueChoice.ExcelSheet,
                         prompt, "Prompt");
                     if (promptIssue != null)
                         yield return promptIssue;
@@ -29,7 +30,7 @@ internal sealed class DialogueChoiceValidator(ExcelFunctions excelFunctions) : I
                 ExcelRef? answer = dialogueChoice.Answer;
                 if (answer != null)
                 {
-                    ValidationIssue? answerIssue = Validate(quest, x.Sequence, x.StepId, dialogueChoice.ExcelSheet,
+                    ValidationIssue? answerIssue = Validate(quest, Sequence, StepId, dialogueChoice.ExcelSheet,
                         answer, "Answer");
                     if (answerIssue != null)
                         yield return answerIssue;
@@ -52,7 +53,7 @@ internal sealed class DialogueChoiceValidator(ExcelFunctions excelFunctions) : I
                     Step = stepId,
                     Type = EIssueType.InvalidExcelRef,
                     Severity = EIssueSeverity.Error,
-                    Description = $"{label} invalid: {excelSheet} → {excelRef.AsKey()}"
+                    Description = _LF("{0} invalid: {1} → {2}", label, excelSheet?.ToString() ?? "", excelRef.AsKey())
                 };
             }
         }
@@ -67,7 +68,7 @@ internal sealed class DialogueChoiceValidator(ExcelFunctions excelFunctions) : I
                     Step = stepId,
                     Type = EIssueType.InvalidExcelRef,
                     Severity = EIssueSeverity.Error,
-                    Description = $"{label} invalid: {excelSheet} → {excelRef.AsRowId()}"
+                    Description = _LF("{0} invalid: {1} → {2}", label, excelSheet?.ToString() ?? "", excelRef.AsKey())
                 };
             }
         }

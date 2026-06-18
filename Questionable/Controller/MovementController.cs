@@ -12,10 +12,12 @@ using Dalamud.Game.ClientState.Objects.SubKinds;
 using Dalamud.Game.ClientState.Objects.Types;
 using Dalamud.Plugin.Ipc.Exceptions;
 using Dalamud.Plugin.Services;
+using ECommons.Throttlers;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Control;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller.NavigationOverrides;
+using Questionable.Controller.Steps.Movement;
 using Questionable.Data;
 using Questionable.External;
 using Questionable.Functions;
@@ -23,6 +25,7 @@ using Questionable.Model;
 using Questionable.Model.Common;
 using Questionable.Model.Common.Converter;
 using Questionable.Model.Questing;
+using static Questionable.Utils.LocalizeShortcut;
 namespace Questionable.Controller;
 
 internal sealed class MovementController
@@ -36,6 +39,7 @@ internal sealed class MovementController
     IObjectTable objectTable,
     AetheryteData aetheryteData,
     ICommandManager commandManager,
+    IChatGui chatGui,
     ILogger<MovementController> logger) : IDisposable
 {
     public const float DefaultVerticalInteractionDistance = 1.95f;
@@ -78,24 +82,54 @@ internal sealed class MovementController
     public DestinationData? Destination { get; set; }
     public DateTime MovementStartedAt { get; private set; } = DateTime.Now;
     public int BuiltNavmeshPercent => navmeshIpc.GetBuildProgress();
+    private DateTime? _landAndRetryTimeout;
+    private DestinationData? _previousDestinationData;
 
     public void Dispose() => Stop();
 
     public void Update()
     {
+        if (_landAndRetryTimeout != null && _previousDestinationData != null)
+        {
+            if (condition[ConditionFlag.InFlight])
+            {
+                if (DateTime.Now > _landAndRetryTimeout)
+                {
+                    Stop();
+                    throw new PathfindingFailedException("Land-and-retry timed out, still InFlight");
+                }
+                return;
+            }
+
+            var retry = _previousDestinationData;
+            _previousDestinationData = null;
+            _landAndRetryTimeout = null;
+            NavigateTo(retry);
+            return;
+        }
         if (_pathfindTask != null && Destination != null)
         {
             if (_pathfindTask.IsCompletedSuccessfully)
             {
-                logger.LogInformation("Pathfinding complete, got {Count} points", _pathfindTask.Result.Count);
-                if (_pathfindTask.Result.Count == 0)
+                List<Vector3> pathfindResult = _pathfindTask.Result;
+                logger.LogInformation("Pathfinding complete, got {Count} points", pathfindResult.Count);
+                if (pathfindResult.Count == 0)
                 {
-                    //_commandManager.ProcessCommand("/vnav rebuild");
-                    ResetPathfinding();
-                    throw new PathfindingFailedException();
+                    if (!Destination.IsFlying && condition[ConditionFlag.InFlight])
+                    {
+                        chatGui.Print(_L("vnavmesh was not able to find a path. Attempting to land, then trying again."),
+                            CommandHandler.MessageTag, CommandHandler.TagColor);
+                        _previousDestinationData = Destination;
+                        _landAndRetryTimeout = DateTime.Now.AddSeconds(10);
+                        ResetPathfinding();
+                        LandExecutor.TryLanding();
+                        return;
+                    }
+                    Stop();
+                    throw new PathfindingFailedException("Pathfinding complete, got 0 points");
                 }
 
-                List<Vector3> navPoints = _pathfindTask.Result.Skip(1).ToList();
+                List<Vector3> navPoints = pathfindResult.Skip(1).ToList();
                 Vector3 start = objectTable[0]?.Position ?? navPoints[0];
                 if (Destination.IsFlying && !condition[ConditionFlag.InFlight] && condition[ConditionFlag.Mounted])
                 {
@@ -130,7 +164,7 @@ internal sealed class MovementController
                 navPoints = Destination.PartialRoute.Concat(navPoints).ToList();
                 logger.LogInformation("Navigating via route: [{Route}]",
                     string.Join(" → ",
-                        _pathfindTask.Result.Select(x => x.ToString("G", CultureInfo.InvariantCulture))));
+                        pathfindResult.Select(x => x.ToString("G", CultureInfo.InvariantCulture))));
 
                 navmeshIpc.MoveTo(navPoints, Destination.IsFlying);
                 MovementStartedAt = DateTime.Now;
@@ -139,10 +173,11 @@ internal sealed class MovementController
             }
             else if (_pathfindTask.IsCompleted)
             {
-                logger.LogWarning("Unable to complete pathfinding task");
+                string error = "Unable to complete pathfinding task";
+                logger.LogWarning(error);
                 //_commandManager.ProcessCommand("/vnav rebuild");
                 ResetPathfinding();
-                throw new PathfindingFailedException();
+                throw new PathfindingFailedException(error);
             }
         }
 
@@ -193,18 +228,6 @@ internal sealed class MovementController
                     {
                         if (AetheryteConverter.IsLargeAetheryte((EAetheryteLocation)Destination.DataId))
                         {
-                            /*
-                            if ((EAetheryteLocation) Destination.DataId is EAetheryteLocation.OldSharlayan
-                                or EAetheryteLocation.UltimaThuleAbodeOfTheEa)
-                                Stop();
-
-                            // TODO verify the first part of this, is there any aetheryte like that?
-                            // TODO Unsure if this is per-aetheryte or what; because e.g. old sharlayan is at -1.53;
-                            //      but Elpis aetherytes fail at around -0.95
-                            if (localPlayerPosition.Y - gameObject.Position.Y < 2.95f &&
-                                    localPlayerPosition.Y - gameObject.Position.Y > -0.9f)
-                                Stop();
-                            */
                             Stop();
                         }
                         else
@@ -244,16 +267,15 @@ internal sealed class MovementController
     {
         Stop();
 
+        NavigationOptions options = new()
+        {
+            StopDistance = destination.StopDistance,
+            VerticalStopDistance = destination.VerticalStopDistance,
+        };
         if (destination.UseNavmesh)
-        {
-            NavigateTo(EMovementType.None, destination.DataId, destination.Position, false, false,
-                destination.StopDistance, destination.VerticalStopDistance);
-        }
+            NavigateTo(EMovementType.None, destination.DataId, destination.Position, options);
         else
-        {
-            NavigateTo(EMovementType.None, destination.DataId, [destination.Position], false, false,
-                destination.StopDistance, destination.VerticalStopDistance);
-        }
+            NavigateTo(EMovementType.None, destination.DataId, [destination.Position], options);
     }
 
     private bool IsOnFlightPath(Vector3 p)
@@ -263,8 +285,7 @@ internal sealed class MovementController
     }
 
     [MemberNotNull(nameof(Destination))]
-    private void PrepareNavigation(EMovementType type, uint? dataId, Vector3 to, bool fly, bool sprint,
-        float? stopDistance, float verticalStopDistance, bool land, bool useNavmesh)
+    private void PrepareNavigation(EMovementType type, uint? dataId, Vector3 to, NavigationOptions options, bool useNavmesh)
     {
         ResetPathfinding();
 
@@ -274,26 +295,44 @@ internal sealed class MovementController
             chatFunctions.ExecuteCommand("/automove off");
         }
 
-        Destination = new(type, dataId, to, stopDistance ?? (QuestStep.DefaultStopDistance - 0.2f), fly,
-            sprint, verticalStopDistance, land, useNavmesh);
+        Destination = new(type, dataId, to,
+            options.StopDistance ?? (QuestStep.DefaultStopDistance - 0.2f),
+            options.Fly, options.Sprint,
+            options.VerticalStopDistance ?? DefaultVerticalInteractionDistance,
+            options.Land, useNavmesh);
         MovementStartedAt = DateTime.MaxValue;
     }
 
-    public void NavigateTo(EMovementType type, uint? dataId, Vector3 to, bool fly, bool sprint,
-        float? stopDistance = null, float? verticalStopDistance = null, bool land = false)
+    /// <summary>
+    /// Unpacks DestinationData params to simplify building new nav options
+    /// </summary>
+    /// <param name="destination">a previous DestinationData instance</param>
+    public void NavigateTo(DestinationData destination) =>
+        NavigateTo(destination.MovementType, destination.DataId, destination.Position, NavigationOptions.FromDestinationData(destination));
+
+    public void NavigateTo(EMovementType type, uint? dataId, Vector3 to, NavigationOptions options)
     {
-        fly |= condition[ConditionFlag.Diving];
-        if (fly && land)
+        bool fly = options.Fly || condition[ConditionFlag.Diving];
+        if (fly && options.Land)
             to = to with { Y = to.Y + 2.6f };
 
-        PrepareNavigation(type, dataId, to, fly, sprint, stopDistance, verticalStopDistance ?? DefaultVerticalInteractionDistance, land, true);
+        NavigationOptions effective = options with { Fly = fly };
+        PrepareNavigation(type, dataId, to, effective, useNavmesh: true);
         logger.LogInformation("Pathfinding to {Destination}", Destination);
 
         Destination.NavmeshCalculations++;
         _cancellationTokenSource = new();
         _cancellationTokenSource.CancelAfter(TimeSpan.FromSeconds(30));
 
-        Vector3 startPosition = objectTable[0]!.Position;
+        Vector3? playerPosition = objectTable[0]?.Position;
+        if (playerPosition == null)
+        {
+            logger.LogWarning("Cannot pathfind: local player object not available");
+            ResetPathfinding();
+            return;
+        }
+
+        Vector3 startPosition = playerPosition.Value;
         if (fly && aetheryteData.CalculateDistance(startPosition, clientState.TerritoryType,
             EAetheryteLocation.CoerthasCentralHighlandsCampDragonhead) < 11f)
         {
@@ -309,27 +348,16 @@ internal sealed class MovementController
 
         _pathfindTask =
             navmeshIpc.Pathfind(startPosition, to, fly, _cancellationTokenSource.Token);
-        //      float range = stopDistance ?? 2.8f;
-        //      if (!_navmeshIpc.SimplePathfindAndMoveCloseTo(to, fly, range))
-        //      {
-        //          _logger.LogWarning("SimpleMove rejected pathfind request (already in progress), stopping first");
-        //          _navmeshIpc.Stop();
-        //          if (!_navmeshIpc.SimplePathfindAndMoveCloseTo(to, fly, range))
-        //          {
-        //              _logger.LogWarning("SimpleMove still rejected after stop");
-        //          }
-        //      }
-        //      MovementStartedAt = DateTime.Now;
     }
 
-    public void NavigateTo(EMovementType type, uint? dataId, List<Vector3> to, bool fly, bool sprint,
-        float? stopDistance, float? verticalStopDistance = null, bool land = false)
+    public void NavigateTo(EMovementType type, uint? dataId, List<Vector3> to, NavigationOptions options)
     {
-        fly |= condition[ConditionFlag.Diving];
-        if (fly && land && to.Count > 0)
+        bool fly = options.Fly || condition[ConditionFlag.Diving];
+        if (fly && options.Land && to.Count > 0)
             to[^1] = to[^1] with { Y = to[^1].Y + 2.6f };
 
-        PrepareNavigation(type, dataId, to.Last(), fly, sprint, stopDistance, verticalStopDistance ?? DefaultVerticalInteractionDistance, land, false);
+        NavigationOptions effective = options with { Fly = fly };
+        PrepareNavigation(type, dataId, to.Last(), effective, useNavmesh: false);
 
         logger.LogInformation("Moving to {Destination}", Destination);
         navmeshIpc.MoveTo(to, fly);
@@ -451,6 +479,8 @@ internal sealed class MovementController
         navmeshIpc.Stop();
         ResetPathfinding();
         Destination = null;
+        _previousDestinationData = null;
+        _landAndRetryTimeout = null;
 
         if (InputManager.IsAutoRunning())
         {
@@ -482,6 +512,28 @@ internal sealed class MovementController
     {
         public long UpdatedAt { get; set; }
         public double Distance2DAtLastUpdate { get; set; }
+    }
+
+    /// <summary>
+    ///     Bundles the optional knobs to <see cref="NavigateTo(EMovementType, uint?, Vector3, NavigationOptions)"/>
+    ///     and its list-overload, replacing what used to be five trailing positional booleans/floats.
+    /// </summary>
+    public sealed record NavigationOptions
+    {
+        public bool Fly { get; init; }
+        public bool Sprint { get; init; }
+        public float? StopDistance { get; init; }
+        public float? VerticalStopDistance { get; init; }
+        public bool Land { get; init; }
+        public static NavigationOptions FromDestinationData(DestinationData destData) =>
+            new()
+            {
+                Fly = destData.IsFlying,
+                Sprint = destData.CanSprint,
+                StopDistance = destData.StopDistance,
+                VerticalStopDistance = destData.VerticalStopDistance,
+                Land = destData.Land
+            };
     }
 
     public sealed class PathfindingFailedException : Exception

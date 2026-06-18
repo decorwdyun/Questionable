@@ -6,7 +6,6 @@ using System.Text;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
-using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
@@ -18,9 +17,11 @@ using Questionable.Data;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
+using Questionable.Utils;
 using Questionable.Windows.Common;
 using Questionable.Windows.QuestComponents;
 using Questionable.Windows.Utils;
+using static Questionable.Utils.LocalizeShortcut;
 namespace Questionable.Windows;
 
 internal sealed class PriorityWindow : LWindow
@@ -28,7 +29,7 @@ internal sealed class PriorityWindow : LWindow
     private const string ClipboardPrefix = "qst:priority:";
     private const string LegacyClipboardPrefix = "qst:v1:";
     private const char ClipboardSeparator = ';';
-    private const string JobQuestsPresetName = "职业/特职任务";
+    private string JobQuestsPresetName = _L("职业/特职任务");
     private readonly IChatGui _chatGui;
 
     private readonly Configuration _configuration;
@@ -50,7 +51,7 @@ internal sealed class PriorityWindow : LWindow
     public PriorityWindow(QuestController questController, QuestFunctions questFunctions, QuestSelector questSelector,
         QuestTooltipComponent questTooltipComponent, UiUtils uiUtils, IChatGui chatGui, QuestRegistry questRegistry,
         IDalamudPluginInterface pluginInterface, Configuration configuration, QuestData questData)
-        : base("任务优先级###QuestionableQuestPriority")
+        : base(_L("任务优先级") + "###QuestionableQuestPriority")
     {
         _questController = questController;
         _questFunctions = questFunctions;
@@ -66,9 +67,9 @@ internal sealed class PriorityWindow : LWindow
         _questSelector.SuggestionPredicate = quest =>
             !quest.Info.IsMainScenarioQuest &&
             !questFunctions.IsQuestUnobtainable(quest.Id) &&
-            questController.ManualPriorityQuests.All(x => x.Id != quest.Id);
+            questController.PriorityManager.Quests.All(x => x.Id != quest.Id);
         _questSelector.DefaultPredicate = quest => questFunctions.IsQuestAccepted(quest.Id);
-        _questSelector.QuestSelected = quest => _questController.ManualPriorityQuests.Add(quest);
+        _questSelector.QuestSelected = quest => _questController.PriorityManager.Add(quest);
 
         Size = new Vector2(400, 400);
         SizeCondition = ImGuiCond.Once;
@@ -86,55 +87,56 @@ internal sealed class PriorityWindow : LWindow
             LoadPreset(JobQuestsPresetName);
         _lastKnownJob = currentJob;
 
-        if (ImGui.CollapsingHeader("说明"))
+        if (ImGui.CollapsingHeader(_L("说明")))
         {
             ImGui.TextWrapped(
-                "Questionable 通常会按以下顺序尝试执行：");
-            ImGui.BulletText("下面手动添加的优先任务（按顺序）");
-            ImGui.BulletText("“优先”任务：职业任务、2.0 极神、水晶塔任务");
+                _L("Questionable 通常会按以下顺序尝试执行："));
+            ImGui.BulletText(_L("下面添加的优先任务（按顺序）"));
+            ImGui.BulletText(_L("\"优先\"任务：职业任务、2.0 极神、2.0 团队任务"));
             ImGui.BulletText(
-                "待办列表中已支持的任务\n（任务日志中始终显示在屏幕上的任务）");
-            ImGui.BulletText("主线任务（如果可用，且未在日志中标记为“忽略”）");
+                _L("待办列表中已支持的任务\n（任务日志中始终显示在屏幕上的任务）"));
+            ImGui.BulletText(_L("主线任务（如果有且未被标记为\"忽略\"）"));
             ImGui.TextWrapped(
-                "如果你没有进行中的主线任务，并且这里也没有添加优先任务，它会优先尝试接取下一个主线任务。");
+                _L("如果没有活跃的主线任务且这里没有添加优先任务，插件会首先尝试接取下一个主线任务。"));
         }
 
         DrawPresets();
 
         ImGui.Separator();
         ImGui.Spacing();
-        ImGui.Text("优先执行的任务：");
+        ImGui.Text(_L("优先执行的任务:"));
         _questSelector.DrawSelection();
         DrawQuestList();
 
         List<ElementId> clipboardItems = ParseClipboardItems();
-        ImGui.BeginDisabled(clipboardItems.Count == 0);
-        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Download, "从剪贴板导入"))
-            ImportFromClipboard(clipboardItems);
-        ImGui.EndDisabled();
-        ImGui.SameLine();
-        ImGui.BeginDisabled(_questController.ManualPriorityQuests.Count == 0);
-        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Upload, "导出到剪贴板"))
-            ExportToClipboard();
-        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Check, "移除已完成任务"))
-            _questController.ManualPriorityQuests.RemoveAll(q => _questFunctions.IsQuestComplete(q.Id));
-        ImGui.SameLine();
-
-        using (ImRaii.Disabled(!ImGui.IsKeyDown(ImGuiKey.ModCtrl)))
+        using (ImRaii.Disabled(clipboardItems.Count == 0))
         {
-            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Trash, "清空全部"))
-                _questController.ClearQuestPriority();
+            if (ImGuiComponentsLocal.IconButtonWithText(FontAwesomeIcon.Download, _L("从剪贴板导入")))
+                ImportFromClipboard(clipboardItems);
         }
+        ImGui.SameLine();
+        using (ImRaii.Disabled(_questController.PriorityManager.IsEmpty))
+        {
+            if (ImGuiComponentsLocal.IconButtonWithText(FontAwesomeIcon.Upload, _L("导出到剪贴板")))
+                ExportToClipboard();
+            if (ImGuiComponentsLocal.IconButtonWithText(FontAwesomeIcon.Check, _L("移除已完成的任务")))
+                _questController.PriorityManager.RemoveCompleted(_questFunctions.IsQuestComplete);
+            ImGui.SameLine();
 
-        if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
-            ImGui.SetTooltip("按住 CTRL 启用此按钮。");
+            using (ImRaii.Disabled(!ImGui.IsKeyDown(ImGuiKey.ModCtrl)))
+            {
+                if (ImGuiComponentsLocal.IconButtonWithText(FontAwesomeIcon.Trash, _L("清空全部")))
+                    _questController.PriorityManager.Clear();
+            }
 
-        ImGui.EndDisabled();
+            if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
+                ImGui.SetTooltip(_L("按住 CTRL 启用此按钮。"));
+        }
     }
 
     private void DrawQuestList()
     {
-        List<Quest> priorityQuests = _questController.ManualPriorityQuests;
+        List<Quest> priorityQuests = [.. _questController.PriorityManager.Quests];
         Quest? itemToRemove = null;
         Quest? itemToAdd = null;
         int indexToAdd = 0;
@@ -149,12 +151,12 @@ internal sealed class PriorityWindow : LWindow
             Quest quest = priorityQuests[i];
             using (ImRaii.PushId($"Quest{quest.Id}"))
             {
-                (Vector4 Color, FontAwesomeIcon Icon, string Status) style = _uiUtils.GetQuestStyle(quest.Id);
+                (Vector4 Color, FontAwesomeIcon Icon, string Status) = _uiUtils.GetQuestStyle(quest.Id);
                 bool hovered;
                 using (IDisposable _ = _pluginInterface.UiBuilder.IconFontFixedWidthHandle.Push())
                 {
                     ImGui.AlignTextToFramePadding();
-                    ImGui.TextColored(style.Color, style.Icon.ToIconString());
+                    ImGui.TextColored(Color, Icon.ToIconString());
                     hovered = ImGui.IsItemHovered();
                 }
 
@@ -170,28 +172,24 @@ internal sealed class PriorityWindow : LWindow
                 {
                     using (ImRaii.PushFont(UiBuilder.IconFont))
                     {
-                        int _pad = 4;
-#if DEBUG
-                        _pad += 4;
-#endif
+                        int _pad = 8;
+
                         ImGui.SameLine(ImGui.GetContentRegionAvail().X +
                                        ImGui.GetStyle().WindowPadding.X -
                                        ImGui.CalcTextSize(FontAwesomeIcon.ArrowsUpDown.ToIconString()).X -
                                        ImGui.CalcTextSize(FontAwesomeIcon.Times.ToIconString()).X -
-#if DEBUG
                                        ImGui.CalcTextSize(FontAwesomeIcon.Edit.ToIconString()).X -
-#endif
                                        ImGui.GetStyle().FramePadding.X * _pad -
                                        ImGui.GetStyle().ItemSpacing.X);
                     }
 
                     if (_draggedItem == quest.Id)
                     {
-                        ImGuiComponents.IconButton("##Move", FontAwesomeIcon.ArrowsUpDown,
+                        ImGuiComponentsLocal.IconButton("##Move", FontAwesomeIcon.ArrowsUpDown,
                             ImGui.ColorConvertU32ToFloat4(ImGui.GetColorU32(ImGuiCol.ButtonActive)));
                     }
                     else
-                        ImGuiComponents.IconButton("##Move", FontAwesomeIcon.ArrowsUpDown);
+                        ImGuiComponentsLocal.IconButton("##Move", FontAwesomeIcon.ArrowsUpDown);
 
                     if (_draggedItem == null && ImGui.IsItemActive() && ImGui.IsMouseDragging(ImGuiMouseButton.Left))
                         _draggedItem = quest.Id;
@@ -202,27 +200,21 @@ internal sealed class PriorityWindow : LWindow
                 {
                     using (ImRaii.PushFont(UiBuilder.IconFont))
                     {
-                        int _pad = 2;
-#if DEBUG
-                        _pad += 4;
-#endif
+                        int _pad = 6;
+
                         ImGui.SameLine(ImGui.GetContentRegionAvail().X +
                                        ImGui.GetStyle().WindowPadding.X -
                                        ImGui.CalcTextSize(FontAwesomeIcon.Times.ToIconString()).X -
-#if DEBUG
                                        ImGui.CalcTextSize(FontAwesomeIcon.Edit.ToIconString()).X -
-#endif
                                        ImGui.GetStyle().FramePadding.X * _pad);
                     }
                 }
 
-#if DEBUG
-                if (ImGuiComponents.IconButton(FontAwesomeIcon.Edit))
-                    (bool success, string filename) = QuestRegistry.OpenEditor(_questRegistry.AssemblyLocation, $"{quest.Info.QuestId}_{quest.Info.SimplifiedName}.json");
+                if (ImGuiComponentsLocal.IconButton(FontAwesomeIcon.Edit))
+                    (bool success, string filename) = QuestRegistry.OpenEditor(quest.Info);
                 ImGui.SameLine();
-#endif
 
-                if (ImGuiComponents.IconButton($"##Remove{i}", FontAwesomeIcon.Times))
+                if (ImGuiComponentsLocal.IconButton($"##Remove{i}", FontAwesomeIcon.Times))
                     itemToRemove = quest;
             }
 
@@ -251,13 +243,10 @@ internal sealed class PriorityWindow : LWindow
         }
 
         if (itemToRemove != null)
-            priorityQuests.Remove(itemToRemove);
+            _questController.PriorityManager.Remove(itemToRemove);
 
         if (itemToAdd != null)
-        {
-            priorityQuests.Remove(itemToAdd);
-            priorityQuests.Insert(indexToAdd, itemToAdd);
-        }
+            _questController.PriorityManager.Move(priorityQuests.IndexOf(itemToAdd), indexToAdd);
     }
 
     private static List<ElementId> ParseClipboardItems()
@@ -303,31 +292,31 @@ internal sealed class PriorityWindow : LWindow
     public string EncodeQuestPriority()
     {
         return ClipboardPrefix + Convert.ToBase64String(Encoding.UTF8.GetBytes(
-            string.Join(ClipboardSeparator, _questController.ManualPriorityQuests.Select(x => x.Id.ToString()))));
+            string.Join(ClipboardSeparator, _questController.PriorityManager.Quests.Select(x => x.Id.ToString()))));
     }
 
     private void ExportToClipboard()
     {
         string clipboardText = EncodeQuestPriority();
         ImGui.SetClipboardText(clipboardText);
-        _chatGui.Print("已复制任务到剪贴板。", CommandHandler.MessageTag, CommandHandler.TagColor);
+        _chatGui.Print(_L("已将任务列表复制到剪贴板。"), CommandHandler.MessageTag, CommandHandler.TagColor);
     }
 
-    private void ImportFromClipboard(List<ElementId> questElements) => _questController.ImportQuestPriority(questElements);
+    private void ImportFromClipboard(List<ElementId> questElements) => _questController.PriorityManager.Import(questElements);
 
     private void DrawPresets()
     {
-        if (!ImGui.CollapsingHeader("预设"))
+        if (!ImGui.CollapsingHeader(_L("预设")))
             return;
 
         Dictionary<string, List<ElementId>> builtInPresets = GetOrCreateBuiltInPresets();
         Dictionary<string, List<string>> userPresets = _configuration.Priority.Presets;
 
-        string preview = _selectedPresetName ?? "选择预设...";
+        string preview = _selectedPresetName ?? _L("选择预设...");
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
         if (ImGui.BeginCombo("##PresetSelection", preview, ImGuiComboFlags.HeightLarge))
         {
-            ImGui.TextDisabled("内置");
+            ImGui.TextDisabled(_L("内置"));
             foreach (string name in builtInPresets.Keys)
             {
                 if (ImGui.Selectable(name, _selectedPresetName == name))
@@ -340,7 +329,7 @@ internal sealed class PriorityWindow : LWindow
             if (userPresets.Count > 0)
             {
                 ImGui.Separator();
-                ImGui.TextDisabled("自定义");
+                ImGui.TextDisabled(_L("自定义"));
                 foreach (string name in userPresets.Keys)
                 {
                     if (ImGui.Selectable(name, _selectedPresetName == name))
@@ -354,19 +343,22 @@ internal sealed class PriorityWindow : LWindow
             ImGui.EndCombo();
         }
 
+        ImGui.TextColoredWrapped(ImGuiColors.DalamudRed, _L("Selecting a preset will override your current priority list and activate the preset. " +
+            "You can save your current list as a preset by entering a name below and selecting Save."));
+
         ImGui.Spacing();
 
         ImGui.SetNextItemWidth(ImGui.GetContentRegionAvail().X);
-        ImGui.InputTextWithHint("##PresetName", "预设名称...", ref _presetName, 128);
+        ImGui.InputTextWithHint("##PresetName", _L("预设名称..."), ref _presetName, 128);
 
         bool nameEmpty = string.IsNullOrWhiteSpace(_presetName);
         bool nameIsBuiltIn = !nameEmpty && builtInPresets.ContainsKey(_presetName.Trim());
         bool nameExists = !nameEmpty && userPresets.ContainsKey(_presetName.Trim());
-        bool noQuests = _questController.ManualPriorityQuests.Count == 0;
+        bool noQuests = _questController.PriorityManager.IsEmpty;
 
         using (ImRaii.Disabled(nameEmpty || nameIsBuiltIn || noQuests || (nameExists && !ImGui.IsKeyDown(ImGuiKey.ModCtrl))))
         {
-            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Save, "保存预设"))
+            if (ImGuiComponentsLocal.IconButtonWithText(FontAwesomeIcon.Save, _L("保存预设")))
             {
                 SavePreset(_presetName.Trim());
                 _presetName = string.Empty;
@@ -379,7 +371,7 @@ internal sealed class PriorityWindow : LWindow
             ImGui.SameLine();
             using (ImRaii.Disabled(!ImGui.IsKeyDown(ImGuiKey.ModCtrl)))
             {
-                if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Trash, "删除预设"))
+                if (ImGuiComponentsLocal.IconButtonWithText(FontAwesomeIcon.Trash, _L("删除预设")))
                 {
                     userPresets.Remove(_selectedPresetName!);
                     _selectedPresetName = null;
@@ -388,16 +380,15 @@ internal sealed class PriorityWindow : LWindow
             }
 
             if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
-                ImGui.SetTooltip("按住 CTRL 启用此按钮。");
+                ImGui.SetTooltip(_L("按住 CTRL 启用此按钮。"));
         }
 
         if (nameIsBuiltIn)
-            ImGui.TextColored(ImGuiColors.DalamudRed, "无法覆盖内置预设。");
+            ImGui.TextColored(ImGuiColors.DalamudRed, _L("无法覆盖内置预设。"));
         else if (nameExists)
-            ImGui.TextColored(ImGuiColors.DalamudYellow, "按住 CTRL 覆盖已有预设。");
+            ImGui.TextColored(ImGuiColors.DalamudYellow, _L("按住 CTRL 覆盖现有预设。"));
     }
 
-    //TODO Add all jobs for all role quests
     private Dictionary<string, List<ElementId>> GetOrCreateBuiltInPresets()
     {
         if (_builtInPresets != null)
@@ -407,22 +398,58 @@ internal sealed class PriorityWindow : LWindow
             835, 903, 916, 918, 919, 920, 929, 928, 930, 931, 932, 945, 1010, 1011, 1015, 1017, 1019, 1553, 1021, 1023,
             1024, 1025, 1026, 1027, 1028, 1029, 1030, 1031, 1032, 1033, 1034, 1035
         ]).FromNumericListOfQuests();
+        List<ElementId> postARRUnlocks = ((ushort[])[
+            // don't add DoH/DoL unlocks to this
+            // Features
+            160, 1463, // materia
+            699, 3017, // dyes, glams
+            1210, // aesthetician
+            1211, // treasure maps
+            1431, // challenge log
+            1432, 1433, 1434, // retainers
+            1212, 1213, 1214, // housing districts
+            1563, 1564, 1565, // hunts
+            4644, // island sanc visit
+            3759, // new game+
+            5187, // free fantasia
+            // Duties
+            94, // sastacha hard
+            697, 1410, // halatali
+            764, 96, // qarn
+            870, 431, // wanderer's palace
+            921, // cutter's cry
+            1128, 1129, 1130, // dzemael gc
+            1131, 1132, 1133, // aurum gc
+            1135, // amdapor (requires aurum)
+            430, // amdapor hard
+            1208, 1209, // pharos sirius
+            1215, // haukke hard
+            1216, // copperbell hard
+            1389, // lost city of amdapor
+            1411, // brayflox hard
+            1524, // tamtara hard
+            1525, // stone vigil hard
+            1526, // hullbreaker isle
+            2248, // hullbreaker hard
+            1556, // palace of the dead
+        ]).FromNumericListOfQuests();
         _builtInPresets = new()
         {
             [JobQuestsPresetName] = [],
-            ["2.0 极神任务"] = QuestData.HardModePrimals.Cast<ElementId>().ToList(),
-            ["水晶塔任务"] = QuestData.CrystalTowerQuests.Cast<ElementId>().ToList(),
-            ["风脉任务：苍穹之禁城"] = GetAetherCurrentQuests(397, 398, 399, 400, 401),
-            ["风脉任务：红莲之狂潮"] = GetAetherCurrentQuests(612, 613, 614, 620, 621, 622),
-            ["风脉任务：暗影之逆焰"] = GetAetherCurrentQuests(813, 814, 815, 816, 817, 818),
-            ["风脉任务：晓月之终途"] = GetAetherCurrentQuests(956, 957, 958, 959, 960, 961),
-            ["风脉任务：金曦之遗辉"] = GetAetherCurrentQuests(1187, 1188, 1189, 1190, 1191, 1192),
-            ["职能任务：防护"] = _questData.GetRoleQuests(Job.PLD).Select(x => x.QuestId).ToList(),
-            ["职能任务：治疗"] = _questData.GetRoleQuests(Job.WHM).Select(x => x.QuestId).ToList(),
-            ["职能任务：近战输出"] = _questData.GetRoleQuests(Job.MNK).Select(x => x.QuestId).ToList(),
-            ["职能任务：远程物理"] = _questData.GetRoleQuests(Job.BRD).Select(x => x.QuestId).ToList(),
-            ["职能任务：远程魔法"] = _questData.GetRoleQuests(Job.BLM).Select(x => x.QuestId).ToList(),
-            ["金币奖励（将 TextAdvance 设置为优先金币袋）"] = gilList
+            [_L("2.0 极神任务")] = QuestData.HardModePrimals.Cast<ElementId>().ToList(),
+            [_L("水晶塔系列任务")] = QuestData.CrystalTowerQuests.Cast<ElementId>().ToList(),
+            [_L("风脉泉：苍穹之禁城")] = GetAetherCurrentQuests(397, 398, 399, 400, 401),
+            [_L("风脉泉：红莲之狂潮")] = GetAetherCurrentQuests(612, 613, 614, 620, 621, 622),
+            [_L("风脉泉：暗影之逆焰")] = GetAetherCurrentQuests(813, 814, 815, 816, 817, 818),
+            [_L("风脉泉：晓月之终途")] = GetAetherCurrentQuests(956, 957, 958, 959, 960, 961),
+            [_L("风脉泉：金曦之遗辉")] = GetAetherCurrentQuests(1187, 1188, 1189, 1190, 1191, 1192),
+            [_L("职能任务：防护")] = _questData.GetRoleQuests(Job.PLD).Select(x => x.QuestId).ToList(),
+            [_L("职能任务：治疗")] = _questData.GetRoleQuests(Job.WHM).Select(x => x.QuestId).ToList(),
+            [_L("职能任务：近战")] = _questData.GetRoleQuests(Job.MNK).Select(x => x.QuestId).ToList(),
+            [_L("职能任务：远敏")] = _questData.GetRoleQuests(Job.BRD).Select(x => x.QuestId).ToList(),
+            [_L("职能任务：法师")] = _questData.GetRoleQuests(Job.BLM).Select(x => x.QuestId).ToList(),
+            [_L("金币（设置 TextAdvance 优先选择金币）")] = gilList,
+            [_L("Post-ARR unlocks")] = postARRUnlocks,
         };
 
         return _builtInPresets;
@@ -439,18 +466,18 @@ internal sealed class PriorityWindow : LWindow
 
     private void LoadPreset(string name)
     {
-        _questController.ClearQuestPriority();
+        _questController.PriorityManager.Clear();
 
         if (name == JobQuestsPresetName)
         {
-            _questController.ImportQuestPriority(GetCurrentJobQuests());
+            _questController.PriorityManager.Import(GetCurrentJobQuests());
             return;
         }
 
         Dictionary<string, List<ElementId>> builtInPresets = GetOrCreateBuiltInPresets();
         if (builtInPresets.TryGetValue(name, out List<ElementId>? questIds))
         {
-            _questController.ImportQuestPriority(questIds);
+            _questController.PriorityManager.Import(questIds);
         }
         else if (_configuration.Priority.Presets.TryGetValue(name, out List<string>? questIdStrings))
         {
@@ -461,13 +488,13 @@ internal sealed class PriorityWindow : LWindow
                     ids.Add(id);
             }
 
-            _questController.ImportQuestPriority(ids);
+            _questController.PriorityManager.Import(ids);
         }
     }
 
     private void SavePreset(string name)
     {
-        List<string> questIds = _questController.ManualPriorityQuests
+        List<string> questIds = _questController.PriorityManager.Quests
             .Select(q => q.Id.ToString())
             .ToList();
         _configuration.Priority.Presets[name] = questIds;

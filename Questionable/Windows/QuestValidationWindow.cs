@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
+using System.Text.Json;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
 using Dalamud.Interface.Colors;
-using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Interface.Windowing;
 using Dalamud.Plugin;
@@ -11,8 +11,10 @@ using FFXIVClientStructs.FFXIV.Common.Math;
 using Questionable.Controller;
 using Questionable.Data;
 using Questionable.Model;
+using Questionable.Utils;
 using Questionable.Validation;
 using Questionable.Windows.Common;
+using static Questionable.Utils.LocalizeShortcut;
 namespace Questionable.Windows;
 
 internal sealed class QuestValidationWindow : LWindow
@@ -24,7 +26,7 @@ internal sealed class QuestValidationWindow : LWindow
 
     public QuestValidationWindow(QuestValidator questValidator, QuestData questData,
         QuestController questController, IDalamudPluginInterface pluginInterface)
-        : base("Quest Validation###QuestionableValidator")
+        : base(_L("Quest Validation") + "###QuestionableValidator")
     {
         _questValidator = questValidator;
         _questData = questData;
@@ -41,6 +43,9 @@ internal sealed class QuestValidationWindow : LWindow
 
     public override void DrawContent()
     {
+        if (ImGuiComponentsLocal.IconButton("###QuestValidationCopy", FontAwesomeIcon.Copy))
+            ImGui.SetClipboardText(JsonSerializer.Serialize(_questValidator.Issues, JsonOptions.Default));
+
         using ImRaii.TableDisposable table = ImRaii.Table("QuestSelection", 5, ImGuiTableFlags.Borders | ImGuiTableFlags.ScrollY);
         if (!table)
         {
@@ -48,11 +53,11 @@ internal sealed class QuestValidationWindow : LWindow
             return;
         }
 
-        ImGui.TableSetupColumn("Quest", ImGuiTableColumnFlags.WidthFixed, 50);
+        ImGui.TableSetupColumn(_L("Quest"), ImGuiTableColumnFlags.WidthFixed, 125);
         ImGui.TableSetupColumn("", ImGuiTableColumnFlags.WidthFixed, 200);
-        ImGui.TableSetupColumn("Seq", ImGuiTableColumnFlags.WidthFixed, 30);
-        ImGui.TableSetupColumn("Step", ImGuiTableColumnFlags.WidthFixed, 30);
-        ImGui.TableSetupColumn("Issue", ImGuiTableColumnFlags.None, 200);
+        ImGui.TableSetupColumn(_L("Seq"), ImGuiTableColumnFlags.WidthFixed, 30);
+        ImGui.TableSetupColumn(_L("Step"), ImGuiTableColumnFlags.WidthFixed, 30);
+        ImGui.TableSetupColumn(_L("Issue"), ImGuiTableColumnFlags.WidthStretch, 1.0f);
         ImGui.TableHeadersRow();
 
         foreach (ValidationIssue validationIssue in _questValidator.Issues)
@@ -65,10 +70,11 @@ internal sealed class QuestValidationWindow : LWindow
 
                 if (validationIssue.ElementId != null)
                 {
+                    ImGui.SameLine();
                     IQuestInfo quest = _questData.GetQuestInfo(validationIssue.ElementId);
-                    bool copy = ImGuiComponents.IconButton(FontAwesomeIcon.Copy);
+                    bool copy = ImGuiComponentsLocal.IconButton($"###ValidationWindowCopy{quest.QuestId.Value}", FontAwesomeIcon.Copy);
                     if (ImGui.IsItemHovered())
-                        ImGui.SetTooltip("Copy as file name");
+                        ImGui.SetTooltip(_L("Copy as file name"));
                     if (copy)
                     {
                         string fileName = $"{quest.QuestId}_{quest.SimplifiedName}.json";
@@ -76,11 +82,18 @@ internal sealed class QuestValidationWindow : LWindow
                     }
 
                     ImGui.SameLine();
-                    bool sim = ImGuiComponents.IconButton(FontAwesomeIcon.Play, new(16));
+                    bool sim = ImGuiComponentsLocal.IconButton($"###ValidationWindowSim{quest.QuestId.Value}", FontAwesomeIcon.Play);
                     if (ImGui.IsItemHovered())
-                        ImGui.SetTooltip("Simulate quest");
+                        ImGui.SetTooltip(_L("Simulate quest"));
                     if (sim)
                         _questController.SimulateQuest(quest, validationIssue.Sequence ?? 0, 0);
+
+                    ImGui.SameLine();
+                    bool edit = ImGuiComponentsLocal.IconButton($"###ValidationWindowEdit{quest.QuestId.Value}", FontAwesomeIcon.Edit);
+                    if (ImGui.IsItemHovered())
+                        ImGui.SetTooltip(QuestRegistry.OpenEditorDescription);
+                    if (edit)
+                        QuestRegistry.OpenEditor(quest);
                 }
             }
 

@@ -7,6 +7,7 @@ using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
 using Dalamud.Plugin;
 using Dalamud.Plugin.Services;
+using ECommons.DalamudServices;
 using ECommons.ExcelServices;
 using ECommons.ImGuiMethods;
 using Lumina.Excel.Sheets;
@@ -14,31 +15,31 @@ using Questionable.Controller;
 using Questionable.Data;
 using Questionable.External;
 using Questionable.Model.Questing;
+using Questionable.Utils;
+using static Questionable.Utils.LocalizeShortcut;
 using GrandCompany = FFXIVClientStructs.FFXIV.Client.UI.Agent.GrandCompany;
 
 namespace Questionable.Windows.ConfigComponents;
 
 internal sealed class GeneralConfigComponent : ConfigComponent
 {
-    private static readonly List<(uint Id, string Name)> DefaultMounts = [(0, "随机坐骑")];
-    private static readonly List<(Job ClassJob, string Name)> DefaultClassJobs = [(Job.ADV, "自动（等级/装等最高的）")];
+    private static readonly (uint Id, string Name) DefaultMount = (0, _L("随机坐骑"));
+    private static readonly (Job ClassJob, string Name) DefaultClassJob = (Job.ADV, _L("自动（等级/装等最高的）"));
 
-    private readonly Job[] _classJobIds;
-    private readonly string[] _classJobNames;
-    private readonly Job[] _craftJobIds;
-    private readonly string[] _craftJobNames;
-    private readonly Job[] _gatherJobIds;
-    private readonly string[] _gatherJobNames;
-
-    private readonly string[] _grandCompanyNames = ["未选择（需要时再手动）", "黑涡团", "双蛇党", "恒辉队"];
-
-    private readonly uint[] _mountIds;
-    private readonly string[] _mountNames;
+    private readonly string[] _grandCompanyNames =
+        [_L("未选择（需要时再手动）"), _L("黑涡团"), _L("双蛇党"), _L("恒辉队")];
 
     private readonly QuestRegistry _questRegistry;
     private readonly TerritoryData _territoryData;
     private readonly IDalamudPluginInterface _pluginInterface;
     private readonly DailyRoutinesIpc _dailyRoutinesIpc;
+    private readonly Lazy<List<Job>> _sortedClassJobs;
+    private readonly Lazy<(uint[] Ids, string[] Names)> _mounts;
+    private readonly Lazy<(Job[] Ids, string[] Names)> _classJobs;
+    private readonly Lazy<(Job[] Ids, string[] Names)> _craftJobs;
+    private readonly Lazy<(Job[] Ids, string[] Names)> _gatherJobs;
+    private string _mountSearchString = string.Empty;
+    private string _langSearchString = string.Empty;
 
     public GeneralConfigComponent(
         IDalamudPluginInterface pluginInterface,
@@ -55,159 +56,207 @@ internal sealed class GeneralConfigComponent : ConfigComponent
         _pluginInterface = pluginInterface;
         _dailyRoutinesIpc = dailyRoutinesIpc;
 
+        _sortedClassJobs = new(() => [.. classJobUtils.SortedClassJobs.Select(x => x.ClassJob)]);
+        _mounts = new(() => BuildMounts(dataManager));
+        _classJobs = new(() => BuildJobList(
+            Enum.GetValues<Job>().Where(x => x != Job.ADV && !x.IsCrafter() && !x.IsGatherer() && !x.IsClass()),
+            prependDefault: true));
+        _craftJobs = new(() => BuildJobList(
+            Enum.GetValues<Job>().Where(x => x != Job.ADV && x.IsCrafter()),
+            prependDefault: false));
+        _gatherJobs = new(() => BuildJobList(
+            Enum.GetValues<Job>().Where(x => x == Job.MIN || x == Job.BTN),
+            prependDefault: false));
+    }
+
+    private static (uint[] Ids, string[] Names) BuildMounts(IDataManager dataManager)
+    {
         List<(uint MountId, string Name)> mounts = dataManager.GetExcelSheet<Mount>()
             .Where(x => x is { RowId: > 0, Icon: > 0 })
             .Select(x => (MountId: x.RowId, Name: x.Singular.ToString()))
             .Where(x => !string.IsNullOrEmpty(x.Name))
             .OrderBy(x => x.Name)
             .ToList();
-        _mountIds = DefaultMounts.Select(x => x.Id).Concat(mounts.Select(x => x.MountId)).ToArray();
-        _mountNames = DefaultMounts.Select(x => x.Name).Concat(mounts.Select(x => x.Name)).ToArray();
+        uint[] ids = [DefaultMount.Id, .. mounts.Select(x => x.MountId)];
+        string[] names = [DefaultMount.Name, .. mounts.Select(x => x.Name)];
+        return (ids, names);
+    }
 
-        List<Job> sortedClassJobs = classJobUtils.SortedClassJobs.Select(x => x.ClassJob).ToList();
-        List<Job> classJobs = Enum.GetValues<Job>()
-            .Where(x => x != Job.ADV)
-            .Where(x => !x.IsCrafter() && !x.IsGatherer())
-            .Where(x => !x.IsClass())
-            .OrderBy(x => sortedClassJobs.IndexOf(x))
-            .ToList();
-        _classJobIds = DefaultClassJobs.Select(x => x.ClassJob).Concat(classJobs).ToArray();
-        _classJobNames = DefaultClassJobs.Select(x => x.Name).Concat(classJobs.Select(x => x.ToFriendlyString())).ToArray();
-
-        List<Job> craftJobs = Enum.GetValues<Job>()
-            .Where(x => x != Job.ADV)
-            .Where(x => x.IsCrafter())
-            .OrderBy(x => sortedClassJobs.IndexOf(x))
-            .ToList();
-        _craftJobIds = craftJobs.ToArray();
-        _craftJobNames = craftJobs.Select(x => x.ToFriendlyString()).ToArray();
-
-        List<Job> gatherJobs = Enum.GetValues<Job>()
-            .Where(x => x != Job.ADV)
-            .Where(x => x == Job.MIN || x == Job.BTN)
-            .OrderBy(x => sortedClassJobs.IndexOf(x))
-            .ToList();
-        _gatherJobIds = gatherJobs.ToArray();
-        _gatherJobNames = gatherJobs.Select(x => x.ToFriendlyString()).ToArray();
+    private (Job[] Ids, string[] Names) BuildJobList(IEnumerable<Job> source, bool prependDefault)
+    {
+        List<Job> sorted = _sortedClassJobs.Value;
+        List<Job> jobs = [.. source.OrderBy(x => sorted.IndexOf(x))];
+        if (prependDefault)
+        {
+            Job[] ids = [DefaultClassJob.ClassJob, .. jobs];
+            string[] names = [DefaultClassJob.Name, .. jobs.Select(x => x.ToString())];
+            return (ids, names);
+        }
+        else
+        {
+            return ([.. jobs], [.. jobs.Select(x => x.ToString())]);
+        }
     }
 
     public override void DrawTab()
     {
-        using ImRaii.TabItemDisposable tab = ImRaii.TabItem("通用###General");
+        using ImRaii.TabItemDisposable tab = ImRaii.TabItem(_L("通用") + "###General");
         if (!tab)
             return;
-
+        Dictionary<string, string> languages = new(){
+            { "en",    _L("English") },
+            { "ja-jp", _L("Japanese") },
+            { "zh-cn", _L("Chinese (Simplified)") },
+            { "af",    _L("Afrikaans") + " (WIP)" },
+            { "ar",    _L("Arabic") + " (WIP)" },
+            { "sq",    _L("Albanian") + " (WIP)" },
+            { "eu",    _L("Basque") + " (WIP)" },
+            { "be",    _L("Belarusian") + " (WIP)" },
+            { "bg",    _L("Bulgarian") + " (WIP)" },
+            { "ca",    _L("Catalan") + " (WIP)" },
+            { "zh-tw", _L("Chinese (Traditional)") + " (WIP)" },
+            { "hr",    _L("Croatian") + " (WIP)" },
+            { "cs",    _L("Czech") + " (WIP)" },
+            { "en-au", _L("English (Australian)") + " (WIP)" },
+            { "fr",    _L("French") + " (WIP)" },
+            { "de",    _L("German") + " (WIP)" },
+            { "es",    _L("Spanish") + " (WIP)" },
+        };
+        string language = Configuration.General.Language;
+        if (ImGuiComponentsLocal.DrawSearchableCombo(_L("Language"), languages.Keys.ToArray(), languages.Values.ToArray(),
+            Configuration.General.Language, ref _langSearchString, ref language))
+        {
+            var was = Configuration.General.Language;
+            Configuration.General.Language = language;
+            Save();
+            if (was != Configuration.General.Language)
+                DalamudInitializer.SetupI18N(Configuration.General.Language);
+        }
 
         Configuration.ECombatModule combatModule = Configuration.General.CombatModule;
-        if (ImGuiEx.EnumCombo("首选战斗模块", ref combatModule))
+        if (ImGuiEx.EnumCombo(_L("首选战斗模块"), ref combatModule))
         {
             Configuration.General.CombatModule = combatModule;
             Save();
         }
 
-        int selectedMount = Array.FindIndex(_mountIds, x => x == Configuration.General.MountId);
-        if (selectedMount == -1)
+        (uint[] mountIds, string[] mountNames) = _mounts.Value;
+        uint mountId = Configuration.General.MountId;
+        if (ImGuiComponentsLocal.DrawSearchableCombo(_L("首选坐骑"), mountIds, mountNames,
+            Configuration.General.MountId, ref _mountSearchString, ref mountId))
         {
-            selectedMount = 0;
-            Configuration.General.MountId = _mountIds[selectedMount];
-            Save();
-        }
-
-        if (ImGui.Combo("首选坐骑", ref selectedMount, _mountNames, _mountNames.Length))
-        {
-            Configuration.General.MountId = _mountIds[selectedMount];
+            Configuration.General.MountId = mountId;
             Save();
         }
 
         int grandCompany = (int)Configuration.General.GrandCompany;
-        if (ImGui.Combo("首选部队阵营", ref grandCompany, _grandCompanyNames,
+        if (ImGui.Combo(_L("首选部队阵营"), ref grandCompany, _grandCompanyNames,
             _grandCompanyNames.Length))
         {
             Configuration.General.GrandCompany = (GrandCompany)grandCompany;
             Save();
         }
 
-        int combatJob = Array.IndexOf(_classJobIds, Configuration.General.CombatJob);
-        if (combatJob == -1)
-        {
-            Configuration.General.CombatJob = Job.ADV;
-            Save();
+        (Job[] classJobIds, string[] classJobNames) = _classJobs.Value;
+        DrawComboOption(_L("Preferred Combat Job"), classJobIds, classJobNames,
+            () => Configuration.General.CombatJob,
+            v => Configuration.General.CombatJob = v);
 
-            combatJob = 0;
+
+        (Job[] craftJobIds, string[] craftJobNames) = _craftJobs.Value;
+        DrawComboOption(_L("首选生产职业"), craftJobIds, craftJobNames,
+            () => Configuration.General.CraftingJob,
+            v => Configuration.General.CraftingJob = v);
+
+        (Job[] gatherJobIds, string[] gatherJobNames) = _gatherJobs.Value;
+        DrawComboOption(_L("首选采集职业"), gatherJobIds, gatherJobNames,
+            () => Configuration.General.GatheringJob,
+            v => Configuration.General.GatheringJob = v);
+
+
+        using (ImRaii.Disabled(!StylistIpc.IsInstalled))
+        {
+            Configuration.EGearsetUpdateSource gearsetSource = Configuration.General.GearsetUpdateSource;
+            if (ImGuiEx.EnumCombo(_L("装备管理器（一键最强）"), ref gearsetSource))
+            {
+                Configuration.General.GearsetUpdateSource = gearsetSource;
+                Save();
+            }
+            if (!StylistIpc.IsInstalled && gearsetSource is Configuration.EGearsetUpdateSource.Stylist)
+            {
+                Svc.Chat.Print(_L("你设置了使用 Stylist 管理装备，但该插件未安装。已重置为默认。"), CommandHandler.MessageTag, CommandHandler.TagColor);
+                Configuration.General.GearsetUpdateSource = Configuration.EGearsetUpdateSource.Vanilla;
+                Save();
+            }
         }
 
-        if (ImGui.Combo("首选战斗职业", ref combatJob, _classJobNames, _classJobNames.Length))
+        string chocoboName = Configuration.General.ChocoboName;
+        if (ImGui.InputText(_L("陆行鸟名字"), ref chocoboName, 20))
+            Configuration.General.ChocoboName = chocoboName;
+
+        if (ImGui.IsItemDeactivatedAfterEdit())
         {
-            Configuration.General.CombatJob = _classJobIds[combatJob];
-            Save();
-        }
-
-
-        int craftingJob = Array.IndexOf(_craftJobIds, Configuration.General.CraftingJob);
-        if (craftingJob == -1)
-        {
-            Configuration.General.CraftingJob = Job.CRP;
-            Save();
-
-            craftingJob = 8;
-        }
-
-        if (ImGui.Combo("首选生产职业", ref craftingJob, _craftJobNames, _craftJobNames.Length))
-        {
-            Configuration.General.CraftingJob = _craftJobIds[craftingJob];
-            Save();
-        }
-
-
-        int gatherJob = Array.IndexOf(_gatherJobIds, Configuration.General.GatheringJob);
-        if (gatherJob == -1)
-        {
-            Configuration.General.GatheringJob = Job.MIN;
-            Save();
-
-            gatherJob = 16;
-        }
-
-        if (ImGui.Combo("首选采集职业", ref gatherJob, _gatherJobNames, _gatherJobNames.Length))
-        {
-            Configuration.General.GatheringJob = _gatherJobIds[gatherJob];
+            if (string.IsNullOrWhiteSpace(Configuration.General.ChocoboName))
+                Configuration.General.ChocoboName = _L("陆行鸟");
             Save();
         }
 
-        Configuration.EGearsetUpdateSource gearsetSource = Configuration.General.GearsetUpdateSource;
-        if (ImGuiEx.EnumCombo("装备管理器（一键最强）", ref gearsetSource))
+        if (ImGui.IsItemHovered())
         {
-            Configuration.General.GearsetUpdateSource = gearsetSource;
+            using (ImRaii.Tooltip())
+            {
+                ImGui.Text(_L("在\"我的专属陆行鸟\"任务中为你的陆行鸟取的名字。"));
+                ImGui.Text(_L("如果留空，将默认为\"陆行鸟\"。"));
+            }
+        }
+
+        string displayName = Configuration.General.DisplayName;
+        if (ImGui.InputText(_L("Display name"), ref displayName, 20))
+            Configuration.General.DisplayName = displayName;
+
+        if (ImGui.IsItemDeactivatedAfterEdit())
+        {
+            if (string.IsNullOrWhiteSpace(Configuration.General.DisplayName))
+                Configuration.General.DisplayName = _L("Anonymous");
             Save();
+        }
+
+        if (ImGui.IsItemHovered())
+        {
+            using (ImRaii.Tooltip())
+            {
+                ImGui.Text(_L("The name associated with submissions to help with QST's development."));
+                ImGui.Text(_L("Defaults to \"Anonymous\" if left blank."));
+            }
         }
 
         ImGui.Separator();
-        ImGui.Text("界面");
+        ImGui.Text(_L("界面"));
         using (ImRaii.PushIndent())
         {
             bool hideInAllInstances = Configuration.General.HideInAllInstances;
-            if (ImGui.Checkbox("在所有副本中隐藏任务窗口", ref hideInAllInstances))
+            if (ImGui.Checkbox(_L("在所有副本中隐藏任务窗口"), ref hideInAllInstances))
             {
                 Configuration.General.HideInAllInstances = hideInAllInstances;
                 Save();
             }
 
             bool useEscToCancelQuesting = Configuration.General.UseEscToCancelQuesting;
-            if (ImGui.Checkbox("使用 ESC 取消任务/移动", ref useEscToCancelQuesting))
+            if (ImGui.Checkbox(_L("使用 ESC 取消任务/移动"), ref useEscToCancelQuesting))
             {
                 Configuration.General.UseEscToCancelQuesting = useEscToCancelQuesting;
                 Save();
             }
 
             bool showIncompleteSeasonalEvents = Configuration.General.ShowIncompleteSeasonalEvents;
-            if (ImGui.Checkbox("显示未完成季节活动详情", ref showIncompleteSeasonalEvents))
+            if (ImGui.Checkbox(_L("显示未完成季节活动详情"), ref showIncompleteSeasonalEvents))
             {
                 Configuration.General.ShowIncompleteSeasonalEvents = showIncompleteSeasonalEvents;
                 Save();
             }
 
             bool hideSponsorButton = Configuration.General.HideSponsorButton;
-            if (ImGui.Checkbox("隐藏赞助按钮", ref hideSponsorButton))
+            if (ImGui.Checkbox(_L("隐藏赞助按钮"), ref hideSponsorButton))
             {
                 Configuration.General.HideSponsorButton = hideSponsorButton;
                 Save();
@@ -216,11 +265,11 @@ internal sealed class GeneralConfigComponent : ConfigComponent
 
 #if REPORTING
         ImGui.Separator();
-        ImGui.Text("问题反馈");
+        ImGui.Text(_L("问题反馈"));
         using (ImRaii.PushIndent())
         {
             bool reportOptOut = Configuration.General.ReportsDisabled;
-            if (ImGui.Checkbox("不发送问题反馈", ref reportOptOut))
+            if (ImGui.Checkbox(_L("不发送问题反馈"), ref reportOptOut))
             {
                 Configuration.General.ReportsDisabled = reportOptOut;
                 Configuration.General.DismissedReportWarning = true;
@@ -228,7 +277,7 @@ internal sealed class GeneralConfigComponent : ConfigComponent
             }
 
             bool dismissedReportWarning = Configuration.General.DismissedReportWarning;
-            if (ImGui.Checkbox("隐藏问题反馈提醒", ref dismissedReportWarning))
+            if (ImGui.Checkbox(_L("隐藏问题反馈提醒"), ref dismissedReportWarning))
             {
                 Configuration.General.DismissedReportWarning = dismissedReportWarning;
                 Save();
@@ -237,7 +286,7 @@ internal sealed class GeneralConfigComponent : ConfigComponent
             if (!reportOptOut)
             {
                 string reportMessage = Configuration.General.ReportMessage;
-                if (ImGui.InputText("反馈备注", ref reportMessage, 256))
+                if (ImGui.InputText(_L("反馈备注"), ref reportMessage, 256))
                 {
                     Configuration.General.ReportMessage = reportMessage;
                     Save();
@@ -247,11 +296,11 @@ internal sealed class GeneralConfigComponent : ConfigComponent
 #endif
 
         ImGui.Separator();
-        ImGui.Text("任务设置");
+        ImGui.Text(_L("任务设置"));
         using (ImRaii.PushIndent())
         {
             bool configureTextAdvance = Configuration.General.ConfigureTextAdvance;
-            if (ImGui.Checkbox("自动配置 TextAdvance",
+            if (ImGui.Checkbox(_L("自动配置 TextAdvance"),
                 ref configureTextAdvance))
             {
                 Configuration.General.ConfigureTextAdvance = configureTextAdvance;
@@ -260,19 +309,31 @@ internal sealed class GeneralConfigComponent : ConfigComponent
 
             if (configureTextAdvance)
             {
+                bool dontSkipCutscenes = Configuration.General.DontSkipCutscenes;
                 using (ImRaii.PushIndent())
                 {
-                    bool dontSkipCutscenes = Configuration.General.DontSkipCutscenes;
-                    if (ImGui.Checkbox("但不跳过过场和对话", ref dontSkipCutscenes))
+                    if (ImGui.Checkbox(_L("但不跳过过场和对话"), ref dontSkipCutscenes))
                     {
                         Configuration.General.DontSkipCutscenes = dontSkipCutscenes;
                         Save();
                     }
                 }
+                if (dontSkipCutscenes)
+                {
+                    using (ImRaii.PushIndent(2))
+                    {
+                        bool dontShowAnswerSuggestions = Configuration.General.DontShowAnswerSuggestions;
+                        if (ImGui.Checkbox(_L("并且不显示系统会帮你选择的答案"), ref dontShowAnswerSuggestions))
+                        {
+                            Configuration.General.DontShowAnswerSuggestions = dontShowAnswerSuggestions;
+                            Save();
+                        }
+                    }
+                }
             }
 
             bool skipLowPriorityInstances = Configuration.General.SkipLowPriorityDuties;
-            if (ImGui.Checkbox("解锁部分可选副本和大型任务（而不是等待手动完成）", ref skipLowPriorityInstances))
+            if (ImGui.Checkbox(_L("解锁部分可选副本和大型任务（而不是等待手动完成）"), ref skipLowPriorityInstances))
             {
                 Configuration.General.SkipLowPriorityDuties = skipLowPriorityInstances;
                 Save();
@@ -288,11 +349,11 @@ internal sealed class GeneralConfigComponent : ConfigComponent
             {
                 using (ImRaii.Tooltip())
                 {
-                    ImGui.Text("Questionable 插件会自动接取一些可选任务（例如风脉泉任务，或 2.0 版本的 24 人团队任务）。");
-                    ImGui.Text("如果开启此设置，Questionable 将继续推进其他任务，而不会等待你手动完成该副本。");
+                    ImGui.Text(_L("Questionable 插件会自动接取一些可选任务（例如风脉泉任务，或 2.0 版本的 24 人团队任务）。"));
+                    ImGui.Text(_L("如果开启此设置，Questionable 将继续推进其他任务，而不会等待你手动完成该副本。"));
 
                     ImGui.Separator();
-                    ImGui.Text("此设置将影响以下副本和大型任务：");
+                    ImGui.Text(_L("此设置将影响以下副本和大型任务："));
                     foreach ((uint ContentFinderConditionId, ElementId QuestId, int Sequence) lowPriorityCfc in _questRegistry.LowPriorityContentFinderConditionQuests)
                     {
                         if (_territoryData.TryGetContentFinderCondition(lowPriorityCfc.ContentFinderConditionId, out TerritoryData.ContentFinderConditionData? cfcData))
@@ -302,7 +363,7 @@ internal sealed class GeneralConfigComponent : ConfigComponent
             }
 
             bool useTickets = Configuration.General.UseTickets;
-            if (ImGui.Checkbox("可用时使用传送券", ref useTickets))
+            if (ImGui.Checkbox(_L("可用时使用传送券"), ref useTickets))
             {
                 Configuration.General.UseTickets = useTickets;
                 Save();
@@ -312,14 +373,14 @@ internal sealed class GeneralConfigComponent : ConfigComponent
             {
                 using (ImRaii.Tooltip())
                 {
-                    ImGui.Text("最好在游戏内传送设置中配置，这里只是为了方便。");
+                    ImGui.Text(_L("最好在游戏内传送设置中配置，这里只是为了方便。"));
                 }
             }
 
 #if false
             ImGui.Spacing();
             bool autoStepRefreshEnabled = Configuration.General.AutoStepRefreshEnabled;
-            if (ImGui.Checkbox("卡住时自动刷新任务步骤（开发中，见提示）", ref autoStepRefreshEnabled))
+            if (ImGui.Checkbox(_L("卡住时自动刷新任务步骤（开发中，见提示）"), ref autoStepRefreshEnabled))
             {
                 Configuration.General.AutoStepRefreshEnabled = autoStepRefreshEnabled;
                 Save();
@@ -335,9 +396,9 @@ internal sealed class GeneralConfigComponent : ConfigComponent
             {
                 using (ImRaii.Tooltip())
                 {
-                    ImGui.Text("如果任务步骤在配置的延迟后疑似卡住，Questionable 会自动刷新该步骤。");
-                    ImGui.Text("这有助于在中断发生后恢复自动任务。");
-                    ImGui.Text("此功能仍在开发中，可能并不完整。");
+                    ImGui.Text(_L("如果任务步骤在配置的延迟后疑似卡住，Questionable 会自动刷新该步骤。"));
+                    ImGui.Text(_L("这有助于在中断发生后恢复自动任务。"));
+                    ImGui.Text(_L("此功能仍在开发中，可能并不完整。"));
                 }
             }
 
@@ -346,14 +407,14 @@ internal sealed class GeneralConfigComponent : ConfigComponent
                 ImGui.Indent();
                 int autoStepRefreshDelay = Configuration.General.AutoStepRefreshDelaySeconds;
                 ImGui.SetNextItemWidth(150f);
-                if (ImGui.SliderInt("刷新延迟（秒）", ref autoStepRefreshDelay, 30, 180))
+                if (ImGui.SliderInt(_L("刷新延迟（秒）"), ref autoStepRefreshDelay, 30, 180))
                 {
                     Configuration.General.AutoStepRefreshDelaySeconds = autoStepRefreshDelay;
                     Save();
                 }
 
                 ImGui.TextColored(new System.Numerics.Vector4(0.7f, 0.7f, 0.7f, 1.0f),
-                    $"如果 {autoStepRefreshDelay} 秒内没有进展，任务步骤将自动刷新。");
+                    _LF("如果 {0} 秒内没有进展，任务步骤将自动刷新。", autoStepRefreshDelay));
                 ImGui.Unindent();
             }
 #endif

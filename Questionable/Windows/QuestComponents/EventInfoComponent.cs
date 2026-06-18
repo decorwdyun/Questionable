@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using Dalamud.Bindings.ImGui;
 using Dalamud.Interface;
-using Dalamud.Interface.Components;
 using Dalamud.Interface.Utility.Raii;
 using Humanizer;
 using Humanizer.Localisation;
@@ -15,6 +13,8 @@ using Questionable.Data;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
+using Questionable.Utils;
+using static Questionable.Utils.LocalizeShortcut;
 namespace Questionable.Windows.QuestComponents;
 
 internal sealed class EventInfoComponent
@@ -28,12 +28,11 @@ internal sealed class EventInfoComponent
     Configuration configuration)
 {
     private readonly Configuration _configuration = configuration;
-    [SuppressMessage("ReSharper", "CollectionNeverUpdated.Local")]
     private readonly List<EventQuest> _eventQuests =
     [
-        new("Limited Time Items", [new UnlockLinkId(568)], DateTime.MaxValue),
-        new("A Maiden's Rhapsody", [new QuestId(2206)], AtDailyReset(new(2026,5,25))) // May 25, 2026 at 3pm (GMT)
-        //new("Valentione's Day 2026", [new QuestId(5325)], AtDailyReset(new(2026, 2, 16))) // January 15, 2026 at 6:59 a.m. (PST) 
+        // Add seasonal events here. If a quest has additional required quests (e.g Make It Rain > Gold Saucer), add a relation in QuestData#L220
+        new(_L("Limited Time Items"), [new UnlockLinkId(568)], DateTime.MaxValue),
+        new(_L("Make It Rain 2026"), [new QuestId(5443)], AtDailyReset(new(2026,6,24))) // May 25, 2026 at 3pm (GMT)
     ];
     private readonly QuestController _questController = questController;
 
@@ -45,7 +44,6 @@ internal sealed class EventInfoComponent
 
     public bool ShouldDraw => _configuration.General.ShowIncompleteSeasonalEvents && _eventQuests.Any(IsIncomplete);
 
-    [SuppressMessage("ReSharper", "UnusedMember.Local")]
     private static DateTime AtDailyReset(DateOnly date) => new(date, new(14, 59), DateTimeKind.Utc);
 
     public void Draw()
@@ -85,13 +83,20 @@ internal sealed class EventInfoComponent
             using (ImRaii.PushId($"##EventQuestSelection{questId}"))
             {
                 string questName = _questData.GetQuestInfo(questId).Name;
+
+                bool priority = ImGuiComponentsLocal.IconButton(FontAwesomeIcon.ExclamationCircle);
+                if (ImGui.IsItemHovered())
+                    ImGui.SetTooltip(_L("Add to priority quests"));
+                if (priority)
+                    _questController.PriorityManager.Add(questId);
+                ImGui.SameLine();
                 if (startableQuests.Contains(questId) &&
                     _questRegistry.TryGetQuest(questId, out Quest? quest))
                 {
-                    if (ImGuiComponents.IconButton(FontAwesomeIcon.Play))
+                    if (ImGuiComponentsLocal.IconButton(FontAwesomeIcon.Play))
                     {
                         _questController.SetNextQuest(quest);
-                        _questController.Start("SeasonalEventSelection");
+                        _questController.Start(_L("SeasonalEventSelection"));
                     }
 
                     bool hovered = ImGui.IsItemHovered();
@@ -108,8 +113,8 @@ internal sealed class EventInfoComponent
                 {
                     ImGui.SetCursorPosX(ImGui.GetCursorPosX());
 
-                    (Vector4 Color, FontAwesomeIcon Icon, string Status) style = _uiUtils.GetQuestStyle(questId);
-                    if (_uiUtils.ChecklistItem(questName, style.Color, style.Icon, ImGui.GetStyle().FramePadding.X))
+                    (Vector4 Color, FontAwesomeIcon Icon, string Status) = _uiUtils.GetQuestStyle(questId);
+                    if (_uiUtils.ChecklistItem(questName, Color, Icon, ImGui.GetStyle().FramePadding.X))
                         _questTooltipComponent.Draw(_questData.GetQuestInfo(questId));
                 }
             }

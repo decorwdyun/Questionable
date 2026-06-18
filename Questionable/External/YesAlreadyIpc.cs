@@ -1,11 +1,10 @@
 ﻿using System;
 using Dalamud.Plugin.Services;
-using ECommons.DalamudServices;
 using ECommons.EzIpcManager;
-using ECommons.Reflection;
 using Microsoft.Extensions.Logging;
 using Questionable.Controller;
 using Questionable.Data;
+using static Questionable.External.IPCUtils;
 #pragma warning disable CS0649 // Field is never assigned to, and will always have its default value
 namespace Questionable.External;
 
@@ -35,7 +34,7 @@ internal sealed class YesAlreadyIpc : IDisposable
         _clientState = clientState;
         _logger = logger;
         _wasEnabled = IsPluginEnabled();
-        _logger.LogInformation($"Enabled:{_wasEnabled}");
+        _logger.LogInformation("Enabled:{WasEnabled}", _wasEnabled);
 
         _framework.Update += OnUpdate;
     }
@@ -43,12 +42,18 @@ internal sealed class YesAlreadyIpc : IDisposable
     public void Dispose()
     {
         _framework.Update -= OnUpdate;
+        if (IPCSubscriber_Common.IsInstalled("YesAlready") && _wasEnabled && !IsPluginEnabled())
+        {
+            _logger.LogDebug("Re-enabling YesAlready on dispose");
+            SetPluginEnabled(true);
+        }
+
         IPCSubscriber_Common.DisposeAll(_disposalTokens);
     }
 
     private void OnUpdate(IFramework framework)
     {
-        if (IPCSubscriber_Common.IsReady("YesAlready"))
+        if (IPCSubscriber_Common.IsInstalled("YesAlready"))
         {
             bool hasActiveQuest = (_questController.IsRunning ||
                                    _questController.AutomationType != QuestController.EAutomationType.Manual) &&
@@ -69,36 +74,6 @@ internal sealed class YesAlreadyIpc : IDisposable
                     _logger.LogDebug("Requested YesAlready on");
                     SetPluginEnabled(true);
                     _wasEnabled = false;
-                }
-            }
-        }
-    }
-
-    internal sealed class IPCSubscriber_Common
-    {
-        internal static bool IsReady(string pluginName) => DalamudReflector.TryGetDalamudPlugin(pluginName, out object _, false, true);
-
-        internal static Version Version(string pluginName)
-        {
-            Version _version;
-            if (DalamudReflector.TryGetDalamudPlugin(pluginName, out object? dalamudPlugin, false, true))
-                _version = dalamudPlugin.GetType().Assembly.GetName().Version ?? new Version(0, 0, 0, 0);
-            else
-                _version = new(0, 0, 0, 0);
-            return _version;
-        }
-
-        internal static void DisposeAll(EzIPCDisposalToken[] _disposalTokens)
-        {
-            foreach (EzIPCDisposalToken token in _disposalTokens)
-            {
-                try
-                {
-                    token.Dispose();
-                }
-                catch (Exception ex)
-                {
-                    Svc.Log.Error($"Error while unregistering IPC: {ex}");
                 }
             }
         }

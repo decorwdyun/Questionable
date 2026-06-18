@@ -29,6 +29,12 @@
         "resolved": "3.2.0.16",
         "contentHash": "nbWQqETgnryEWedkZSxNValCgTdylNOibwkaYNYvGoY7XBXWK1KzKVgAroPQpGGrF2Q3NX1mbhoDczAaePYc8w=="
       },
+      "I18N.DotNet": {
+        "type": "Direct",
+        "requested": "[1.3.1, )",
+        "resolved": "1.3.1",
+        "contentHash": "b9uFO1ALnFNECyTTJZxHjzQjThtsL8Z8P7YLyo5QFM5FWmjpHK1vPPcUYdPBCgwlBn/Ffszefq7fIsjQMIqQLg=="
+      },
       "JetBrains.Annotations": {
         "type": "Direct",
         "requested": "[2025.2.4, )",
@@ -53,11 +59,20 @@
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.8"
         }
       },
-      "System.Security.Cryptography.ProtectedData": {
+      "NotificationMasterAPI": {
         "type": "Direct",
-        "requested": "[10.0.1, )",
-        "resolved": "10.0.1",
-        "contentHash": "9SqHNq+lAjZeyPcm69FTQEjr+wsRYvkS3aW8yxoEndVYwDRkCrsP/44QPqpWHwzevoX26rkOoQ6kr7GZWngw2A=="
+        "requested": "[1.0.0.1, )",
+        "resolved": "1.0.0.1",
+        "contentHash": "ta+lQtxQzHkqPC3doDn3ud8MvtwNnTgTIeXqfqu92G4lAy+/UJZ6iEefFH4MRZmX8Z99nUmUJZ4zcRvVMABzjQ=="
+      },
+      "PunishLib": {
+        "type": "Direct",
+        "requested": "[2.0.0.1, )",
+        "resolved": "2.0.0.1",
+        "contentHash": "1wr+HPnJAywcO82+4/FyPW9m/cAzpE5L8gz+TFe2+gHpbDUJRuw3Od+JQNNzkcw3WDi73Z8fXW2n8n2Tjjvv2A==",
+        "dependencies": {
+          "ECommons": "3.2.0.11"
+        }
       },
       "System.Text.Json": {
         "type": "Direct",
@@ -67,9 +82,9 @@
       },
       "WrathCombo.API": {
         "type": "Direct",
-        "requested": "[0.5.4, )",
-        "resolved": "0.5.4",
-        "contentHash": "L9aHWAqc/rT+jmn+bdgnocWWncZmb8+15kLEcbrIGg6i6W+EuDnghYhe6PIJuiuqa1Bs6J9wvRjz5hblwP628w=="
+        "requested": "[0.5.5, )",
+        "resolved": "0.5.5",
+        "contentHash": "mvUBFTUQt35b52MeyuPXPk+3udCAmZ+cLV5mv9Y67FQP78UT+qtpEMdAGYxEynj7+hcPGL4fGk2GB2L6eRle5Q=="
       },
       "Humanizer.Core": {
         "type": "Transitive",
@@ -130,19 +145,16 @@
       "gatheringpaths": {
         "type": "Project",
         "dependencies": {
-          "Questionable.Model": "[15.278.0, )"
+          "Questionable.Model": "[15.300.0.1, )"
         }
       },
       "questionable.model": {
-        "type": "Project",
-        "dependencies": {
-          "System.Text.Json": "[9.0.3, )"
-        }
+        "type": "Project"
       },
       "questpaths": {
         "type": "Project",
         "dependencies": {
-          "Questionable.Model": "[15.278.0, )"
+          "Questionable.Model": "[15.300.0.1, )"
         }
       }
     }

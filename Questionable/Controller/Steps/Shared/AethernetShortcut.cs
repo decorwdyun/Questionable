@@ -163,8 +163,11 @@ internal static class AethernetShortcut
 
                         Vector3 closestPoint = nearbyPoints.MinBy(x => Vector3.Distance(playerPosition, x));
                         _moving = true;
-                        movementController.NavigateTo(EMovementType.Quest, (uint)Task.From, closestPoint, false, true,
-                            0.25f);
+                        movementController.NavigateTo(EMovementType.Quest, (uint)Task.From, closestPoint, new()
+                        {
+                            Sprint = true,
+                            StopDistance = 0.25f,
+                        });
                         return true;
                     }
                     else
@@ -205,16 +208,18 @@ internal static class AethernetShortcut
             float distance = Task.From switch
             {
                 var _ when Task.From.IsFirmamentAetheryte() => 4.4f,
-                EAetheryteLocation.UldahChamberOfRule => 5f,
                 var _ when AetheryteConverter.IsLargeAetheryte(Task.From) => 10.9f,
-                var _ => 6.9f
+                var _ => 5f
             };
 
             bool goldSaucerAethernetShard = aetheryteData.IsGoldSaucerAetheryte(Task.From) &&
                                             !AetheryteConverter.IsLargeAetheryte(Task.From);
-            movementController.NavigateTo(EMovementType.Quest, (uint)Task.From, aetheryteData.Locations[Task.From],
-                false, true, distance,
-                goldSaucerAethernetShard ? 5f : null);
+            movementController.NavigateTo(EMovementType.Quest, (uint)Task.From, aetheryteData.Locations[Task.From], new()
+            {
+                Sprint = true,
+                StopDistance = distance,
+                VerticalStopDistance = goldSaucerAethernetShard ? 5f : null,
+            });
         }
 
         private void DoTeleport()

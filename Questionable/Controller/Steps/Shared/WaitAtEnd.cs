@@ -12,6 +12,7 @@ using Questionable.External;
 using Questionable.Functions;
 using Questionable.Model;
 using Questionable.Model.Questing;
+using Questionable.Windows.Utils;
 namespace Questionable.Controller.Steps.Shared;
 
 internal static class WaitAtEnd
@@ -23,7 +24,8 @@ internal static class WaitAtEnd
         ICondition condition,
         TerritoryData territoryData,
         AutoDutyIpc autoDutyIpc,
-        BossModIpc bossModIpc)
+        BossModIpc bossModIpc,
+        RedoUtil redoUtil)
         : ITaskFactory
     {
         public IEnumerable<ITask> CreateAllTasks(Quest quest, QuestSequence sequence, QuestStep step)
@@ -66,8 +68,10 @@ internal static class WaitAtEnd
                     return [Next(quest, sequence)];
 
                 case EInteractionType.WaitForObjectAtPosition:
-                    ArgumentNullException.ThrowIfNull(step.DataId);
-                    ArgumentNullException.ThrowIfNull(step.Position);
+                    if (!step.DataId.HasValue)
+                        throw new ArgumentNullException(nameof(step.DataId));
+                    if (!step.Position.HasValue)
+                        throw new ArgumentNullException(nameof(step.Position));
 
                     return
                     [
@@ -115,7 +119,11 @@ internal static class WaitAtEnd
                         WaitQuestAccepted accept = new(step.PickUpQuestId ?? quest.Id);
                         WaitDelay delay = new();
                         if (step.PickUpQuestId != null)
+                        {
+                            if (redoUtil.IsRedoActive()) // Can't accept other quests during NG+
+                                return [delay, Next(quest, sequence)];
                             return [accept, delay, Next(quest, sequence)];
+                        }
                         else
                             return [accept, delay];
                     }
@@ -139,16 +147,19 @@ internal static class WaitAtEnd
         private static NextStep Next(Quest quest, QuestSequence sequence) => new(quest.Id, sequence.Sequence);
     }
 
-    internal sealed record WaitDelay(TimeSpan Delay) : ITask
+    internal sealed record WaitDelay(TimeSpan Delay, string? Message) : ITask
     {
         public WaitDelay()
-            : this(TimeSpan.FromSeconds(1))
+            : this(TimeSpan.FromSeconds(1), null)
+        {
+        }
+        public WaitDelay(TimeSpan Delay) : this(Delay, null)
         {
         }
 
         public bool ShouldRedoOnInterrupt() => true;
 
-        public override string ToString() => $"Wait(seconds: {Delay.TotalSeconds})";
+        public override string ToString() => $"Wait(seconds: {Delay.TotalSeconds}{(Message != null ? $", message: {Message}" : "")})";
     }
 
     internal sealed class WaitDelayExecutor : AbstractDelayedTaskExecutor<WaitDelay>
@@ -181,14 +192,14 @@ internal static class WaitAtEnd
         public override string ToString() => $"Wait(QW: {string.Join(", ", Step.CompletionQuestVariablesFlags.Select(x => x?.ToString() ?? "-"))})";
     }
 
-    internal sealed class WaitForCompletionFlagsExecutor(QuestFunctions questFunctions)
+    internal sealed class WaitForCompletionFlagsExecutor()
         : TaskExecutor<WaitForCompletionFlags>
     {
         protected override bool Start() => true;
 
         public override ETaskResult Update()
         {
-            QuestProgressInfo? questWork = questFunctions.GetQuestProgressInfo(Task.Quest);
+            QuestProgressInfo? questWork = QuestFunctions.GetQuestProgressInfo(Task.Quest);
             return questWork != null &&
                    QuestWorkUtils.MatchesQuestWork(Task.Step.CompletionQuestVariablesFlags, questWork)
                 ? ETaskResult.TaskComplete
@@ -226,15 +237,18 @@ internal static class WaitAtEnd
         public override string ToString() => $"WaitQuestAccepted({ElementId})";
     }
 
-    internal sealed class WaitQuestAcceptedExecutor(QuestFunctions questFunctions) : TaskExecutor<WaitQuestAccepted>
+    internal sealed class WaitQuestAcceptedExecutor(QuestFunctions questFunctions, QuestController questController)
+        : TaskExecutor<WaitQuestAccepted>
     {
         protected override bool Start() => true;
 
         public override ETaskResult Update()
         {
-            return questFunctions.IsQuestAccepted(Task.ElementId)
-                ? ETaskResult.TaskComplete
-                : ETaskResult.StillRunning;
+            if (!questFunctions.IsQuestAccepted(Task.ElementId))
+                return ETaskResult.StillRunning;
+
+            questController.TryStopOnQuestAccepted(Task.ElementId);
+            return ETaskResult.TaskComplete;
         }
 
         public override bool ShouldInterruptOnDamage() => false;

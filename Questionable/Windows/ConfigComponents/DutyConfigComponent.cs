@@ -17,6 +17,8 @@ using Questionable.Data;
 using Questionable.External;
 using Questionable.Model;
 using Questionable.Model.Questing;
+using Questionable.Utils;
+using static Questionable.Utils.LocalizeShortcut;
 namespace Questionable.Windows.ConfigComponents;
 
 internal sealed class DutyConfigComponent : ConfigComponent
@@ -49,7 +51,7 @@ internal sealed class DutyConfigComponent : ConfigComponent
             {
                 Expansion = (EExpansionVersion)x.TerritoryType.Value.ExVersion.RowId,
                 CfcId = x.RowId,
-                Name = territoryData.GetContentFinderCondition(x.RowId)?.Name ?? "?",
+                Name = territoryData.GetContentFinderCondition(x.RowId)?.Name ?? _L("?"),
                 TerritoryId = x.TerritoryType.RowId,
                 ContentType = x.ContentType.RowId,
                 Level = x.ClassJobLevelRequired,
@@ -64,12 +66,12 @@ internal sealed class DutyConfigComponent : ConfigComponent
 
     public override void DrawTab()
     {
-        using ImRaii.TabItemDisposable tab = ImRaii.TabItem("副本###Duties");
+        using ImRaii.TabItemDisposable tab = ImRaii.TabItem(_L("副本") + "###Duties");
         if (!tab)
             return;
 
         bool runInstancedContentWithAutoDuty = Configuration.Duties.RunInstancedContentWithAutoDuty;
-        if (ImGui.Checkbox("使用 AutoDuty 和 BossMod 自动通过副本", ref runInstancedContentWithAutoDuty))
+        if (ImGui.Checkbox(_L("使用 AutoDuty 和 BossMod 自动通过副本"), ref runInstancedContentWithAutoDuty))
         {
             Configuration.Duties.RunInstancedContentWithAutoDuty = runInstancedContentWithAutoDuty;
             Save();
@@ -77,25 +79,41 @@ internal sealed class DutyConfigComponent : ConfigComponent
 
         ImGui.SameLine();
         ImGuiComponents.HelpMarker(
-            "此功能使用的战斗模块由 AutoDuty 配置，将忽略在 Questionable 的“通用”设置中所做的选择。");
+            _L("此功能使用的战斗模块由 AutoDuty 配置，将忽略在 Questionable 的“通用”设置中所做的选择。"));
+
+        using (ImRaii.Disabled(!runInstancedContentWithAutoDuty))
+        {
+            bool runUnsynced = Configuration.Duties.RunUnsynced;
+            if (ImGui.Checkbox(_L("Run content unsynced where safe"), ref runUnsynced))
+            {
+                Configuration.Duties.RunUnsynced = runUnsynced;
+                Save();
+            }
+            ImGui.SameLine();
+            ImGuiComponents.HelpMarker(
+                _L("If the level of your current job is greater than 15 levels above a duty's sync level, or if your average item level is greater than 100 over " +
+                "a duty's required item level, Questionable will ask AutoDuty to run it solo as an Unrestricted Party."));
+            ImGui.SameLine();
+            ImGui.TextColored(ImGuiColors.DalamudRed, _L("Experimental feature"));
+        }
 
         ImGui.Separator();
 
         using (ImRaii.Disabled(!runInstancedContentWithAutoDuty))
         {
             ImGui.Text(
-                "Questionable 包含一个默认的副本列表，如果安装了 AutoDuty 和 BossMod，副本任务就会自动进行。");
+                _L("Questionable 包含一个默认的副本列表，如果安装了 AutoDuty 和 BossMod，副本任务就会自动进行。"));
 
             ImGui.Text(
-                "此副本列表可能会随着每次更新而变化，并基于以下表格：");
-            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.GlobeEurope, "查看 AutoDuty 的支持表"))
+                _L("此副本列表可能会随着每次更新而变化，并基于以下表格："));
+            if (ImGuiComponentsLocal.IconButtonWithText(FontAwesomeIcon.GlobeEurope, _L("查看 AutoDuty 的支持表")))
             {
                 Util.OpenLink(
                     "https://docs.google.com/spreadsheets/d/151RlpqRcCpiD_VbQn6Duf-u-S71EP7d0mx3j1PDNoNA/edit?pli=1#gid=0");
             }
 
             ImGui.Separator();
-            ImGui.Text("你可以覆盖每个副本/讨伐歼灭战的设置：");
+            ImGui.Text(_L("你可以覆盖每个副本/讨伐歼灭战的设置："));
 
             DrawConfigTable(runInstancedContentWithAutoDuty);
 
@@ -138,8 +156,8 @@ internal sealed class DutyConfigComponent : ConfigComponent
                 using ImRaii.TableDisposable table = ImRaii.Table($"Duties{expansion}", 2, ImGuiTableFlags.SizingFixedFit);
                 if (table)
                 {
-                    ImGui.TableSetupColumn("名称", ImGuiTableColumnFlags.WidthStretch);
-                    ImGui.TableSetupColumn("选项", ImGuiTableColumnFlags.WidthFixed, 200f);
+                    ImGui.TableSetupColumn(_L("名称"), ImGuiTableColumnFlags.WidthStretch);
+                    ImGui.TableSetupColumn(_L("选项"), ImGuiTableColumnFlags.WidthFixed, 200f);
 
                     if (_contentFinderConditionNames.TryGetValue(expansion, out List<DutyInfo>? cfcNames))
                     {
@@ -168,13 +186,13 @@ internal sealed class DutyConfigComponent : ConfigComponent
                                         using ImRaii.TooltipDisposable tooltip = ImRaii.Tooltip();
                                         ImGui.TextUnformatted(name);
                                         ImGui.Separator();
-                                        ImGui.BulletText($"TerritoryId: {territoryId}");
-                                        ImGui.BulletText($"ContentFinderConditionId: {cfcId}");
+                                        ImGui.BulletText(_LF("TerritoryId: {0}", territoryId));
+                                        ImGui.BulletText(_LF("ContentFinderConditionId: {0}", cfcId));
                                     }
 
                                     if (runInstancedContentWithAutoDuty && !_autoDutyIpc.HasPath(cfcId))
                                     {
-                                        ImGuiComponents.HelpMarker("尚未支持此副本或 AutoDuty 插件未启用",
+                                        ImGuiComponents.HelpMarker(_L("尚未支持此副本或 AutoDuty 插件未启用"),
                                             FontAwesomeIcon.Times, ImGuiColors.DalamudRed);
                                     }
                                     else if (dutyOptions.Notes.Count > 0)
@@ -243,7 +261,7 @@ internal sealed class DutyConfigComponent : ConfigComponent
 
     private void DrawEnableAllButton()
     {
-        if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.CheckCircle, "全部启用"))
+        if (ImGuiComponentsLocal.IconButtonWithText(FontAwesomeIcon.CheckCircle, _L("全部启用")))
         {
             Configuration.Duties.BlacklistedDutyCfcIds.Clear();
             Configuration.Duties.WhitelistedDutyCfcIds.Clear();
@@ -252,7 +270,7 @@ internal sealed class DutyConfigComponent : ConfigComponent
             {
                 foreach ((uint cfcId, uint _, string _) in cfcNames)
                 {
-                    if (_questRegistry.TryGetDutyByContentFinderConditionId(cfcId, out DutyOptions? dutyOptions))
+                    if (_questRegistry.TryGetDutyByContentFinderConditionId(cfcId, out DutyOptions? _))
                         Configuration.Duties.WhitelistedDutyCfcIds.Add(cfcId);
                 }
             }
@@ -261,7 +279,7 @@ internal sealed class DutyConfigComponent : ConfigComponent
         }
 
         if (ImGui.IsItemHovered())
-            ImGui.SetTooltip("启用全部副本，请自行承担风险。");
+            ImGui.SetTooltip(_L("启用全部副本，请自行承担风险。"));
     }
 
     private void DrawClipboardButtons()
@@ -269,7 +287,7 @@ internal sealed class DutyConfigComponent : ConfigComponent
         using (ImRaii.Disabled(Configuration.Duties.WhitelistedDutyCfcIds.Count +
             Configuration.Duties.BlacklistedDutyCfcIds.Count == 0))
         {
-            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Copy, "导出到剪贴板"))
+            if (ImGuiComponentsLocal.IconButtonWithText(FontAwesomeIcon.Copy, _L("导出到剪贴板")))
             {
                 IEnumerable<string> whitelisted =
                     Configuration.Duties.WhitelistedDutyCfcIds.Select(x => $"{DutyWhitelistPrefix}{x}");
@@ -287,7 +305,7 @@ internal sealed class DutyConfigComponent : ConfigComponent
         using (ImRaii.Disabled(string.IsNullOrEmpty(clipboardText) ||
                                !clipboardText.StartsWith(DutyClipboardPrefix, StringComparison.InvariantCulture)))
         {
-            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Paste, "从剪贴板导入"))
+            if (ImGuiComponentsLocal.IconButtonWithText(FontAwesomeIcon.Paste, _L("从剪贴板导入")))
             {
                 clipboardText = clipboardText.Substring(DutyClipboardPrefix.Length);
                 string text = Encoding.UTF8.GetString(Convert.FromBase64String(clipboardText));
@@ -318,7 +336,7 @@ internal sealed class DutyConfigComponent : ConfigComponent
     {
         using (ImRaii.Disabled(!ImGui.IsKeyDown(ImGuiKey.ModCtrl)))
         {
-            if (ImGuiComponents.IconButtonWithText(FontAwesomeIcon.Undo, "重置为默认"))
+            if (ImGuiComponentsLocal.IconButtonWithText(FontAwesomeIcon.Undo, _L("重置为默认")))
             {
                 Configuration.Duties.WhitelistedDutyCfcIds.Clear();
                 Configuration.Duties.BlacklistedDutyCfcIds.Clear();
@@ -327,7 +345,7 @@ internal sealed class DutyConfigComponent : ConfigComponent
         }
 
         if (ImGui.IsItemHovered(ImGuiHoveredFlags.AllowWhenDisabled))
-            ImGui.SetTooltip("按住 CTRL 启用此按钮。");
+            ImGui.SetTooltip(_L("按住 CTRL 启用此按钮。"));
     }
 
     private sealed record DutyInfo(uint CfcId, uint TerritoryId, string Name);

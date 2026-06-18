@@ -29,6 +29,7 @@
           },
           "TerritoryId": 612,
           "InteractionType": "SinglePlayerDuty",
+          "SinglePlayerDutyOptions": {"Enabled": true},
           "AetheryteShortcut": "Fringes - Peering Stones",
           "Fly": true
         }

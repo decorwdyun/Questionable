@@ -10,6 +10,7 @@ using Questionable.Controller;
 using Questionable.Data;
 using Questionable.Model;
 using Questionable.Windows.QuestComponents;
+using static Questionable.Utils.LocalizeShortcut;
 namespace Questionable.Windows.JournalComponents;
 
 internal sealed class QuestRewardComponent
@@ -19,30 +20,25 @@ internal sealed class QuestRewardComponent
     QuestTooltipComponent questTooltipComponent,
     UiUtils uiUtils)
 {
-    private readonly QuestData _questData = questData;
-    private readonly QuestRegistry _questRegistry = questRegistry;
-    private readonly QuestTooltipComponent _questTooltipComponent = questTooltipComponent;
-    private readonly UiUtils _uiUtils = uiUtils;
-
     private bool _showEventRewards;
 
     public void DrawItemRewards()
     {
-        using ImRaii.TabItemDisposable tab = ImRaii.TabItem("物品奖励");
+        using ImRaii.TabItemDisposable tab = ImRaii.TabItem(_L("物品奖励"));
         if (!tab)
             return;
 
-        ImGui.Checkbox("显示季节活动任务奖励", ref _showEventRewards);
+        ImGui.Checkbox(_L("显示季节活动任务奖励"), ref _showEventRewards);
         ImGui.Spacing();
 
         ImGui.BulletText(
-            "仅列出不可交易物品（例如飞艇模型可在市场交易，因此不会列出）。");
+            _L("仅列出不可交易物品（例如飞艇模型可在市场交易，因此不会列出）。"));
 
-        DrawGroup("坐骑", EItemRewardType.Mount);
-        DrawGroup("宠物", EItemRewardType.Minion);
-        DrawGroup("Orchestrion Rolls", EItemRewardType.OrchestrionRoll);
-        DrawGroup("Triple Triad Cards", EItemRewardType.TripleTriadCard);
-        DrawGroup("Fashion Accessories", EItemRewardType.FashionAccessory);
+        DrawGroup(_L("坐骑"), EItemRewardType.Mount);
+        DrawGroup(_L("宠物"), EItemRewardType.Minion);
+        DrawGroup(_L("管弦乐琴乐谱"), EItemRewardType.OrchestrionRoll);
+        DrawGroup(_L("幻卡"), EItemRewardType.TripleTriadCard);
+        DrawGroup(_L("时尚配饰"), EItemRewardType.FashionAccessory);
     }
 
     private void DrawGroup(string label, EItemRewardType type)
@@ -50,10 +46,14 @@ internal sealed class QuestRewardComponent
         if (!ImGui.CollapsingHeader($"{label}###Reward{type}"))
             return;
 
-        foreach (ItemReward item in _questData.RedeemableItems.Where(x => x.Type == type)
-            .OrderBy(x => x.Name, StringComparer.CurrentCultureIgnoreCase))
+        var results = questData.RedeemableItems.Where(x => x.Type == type)
+            .OrderBy(x => x.Name, StringComparer.CurrentCultureIgnoreCase).ToList();
+        if (results.Count == 0)
+            ImGui.Text("No results");
+
+        foreach (ItemReward item in results)
         {
-            if (_questData.TryGetQuestInfo(item.ElementId, out IQuestInfo? questInfo))
+            if (questData.TryGetQuestInfo(item.ElementId, out IQuestInfo? questInfo))
             {
                 bool isEventQuest = questInfo is QuestInfo { IsSeasonalEvent: true };
                 if (!_showEventRewards && isEventQuest)
@@ -64,19 +64,20 @@ internal sealed class QuestRewardComponent
                     name += $" {SeIconChar.Clock.ToIconString()}";
 
                 bool complete = item.IsUnlocked();
-                Vector4 color = !_questRegistry.IsKnownQuest(item.ElementId)
+                Vector4 color = !questRegistry.IsKnownQuest(item.ElementId)
                     ? ImGuiColors.DalamudGrey
                     : complete
                         ? ImGuiColors.ParsedGreen
                         : ImGuiColors.DalamudRed;
                 FontAwesomeIcon icon = complete ? FontAwesomeIcon.Check : FontAwesomeIcon.Times;
-                if (_uiUtils.ChecklistItem(name, color, icon))
+                if (uiUtils.ChecklistItem(name, color, icon))
                 {
                     using ImRaii.TooltipDisposable tooltip = ImRaii.Tooltip();
-                    ImGui.Text($"Obtained from: {questInfo.Name}");
+                    if (item.Type is not EItemRewardType.TripleTriadCard)
+                        ImGui.Text(_LF("Obtained from: {0}", questInfo.Name));
                     using (ImRaii.PushIndent())
                     {
-                        _questTooltipComponent.DrawInner(questInfo, false);
+                        questTooltipComponent.DrawInner(questInfo, false);
                     }
                 }
             }

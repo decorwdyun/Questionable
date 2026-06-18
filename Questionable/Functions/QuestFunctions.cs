@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using Dalamud.Game.Text;
 using Dalamud.Memory;
 using Dalamud.Plugin.Services;
+using ECommons;
 using ECommons.ExcelServices;
+using ECommons.Throttlers;
 using FFXIVClientStructs.FFXIV.Application.Network.WorkDefinitions;
 using FFXIVClientStructs.FFXIV.Client.Game;
 using FFXIVClientStructs.FFXIV.Client.Game.Character;
@@ -15,13 +16,17 @@ using FFXIVClientStructs.FFXIV.Client.Game.UI;
 using FFXIVClientStructs.FFXIV.Client.UI.Agent;
 using FFXIVClientStructs.FFXIV.Client.UI.Arrays;
 using FFXIVClientStructs.FFXIV.Component.GUI;
+using Lumina;
 using Lumina.Excel.Sheets;
+using Microsoft.Extensions.Logging;
 using Questionable.Controller;
 using Questionable.Data;
 using Questionable.Model;
 using Questionable.Model.Common;
 using Questionable.Model.Questing;
 using Questionable.Utils;
+using static Questionable.Utils.CacheUtils;
+using static Questionable.Utils.LocalizeShortcut;
 using GrandCompany = FFXIVClientStructs.FFXIV.Client.UI.Agent.GrandCompany;
 using Quest = Questionable.Model.Quest;
 
@@ -38,25 +43,11 @@ internal sealed unsafe class QuestFunctions
     IDataManager dataManager,
     IClientState clientState,
     IObjectTable objectTable,
-    //IPlayerState playerState,
     IGameGuiAdapter gameGui,
-    IChatGui chatGui,
-    IAetheryteList aetheryteList)
+    IChatGui chatGui)
 {
     internal static readonly int[] questsThatUseWhiteWolfGate = [439, 1080, 3870, 33];
-    private readonly AetheryteFunctions _aetheryteFunctions = aetheryteFunctions;
-    private readonly IAetheryteList _aetheryteList = aetheryteList;
-    private readonly AlliedSocietyData _alliedSocietyData = alliedSocietyData;
-    private readonly AlliedSocietyQuestFunctions _alliedSocietyQuestFunctions = alliedSocietyQuestFunctions;
-    private readonly IChatGui _chatGui = chatGui;
-    private readonly IClientState _clientState = clientState;
-    private readonly Configuration _configuration = configuration;
-    private readonly IDataManager _dataManager = dataManager;
-    //private readonly IPlayerState _playerState;
-    private readonly IGameGuiAdapter _gameGui = gameGui;
-    private readonly IObjectTable _objectTable = objectTable;
-    private readonly QuestData _questData = questData;
-    private readonly QuestRegistry _questRegistry = questRegistry;
+    internal Dictionary<ushort, HashSet<IQuestInfo>> prereqCache = [];
 
     public QuestReference GetCurrentQuest(bool allowNewMsq = true)
     {
@@ -66,17 +57,17 @@ internal sealed unsafe class QuestFunctions
 
         if (currentQuest == null || currentQuest.Value == 0)
         {
-            if (_clientState.TerritoryType == 181) // Starting in Limsa
+            if (clientState.TerritoryType == 181) // Starting in Limsa
             {
                 return new(new QuestId(107), 0, MainScenarioQuestState.Available);
             }
 
-            if (_clientState.TerritoryType == 182) // Starting in Ul'dah
+            if (clientState.TerritoryType == 182) // Starting in Ul'dah
             {
                 return new(new QuestId(594), 0, MainScenarioQuestState.Available);
             }
 
-            if (_clientState.TerritoryType == 183) // Starting in Gridania
+            if (clientState.TerritoryType == 183) // Starting in Gridania
             {
                 return new(new QuestId(39), 0, MainScenarioQuestState.Available);
             }
@@ -90,7 +81,7 @@ internal sealed unsafe class QuestFunctions
                 return new(currentQuest, sequence, questState);
 
             // The company you keep...
-            return _configuration.General.GrandCompany switch
+            return configuration.General.GrandCompany switch
             {
                 GrandCompany.TwinAdder => new(new QuestId(680), 0, questState),
                 GrandCompany.Maelstrom => new(new QuestId(681), 0, questState),
@@ -112,14 +103,15 @@ internal sealed unsafe class QuestFunctions
                 return new(new QuestId(chocoboQuest), QuestManager.GetQuestSequence(chocoboQuest), questState);
         }
         else if (questsThatUseWhiteWolfGate.Contains(currentQuest.Value) &&
-                 !_aetheryteFunctions.IsAetheryteUnlocked(EAetheryteLocation.GridaniaWhiteWolfGate))
+                 !aetheryteFunctions.IsAetheryteUnlocked(EAetheryteLocation.GridaniaWhiteWolfGate))
         {
             // quests that use white wolf gate, finish 'broadening horizons' to unlock it
-            if (!_aetheryteFunctions.IsAetheryteUnlocked(EAetheryteLocation.GridaniaBlueBadgerGate))
+            if (!aetheryteFunctions.IsAetheryteUnlocked(EAetheryteLocation.GridaniaBlueBadgerGate))
             {
-                _chatGui.Print("This quest uses the White Wolf Gate, which requires that you unlock all aethernet shards in Gridania.\n" +
+                chatGui.Print(_L("This quest uses the White Wolf Gate, which requires that you unlock all aethernet shards in Gridania.\n" +
                                "This should have happened as part of the quest \"Close To Home\" if starting in Gridania, or \"The Ul'dahn/Lominsan Envoy\" for the other cities.\n" +
-                               "Please unlock the aethernet shards, or complete the current quest sequence manually before continuing.");
+                               "Please unlock the aethernet shards, or complete the current quest sequence manually before continuing."),
+                               CommandHandler.MessageTag, CommandHandler.TagColor);
             }
 
             QuestId broadeningHorizons = new(802);
@@ -138,7 +130,7 @@ internal sealed unsafe class QuestFunctions
         // always prioritize accepting MSQ quests, to make sure we don't turn in one MSQ quest and then go off to do
         // side quests until the end of time.
         (QuestReference msqQuest, string? _) = GetMainScenarioQuest();
-        if (msqQuest.CurrentQuest != null && !_questRegistry.IsKnownQuest(msqQuest.CurrentQuest))
+        if (msqQuest.CurrentQuest != null && !questRegistry.IsKnownQuest(msqQuest.CurrentQuest))
             msqQuest = QuestReference.NoQuest(msqQuest.State);
 
         if (msqQuest.CurrentQuest != null && !IsQuestAccepted(msqQuest.CurrentQuest))
@@ -162,7 +154,7 @@ internal sealed unsafe class QuestFunctions
             {
                 case 1: // normal quest
                     currentQuest = new QuestId(questManager->NormalQuests[trackedQuest.Index].QuestId);
-                    if (_questRegistry.IsKnownQuest(currentQuest))
+                    if (questRegistry.IsKnownQuest(currentQuest))
                         trackedQuests.Add((currentQuest, QuestManager.GetQuestSequence(currentQuest.Value)));
                     break;
 
@@ -171,9 +163,9 @@ internal sealed unsafe class QuestFunctions
             }
         }
 
-        if (_configuration.General.SkipLowPriorityDuties && trackedQuests.Count > 0)
+        if (configuration.General.SkipLowPriorityDuties && trackedQuests.Count > 0)
         {
-            IReadOnlyList<(uint ContentFinderConditionId, ElementId QuestId, int Sequence)> lowPriorityQuests = _questRegistry.LowPriorityContentFinderConditionQuests;
+            IReadOnlyList<(uint ContentFinderConditionId, ElementId QuestId, int Sequence)> lowPriorityQuests = questRegistry.LowPriorityContentFinderConditionQuests;
             trackedQuests.RemoveAll(x => lowPriorityQuests.Any(y => x.Quest == y.QuestId && x.Sequence == y.Sequence));
         }
 
@@ -182,12 +174,12 @@ internal sealed unsafe class QuestFunctions
             // if we have multiple quests to turn in for an allied society, try and complete all of them
             (ElementId firstTrackedQuest, byte firstTrackedSequence) = trackedQuests.First();
             EAlliedSociety firstTrackedAlliedSociety =
-                _alliedSocietyData.GetCommonAlliedSocietyTurnIn(firstTrackedQuest);
+                alliedSocietyData.GetCommonAlliedSocietyTurnIn(firstTrackedQuest);
             if (firstTrackedAlliedSociety != EAlliedSociety.None)
             {
                 List<(ElementId Quest, byte Sequence)> alliedQuestsForSameSociety = trackedQuests.Skip(1)
                     .Where(quest =>
-                        _alliedSocietyData.GetCommonAlliedSocietyTurnIn(quest.Quest) == firstTrackedAlliedSociety)
+                        alliedSocietyData.GetCommonAlliedSocietyTurnIn(quest.Quest) == firstTrackedAlliedSociety)
                     .ToList();
                 if (alliedQuestsForSameSociety.Count > 0)
                 {
@@ -196,7 +188,7 @@ internal sealed unsafe class QuestFunctions
                         foreach ((ElementId questId, byte sequence) in alliedQuestsForSameSociety)
                         {
                             // only if the other quest isn't ready to be turned in
-                            if (sequence != 255 || (_questRegistry.TryGetQuest(questId, out Quest? quest) && !IsReadyToCompleteQuest(quest)))
+                            if (sequence != 255 || (questRegistry.TryGetQuest(questId, out Quest? quest) && !IsReadyToCompleteQuest(quest)))
                                 return new(questId, sequence, msqQuest.State);
                         }
                     }
@@ -208,7 +200,7 @@ internal sealed unsafe class QuestFunctions
                         // also include the first quest in the list for those
                         alliedQuestsForSameSociety.Insert(0, (firstTrackedQuest, firstTrackedSequence));
 
-                        _alliedSocietyData.GetCommonAlliedSocietyNpcs(firstTrackedAlliedSociety,
+                        alliedSocietyData.GetCommonAlliedSocietyNpcs(firstTrackedAlliedSociety,
                             out uint[]? normalNpcs,
                             out uint[] _);
 
@@ -247,7 +239,7 @@ internal sealed unsafe class QuestFunctions
             return new(firstTrackedQuest, firstTrackedSequence, msqQuest.State);
         }
 
-        ElementId? priorityQuest = GetNextPriorityQuestsThatCanBeAccepted()
+        ElementId? priorityQuest = NextPriorityQuestsThatCanBeAccepted
             .Where(x => x.IsAvailable)
             .Select(x => x.QuestId)
             .FirstOrDefault();
@@ -274,7 +266,7 @@ internal sealed unsafe class QuestFunctions
             if (questRedoHud != null && questRedoHud->IsAgentActive())
             {
                 // there's surely better ways to check this, but the one in the OOB Plugin was even less reliable
-                if (_gameGui.TryGetAddonByName<AtkUnitBase>("QuestRedoHud", out AtkUnitBase* addon) &&
+                if (gameGui.TryGetAddonByName<AtkUnitBase>("QuestRedoHud", out AtkUnitBase* addon) &&
                     addon->AtkValuesCount == 4 &&
                     // 0 seems to be active,
                     // 1 seems to be paused,
@@ -293,27 +285,27 @@ internal sealed unsafe class QuestFunctions
 
         AgentScenarioTree* scenarioTree = AgentScenarioTree.Instance();
         if (scenarioTree == null)
-            return (QuestReference.NoQuest(MainScenarioQuestState.Unavailable), "No Scenario Tree");
+            return (QuestReference.NoQuest(MainScenarioQuestState.Unavailable), _L("No Scenario Tree"));
 
         if (scenarioTree->Data == null)
-            return (QuestReference.NoQuest(MainScenarioQuestState.LoadingScreen), "Scenario Tree Data is null");
+            return (QuestReference.NoQuest(MainScenarioQuestState.LoadingScreen), _L("Scenario Tree Data is null"));
 
         QuestId currentQuest = new(scenarioTree->Data->MainScenarioQuestIds[0]);
         string extraData = $"sq: {currentQuest}";
         if (currentQuest.Value == 0)
         {
             if (IsMainScenarioQuestComplete())
-                return (QuestReference.NoQuest(MainScenarioQuestState.Complete), "Main Scenario is complete");
+                return (QuestReference.NoQuest(MainScenarioQuestState.Complete), _L("Main Scenario is complete"));
 
             // fallback lookup; find a quest which isn't completed but where all prequisites are met
             // excluding branching quests
 
-            List<QuestInfo> potentialQuests = _questData.MainScenarioQuests
+            List<QuestInfo> potentialQuests = questData.MainScenarioQuests
                 .Where(x => x.StartingCity == 0 || x.StartingCity == PlayerState.Instance()->StartTown)
                 .Where(q => IsReadyToAcceptQuest(q.QuestId, true))
                 .ToList();
             if (potentialQuests.Count == 0)
-                return (QuestReference.NoQuest(MainScenarioQuestState.Unavailable), "No potential quests found");
+                return (QuestReference.NoQuest(MainScenarioQuestState.Unavailable), _L("No potential quests found"));
             else if (potentialQuests.Count > 1)
             {
                 // for all of these (except the GC quests), questionable normally auto-picks the next quest based on the
@@ -337,7 +329,7 @@ internal sealed unsafe class QuestFunctions
 
                 if (potentialQuests.Count != 1)
                 {
-                    return (QuestReference.NoQuest(MainScenarioQuestState.Unavailable), "Multiple potential quests found: " +
+                    return (QuestReference.NoQuest(MainScenarioQuestState.Unavailable), _L("Multiple potential quests found:") + " " +
                                                                                         string.Join(", ", potentialQuests.Select(x => x.QuestId.Value)));
                 }
             }
@@ -348,27 +340,27 @@ internal sealed unsafe class QuestFunctions
         // if the MSQ is hidden, we generally ignore it
         QuestManager* questManager = QuestManager.Instance();
         if (IsQuestAccepted(currentQuest) && questManager->GetQuestById(currentQuest.Value)->IsHidden)
-            return (QuestReference.NoQuest(MainScenarioQuestState.Available), "Quest accepted but hidden");
+            return (QuestReference.NoQuest(MainScenarioQuestState.Available), ("Quest accepted but hidden"));
 
         // it can sometimes happen (although this isn't reliably reproducible) that the quest returned here
         // is one you've just completed. We return 255 as sequence here, since that is the end of said quest;
         // but this is just really hoping that this breaks nothing.
         if (IsQuestComplete(currentQuest))
-            return (new(currentQuest, 255, MainScenarioQuestState.Available), $"Quest {currentQuest.Value} complete");
+            return (new(currentQuest, 255, MainScenarioQuestState.Available), _LF("Quest {0} complete",currentQuest.Value));
         else if (!IsReadyToAcceptQuest(currentQuest))
-            return (QuestReference.NoQuest(MainScenarioQuestState.Unavailable), $"Not readdy to accept quest {currentQuest.Value}");
+            return (QuestReference.NoQuest(MainScenarioQuestState.Unavailable), _LF("Not ready to accept quest {0}",currentQuest.Value));
 
         short currentLevel = PlayerState.Instance()->CurrentLevel;
 
         // are we in a loading screen?
-        if (_objectTable[0] == null)
-            return (QuestReference.NoQuest(MainScenarioQuestState.LoadingScreen), "In loading screen");
+        if (objectTable[0] == null)
+            return (QuestReference.NoQuest(MainScenarioQuestState.LoadingScreen), _L("In loading screen"));
 
         // if we're not at a high enough level to continue, we also ignore it
-        if (_questRegistry.TryGetQuest(currentQuest, out Quest? quest)
+        if (questRegistry.TryGetQuest(currentQuest, out Quest? quest)
             && quest.Info.Level > currentLevel)
         {
-            return (QuestReference.NoQuest(MainScenarioQuestState.Unavailable), "Low level");
+            return (QuestReference.NoQuest(MainScenarioQuestState.Unavailable), _L("Low level"));
         }
 
         return (new(currentQuest, QuestManager.GetQuestSequence(currentQuest.Value), MainScenarioQuestState.Available), extraData);
@@ -376,10 +368,10 @@ internal sealed unsafe class QuestFunctions
 
     private bool IsOnAlliedSocietyMount()
     {
-        BattleChara* battleChara = (BattleChara*)(_objectTable[0]?.Address ?? 0);
+        BattleChara* battleChara = (BattleChara*)(objectTable[0]?.Address ?? 0);
         return battleChara != null &&
                battleChara->Mount.MountId != 0 &&
-               _alliedSocietyData.Mounts.ContainsKey(battleChara->Mount.MountId);
+               alliedSocietyData.Mounts.ContainsKey(battleChara->Mount.MountId);
     }
 
     private bool IsReadyToCompleteQuest(Quest quest)
@@ -396,7 +388,7 @@ internal sealed unsafe class QuestFunctions
 
     private bool IsInteractSequence(ElementId questId, byte sequenceNo, uint[] dataIds)
     {
-        if (_questRegistry.TryGetQuest(questId, out Quest? quest))
+        if (questRegistry.TryGetQuest(questId, out Quest? quest))
         {
             QuestSequence? sequence = quest.FindSequence(sequenceNo);
             return sequence != null &&
@@ -409,7 +401,7 @@ internal sealed unsafe class QuestFunctions
         return false;
     }
 
-    public QuestProgressInfo? GetQuestProgressInfo(ElementId elementId)
+    public static QuestProgressInfo? GetQuestProgressInfo(ElementId elementId)
     {
         if (elementId is QuestId questId)
         {
@@ -420,7 +412,9 @@ internal sealed unsafe class QuestFunctions
             return null;
     }
 
-    public List<PriorityQuestInfo> GetNextPriorityQuestsThatCanBeAccepted()
+    private CachedValue<List<PriorityQuestInfo>> _nextPriorityQuests = new(ttlSeconds: 2);
+    public List<PriorityQuestInfo> NextPriorityQuestsThatCanBeAccepted => _nextPriorityQuests.Get(GetNextPriorityQuestsThatCanBeAccepted);
+    private List<PriorityQuestInfo> GetNextPriorityQuestsThatCanBeAccepted()
     {
         // ideally, we'd also be able to afford *some* teleports
         // this implicitly makes sure we're not starting one of the lv1 class quests if we can't afford to teleport back
@@ -433,48 +427,46 @@ internal sealed unsafe class QuestFunctions
             .Where(x => IsReadyToAcceptQuest(x))
             .Select(x =>
             {
-                if (!_questRegistry.TryGetQuest(x, out Quest? quest))
-                    return new(x, "Unknown quest");
+                if (!questRegistry.TryGetQuest(x, out Quest? quest))
+                    return new(x, _L("Unknown quest"));
 
                 QuestStep? firstStep = quest.FindSequence(0)?.FindStep(0);
                 if (firstStep == null)
-                    return new(x, "No sequence 0 with steps");
+                    return new(x, _L("No sequence 0 with steps"));
 
                 // all priority quests assume we're able to teleport to the beginning (and for e.g. class quests, the end)
                 // ideally without having to wait 15m for Return.
                 // TODO This should be tweaked for level 1-5 class quests so that all of them can be done without teleport unlocked; the latest we unlock teleport is level 10 for Gridania characters
                 //      That probably means that (a) level 1-5 class quests should be doable without any teleports at all, and (b) the return point after being interrupted should be in the main city
-                if (!_aetheryteFunctions.IsTeleportUnlocked())
-                    return new(x, "Teleport not unlocked");
+                if (!aetheryteFunctions.IsTeleportUnlocked())
+                    return new(x, _L("Teleport not unlocked"));
 
                 if (!firstStep.IsTeleportableForPriorityQuests())
-                    return new(x, "Can't teleport to start");
+                    return new(x, _L("Can't teleport to start"));
 
-                if (gil < EstimateTeleportCosts(quest))
+                int teleportCosts = TeleportCosts(quest);
+                if (gil < teleportCosts)
                 {
                     return new(x,
-                        string.Create(CultureInfo.InvariantCulture,
-                            $"Not enough gil, estimated cost: {EstimateTeleportCosts(quest):N0}{SeIconChar.Gil.ToIconString()}"));
+                        _LF("Not enough gil, estimated cost: {0:N0}{1}",teleportCosts,SeIconChar.Gil.ToIconString()));
                 }
 
                 EAetheryteLocation? firstLockedAetheryte = quest.AllSteps()
                     .Select(y =>
                     {
                         if (y.Step.AetheryteShortcut is { } aetheryteShortcut &&
-                            !_aetheryteFunctions.IsAetheryteUnlocked(aetheryteShortcut))
+                            !aetheryteFunctions.IsAetheryteUnlocked(aetheryteShortcut))
                         {
                             if ((y.Step.SkipConditions?.AetheryteShortcutIf?.AetheryteLocked) != aetheryteShortcut)
                                 return aetheryteShortcut;
-                            // else _logger.LogTrace("Checking priority quest {QuestId}: aetheryte locked, but is listed as skippable", quest.Id);
-
                         }
 
                         if (y.Step.AethernetShortcut is { } aethernetShortcut)
                         {
-                            if (!_aetheryteFunctions.IsAetheryteUnlocked(aethernetShortcut.From))
+                            if (!aetheryteFunctions.IsAetheryteUnlocked(aethernetShortcut.From))
                                 return aethernetShortcut.From;
 
-                            if (!_aetheryteFunctions.IsAetheryteUnlocked(aethernetShortcut.To))
+                            if (!aetheryteFunctions.IsAetheryteUnlocked(aethernetShortcut.To))
                                 return aethernetShortcut.To;
                         }
 
@@ -486,7 +478,7 @@ internal sealed unsafe class QuestFunctions
                     // if quest requires white wolf gate, and unlock quest is available, don't report locked
                     if (firstLockedAetheryte == EAetheryteLocation.GridaniaWhiteWolfGate && IsReadyToAcceptQuest(new QuestId(802)))
                         return new(x);
-                    return new(x, $"Aetheryte locked: {firstLockedAetheryte}");
+                    return new(x, _LF("Aetheryte locked: {0}",firstLockedAetheryte));
                 }
 
                 return new PriorityQuestInfo(x);
@@ -494,21 +486,24 @@ internal sealed unsafe class QuestFunctions
             .ToList();
     }
 
-    private int EstimateTeleportCosts(Quest quest)
+    private int TeleportCosts(Quest quest)
     {
-        // TODO (probably in 7.4): clientstructs' aetheryte list has an 'IsFreeAetheryte' field, dalamud doesn't
-        Dictionary<EAetheryteLocation, float> cheapTeleports = _aetheryteList.Where(x => x.IsFavourite || _aetheryteFunctions.IsFreeAetheryte((EAetheryteLocation)x.AetheryteId))
-            .ToDictionary(x => (EAetheryteLocation)x.AetheryteId, x =>
-            {
-                if (_aetheryteFunctions.IsFreeAetheryte((EAetheryteLocation)x.AetheryteId))
-                    return 0;
-                else
-                    return 0.5f;
-            });
+        List<EAetheryteLocation> teleportTargets = quest.AllSteps()
+            .Where(x => x.Step.AetheryteShortcut != null)
+            .Select(x => x.Step.AetheryteShortcut!.Value)
+            .ToList();
+        if (teleportTargets.Count == 0)
+            return 0;
 
-        int baseCost = quest.Info.Expansion == EExpansionVersion.ARealmReborn ? 300 : 1000;
-        return quest.AllSteps().Where(x => x.Step.AetheryteShortcut != null)
-            .Sum(x => (int)(baseCost * cheapTeleports.GetValueOrDefault(x.Step.AetheryteShortcut!.Value, 1f)));
+        Telepo* telepo = Telepo.Instance();
+        if (telepo == null)
+            return 0;
+
+        Dictionary<uint, uint> teleportCosts = [];
+        foreach (TeleportInfo info in telepo->TeleportList)
+            teleportCosts.TryAdd(info.AetheryteId, info.GilCost);
+
+        return teleportTargets.Sum(x => (int)teleportCosts.GetValueOrDefault((uint)x, 999u));
     }
 
     public List<ElementId> GetPriorityQuests(bool onlyClassAndRoleQuests = false)
@@ -516,26 +511,26 @@ internal sealed unsafe class QuestFunctions
         List<ElementId> priorityQuests = [];
         if (!onlyClassAndRoleQuests)
         {
-            if (!_configuration.Advanced.SkipARealmRebornHardModePrimals)
+            if (!configuration.Advanced.SkipARealmRebornHardModePrimals)
             {
                 // Ifrit quest is handled as a pickup during MSQ
                 priorityQuests.AddRange(QuestData.HardModePrimals.Skip(1));
             }
 
-            if (!_configuration.Advanced.SkipCrystalTowerRaids)
+            if (!configuration.Advanced.SkipCrystalTowerRaids)
                 priorityQuests.AddRange(QuestData.CrystalTowerQuests);
         }
 
-        if (!_configuration.Advanced.SkipClassJobQuests)
+        if (!configuration.Advanced.SkipClassJobQuests)
         {
             Job classJob = (Job?)PlayerState.Instance()->CurrentClassJobId ?? Job.ADV;
             uint[] shadowbringersRoleQuestChapters = QuestData.AllRoleQuestChapters.Select(x => x[0]).ToArray();
             if (classJob != Job.ADV)
             {
-                priorityQuests.AddRange(_questRegistry.GetKnownClassJobQuests(classJob)
+                priorityQuests.AddRange(questRegistry.GetKnownClassJobQuests(classJob)
                     .Where(x =>
                     {
-                        if (!_questRegistry.TryGetQuest(x.QuestId, out Quest? quest) ||
+                        if (!questRegistry.TryGetQuest(x.QuestId, out Quest? quest) ||
                             quest.Info is not QuestInfo questInfo)
                         {
                             return false;
@@ -559,13 +554,13 @@ internal sealed unsafe class QuestFunctions
         }
 
         return priorityQuests
-            .Where(_questRegistry.IsKnownQuest)
+            .Where(questRegistry.IsKnownQuest)
             .ToList();
     }
 
     public bool IsReadyToAcceptQuest(ElementId questId, bool ignoreLevel = false)
     {
-        _questRegistry.TryGetQuest(questId, out Quest? quest);
+        questRegistry.TryGetQuest(questId, out Quest? quest);
         if (quest is { Info.IsRepeatable: true })
         {
             if (IsQuestAccepted(questId))
@@ -591,8 +586,8 @@ internal sealed unsafe class QuestFunctions
                 return false;
         }
 
-        if (IsQuestLocked(questId))
-            return false;
+        if (IsQuestLocked(questId) is (bool isLocked, var _))
+            return !isLocked;
 
         if (!ignoreLevel)
         {
@@ -607,6 +602,7 @@ internal sealed unsafe class QuestFunctions
 
     public bool IsQuestAcceptedOrComplete(ElementId elementId) => IsQuestComplete(elementId) || IsQuestAccepted(elementId);
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static")]
     public bool IsQuestAccepted(ElementId elementId)
     {
         if (elementId is QuestId questId)
@@ -621,7 +617,7 @@ internal sealed unsafe class QuestFunctions
             throw new ArgumentOutOfRangeException(nameof(elementId));
     }
 
-    public bool IsQuestAccepted(QuestId questId)
+    public static bool IsQuestAccepted(QuestId questId)
     {
         QuestManager* questManager = QuestManager.Instance();
         return questManager->IsQuestAccepted(questId.Value);
@@ -641,55 +637,65 @@ internal sealed unsafe class QuestFunctions
             throw new ArgumentOutOfRangeException(nameof(elementId));
     }
 
-    [SuppressMessage("Performance", "CA1822")]
     public bool IsQuestComplete(QuestId questId) => QuestManager.IsQuestComplete(questId.Value);
 
     public bool IsQuestComplete(UnlockLinkId unlockLinkId) => UIState.Instance()->IsUnlockLinkUnlocked(unlockLinkId.Value);
 
-    public bool IsQuestLocked(ElementId elementId, ElementId? extraCompletedQuest = null)
+    public (bool,string[]?) IsQuestLocked(ElementId elementId, ElementId? extraCompletedQuest = null)
     {
         if (elementId is QuestId questId)
             return IsQuestLocked(questId, extraCompletedQuest);
         else if (elementId is SatisfactionSupplyNpcId satisfactionSupplyNpcId)
-            return IsQuestLocked(satisfactionSupplyNpcId);
+            return (IsQuestLocked(satisfactionSupplyNpcId),null);
         else if (elementId is AlliedSocietyDailyId alliedSocietyDailyId)
-            return IsQuestLocked(alliedSocietyDailyId);
+            return (IsQuestLocked(alliedSocietyDailyId),null);
         else if (elementId is UnlockLinkId unlockLinkId)
-            return IsQuestLocked(unlockLinkId);
+            return (IsQuestLocked(unlockLinkId),null);
         else
             throw new ArgumentOutOfRangeException(nameof(elementId));
     }
 
-    private bool IsQuestLocked(QuestId questId, ElementId? extraCompletedQuest = null)
+    private (bool,string[]) IsQuestLocked(QuestId questId, ElementId? extraCompletedQuest = null)
     {
-        if (IsQuestUnobtainable(questId, extraCompletedQuest))
-            return true;
+        Dictionary<string,bool> lockedReason = [];
+        lockedReason.Add("Unobtainable", IsQuestUnobtainable(questId, extraCompletedQuest));
 
-        QuestInfo questInfo = (QuestInfo)_questData.GetQuestInfo(questId);
-        if (questInfo.GrandCompany != GrandCompany.None && questInfo.GrandCompany != GetGrandCompany())
-            return true;
+        QuestInfo questInfo = (QuestInfo)questData.GetQuestInfo(questId);
+        if (questInfo.GrandCompany != GrandCompany.None)
+            lockedReason.Add("Grand company mismatch", questInfo.GrandCompany != GetGrandCompany());
 
-        if (questInfo.AlliedSociety != EAlliedSociety.None && questInfo.IsRepeatable)
-            return !IsDailyAlliedSocietyQuestAndAvailableToday(questId);
+        if (questInfo.AlliedSociety != EAlliedSociety.None)
+            if (questInfo.IsRepeatable)
+                lockedReason.Add("Daily society quest is not available today", !IsDailyAlliedSocietyQuestAndAvailableToday(questId));
+            else
+                lockedReason.Add("Society story quest is not available", !IsAlliedSocietyStoryQuestAvailable(questId));
 
         if (questInfo.IsMoogleDeliveryQuest)
         {
             byte currentDeliveryLevel = PlayerState.Instance()->DeliveryLevel;
             if (extraCompletedQuest != null &&
-                _questData.TryGetQuestInfo(extraCompletedQuest, out IQuestInfo? extraQuestInfo) &&
+                questData.TryGetQuestInfo(extraCompletedQuest, out IQuestInfo? extraQuestInfo) &&
                 extraQuestInfo is QuestInfo { IsMoogleDeliveryQuest: true })
                 currentDeliveryLevel++;
 
-            if (questInfo.MoogleDeliveryLevel > currentDeliveryLevel)
-                return true;
+            lockedReason.Add("Moogle quest delivery level is too low", questInfo.MoogleDeliveryLevel > currentDeliveryLevel);
         }
 
-        return !HasCompletedPreviousQuests(questInfo, extraCompletedQuest) || !HasCompletedPreviousInstances(questInfo);
+        // "an ill-conceived venture" requires to have retainers unlocked
+        if ((new ushort[]{ 1432,1433,1434 }).Contains(questId.Value))
+        {
+            var retainerManager = RetainerManager.Instance();
+            lockedReason.Add("Retainers are not unlocked", retainerManager->MaxRetainerEntitlement == 0);
+        }
+
+        lockedReason.Add("Prev quests not completed", !HasCompletedPreviousQuests(questInfo, extraCompletedQuest));
+        lockedReason.Add("Prev instances not completed", !HasCompletedPreviousInstances(questInfo));
+        return (lockedReason.Values.Any(x => x),lockedReason.Keys.ToArray());
     }
 
     private bool IsQuestLocked(SatisfactionSupplyNpcId satisfactionSupplyNpcId)
     {
-        SatisfactionSupplyInfo questInfo = (SatisfactionSupplyInfo)_questData.GetQuestInfo(satisfactionSupplyNpcId);
+        SatisfactionSupplyInfo questInfo = (SatisfactionSupplyInfo)questData.GetQuestInfo(satisfactionSupplyNpcId);
         return !HasCompletedPreviousQuests(questInfo, null);
     }
 
@@ -704,7 +710,7 @@ internal sealed unsafe class QuestFunctions
 
     public bool IsDailyAlliedSocietyQuest(QuestId questId)
     {
-        QuestInfo questInfo = (QuestInfo)_questData.GetQuestInfo(questId);
+        QuestInfo questInfo = (QuestInfo)questData.GetQuestInfo(questId);
         return questInfo.AlliedSociety != EAlliedSociety.None && questInfo.IsRepeatable;
     }
 
@@ -713,9 +719,21 @@ internal sealed unsafe class QuestFunctions
         if (!IsDailyAlliedSocietyQuest(questId))
             return false;
 
-        QuestInfo questInfo = (QuestInfo)_questData.GetQuestInfo(questId);
-        return _alliedSocietyQuestFunctions.GetAvailableAlliedSocietyQuests(questInfo.AlliedSociety).Contains(questId);
+        QuestInfo questInfo = (QuestInfo)questData.GetQuestInfo(questId);
+        return alliedSocietyQuestFunctions.GetAvailableAlliedSocietyQuests(questInfo.AlliedSociety).Contains(questId);
     }
+
+    public bool IsAlliedSocietyStoryQuestAvailable(QuestId questId)
+    {
+        QuestInfo questInfo = (QuestInfo)questData.GetQuestInfo(questId);
+        (EAlliedSocietyRank currentRank, ushort currentRep, ushort neededRep) = GetAlliedSocietyRankAndRep(questInfo.AlliedSociety);
+        return currentRank > questInfo.AlliedSocietyRank || currentRep >= neededRep;
+    }
+
+    public (EAlliedSocietyRank, ushort, ushort) GetAlliedSocietyRankAndRep(EAlliedSociety alliedSociety) =>
+        ((EAlliedSocietyRank)PlayerState.Instance()->GetBeastTribeRank((byte)alliedSociety),
+        PlayerState.Instance()->GetBeastTribeCurrentReputation((byte)alliedSociety),
+        PlayerState.Instance()->GetBeastTribeNeededReputation((byte)alliedSociety));
 
     public bool IsQuestUnobtainable(ElementId elementId, ElementId? extraCompletedQuest = null)
     {
@@ -729,7 +747,7 @@ internal sealed unsafe class QuestFunctions
 
     public bool IsQuestUnobtainable(QuestId questId, ElementId? extraCompletedQuest = null)
     {
-        QuestInfo questInfo = (QuestInfo)_questData.GetQuestInfo(questId);
+        QuestInfo questInfo = (QuestInfo)questData.GetQuestInfo(questId);
         if (questInfo.Expansion > (EExpansionVersion)PlayerState.Instance()->MaxExpansion)
             return true;
 
@@ -742,7 +760,7 @@ internal sealed unsafe class QuestFunctions
                 return true;
         }
 
-        if (_questData.GetLockedClassQuests().Contains(questId))
+        if (questData.GetLockedClassQuests().Contains(questId))
             return true;
 
         byte startingCity = PlayerState.Instance()->StartTown;
@@ -812,7 +830,7 @@ internal sealed unsafe class QuestFunctions
         return false;
     }
 
-    public bool IsQuestRemoved(ElementId elementId)
+    public static bool IsQuestRemoved(ElementId elementId)
     {
         if (elementId is QuestId questId)
             return IsQuestRemoved(questId);
@@ -820,8 +838,7 @@ internal sealed unsafe class QuestFunctions
             return false;
     }
 
-    [SuppressMessage("Performance", "CA1822")]
-    private bool IsQuestRemoved(QuestId questId) => questId.Value is 487 or 1428 or 1429;
+    private static bool IsQuestRemoved(QuestId questId) => questId.Value is 487 or 1428 or 1429;
 
     private bool HasCompletedPreviousQuests(IQuestInfo questInfo, ElementId? extraCompletedQuest)
     {
@@ -856,9 +873,12 @@ internal sealed unsafe class QuestFunctions
     private static bool HasCompletedPreviousInstances(QuestInfo questInfo)
     {
         if (questInfo.PreviousInstanceContent.Count == 0)
+        {
             return true;
+        }
 
         int completedInstances = questInfo.PreviousInstanceContent.Count(x => UIState.IsInstanceContentCompleted(x));
+
         if (questInfo.PreviousInstanceContentJoin == EQuestJoin.All &&
             questInfo.PreviousInstanceContent.Count == completedInstances)
             return true;
@@ -870,7 +890,7 @@ internal sealed unsafe class QuestFunctions
 
     public bool IsClassJobUnlocked(Job classJob)
     {
-        ClassJob classJobRow = _dataManager.GetExcelSheet<ClassJob>().GetRow((uint)classJob);
+        ClassJob classJobRow = dataManager.GetExcelSheet<ClassJob>().GetRow((uint)classJob);
         ushort questId = (ushort)classJobRow.UnlockQuest.RowId;
         if (questId != 0)
             return IsQuestComplete(new QuestId(questId));
@@ -881,13 +901,13 @@ internal sealed unsafe class QuestFunctions
 
     public bool IsJobUnlocked(Job classJob)
     {
-        ClassJob classJobRow = _dataManager.GetExcelSheet<ClassJob>().GetRow((uint)classJob);
+        ClassJob classJobRow = dataManager.GetExcelSheet<ClassJob>().GetRow((uint)classJob);
         return IsClassJobUnlocked((Job)classJobRow.ClassJobParent.RowId);
     }
 
     public GrandCompany GetGrandCompany() => (GrandCompany)PlayerState.Instance()->GrandCompany;
 
-    public bool IsMainScenarioQuestComplete() => IsQuestComplete(_questData.LastMainScenarioQuestId);
+    public bool IsMainScenarioQuestComplete() => IsQuestComplete(questData.LastMainScenarioQuestId);
 }
 
 public sealed record QuestReference(ElementId? CurrentQuest, byte Sequence, MainScenarioQuestState State)

@@ -1,8 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Collections.Generic;
 using JetBrains.Annotations;
+using Questionable.Model.Common;
+using Questionable.Model.Common.Converter;
 namespace Questionable.Model;
 
-[SuppressMessage("Design", "CA1028", Justification = "Game type")]
 [UsedImplicitly(ImplicitUseTargetFlags.Members)]
 public enum EAlliedSociety : byte
 {
@@ -59,3 +60,5 @@ public static class EAlliedSocietyExtensions
         };
     }
 }
+
+public sealed class AlliedSocietyConverter() : EnumConverter<EAlliedSociety>();
